@@ -67,3 +67,5 @@ Kartı yazan: Volkan (+ Claude, BUILD), 31 Ekim 2026 akşam. Sözleşme: [docs/d
 **Karar masasına yaz** (volkan.md, bekleme): kırmızı kuralı okuması (varsayılan `karamsar_yeni_ev`; karar bekliyor, volkan.md "kırmızı kuralı" UYARI'sı). Karar değişirse BUILD `KIRMIZI_KURALI`'nı değiştirir, sen yeniden koşarsın.
 
 **Takılırsan:** önce Faz 3 günlüğündeki tanımlara bak; sonra can.md'ye yazmadan önce volkan.md'ye UYARI.
+
+Bitti 31 Eki 15:50 (Can), kanıt: PR #14 (`sinav.py faz3` 20 şehirde; sınav 11–20: yanlış yeşil 0/21, %40 kuralı 41/284 yan yana; kaç ev maddesi KALDI, tanım sorusu volkan.md); `docs/sunum/kilit_yanlis_yesil.png`; docs/log/2026-10-31-can-faz3.md. Kırmızı kuralı kararından sonra yeniden koşulacak.

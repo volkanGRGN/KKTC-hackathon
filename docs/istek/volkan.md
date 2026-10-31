@@ -234,3 +234,20 @@ Faz 1, 1.2'de 5/5; konut CV 0,32. Rakamların senin geliştirme ölçümünle tu
 Dosya: PR #14, src/edp_kiyas.py, docs/log/2026-10-31-can-faz2.md, docs/sunum/
 Neden: karar masası 16:50 sırası (2), (3), (5); ADR-0008 madde 1, 2, 4; 17:03 UYARI.
 Durum: bekliyor
+
+## UYARI! 31 Eki 15:50 — Can'dan — Faz 3 sınavı resmi sonuç (PR #14'e eklendi) + kaç ev maddesi KALDI
+Ne: `sinav.py faz3` ve kilit grafik PR #14'te (dal `sinav/faz2`, ikinci commit). Girdi: `kac-ev/ilk-surum` dalındaki `kac_ev.py`, Faz 2'deki 1.2 şehirleri, kırmızı kuralı varsayılan (`karamsar_yeni_ev`). Sınav şehirleri 11–20 senin ölçümünle birebir:
+
+| Ölçü | Sonuç |
+|---|---|
+| Yanlış yeşil | 0/21 (her şehirde 0) → GEÇTİ |
+| %40 kuralı | 41/284 (%14,4; en kötü şehir 6/23); dolu 74'ün 41'ine "yer var" |
+| Yanlış kırmızı | %68,8 → UYARI |
+| Sarı | %25,6 |
+
+Kilit grafik: `docs/sunum/kilit_yanlis_yesil.png` (main). Slayt 5'e 1.2 rakamları (%3,9 / %22), slayt 10'a kilit grafik işlendi.
+**Kaç ev maddesi KALDI.** Kart "`kac_ev_tavan` = 1 olanlar ayrı" diyor. Tavan = 0 trafolarda (n 240) ortanca hata: karamsar 9, iyimser 3,5, ortası 5,75 ev; hiçbiri ≤ 2 değil. Senin "iyimser 2" ölçümün tavan = 1 dahil (n 347). Tavanlı trafoda gerçek sayı alttan kesik, iyimser de genelde aynı tavana dayanınca hata yapay küçük çıkıyor. Bilgi satırında ikisi de yazıyor; eşiği ve tanımı oynatmadım.
+Soru: madde tanımı hangisi olsun (kart: ayrı → KALDI; dahil → iyimser 2, geçer)? Kırmızı kuralı kararı gelince `faz3` yeniden koşulur.
+Dosya: PR #14 (src/sinav.py, src/grafikler.py), docs/log/2026-10-31-can-faz3.md, docs/sunum/
+Neden: karar masası 16:50 (4), 17:17 UYARI; kart "karar masasına yaz: eşik tartışmalıysa".
+Durum: bekliyor

@@ -150,7 +150,7 @@ Durum: yapıldı — (1) PR #12 onaylandı; (2) 1.2 şehirleri üretildi, Faz 1 
 Ne: (1) Kart: docs/gorev/can-faz3-sinav-grafik.md (`sinav.py faz3` + kilit grafik). `kac_ev.py` PR #13'te (#12'nin üstünde); birleşene kadar `kac-ev/ilk-surum` dalından üret. (2) Sunum iskeleti için (ROADMAP Faz 5 "güven merdiveni" main'de): manşet İspanya %25 → %10 (PR #10); gerilim 6 hattın 4'ü ±%40 (PR #11); farazi 1.2 faturalı %3,9 / faturasız %22 (destek, üst sınır); **kilit grafik: dolu trafoya "yer var" — biz 0/21, %40 kuralı 41/284 (%14)** (sınav şehirleri 11–20, gösterim). Hepsi senin resmi ölçümünle teyit edilecek.
 Dosya: docs/gorev/can-faz3-sinav-grafik.md, ROADMAP.md (Faz 5)
 Neden: karar masası 16:50 iş sırası (4) ve 17:00 BİLGİ.
-Durum: bekliyor
+Durum: yapıldı — (1) `sinav.py faz3` + kilit grafik PR #14, günlük docs/log/2026-10-31-can-faz3.md, kaç ev maddesi KALDI (tanım sorusu volkan.md 15:50); (2) sunum iskeletine işlendi (slayt 5: 1.2 %3,9 / %22; slayt 10: kilit grafik 0/21 ↔ 41/284 teyit edildi)
 
 ## KARAR 17:26 — `sinav.py faz2` saf tahmin satırının kesin tanımı (ADR-0008 madde 1 düzeltmesi)
 Karar: İki saf tahmin, model hangi bilgiyle koştuysa onunla karşılaştırılır: **faturasız** → ölçülü trafolarda Σ öğlen en düşük ÷ Σ tarife enerjisi × trafonun tarife enerjisi (tarife enerjisi = sınıf başına abone sayısı × sınıfın yıllık ortalaması, `sehir_uret.py` SINIFLAR; Kıb-Tek bunu bilir); **faturalı** → Σ öğlen ÷ Σ `yillik_tuketim_mwh` × trafonun `yillik_tuketim_mwh`. Geçme: modelin ortanca ve P90 hatası ilgili saf tahminden ≥ %25 düşük. "Σ abone" tanımı kaldırıldı (karışık şehirde otel = 1 abone, anlamsız).
