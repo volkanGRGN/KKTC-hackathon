@@ -5,4 +5,11 @@ PDF:   http://web.archive.org/web/20240429185116/https://www.eac.com.cy/EL/Regul
 Lisans belirtilmemiş; sunumda kaynak gösterilecek.
 Not: 5. sayfanın adı "L._COMM._STORES" ama PDF'teki sıraya göre OTEL sınıfı (ε. Büyük ticari - otel birimleri).
 
+Injection (üretim) profilleri, aynı klasör, indirildi 31 Ekim 2026 (Can):
+Excel: http://web.archive.org/web/20240429185132/https://www.eac.com.cy/EL/RegulatedActivities/Distribution/agorailektrismou/Documents/Profile%20Classes/Injection_Profile_Classes.xlsx
+Sayfalar: PV_SYSTEMS, PVs_ROOFTOPS, WIND_PARKS, BIOMASS. Düzen Offtake ile aynı (17.520 satır yarım saatlik + 24 tipik gün sütunu). Birim: kurulu güce göre pu.
+Sağlama (Can): PVs_ROOFTOPS Nisan iş günü tepesi 0,629 (13:00), 12:00 = 0,610; PV_SYSTEMS tepesi 0,706 (12:30).
+
+İpucu: web.archive adresinde zaman damgasının sonuna "id_" eklenirse (ör. 20240429185132id_) arşiv çerçevesi olmadan ham dosya iner.
+
 Depoda: yalnız bu KAYNAK.txt. Depo açık ve lisans belirsiz olduğu için Excel ve PDF depoya konmadı; yukarıdaki iki adresten indirip bu klasöre koyun (dosya adları: Offtake_Profile_Classes.xlsx, Profile_Classes.pdf).

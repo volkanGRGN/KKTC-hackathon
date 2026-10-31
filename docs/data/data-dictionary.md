@@ -12,6 +12,12 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Ölçülü: konut ve konut+panel 68 ev (2016), küçük ticari 23, büyük ticari 79, otel 30, küçük sanayi 66, büyük sanayi 41. Su pompası, sokak aydınlatması, ısı depolama **ölçülmemiş**, kuraldan türetilmiş.
 - Yanlılık: Güney, Kuzey değil; konut 2016 ve 68 ev; ortalama eğri tek evin tepesini düşük gösterir. **5. sayfanın adı "L._COMM._STORES" ama otel sınıfıdır** (PDF sırasıyla doğrulandı).
 
+**EAC üretim (injection) profilleri** — `data/raw/eac-profil-siniflari/Injection_Profile_Classes.xlsx`
+- 4 sınıf: PV_SYSTEMS (büyük güneş), PVs_ROOFTOPS (çatı), WIND_PARKS, BIOMASS. 2022, yarım saatlik + 24 tipik gün. Birim: kurulu güce göre pu.
+- Kaynak, lisans: Offtake ile aynı (EAC, web.archive, lisans belirtilmemiş).
+- Sağlama [Hesap]: çatı güneşi Nisan iş günü tepesi 0,63 pu (13:00); büyük güneş 0,71 pu.
+- Kullanım: benzetimdeki panel çıkışının (Open-Meteo ışınımı × kayıp katsayısı) gerçek Kıbrıs çatı eğrisiyle karşılaştırılması. Yanlılık: Güney'in toplam çatı filosunun ortalaması, tek evin bulut geçişini göstermez.
+
 **Kıb-Tek istatistikleri** — `data/raw/kibtek-istatistik/` (stat_2023, stat_2024, tuketim_2024, tuketim_2025; PDF; depoda yok, KAYNAK.txt'de nereden)
 - Tarife sınıfı başına abone sayısı ve yıllık MWh (2023: toplam 219.931 tüketici, konut 175.577, ticari I 20.950, ticari II 494, sanayi I 1.227, sanayi II 352, su motorları 3.250).
 - Farazi şehirde trafo başına abone karışımı bu oranlardan kurulur. Trafo eşleşmesi YOK.
