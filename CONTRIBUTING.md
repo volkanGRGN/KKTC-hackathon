@@ -3,6 +3,7 @@
 Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı söyler. Aynı kuralların ajan dili [CLAUDE.md](CLAUDE.md); ikisi çelişmez, biri değişirse öteki aynı değişiklikte güncellenir.
 
 ## Dallar
+- **Şimdilik (Faz 0, kod başlamadan): dal açılmaz, doğrudan `main`'e gönderilir** (Volkan, 31 Ekim). Aşağıdaki dal ve PR kuralları Faz 1 başlayınca geçerli.
 - `main` her zaman çalışır durumda.
 - İş dalı: `tur/kisa-aciklama` (ör. `feat/profil-kumeleme`, `fix/veri-okuma`).
 

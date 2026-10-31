@@ -6,7 +6,7 @@ Bu, [CONTRIBUTING.md](CONTRIBUTING.md)'nin ajan dilindeki özetidir. İnsan CONT
 - Kararlar `docs/decisions/` altında ADR'dir. Yeni karar = yeni ADR; eskiyi düzenleme, "superseded by" ile işaretle.
 - İş/deney sonuçları `docs/log/` altına tarihli, append-only dosyaya (`YYYY-AA-GG-kisa-ad.md`).
 - Dokümanı bozan değişiklik aynı değişiklikte dokümanı da düzeltir.
-- Küçük, odaklı commit; main'den rebase.
+- Küçük, odaklı commit; main'den rebase. Şimdilik (Faz 0) dal açma, doğrudan main'e gönder; dal + PR Faz 1'de başlar.
 - Emin olmadığın bir karar gerekiyorsa önce sor, kendi başına varsayma.
 
 ## İşe başlamadan
