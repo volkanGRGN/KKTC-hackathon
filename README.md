@@ -14,6 +14,8 @@ Henüz yok.
 
 ## Repo haritası
 
+- [docs/02-faz-0-ogrenim.md](docs/02-faz-0-ogrenim.md) — **yeni gelen buradan başlar**: sorun, kavramlar, okuma sırası, ilk uygulama
+- [ROADMAP.md](ROADMAP.md) — fazlar ve bitiş ölçütleri
 - [docs/00-overview.md](docs/00-overview.md) — amaç, kapsam, kapsam dışı, başarı ölçütü
 - [docs/01-plan.md](docs/01-plan.md) — iş kolları ve takvim
 - [docs/glossary.md](docs/glossary.md) — ortak terimler
