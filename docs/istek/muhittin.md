@@ -14,7 +14,7 @@ Durum: bekliyor | soruldu | cevaplandı (cevap: docs/log/…)
 Ne denedik: Aşağıdaki gönderilecek metinde. Kısaca: deneme şehirleri gerçek Kıbrıs verisine çapalı (EAC 2022 eğrileri, Kıb-Tek 2023 büyüklükleri), bugün trafo başına mahalle çarpanı eklendi (İspanya yayılımına çapalı: CV 0,46 / 0,14); şablon modeli; kontroller farazi %8,6 (saf tahmin %9,7), İspanya %25 → fatura ile %10, İngiltere gerilim fiziği 6 hatta 4'ü ±%40.
 Karar noktası: hata payını küçültme önceliği; çapalama istatistikleri; mimari; yanlış yeşil için karamsar senaryo yeterli mi.
 Seçenekler: cevap ADR-0009'a (hata payı önceliği) ve Faz 5 hikâyesine girer; cevapsız kalırsa mevcut kararlarla (ADR-0007 fatura, ADR-0008 mahalle çarpanı) devam.
-Durum: bekliyor
+Durum: cevaplandı 17:00 (cevap: docs/log/2026-10-31-muhittin-cevap-2-hata-payi-mimari.md; kararlar ADR-0009, ADR-0010)
 
 Gönderilecek metin (Volkan iletir):
 

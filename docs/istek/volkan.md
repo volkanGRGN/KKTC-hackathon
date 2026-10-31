@@ -134,3 +134,13 @@ Karar: Sunum yarın, saat bilinmiyor; bu akşam üç şey paralel gider: Faz 2 k
 5. ROADMAP: Faz 2 başlığına durum, Faz 3 ve Faz 5 "başladı 31 Ekim akşam"; kartları docs/gorev'e; DEVIR tazele. Can ve Civan'ın kutularına iş sırasını ben yazdım (can.md / civan.md 16:50); kartlar gelince onlar kartı esas alır.
 Senden beklenen (ana oturum): yukarıdakiler; bitirdiğin kalemi bu girdinin altına "yapıldı <saat>" satırıyla işle.
 Durum: bekliyor
+
+## KARAR 17:00 — BUILD'e: Muhittin'in cevabı → sunum hikâyesi, Faz 3 yeşil kuralı, bugün / sonra ayrımı
+Karar: Muhittin'in ikinci cevabı günlükte (docs/log/2026-10-31-muhittin-cevap-2-hata-payi-mimari.md); [ADR-0009](../decisions/adr-0009-dogruluk-onceligi-ve-capalama.md) ve [ADR-0010](../decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md) kabul.
+**Bugün (sunum öncesi):**
+1. Faz 5 hikâyesi "güven merdiveni": tek cümle "Kıbrıs'ı ölçemiyoruz; yöntemi ölçebildiğimiz her şeyde kanıtlıyoruz, sonra uyguluyoruz." Dört basamak, her birine tek iddia + tek rakam, hepsi "saf tahmine göre ne kadar iyi" cinsinden: farazi şehir (kontrollü gerçek), İspanya (yük, dış geçerlilik), İngiltere (gerilim, dış geçerlilik), Kıbrıs pilotu (saha). **Manşet rakam: İspanya %25 → %10** ("hiç görmediğimiz 29 gerçek trafoda, Kıb-Tek'in zaten elinde olan abone sayısı + faturayla"). İkinci vurgu: gerilimde 6 hattın 4'ü ±%40, 2 ıskalama uca kümelenme → karamsar senaryo. Farazi %8,6 destek rakamı, manşet değil. ROADMAP Faz 5 akışı ve dürüstlük cümleleri buna göre; Can'ın sunum iskeletine aktar.
+2. `kac_ev.py` renk kuralı ADR-0010: yeşil = karamsar sınırı marjla geçiyor (gerilim payının %10'u ya da ≥ 1 ev) VE güven yüksek; sarı = sınırda ya da güven orta/düşük; kırmızı = karamsar aşıyor. `modeling.md` §5 güncelle. Can'ın Faz 3 sınavına "yanlış yeşil" zaten var; "canlı bütçe < %2" notu validation.md'ye.
+3. Fatura: sözleşme 1.2'deki `yillik_tuketim_mwh` kalır; dağılım sütunları (yüksek tüketen abone oranı) 1.3'e not.
+**Sonra (sunum sonrası / pilot öncesi), ROADMAP'e "Faz 3 ikinci sürüm" olarak:** kümülatif düşüm (`onaylanan_kw`, `kalan_ev`), yeşil kuralının İspanya/İngiltere geri-testi ve bütçe eşikleri, çapalamaya korelasyon matrisi + P90/P95 + PV konum dağılımı + trafo içi çeşitlilik (Can'ın `edp_kiyas.py`; üretici 1.3), "farazi − İspanya" fark ölçeri her sürümde.
+Senden beklenen (ana oturum): 1–3 bugün, "sonra" listesi ROADMAP'e; bitince bu girdiye "yapıldı <saat>".
+Durum: bekliyor

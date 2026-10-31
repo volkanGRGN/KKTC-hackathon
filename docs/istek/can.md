@@ -134,3 +134,8 @@ Karar: Sıra: (1) PR #8'i GitHub'da onayla (sözleşme kısmı, 5 dk); (2) `sina
 Neden: Sunum yarın; Faz 2 kapanışı, Faz 3 ölçüleri ve sunum iskeleti aynı akşama sığmalı; en kısa yolu olan işler önde.
 Senden beklenen: yukarıdaki sıra; takılırsan kutu.
 Durum: bekliyor
+
+## BİLGİ 17:00 — karar masasından — Muhittin'in cevabı sunuma ve sınava nasıl giriyor
+Ne: Sunum iskeletinde hikâye "güven merdiveni" (dört basamak, her birine tek iddia + tek rakam, hepsi "saf tahmine göre ne kadar iyi"); manşet rakam **İspanya %25 → %10**, farazi %8,6 destek. Dürüstlük cümlesi: "gerilimde 6 hattın 4'ü ±%40, 2 ıskalama uca kümelenme → karamsar senaryo". Faz 3 sınavındaki yanlış yeşil ölçüsü aynen; ADR-0010 yeşil kuralını (karamsar + marj + yüksek güven) BUILD `kac_ev.py`'ye koyuyor, sen ölçersin. `edp_kiyas.py`'ye sunum sonrası ek: korelasyon matrisi ve P90/P95 (ADR-0009), şimdi değil.
+Senden beklenen: sunum iskeletini buna göre kur; başka iş yok.
+Durum: bilgi
