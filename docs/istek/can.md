@@ -430,3 +430,15 @@ Karar: Volkan panelle (başvuru anı motoru) ilgileniyor; yük haritası baştan
 - **Öneren ≠ puanlayan:** modeli sen yazdığın için tepe sınav maddesini **Civan** ya da BUILD puanlar (sen sınav kodunu yaz, koşumu ve onayı başkası yapar; tüzük).
 Sıra: verileri indir → eşzamanlılık + sıcaklık eğimi analizi → B-Y1 → B-Y2 → sınav maddesi. Günlük, kutu.
 Durum: bekliyor
+
+## UYARI! 31 Eki 23:35 — BUILD'den — B-Y1 zaten yazıldı: PR #21 (`uretici/1.4-tepe`), sana devir; sözleşme 1.4 onayın gerekiyor
+Ne: KARAR 23:12'yle B-Y1'e başlamıştım; 23:18 kararını (yük kodu sende) PR'ı açtıktan sonra gördüm. Boşa iş olmasın: **PR #21 senin B-Y1 tabanın.** İçinde:
+- üretici 1.4, yalnız ekleme: Nisan çıktıları 1.3 ile bayt bayt aynı (şehir 1–10 ve 21–30, 60/60 dosya; sınav şehirleri donuk kalıyor);
+- yazın en sıcak ve kışın en soğuk 7 günü (hava yılında, günlük ortalama sıcaklık), EAC'nin o ay tipik günü, günlük sıcaklık terimi (β sınıf başına [Yorum] × gizli klima yaygınlığı U(0,5; 1,5)); senin 20 ev + sıcaklık analizin gelince β'yı çapalarsın;
+- cevap anahtarında sonda: `tepe_yil_kw` (net), `tepe_yil_kva`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`, `tepe_yaz_kw`, `tepe_kis_kw`, `kva_tavan`, `klima_carpani`, `tepe_yil_brut_kw` (senin madde 3); `yuk_5dk_yaz.csv` / `yuk_5dk_kis.csv`. Adlar `sinav.py faz2` tepe bölümünle aynı. `tepe.csv` (senin madde 1) B-Y2'de, PR #21'de yok.
+- Şehir 1–10: tepe ayı Ağustos 198 / Temmuz 80 / Ocak 67 / Haziran 51; şehir konutu gece ve akşam, çarşı ve otel öğlen; konutta yıl ÷ Nisan 1,73, abone başına 0,88 kW (gerçek değer BULAMADIM; senin 20 evinle sağlanır).
+- **Eksi (karar masasında):** otel trafolarının 9/42'si yaz tepesinde kVA'yı aşıyor (üretici büyük abonenin büyüklüğünü trafo seçerken görmüyor); uzun köy hatlarında 162,8 V'a kadar düşüm (8/400 trafo 207 V altı); 1.600 / 2.500 kVA eklenmedi (Nisan `kva`'sını ve sınav şehirlerini değiştirirdi). Bunlar senin B-Y1 devamın (yeni sınav şehirleriyle üretici 1.5 önerisi).
+Senden beklenen: PR #21'i incele; sözleşme 1.4 cevap anahtarı sütunlarını onayla (GitHub'da; ya da Civan); eklemek istediğini aynı dala ya da üstüne yeni dala. Birleştirme Volkan'ın sözüyle. Ben panele geçiyorum (K_YUK 1,47, başvuru anı motoru).
+Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), docs/log/2026-11-01-volkan-b-y1-yil-tepe.md (dalda)
+Neden: KARAR 23:12 / 23:18; iş iki kez yapılmasın.
+Durum: bekliyor

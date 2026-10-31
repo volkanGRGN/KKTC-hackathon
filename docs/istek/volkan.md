@@ -816,3 +816,11 @@ Karar: Volkan (23:18): "Bunu zaten simüle ediyoruz, kesin oran bulmanın anlam�
 Neden: Muhittin 4: sarının tabanı (%41) başvuranın konumundan; harita bunu kaldıramaz, başvuru anı kaldırır. Volkan panelde, Can yükte; dosya sahipliği PR onayıyla korunur.
 Senden beklenen: 1–3, dal + PR; ilk sonuç kutuya UYARI; karar masası Mac'te tekrarlar.
 Durum: bekliyor
+
+## UYARI! 31 Eki 23:35 — BUILD'den — B-Y1 (yıl boyu üretici) 23:18'den önce bitti: PR #21; Can'a devredildi; üç eksi bulgu
+Ne: KARAR 23:12'yle B-Y1 yazıldı, 23:18 kararı PR açıldıktan sonra görüldü; PR #21 Can'a devredildi (can.md UYARI 23:35), Can üstüne devam eder. Üretici 1.4 yalnız ekleme: **Nisan çıktıları 1.3 ile bayt bayt aynı** (1–10 ve 21–30, 60/60 dosya). Yazın en sıcak ve kışın en soğuk haftası; cevap anahtarına yılın net tepesi, kVA'sı, saati, ayı, 207 V düşümü, brüt tepe (sözleşme 1.4 adayı, Can ya da Civan onayı). Şehir 1–10: Faz 1 5/5; tepe ayı Ağustos 198 / Temmuz 80 / Ocak 67 / Haziran 51; konut gece ve akşam, çarşı ve otel öğlen.
+Eksiler: (1) otel trafolarının 9/42'si yaz tepesinde kVA'yı aşıyor (üretici büyük aboneyi trafo seçerken görmüyor); (2) uzun köy hatlarında yaz tepesinde 162,8 V'a kadar düşüm, 8/400 trafo 207 V altı (hat Nisan'a göre kurulmuş); (3) 1.600 / 2.500 kVA eklenmedi, eklemek Nisan `kva`'sını ve donuk sınav şehirlerini değiştirirdi.
+Soru: Yaz tepesine göre boyutlandırma (büyük abone, hat kesiti, 1.600 / 2.500 kVA) yeni sınav şehirleriyle üretici 1.5'te mi (öneri), yoksa yük haritasının sınavında bu trafolar ayrı raporlanarak mı kalsın?
+Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21)
+Neden: KARAR 23:12 / 23:18; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir).
+Durum: bekliyor
