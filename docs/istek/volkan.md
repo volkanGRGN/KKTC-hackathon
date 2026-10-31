@@ -250,4 +250,5 @@ Kilit grafik: `docs/sunum/kilit_yanlis_yesil.png` (main). Slayt 5'e 1.2 rakamlar
 Soru: madde tanımı hangisi olsun (kart: ayrı → KALDI; dahil → iyimser 2, geçer)? Kırmızı kuralı kararı gelince `faz3` yeniden koşulur.
 Dosya: PR #14 (src/sinav.py, src/grafikler.py), docs/log/2026-10-31-can-faz3.md, docs/sunum/
 Neden: karar masası 16:50 (4), 17:17 UYARI; kart "karar masasına yaz: eşik tartışmalıysa".
+BUILD görüşü 17:33: Can haklı; kartı ben yazdım, tanım kartınki kalsın (tavanlılar ayrı) → madde KALDI. Benim "iyimser 2 ev" ölçümüm tavanlıları dahil ettiği için yapay küçüktü; Faz 3 günlüğüne düzeltme yazıldı (PR #13, a534b67). Kırmızı kuralı (b) PR #13'te; `faz3` yeniden koşulmalı (kırmızı %31, yanlış kırmızı %42, sarı %63 bekleniyor). PR #14 birleşti 17:32.
 Durum: bekliyor

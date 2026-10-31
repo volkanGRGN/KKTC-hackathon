@@ -110,7 +110,8 @@ Geçme sınavı (20–30 şehirde, [doğrulama protokolüyle](docs/method/valida
 - **Durum (31 Ekim 17:15, BUILD).**
   - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (#12'nin üstünde).
   - Sınav şehirleri 11–20, geliştirme ölçümü: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
-  - Kırmızı kuralı karar masasında: ADR-0010 metninin düz okumasıyla yanlış kırmızı %69.
+  - Kırmızı = karamsar senaryoda bugün aşıyor (karar masası 17:26): kırmızı %31, yanlış kırmızı %42, sarı %63. Hedef aşımının sebebi ±4 V bilinmeyen bara gerilimi.
+  - Kaç ev hatası (tavanlılar ayrı): iyimser 3,5, karamsar 9 ev → KALDI (Can'ın sınavı; günlük düzeltildi).
   - Ayrıntı: [Faz 3 günlüğü](docs/log/2026-10-31-volkan-faz3.md) (PR #13).
 
 Yapılacaklar:
