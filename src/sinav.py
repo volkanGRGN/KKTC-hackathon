@@ -451,10 +451,15 @@ def faz3(sehirler):
                 adaysiz += 1
                 continue
             k = s['kac_ev'][r['trafo_no']]
+            kar, iyi = int(k['kac_ev_karamsar']), int(k['kac_ev_iyimser'])
+            # Ortası: sözleşme 1.3 `kac_ev_orta` (olasılıklı hesabın çekiliş ortancası) varsa o, yoksa (karamsar + iyimser) ÷ 2.
+            orta = float(k['kac_ev_orta']) if k.get('kac_ev_orta') not in (None, '') else (kar + iyi) / 2
             satir.append(dict(sehir=s['ad'], tip=r['tip'], gercek=int(r['kac_ev_gercek']),
-                              tavan=int(r['kac_ev_tavan']), renk=k['renk'], kar=int(k['kac_ev_karamsar']),
-                              iyi=int(k['kac_ev_iyimser']), k40=int(k['kural40_ev']), sinir=k['sinir_karamsar']))
+                              tavan=int(r['kac_ev_tavan']), renk=k['renk'], kar=kar, iyi=iyi, orta=orta,
+                              k40=int(k['kural40_ev']), sinir=k['sinir_karamsar']))
     dolu = [x for x in satir if x['gercek'] == 0]
+    orta_ad = 'ortası (kac_ev_orta)' if any(k.get('kac_ev_orta') not in (None, '')
+                                            for s in sehirler for k in s['kac_ev'].values()) else 'ortası'
 
     def yanlis_yesil(yer_var):
         """(yanlış, yer var denen, şehir başına {şehir: (yanlış, yer var)})"""
@@ -495,14 +500,14 @@ def faz3(sehirler):
     # 4. Kaç ev hatası (tavan = 1 olanlar ayrı: gerçek alttan kesik).
     kes = [x for x in satir if not x['tavan']]
     hata = {ad: st.median(abs(f(x) - x['gercek']) for x in kes) for ad, f in
-            (('karamsar', lambda x: x['kar']), ('iyimser', lambda x: x['iyi']), ('ortası', lambda x: (x['kar'] + x['iyi']) / 2))}
+            (('karamsar', lambda x: x['kar']), ('iyimser', lambda x: x['iyi']), (orta_ad, lambda x: x['orta']))}
     gecen = [ad for ad, h in hata.items() if h <= KAC_EV_HATA_MAX]
     _madde(m, bool(gecen), f'kaç ev hatası ortanca ≤ {KAC_EV_HATA_MAX:g} ev (en az bir sayı)',
            ', '.join(f'{ad} {h:g}' for ad, h in hata.items()) + f' ev; eşiği geçen: {", ".join(gecen) or "yok"}; '
            f'n = {len(kes)}, tavan = 1 ayrı {len(satir) - len(kes)}')
     bilgi.append('kaç ev hatası ortancası, tavan = 1 dahil (gerçek alttan kesik): ' + ', '.join(
         f'{ad} {st.median(abs(f(x) - x["gercek"]) for x in satir):g}' for ad, f in
-        (('karamsar', lambda x: x['kar']), ('iyimser', lambda x: x['iyi']), ('ortası', lambda x: (x['kar'] + x['iyi']) / 2)))
+        (('karamsar', lambda x: x['kar']), ('iyimser', lambda x: x['iyi']), (orta_ad, lambda x: x['orta'])))
         + f' ev (n = {len(satir)})')
 
     # 5. Sarı oranı (hedef; aşarsa UYARI).
