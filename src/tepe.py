@@ -165,11 +165,13 @@ def ay_kosullari(hava, yil, kip):
 # ---------- önsel ----------
 
 def sinif_kw(tr):
-    """Trafo × sınıf yıllık ortalama kW. Fatura (yillik_tuketim_mwh) varsa sınıf enerjileri faturaya ölçeklenir."""
+    """Trafo × sınıf yıllık ortalama kW. Fatura varsa sınıf enerjileri brüt faturaya ölçeklenir (sablon.fatura_mwh:
+    fatura net ise panel üretimi geri eklenir; net faturayla akşam tepesi az çıkar, güvensiz yön)."""
+    import sablon
     E = np.column_stack([tr[a].fillna(0).to_numpy(float) * MWH[a] for a in ABONE])      # MWh/yıl
-    if 'yillik_tuketim_mwh' in tr and tr['yillik_tuketim_mwh'].notna().all():
+    if sablon.fatura_var(tr):
         top = E.sum(1)
-        E = E * np.divide(tr['yillik_tuketim_mwh'].to_numpy(float), top, out=np.ones_like(top), where=top > 0)[:, None]
+        E = E * np.divide(sablon.fatura_mwh(tr), top, out=np.ones_like(top), where=top > 0)[:, None]
     return E / 8.76
 
 
@@ -280,7 +282,10 @@ def main():
     ap.add_argument('--aralik', default=None, help='ör. 1-10 (yoksa kökteki bütün sehir-* klasörleri)')
     ap.add_argument('--hava', choices=['yil', 'tasarim'], default='yil',
                     help="yil: şehrin hava yılı (sınav); tasarim: + TASARIM_EK_C (harita)")
+    ap.add_argument('--fatura-net', action='store_true', help='fatura mahsuplaşmalı abonelerde net (sablon.py ile aynı)')
     a = ap.parse_args()
+    import sablon
+    sablon.FATURA_NET = a.fatura_net
     if a.aralik:
         i, j = map(int, a.aralik.split('-'))
         klasorler = [a.kok / f'sehir-{s:03d}' for s in range(i, j + 1)]
