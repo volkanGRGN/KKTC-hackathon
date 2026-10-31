@@ -170,4 +170,34 @@ python3 src/edp_test.py <GIS_data> --cikti edp_sonra.csv && python3 src/kalibras
 
 Geliştirme 1–10: Faz 2 farazi kapsama %87,5 (GEÇTİ); Faz 3 v2 ile aynı (yeşil 44, yanlış yeşil 0/44). Faz 3 değişmiyor, çünkü k yalnız yük bandını genişletiyor; yeşil ve kırmızıyı belirleyen gerilim tarafı (s).
 
+## Ek 3 (31 Ekim 23:45, BUILD; karar masası 23:13): K_YUK 1,27 → 1,47, ürünün seçim yöntemi tabakalı
+
+**Neden:** Can'ın sınav işlerinin kontrolünde (can.md KONTROL 23:15) bulundu: sınav ürünün seçimini ölçüyor (faturalı, 10 ölçülü, **tabakalı**), K_YUK ise rastgele + tabakalı seçimin havuzundan geliyordu. İki yolun hatası ters yönde. Kural 22:06'daki ilke (sevk yapılandırması), sonuca bakılarak değil: ürün ölçülecek trafoyu tabakalı seçer (`sablon.py` `ogretici_sec`).
+
+**k, seçim yöntemi × ölçülü sayısı** [Hesap: `edp_test.py --kalibrasyonsuz`, girdi c, main]:
+
+| Seçim | 5 | 10 | 15 | 10 + 15 |
+|---|---|---|---|---|
+| rastgele | 1,99 | 0,99 | 1,17 | 1,07 |
+| **tabakalı** | 1,86 | 1,39 | 1,56 | **1,47** |
+| ikisi havuzda (eski) | 1,93 | 1,21 | 1,33 | 1,27 |
+
+- `K_YUK = 1,47` (`sablon.py`; `edp_test.py` aynı sabiti okur); `kalibrasyon.py ispanya` varsayılan kesiti tabakalı 10 + 15 (`--yol`); tüzük madde 3'e "ölçülü sayısı ve seçim yöntemi dahil".
+- Tabakalı 10 + 15 kesitinde (28 trafo, 660 satır): %80 bant %65,2 → %80,0 iç örnek, **%78,5 bir-dışarıda** (bir-dışarıda k 1,38–1,50); PIT sapması 0,130 → 0,097 (tolerans 0,113).
+
+**Sınav 21–30 bir kez (üretici 1.3, model v2b, K 1,47; Mac):**
+
+| | K 1,27 | **K 1,47** |
+|---|---|---|
+| İspanya %80 bant (Can'ın maddesi, 10 / tabakalı) | %76,8 | **%82,1** (GEÇTİ) |
+| İspanya %95 bant (bilgi, n < 150) | %88,9 | %92,6 |
+| İspanya PIT sapması (tolerans 0,113) | 0,071 fazla emin | 0,066 fazla geniş (GEÇTİ) |
+| Farazi %80 bant (bilgi) | %82,1 | %89,3 |
+| Yanlış yeşil | 0/17 | **0/17** (GEÇTİ) |
+| Yeşil / kırmızı / sarı | 17 / 61 / %77,7 | 17 / 61 / %77,7 |
+| Kırmızı kovasında aşan (eşik %37) | %49 | %49 (GEÇTİ) |
+| Kaç ev orta / P10 altı | 2 | 2 |
+
+Geliştirme 1–10: renkler aynı (yeşil 20, kırmızı 53, sarı 281, yanlış yeşil 0/20); İspanya %82,1, PIT 0,066. Renk değişmiyor, çünkü k yalnız yük bandını genişletiyor; rengi gerilim tarafı belirliyor (Ek 2'deki gibi). Bant genişleyince yeşil ancak azalabilir; bu turda azalmadı.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

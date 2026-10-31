@@ -302,14 +302,17 @@ BANT_SIMETRIK = True
 # farazi dünyanın yayılımını görür; gerçek dünya daha dağınık. İspanya'da (EDP Oviedo 2018, 29 trafo, edp_test.py faturalı
 # (c) koşusu) %80 bant gerçeğin %71,4'ünü kapsadı ("fazla emin"). k_yük = |birim artık|'ın %80 yüzdeliği; bant log ölçekte
 # k ile genişler. Kalibrasyon modelin SEVK EDİLDİĞİ yapılandırmada ölçülür: her şehirde 12 ölçülü (OLCULU_ANA), bu yüzden
-# İspanya'nın 10 ve 15 ölçülü denemeleri (1.320 tahmin); 5 ölçülü denemeler başka bir modelin hatası, k'yi şişiriyordu
-# (5: 1,93; 10: 1,21; 15: 1,33; karışık 1,475). k ölçülü sayısına bağlı; ölçülü sayısı değişirse k yeniden, pilotta yeniden.
-# Farazi şehre bakılarak seçilmedi. Kaynak: src/kalibrasyon.py ispanya --n 10,15; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md.
-K_YUK = 1.27                            # [Hesap: İspanya n 10+15; bir-dışarıda k aralığı 1,20–1,29]
-KALIBRASYON = dict(kaynak='EDP Oviedo 2018, 29 trafo, 10 ve 15 ölçülü bir-dışarıda tahminler (src/edp_test.py girdi c)',
-                   k=K_YUK, olculu_sayisi=[10, 15], k_bir_disarida_aralik=[1.20, 1.29], kapsama80_once=0.714,
-                   kapsama80_sonra_bir_disarida=0.786,
-                   betik='src/kalibrasyon.py ispanya --n 10,15', not_='ayar yalnız gerçek artıkla; farazi şehre bakılarak seçilmedi; sevk yapılandırması 12 ölçülü')
+# İspanya'nın 10 ve 15 ölçülü denemeleri; 5 ölçülü denemeler başka bir modelin hatası, k'yi şişiriyordu
+# (5: 1,93; 10: 1,21; 15: 1,33; karışık 1,475). Sevk yapılandırması seçim yöntemini de kapsar (karar masası 23:13): ürün
+# ölçülecek trafoyu tabakalı seçer (ogretici_sec), bu yüzden yalnız tabakalı denemeler (tabakalı 10 + 15: k 1,47; rastgele
+# 10 + 15: 1,07; ikisi havuzda 1,27, iki yolun hatası ters yönde). k ölçülü sayısına ve seçim yöntemine bağlı; biri
+# değişirse k yeniden, pilotta yeniden. Farazi şehre bakılarak seçilmedi. Kaynak: src/kalibrasyon.py ispanya --n 10,15
+# --yol tabakali; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md.
+K_YUK = 1.47                            # [Hesap: İspanya tabakalı n 10+15; bir-dışarıda k aralığı 1,38–1,50; rastgele kesitte 1,07]
+KALIBRASYON = dict(kaynak='EDP Oviedo 2018, 10 ve 15 ölçülü, tabakalı seçim, bir-dışarıda tahminler (src/edp_test.py girdi c)',
+                   k=K_YUK, olculu_sayisi=[10, 15], secim='tabakali', k_bir_disarida_aralik=[1.38, 1.50],
+                   betik='src/kalibrasyon.py ispanya --n 10,15 --yol tabakali',
+                   not_='ayar yalnız gerçek artıkla; farazi şehre bakılarak seçilmedi; sevk yapılandırması 12 ölçülü, tabakalı seçim')
 TABAN_HATA = 0.05                       # model hatası tabanının alt sınırı (çok aboneli trafoda bile) [Yorum]
 # Taban artıklardan seçilir (taban_sec). Sürüm 1.2 şehirlerinde mahalle farkı (ADR-0008) abone sayısıyla
 # sönmüyor: sabit 0,05 tabanla çok aboneli konut trafosu "yüksek güven" alıp en çok yanılan oluyordu.
