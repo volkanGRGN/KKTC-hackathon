@@ -1,6 +1,6 @@
 # Tablo biçimi sözleşmesi
 
-Sürüm 1.4 adayı (PR, Can ya da Civan onayı bekliyor) · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011; 1.4: yıl boyu tepe, cevap anahtarında sonda dokuz sütun, `yuk_5dk_yaz.csv` / `yuk_5dk_kis.csv`; ADR-0014, karar masası 23:12) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
+Sürüm 1.4 adayı (PR, Can ya da Civan onayı bekliyor) · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011; 1.4: yıl boyu tepe, cevap anahtarında sonda on sütun, `yuk_5dk_yaz.csv` / `yuk_5dk_kis.csv`; ADR-0014, karar masası 23:12) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
 
 Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun eksik ya da yanlış geliyorsa önce bu dosyaya bak; değişiklik gerekiyorsa [Volkan'ın kutusuna](../istek/volkan.md) yaz. Örnek değerler biçimi göstermek içindir; ölçüm ya da sonuç değildir.
 
@@ -117,6 +117,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | `tepe_yaz_kw`, `tepe_kis_kw` | float | kW | `88.23` | **1.4.** Yaz ve kış penceresinin net tepesi; pencere üretilmediyse boş |
 | `kva_tavan` | int | 0/1 | `0` | **1.4.** 1 = gereken güç listedeki en büyük trafoyu (1000 kVA) aştı, listeye kesildi; tüketim doluluğu bu trafolarda üreticinin sınırı, ayrı raporlanır |
 | `klima_carpani` | float | oran | `1.12` | **1.4.** Trafonun sıcaklık duyarlılığı çarpanı (klima / ısıtma yaygınlığı), U(0,5; 1,5), gizli (mahalle çarpanı gibi) |
+| `tepe_yil_brut_kw` | float | kW | `91.40` | **1.4.** Aynı pencerelerde brüt tüketim tepesi (panelsiz); `tepe_yil_kw` ile farkı panelin tepeye etkisi (Can, volkan.md 23:12 sonrası madde 3) |
 
 **"Gerçek kaç ev" tanımı:** panelsiz konut aboneler rastgele sıraya dizilir (Kıb-Tek'in başvuru sırası gibi). Sırayla her birine 6,5 kW panel eklenir (ev tek fazlıysa kendi fazına) [ROADMAP Faz 1: bekleyen başvurular 5–8 kW, orta değer]. Kritik adımlarda (bugünkü en yüksek gerilimli 6 adım + en güçlü güneşli 3 adım) herhangi bir evde gerilim 259 V'u ya da trafo yükü kVA'yı aşarsa o başvuru reddedilir ve **sıradakine geçilir** (ilk retle durulmaz: hat ucundaki bir evin sığmaması trafoya yakın evi engellemez). Onaylanan ev sayısı sonuçtur. Bugün zaten aşıyorsa 0. 7 farklı sıra, ortanca.
 

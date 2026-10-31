@@ -50,7 +50,7 @@ ayrı akışlardan (`klima14-`, `yaz14-`, `kis14-`, `og14-`), şehrin ağı ayn�
   farklıysa günün yükü × (1 + β·ΔT) (yaz) ya da × (1 − β·ΔT) (kış), en az ×0,6. β sınıf başına [Yorum] × trafo başına
   klima / ısıtma yaygınlığı U(0,5; 1,5) (gizli; mahalle gibi). Bütün evler aynı havayı görür: klima tepesi eşzamanlı.
   β'lar Can'ın 20 Kıbrıs evi + sıcaklık analizine çapalanacak (Faz 11).
-- Cevap anahtarına sonda: yılın net tepesi (`tepe_yil_kw`, kVA'sı, saati, ayı), yaz ve kış tepeleri, yıl pencerelerinde
+- Cevap anahtarına sonda: yılın net tepesi (`tepe_yil_kw`, kVA'sı, saati, ayı; brüt tepe ayrıca), yaz ve kış tepeleri, yıl pencerelerinde
   en düşük ev gerilimi (`v_min_tepe_v`, 207 V), `kva_tavan` (gereken güç 1000 kVA'yı aştı, listeye kesildi; Nisan
   donuk olduğu için 1.600 / 2.500 kVA eklenmedi). Yeni dosyalar `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv`.
 
@@ -792,6 +792,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                                           round(ur, 2), round(tk - ur, 2), round(ms['vmax'][i], 1),
                                           round(ms['vmin'][i], 1), round(ms['s_kva'][i], 1)])
         tepe, mev_tepe = None, {}
+        brut = max(max(ps['tuketim']) for _, ps, _ in pencere)
         for ad, ps, tar in pencere:
             for i in range(len(ps['tuketim'])):
                 net = ps['tuketim'][i] - ps['uretim'][i]
@@ -802,7 +803,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         cevap.update(tepe_yil_kw=tepe[0], tepe_ayi=tepe[1], tepe_saati=tepe[2],
                      tepe_yil_kva=max(max(ps['s_kva']) for _, ps, _ in pencere),
                      v_min_tepe_v=min(min(ps['vmin']) for _, ps, _ in pencere),
-                     tepe_yaz_kw=mev_tepe.get('yaz'), tepe_kis_kw=mev_tepe.get('kis'), klima=klima)
+                     tepe_yaz_kw=mev_tepe.get('yaz'), tepe_kis_kw=mev_tepe.get('kis'), klima=klima, brut=brut)
 
         abone = {c: 0 for c in ABONE_SUTUNLARI}
         for h in tr['evler']:
@@ -827,7 +828,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                             cevap['tepe_ayi'], round(cevap['v_min_tepe_v'], 1),
                             '' if cevap['tepe_yaz_kw'] is None else round(cevap['tepe_yaz_kw'], 2),
                             '' if cevap['tepe_kis_kw'] is None else round(cevap['tepe_kis_kw'], 2),
-                            tr['kva_tavan'], round(cevap['klima'], 3)])
+                            tr['kva_tavan'], round(cevap['klima'], 3), round(cevap['brut'], 2)])
 
         for i in range(len(g)):
             d, s = divmod(i, ADIM)
@@ -850,7 +851,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
              'v_max_bugun_v', 'v_min_bugun_v', 'kac_ev_aday', 'kac_ev_gercek', 'kac_ev_gercek_min',
              'kac_ev_gercek_max', 'kac_ev_tavan', 'kac_ev_sinir', 'mahalle_carpani', 'saat_kaymasi_dk',
              'tepe_yil_kw', 'tepe_yil_kva', 'tepe_saati', 'tepe_ayi', 'v_min_tepe_v', 'tepe_yaz_kw', 'tepe_kis_kw',
-             'kva_tavan', 'klima_carpani'],
+             'kva_tavan', 'klima_carpani', 'tepe_yil_brut_kw'],
             cevap_satir)
     for mev, satir in mevsim_satir.items():          # 1.4
         csv_yaz(klasor / f'yuk_5dk_{mev}.csv',

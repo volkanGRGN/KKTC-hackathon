@@ -8,7 +8,7 @@
 - **Eğri:** her günün kendi ayının EAC 2022 tipik günü (iş günü / tatil). Temmuz konutunun tipik günü gece yarısı tepe yapıyor (23:45; tepe ÷ ortalama 1,21) [Hesap: EAC profil sınıfları]; şekil veriden kalır.
 - **Sıcaklık terimi:** tipik gün o ayın ortalama havasını taşır. Günün ortalama sıcaklığı ayın ortalamasından ΔT farklıysa günün yükü × (1 + β·ΔT) (yaz) ya da × (1 − β·ΔT) (kış), en az × 0,6. β sınıf başına [Yorum, hepsi varsayım; Kıbrıs'a özgü sınıf eğimi BULAMADIM]: yaz konut ve yurt 0,045, küçük ve büyük ticaret 0,03, otel 0,02, su motoru 0,02, sanayi 0,01 / 0,005; kış konut ve yurt 0,03, küçük ticaret 0,02, diğerleri ≤ 0,015. Trafo başına gizli **klima yaygınlığı** U(0,5; 1,5) (cevap anahtarında `klima_carpani`). Bütün evler aynı havayı görür: klima tepesi eşzamanlı (Muhittin 4 madde 2). β'lar Can'ın 20 Kıbrıs evi + sıcaklık analizine çapalanacak.
 - İlk denemede sıcaklık farkı saat saat uygulanmıştı: sıcak dalgada öğleden sonra en çok ısındığı için konut tepesi 17:00'ye kaydı, EAC'nin gece tepesi kayboldu. Günlük farka çevrildi (şehir 1–10'da; sınav şehirlerine bakılmadı).
-- **Cevap anahtarı (sözleşme 1.4, sonda):** `tepe_yil_kw` (yılın net tepesi, üç pencere), `tepe_yil_kva`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`, `tepe_yaz_kw`, `tepe_kis_kw`, `kva_tavan`, `klima_carpani`. Yeni dosyalar `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv` (`sicaklik_c` ve `trafo_kva` sütunlarıyla). Can'ın `sinav.py faz2` tepe bölümü `tepe_yil_kw` ve `tepe_saati`'ni okuyor (3bfa967), adlar onunla aynı.
+- **Cevap anahtarı (sözleşme 1.4, sonda):** `tepe_yil_kw` (yılın net tepesi, üç pencere), `tepe_yil_kva`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`, `tepe_yaz_kw`, `tepe_kis_kw`, `kva_tavan`, `klima_carpani`, `tepe_yil_brut_kw` (Can'ın önerisi: net ↔ brüt farkı panelin tepeye etkisi). Yeni dosyalar `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv` (`sicaklik_c` ve `trafo_kva` sütunlarıyla). Can'ın `sinav.py faz2` tepe bölümü `tepe_yil_kw` ve `tepe_saati`'ni okuyor (3bfa967), adlar onunla aynı.
 
 ## Sağlama (şehir 1–10, üretici 1.4) [Hesap]
 | | |
@@ -34,7 +34,7 @@
 ## Ne kaldı
 - β ve klima yaygınlığı varsayım; Can'ın eşzamanlılık ve sıcaklık eğimi sonucu gelince çapalanır (üretici 1.5 adayı).
 - Tasarım sıcaklığı (10 yılda bir sıcak akşam) üreticide yok; pencere yalnız şehrin hava yılının en sıcak haftası.
-- B-Y2 (tepe modeli) sıradaki iş.
+- B-Y2 (tepe modeli) ve 1.600 / 2.500 kVA: karar masası 23:18'le yük haritasının kodu Can'a geçti; bu PR (B-Y1) o karardan önce yazılmıştı, Can'a devredildi (onay ve üstüne devam).
 
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
