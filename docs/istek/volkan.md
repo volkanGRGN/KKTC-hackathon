@@ -861,3 +861,23 @@ Ne ölçüldü (Windows, dal df08987, ayrı çalışma klasörü): (1) **Veri va
 Onay: düzeltme doğru; sözleşme 1.4 cevap anahtarı sütunları kararlaştırıldığı gibi (Civan onaylar, 23:35). Ben üretici 1.5'e (dal `uretici/1.5`, PR #21'in üstünde) geçiyorum.
 Dosya: PR #21; src/sinav.py
 Durum: bilgi
+
+## KARAR 00:10 — (BUILD 2 — panel) PR #19 (Faz 10 hazırlık, inverter kaydı): model rakamları birebir; iki eksi bulgu, düzelmeden birleşmez
+Karar: Karar masası Mac'te PR #19'u main'le birleşik hâliyle koştu. **Tutan:** betiğin başındaki model rakamları üretici 1.3 şehirleri 1–10'dan birebir (panelli şehir konutu 134 trafo; bara P10/50/90 245,1 / 247,6 / 250,6 V; en kötü ev 249,5 / 253,8 / 260,0 V; bara üstü 3,4 / 5,6 / 10,5 V; 253 V'u aşan 79/134, 259 V'u aşan 17/134) [Hesap: karar masası 00:05]. Yapay bir haftalık kayıt (5 dk) üç biçimde: İngilizce virgüllü CSV (PV sütunu doğru dışarıda kaldı) ve xlsx (tarih hücreli) doğru okundu, sonuçlar aynı.
+**Eksi (1) — UTF-8 olmayan dosya hiç okunmuyor:** Türkçe Excel'in "CSV (noktalı virgül)" kaydı cp1254'tür; `satirlar()` kodlamaları `utf-8-sig`, `utf-16`, … sırayla dener ve bayt sayısı çiftse `utf-16` hatasız "çözer", metin anlamsız olur → "Başlık satırı bulunamadı" ve `--zaman` / `--gerilim` de kurtarmaz (çözümleme ondan önce). Düzeltme: `utf-16`'yı yalnız BOM varsa (ya da NUL baytı çoksa) dene.
+**Eksi (2) — ayraç ilk satırdan seçiliyor:** dışa aktarımın üstünde bilgi satırları varsa (SMA "sep=;", cihaz adı) ayraç yanlış seçilir; başlık tek hücre kalır → "Gerilim sütunu bulunamadı". Düzeltme: ayracı başlık satırından (zaman adayı içeren satır) seç.
+İkisi de yüksek sesle duruyor (yanlış rakam yazmıyor), ama tanıdık evden gelecek ilk kaydın Türkçe Excel'den geçme olasılığı yüksek; kart (P6) "~5 dk" diyor.
+Senden beklenen: iki düzeltme PR #19 dalına; deneme: cp1254 noktalı virgüllü, üstte iki bilgi satırlı, gece 0 yazan üç fazlı kayıt. Bitince karar masasına mesaj; karar masası Mac'te tekrarlar ve birleştirir (Volkan'ın sözü: "PR'ları test et ve yolla").
+Neden: Volkan'ın kuralı (eksi bulgulu PR düzelmeden birleşmez).
+Durum: bekliyor
+
+## KARAR 00:10 — (BUILD 2 — panel) PR #22 (başvuru anı motoru + sahte kayıt): birleşme için kalanlar
+Karar: PR #22, KARAR 23:47'deki şartlar ve Civan'ın sözleşme §7 incelemesindeki iki düzeltmeyle birleşir. Sıra:
+1. **İki kat hata koşumu** (KARAR 23:47 madde 1): motor kaydın hata payını "iki kat" varsayarken gerçek kayıt hatası **beklenen** ve **yarı** olduğunda hemen evet, yanlış evet, önce ölç; sınav 21–30 bir kez (üretici 1.3, K_YUK 1,47). Günlüğe (`docs/log/2026-11-01-volkan-sahte-kayit.md`) tablo, PR açıklamasına tek satır.
+2. **Tüzük madde 2'ye cümle:** "Kayıt kalitesi sahada ölçülmeden kayda koşullu kararlar en kötü kayıt hatasıyla verilir."
+3. **Civan'ın iki notu (PR #22 incelemesi):** (a) `inverter` satırının `deger` alanı türetilmiş (`bara_V;esdeger_boy_m`), ham kayıt değil: §7'ye "türetilmiş değer; gerçek kayıtta geri çözüm adımı gerekir" notu ve iki değer ayrı sütun (`bara_v`, `esdeger_boy_m`) ya da en az notta bu öneri; (b) sözleşmenin sürüm satırına §7 / `kayitlar.csv` ve dosyalar tablosuna `kayitlar.csv` satırı (üreten `src/sahte_kayit.py`, okuyan `src/basvuru.py`, `src/basvuru_testi.py`, Faz 9).
+4. **Taban:** PR #21 (sözleşme 1.4 cevap anahtarı) önce birleşecek ve aynı sürüm satırına dokunuyor; birleşince dalı main'e göre güncelle, iki ibare birlikte kalsın.
+5. **§7 onayı:** düzeltmelerden sonra Civan'dan (ya da Can'dan) GitHub onayı; isteği civan.md'ye UYARI olarak yaz.
+Sonra karar masasına mesaj; karar masası Mac'te 21–30'u (dört kayıt düzeyi + iki kat koşumu) tekrarlar, rakamlar tutarsa deneme olarak birleştirir (resmi hesap değişmez).
+Neden: KARAR 23:47; Civan'ın §7 incelemesi (onay değil, iki düzeltme önerisi); Volkan'ın kuralı.
+Durum: bekliyor
