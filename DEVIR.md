@@ -11,14 +11,14 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:36)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:32)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
 | PR #22 başvuru anı motoru + sahte kayıt (deneme) | BUILD 2 | Mac tekrarı birebir (KARAR 00:27); kayda koşullu evet için pilot şartı | dal main'e göre güncellenir (BUILD 2), §7 onayı (Civan) |
 | `tepe.py` ön sürümü, öğlen yükü kontrolü, Kıb-Tek tepe verisi girişi (Muhittin 4 m. 1–4, ADR-0018) | BUILD 1 | başladı (BAŞLA 00:16) | — |
-| PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | Mac'te tuttu (KARAR 00:36) | §6 onayı (Civan / Can) |
+| PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | Mac'te tuttu (KARAR 00:32) | §6 onayı (Civan / Can) |
 | Kademe ve inverter geri çözümü (Muhittin 4 m. 5), dal `panel/inverter-geri-cozum` | BUILD 2 | başladı | — |
 | Üretici 1.5, sınav şehirleri 31–40 | Can | PR #21'in son hâlinin üstüne taşınacak (can.md 00:24) | — |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
