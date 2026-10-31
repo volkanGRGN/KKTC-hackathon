@@ -36,10 +36,16 @@ Kural: model yalnız Kıb-Tek'in bileceğini girdi alır (`trafolar.csv`) ve yal
 
 ## 4. Kaç ev sığar (Faz 3)
 
-- Isıl: trafo gücü + öğlen en düşük yük − mevcut panel. Yanına bugünkü %40 kuralı.
-- Gerilim: pay = 259 − trafo çıkış gerilimi − trafo yükselmesi; etkin mesafe hat boyunun yarısı; tek faz karamsar, dengeli üç faz iyimser. Trafo çıkışı: şartname boşta 250 V, kademe ayarı bilinmiyor → farazi şehirde 244–252 V (üretici 1.2; İngiltere UKPN'de siteler arası bara yayılımı ss 3,3 V).
-- Sonuç = küçüğü ÷ 6,5 kW. İki senaryo: karamsar (P10 yük, faz bilinmiyor) ve iyimser.
+Kod: `src/kac_ev.py`. Girdi: `trafolar.csv` (kVA, hat sayısı ve en uzun hat boyu, kablo, abone ve panel sayıları) ve `tahmin.csv` (öğlen en düşük yükün P10 / P90'ı, güven). Ölçülü trafoda ölçülen yük.
+
+- Fizik, ev ev benzetimin (`src/trafo_bos_kapasite.py` `solve`) empedanslarıyla tek denklem: hat ucu gerilimi = trafo çıkışı × (1 + OG öğlen yükselmesi) + r_trafo × faz akımı + r_hat × akım × mesafe; akım = (panel kW × öğlen güneşi − yük) ÷ 250 V. Tek fazlı akım nötrden döner (r_faz + r_nötr), dengeli üç fazda nötr akımı yok. Her yeni ev (6,5 kW) gerilimi sabit bir miktar artırır; 259 V'a kalan pay ÷ ev başına artış = gerilimin izin verdiği ev.
+- Öğlen güneşi: Nisan'da en yüksek saatlik eğik ışınım 998 W/m² (2023–2025, Open-Meteo) × 0,82 kayıp [Hesap].
+- Isıl: ters akış ≤ kVA: (kVA + yük − mevcut panel × güneş) ÷ güneş = ısıl pay kW.
+- Sonuç = gerilim ve ısılın küçüğü, aşağı yuvarlanır, panelsiz konut abone sayısıyla sınırlı.
+- **Karamsar:** P10 yük; trafo çıkışı 250 V + %0,8 OG öğlen yükselmesi [Yorum]; yeni paneller **hattın ucunda ve tek fazda** (İngiltere UKPN: paneller uca toplanınca eşit yayılmış model yükselmeyi 2–4 kat az gösterdi; karar masası 16:27); mevcut panellerin yarısı aynı fazda, hat boyunun 2/3'ünde; hat üstünde yük indirimi yok; en uzun hattın payı eşit pay ile boy payının büyüğü.
+- **İyimser:** P90 yük, 246 V, yeni ve mevcut paneller hat ortasında, dengeli üç faz, hat yükü panel üretimini azaltır.
 - `v_max` 264 V üstü benzetim değerleri fiziksel değil (inverter kapanır; ADR-0006); Faz 3 259 V sınırını kullanır.
+- Benzetimdeki "gerçek kaç ev" sıra sıra başvurur, sığmayanı atlayıp sıradakine geçer (trafoya yakın ev uçtaki evden sonra da sığabilir). Bu yüzden gerçek, karamsar ile iyimser arasında, iyimsere yakın düşer.
 
 ## 5. Belirsizlik ve renk
 
@@ -53,4 +59,8 @@ Kural: model yalnız Kıb-Tek'in bileceğini girdi alır (`trafolar.csv`) ve yal
   - **Fatura yoksa `yuksek` verilmez** (1.2): büyüklük mahalle farkı kadar (±%30) bilinmez; 12 ölçülünün bir-dışarıda hatası şans eseri küçük çıkan şehirde "yüksek" en çok yanılan oluyordu.
   - Beklenen hata = bölünmüş artıkların mutlak ortancası × trafonun birimi.
   - Eşikler [Yorum]; günlükte gerekçe.
-- **Renk (Faz 3):** yeşil = karamsar senaryoda bile yer var ve güven yüksek; kırmızı = iyimser senaryoda bile yer yok; diğerleri sarı → ölç ya da esnek onay.
+- **Renk (Faz 3, [ADR-0010](../decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md)):**
+  - **yeşil** = karamsar senaryo bekleyen evi marjla alıyor (marj = gerilim payının %10'u, en az 1 ev: karamsarda en az ~2 ev sığmalı) **ve** güven yüksek;
+  - **kırmızı** = karamsar senaryoda bugün aşıyor (yeni panel olmadan hat ucu 259 V üstünde ya da ısıl pay eksi): "önce ölç ya da güçlendir"; **sarı** = sınırda (karamsar bugün aşmıyor ama bekleyen ev sığmıyor) ya da güven orta / düşük. Karar masası 17:26 bu okumayı seçti (`KIRMIZI_KURALI = karamsar_bugun`); kod öbür iki okumayı da tanır (`karamsar_yeni_ev`: bekleyen ev hattın ucunda sığmıyor; `beklenen_bugun`). Yanlış kırmızı ve sarı oranı ROADMAP hedeflerinin üstünde: sebep ±4 V bilinmeyen bara gerilimi, pilotun ilk ölçeceği şey ([Faz 3 günlüğü](../log/2026-10-31-volkan-faz3.md));
+  - sarı → sınırlı onay ya da önce ölçüm (ölçüm cihazı sarılara).
+  - Renk, panelsiz konut abone sayısıyla sınırlanmamış fiziğe bakar (başvuru ticari aboneden de gelebilir).

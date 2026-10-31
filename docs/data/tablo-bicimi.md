@@ -151,13 +151,13 @@ Satır = bir trafo.
 | Sütun | Tür | Birim | Örnek | Açıklama |
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
-| `kac_ev_karamsar` | int | ev | `1` | P10 yük, tek faz, trafo çıkışı 250 V |
-| `kac_ev_iyimser` | int | ev | `6` | P90 yük, dengeli üç faz, 246 V |
-| `isil_pay_kw` | float | kW | `142.0` | trafonun ısınmadan alabileceği ek panel |
+| `kac_ev_karamsar` | int | ev | `1` | P10 yük, tek faz, trafo çıkışı 250 V, bekleyen paneller hattın ucunda (karar masası 16:27); panelsiz konut abone sayısıyla sınırlı |
+| `kac_ev_iyimser` | int | ev | `6` | P90 yük, dengeli üç faz, 246 V, hat ortası; aynı sınır |
+| `isil_pay_kw` | float | kW | `142.0` | trafonun ısınmadan alabileceği ek panel (karamsar: P10 yük) |
 | `gerilim_pay_kw_karamsar` | float | kW | `8.60` | |
 | `gerilim_pay_kw_iyimser` | float | kW | `41.30` | |
 | `sinir_karamsar` | str | — | `gerilim` | karamsar senaryoda bağlayan: `gerilim` / `isil` |
-| `renk` | str | — | `sari` | `yesil` / `sari` / `kirmizi` ([yöntem](../method/modeling.md) bölüm 5) |
+| `renk` | str | — | `sari` | `yesil` / `sari` / `kirmizi` ([yöntem](../method/modeling.md) bölüm 5, ADR-0010) |
 | `kural40_ev` | int | ev | `9` | %40 kuralının dediği: ⌊max(0, 0,4 × `kva` − `panel_kw`) ÷ 6,5⌋ |
 
 "Ölçülmedi" etiketi = `tahmin.csv`'de `olculdu` = 0. Harita `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`'yi (sehir, trafo_no) ile birleştirir.
