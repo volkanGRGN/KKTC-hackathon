@@ -17,6 +17,8 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
   - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (artık main'e bağlı; Can'ın incelemesini bekliyor).
   - Sınav şehirleri 11–20: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
   - Kırmızı = karamsar senaryoda bugün aşıyor (karar masası 17:26): kırmızı %31, yanlış kırmızı %42, sarı %63. Hedef aşımının sebebi ±4 V bilinmeyen bara gerilimi; pilotun ilk ölçeceği şey.
+  - Varsayım envanteri ([günlük](docs/log/2026-10-31-volkan-faz3-varsayimlar.md)): hiçbir ayar kırmızıyı düzeltmiyor, sıralama 0,75'te sabit; öğlen OG yükselmesi (+%0,8) UKPN'le çelişiyor.
+  - Olasılıklı deneme [PR #15](https://github.com/volkanGRGN/KKTC-hackathon/pull/15): sınav 11–20'de yanlış yeşil 0/97 (yeşil %28), yanlış kırmızı %23, kaç ev hatası 2. Resmi hesap olup olmayacağı karar masasında.
 - **Faz 5 başladı** (paralel). Hikâye "güven merdiveni", manşet İspanya %25 → %10 (ROADMAP Faz 5).
 
 ## Açık faz ve kim nerede
