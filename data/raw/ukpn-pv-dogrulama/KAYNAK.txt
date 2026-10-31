@@ -1,0 +1,12 @@
+UK Power Networks — "Validation of Photovoltaic (PV) Connection Assessment Tool" izleme verisi (LCN Fund Tier 1, 2012–2014).
+Veri sayfası: https://data.london.gov.uk/dataset/photovoltaic-pv-solar-panel-energy-generation-data-2nlqm/  (London Datastore; yazar UK Power Networks; lisans CC BY 4.0; son güncelleme 7 Nisan 2022)
+Dosyalar (indirildi 31 Ekim 2026, karar masası, Volkan'ın isteğiyle):
+  indirilen/PV_Data.zip  — https://data.london.gov.uk/download/2nlqm/81fb6b31-f6b2-4e12-b054-090319faec7b/PV%20Data.zip  (sayfada 783,50 MB; SHA-256 sayfada yok, indirince hesaplanacak)
+  indirilen/Weather_Data_2014-11-30.xlsx — https://data.london.gov.uk/download/2nlqm/b4a7e790-8cb8-451c-b828-c4c5d8445705/Weather%20Data%202014-11-30.xlsx (19,0 MB)
+  kapanis-raporu-ofgem-2015.pdf — Ofgem, "Validation of PV Connection Assessment Tool, Closedown Report v1.1" (Mart 2015): https://www.ofgem.gov.uk/ofgem-publications/93938/pvtoolcdrfinal-pdf  (+ .txt: pdftotext -layout çıktısı)
+İçerik [Kaynaklı: kapanış raporu]: 20 ikincil trafo (18 yüksek PV'li + 2 PV'siz; kırsal + banliyö, EPN/SPN, Londra değil; 50–1.000 kVA) + 10 müşteri evi (6'sı izlenen trafoların hat ucunda; * işaretli siteler: Alverstone Close, Bancroft Close, Forest Road, Maple Drive East, Suffolk Road, YMCA). Her AG fider çıkışında ayrı cihaz (57 cihaz): gerilim, akım, P, Q, S, THD, faz faz; evlerde net alış/veriş (10/10) ve üretim (6/10); 9 trafoda hava istasyonu (ışınım 30 dk).
+Dönem: 27 Temmuz 2013 – 19 Kasım 2014 (480 gün). 10 Haziran 2014 ÖNCESİ 10 dk ölçümler saatlik en düşük/en yüksek olarak toplulaştırılmış; 10 dk tam seri Haziran 2014 sonrası; 1 dk 18 Haziran – 7 Eylül 2014.
+Site tablosu (rapor Tablo 3, s.17): site adı, bağlı PV kW, müşteri sayısı; hat boyu ve kablo tipi raporun ekinde/şebeke modelinde aranacak.
+Kullanım: Faz 3 gerilim fiziği doğrulaması — bizim ev ev yük akışı (src/trafo_bos_kapasite.py solve) İngiltere'nin ölçülen hat ucu gerilim yükselmesini tutturuyor mu. Ülke farkı: 230 V nominal, 253 V yasal üst sınır, çoğu yeraltı Al kablo; taşınan şey fizik, rakam değil.
+Depoda yok (data/raw/*/* gitignore); bu KAYNAK.txt ve rapor notu depoda. İndirilen zip çalıştırılmaz, yalnız okunur; kendi klasöründe açılır.
+SHA-256 (PV_Data.zip, 821.564.466 bayt, 31 Ekim 2026): 790b78d40e2bbaa584a4e694b746576e1ca9f412d1d961962ba3b679aa83dde0
