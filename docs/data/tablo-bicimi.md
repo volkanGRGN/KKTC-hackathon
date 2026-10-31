@@ -199,3 +199,24 @@ Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama 
 | `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy). **Türetilmiş değer, ham kayıt değil:** inverterin ham gerilim / güç serisi bu dosyaya girmez, geri çözümün sonucu girer; gerçek kayıtta önce geri çözüm adımı gerekir (ham seriden, `src/inverter_kaydi.py` gibi). 1.4 kesinleşirken iki değerin ayrı sütun olması önerilir (`bara_v`, `esdeger_boy_m`) (Civan, 23:56; karar masası 00:10) |
 
 Başvuru formu (başvuranın hattı, yeri, fazı) aynı alanlarla ayrı gelir; testte `sahte_kayit.basvuru_kaydi` üretir, dosyası henüz yok.
+
+## 8. `tepe.csv` — Faz 11 yılın tepesi, ön sürüm (1.4 adayı; Can ya da Civan onayı; §7 PR #22'nin `kayitlar.csv`'si)
+Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe bölümü) ve harita (yük kartı). Satır = trafo; harita `(sehir, trafo_no)` ile birleştirir. Sütun adları Can'ın önerisiyle (volkan.md 23:12 sonrası). Model `cevap_anahtari.csv`'yi okumaz; `ayar.json`'dan yalnız `hava_yili`. Dosyalar tablosuna satır PR #21 (sözleşme 1.4) birleşince eklenir (iki PR aynı satırlara dokunmasın).
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `trafo_no` | int, str | — | `1`, `T01` | |
+| `olculdu` | int | 0/1 | `0` | `tahmin.csv` ile aynı ölçülü küme (Nisan ölçümü); sınav yalnız 0'ları sayar |
+| `tepe_kw` | float | kW | `88.23` | Yılın net tepesi (trafodan geçen), şehrin hava yılında; orta tahmin |
+| `tepe_kw_p10`, `tepe_kw_p90` | float | kW | `70.1`, `135.0` | Geniş bant: İspanya Mayıs tepesi artıkları (sağa çarpık) ⊕ eğim belirsizliği (ADR-0018 m. 2, 4) |
+| `tepe_saati` | str | SS:DD | `23:30` | Tepenin saati (ayın tipik günü) |
+| `tepe_ayi` | int | ay | `7` | Tepenin ayı (6–9, 1–2 ya da 4) |
+| `pf_varsayim` | float | — | `0.95` | Güç katsayısı varsayımı (ADR-0014) |
+| `tepe_kva`, `tepe_kva_p10`, `tepe_kva_p90` | float | kVA | `92.9` | `tepe_kw*` ÷ `pf_varsayim` |
+| `bos_kva` | float | kVA | `157.1` | `kva` − `tepe_kva` (yan panel) |
+| `bos_kva_p10` | float | kVA | `107.9` | `kva` − `tepe_kva_p90`: **haritanın "yük için boş" sayısı** (güvenli yön; ADR-0018 m. 6) |
+| `bos_kva_p90` | float | kVA | `176.2` | `kva` − `tepe_kva_p10` |
+| `guven` | str | — | `on` | Ön sürümde hep `on` (yaz ölçümü yok) |
+| `kor_nokta` | str | — | `mayis_temmuz;klima_kuyrugu` | Her sayının yanındaki etiket (ADR-0018 m. 3): gerçek veri bahar; sıcak dalga kuyruğu ölçülmedi |
+
+Bilgi dosyası `tepe_ozet.json`: ölçülü trafolar, Nisan oranları (R), sınıf eğimleri, ay sıcaklık sapmaları, bant.
