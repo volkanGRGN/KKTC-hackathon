@@ -49,3 +49,21 @@ Ne: Yeni ayarlarla (gerçek EAC + Lefkoşa ışınımı, yaygınlık %3–25) Fa
 Dosya: ROADMAP.md (Faz 1 geçme sınavı; şimdilik [~]), src/sinav.py (V_ALT, Can'ın), src/sehir_uret.py (TIPLER)
 Neden: Maddenin amacı "benzetim bozuk değil"; üç trafo bozuk görünmüyor (büyük yük ya da uzun ince hat, akşam tepesi) [Yorum]. Önceki yapay ışınımlı 20 şehirde 0 idi. Rakamlar: docs/log/2026-10-31-volkan-faz1.md ek girdi. Faz 2'yi bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 14:20 — Can'dan — İspanya EDP kullanılabilir: gerçek doğrulama adayı (Faz 2, 2i)
+Ne: EDP veri seti indirildi ve incelendi (zaman kutusu ~40 dk). 30 trafo (28 × 630, 1 × 1000, 1 × 250 kVA), 8.087 müşteri, **saatlik**, 1–21 Mayıs 2018. Müşteri → trafo eşleşmesi çıkarılabiliyor (ağ radyal; 8.073/8.087 yük tek trafoya); 29 trafonun saatlik toplam yükü elde, öğlen (11–14) en düşük 25–163 kW [Hesap]. Sınırlama: **tarife sınıfı / abone tipi yok** (yalnız müşteri sayısı, faz, kVA, hat boyu); TD009456 (251 müşteri) tamamen sıfır; kentsel, kuzey İspanya, Akdeniz değil. Eleme 4/5 → alındı.
+Dosya: data/raw/edp-oviedo/KAYNAK.txt, docs/data/data-dictionary.md, docs/log/2026-10-31-can-faz2.md
+Neden: Faz 2 kartı adım 3 ("kullanılabilirse Volkan'ın kutusuna"). Modeli EDP'de koşmak senin işin (2i); girdi yalnız toplam müşteri + kVA olabilir. İstersen trafo başına saatlik toplamı sözleşme biçiminde çıkaran küçük betiği ben yazarım; karar senin.
+Durum: bekliyor
+
+## UYARI! 31 Eki 14:20 — Can'dan — sözleşme §5: arketipler.csv `oran` brüt mü net mi?
+Ne: Faz 2 kartındaki "doğru arketip" ölçüsü trafonun gerçek kümesini `yuk_5dk.csv` **`tuketim_kw`** (brüt) iş günü eğrisinden bulup `arketipler.csv` `oran` ile karşılaştırıyor. Sözleşme `oran`ın hangi seriden (brüt `tuketim_kw` mi, sayacın gördüğü `net_kw` mi) çıktığını yazmıyor. `sablon.py` net üzerinden kümelerse ölçü yanlış arketiple karşılaştırır. Harita formülü (`oran` × `ogle_min_kw` ÷ öğlen en düşük `oran`) brütü ima ediyor. Öneri: §5'e "`oran`: brüt tüketim (`tuketim_kw`) eğrisi" satırı.
+Dosya: docs/data/tablo-bicimi.md §5, src/sablon.py
+Neden: iskelet uyumu; `sinav.py faz2` yazılmadan netleşsin. Bloklamıyor.
+Durum: bekliyor
+
+## UYARI! 31 Eki 14:20 — Can'dan — bilgi: PR #6 okuma notları (birleşmeden önce bakıldı)
+Ne: Engelleyen bulgu yok (ısıl sınır kVA ile doğru, ışınım saat kaydırması doğru, sütunlar sözleşmeyle birebir, tohumlar platformdan bağımsız). İki küçük not: (1) Bayramlar iş günü sayılıyor (yalnız cumartesi/pazar tatil): eski 20 şehrin 12'sinin penceresi 23 Nisan ya da 2024 Ramazan Bayramı'na (10–12 Nisan) denk geliyor, `isgunu` etiketli [Yorum: tarihler resmi kaynaktan doğrulanmadı]. Ya bayram listesi ya da "bayram yok sayıldı [Yorum]" notu. (2) `KVA_LISTESI` en büyüğü 1000; gerek büyükse sessizce 1000 seçiliyor: 800 trafonun 104'ü 1000 kVA (otel 49, çarşı 55); Nisan tepesi kVA'nın en çok %50'si, şimdilik etkisiz, yaz benzetilirse önemli.
+Dosya: src/sehir_uret.py
+Neden: bilgi; karar gerekmiyorsa "okundu" yeterli.
+Durum: bekliyor
