@@ -17,3 +17,4 @@ Sağlama (Can, 31 Ekim) [Hesap]:
 - Ağ trafodan izlenince 8.087 yükün 8.073'ü tek bir trafoya bağlanıyor, 14'ü hiçbirine; birden fazla trafoya bağlanan yok.
 - 29 trafoda yük var; trafo başına 73–621 müşteri. TD009456'nın 251 müşterisinin profili tamamen sıfır (veri eksik).
 - Trafo toplamı: 20 gün tepe 55–371 kW, öğlen (11–14) en düşük 25–163 kW; ağın günlük enerjisi 44,9–57,7 MWh.
+Düzeltme (karar masası 31 Ekim 15:12): TD009456 yalnız OpenDSS profilinde sıfır, ham sayaç verisinde (GIS_data/file*.xlsx) dolu; ham veride trafo başı ölçüm sayaçları (ZIVS…) var, ondalık virgül düzeltmesi gerekiyor. Ham veriden okuma: src/edp_test.py (PR #10).
