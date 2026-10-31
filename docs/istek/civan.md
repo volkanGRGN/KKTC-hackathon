@@ -210,3 +210,8 @@ Sırada (TEST oturumu koşuyor): #24 yılın tepesi (`tepe.csv` §8), #26 Kıb-T
 Dosya: GitHub PR'ları
 Neden: Volkan: "hepsini bitirmemiz gerek"; sözleşme değişikliği Can ya da Civan onayı ister (CONTRIBUTING).
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:36 — karar masasından (KARAR) — yük kartı: tepe saati tek değil, iki aday saat / dönem
+Ne: Konut trafolarında günde iki tepe var (16–17 ve 23), neredeyse eşit; tek saat yarı yarıya tutuyor. PR #32 `tepe.csv`'ye `tepe_saati_2` (ikinci aday) ve `tepe_donemi` (§8) ekliyor; iki adaydan biri %60, dönem %69 tutuyor [Hesap; farazi, üretici 1.5]. Kart "tepe saati" yerine "tepe: akşam (17:00 ya da 23:00)" gibi iki adayı göstersin. Sütunlar #24 / #26 / #29 / #31 / #32 zinciri birleşince main'de olur (hepsi GitHub onayını bekliyor; onay listesi 01:20 girdisinde).
+Dosya: app/ (senin); docs/data/tablo-bicimi.md §8 (onay)
+Durum: bekliyor

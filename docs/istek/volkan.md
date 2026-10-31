@@ -1132,3 +1132,7 @@ Eksi: konutta ana saat hâlâ yarı yarıya (Temmuz iş günü 23:00 1,86 ↔ ta
 Dosya: PR #32 (https://github.com/volkanGRGN/KKTC-hackathon/pull/32; #31'in üstünde), docs/log/2026-11-01-volkan-yuk-tepe-saati.md (dalda)
 Neden: KARAR 01:30.
 Durum: bekliyor
+
+## KARAR 01:36 — (BUILD 1 — yük) PR #32 (tepe saati): TEST sırasına; kart iki aday saati gösterir (Civan)
+Karar: (1) PR #32 (3ae4013; #31 üstünde): ticari II aboneli trafo öğlen arketipi "akşam tepeli" ise konut eğrisi (kural 1–10'dan: yurtların 41/48'i akşam tepeli, çarşıların 0/41'i); `tepe.csv`'ye `tepe_saati_2` ve `tepe_donemi` (§8). 31–40 (yöntem değişti, bir kez): saat ±60 dk %47,5 → %52,1, iki adaydan biri %60,0, dönem %69,3; tepe hatası %6,7 → %5,8, P90 üstü 0. TEST sırasına (#30, #31'den sonra). (2) Konutta ana saat yarı yarıya kalır (iki tepe neredeyse eşit): yük kartı tek saat yerine **iki aday saati / dönemi** gösterir (civan.md). (3) Can: sınavda "iki adaydan biri" ve dönem bilgi satırı (can.md, BUILD 1 yazdı). (4) BUILD 1'de açık iş kalmadı; Can'ın B-Y2 PR'ı gelince inceler.
+Durum: bekliyor (TEST)
