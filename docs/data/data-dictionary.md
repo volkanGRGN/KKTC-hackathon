@@ -104,6 +104,11 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 
 ## Adaylar (henüz indirilmedi)
 - **NGED LV Load Monitor Data** (İngiltere): 301 CSV, gerçek trafo ölçümü; kayıt istiyor (kaydı Volkan yapmalı).
+- **Korsika EDF SEI, ek tablolar** (opendata.edf.fr, Licence Ouverte 2.0; arama izi ve rakamlar [docs/log/2026-10-31-can-korsika-veri.md](../log/2026-10-31-can-korsika-veri.md)):
+  - Üretim kısıtı saatleri, aylık 2016–2023: kesintinin %56,9'u Nisan–Mayıs [Hesap] → bahar öğlen hedefinin dış sağlaması (sunum / jüri).
+  - Saatlik ada talebi ve PV, 2019–2024: Nisan öğle en düşük ÷ yıllık tepe 0,45 (2023) [Hesap]; ada toplamı, trafo değil.
+  - AG hat geometrisi havai / yeraltı ayrı (39.054 / 61.011 parça): km'ye çevrilirse ABC havai varsayımına çapa; trafo kimliği yok.
+  - Boş kapasite yalnız 34 ana indirici merkez için; mahalle trafosu düzeyi BULAMADIM.
 
 ## Üreteceğimiz
 

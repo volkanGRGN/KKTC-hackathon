@@ -686,3 +686,9 @@ Dosya: PR #19 (https://github.com/volkanGRGN/KKTC-hackathon/pull/19)
 Neden: KARAR 21:15 / 22:21; tanıdık evden kayıt gelirse hazır olsun. Birleştirme Volkan'ın sözüyle.
 Durum: bilgi
 PR İNCELEME 22:29 (karar masası): PR #19 incelendi — yalnız görev kartı + `src/inverter_kaydi.py` (salt okur, dış bağlantı ve çalıştırma yok, kişisel veri yok, sözdizimi temiz); kullanım bölünmesi değer görülmeden dondurulmuş (ilk 5 ev doğrulama); model koduna dokunmuyor. **Birleşebilir**; Volkan'ın sözüyle (izin sistemi).
+
+## BİLGİ 31 Eki (22:30 sonrası) — Can'dan — Korsika: güneş kesintisinin %57'si Nisan–Mayıs (bahar hedefimizin dış sağlaması)
+Ne: Korsika açık verisini (opendata.edf.fr, Licence Ouverte 2.0) taradım. Mahalle trafosu düzeyinde yük / gerilim / boş kapasite **yok** (BULAMADIM; boş kapasite yalnız 34 ana indirici merkez için). İşe yarayan bir bulgu: adanın anlık yenilenebilir sınırı (%35) yüzünden güneş ve rüzgârın kesildiği saatlerin 2016–2023'te **%56,9'u Nisan + Mayıs'ta**, Temmuz–Ağustos ve Aralık–Ocak'ta ~0 [Hesap: EDF SEI "Limitations de production — Corse", 96 aylık satır]. Ayrıca 2023 saatlik ada talebinde Nisan öğle en düşük ÷ yıllık tepe 0,45 [Hesap].
+Dosya: docs/log/2026-10-31-can-korsika-veri.md; veri sözlüğü "Adaylar".
+Neden: jüri "neden Nisan öğleni?" derse dış kanıt: yalıtık bir adada güneşin sığmama sorunu baharda en büyük. Mekanizma farklı (Korsika'da sistem sınırı, bizde trafo gerilimi) — bunu söylemeden kullanılmaz. Sunum metni v1'de kalıyor; jüri cevabına girip girmeyeceği senin kararın.
+Durum: bilgi
