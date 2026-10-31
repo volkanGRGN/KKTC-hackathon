@@ -48,9 +48,9 @@ Windows'ta `python3` yerine `python`. Sanal ortamı etkinleştirmeden çalışt�
 
 **Kıyı kontrolü (isteğe bağlı):** `data/raw/osm-kasaba/girne_kiyi.json` varsa sahte trafolar karada tutulur; yoksa uyarı çıkar ve trafoların bir kısmı denize düşebilir. İndirme komutu [KAYNAK.txt](../data/raw/osm-kasaba/KAYNAK.txt)'de.
 
-## "Noktalar çoğalıyor" sayfası (sunum geçişi)
+## "Noktalar çoğalıyor" (sunum geçişi, haritadan ayrı)
 
-Sol menüde **noktalar cogaliyor** (`app/pages/noktalar_cogaliyor.py` → `app/animasyon.py` + `app/animasyon.html`; civan.md KARAR 17:32). ~14 saniye:
+Harita sayfasına bağlı değil; tek başına çalışır: `streamlit run app/animasyon.py` (`app/animasyon.py` + `app/animasyon.html`; civan.md KARAR 17:32). Sunum ekranları kurulunca `goster()` oradan çağrılır. ~14 saniye:
 1. sehir-001 Girne'de: önce 3 ölçülü trafo tek tek, sonra kalan ölçülüler (dolu nokta, beyaz kenar).
 2. Tahmin edilenler ölçülenlere yakından uzağa, küçük gruplar hâlinde (soluk halka); renk `kac_ev.csv`'den.
 3. Görünüm adaya açılır; öbür farazi şehirler (002–020) kasabalara **temsili** yerleşir (dağılım 0,4 küçültülmüş). Kasaba merkezleri yaklaşık [Yorum], gerçek trafo yeri değil.
