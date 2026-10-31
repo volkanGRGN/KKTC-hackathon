@@ -1,6 +1,6 @@
 """Harita için sahte şehirler üretir (Faz 1, Civan).
 
-Sütunlar docs/data/tablo-bicimi.md sürüm 1 ile birebir. Değerler yalnız biçimi
+Sütunlar docs/data/tablo-bicimi.md sürüm 1.2 ile birebir. Değerler yalnız biçimi
 ve haritayı denemek içindir: ölçüm ya da sonuç değil, "SAHTE VERİ — gösterim".
 
 Çalıştırma: python3 app/ornek_veri.py  →  data/synthetic/sehir-901/ … 903/
@@ -35,7 +35,15 @@ YENI_PANEL_KW = 6.5
 PANEL_YAYGINLIGI = (0.03, 0.25)  # konut abonelerinin payı, ADR-0006
 PANEL_KW = (4.0, 6.5)  # bir çatı paneli, kW (civan.md 13:33, Volkan)
 
-SOZLESME_SURUMU = 1
+SOZLESME_SURUMU = "1.2"  # 1.2'den metin (sözleşme §4)
+# Abone başına yıllık MWh [Hesap: Kıb-Tek 2023, src/sehir_uret.py SINIFLAR ile aynı değerler]
+YILLIK_MWH = {
+    "abone_konut": 648494 / 175577, "abone_ticari1": 210978 / 20950,
+    "abone_ticari2": 169496 / 494, "abone_turizm": 215147 / 171,
+    "abone_sanayi1": 22391 / 1227, "abone_sanayi2": 95996 / 352,
+    "abone_su_motoru": 51256 / 3250,
+}
+FATURA_SAPMASI = (0.95, 1.05)  # ADR-0007
 ADIM_SAYISI = 288  # 5 dakikalık adım, bir gün
 OGLE_ADIMLARI = range(132, 168)  # 11:00–14:00, sözleşme "Öğlen penceresi"
 GUNLER = ((0, "isgunu"), (1, "tatil"))  # kart: 2 gün yeter
@@ -59,7 +67,7 @@ TRAFOLAR_SUTUN = [
     "kva", "hat_sayisi", "hat_boyu_max_m", "hat_boyu_toplam_m", "kablo",
     "abone_konut", "abone_ticari1", "abone_ticari2", "abone_turizm",
     "abone_sanayi1", "abone_sanayi2", "abone_su_motoru",
-    "panel_sayisi", "panel_kw",
+    "panel_sayisi", "panel_kw", "yillik_tuketim_mwh",
 ]
 TAHMIN_SUTUN = [
     "sehir", "trafo_no", "olculdu", "olculu_sayi", "arketip",
@@ -153,7 +161,14 @@ def trafo_satiri(rng, sehir, no, yayginlik, segmentler):
         "hat_sayisi": hat_sayisi, "hat_boyu_max_m": hat_max,
         "hat_boyu_toplam_m": hat_toplam, "kablo": rng.choice(("ABC70", "ABC95")),
         **abone, "panel_sayisi": panel_sayisi, "panel_kw": panel_kw,
+        "yillik_tuketim_mwh": yillik_mwh(rng, abone),
     }
+
+
+def yillik_mwh(rng, abone):
+    """Sözleşme 1.2: abonelerin yıllık enerjisi × fatura sapması (ADR-0007)."""
+    toplam = sum(adet * YILLIK_MWH[sutun] for sutun, adet in abone.items())
+    return round(toplam * rng.uniform(*FATURA_SAPMASI), 2)
 
 
 def guven_etiketi(olasilik):
