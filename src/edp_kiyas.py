@@ -23,6 +23,12 @@ from pathlib import Path
 
 import pandas as pd
 
+try:
+    import python_calamine  # noqa: F401  hızlı Excel okuyucu (BUILD'in edp_test.py'si de kullanıyor)
+    MOTOR = 'calamine'
+except ImportError:
+    MOTOR = 'openpyxl'                    # requirements.txt'de; ilk okuma birkaç dakika sürer
+
 OGLE_SAAT = (11, 12, 13)
 TATIL_EDP = {pd.Timestamp('2018-05-01')}     # İşçi Bayramı, İspanya ulusal tatili [Kaynaklı]
 ABONE = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm', 'abone_sanayi1', 'abone_sanayi2',
@@ -65,7 +71,7 @@ def edp_oku(G):
     if onb.exists():
         d = pd.read_pickle(onb)
     else:
-        d = pd.concat([pd.read_excel(G / f'file{i}.xlsx', engine='calamine',
+        d = pd.concat([pd.read_excel(G / f'file{i}.xlsx', engine=MOTOR,
                                      usecols=['Codigo Ct', 'Referencia', 'Fecha', 'Activa E', 'Estado', 'Tipo proceso'])
                        for i in range(1, 8)], ignore_index=True)
         d['Fecha'] = pd.to_datetime(d['Fecha'])
@@ -80,7 +86,7 @@ def edp_oku(G):
     bas = d.Referencia.astype(str).str.startswith('ZIVS')
     yk = d[bas].groupby(['Codigo Ct', 'Fecha'])['Activa E'].sum().unstack(0)
     fatura = d[~bas].groupby('Codigo Ct')['Activa E'].sum()
-    ld = pd.read_excel(G / 'load.xlsx', sheet_name='Load', engine='calamine')
+    ld = pd.read_excel(G / 'load.xlsx', sheet_name='Load', engine=MOTOR)
     musteri = ld.groupby('Codigo Ct').size()
     gun = yk.index.normalize()
     isg = (yk.index.day_of_week < 5) & ~gun.isin(TATIL_EDP)
