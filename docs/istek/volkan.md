@@ -310,3 +310,33 @@ Durum: karar verildi 19:13 → can.md (aralık kalır, "en az" kelimesi gider; m
 Karar: Can'ın bulgusu (gerçek, çekiliş P10'unun altında 36/240 = %15; tek denklemde 0) ürünü değiştirmiyor, dili değiştiriyor: `kac_ev_karamsar` / `kac_ev_iyimser` = çekilişlerin P10 / P90'ı, yani Faz 2'deki gibi **%80 bant**; taban değil. Manşet sayı `kac_ev_orta`; vaat renkte (yeşil = ilk 2 başvuru ≥ %98 sığar, ADR-0010). Bant kalibrasyonu (P10 altı / P90 üstü, hedef ~%10 / %10) Faz 2'deki gibi bilgi satırı olur, madde değil; %15'in sebebi bilinen iyimserlik (üreticideki +%0,8 OG, panellerin uca kayması) → üretici 1.3.
 Senden beklenen (ana oturum, 1.3 notuna 2 cümle): sözleşme §6'da `kac_ev_karamsar` / `kac_ev_iyimser` açıklaması "çekilişlerin P10 / P90'ı; %80 bant, 'en az' değil"; `modeling.md` §4'e aynı cümle; konuşma notu taslağında "en az … ev" varsa "yaklaşık N ev (A–B)". Başka iş yok; 45 dk kutun aynı.
 Durum: yapıldı 19:15 (BUILD) — sözleşme §6 karamsar/iyimser "%80 bant, 'en az' değil", `kac_ev_orta` "yaklaşık N ev (karamsar–iyimser)", modeling.md §4 aynı cümle: PR #15 (12d726e); konuşma notu taslağında "en az" yoktu, otel örneği "yaklaşık N ev (A–B)" ve yeşil cümlesi "%98" diye düzeltildi (main).
+
+## KARAR 19:44 — BUILD'e (Volkan'ın isteği, BUILD 19:4x mesajı): Faz 3 açık eksikleri — bu gece ne, pilotta ne
+Karar: **Faz 3 bu gece kapanır (gösterim), açık eksikler pilota.** #15 birleşti (19:37). Can'ın resmi `faz3`'ü gelince ROADMAP Faz 3 kutuları: yanlış yeşil [x], %40 kuralı yan yana [x], kaç ev ≤ 2 [x] (orta 2), yanlış kırmızı ve sarı [x] "raporlandı, hedef üstü, sebep bilgi eksikliği" (Faz 2'deki faturasız satırı gibi). Başlık: "(bitti 31 Ekim, gösterim; açık eksikler pilotta)". ROADMAP Faz 3'e **"Açık eksikler"** bölümü, bu tabloyla:
+
+| # | Eksik (sınav 11–20) | Bu gece | Pilot / sunum sonrası |
+|---|---|---|---|
+| 1 | Yanlış kırmızı %27 (hedef ≤ %20) | (a) bilginin değeri denemesi rakamını verir; madde "raporlandı" | bara gerilimi (akıllı priz gece seviyesi, trafo plakası kademe); Kıb-Tek'ten panelli abonenin adresi ve fazı (uzmana soru 2, 4, 8) |
+| 2 | Sarı %62 (hedef ≤ %30) | eşik **0,98 kalır** (tablo aşağıda) | ölçüm cihazı sarılara (asıl pilot); 1'deki bilgiler |
+| 3 | Yeşil bütçesi (%2) gerçek veride doğrulanmadı (İngiltere 5/6, Bancroft) | iş yok; ekran 4 cümlesi hazır (Can) | inverter uygulamasının 5 dk gerilim kaydı (panelli evler, izinle) + sarıların hat ucunda öğlen gerilimi; her ölçülen hat geri-teste; kol yapısı (soru 3) |
+| 4 | Olasılık düşük uçta iyimser (%10–30 diyene ~%43 aşıyor) | iş yok: sınav şehirleri donuk, gece yeniden üretim bütün rakamları değiştirir (ADR-0009) | üretici 1.3: OG aralığı (ROADMAP'te), panellerin uca kayma dağılımı; sonra kalibrasyon yeniden |
+| 5 | Kaç ev aralığı taban değil (P10 altı %15) | çözüldü: dil 19:13, Can'ın bilgi satırı (c3fb046) | üretici 1.3 ile yeniden ölç |
+| 6 | Faturasız model basit tahmini geçmiyor (Faz 2) | iş yok | Kıb-Tek'ten trafo başına fatura toplamı = pilotun veri isteği (soru 7) |
+
+**(a) Bilginin değeri denemesi: onay, bu gece, yeni BUILD'in ilk işi, zaman kutusu 60 dk.** `kac_ev_olasilik.py`'ye dokunmadan ayrı deney betiği; resmi `kac_ev.csv` ve sınav rakamları değişmez; ayar yok. Senaryolar: S0 bugünkü; S1 bara gerilimi bilinir (cevap anahtarı `v0_v`); S2 panelli evlerin hattaki yeri bilinir (üreticiden, aynı tohum; yalnız deney); S3 tek fazlıların fazı bilinir (`faz_a_ev`…); S4 hepsi. Ölçüler: yanlış kırmızı, sarı, yeşil, yanlış yeşil, kaç ev hatası. Şehir 1–10, sonra 11–20 bir kez. Etiket: "üst sınır (kusursuz bilgi, farazi şehir)"; gerçek ölçüm gürültülü olur. Çıktı: Faz 3 günlüğüne tablo + Can'a ekran 6 için tek cümle ("bara gerilimini ölçmek yanlış kırmızıyı %27'den %x'e indirir"). Bilgi kaynağı eşlemesi günlükte: S1 ← akıllı priz / plaka, S2 ← Kıb-Tek abone adresi, S3 ← Kıb-Tek bağlantı kaydı. 60 dk'ya sığmazsa bırak, ekran 6 bugünkü cümleyle kalır.
+
+**(b) Yeşil eşiği: yapıldı (karar masası, 19:44), eşik 0,98 kalır.** Hesap: #15 birleşik kodla Mac'te üretilen 20 şehrin `kac_ev.csv`'sinden (40 çekilişte 0,98 = 40/40, 0,95 = 38/40); kırmızı kuralı aynı, yeşil = `p_iki_ev_sigar` ≥ eşik ve güven yüksek:
+
+| Eşik | Geliştirme 1–10 (354 trafo, 55 dolu): yeşil / sarı / yanlış yeşil | Sınav 11–20 (347, 73 dolu, bilgi): yeşil / sarı / yanlış yeşil |
+|---|---|---|
+| **0,98** | %23 / %68 / **0/83** | %25 / %62 / **0/87** |
+| 0,95 | %31 / %61 / 1/108 (en kötü şehir %7,7) | %33 / %54 / 1/116 |
+| 0,90 | %35 / %56 / 2/124 | %38 / %49 / 1/132 |
+| 0,80 | %45 / %46 / 3/159 (en kötü %10) | %45 / %42 / 3/156 |
+
+Neden 0,98: 0,95'te dolu trafoya ilk "yer var" geliyor (geliştirme şehirlerinde de); 0,80'e kadar inse bile sarı %46'nın altına düşmüyor, yani sarıyı eşik değil bilgi düşürür; bütçe gerçek veride doğrulanmadı (Bancroft). Karar 1–10 ve ilkeden; 11–20 yalnız bilgi. Tablo Faz 3 günlüğüne "eşiğin bedeli" olarak (yeni BUILD kopyalar). Jüri cevabı: "Eşiği gevşetsek sarı ancak yarıya iner ve dolu trafoya 'yer var' demeye başlarız; sarıyı azaltan şey ölçüm."
+
+**Veri alma yolları (BUILD notu, pilot sırası, ucuzdan pahalıya):** (1) panelli evlerin inverter uygulaması 5 dk gerilim kaydı, izinle (bedava; Kıbrıs'tan ilk hat ucu gerilimi; eksik 3); (2) gerilim ölçen akıllı priz birkaç evde (15–20 €; gece bara seviyesi; eksik 1–2); (3) trafo plakası fotoğrafı (uk, kademe; soru 8); (4) Kıb-Tek'ten abone–trafo eşleşmesi, panelli abonenin adresi ve fazı, trafo başına fatura toplamı (soru 2, 4, 6, 7); (5) sarı trafoların hat ucunda geçici ölçüm cihazı (asıl pilot); (6) uydu görüntüsünde panel sayımı (yaygınlık, ADR-0006 BULAMADIM). Kampta uzmana 2, 3, 4, 6, 7, 8. Şartname: Kıb-Tek ihale ilanları / EMO / yetki belgeli firma.
+Neden: Sunum yarın; Faz 3'ün ürünü (yanlış yeşil 0, kaç ev ≤ 2) geçti, kalan iki hedef bilgi eksikliğinden ve bu gece ayarla kapanmaz (varsayım envanteri). (a) bu zayıflığı pilotun rakamlı isteğine çeviriyor, ekran 6'yı güçlendiriyor. 4 ve 5'in kökü üretici; gece yeniden üretim sınavı ve sunum rakamlarını bozar.
+Senden beklenen (yeni BUILD, DEVIR'den devralır): (1) ROADMAP Faz 3 kutuları Can'ın resmi `faz3`'üyle + "Açık eksikler" bölümü + DEVIR; (2) (a) denemesi, 60 dk; (3) (b) tablosunu Faz 3 günlüğüne. Sonra Faz 5 (prova).
+Durum: bekliyor
