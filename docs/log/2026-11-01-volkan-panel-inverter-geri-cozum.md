@@ -95,6 +95,9 @@ Geliştirme 1–10 (141 trafo): resmi 4 (0) / 14 (11) / %87; kayıtlı 6–8 (0)
 7. **İnverter haritayı açmıyor:** inverterli trafolarda yeşil 0 → 1–3 (sınav), 4 → 6–8 (geliştirme); bayrak sayısı bazen düşüyor ama isabeti artıyor. PR #20'deki "her panelli trafoda bir inverterle yeşil %5 → %10" sonucu iyimser uçtu (bara ±1 V ve hat empedansı ±%20 doğru varsayılıyordu); gerçekçi hâlde (inverter panelli evlerin %20'sinde, bara ölçülmüş kaymayla, empedans çözülemiyor) tutmuyor. Sunum / jüri cümlesinde kullanılmamalı [Yorum].
 8. **Hat empedansı tek inverterden bu yöntemle çözülmüyor** (olumsuz sonuç, yukarıda). Muhittin 5B'nin bara yarısı çalışıyor (ölçülmüş kaymayla), empedans yarısı bu sadeleştirmeyle çalışmıyor.
 
+## Karar (karar masası 00:39)
+Mac tekrarı birebir. (1) Motor inverter barasını **yalnız ölçülmüş kayma dağılımıyla** kullanır; dağılım yoksa inverter satırı bara için hiç kullanılmaz (kademe kaydı ya da 244–252 V). R1 yolu (ölçülmemiş ±U) kapandı: `basvuru.py`'de ±`inv_bara_v` geri dönüşü kaldırıldı; bu yüzden bayraksız `basvuru_testi.py` koşumu (türetilmiş inverter satırlı R0) artık PR #22'nin tablosunu vermez, inverter barası orada kullanılmaz. (2) Deneme şehirlerinde sonuç R2 / R3. (3) **Pilot şartı:** canlıda inverter barasına dayanan "hemen evet" ancak pilotta aynı evde, aynı hafta P6 inverter kaydı ve P7 priz gece seviyesi yan yana ölçülüp kayma gerçek veriden çıkınca; o zamana kadar "önce ölç". Faz 10 kartına satır eklendi. Hat empedansı geri çözümü şimdilik yok (eğim çok oynuyor; gerçek pilot verisi beklenir).
+
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
 |---|---|---|---|---|---|
