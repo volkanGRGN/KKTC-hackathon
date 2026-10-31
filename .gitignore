@@ -1,0 +1,8 @@
+# Ham veri depoya konmaz (depo açık, lisanslar belirsiz); KAYNAK.txt'deki adreslerden indirilir
+data/raw/*/*
+!data/raw/*/KAYNAK.txt
+# Üretilen farazi şehirler yeniden üretilebilir
+data/synthetic/
+__pycache__/
+*.pyc
+.DS_Store

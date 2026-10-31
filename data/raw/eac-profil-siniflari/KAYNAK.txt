@@ -1,0 +1,8 @@
+Güney Kıbrıs dağıtım şirketi (EAC DSO) "Profil Sınıfları", Nisan 2023, 2022 ölçümleri, 30 dakikalık.
+İndirildi: 31 Ekim 2026, web.archive.org kopyalarından (EAC sitesi bağlantıyı reddetti).
+Excel: http://web.archive.org/web/20240429185043/https://www.eac.com.cy/EL/RegulatedActivities/Distribution/agorailektrismou/Documents/Profile%20Classes/Offtake_Profile_Classes.xlsx
+PDF:   http://web.archive.org/web/20240429185116/https://www.eac.com.cy/EL/RegulatedActivities/Distribution/agorailektrismou/Documents/Profile%20Classes/Profile_Classes.pdf
+Lisans belirtilmemiş; sunumda kaynak gösterilecek.
+Not: 5. sayfanın adı "L._COMM._STORES" ama PDF'teki sıraya göre OTEL sınıfı (ε. Büyük ticari - otel birimleri).
+
+Depoda: yalnız bu KAYNAK.txt. Depo açık ve lisans belirsiz olduğu için Excel ve PDF depoya konmadı; yukarıdaki iki adresten indirip bu klasöre koyun (dosya adları: Offtake_Profile_Classes.xlsx, Profile_Classes.pdf).
