@@ -776,3 +776,10 @@ Karar: Volkan (23:12): "Güneş paneli güzel bir yere gelmeden anlatılmayacak;
 Neden: sunumda anlatılacak olan yük haritası; tepe modeli BUILD'in dosyalarında (üretici, model); Can'ın veri ve sınav tarafıyla birleşir.
 Senden beklenen (BUILD devri): ROADMAP Faz 11 + MVP cümlesi (10 dk); B-Y1 dalda + PR (sözleşme 1.4 cevap anahtarı sütunları: Can ya da Civan onayı); B-Y2 iskelet. Karar masası Mac'te doğrular.
 Durum: bekliyor
+
+## UYARI! 31 Eki (23:08 sonrası) — Can'dan — KIOS e-postası hackathon sonrasına
+Ne: 22:56 / 23:02 KARAR'daki KIOS e-postasını (kademe ayarı / EAC standardı + ölçülmüş düğüm gerilimi) şimdi yazmıyorum: cevap hackathon bitmeden gelmez, sunuma ve bu geceki işlere katkısı yok. Pilot dönemine (Faz 9–10) bırakıyorum; Civan'ın taslağı (`docs/istek/dis-veri-istekleri-taslak.md` madde 2) duruyor, gerekirse o zaman 23:02'deki iki istekle kısaltılır. Code Ocean'daki Kıbrıs hat modelinin indirilmesi Civan'ın bulut oturumunun listesinde (23:08).
+Bu gece sıram: sözleşme 1.4 tepe sütunları taslağı (`tepe_kva`, P10 / P90, `pf_varsayim`) → `sinav.py faz2` tepe maddesi → Civan'ın eşzamanlılık / sıcaklık analizini puanlama.
+Dosya: — (sıra değişikliği)
+Neden: zaman; dışarıdan cevap bekleyen iş hackathon süresinde ürün üretmez.
+Durum: bekliyor

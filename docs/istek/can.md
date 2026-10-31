@@ -367,7 +367,7 @@ Karar: Volkan: "KIOS kısmını ve verileri indirmeyi Can yapabilir mi" → evet
 2. **Açık verileri indir** (her biri kendi `data/raw/<ad>/` klasörüne, KAYNAK.txt: adres, lisans, tarih, bayt, SHA-256; ham dosya depoya girmez; indirilen hiçbir şey çalıştırılmaz): (a) Kotsonias 2019 makalesi ve Zenodo'daki ekler (`zenodo.3561929`; Civan PDF'in SHA'sını almış, ekleri bak); (b) **Plegma** (Yunanistan, 13 ev, 10 sn, bir yıl, klima ve iç / dış sıcaklık; Scientific Data 2024, DOI 10.1038/s41597-024-03208-0): akşam tepesinin sıcaklık eğimi ve klima eşzamanlılığı için (Muhittin madde 2); önce lisansı ve boyutu kutuya yaz, büyükse yalnız gereken dosyalar; (c) Lefkoşa saatlik sıcaklık, bir yıl (Open-Meteo, mevcut KAYNAK'taki adresin `temperature_2m` ile 2023 tamamı). Veri sözlüğüne satırlar (senin dosyan).
 Neden: Muhittin'in dördüncü cevabı (günlük): tepe için sıcaklık eğimi ve klima eşzamanlılığı; PV için kademe bilgisi ve gerçek Kıbrıs hattı.
 Senden beklenen: onaylar → KIOS metni (Volkan'a) → indirmeler; takılırsan kutu.
-Durum: bekliyor
+Durum: KIOS e-postası hackathon sonrasına (cevap süresinde gelmez; volkan.md'ye yazıldı); indirmeler Civan'ın bulut oturumunda (23:08)
 
 ## KARAR 22:58 — veri indirme listesi güncellendi: Volkan'ın getirdiği kaynak tablosu karar masasında doğrulandı (Zenodo API ve DOI çözümleme)
 Karar: Volkan bir kaynak tablosu getirdi (yapay zekâ araştırması gibi; her iddia kontrol edildi). Doğrulama: kayıt var mı, başlık, tarih, lisans, erişim, dosya boyu [Kaynaklı: zenodo.org/api/records, doi.org; karar masası 22:58]. **İndirme sırası** (her biri `data/raw/<ad>/` + KAYNAK.txt: adres, lisans, tarih, bayt, SHA-256; ham veri depoya girmez):
