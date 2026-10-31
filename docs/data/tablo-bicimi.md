@@ -185,5 +185,28 @@ Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe b�
 | `bos_kva_p90` | float | kVA | `176.2` | `kva` − `tepe_kva_p10` |
 | `guven` | str | — | `on` | Ön sürümde hep `on` (yaz ölçümü yok) |
 | `kor_nokta` | str | — | `mayis_temmuz;klima_kuyrugu` | Her sayının yanındaki etiket (ADR-0018 m. 3): gerçek veri bahar; sıcak dalga kuyruğu ölçülmedi |
+| `tepe_kaynagi` | str | — | `model` | Sayının kaynağı: `model` (ölçülmedi), `olcum_nisan` (ölçülü, Nisan), `kayit_md` / `kayit_etut` (Kıb-Tek tepe kaydı, §8). `olculdu` = 1 hepsinde `model` dışında |
 
 Bilgi dosyası `tepe_ozet.json`: ölçülü trafolar, Nisan oranları (R), sınıf eğimleri, ay sıcaklık sapmaları, bant.
+
+## 8. `kibtek_tepe.csv`, `kibtek_fider.csv` — Kıb-Tek tepe verisi (Faz 9 / 11 adayı; Can ya da Civan onayı)
+Gerçek veri gelince Kıb-Tek'in kayıtları bu biçime çevrilir; deneme şehrinde sahtesini `src/sahte_tepe_kaydi.py` yazar (kusurlarıyla). Okuyan `src/tepe.py` (dosya varsa kendiliğinden; `--kibtek-yok` ile kapanır). [Görev kartı](../gorev/volkan-faz9-kibtek-tepe.md).
+
+`kibtek_tepe.csv` (satır = kayıt; bir trafoda bir kayıt):
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `trafo_no` | int, str | — | `1`, `T16` | |
+| `kaynak` | str | — | `md_kaydi` | `md_kaydi` (maksimum talep göstergesi / sayaç yazmacı: sezonun en yükseği), `etut` (yaz yük etüdü, tek okuma), `akilli_sayac` (aylık MD yazmacı; `md_kaydi` gibi okunur) |
+| `tepe_kw` | float | kW | `291.56` | Kaydın değeri. Boşsa `tepe_a`'dan: 3 × 230 V × A × 0,95 ÷ 1000 (en yüklü faz; dengesizlikte fazla gösterir) |
+| `tepe_a` | float | A | `430` | İsteğe bağlı: en yüklü fazın akımı (MD ibresi çoğunlukla akım okur) |
+| `zaman` | str | ISO yerel | `2024-07-22T20:30` | Okumanın anı; MD'de boş (zamanı bilinmez, sezon tepesi sayılır) |
+
+`kibtek_fider.csv` (satır = OG fider; aşağıdan yukarı mutabakat, kontrol):
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `fider_no` | int, str | — | `1`, `F3` | |
+| `trafolar` | str | — | `T03;T08;T10` | Fiderin beslediği trafolar (`;` ile) |
+| `tepe_kw` | float | kW | `2451.71` | Fider tepesi (SCADA), trafo ve OG kayıpları dahil |
+| `zaman` | str | ISO yerel | `2024-07-19T16:20` | Tepenin anı |
