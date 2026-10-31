@@ -24,11 +24,11 @@ Taslak 31 Ekim; ekiple oturtuluyor. Süreler kaba: kısa < orta < uzun; saat yok
 
 **Amaç:** Cevap anahtarı bilinen, Kıbrıs'a benzeyen 20–30 şehir.
 **Girdi:** Aşağıdaki veri adımı + EAC profil sınıfları (elimizde) + Kıb-Tek 2023 tarife sınıfı abone oranları + mevcut benzetim.
-**Çıktı:** `src/sehir_uret.py`; `data/synthetic/<no>/`: trafo tablosu, 5 dakikalık yük, ev ev gerilim, cevap anahtarı, ayar dosyası (tohum dahil).
+**Çıktı:** `src/sehir_uret.py`; `data/synthetic/sehir-<NNN>/`: trafo tablosu, 5 dakikalık yük (adım adım en yüksek ve en düşük ev gerilimiyle), cevap anahtarı, ayar dosyası (tohum dahil). Biçim: [docs/data/tablo-bicimi.md](docs/data/tablo-bicimi.md).
 **Kim / süre:** üçü paralel · uzun (günün büyük kısmı).
 **Paralel işler ve dosyalar:**
 - Volkan+Claude → önce `docs/data/tablo-bicimi.md` (kısa; herkes bunu bekler), sonra `src/sehir_uret.py` (şehir kurma, rastgeleleştirme, cevap anahtarı), `docs/log/…-volkan-faz1.md`.
-- Can → `src/profiller.py`: EAC Excel'ini okur, 12 sınıfı 7 tipe çevirir, 30 dk → 5 dk açar, iş günü/tatil ve ay seçer, sağlama rakamlarını yazdırır (öğlen/akşam oranı, otel yaz/kış); + veri adımı (`data/raw/<veri>/KAYNAK.txt`, `docs/data/data-dictionary.md`), `docs/log/…-can-faz1.md`. Şehir üreticisi bu dosyayı çağırır.
+- Can → `src/profiller.py`: EAC Excel'ini okur, kullandığımız 8 abone sınıfının şekil eğrisini verir (yıllık ortalama = 1; tiplerin abone karışımı ve büyüklük şehir üreticisinde), 30 dk → 5 dk açar, iş günü/tatil ve ay seçer, sağlama rakamlarını yazdırır (öğlen/akşam oranı, otel yaz/kış); + veri adımı (`data/raw/<veri>/KAYNAK.txt`, `docs/data/data-dictionary.md`), `docs/log/…-can-faz1.md`. Şehir üreticisi bu dosyayı çağırır.
 - Civan → `app/ornek_veri.py` (tablo biçimine uygun sahte şehir) + `app/harita.py` iskeleti; `data/raw/osm-kasaba/`.
 
 Yapılacaklar — veri (Can yapar, Volkan eleme kararını onaylar; her aday için eleme: Kıbrıs/Akdeniz mi · ölçülmüş mü · ≤ 1 saat mi · kaynak ve lisans var mı · bu fazda kullanılacağı belli mi; üçten az "evet" → elenir, nedeni günlükte):
@@ -40,8 +40,8 @@ Yapılacaklar — veri (Can yapar, Volkan eleme kararını onaylar; her aday iç
 - Her indirilen `data/raw/<ad>/` + KAYNAK.txt; her aday [veri sözlüğünde](docs/data/data-dictionary.md) satır ya da "elendi + neden".
 
 Yapılacaklar — kod (Claude):
-- Can'ın `profiller.py`'sini çağırarak 7 tipin eğrisini al (30 dk → 5 dk açma ve tip karışımı orada); bahar iş günü ve tatil günü.
-- Sözleşmeyi (`docs/data/tablo-bicimi.md`) yaz; **üç tabloyu birden** kapsar, Civan ve Can baştan hepsine göre kurar: (1) trafo tablosu: no, tip, kVA, koordinat, hat boyu, kablo, sınıf başına abone sayısı, panel kW, faz dağılımı; (2) Faz 2 tahmin tablosu: trafo no, arketip, öğlen yük tahmini, P10, P90, güven; (3) Faz 3 sonuç tablosu: kaç ev karamsar/iyimser, renk, ölçülmedi etiketi, %40 kuralının dediği.
+- Can'ın `profiller.py`'sinden abone sınıfı eğrilerini al (30 dk → 5 dk açma orada); 7 tipin abone karışımı ve abone başına büyüklük (Kıb-Tek yıllık tüketimi) şehir üreticisinde; bahar iş günü ve tatil günü.
+- Sözleşmeyi yaz: [docs/data/tablo-bicimi.md](docs/data/tablo-bicimi.md). Civan ve Can baştan hepsine göre kurar: trafo tablosu, 5 dakikalık yük, cevap anahtarı, Faz 2 tahmin tablosu, Faz 3 kaç ev tablosu. Tip ve faz dağılımı Kıb-Tek'in bilmediği şeyler olduğu için trafo tablosunda değil cevap anahtarında.
 - Rastgeleleştirme: tüketim ±%20, saat kayması ±30–60 dk, panel yaygınlığı %10–50, hava yılı 2024/2025, trafo çıkışı 246–250 V, faz dağılımı.
 - Cevap anahtarı: öğlen (11–14) en düşük yük (iş günü ve tatil) + ev ev benzetimle gerçek "kaç ev sığar" (259 V; ev başına 6,5 kW: bekleyen başvurular 5–8 kW, orta değer; eski benzetim kendi içinde 5 kW kullanır).
 - README'de komut; günlük.
