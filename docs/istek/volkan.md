@@ -679,3 +679,9 @@ Karar: (a) **Kırmızı kovası ölçüsü de n'ye bağlı tolerans alır** (tü
 Faz 1 yeni ölçütle geçti (1/400, 205,9 V): tamam.
 Senden beklenen (BUILD): (a) madde metni ve tolerans formülü dala (sinav.py Can'ın: Can'a yazıldı); (b) günlük satırı. Birleşme sırası aynı: #16 → #18.
 Durum: yapıldı 22:22 (BUILD) — PR #18 dalına d7f04fa (main dalla birleşik): ROADMAP Faz 3 kırmızı ölçüsü n toleransıyla (n 61 → %37, %49 geçer; yön karamsar bilgi), Faz 10 satırına karamsar yönlerin yeniden kalibrasyonu; ADR-0016 bağlamına İspanya model = saf fatura satırı; günlük.
+
+## BİLGİ 31 Eki 22:28 — BUILD'den — Faz 10 hazırlık PR #19 (eksi bulgu yok)
+Ne: Karar masasının önerisiyle (#16 ve #18'de BUILD işi bitti) Faz 10 hazırlığı. `docs/gorev/volkan-faz10-pilot-a.md`: P6 inverter kaydı, P7 akıllı priz, P8 trafo plakası, P9 Kıb-Tek; kişisel veri yok; **kullanım bölünmesi değer görülmeden donduruldu** (ilk 5 ev doğrulama); Faz 10'da yeniden kalibre edilecek karamsar yönler (ADR-0016). `src/inverter_kaydi.py`: kaydı işler, modelle kıyaslar (üretici 1.3 rakamları). Model kodu değişmiyor.
+Dosya: PR #19 (https://github.com/volkanGRGN/KKTC-hackathon/pull/19)
+Neden: KARAR 21:15 / 22:21; tanıdık evden kayıt gelirse hazır olsun. Birleştirme Volkan'ın sözüyle.
+Durum: bilgi
