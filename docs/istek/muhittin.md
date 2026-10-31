@@ -33,3 +33,27 @@ Gönderilecek metin (Volkan iletir):
 > 4) Yanlış yeşil (dolu trafoya "yer var" demek) için karamsar senaryo yeterli bir koruma mı, yoksa trafo başına ölçüm olmadan yeşil hiç verilmemeli mi?
 >
 > Teşekkürler.
+
+## 20:52 — karar masası (Volkan adına) — Sunumdan sonra: modeli gerçek veriyle nasıl iyileştiririz; çalışma belgeleri ve talimatlar nasıl olmalı
+Ne denedik: Faz 3 bitti (olasılıklı hesap, ADR-0011); bilginin değeri denemesi (Faz 3 günlüğü 19:55): trafo çıkış gerilimi bilinince yanlış kırmızı %27 → %19, adres ve fazla %4; sarı %62 → %57, tam ağda %41. İngiltere geri-testi 6 hattın 5'i. Başvuru-anı kararı ADR-0012 (sınanmadı). Veri edinme yolları DEVIR'de (inverter kaydı, akıllı priz, plaka, Kıb-Tek kayıtları, pilot).
+Karar noktası: Volkan (20:52): "bundan sonra iş modeli verilerle iyileştirmek; bunu nasıl yapacağımızı, doğru talimatların ve belgelerin nasıl olması gerektiğini Muhittin'e soralım; veri işe yarar deniyor ama düzeltme önerilmiyor." Cevap ROADMAP "sunum sonrası / pilot" planına, üretici 1.3'e ve görev kartı kalıbına girer.
+Seçenekler: Aşağıdaki metinde bizim önerdiğimiz sıra var; Muhittin düzeltir ya da onaylar. Cevapsız kalırsa önerilen sırayla devam.
+Durum: bekliyor
+
+Gönderilecek metin (Volkan iletir):
+
+> Merhaba Muhittin hocam, sunum öncesi son danışma; bu kez sonrası için.
+>
+> Nerede kaldık: Önerdiğiniz gibi kurduk. Deneme şehirlerinde öğlen yükü hatası faturayla ortanca %3,8, İspanya'nın 29 gerçek trafosunda %10 (faturasız %25). Panel kararında yeşil kuralınızı olasılıkla uyguladık: bilinmeyenleri (trafo çıkış gerilimi, panelin yeri ve fazı, hat boyu) gerçek veriye dayalı aralıktan kırk kez çekip ev ev benzetim koşuyoruz; dolu trafoya "yer var" hiç demedi (87 yeşilde 0), kaç ev sayısında ortanca 2 ev sapıyor. Bedeli: trafoların %62'si sarı, kırmızıların %27'sinde aslında yer var. İngiltere'nin 6 gerçek hattında gerilim tahmini 5'inde güvenli sınırın altında kaldı, birinde (paneller yüksüz bir kolda) yükselmeyi küçük gördü.
+>
+> Sonra ne hangi bilgiyi düzeltir diye ölçtük: trafo çıkış gerilimi bilinince yanlış kırmızı %27'den %19'a iniyor, panelli evlerin adresi ve fazı da bilinirse %4'e. Sarı ise bilgiyle az düşüyor (%62'den %57'ye; ağın tamamı bilinse bile %41), çünkü yeşil kuralı "sıradaki başvuru hattın neresinden gelirse gelsin sığsın" diyor. Bunun üzerine sarı trafoda kararı haritada değil başvuru anında, başvuranın adresiyle vermeyi düşündük; henüz sınamadık.
+>
+> Bundan sonraki iş modeli gerçek veriyle iyileştirmek. Elimize girebilecek veri, ucuzdan pahalıya: panelli evlerin inverter uygulamasındaki 5 dakikalık gerilim kaydı (gece kaydı yok), birkaç evde gerilim ölçen akıllı priz, trafo plakası ve kademe, Kıb-Tek'in abone–trafo ve faz kayıtları, pilotta sarı trafoların hat ucunda geçici ölçüm. Bizim önerdiğimiz sıra şu: (1) önce trafo çıkış gerilimi, çünkü tek başına en çok düzelten o; hesapta aralık yerine ölçülen değer; (2) her ölçülen trafo modele öğretici olarak girer ve aralıklar (bant, çekiliş dağılımları) ölçümle yeniden ayarlanır; (3) deneme şehri üreticisi gerçek dağılımlara çapalanır (öğlen orta gerilim değişimi, panellerin hat üstündeki yeri, trafo içi tüketim çeşitliliği) ve test şehirleri yeniden üretilir; (4) başvuru-anı kararı sınanır. Her adımda ölçü: yanlış yeşil bütçesi (<%2), yanlış kırmızı, sarı oranı, kaç ev hatası; geliştirme ve sınav şehirleri ayrı, sınav şehrine göre ayar yok.
+>
+> Sorularım:
+> 1) Bu sıra doğru mu, neyi atlıyoruz? Hangi veri ne kadar gelince "model iyileşti" deriz; ölçülen trafo sayısı için bir hedef koymalı mıyız?
+> 2) Ölçülen trafo modeli nasıl güncellemeli: ölçüm geldikçe aralıkları daraltmak mı, belli sayıda ölçümden sonra baştan eğitmek mi? Aralıkların "fazla emin" çıkmasını (kusursuz bilgide bant kapsaması %80'den %57'ye düştü) nasıl yakalarız?
+> 3) Bu döngüyü ekibin ve yapay zekâ ajanlarının belge düzeniyle yürütüyoruz; şablonu sizden almıştık (karar kayıtları, günlük, görev kartı, veri sözleşmesi, devir notu). "Veri geldi → modeli güncelle → sına → raporla" döngüsü için bu belgeler ve ajan talimatları nasıl olmalı: bir veri partisi için görev kartında ne yazmalı, hangi kurallar sabit kalmalı (sınav setine ayar yok, geri-test bütçesi, her rakama kaynak), deney günlüğü nasıl tutulmalı, "bitti" ne zaman denir?
+> 4) Sarı trafoda kararı başvuru anında başvuranın adresiyle vermek size mantıklı geliyor mu, yoksa sarıyı azaltmanın daha doğru bir yolu var mı?
+>
+> Teşekkürler.
