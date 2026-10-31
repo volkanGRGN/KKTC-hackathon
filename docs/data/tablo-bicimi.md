@@ -45,7 +45,7 @@ Satır = bir trafo.
 | `y_m` | int | m | `-310` | referans noktasından kuzeye |
 | `bolge` | str | — | `kentsel` | `kentsel` / `kirsal` / `turistik` / `sanayi` |
 | `montaj` | str | — | `direk` | `direk` / `yer` |
-| `kva` | int | kVA | `250` | direk 25/50/100/250/400 [varsayım: Kıb-Tek şartnamesi, kaynak bağlantısı yok]; yer 630/1000 [Yorum] |
+| `kva` | int | kVA | `250` | direk 25/50/100/250/400 [varsayım: Kıb-Tek şartnamesi, kaynak bağlantısı yok]; yer 630/1000 [Yorum]. Dayanak: ASTOR kataloğu (2020; Elparts'ın sattığı marka) yağlı dağıtım trafosu 50–5000 kVA, kompakt trafo merkezi 1000 / 1600 kVA [Kaynaklı]; 25 kVA kaynaksız |
 | `hat_sayisi` | int | adet | `2` | trafodan çıkan alçak gerilim hattı |
 | `hat_boyu_max_m` | int | m | `420` | en uzun hattın trafodan son eve boyu (Faz 3 formülündeki L) |
 | `hat_boyu_toplam_m` | int | m | `740` | |
@@ -90,7 +90,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
 | `tip` | str | — | `sehir_konutu` | `sehir_konutu` / `koy` / `carsi` / `otel` / `sanayi` / `sulama` / `yurt` ([sözlük](../glossary.md) "Tip") |
-| `v0_v` | float | V | `247.6` | trafo çıkış faz gerilimi, boşta; kademe bilinmiyor, rastgele: 246–250 (1.1'e kadar), **244–252 (1.2**; UKPN bara yayılımı, karar masası 16:27) |
+| `v0_v` | float | V | `247.6` | trafo çıkış faz gerilimi, boşta; trafoda boşta kademe değiştirici var [Kaynaklı: ASTOR kataloğu], adımı ve Kıb-Tek'in ayarı bilinmiyor, rastgele: 246–250 (1.1'e kadar), **244–252 (1.2**; UKPN bara yayılımı, karar masası 16:27) |
 | `faz_a_ev`, `faz_b_ev`, `faz_c_ev` | int | adet | `14` | tek fazlı aboneler hangi fazda |
 | `uc_faz_ev` | int | adet | `3` | üç fazlı abone |
 | `ogle_min_kw` | float | kW | `9.84` | **Faz 2'nin hedefi:** öğlen penceresinde brüt tüketimin en düşüğü, 14 günün hepsinde |
