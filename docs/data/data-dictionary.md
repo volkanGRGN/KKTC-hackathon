@@ -2,6 +2,19 @@
 
 Her satır: ne, birim/çözünürlük, kaynak, lisans, ölçülü mü, bilinen yanlılık. Ayrıntı ve adresler [araştırma günlüğünde](../log/2026-10-31-kapsamli-arastirma.md).
 
+## Yeni veri eklerken (kontrol listesi)
+
+Her yeni veri için KAYNAK.txt ve aşağıdaki satır bunları cevaplar; cevap yoksa "BULAMADIM" yazılır, tahmin edilmez.
+1. **Birim:** kW mı kWh mı, pu ise neye göre (kVA, kurulu güç, yıllık enerji)?
+2. **Çözünürlük:** 1 / 5 / 10 / 30 dk, saatlik; ortalama mı, anlık mı, en düşük/en yüksek mi?
+3. **Saat damgasının anlamı:** dilimin başı mı sonu mu (EAC'de 00:30 satırı 00:00–00:30 dilimi)?
+4. **Saat dilimi:** UTC mi, yerel mi, yaz saati dahil mi?
+5. **SHA-256** ve bayt boyu, indirme tarihi ve adresi (KAYNAK.txt).
+6. **Çifte sayım riski:** aynı tüketim iki kaynakta mı (ör. net = tüketim − panel; trafo ölçümü ile sayaç toplamı)?
+7. **Çapraz sağlama:** hangi bağımsız kaynakla, hangi rakamla karşılaştırılacak (ör. yıllık toplam ↔ Kıb-Tek)?
+8. **Lisans** ve atıf metni; lisans yoksa "belirtilmemiş, kaynak gösterilir".
+9. **Etiket:** satırdaki her rakam [Kaynaklı: adres] / [Hesap] / [Yorum]; ölçülü mü, türetilmiş mi.
+
 ## Elimizde
 
 Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konmaz; her klasördeki KAYNAK.txt'de indirme adresi var.
