@@ -54,3 +54,5 @@ Harita kuralları:
 **Karar masasına yaz (`volkan.md`, bekleme, sıradaki işe geç):** haritanın ihtiyacı olup sözleşmede olmayan sütun; referans noktasını değiştirmek; tıklama çalışmazsa seçme kutusu yedeğinin kalıcı olup olmayacağı.
 
 **Takılırsan:** tıklama gelmiyorsa `streamlit --version` (≥ 1.39), katmanda `id` ve `pickable`; olmazsa kenar çubuğuna trafo seçme kutusu (`st.selectbox`) koyup devam et; sonra istek kutusu (sormadan) / bloklarsa sesli.
+
+**Faz 2'de aynı kart (31 Ekim):** yeni kart yok. Yan panel `tahmin.csv` ve `arketipler.csv`'yi sahte veriyle göstersin: arketip eğrisi × ölçek ([sözleşme §5](../data/tablo-bicimi.md) son paragraf), %80 bant (`ogle_min_kw_p10`–`p90`), `guven` etiketi, `olculdu` = 0 ise "ölçülmedi". Gerçek `tahmin.csv` `src/sablon.py` main'e gelince `data/synthetic/sehir-001…020/` klasörlerinde oluşur; sütunlar sözleşmeyle aynı, harita kodunda değişiklik gerekmez.
