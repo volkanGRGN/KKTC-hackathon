@@ -1,11 +1,11 @@
 # ADR-0017: Panel katmanı "güvenli uçlar" olarak gösterilir — kesin yeşil azınlık, "büyük olasılıkla dolu" bayrağı, arası renksiz ("başvuruda bakılır")
 
-Tarih: 2026-11-01 · Durum: kabul · ADR-0010, ADR-0011, ADR-0012, ADR-0015, ADR-0016 üstüne · kaynak: Muhittin'in dördüncü cevabı madde 1 ([günlük](../log/2026-10-31-muhittin-cevap-4-odak-tepe-kademe.md)) · karar masası 1 Kasım 00:25
+Tarih: 2026-11-01 · Durum: kabul · ADR-0010, ADR-0011, ADR-0012, ADR-0015, ADR-0016 üstüne · kaynak: Muhittin'in dördüncü cevabı madde 1 ([günlük](../log/2026-10-31-muhittin-cevap-4-odak-tepe-kademe.md)) · karar masası 1 Kasım 00:12
 
 ## Bağlam
 Panel haritası bugün üç renk: yeşil (`p_iki_ev_sigar` ≥ 0,98 ve yük güveni yüksek; ADR-0010), kırmızı (`p_bugun_asar` ≥ 0,5; ADR-0011), arası sarı. Gerçekçi şehirlerde (üretici 1.3) kapılar tutuyor ama kırmızının yarısında yer var (ADR-0016 bunu kalibrasyon ölçüsü olarak kabul etti). Muhittin: PV haritası bugünkü hâliyle bir **kapasite haritası** diye okunursa zarar verir; yer olan trafoya "dolu" demek Kıb-Tek'in güvenini yakar. PV'nin güvenilir yaptığı tek şey asla yanlış yeşil dememek; belirsiz kısım renklendirilmemeli, başvuruda bakılmalı.
 
-Aynı eşiklerle ölçüm (aday evi olan trafolar; üretici 1.3, K_YUK 1,47) [Hesap: karar masası 00:20, BUILD'in yerel şehirleri, sınav kodunun tanımıyla: dolu = `kac_ev_gercek` 0]:
+Aynı eşiklerle ölçüm (aday evi olan trafolar; üretici 1.3, K_YUK 1,47) [Hesap: karar masası 00:11, BUILD'in yerel şehirleri, sınav kodunun tanımıyla: dolu = `kac_ev_gercek` 0]:
 
 | | Geliştirme 1–10 (354 trafo, dolu 47) | Sınav 21–30 (349, dolu 44; daha önce görüldü, bilgi) |
 |---|---|---|

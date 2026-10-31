@@ -157,7 +157,7 @@ Neden: CONTRIBUTING sözleşme kuralı; karar masası 23:35.
 Durum: yapıldı (Civan): PR #21 onaylandı (not: tepe_yil_kw üç pencerenin tepesi, açıklamaya eklenmeli; bloklamaz); PR #22'ye iki not (inverter `deger` türetilmiş, ham kayıt değil; sürüm satırı ve dosyalar tablosunda §7 eksik). Haritaya ikisinin de etkisi yok.
 
 
-## UYARI! 1 Kasım 00:40 — karar masasından (KARAR) — panel katmanı "güvenli uçlar" kararı yazıldı (ADR-0017); kart sütun gelince
+## UYARI! 1 Kasım 00:15 — karar masasından (KARAR) — panel katmanı "güvenli uçlar" kararı yazıldı (ADR-0017); kart sütun gelince
 Ne: [ADR-0017](../decisions/adr-0017-pv-katmani-guvenli-uclar.md) kabul. Panel katmanında üç durum: **yeşil** (bugünkü yeşil; "ilk 2 başvuru güvenle sığar"), **"büyük olasılıkla dolu" bayrağı** (`p_bugun_asar` ≥ 0,7; kırmızı dolgu değil uyarı işareti; "başvuruda ölçüm ya da güçlendirme gerekir"), **renksiz** ("başvuruda bakılır"). Eşiği harita hesaplamaz: BUILD 2 `kac_ev.csv`'ye `pv_uc` sütununu (`yesil` / `dolu_bayrak` / `bos`) ekleyecek (sözleşme 1.4 adayı, onay sende ya da Can'da). Sütun gelince harita kartı bundan; şimdilik kod değişikliği yok. Yük katmanının ikinci sayısı ("akşam doluluğu") [ADR-0018](../decisions/adr-0018-aksam-tepesi-on-surum.md)'e göre P90 tepeden (`bos_kva_p10`), "ön" etiketi ve iki kör nokta etiketiyle.
 Ayrıca: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç oturumu"); PR'lar "[Yük]" ya da "[Panel]" başlıklı gelir.
 Dosya: app/ (senin), docs/data/tablo-bicimi.md (onay)

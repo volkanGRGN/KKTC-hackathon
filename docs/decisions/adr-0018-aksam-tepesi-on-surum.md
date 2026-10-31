@@ -1,6 +1,6 @@
 # ADR-0018: Akşam tepesi ön sürümü — şablon yöntemi, İspanya-Mayıs artıklarından geniş bant, açık kör nokta etiketleri, sıcaklık düzeltme terimi, iki bileşenli eşzamanlılık
 
-Tarih: 2026-11-01 · Durum: kabul (ön sürüm; yaz verisi gelince yeni ADR) · ADR-0001, ADR-0013, ADR-0014 üstüne · kaynak: Muhittin'in dördüncü cevabı madde 2 ve 4 ([günlük](../log/2026-10-31-muhittin-cevap-4-odak-tepe-kademe.md)) · karar masası 1 Kasım 00:30
+Tarih: 2026-11-01 · Durum: kabul (ön sürüm; yaz verisi gelince yeni ADR) · ADR-0001, ADR-0013, ADR-0014 üstüne · kaynak: Muhittin'in dördüncü cevabı madde 2 ve 4 ([günlük](../log/2026-10-31-muhittin-cevap-4-odak-tepe-kademe.md)) · karar masası 1 Kasım 00:13
 
 ## Bağlam
 ADR-0014 yük katmanını ayrı bir tepe modeline bağladı. Üretici 1.4 (PR #21) deneme şehirlerine yılın tepesini ekledi (yaz ve kış haftası; tepe ayı çoğunlukla Ağustos / Temmuz, konutta akşam). Tek gerçek tepe verimiz İspanya EDP (Mayıs). Muhittin şablon yöntemini (ölçülü trafolardan eğri şekli, faturadan büyüklük; ADR-0001) **ön sürüm** olarak kabul etti, iki şart ve bir yapısal uyarıyla: şablon tepeyi sabit bir eğri gibi gömer, oysa tasarım tepesi bir kuyruk olayıdır (sıcak dalga akşamı); bu yüzden yöntem tepeyi **sistematik olarak az gösterir**, yani güvensiz yönde yanılır. Öğlen için ise "yük = fatura × oran + kalibre bant" yöntemi doğru (taban vadisi, davranış farkı az); öğlen net yükünü faturadan ayıran tek şey panelli evin kendi tüketimi.
