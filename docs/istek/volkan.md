@@ -563,3 +563,11 @@ Durum: bilgi
 Karar: (1) ROADMAP Faz 4 "Windows ve Mac'te çalıştı" [x] (Civan KONTROL 21:29 + BUILD 20:55); "internet kapalıyken açılıyor; ekran kaydı" kutusu: zemin dosyasıyla dışarıya istek yok (iki platformda ölçüldü), **ekran kaydı yarın sabah provada alınır** (Civan, yedek; sunum bilgisayarı çökerse PDF + kayıt), ağ fiilen kapalı deneme isteğe bağlı. (2) Civan'ın "noktalar çoğalıyor" geçişi main'de (e85e21b: ikinci sayfa, pop 0 → %115 → %100, ölçülen dolu / tahmin soluk halka, renkler, "gösterim" etiketi, Natural Earth kıyısı kamu malı); karar masası diff'i inceledi, 17:32 kararına uygun; **BUILD provada Mac'te açıp 3 → 5 geçişini dener** (2 dk), sorun varsa civan.md. (3) Kilit grafik: Can'ın isteğiyle karar masası Mac'te resmi veriden yeniden çizdi ve commit etti (`docs/sunum/kilit_yanlis_yesil.png`: 0/87 ↔ 41/284, dolu 41/73). Mac'te aynı tohumla üç koşu (biri PYTHONHASHSEED=0) birebir aynı: üretici Mac'te deterministik; fark Windows ↔ Mac (platform / sürüm), bir trafo. Tüzük madde 5'e not (BUILD, 2 satır): "resmi rakamlar karar masasının Mac koşumundan; başka platformda yeniden üretilen şehirler gösterim için, sınav için değil; sebep Faz 6'da aranır (Python 3.14 ↔ 3.12, kayan nokta)".
 Senden beklenen (BUILD): ROADMAP Faz 4 iki kutu metni, tüzük notu (5 dk, B1'i bölme; B1 bitince); provada animasyon.
 Durum: bekliyor
+
+## UYARI! 31 Eki 21:46 — Civan'dan (+ Claude) — Dış veri istek metinleri hazır, gönderen sensin (KARAR 21:39 madde 2)
+Ne: `docs/istek/dis-veri-istekleri-taslak.md`: (1) Micallef 2015 tezi, Malta Üniv. OAR "Request a copy" formu (Gozo hat boyu, kablo, Srug F1); (2) KIOS yazarlarına e-posta (makaledeki AG hattın modeli, düğüm gerilimleri; EAC ~60 tüketici verisi yalnız anonim / toplu / gizlilik sözleşmesiyle). İkisi İngilizce, gönderilmeye hazır; köşeli parantezde senin imzan. Ham veriyi yayımlamama ve atıf sözü var.
+Sorular: (a) Metinde "the northern part of Cyprus / Turkish Cypriot community" dili uygun mu? (b) KIOS'ta Kyriakides ve EAC'den Ioannou bilgi olarak eklensin mi?
+Ayrıca: Korsika KAYNAK main'de (`data/raw/edf-sei-corse/KAYNAK.txt`); sözlük satırı Can'ın kutusunda (can.md 21:46).
+Dosya: docs/istek/dis-veri-istekleri-taslak.md, data/raw/edf-sei-corse/KAYNAK.txt
+Neden: KARAR 21:39. Bloklamıyor.
+Durum: yeni

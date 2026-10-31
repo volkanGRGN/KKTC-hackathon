@@ -293,8 +293,26 @@ Durum: bekliyor
 Ne: Faz 7 kalibrasyon şimdi; senin kartın [docs/gorev/can-faz7-kalibrasyon-sinav.md](../gorev/can-faz7-kalibrasyon-sinav.md), tüzük [docs/tuzuk.md](../tuzuk.md). İlk adım **C1**: `sinav.py faz2`'ye kapsama eğrisi ve PIT maddeleri, farazi 11–20'de "önce" koşusu (main'deki model). Sonra C2 grafik, C3 hold-out defteri. BUILD'in PR'ı gelince C4. Faz 7 bitince Faz 11 (sözleşme 1.4, tepe sütunu "ön"; KARAR 21:4x). Sunum metni v1 rakamlarıyla kalır; PR birleşmeden değiştirme. Takılırsan kutu; bloklarsa Volkan'ı ara.
 Durum: bilgi
 
+<<<<<<< Updated upstream
 ## KARAR 21:44 — volkan.md'deki "kilit grafik yenilendi; Mac ↔ Windows bir trafo farkı" isteğine
 Karar: Senin önerdiğin gibi: PNG'yi Mac'te resmi veriden tek komutla çizdim (`grafikler.py faz3 … --aralik 11-20`) ve karar masası commit etti (senin dosyan, senin izninle): yanlış yeşil 0/87, dolu trafoya yer var 0/73; %40 kuralı 41/284, dolu 41/73. Slayt 10 ve ekran 5'teki "41/74" etiketi 41/73 olur (Windows notu kalkar). Fark platform kaynaklı: Mac'te aynı tohumla üç koşu (biri PYTHONHASHSEED=0) birebir aynı; Windows'ta bir trafo farklı. Tüzük madde 5'e "resmi rakam Mac koşumu" notu BUILD'de; sebep Faz 6'da aranır. Senin Faz 3 günlüğüne bir satır: "Windows'ta aynı main'den üretilen 20 şehirde dolu 74 / tavanlı 107 (Mac 73 / 108); sebep aranıyor".
 Neden: ürün rakamı tek kaynaktan olmalı; tüzük madde 5 (sonuç = commit + veri + tohum) platformu da anmalı.
 Senden beklenen: slayt 10 / ekran 5 etiketini 41/73 yap; günlük satırı; sonra C1'e devam.
 Durum: bekliyor
+=======
+## UYARI! 31 Eki 21:45 — Civan'dan (+ Claude) — Veri sözlüğüne Korsika satırı ve Kuzey trafo sayısı vekili (KARAR 21:39 madde 1; onay senin)
+Ne: Sözlük senin dosyan; aşağıdaki iki değişikliği sen ekle ya da "ekle" de, ben PR açayım. KAYNAK hazır: `data/raw/edf-sei-corse/KAYNAK.txt` (main'de).
+1. **"Güney referans sayıları" satırında** "Kuzey'in trafo sayısı için vekil (~6.400, [Hesap])" yerine: "Kuzey'in trafo sayısı için vekil **~6.400–6.700** [Hesap: 219.931 tüketici ÷ trafo başına 34,4 (Güney) ya da 32,9 (Korsika, aşağıda)]".
+2. **"Elimizde" altına yeni satır** (SimBench'ten sonra önerim):
+
+**Korsika EDF SEI açık veri — ada şebekesi ölçüsü** — `data/raw/edf-sei-corse/`
+- İki tablo: (1) yıllık OG/AG trafo merkezi sayısı ve hat boyları (2011–2025, ada toplamı); (2) belediye × sektör yıllık tüketim (MWh) ve teslim noktası sayısı. Birim km, adet, MWh/yıl; çözünürlük yıllık.
+- Kaynak: EDF SEI Corse, opendata-corse.edf.fr, Licence Ouverte 2.0. İndirildi 31 Ekim 2026 (Civan); SHA-256 KAYNAK.txt'de.
+- Ölçülü: işletmecinin kayıt sayımı (ölçüm değil, envanter).
+- Sağlama [Hesap]: 2024'te 8.144 trafo, 5.930 km AG hat, 267.925 teslim noktası → trafo başına 0,73 km ve 32,9 nokta (Güney 1,02 km ve 34,4).
+- Yanlılık: Kıbrıs değil; ada toplamı, mahalle dağılımı ve havai / yeraltı ayrımı yok; teslim noktası abone ile birebir değil [Yorum].
+- Kullanım: Kuzey trafo sayısı vekiline ikinci, bağımsız sağlama (~6.690); farazi şehirde trafo başına hat boyu için dış çapa (üretici 1.3 adayı).
+Dosya: docs/data/data-dictionary.md (senin); data/raw/edf-sei-corse/KAYNAK.txt (Civan)
+Neden: Karar masası 21:39 (1): Korsika vekili sözlüğe; ekran 6'daki "120–170 trafo" ve sunum metni değişmez.
+Durum: yeni
+>>>>>>> Stashed changes
