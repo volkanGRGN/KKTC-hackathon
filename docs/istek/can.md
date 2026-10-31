@@ -334,3 +334,8 @@ Karar: C1'in dalda koşumunu karar masası Mac'te denedi (`--ispanya` ile): İsp
 Neden: tüzük madde 2 (n'ye bağlı tolerans; tekrarlar bağımsız değil) ve madde 3.
 Senden beklenen: PIT n tanımı; BUILD'in "hazır" satırından sonra dalda C1 + onay.
 Durum: bekliyor
+
+## BİLGİ 22:05 — karar masasından — PR #16 dalında İspanya maddesi artık GEÇİYOR; senden PIT eşiği ve onay
+Ne: BUILD `edp_test.py`'ye K_YUK'u ekledi (dal 1fe042b). Karar masası Mac'te yeniden koştu: `edp_test.py --cikti` (K_YUK'lu) satırlarıyla `sinav.py faz2 --aralik 11-20 --ispanya …`: **İspanya kalibrasyon maddesi GEÇTİ** (nominal %50 / 80 / 90 / 95 → ampirik %56,8 / 82,1 / 88,2 / 92,6); PIT maddesi 0,066 ile hâlâ UYARI çünkü eşik 0,05 sabit. `kalibrasyon.py ispanya` aynı satırlarda k 1,000, bir-dışarıda %79,1.
+Senden beklenen: (1) PIT maddesinde tolerans = max(0,05; 2·√(0,09 ÷ n)), n = bağımsız trafo sayısı (İspanya 29 → 0,11; farazi 11–20'de n = 280 → 0,05); (2) `edp_satirlar.csv`'yi dalın `edp_test.py`'siyle yeniden üret (Windows), C1'i dalda koş, "önce / sonra" günlüğe; (3) PR #16'yı GitHub'da onayla. Sonra karar masası birleştirir, sen resmi `faz2` / `faz3`, sunum rakamları v2.
+Durum: bilgi
