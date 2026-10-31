@@ -54,7 +54,7 @@ Geçme sınavı:
 - [x] Windows'ta çalıştı ve çıktı UTF-8 (Can onayı): [can-faz1](docs/log/2026-10-31-can-faz1.md)
 - [x] Veri adımı: her aday için veri sözlüğünde satır ya da "elendi + neden"; indirilenlerin KAYNAK.txt'si eksiksiz: [veri sözlüğü](docs/data/data-dictionary.md), [can-faz1-veri](docs/log/2026-10-31-can-faz1-veri.md)
 
-## Faz 2 — Modeli eğitme ve sınama: ölçülü trafolardan öğrenip ölçülmeyen trafonun öğlen yükünü tahmin etmek (kapanıyor: Can'ın resmi ölçümü bekleniyor)
+## Faz 2 — Modeli eğitme ve sınama: ölçülü trafolardan öğrenip ölçülmeyen trafonun öğlen yükünü tahmin etmek (bitti 31 Ekim, faturalı)
 
 **Amaç:** Ölçülmeyen trafonun bahar öğleni en düşük yükünü bant ve güvenle tahmin etmek (ADR-0001).
 **Girdi:** Faz 1 şehirleri. **Çıktı:** `src/sablon.py` ve şehir başına sonuç tablosu.
@@ -64,13 +64,7 @@ Geçme sınavı:
 - Can → `src/sinav.py` (2h dahil): tahmin tablosu + cevap anahtarını alır, geçme sınavındaki her ölçüyü hesaplar (doğru arketip oranı, öğlen hata ortanca/P90, bant kapsama, şehirler arası fark, düşük güven oranı); `src/grafikler.py`: kalibrasyon ve "kaç trafo ölçmeli" grafikleri; + gerçek veri adayları (İspanya EDP, NGED) inceleme ve KAYNAK; `docs/log/…-can-faz2.md`. Modeli yazan sınavı yazmaz.
 - Civan → `app/harita.py` yan panel ve tıklama (sahte veriyle).
 - Kartlar: [Can](docs/gorev/can-faz2-sinav-grafikler.md); Civan Faz 1 kartının sonundaki Faz 2 notu.
-- **Durum (31 Ekim 17:15, BUILD).**
-  - Model [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8); üretici ve sözleşme 1.2 + fatura [PR #12](https://github.com/volkanGRGN/KKTC-hackathon/pull/12). İkisi Can'ın onayını bekliyor (Volkan: "Can'ı ve bağımlı PR'ları bekleriz").
-  - Sınav şehirleri 11–20, geliştirme ölçümü:
-    - faturalı ortanca %3,9 / P90 %8,3, kapsama %85;
-    - faturasız %22 / %55 (İspanya gerçek verisiyle aynı seviye);
-    - faturalı saf tahmin %5,8 / %16.
-  - Ayrıntı: [üretici 1.2 günlüğü](docs/log/2026-10-31-volkan-uretici-1-2.md) (PR #12). Kutular Can'ın `sinav.py faz2` rakamıyla dolar.
+- **Durum (17:42):** bitti, faturalı. Model (#8) ve üretici 1.2 + fatura (#12) main'de; resmi ölçüm Can'ın `sinav.py faz2`'si (#14), 7/7 GEÇTİ. Ayrıntı: [üretici 1.2 günlüğü](docs/log/2026-10-31-volkan-uretici-1-2.md), [can-faz2](docs/log/2026-10-31-can-faz2.md).
 
 Yapılacaklar — veri (Can yapar, Volkan onaylar; gerçek doğrulama adayları, aynı eleme). İstisna: NGED kaydını Volkan açar (hesap onun):
 - İspanya EDP gerçek şebeke (Mendeley, CC BY): trafo başına toplam yük çıkıyor mu, çözünürlük, abone tipi.
@@ -89,13 +83,14 @@ Yapılacaklar — kod (her biri bir görev; eğitim akışı: veri hazırla → 
 - Not: modeller bilerek küçük ve yorumlanabilir (ADR-0001); derin öğrenme kapsam dışı.
 
 Geçme sınavı (20–30 şehirde, [doğrulama protokolüyle](docs/method/validation.md); her ölçü ortanca ve en kötü şehir):
-- [ ] Doğru arketip oranı ortanca ≥ %75 (İngiltere ~%80 ile kıyas; "gösterim").
-- [ ] Öğlen en düşük yük hatası ortanca ≤ %15, P90 ≤ %30.
-- [ ] %80 bandın gerçek kapsama oranı %70–90 arasında (sahte güven yok).
-- [ ] Şehirler arası sınav (A'da kur, B'de dene) hatası şehir içi hatanın 1,5 katını geçmiyor.
-- [ ] Ölçülü ve ölçülmeyen trafoların tip dağılımı karşılaştırılmış, günlükte.
-- [ ] "Düşük güven" oranı raporlandı (hedef ≤ %25; aşarsa sebep günlükte).
-- [ ] 5 / 10 / 20 ölçülü trafo eğrisi çizildi, "gösterim" etiketli.
+- [x] Doğru arketip oranı ortanca ≥ %75 (İngiltere ~%80 ile kıyas; "gösterim"). Sınav 11–20: %98,2, en kötü %89,3: [can-faz2](docs/log/2026-10-31-can-faz2.md)
+- [x] Öğlen en düşük yük hatası ortanca ≤ %15, P90 ≤ %30. Faturalı %3,8 / %8,0 (en kötü şehir %5,1 / %9,5); saf tahmin (fatura) %5,5 / %15,2, model %31 / %48 iyi: [can-faz2](docs/log/2026-10-31-can-faz2.md)
+- [x] %80 bandın gerçek kapsama oranı %70–90 arasında (sahte güven yok). %83,9; bant yukarı kayıktı (P10 altı %11), simetrik bantla %87,5, P10 altı %6 / P90 üstü %6: [can-faz2](docs/log/2026-10-31-can-faz2.md), [1.2 günlüğü](docs/log/2026-10-31-volkan-uretici-1-2.md)
+- [x] Şehirler arası sınav (A'da kur, B'de dene) hatası şehir içi hatanın 1,5 katını geçmiyor. Ortanca 1,08; en kötü 1,81, 2 şehir 1,5 üstünde (payda küçük: şehir içi hata %3–4): [can-faz2](docs/log/2026-10-31-can-faz2.md)
+- [x] Ölçülü ve ölçülmeyen trafoların tip dağılımı karşılaştırılmış, günlükte. Uzaklık (TV) ortanca 0,21: [can-faz2](docs/log/2026-10-31-can-faz2.md)
+- [x] "Düşük güven" oranı raporlandı (hedef ≤ %25; aşarsa sebep günlükte). Faturalı %0; faturasız %100 (fatura yoksa büyüklük ±%30 bilinmez): [can-faz2](docs/log/2026-10-31-can-faz2.md)
+- [x] 5 / 10 / 20 ölçülü trafo eğrisi çizildi, "gösterim" etiketli. 5 / 10 / 12 / 20 ölçülü → hata %4,6 / %3,8 / %4,1 / %3,5: faturalı modelde ölçülü sayısı hatayı az değiştiriyor (İspanya'yla aynı yön): `outputs/faz2_kac_trafo.png`, [can-faz2](docs/log/2026-10-31-can-faz2.md)
+- **Bilgi (karar masası 17:38):** fatura olmadan model, saf tahmini ortancada geçmiyor. Sınav 11–20 faturasız %20,6 / %50,7; tarife saf tahmini %22,9 / %62,2; model yalnız %10 / %19 iyi. Kazanç kötü uçta (P90). Faz 2 faturayla geçti (ADR-0007 faturayı girdi yaptı); Kıb-Tek'ten fatura toplamı istemenin kanıtı.
 
 ## Faz 3 — İlk uygulama katmanı, güneş paneli: her trafo için kaç ev daha, aralık ve yeşil/sarı/kırmızı karar (başladı 31 Ekim akşam)
 
@@ -108,7 +103,7 @@ Geçme sınavı (20–30 şehirde, [doğrulama protokolüyle](docs/method/valida
 - Civan → `app/harita.py`'yi gerçek Faz 3 tablosuna bağlar.
 - Kartlar: [Can](docs/gorev/can-faz3-sinav-grafik.md), [Civan](docs/gorev/civan-faz3-yan-panel.md).
 - **Durum (31 Ekim 17:15, BUILD).**
-  - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (#12'nin üstünde).
+  - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (taban main; Can'ın onayını bekliyor).
   - Sınav şehirleri 11–20, geliştirme ölçümü: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
   - Kırmızı = karamsar senaryoda bugün aşıyor (karar masası 17:26): kırmızı %31, yanlış kırmızı %42, sarı %63. Hedef aşımının sebebi ±4 V bilinmeyen bara gerilimi.
   - Kaç ev hatası (tavanlılar ayrı): iyimser 3,5, karamsar 9 ev → KALDI (Can'ın sınavı; günlük düzeltildi).

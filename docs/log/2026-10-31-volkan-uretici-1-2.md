@@ -171,4 +171,27 @@ Saf tahminlerdeki iki rakam: iki koşuda öğretici küme biraz farklı (fatura 
    - Uzmana soru 7 (01-plan): çekilen ve verilen enerji ayrı kayıtlı mı?
 3. **Farazi faturalı isabet bir üst sınır.** Farazide %3,9, İspanya gerçek verisinde faturayla %10. Abone başına eğri farkı üretici 1.3'e (ADR-0009, trafo içi çeşitlilik).
 
+## Ek girdi — 31 Ekim 17:41: bant kayması (Can'ın Faz 2 sınavı, karar masası 17:38)
+
+**Bulgu (Can).** Gerçek, P10'un altında %11, P90'ın üstünde %4. Bant yukarı kayık; düşük öğlen yükünü kaçırmak yanlış yeşil yönü.
+
+**Karar masasının önerisi işe yaramadı.** Öneri, tahmini ve bandı bir-dışarıda artıkların ortancasıyla kaydırmaktı. Şehir 1–10'da [Hesap]:
+- Artık ortancası şehir başına −%1,3 ile +%2 arasında, ortanca %0,1: tahminde kayma yok.
+- Tahminin gerçekten büyük olduğu trafo payı %46.
+- Ortancayla kaydırınca P10 altı %14'ten %17'ye kötüleşti.
+- Kayma bandın **şeklinde**: 12 ölçülünün artıkları sağa çarpık (ör. bir şehirde P10 −0,15, P90 +0,41), ölçülmeyende tersi.
+
+**Yapılan.** Bant tahmin etrafında simetrik: log ölçekte genişlik P10–P90'ın yarısı (`BANT_SIMETRIK`). Tahminin kendisi ve hata değişmedi.
+
+| | P10 altı | P90 üstü | Kapsama |
+|---|---|---|---|
+| Şehir 1–10, önce | %14,3 | %8,2 | %77,5 |
+| Şehir 1–10, simetrik | %10,7 | %12,9 | %76,4 |
+| Sınav 11–20, önce (Can'ın sınavıyla aynı) | %11,1 | %3,6 | %85,4 |
+| Sınav 11–20, simetrik (bir kez) | %6,4 | %6,1 | %87,5 |
+
+- Denenen diğer üç biçim (ortanca merkezli, ortancayla kaydırma, yalnız tahmini kaydırma) şehir 1–10'da daha kötü ya da aynıydı.
+- Can'ın `sinav.py faz2`'si yeni bantla: 7/7 GEÇTİ; kapsama %87,5; dışarıda kalan P10 altı 17, P90 üstü 17 trafo.
+- Faz 3 değişmedi: yanlış yeşil 0/21, kırmızı %31.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

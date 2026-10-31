@@ -2,12 +2,12 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 17:33 (BUILD oturumu)
+**Güncellendi:** 31 Ekim 2026, 17:42 (BUILD oturumu)
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0010).
 - **Faz 1 bitti.** Altı madde geçti; gerilim eşiği 207 V (EN 50160). Dış çapa: İngiltere UKPN raporu ([Faz 1 günlüğü](docs/log/2026-10-31-volkan-faz1.md)).
-- **Faz 2 kapanıyor.** 17:24'te main'e birleşti: #8 (şablon modeli + sözleşme 1.1), #12 (üretici ve sözleşme 1.2: mahalle farkı, yıllık fatura, bayramlar, kıyı, bara 244–252 V; model faturayı kullanır), #10 (İspanya EDP), #11 (İngiltere UKPN gerilim). Main'de: üretici birebir aynı şehri veriyor, `sinav.py faz1` 5/5.
+- **Faz 2 bitti (faturalı).** Can'ın `sinav.py faz2`'si 7/7 GEÇTİ; bant simetrik yapıldı (kapsama %87,5, iki kuyruk %6). Faturasız model saf tahmini ortancada geçmiyor (bilgi satırı). 17:24'te main'e birleşti: #8 (şablon modeli + sözleşme 1.1), #12 (üretici ve sözleşme 1.2: mahalle farkı, yıllık fatura, bayramlar, kıyı, bara 244–252 V; model faturayı kullanır), #10 (İspanya EDP), #11 (İngiltere UKPN gerilim). Main'de: üretici birebir aynı şehri veriyor, `sinav.py faz1` 5/5.
   - Yeni şehir için: README'deki iki indirme, sonra `sehir_uret.py 1 20` ve `sablon.py data/synthetic`.
   - Sınav şehirleri 11–20 (geliştirme ölçümü, gösterim):
     - faturalı %3,9 / P90 %8,3;
@@ -44,5 +44,5 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 
 ## Sıradaki üç adım
 1. Can #13'ü incelesin, birleşsin. Can `sinav.py faz2` ve `faz3`'ü koşsun; ROADMAP kutuları rakamla dolsun.
-2. Can saf tahmin maddesini yeni tanıma geçirsin; ROADMAP Faz 2 kutuları onun rakamıyla dolsun, Faz 3'te yanlış kırmızı ve sarı "KALDI, sebep günlükte".
+2. Can `faz3`'ü yeni kırmızı kuralıyla yeniden koşsun; ROADMAP Faz 3'te yanlış kırmızı, sarı ve kaç ev "KALDI, sebep günlükte".
 3. Faz 5: konuşma notu taslağı hazır (BUILD), slayt iskeleti Can'da (83b0f11), gece 2 prova.
