@@ -49,19 +49,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
    - ekran 5 rakamları;
    - ASTOR kataloğu KAYNAK ve sözlük satırı (can.md 19:26).
    - Sonra BUILD ROADMAP Faz 3 kutularını doldurur: yanlış yeşil ve kaç ev GEÇTİ; yanlış kırmızı ve sarı "KALDI, sebep günlükte".
-4. **Eksik verinin nasıl alınacağı** (Volkan'la konuşuldu, henüz bir yere yazılmadı):
-   - Bedava ya da ucuz:
-     - panelli evlerin inverter uygulamasındaki 5 dk şebeke gerilimi kaydı (Kıbrıs'ta ilk gerçek hat ucu gerilimi);
-     - gerilim ölçen akıllı priz (15–20 €; gece / öğlen bara seviyesi);
-     - trafo plakası fotoğrafı (uk, kademe aralığı);
-     - Girne 1 km² uydu görüntüsünde panel sayımı (yaygınlık).
-   - Kampta: uzmana soru 2, 3, 4, 6, 7, 8 ([plan](docs/01-plan.md)).
-   - Şartname: Kıb-Tek ihale ilanları, EMO, yetki belgeli firma (Elparts).
-5. **Malta notları** (Volkan getirdi, bilgi; depoya henüz girmedi):
-   - Enemalta "Available Capacity" haritası boş kapasiteyi yalnız güçten hesaplıyor (trafo gücü − ölçülmüş en yüksek talep), gerilime bakmıyor. Sunum kıyası: "komşu ada da güç kuralıyla karar veriyor".
-   - Malta LV makalesi (Energies 2022, 15(18) 6731): akıllı sayaç + OpenDSS + Monte Carlo. Bizim olasılıklı hesapla aynı mantık. Verisi açık değil (Zenodo'da yalnız makale; "Data Availability: Not applicable").
-   - Malta'da LV hatlarında panel payı < %20, ev paneli < 3,1 kWp.
-   - IET 2024'te trafoda 232–248 V ölçülmüş: bara bandı için dış çapa (Malta ayarı farklı olabilir).
+4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
 ## Bilinen sorunlar ve kararlar
 - Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Üretici 1.2 iki yeni dosya ister: kıyı (`osm-kasaba`) ve Open-Meteo 2023 (README).
