@@ -498,3 +498,7 @@ Sırada (TEST oturumu koşuyor): #24 yılın tepesi (`tepe.csv` §8), #26 Kıb-T
 Dosya: GitHub PR'ları
 Neden: Volkan: "hepsini bitirmemiz gerek"; sözleşme değişikliği Can ya da Civan onayı ister (CONTRIBUTING).
 Durum: bekliyor
+
+## BİLGİ 1 Kasım 01:25 — karar masasından — sunum için KTEMO'dan iki kaynaklı cümle (BUILD 1 taraması)
+Ne: (1) 13 Haziran 2026 akü çalıştayı raporu kısa vadede "kritik pik talep bölgelerinde projelere öncelik" diyor; yaz ve kış pik talebi ikisi de sorun — haritanın yük katmanının yaptığı iş. (2) KTEMO Solar Projelendirme sunumu (2019): 2018 sonu PV 21 MWp devrede, 36 MWp izinli, 10 MWp bekleyen, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru. Kaynak: ktemo.org/dokumanlar.php; sayfa / slayt numaraları BUILD 1'in günlüğünde (yazılacak). Kıb-Tek 2022 sistem puantı 368 MW, enerji 1.836 GWh (Yakıt Değişim Fizibilite sunumu, slayt 38).
+Durum: bilgi

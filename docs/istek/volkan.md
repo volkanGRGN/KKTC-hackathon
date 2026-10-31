@@ -1093,3 +1093,12 @@ Karar: (1) **PR #27 (6edb7bc, Can):** dal PR #21'in düzeltmeden önceki hâlini
 (2) **PR #29 (BUILD 1, akşam gerilimi) sorusuna karar: evet, akşam gerilimi kararı P10 ≥ 207 V** (ADR-0018 m. 6 ile aynı ilke: güvenli yön; ortancayla 3/263 ve 5/259 yanlış "yeterli" çıkıyordu). Can'ın sınavı kararı P10'dan (ya da `p_aksam_207`) okusun (can.md, BUILD 1 yazdı). #29 TEST sırasında (#24, #26'dan sonra).
 (3) **Birleştirme:** #27'yi GitHub'da Volkan ya da Civan onaylayabilir (yazarı Can); onay gelince karar masası birleştirir. Volkan'ın açtığı #22, #23, #25, #28 (ve TEST'ten sonra #24, #26, #29) için Can ya da Civan onayı.
 Durum: bekliyor (GitHub onayları; TEST)
+
+## KARAR 01:25 — (BUILD 1 — yük) KTEMO taraması ve PR #27 incelemesi: dört karar
+Karar: BUILD 1'in PR #27 incelemesi karar masasının Mac koşusuyla aynı (pencere düzeltmesi trafo boyutunu değiştirmiyor; birleşik ağaçta 1–10 0,47 / 0,73, 31–40 0,44 / 0,68; KARAR 01:20 — 31–40'ın düzeltilmiş pencereyle koşusu yapıldı, Can'ın dalı güncellemesi birleşmeyi değiştirmez, yalnız günlüğe birleşik rakamlar). KTEMO belgelerinden [Kaynaklı: ktemo.org/dokumanlar.php]:
+1. **Sistem puantı yukarıdan aşağı sağlama olarak eklenir (bilgi, sınav maddesi değil):** Kıb-Tek 2022 puantı 368 MW, enerji 1.836 GWh → tepe ÷ ortalama 1,76 [Hesap]. BUILD 1: deneme şehirlerinin toplam yükünde tepe ÷ ortalama (yıl boyu üretici 1.4 / 1.5) bu oranla yan yana, günlüğe; uzak düşerse üretici sorusu olarak karar masasına.
+2. **Kıb-Tek istek metni madde 9'a ek** (yapıldı): öngörülen puantı 25 kVA üstü yapıların Kıb-Tek görüşündeki puant gücü ve bağlandığı trafo (KTEMO Bildirim No-1, 2018: bu yapılar için Kıb-Tek görüşü zorunlu).
+3. **Güç katsayısı 0,95 kalır, kaynağı yazılır:** Bakanlar Kurulu 2227/2010, kurulu gücü ≥ 25 kVA konut dışı ve üç fazlı konutta kompanzasyon zorunlu, cos φ 0,90–1. Tek fazlı konutta kural yok; temkinli uç 0,90 (tepe kVA +%5,6) `tepe.csv` notunda duyarlılık olarak (BUILD 1, sonraki `yuk/` PR'ında).
+4. **Panel rakamları** (KTEMO Solar Projelendirme sunumu, 2019): 2018 sonu PV 21 MWp devrede, 36 MWp izinli, 10 MWp bekleyen, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru; 2023 çalıştayında konut GES'ini 3 kW'la sınırlama önerisi; uygulama rehberi İngiltere G83'ün çevirisi (faz başına 16 A). BUILD 2'ye bilgi (başvuru büyüklüğü varsayımı 6,5 kW'ın yanında 3 kW sınırı); Can'a sunum için.
+Kaynak belgeler depoya girmez; BUILD 1 adresleri ve sayfa / slayt numaralarıyla bir günlük yazar (`docs/log/2026-11-01-volkan-ktemo-tarama.md`).
+Durum: bekliyor (BUILD 1: 1, 3 ve günlük)

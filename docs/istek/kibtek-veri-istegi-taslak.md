@@ -34,7 +34,7 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 >
 > 7. **Trafo en yüksek yük kayıtları:** trafo başına maksimum talep / yükleme kayıtları; yoksa bir yaz yük etüdü (pens ampermetreyle örneklem bile yeterli). Akıllı sayaç varsa aylık maksimum talep yazmacı.
 > 8. **Orta gerilim fider / merkez tepe geçmişi (SCADA),** zaman damgalı; aynı saatlerin sıcaklığıyla eşleşebilecek biçimde (trafo trafo hesabı yukarıdan doğrulamak için).
-> 9. **Ticari ve sanayi abonelerin kayıtlı maksimum talebi** (müşteri listesi ve tarife sınıfıyla; madde 1'deki anonim numarayla).
+> 9. **Ticari ve sanayi abonelerin kayıtlı maksimum talebi** (müşteri listesi ve tarife sınıfıyla; madde 1'deki anonim numarayla); ayrıca Kıb-Tek görüşü verilen (öngörülen puantı 25 kVA üstü) yapıların öngörülen puant gücü ve bağlandığı trafo.
 > 10. **Hava verisi:** Kıb-Tek'in kendi kullandığı sıcaklık kaydı varsa (yoksa açık arşiv kullanırız).
 >
 > Bu kayıtların tamamı gerekmiyor. Panel tarafında yalnız 1 ve 2 bile, başvuru geldiğinde o ev için "sığar / önce ölç / sığmaz" kararını vermemize yetiyor; doluluk tarafında yalnız 7 (bir örneklem bile) yaz tepesini tahminden ölçüme çeviriyor. Kayıtların hangi biçimde tutulduğunu (dijital, kâğıt, coğrafi bilgi sistemi) öğrenmek de bizim için değerli.
@@ -53,3 +53,4 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 - [ ] Rakamlar: İspanya %10 [Hesap: PR #10]; "%27 → %4" farazi şehir üst sınırı, metne konmadı, konuşmada etiketiyle.
 - Kademe neden trafo başına (BUILD, 31 Ekim 23:15): PV açılma denemesinde (PR #20, gerçekçi şehirler) Kıb-Tek'in iki değerli kademe *standardını* bilmek açmadı (adım 6,25 V, belirsizlik 8 V'tan dar değil); açan, trafonun kendi ayarı. Gerçekçi kayıt hata oranları (kademe kaydı ne kadar doğru, abone–trafo eşleşmesi, faz kaydının doluluğu) kampta uzmana sorulur; sahte kayıt testi bu oranlarla kurulur (ROADMAP Faz 9).
 - [x] Yük haritası öne alındı (karar masası 23:12): tepe kalemleri metne eklendi (madde 7–10; Muhittin 4 madde 3), konu satırı ve giriş yük + panel (karar masası, 1 Kasım 00:14; [ADR-0018](../decisions/adr-0018-aksam-tepesi-on-surum.md)). Trafo başına kademe ayarı madde 4'te kalır (Muhittin 4 madde 5A; PR #20: standart değil trafonun kendi ayarı açıyor). Trafo → abone → faz bağlantısı madde 1–2'de.
+- Madde 9 eki (karar masası, 1 Kasım 01:25): KTEMO Teknik Komite Bildirim No-1 (8.06.2018) öngörülen puantı 25 kVA üstü yapılar için Kıb-Tek görüşünü zorunlu tutuyor; bu yüzden Kıb-Tek'te büyük yapıların öngörülen puant kaydı olmalı [Kaynaklı: ktemo.org/dokumanlar.php, BUILD 1 taraması].
