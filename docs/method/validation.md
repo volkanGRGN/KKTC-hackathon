@@ -19,6 +19,8 @@ Kural: **test seti asla yalnız farazi değil.** Farazi şehir yöntemin çalı�
 | Kaç ev hatası | tahmini kaç ev − ev ev benzetimde gerçek kaç ev | ürünün asıl sayısı |
 | Kalibrasyon | %80 bandın gerçek değeri kapsama oranı | sahte güven var mı |
 
+Yanlış yeşil eşikleri: farazi şehirde ≤ %5 (en kötü şehir ≤ %10) **gösterim** eşiği; canlıya geçiş bütçesi **< %2**, gerçek veride geri-testle tutulur (ADR-0010; marj ve güven eşikleri bu bütçeye göre ayarlanır). Faz 2'de ayrıca **saf tahmin** kıyası: model, saf tahminden ortanca ve P90'da en az %25 iyi olmalı (ADR-0008; tanımı karar masasında: abone sayısı / tarife enerjisi / fatura).
+
 Her ölçü 20–30 şehir üzerinden **aralık** olarak raporlanır (ortanca, en kötü). Ayrıca kaba kıyas: New York şirketlerinin "öğlen yükü = tepenin %15–40'ı" kuralı.
 
 ## Temsil yanlılığı
@@ -29,5 +31,7 @@ Her ölçü 20–30 şehir üzerinden **aralık** olarak raporlanır (ortanca, e
 
 ## Gerçek veri
 
-- İspanya EDP (30 gerçek trafo) kullanılabilirse aynı protokol orada koşulur; sonuç ayrı başlıkta "gerçek veri" diye verilir.
+- İspanya EDP (29 gerçek trafo, yük): aynı protokol koşuldu (PR #10); sonuç ayrı başlıkta "gerçek veri". Donuk sınav: üretici ve model İspanya hatasını düşürmek için ayarlanmaz (ADR-0009).
+- İngiltere UKPN (6 hat ucu ev, gerilim): `solve()` ölçülen yükselmenin 4 sitede 0,84–1,39 katı, 2 sitede (paneller uçta) 0,22 / 0,52 (PR #11) → karamsar senaryo panelleri hattın ucuna koyar.
+- **Pilotun ilk ölçeceği şey bara gerilimi dağılımı** (trafo çıkışı; karar masası 16:27). Farazi şehirde 244–252 V varsayıldı, Kıbrıs dağılımı BULAMADIM. Faz 3'te kırmızı kararını en çok bu belirsizlik bulandırıyor: bugün dolu trafoların hemen hepsi zaten 259 V üstünde, bunu ±4 V bilinmeyen bara gerilimi belirliyor ([Faz 3 günlüğü](../log/2026-10-31-volkan-faz3.md)).
 - Kıbrıs için kanıt önerisi: ilkbaharda 10 trafoda kör test (tahmin önce kaydedilir, sonra ≥7 gün ölçülür); başarı ölçütü önerisi: gerçek kırmızıların ≥%90'ı yakalanır, öğlen yük hatası ±%20 ([Yorum]).

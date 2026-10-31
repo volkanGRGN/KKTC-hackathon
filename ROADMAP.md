@@ -54,7 +54,7 @@ Geçme sınavı:
 - [x] Windows'ta çalıştı ve çıktı UTF-8 (Can onayı): [can-faz1](docs/log/2026-10-31-can-faz1.md)
 - [x] Veri adımı: her aday için veri sözlüğünde satır ya da "elendi + neden"; indirilenlerin KAYNAK.txt'si eksiksiz: [veri sözlüğü](docs/data/data-dictionary.md), [can-faz1-veri](docs/log/2026-10-31-can-faz1-veri.md)
 
-## Faz 2 — Modeli eğitme ve sınama: ölçülü trafolardan öğrenip ölçülmeyen trafonun öğlen yükünü tahmin etmek (sürüyor)
+## Faz 2 — Modeli eğitme ve sınama: ölçülü trafolardan öğrenip ölçülmeyen trafonun öğlen yükünü tahmin etmek (kapanıyor: Can'ın resmi ölçümü bekleniyor)
 
 **Amaç:** Ölçülmeyen trafonun bahar öğleni en düşük yükünü bant ve güvenle tahmin etmek (ADR-0001).
 **Girdi:** Faz 1 şehirleri. **Çıktı:** `src/sablon.py` ve şehir başına sonuç tablosu.
@@ -64,6 +64,13 @@ Geçme sınavı:
 - Can → `src/sinav.py` (2h dahil): tahmin tablosu + cevap anahtarını alır, geçme sınavındaki her ölçüyü hesaplar (doğru arketip oranı, öğlen hata ortanca/P90, bant kapsama, şehirler arası fark, düşük güven oranı); `src/grafikler.py`: kalibrasyon ve "kaç trafo ölçmeli" grafikleri; + gerçek veri adayları (İspanya EDP, NGED) inceleme ve KAYNAK; `docs/log/…-can-faz2.md`. Modeli yazan sınavı yazmaz.
 - Civan → `app/harita.py` yan panel ve tıklama (sahte veriyle).
 - Kartlar: [Can](docs/gorev/can-faz2-sinav-grafikler.md); Civan Faz 1 kartının sonundaki Faz 2 notu.
+- **Durum (31 Ekim 17:15, BUILD).**
+  - Model [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8); üretici ve sözleşme 1.2 + fatura [PR #12](https://github.com/volkanGRGN/KKTC-hackathon/pull/12). İkisi Can'ın onayını bekliyor (Volkan: "Can'ı ve bağımlı PR'ları bekleriz").
+  - Sınav şehirleri 11–20, geliştirme ölçümü:
+    - faturalı ortanca %3,9 / P90 %8,3, kapsama %85;
+    - faturasız %22 / %55 (İspanya gerçek verisiyle aynı seviye);
+    - faturalı saf tahmin %5,8 / %16.
+  - Ayrıntı: [üretici 1.2 günlüğü](docs/log/2026-10-31-volkan-uretici-1-2.md) (PR #12). Kutular Can'ın `sinav.py faz2` rakamıyla dolar.
 
 Yapılacaklar — veri (Can yapar, Volkan onaylar; gerçek doğrulama adayları, aynı eleme). İstisna: NGED kaydını Volkan açar (hesap onun):
 - İspanya EDP gerçek şebeke (Mendeley, CC BY): trafo başına toplam yük çıkıyor mu, çözünürlük, abone tipi.
@@ -90,7 +97,7 @@ Geçme sınavı (20–30 şehirde, [doğrulama protokolüyle](docs/method/valida
 - [ ] "Düşük güven" oranı raporlandı (hedef ≤ %25; aşarsa sebep günlükte).
 - [ ] 5 / 10 / 20 ölçülü trafo eğrisi çizildi, "gösterim" etiketli.
 
-## Faz 3 — İlk uygulama katmanı, güneş paneli: her trafo için kaç ev daha, aralık ve yeşil/sarı/kırmızı karar
+## Faz 3 — İlk uygulama katmanı, güneş paneli: her trafo için kaç ev daha, aralık ve yeşil/sarı/kırmızı karar (başladı 31 Ekim akşam)
 
 **Amaç:** Her trafo için kaç ev daha, karamsar/iyimser aralık, triyaj rengi (ADR-0002, ADR-0005).
 **Girdi:** Faz 2 tahminleri ve bantları; trafo kVA, hat boyu, iletken, mevcut panel. **Çıktı:** `src/kac_ev.py`; trafo tablosu + karşılaştırma raporu.
@@ -99,12 +106,24 @@ Geçme sınavı (20–30 şehirde, [doğrulama protokolüyle](docs/method/valida
 - Volkan+Claude → `src/kac_ev.py`, `docs/log/…-volkan-faz3.md`.
 - Can → `src/sinav.py`'ye Faz 3 ölçüleri (yanlış yeşil, yanlış kırmızı, kaç ev hatası, sarı oranı) ve %40 kuralı karşılaştırması; `src/grafikler.py`'ye kilit grafik (biz vs %40 kuralı); `docs/log/…-can-faz3.md`.
 - Civan → `app/harita.py`'yi gerçek Faz 3 tablosuna bağlar.
+- Kartlar: [Can](docs/gorev/can-faz3-sinav-grafik.md), [Civan](docs/gorev/civan-faz3-yan-panel.md).
+- **Durum (31 Ekim 17:15, BUILD).**
+  - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (#12'nin üstünde).
+  - Sınav şehirleri 11–20, geliştirme ölçümü: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
+  - Kırmızı kuralı karar masasında: ADR-0010 metninin düz okumasıyla yanlış kırmızı %69.
+  - Ayrıntı: [Faz 3 günlüğü](docs/log/2026-10-31-volkan-faz3.md) (PR #13).
 
 Yapılacaklar:
 - Isıl sınır ve gerilim sınırı, küçüğü; yanında %40 kuralının sonucu.
-- İki senaryo: karamsar (P10 yük, tek faz, 250 V) ve iyimser (P90 yük, dengeli üç faz, 246 V).
-- Renk kuralı: yeşil = karamsarda bile yer var ve güven yüksek; kırmızı = iyimserde bile yok; diğerleri sarı (ölç ya da esnek onay). "Ölçülmedi" etiketi.
+- İki senaryo: karamsar (P10 yük, tek faz, 250 V, bekleyen paneller hattın ucunda: İngiltere UKPN, karar masası 16:27) ve iyimser (P90 yük, dengeli üç faz, 246 V, hat ortası).
+- Renk kuralı ([ADR-0010](docs/decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md)): yeşil = karamsar senaryo bekleyen evi marjla alıyor (payın %10'u, en az 1 ev) ve güven yüksek; kırmızı = karamsar sınırı aşıyor (okuması karar masasında); diğerleri sarı (sınırlı onay ya da önce ölçüm; ölçüm cihazı sarılara). İlk taslakta kırmızı "iyimserde bile yok" idi. "Ölçülmedi" etiketi.
 - Benzetimdeki gerçek "kaç ev" ile karşılaştırma; %40 kuralıyla aynı karşılaştırma.
+
+- **Faz 3 ikinci sürüm (sunum sonrası / pilot öncesi; karar masası 17:00, ADR-0009, ADR-0010):**
+  - kümülatif onay düşümü (`kac_ev.csv`'ye `onaylanan_kw`, `kalan_ev`; sözleşme 1.3);
+  - yeşil kuralının İspanya / İngiltere geri-testi ve canlı bütçe (yanlış yeşil < %2);
+  - üretici 1.3 çapaları: korelasyon matrisi, P90/P95 kuyruk, hat üstünde PV konum dağılımı ve fazı, trafo içi çeşitlilik (Can'ın `edp_kiyas.py`'si);
+  - "farazi − İspanya" fark ölçeri her sürümde.
 
 Geçme sınavı (20–30 şehirde):
 - [ ] **Yanlış yeşil oranı ≤ %5** (dolu trafoya "yer var"); en kötü şehirde ≤ %10.
@@ -139,12 +158,23 @@ Geçme sınavı:
 ## Faz 5 — Sunum ve prova: hikâye, canlı gösteri, itirazlara hazır cevap
 
 **Amaç:** 5–7 dakikada hikâye + canlı gösteri + itirazlara hazır cevap. **Girdi:** Faz 3 grafikleri, Faz 4 paneli, [araştırma](docs/log/2026-10-31-kapsamli-arastirma.md) bölüm 8. **Çıktı:** slaytlar (PDF yedek), konuşma notu, soru-cevap.
-**Kim / süre:** en son, Faz 3 ve 4 bittikten sonra, hep birlikte; Volkan anlatır · orta (2 prova dahil).
+**Kim / süre:** başladı 31 Ekim akşam, Faz 3 ile paralel (karar masası 16:50); Volkan anlatır · orta (gece 2 prova).
 **Dosyalar:** `docs/sunum/` (Can açar; slaytlar ve konuşma notu).
 
 Yapılacaklar:
-- Akış: Güney %47'sini atıyor → Kuzey'de 2.670 bekliyor, Kıb-Tek mahalleyi görmüyor → İngiltere 800 trafo, %80 → bizim uyarlama (öğlen + gerilim, Kıbrıs'a özel; **fotoğraf değil film**: bugün kurulumcu gerilimi tek noktada, tek gün ölçüyor, komşular panel ekledikçe baharda sınır aşılıyor ve kimse önceden görmüyor; biz trafonun gün ve mevsim boyu davranışını tahmin edip "kaç ev daha ekleyince sınıra gelir" sorusuna önceden cevap veriyoruz) → canlı harita → %40 kuralıyla yan yana yanlış yeşil → pilot (20–50 → 120–170 trafo, ~20 bin € + pens, baharda) → itirazlar ve triyaj.
-- Dürüstlük cümleleri: "%80 İngiltere'de gerçek veride; farazi şehir gösterim; Kıbrıs'taki doğruluğu pilot söyler." + temsil yanlılığı: "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz." + gerçek veri ([ADR-0008](docs/decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md) madde 3): "Farazi şehir isabeti gerçek isabetin üst sınırıdır. Gerçek veride, İspanya'da 29 trafoda sınadık: yalnız müşteri sayısıyla ~%25, fatura bilgisiyle ~%10 ortanca hata. Kıbrıs'taki doğruluğu pilot söyler."
+- **Hikâye: güven merdiveni** (karar masası 17:00, [ADR-0009](docs/decisions/adr-0009-dogruluk-onceligi-ve-capalama.md)).
+  - Tek cümle: "Kıbrıs'ı ölçemiyoruz; yöntemi ölçebildiğimiz her şeyde kanıtlıyoruz, sonra uyguluyoruz."
+  - Dört basamak, her birine tek iddia + tek rakam, hepsi "saf tahmine göre ne kadar iyi" cinsinden:
+    1. farazi şehir (kontrollü gerçek);
+    2. İspanya (yük, dış geçerlilik);
+    3. İngiltere (gerilim, dış geçerlilik);
+    4. Kıbrıs pilotu (saha).
+  - **Manşet rakam: İspanya %25 → %10** ("hiç görmediğimiz 29 gerçek trafoda, Kıb-Tek'in zaten elinde olan abone sayısı + faturayla").
+  - İkinci vurgu: gerilimde 6 hattın 4'ü ±%40, 2 ıskalama uca kümelenme → karamsar senaryo.
+  - Farazi rakamlar destek, manşet değil. Farazi 1.2'de faturasız %22, faturalı %3,9 (iyimser üst sınır).
+  - Kilit grafik: yanlış yeşil, biz 0 / %40 kuralı %14.
+- Akış (eski taslak, merdivene yerleşir): Güney %47'sini atıyor → Kuzey'de 2.670 bekliyor, Kıb-Tek mahalleyi görmüyor → İngiltere 800 trafo, %80 → bizim uyarlama (öğlen + gerilim, Kıbrıs'a özel; **fotoğraf değil film**: bugün kurulumcu gerilimi tek noktada, tek gün ölçüyor, komşular panel ekledikçe baharda sınır aşılıyor ve kimse önceden görmüyor; biz trafonun gün ve mevsim boyu davranışını tahmin edip "kaç ev daha ekleyince sınıra gelir" sorusuna önceden cevap veriyoruz) → canlı harita → %40 kuralıyla yan yana yanlış yeşil → pilot (20–50 → 120–170 trafo, ~20 bin € + pens, baharda) → itirazlar ve triyaj.
+- Dürüstlük cümleleri: "%80 İngiltere'de gerçek veride; farazi şehir gösterim; Kıbrıs'taki doğruluğu pilot söyler." + temsil yanlılığı: "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz." + gerçek veri ([ADR-0008](docs/decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md) madde 3): "Farazi şehir isabeti gerçek isabetin üst sınırıdır. Gerçek veride, İspanya'da 29 trafoda sınadık: yalnız müşteri sayısıyla ~%25, fatura bilgisiyle ~%10 ortanca hata. Kıbrıs'taki doğruluğu pilot söyler." + gerilim (karar masası 16:27): "Gerilim fiziğini İngiltere'de 6 gerçek hatta sınadık: dördünde ±%40 içinde, ikisinde paneller hat ucunda toplandığı için model yükselmeyi az gösterdi; bu yüzden karamsar senaryomuz panelleri hattın ucuna koyar."
 - İtiraz slaydı (adalet, yanlış evet/hayır maliyeti, hesap verebilirlik, komşu etkisi, zamanla bozulma) → ret değil triyaj, insan onayı, itiraz eden ölçüm ister.
 - Kaynak slaydı (UKPN "Validation of PV Connection Assessment Tool" kapanış raporu, Ofgem, Mart 2015: bara gerilimi 248 V tasarım varsayımı, gündüz en düşük talep 200–400 W/müşteri, faz dengesizliği kentsel %25 / kırsal %50; [Faz 1 günlüğü](docs/log/2026-10-31-volkan-faz1.md) dış çapa); PDF ve ekran kaydı yedeği.
 
