@@ -685,3 +685,4 @@ Ne: Karar masasının önerisiyle (#16 ve #18'de BUILD işi bitti) Faz 10 hazır
 Dosya: PR #19 (https://github.com/volkanGRGN/KKTC-hackathon/pull/19)
 Neden: KARAR 21:15 / 22:21; tanıdık evden kayıt gelirse hazır olsun. Birleştirme Volkan'ın sözüyle.
 Durum: bilgi
+PR İNCELEME 22:29 (karar masası): PR #19 incelendi — yalnız görev kartı + `src/inverter_kaydi.py` (salt okur, dış bağlantı ve çalıştırma yok, kişisel veri yok, sözdizimi temiz); kullanım bölünmesi değer görülmeden dondurulmuş (ilk 5 ev doğrulama); model koduna dokunmuyor. **Birleşebilir**; Volkan'ın sözüyle (izin sistemi).
