@@ -4,7 +4,8 @@
 Yöntem: docs/method/modeling.md bölüm 4–5; gerekçe ADR-0002 (gerilim), ADR-0005 (triyaj), ADR-0010 (yeşil kararı).
 Okur: trafolar.csv (Kıb-Tek'in bildiği: kVA, hat sayısı ve boyu, kablo, abone ve panel sayıları) ve tahmin.csv
 (Faz 2: öğlen en düşük yükün P10 / P90'ı ve güven). cevap_anahtari.csv'yi okumaz.
-Yazar (sözleşme §6): kac_ev.csv.
+Yazar (sözleşme §6): kac_ev.csv. ADR-0011'den beri yedek yol: resmi hesap src/kac_ev_olasilik.py, o da pay sütunlarını
+(isil_pay_kw, gerilim_pay_kw_*, sinir_karamsar, kural40_ev) bu dosyanın sehir_hesapla()'sından alır.
 
 Fizik, şehir üreticisinin ev ev benzetimiyle (src/trafo_bos_kapasite.py solve) aynı empedanslar, tek denklemde:
   hat ucundaki gerilim = trafo çıkışı × (1 + OG yükselmesi) + trafo yükselmesi + hat yükselmesi
@@ -128,7 +129,12 @@ def sayi(x):
     return float(x) if x not in ('', None) else math.nan
 
 
-def sehir_calistir(klasor):
+SUTUNLAR = ['sehir', 'trafo_no', 'kac_ev_karamsar', 'kac_ev_iyimser', 'isil_pay_kw', 'gerilim_pay_kw_karamsar',
+            'gerilim_pay_kw_iyimser', 'sinir_karamsar', 'renk', 'kural40_ev']
+
+
+def sehir_hesapla(klasor):
+    """Tek denklem: sözleşme §6 satırları (yazmadan). kac_ev_olasilik.py pay sütunlarını buradan alır."""
     with open(klasor / 'trafolar.csv', encoding='utf-8', newline='') as fh:
         trafolar = list(csv.DictReader(fh))
     with open(klasor / 'tahmin.csv', encoding='utf-8', newline='') as fh:
@@ -157,12 +163,20 @@ def sehir_calistir(klasor):
             sinir_karamsar='gerilim' if evk_v <= evk_i else 'isil',
             renk=renk(ev_k, t['guven'], sonuc),
             kural40_ev=max(0, math.floor((KURAL40 * tr['kva'] - tr['panel_kw']) / YENI_PANEL_KW))))
-    sutunlar = ['sehir', 'trafo_no', 'kac_ev_karamsar', 'kac_ev_iyimser', 'isil_pay_kw', 'gerilim_pay_kw_karamsar',
-                'gerilim_pay_kw_iyimser', 'sinir_karamsar', 'renk', 'kural40_ev']
-    with open(klasor / 'kac_ev.csv', 'w', encoding='utf-8', newline='') as fh:
+    return satirlar
+
+
+def csv_yaz(yol, sutunlar, satirlar):
+    with open(yol, 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=sutunlar, lineterminator='\n')
         w.writeheader()
         w.writerows(satirlar)
+
+
+def sehir_calistir(klasor):
+    """Yedek yol (ADR-0011): tek denklemle kac_ev.csv. Resmi hesap kac_ev_olasilik.py."""
+    satirlar = sehir_hesapla(klasor)
+    csv_yaz(klasor / 'kac_ev.csv', SUTUNLAR, satirlar)
     return satirlar
 
 

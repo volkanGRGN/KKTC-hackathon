@@ -40,7 +40,7 @@ python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da 
 
 Şehir başına ~1 saniye. Yöntem [docs/method/modeling.md](docs/method/modeling.md); sınav `python3 src/sinav.py faz2 data/synthetic` (Can). Sürüm 1.2 şehirleri için önce iki indirme: kıyı (`data/raw/osm-kasaba/KAYNAK.txt`) ve Open-Meteo 2023 (`data/raw/open-meteo-lefkosa/`); yoksa üretici uyarıp eski kurala / yapay ışınıma düşer.
 
-**Kaç ev (Faz 3):** `python3 src/kac_ev.py data/synthetic` → her şehirde `kac_ev.csv` (karamsar / iyimser, renk, %40 kuralı). `tahmin.csv` ister; şehir başına 0,1 saniyenin altında.
+**Kaç ev (Faz 3):** `python3 src/kac_ev_olasilik.py data/synthetic` → her şehirde `kac_ev.csv` (karamsar / orta / iyimser, renk, bugün aşma olasılığı, %40 kuralı; ADR-0011). `tahmin.csv` ister; şehir başına 3–5 saniye. Yedek yol (tek denklem, 0,1 sn): `python3 src/kac_ev.py data/synthetic`; aynı dosyayı üç ek sütunsuz yazar.
 
 **Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
 
