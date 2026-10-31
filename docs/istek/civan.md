@@ -154,5 +154,5 @@ Ne: Sözleşme değişikliği Can ya da Civan onayı ister; karar masası 23:35'
 Senden beklenen: `docs/data/tablo-bicimi.md` farkını oku, GitHub'da onayla ya da düzeltme yaz. Birleştirme Volkan'ın sözüyle; PR #22 ayrıca karar masasının testinde (iki eksi bulgu).
 Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
 Neden: CONTRIBUTING sözleşme kuralı; karar masası 23:35.
-Durum: bekliyor
+Durum: yapıldı (Civan): PR #21 onaylandı (not: tepe_yil_kw üç pencerenin tepesi, açıklamaya eklenmeli; bloklamaz); PR #22'ye iki not (inverter `deger` türetilmiş, ham kayıt değil; sürüm satırı ve dosyalar tablosunda §7 eksik). Haritaya ikisinin de etkisi yok.
 
