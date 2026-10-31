@@ -806,3 +806,13 @@ Sınav (benim, şimdi): `sinav.py faz2`'ye tepe bölümü: `tepe.csv` ve `tepe_y
 Dosya: docs/data/tablo-bicimi.md (BUILD PR'ı), src/sinav.py (Can)
 Neden: 23:12 KARAR; tek yazar kuralı; yük haritası sunumun öne çıkan katmanı. Bloklamıyor.
 Durum: bekliyor
+
+## KARAR 23:18 — BUILD'e: Muhittin'in önerisi şimdi — başvuru anında karar motoru, eksik bilgiler sahte Kıb-Tek kayıtlarıyla; BUILD panelde, yük kodu Can'a
+Karar: Volkan (23:18): "Bunu zaten simüle ediyoruz, kesin oran bulmanın anlamı yok; verileri Kıb-Tek'ten alacağız. Muhittin'in önerdiğini yapabilir miyiz? Eksik yerlerde sahte verilerle çalışacağız." → **Evet.** ADR-0012 ve ADR-0015 uygulanır; sahte kayıt testi (KARAR 23:02, 23:1x düzeltmeleri) bu motorun girdisi olur, ayrı test değil.
+1. **Başvuru anı motoru** (`src/basvuru.py`, olasılıklı hesabın üstünde, aynı fizik ve aynı kapı; ADR-0015 m. 3): girdi trafo + başvuran ev (sahte kayıttan hattı, direk sırası ±2, fazı varsa) + **o ana kadar onaylanmış ama kurulmamış başvurular** (durumlu; ADR-0015 m. 1, ADR-0010 m. 2). Çekilişler başvuranın gerçek konumuna ve kayıtlı bilgilere koşullanır. Karar: **evet** (bu başvuru + öncekiler %98 sığar), **önce ölç** (arada), **hayır / güçlendir** (bugün aşma olasılığı ≥ 0,5). Kayıt eksikse o bilinmeyen aralıktan çekilir.
+2. **Haritada sarının yeni dili** (ADR-0015 m. 4): sarı trafo için "hattın ilk %x'inde başvuru yeşil" (konum payı); çıktı sütunu sözleşme 1.4 adayı `yesil_konum_payi`.
+3. **Test (deneme şehirleri, üretici 1.3; 1–10'da kur, 21–30 bir kez):** her trafoda cevap anahtarının panelsiz konutlarından rastgele sıralı başvuru akışı (7 sıra, cevap anahtarındaki tanımla); her başvuruya motor karar verir, onaylananlar bir sonrakine taahhüt olarak girer; gerçek, benzetimle (aynı tohumdan gerçek ağ): bu başvuru öncekilerle birlikte 259 V / kVA'yı aşıyor mu. **Ölçüler:** başvuru anında **yanlış evet** (kapı < %2), **hemen evet alan başvuru payı** (harita yeşili %5 ile kıyas), "önce ölç" payı, sarı trafolarda konum payı; aynı akışta %40 kuralının yanlış eveti. Sahte kayıt kusurları üç düzeyde (iyimser / beklenen / kötümser) ve kayıtsız durum yan yana. Etiket: "sahte kayıtlarla, gösterim; gerçek kayıtlar Kıb-Tek'ten".
+4. **Sıra (BUILD devri, Volkan panelde):** K_YUK 1,47 (yapılıyor) → **sahte kayıtlar + başvuru anı motoru** → ROADMAP Faz 6–12. **B-Y1 / B-Y2 (yük haritası kodu) Can'a geçti** (can.md 23:18): Can senin dosyalarına (`sehir_uret.py`, yeni `src/tepe.py`) dal + PR ile yazar, sen onaylarsın.
+Neden: Muhittin 4: sarının tabanı (%41) başvuranın konumundan; harita bunu kaldıramaz, başvuru anı kaldırır. Volkan panelde, Can yükte; dosya sahipliği PR onayıyla korunur.
+Senden beklenen: 1–3, dal + PR; ilk sonuç kutuya UYARI; karar masası Mac'te tekrarlar.
+Durum: bekliyor

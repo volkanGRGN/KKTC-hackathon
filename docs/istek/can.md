@@ -422,3 +422,11 @@ Ne ölçüldü: main b0020aa, Mac, Python 3.12; üretici 1.3 şehirleri 21–30 
   Sınav bugün de geçiyor; ama İspanya maddesi K'ya göre iç örnek (K aynı satırlardan) ve ürünün yolu için bant biraz dar (fazla emin). Geliştirme 1–10'da K 1,47 ile renk değişmiyor (yeşil 20, kırmızı 53, sarı 281, yanlış yeşil 0/20), yalnız bant genişliyor (P90 ÷ P10 ortanca 1,37 → 1,44). Karar masasına gitti (volkan.md UYARI 23:15).
 Onay: beş commit'in kontrol edildi, rakamlar birebir; BUILD onaylıyor. Senden şimdilik iş yok; karar masası K'yı değiştirirse faz2'yi 21–30'da bir kez yeniden koşarsın (`--ispanya` yeni satırlarla).
 Durum: bilgi
+
+## KARAR 23:18 — yük haritasının kodu sende (Volkan panelde): B-Y1 yıl boyu üretici ve B-Y2 tepe modeli, Volkan'ın dosyalarına PR ile
+Karar: Volkan panelle (başvuru anı motoru) ilgileniyor; yük haritası baştan sona senin. Volkan'ın dosyalarına dokunan kısım dal + PR, Volkan / BUILD onayıyla (CONTRIBUTING sahiplik).
+- **B-Y1 (`src/sehir_uret.py`, dal `yuk/yil-boyu`):** aynı şehirler için Temmuz ve Ocak haftası (aynı tohum ve ağ; `AY` parametresi; EAC 2022 sınıf eğrilerinin o ayı; Open-Meteo saatlik sıcaklık ve ışınım o ay); yer trafosu listesine 1.600 / 2.500 kVA (yaz tepesinde aşan varsa); cevap anahtarına `tepe_yil_kw`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v` (net yükle). Sözleşme 1.4 (cevap anahtarı sütunları) PR'da; Civan onayı.
+- **B-Y2 (yeni `src/tepe.py`):** iki bileşen: taban (fatura / tarife enerjisiyle ölçek, √N çeşitlilik) + klima (sıcaklık eğimi × klimalı ev sayısı, yüksek eşzamanlılık); eğim ve eşzamanlılık senin 20 Kıbrıs evi + sıcaklık analizinden; tasarım sıcaklığı Lefkoşa uzun seri; bant ölçülü trafoların bir-dışarıda artıkları + eğim belirsizliği; çıktı `tahmin.csv`'ye ek sütunlar (`tepe_kva`, P10 / P90, `tepe_saati`, `pf_varsayim` 0,95, "ön"). `sablon.py`'ye dokunma; `tepe.py` `tahmin.csv`'yi okur, kendi sütunlarını ekler.
+- **Öneren ≠ puanlayan:** modeli sen yazdığın için tepe sınav maddesini **Civan** ya da BUILD puanlar (sen sınav kodunu yaz, koşumu ve onayı başkası yapar; tüzük).
+Sıra: verileri indir → eşzamanlılık + sıcaklık eğimi analizi → B-Y1 → B-Y2 → sınav maddesi. Günlük, kutu.
+Durum: bekliyor
