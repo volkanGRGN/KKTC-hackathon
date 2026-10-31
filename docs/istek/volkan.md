@@ -468,7 +468,7 @@ Sorular:
 (c) Pilot veri isteği listesine iki kişi eklensin mi: KIOS yazarları (hat modeli + EAC 60 tüketici verisi) ve Micallef 2015 tezi "Request a copy" (Gozo dış sınamasının eksik hat boyu / kablosu)?
 Dosya: docs/log/2026-10-31-civan-ada-veri-setleri.md; ham dosyalar depo dışında
 Neden: Civan'ın isteği: eksik veriler için adalardan uyarlanabilir veri. Bloklamıyor.
-Durum: yeni
+Durum: karar verildi 21:16 → civan.md: (a) üretici 1.3 'ince uç kol' senaryosu evet (ROADMAP, BUILD) + uzmana soru 3 notu; (b) sözlük vekili sunum sonrası Can'a, ekran 6 rakamı bu gece değişmez; (c) dış veri istekleri listesine evet, gönderme Volkan
 
 ## KARAR 21:15 — BUILD'e: Muhittin'in üçüncü cevabı işlendi; sunum sonrası faz haritası (Volkan: "sarının düzelmesi lazım"); bu gece yalnız ROADMAP'e taslak
 Karar: Cevap günlükte ([muhittin-cevap-3](../log/2026-10-31-muhittin-cevap-3-veri-dongusu.md)); [ADR-0013](../decisions/adr-0013-veri-dongusu-tuzugu.md) (veri döngüsü tüzüğü) ve [ADR-0014](../decisions/adr-0014-yuk-katmani-ayri-tepe-modeli.md) (yük katmanı) yazıldı. **Sunum sonrası faz haritası** (ROADMAP'e "Sunum sonrası" bölümü; Faz 6–11; sıra Muhittin'in uyarısıyla: ucuz olan değil, sarıyı ve yanlış kırmızıyı en çok düşüren önde):

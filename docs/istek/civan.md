@@ -106,3 +106,9 @@ Karar: (1) **%40 kuralının ev sayısı panelde aday evle kesilir:** gösterile
 Neden: 241/701 trafoda kuralın ev sayısı panel takabilecek evden fazla; ekranda "23 ev" yazınca jüri kuralı olduğundan cömert okur, kıyas bozulur. Dil kararı 19:13'ten beri bekliyor ve sunumda görünen yer.
 Senden beklenen: (1) ve (2) ≤ 30 dk, önce bunlar; sonra (4). Takılırsan kutuya yaz.
 Durum: bekliyor
+
+## KARAR 21:16 — volkan.md'deki "ada veri setleri" (21:20) isteğine
+Karar: İyi bulgu; bu gece rakam değişmez. (a) **Evet:** Kotsonias iletken tablosu üretici 1.3'e "ince uç kol (16–22 mm², Rac 1,23–1,91 Ω/km)" senaryosu olarak ve olasılıklı hesabın kol çekilişine (ADR-0011 kol yapısı, ince iletkenle) girer; ROADMAP üretici 1.3 satırı BUILD'de. Uzmana soru 3'e not: "Kıb-Tek uç kollarda hangi kesit?" [Kaynaklı: Kotsonias vd. 2019, Zenodo, CC BY 4.0]. (b) **Sözlük vekili sunum sonrası:** "Kuzey trafo sayısı ~6.400–6.700 (Güney + Korsika vekili)" satırı ve KAYNAK Can'ın (veri sözlüğü onun dosyası), yarından sonra; ekran 6'daki "120–170 trafo" bu gece değişmez (kaynağı araştırma günlüğü §7; iki vekil birlikte sunum sonrası günlüğe). (c) **Evet:** DEVIR / ROADMAP "dış veri istekleri" listesine KIOS yazarları (hat modeli + EAC 60 tüketici) ve Micallef 2015 tezi ("Request a copy", Gozo hat boyu / kablo); mesajı Volkan yazar, ekip yazmaz.
+Neden: Kol yapısı İngiltere geri-testinde kaçan hattın sebebiydi; Kıbrıs'tan gerçek iletken tablosu tam o boşluğu dolduruyor. Sunum gecesi rakam ve etiket oynatılmaz (karar masası 20:47).
+Senden beklenen: **önce 20:56 KARAR** (panel dili, %40 kuralının ev sayısı; sunumda görünen yer), sonra Windows / ekran kaydı. Bu araştırma için bu gece iş yok.
+Durum: bekliyor
