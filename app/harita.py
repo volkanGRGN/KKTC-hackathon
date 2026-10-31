@@ -262,10 +262,17 @@ def yan_panel(klasor, veri, satir):
             f"Güven: {GUVEN_ADI.get(satir['guven'], satir['guven'])} · {olcum}"
         )
     if "renk" in veri:
+        # Aday: panelsiz konut abonesi; trafolar.csv'den (cevap anahtarı okunmaz).
+        aday = int(satir["abone_konut"] - satir["panel_sayisi"])
+        if aday <= 0:
+            kac_ev = "**panelsiz konut yok**"
+        else:
+            kac_ev = (
+                f"**{int(satir['kac_ev_karamsar'])}–{int(satir['kac_ev_iyimser'])}** "
+                "(karamsar–iyimser)"
+            )
         st.markdown(
-            f"Kaç ev daha panel: **{int(satir['kac_ev_karamsar'])}–"
-            f"{int(satir['kac_ev_iyimser'])}** (karamsar–iyimser) · "
-            f"{RENK_ADI[satir['renk']]}  \n"
+            f"Kaç ev daha panel: {kac_ev} · {RENK_ADI[satir['renk']]}  \n"
             f"%40 kuralı: {int(satir['kural40_ev'])} ev"
         )
     egri_ciz(klasor, veri, satir)

@@ -178,11 +178,15 @@ def tahmin_satiri(rng, trafo, olculdu, olculu_sayi):
     }
 
 
-def renk(karamsar, iyimser, guven):
-    """docs/method/modeling.md bölüm 5'teki kural."""
-    if iyimser == 0:
+def renk(pay_karamsar_kw, guven):
+    """ADR-0010: kırmızı = karamsar sınır aşılıyor; yeşil = marj (payın %10'u ya da
+    en az 1 ev) düşülünce de en az 1 ev sığıyor VE güven yüksek; diğerleri sarı."""
+    if pay_karamsar_kw <= 0:
         return "kirmizi"
-    return "yesil" if karamsar > 0 and guven == "yuksek" else "sari"
+    marj = max(0.1 * pay_karamsar_kw, YENI_PANEL_KW)
+    if guven == "yuksek" and pay_karamsar_kw - marj >= YENI_PANEL_KW:
+        return "yesil"
+    return "sari"
 
 
 def kac_ev_satiri(rng, trafo, tahmin):
@@ -190,9 +194,10 @@ def kac_ev_satiri(rng, trafo, tahmin):
     aday = trafo["abone_konut"] - trafo["panel_sayisi"]
     isil = max(0.0, kva + tahmin["ogle_min_kw_p10"] - panel_kw)
     gerilim_iyimser = max(0.0, rng.uniform(-8, 40) + 0.08 * kva)
-    gerilim_karamsar = gerilim_iyimser * rng.uniform(0.2, 0.6)
-    karamsar = min(aday, math.floor(min(isil, gerilim_karamsar) / YENI_PANEL_KW))
-    iyimser = min(aday, math.floor(min(isil, gerilim_iyimser) / YENI_PANEL_KW))
+    # Karamsar pay eksi olabilir: bugünden sınır aşılıyor (ADR-0010 kırmızı).
+    gerilim_karamsar = gerilim_iyimser * rng.uniform(0.2, 0.6) - rng.uniform(0, 10)
+    karamsar = max(0, min(aday, math.floor(min(isil, gerilim_karamsar) / YENI_PANEL_KW)))
+    iyimser = max(0, min(aday, math.floor(min(isil, gerilim_iyimser) / YENI_PANEL_KW)))
     return {
         "sehir": trafo["sehir"], "trafo_no": trafo["trafo_no"],
         "kac_ev_karamsar": karamsar, "kac_ev_iyimser": iyimser,
@@ -200,7 +205,7 @@ def kac_ev_satiri(rng, trafo, tahmin):
         "gerilim_pay_kw_karamsar": round(gerilim_karamsar, 2),
         "gerilim_pay_kw_iyimser": round(gerilim_iyimser, 2),
         "sinir_karamsar": "gerilim" if gerilim_karamsar < isil else "isil",
-        "renk": renk(karamsar, iyimser, tahmin["guven"]),
+        "renk": renk(min(isil, gerilim_karamsar), tahmin["guven"]),
         "kural40_ev": math.floor(max(0.0, 0.4 * kva - panel_kw) / YENI_PANEL_KW),
     }
 
