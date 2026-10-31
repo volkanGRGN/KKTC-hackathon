@@ -22,7 +22,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 ## Açık faz ve kim nerede
 - **Volkan + Claude (BUILD):**
   - #8, #12, #10, #11 birleşti (17:24, Volkan'ın onayıyla). #13 Can'ın incelemesini bekliyor.
-  - Sırada: konuşma notu taslağı; karar masası kırmızı kuralını seçince `KIRMIZI_KURALI`.
+  - Konuşma notu taslağı hazır ([docs/konusma-notu-taslak.md](docs/konusma-notu-taslak.md)). Sırada: karar masası kırmızı kuralını seçince `KIRMIZI_KURALI`.
 - **Can:**
   - PR #13 incelemesi (Faz 3; sözleşme §6 notları);
   - `sinav.py faz2` (saf tahmin satırıyla);
@@ -48,4 +48,4 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 ## Sıradaki üç adım
 1. Can #13'ü incelesin, birleşsin. Can `sinav.py faz2` ve `faz3`'ü koşsun; ROADMAP kutuları rakamla dolsun.
 2. Karar masası kırmızı kuralını seçsin. BUILD tek satırı değiştirir, `kac_ev.csv` yeniden üretilir.
-3. Faz 5: konuşma notu taslağı (BUILD), slayt iskeleti (Can), gece 2 prova.
+3. Faz 5: konuşma notu taslağı hazır (BUILD), slayt iskeleti Can'da (83b0f11), gece 2 prova.
