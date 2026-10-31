@@ -554,3 +554,7 @@ Karar: Volkan (21:39): "Malta vs. için 'bu gece sunum var, olmaz' demişsin; fa
 Neden: Volkan'ın kararı; sunumun hikâyesi değişmiyor, yalnız rakamlar PR'larla güncelleniyor; ertelemeler karar masasının temkiniydi, Volkan kaldırdı.
 Senden beklenen (BUILD): ROADMAP başlık ve ibareler (10 dk), DEVIR "Faz 6–12 başladı"; B1–B3 devam; sonra Gozo ve Faz 8. Kıb-Tek istek metni taslağı `docs/istek/kibtek-veri-istegi-taslak.md` (Volkan gönderir).
 Durum: bekliyor
+
+## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın (BUILD)
+Ne: BUILD kartı [docs/gorev/volkan-faz7-kalibrasyon.md](../gorev/volkan-faz7-kalibrasyon.md): B1 `src/kalibrasyon.py` → B2 İspanya k_yük → B3 İngiltere model-sapma + sınav 11–20 bir kez → PR (Can onaylar). Sonra Gozo dış sınaması (30 dk), Faz 8 üretici çapalama ve yeni sınav şehirleri (dal + PR), Kıb-Tek veri istek taslağı. Önce ROADMAP başlık değişikliği (KARAR 21:4x, 10 dk). Can C1'den, Civan Faz 4'ün kalanından başlıyor; bildirim kutularda.
+Durum: bilgi

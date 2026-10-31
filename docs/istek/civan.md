@@ -118,3 +118,7 @@ Karar: 21:16'daki "sunum sonrası" ertelemesi kalkıyor. Faz 4 (ağ kapalı aç�
 Neden: Volkan "sunuma daha var, dediklerimizi uygulayalım"; Gozo dış sınaması ve Korsika vekili fazlara geri alındı (volkan.md 21:39).
 Senden beklenen: Faz 4 → (1) → (2); başka iş yok.
 Durum: bekliyor
+
+## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın
+Ne: Senin sıran: (1) **Faz 4 kalan iki madde**: internet fiilen kapalıyken açılış ve 2 dakikalık ekran kaydı (KONTROL 20:55; bitince ROADMAP Faz 4 kutuları için BUILD'e satır); (2) sözlük vekili + Korsika KAYNAK ve dış veri istek metinleri (KARAR 21:4x); (3) arkada veri araştırması, kartın [docs/gorev/civan-veri-arastirma.md](../gorev/civan-veri-arastirma.md): her bulgu tüzükteki alanlarla kutuya "veri partisi". Faz 7–8'de sana kod işi yok; Faz 11 kart görünümü Faz 4 bitince. Takılırsan kutu; bloklarsa Volkan'ı ara.
+Durum: bilgi

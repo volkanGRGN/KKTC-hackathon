@@ -288,3 +288,7 @@ Karar: Volkan "sunuma daha var, dediklerimizi uygulayalım" dedi; 21:03'teki "bu
 Neden: Volkan'ın kararı; ADR-0014; Muhittin 5–6.
 Senden beklenen: C1–C3 → sonra bu; takılırsan kutu.
 Durum: bekliyor
+
+## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın
+Ne: Faz 7 kalibrasyon şimdi; senin kartın [docs/gorev/can-faz7-kalibrasyon-sinav.md](../gorev/can-faz7-kalibrasyon-sinav.md), tüzük [docs/tuzuk.md](../tuzuk.md). İlk adım **C1**: `sinav.py faz2`'ye kapsama eğrisi ve PIT maddeleri, farazi 11–20'de "önce" koşusu (main'deki model). Sonra C2 grafik, C3 hold-out defteri. BUILD'in PR'ı gelince C4. Faz 7 bitince Faz 11 (sözleşme 1.4, tepe sütunu "ön"; KARAR 21:4x). Sunum metni v1 rakamlarıyla kalır; PR birleşmeden değiştirme. Takılırsan kutu; bloklarsa Volkan'ı ara.
+Durum: bilgi
