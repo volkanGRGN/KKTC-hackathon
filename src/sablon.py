@@ -298,16 +298,18 @@ BANT_YONTEMI = 'nicel'                  # 'nicel': artıkların P10–P90'ı; 'u
 # %4 → düşük yükü kaçırmak = yanlış yeşil yönü). Artık ortancası ~0 (şehir 1–10: %0,1), yani kayma tahminde değil
 # bandın şeklinde. Şehir 1–10: P10 altı %14 → %11, P90 üstü %8 → %13; sınav 11–20: %11 → %6, %4 → %6 (Faz 2 günlüğü).
 BANT_SIMETRIK = True
-# Faz 7 (karar masası 21:32; ADR-0013 madde 3): bant GERÇEĞE karşı kalibre. Şehrin kendi bir-dışarıda artıkları
-# farazi dünyanın yayılımını görür; gerçek dünya daha dağınık. İspanya'da (EDP Oviedo 2018, 29 trafo, edp_test.py
-# faturalı (c) koşusunun 2.280 bir-dışarıda tahmini) %80 bant gerçeğin %65,7'sini kapsadı ("fazla emin").
-# k_yük = |birim artık|'ın %80 yüzdeliği; bant log ölçekte k ile genişler. Farazi şehre bakılarak seçilmedi.
-# Kaynak: src/kalibrasyon.py ispanya; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md.
-K_YUK = 1.475                           # [Hesap: İspanya; bir-dışarıda k aralığı 1,38–1,50]
-KALIBRASYON = dict(kaynak='EDP Oviedo 2018, 29 trafo, bir-dışarıda tahminler (src/edp_test.py girdi c)',
-                   k=K_YUK, k_bir_disarida_aralik=[1.379, 1.504], kapsama80_once=0.657,
-                   kapsama80_sonra_ic_ornek=0.8, kapsama80_sonra_bir_disarida=0.791,
-                   betik='src/kalibrasyon.py ispanya', not_='ayar yalnız gerçek artıkla; farazi şehre bakılarak seçilmedi')
+# Faz 7 (karar masası 21:32, 22:0x; ADR-0013 madde 3): bant GERÇEĞE karşı kalibre. Şehrin kendi bir-dışarıda artıkları
+# farazi dünyanın yayılımını görür; gerçek dünya daha dağınık. İspanya'da (EDP Oviedo 2018, 29 trafo, edp_test.py faturalı
+# (c) koşusu) %80 bant gerçeğin %71,4'ünü kapsadı ("fazla emin"). k_yük = |birim artık|'ın %80 yüzdeliği; bant log ölçekte
+# k ile genişler. Kalibrasyon modelin SEVK EDİLDİĞİ yapılandırmada ölçülür: her şehirde 12 ölçülü (OLCULU_ANA), bu yüzden
+# İspanya'nın 10 ve 15 ölçülü denemeleri (1.320 tahmin); 5 ölçülü denemeler başka bir modelin hatası, k'yi şişiriyordu
+# (5: 1,93; 10: 1,21; 15: 1,33; karışık 1,475). k ölçülü sayısına bağlı; ölçülü sayısı değişirse k yeniden, pilotta yeniden.
+# Farazi şehre bakılarak seçilmedi. Kaynak: src/kalibrasyon.py ispanya --n 10,15; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md.
+K_YUK = 1.27                            # [Hesap: İspanya n 10+15; bir-dışarıda k aralığı 1,20–1,29]
+KALIBRASYON = dict(kaynak='EDP Oviedo 2018, 29 trafo, 10 ve 15 ölçülü bir-dışarıda tahminler (src/edp_test.py girdi c)',
+                   k=K_YUK, olculu_sayisi=[10, 15], k_bir_disarida_aralik=[1.20, 1.29], kapsama80_once=0.714,
+                   kapsama80_sonra_bir_disarida=0.786,
+                   betik='src/kalibrasyon.py ispanya --n 10,15', not_='ayar yalnız gerçek artıkla; farazi şehre bakılarak seçilmedi; sevk yapılandırması 12 ölçülü')
 TABAN_HATA = 0.05                       # model hatası tabanının alt sınırı (çok aboneli trafoda bile) [Yorum]
 # Taban artıklardan seçilir (taban_sec). Sürüm 1.2 şehirlerinde mahalle farkı (ADR-0008) abone sayısıyla
 # sönmüyor: sabit 0,05 tabanla çok aboneli konut trafosu "yüksek güven" alıp en çok yanılan oluyordu.

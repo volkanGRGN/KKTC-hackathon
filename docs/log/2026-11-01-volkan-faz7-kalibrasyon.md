@@ -140,4 +140,34 @@ python3 src/edp_test.py <GIS_data> --kalibrasyonsuz --cikti edp_once.csv && pyth
 python3 src/edp_test.py <GIS_data> --cikti edp_sonra.csv && python3 src/kalibrasyon.py ispanya edp_sonra.csv                   # sağlama: k ≈ 1
 ```
 
+## Ek girdi — 31 Ekim 22:20: k_yük ölçülü sayısına bağlı; K_YUK 1,475 → 1,27 (karar masası 22:0x)
+**Bulgu (Faz 8 ayarında):** üretici dağınıklaşınca farazi kapsama hiç inmedi. Sebep k'nin hesabında: İspanya satırları 5, 10 ve 15 ölçülü denemelerin karışımıydı. Model her şehirde 12 ölçülü kullanıyor (`OLCULU_ANA`).
+
+| Ölçülü (İspanya, girdi c) | Satır | k | %80 bant önce | Bir-dışarıda kapsama, sonra |
+|---|---|---|---|---|
+| 5 | 960 | 1,93 | %57,9 | %79,2 |
+| 10 | 760 | 1,21 | %73,4 | %78,3 |
+| 15 | 560 | 1,33 | %68,8 | %77,9 |
+| **10 + 15** | 1.320 | **1,27** | %71,4 | **%78,6** |
+| hepsi (önceki K_YUK) | 2.280 | 1,475 | %65,7 | %79,1 |
+
+- **İlke (tüzük madde 3'e eklendi):** kalibrasyon modelin sevk edildiği yapılandırmada ölçülür. 5 ölçülü denemeler başka bir modelin hatası; karışım k'yi şişiriyordu.
+- **k ölçülü sayısına bağlı:** ölçülü sayısı değişirse k yeniden; pilotta yeniden.
+- `K_YUK = 1,27` (`sablon.py`, `edp_test.py` aynı sabiti okur); `kalibrasyon.py ispanya --n 10,15` varsayılan.
+- İspanya, 10 + 15 kesiti: %80 bant %71,4 → %80,0 iç örnek, %78,6 bir-dışarıda; %95 bant %87,5 → %93,1; PIT sapması 0,068 → 0,102 (tolerans n = 29'da 0,11: geçer, ama şekil k ile kötüleşiyor, Faz 10).
+
+**Sınav 11–20 bir kez daha (v2b; v1.2 şehirleri, BUILD klasörü):**
+
+| | v1 | v2 (k 1,475) | **v2b (k 1,27)** |
+|---|---|---|---|
+| Yanlış yeşil | 0/87 | 0/48 | **0/49** (GEÇTİ) |
+| Yeşil | 87 (%25) | 48 (%14) | 49 (%14) |
+| Kırmızı / yanlış kırmızı | 44 / %27,3 | 61 / %32,8 | 61 / %32,8 |
+| Sarı | %62,2 | %68,6 | %68,3 |
+| Kaç ev orta / karamsar | 2 / 2 | 1 / 2 | 1 / 2 (GEÇTİ) |
+| Kaç ev P10 altı / P90 üstü | %15,0 / %4,6 | %7,1 / %3,8 | %7,1 / %4,6 |
+| Faz 2 farazi kapsama (şehir ortancası; bilgi) | %87,5 | %96,4 | **%92,9** |
+
+Geliştirme 1–10: Faz 2 farazi kapsama %87,5 (GEÇTİ); Faz 3 v2 ile aynı (yeşil 44, yanlış yeşil 0/44). Faz 3 değişmiyor, çünkü k yalnız yük bandını genişletiyor; yeşil ve kırmızıyı belirleyen gerilim tarafı (s).
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
