@@ -514,7 +514,7 @@ def main():
                             xy=[round(h['xy'][0]), round(h['xy'][1])], grup=lab.get(h['id']))
                        for h in houses],
                trafos=[dict(ad=t['ad'], kva=t['kva'], xy=t['xy']) for t in trafos], sonuc=results)
-    with open(sys.argv[2] if len(sys.argv) > 2 else 'trafo_bos_kapasite_sonuc.json', 'w') as fh:
+    with open(sys.argv[2] if len(sys.argv) > 2 else 'trafo_bos_kapasite_sonuc.json', 'w', encoding='utf-8') as fh:
         json.dump(out, fh, ensure_ascii=False, indent=1)
 
 
