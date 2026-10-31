@@ -20,6 +20,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
   - Varsayım envanteri ([günlük](docs/log/2026-10-31-volkan-faz3-varsayimlar.md)): hiçbir ayar kırmızıyı düzeltmiyor, sıralama 0,75'te sabit; öğlen OG yükselmesi (+%0,8) UKPN'le çelişiyor.
   - Olasılıklı deneme [PR #15](https://github.com/volkanGRGN/KKTC-hackathon/pull/15): sınav 11–20'de yanlış yeşil 0/97 (yeşil %28), yanlış kırmızı %23, kaç ev hatası 2. Resmi hesap olup olmayacağı karar masasında.
   - Gerçek veride geri-test ([günlük](docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md)): İngiltere 6 hattın 5'inde ölçülen yükselme hesabın %98 sınırının altında, Bancroft'ta değil (kol yapısı). Yeşil kuralı gerçek veride doğrulanmış sayılmaz.
+  - 18:43: hat boyu belirsizliği ve yüksüz panelli kol PR #15'e eklendi; sınav 11–20 yanlış yeşil 0/87, dolu trafonun kırmızı denen payı 32/74, kaç ev hatası 2.
 - **Faz 5 başladı** (paralel). Hikâye "güven merdiveni", manşet İspanya %25 → %10 (ROADMAP Faz 5).
 
 ## Açık faz ve kim nerede
