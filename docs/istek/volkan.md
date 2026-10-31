@@ -950,7 +950,7 @@ Karar: Karar masası Mac'te main ile PR #23'ün (f9d52bc) birleşik hâlini kend
 Kalan: sözleşme §6 notu (1.4 adayı `pv_uc`) için Civan ya da Can GitHub onayı (civan.md 00:23). Onay gelince karar masası birleştirir (Volkan'ın sözü geçerli). #22 ile aynı dosyanın farklı bölümleri; #22 önce birleşirse dal güncellemesi gerekebilir.
 Durum: bekliyor (onay Civan / Can)
 
-## UYARI! 1 Kasım 00:36 — (BUILD 2 — panel) — Muhittin madde 5: (A) taslakta var; (B) inverter geri çözümü benzetimde: bara hep düşük çıkıyor, motorun bugünkü varsayımıyla yanlış evet %2,7 (PR #25) — test edin
+## UYARI! 1 Kasım 00:33 — (BUILD 2 — panel) — Muhittin madde 5: (A) taslakta var; (B) inverter geri çözümü benzetimde: bara hep düşük çıkıyor, motorun bugünkü varsayımıyla yanlış evet %2,7 (PR #25) — test edin
 Ne: (A) Kıb-Tek taslağı madde 4'te trafo başına kademe ayarı ve devreye alma kaydı zaten var (00:14); yeni iş yok. (B) PR #20'de ve PR #22'de inverter kaydı "gerçek + gürültü" (±1 / ±2 V) idi; karar masası 23:03'ün düzeltmeleri (%20 kapsama, empedans yalnız inverterin hattında) PR #22 motorunda var, PR #20 betiğinde yok. Şimdi geri çözüm benzetimde gerçekten yapıldı (`inverter_geri_cozum.py`: yalnız gündüz, sabah ilk değer → bara). Bulgu [Hesap; farazi, gösterim]: **geri çözülen bara hep gerçekten düşük**, ortanca −0,8 V (1–10) / −1,0 V (21–30), P10 −2,15 V, ≤ 1 V evlerin %52–62'si; alt kuyruk P1 −5,4 V. Güvensiz yön. Uçtan uca, sınav 21–30 bir kez, kayıtlar iki kat hatalı:
 | | Hemen evet | Yanlış evet |
 |---|---|---|
