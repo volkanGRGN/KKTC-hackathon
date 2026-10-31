@@ -7,6 +7,7 @@ ve haritayı denemek içindir: ölçüm ya da sonuç değil, "SAHTE VERİ — g�
 """
 
 import csv
+import json
 import math
 import random
 from pathlib import Path
@@ -29,6 +30,26 @@ DIREK_KVA = (25, 50, 100, 250, 400)
 YER_KVA = (630, 1000)
 BOLGELER = ("kentsel", "kirsal", "turistik", "sanayi")
 YENI_PANEL_KW = 6.5
+PANEL_YAYGINLIGI = (0.03, 0.25)  # konut abonelerinin payı, ADR-0006
+
+SOZLESME_SURUMU = 1
+ADIM_SAYISI = 288  # 5 dakikalık adım, bir gün
+OGLE_ADIMLARI = range(132, 168)  # 11:00–14:00, sözleşme "Öğlen penceresi"
+GUNLER = ((0, "isgunu"), (1, "tatil"))  # kart: 2 gün yeter
+CATI_GUNES_TEPE = 0.63  # Nisan iş günü tepesi, pu [Kaynaklı: EAC injection, veri sözlüğü]
+
+# Arketip eğrileri: (tepe saati, genişlik saat, ağırlık) tümsekleri + taban.
+# Biçim gösterimi; EAC eğrisi değil.
+ARKETIPLER = (
+    ("aksam_tepeli_konut", 0.35, ((8.0, 1.5, 0.35), (20.5, 2.0, 0.65))),
+    ("oglen_tepeli_carsi", 0.20, ((12.5, 3.0, 0.80),)),
+    ("duz_sanayi", 0.60, ((10.0, 4.0, 0.40),)),
+    ("gun_boyu_turizm", 0.50, ((13.0, 4.0, 0.30), (21.0, 2.0, 0.20))),
+)
+TATIL_CARPANI = {
+    "aksam_tepeli_konut": 1.10, "oglen_tepeli_carsi": 0.75,
+    "duz_sanayi": 0.60, "gun_boyu_turizm": 1.00,
+}
 
 TRAFOLAR_SUTUN = [
     "sehir", "trafo_no", "enlem", "boylam", "x_m", "y_m", "bolge", "montaj",
@@ -46,6 +67,11 @@ KAC_EV_SUTUN = [
     "sehir", "trafo_no", "kac_ev_karamsar", "kac_ev_iyimser", "isil_pay_kw",
     "gerilim_pay_kw_karamsar", "gerilim_pay_kw_iyimser", "sinir_karamsar",
     "renk", "kural40_ev",
+]
+ARKETIP_SUTUN = ["sehir", "arketip", "arketip_adi", "gun_turu", "adim", "oran"]
+YUK_SUTUN = [
+    "sehir", "trafo_no", "gun", "gun_turu", "adim", "saat",
+    "tuketim_kw", "uretim_kw", "net_kw", "v_max_v", "v_min_v",
 ]
 
 
@@ -82,7 +108,7 @@ def aboneler(rng, bolge, kva):
     return abone
 
 
-def trafo_satiri(rng, sehir, no):
+def trafo_satiri(rng, sehir, no, yayginlik):
     bolge = rng.choice(BOLGELER)
     montaj = "yer" if rng.random() < 0.2 else "direk"
     kva = rng.choice(YER_KVA if montaj == "yer" else DIREK_KVA)
@@ -91,7 +117,8 @@ def trafo_satiri(rng, sehir, no):
     hat_max = rng.randint(300, 700) if bolge == "kirsal" else rng.randint(120, 450)
     hat_toplam = max(hat_max, round(hat_max * hat_sayisi * rng.uniform(0.6, 0.9)))
     abone = aboneler(rng, bolge, kva)
-    panel_sayisi = rng.randint(0, abone["abone_konut"] // 2)
+    konut = abone["abone_konut"]
+    panel_sayisi = min(konut, round(konut * yayginlik * rng.uniform(0.5, 1.5)))
     panel_kw = round(sum(rng.uniform(4, 8) for _ in range(panel_sayisi)), 2)
     return {
         "sehir": sehir, "trafo_no": f"T{no:02d}", "enlem": enlem, "boylam": boylam,
@@ -135,7 +162,7 @@ def kac_ev_satiri(rng, trafo, tahmin):
     kva, panel_kw = trafo["kva"], trafo["panel_kw"]
     aday = trafo["abone_konut"] - trafo["panel_sayisi"]
     isil = max(0.0, kva + tahmin["ogle_min_kw_p10"] - panel_kw)
-    gerilim_iyimser = max(0.0, rng.uniform(-10, 60) * kva / 250)
+    gerilim_iyimser = max(0.0, rng.uniform(-8, 40) + 0.08 * kva)
     gerilim_karamsar = gerilim_iyimser * rng.uniform(0.2, 0.6)
     karamsar = min(aday, math.floor(min(isil, gerilim_karamsar) / YENI_PANEL_KW))
     iyimser = min(aday, math.floor(min(isil, gerilim_iyimser) / YENI_PANEL_KW))
@@ -151,6 +178,76 @@ def kac_ev_satiri(rng, trafo, tahmin):
     }
 
 
+def arketip_oranlari():
+    """{(arketip, gun_turu): 288 oran}; her eğri kendi tepesine bölünür (0–1)."""
+    oranlar = {}
+    for no, (_, taban, tumsekler) in enumerate(ARKETIPLER):
+        carpan = TATIL_CARPANI[ARKETIPLER[no][0]]
+        for _, gun_turu in GUNLER:
+            k = carpan if gun_turu == "tatil" else 1.0
+            ham = [
+                taban + k * sum(
+                    w * math.exp(-0.5 * ((adim / 12 - t) / g) ** 2)
+                    for t, g, w in tumsekler
+                )
+                for adim in range(ADIM_SAYISI)
+            ]
+            tepe = max(ham)
+            oranlar[(no, gun_turu)] = [h / tepe for h in ham]
+    return oranlar
+
+
+def arketip_satirlari(sehir, oranlar):
+    return [
+        {
+            "sehir": sehir, "arketip": no, "arketip_adi": ARKETIPLER[no][0],
+            "gun_turu": gun_turu, "adim": adim, "oran": round(oran, 3),
+        }
+        for (no, gun_turu), egri in oranlar.items()
+        for adim, oran in enumerate(egri)
+    ]
+
+
+def saat(adim):
+    return f"{adim // 12:02d}:{adim % 12 * 5:02d}"
+
+
+def gunes_pu(adim):
+    """Açık gün çatı güneşi, 07:00–19:00, tepe 13:00 (biçim gösterimi)."""
+    return CATI_GUNES_TEPE * max(0.0, math.sin(math.pi * (adim / 12 - 7) / 12))
+
+
+def yuk_satirlari(trafo, tahmin, oranlar):
+    """Ölçülü trafonun 2 günlük yükü; öğlen en düşüğü tahmin.csv'deki ölçülene eşit."""
+    a = tahmin["arketip"]
+    ogle_min_oran = min(oranlar[(a, gt)][i] for _, gt in GUNLER for i in OGLE_ADIMLARI)
+    olcek = tahmin["ogle_min_kw_olculen"] / ogle_min_oran
+    kva = trafo["kva"]
+    satirlar = []
+    for gun, gun_turu in GUNLER:
+        for adim, oran in enumerate(oranlar[(a, gun_turu)]):
+            tuketim = olcek * oran
+            uretim = trafo["panel_kw"] * gunes_pu(adim)
+            net = tuketim - uretim
+            v_orta = 248 - 25 * net / kva
+            satirlar.append({
+                "sehir": trafo["sehir"], "trafo_no": trafo["trafo_no"],
+                "gun": gun, "gun_turu": gun_turu, "adim": adim, "saat": saat(adim),
+                "tuketim_kw": round(tuketim, 2), "uretim_kw": round(uretim, 2),
+                "net_kw": round(net, 2), "v_max_v": round(v_orta + 2, 1),
+                "v_min_v": round(v_orta - 6 - 15 * max(net, 0) / kva, 1),
+            })
+    return satirlar
+
+
+def ayar(sehir, yayginlik):
+    return {
+        "sehir": sehir, "tohum": sehir, "sozlesme_surumu": SOZLESME_SURUMU,
+        "sahte": True, "referans_enlem": REF_ENLEM, "referans_boylam": REF_BOYLAM,
+        "panel_yayginligi": round(yayginlik, 3),
+    }
+
+
 def csv_yaz(yol, sutunlar, satirlar):
     with open(yol, "w", encoding="utf-8", newline="") as f:
         yazici = csv.DictWriter(f, fieldnames=sutunlar, lineterminator="\n")
@@ -161,7 +258,10 @@ def csv_yaz(yol, sutunlar, satirlar):
 def sehir_uret(sehir):
     """Bir sahte şehrin tablolarını üretir; aynı tohum aynı tabloları verir."""
     rng = random.Random(sehir)
-    trafolar = [trafo_satiri(rng, sehir, no) for no in range(1, TRAFO_SAYISI + 1)]
+    yayginlik = rng.uniform(*PANEL_YAYGINLIGI)
+    trafolar = [
+        trafo_satiri(rng, sehir, no, yayginlik) for no in range(1, TRAFO_SAYISI + 1)
+    ]
     olculu_sayi = rng.randint(OLCULU_MIN, OLCULU_MAX)
     olculu_nolar = set(rng.sample(range(TRAFO_SAYISI), olculu_sayi))
     tahminler = [
@@ -169,7 +269,17 @@ def sehir_uret(sehir):
         for i, t in enumerate(trafolar)
     ]
     kac_ev = [kac_ev_satiri(rng, t, tm) for t, tm in zip(trafolar, tahminler)]
-    return {"trafolar": trafolar, "tahmin": tahminler, "kac_ev": kac_ev}
+    oranlar = arketip_oranlari()
+    yuk = [
+        satir
+        for t, tm in zip(trafolar, tahminler) if tm["olculdu"]
+        for satir in yuk_satirlari(t, tm, oranlar)
+    ]
+    return {
+        "trafolar": trafolar, "tahmin": tahminler, "kac_ev": kac_ev,
+        "arketipler": arketip_satirlari(sehir, oranlar), "yuk_5dk": yuk,
+        "ayar": ayar(sehir, yayginlik),
+    }
 
 
 def sehir_yaz(sehir, tablolar):
@@ -178,6 +288,11 @@ def sehir_yaz(sehir, tablolar):
     csv_yaz(klasor / "trafolar.csv", TRAFOLAR_SUTUN, tablolar["trafolar"])
     csv_yaz(klasor / "tahmin.csv", TAHMIN_SUTUN, tablolar["tahmin"])
     csv_yaz(klasor / "kac_ev.csv", KAC_EV_SUTUN, tablolar["kac_ev"])
+    csv_yaz(klasor / "arketipler.csv", ARKETIP_SUTUN, tablolar["arketipler"])
+    csv_yaz(klasor / "yuk_5dk.csv", YUK_SUTUN, tablolar["yuk_5dk"])
+    with open(klasor / "ayar.json", "w", encoding="utf-8", newline="\n") as f:
+        json.dump(tablolar["ayar"], f, ensure_ascii=False, indent=2)
+        f.write("\n")
 
 
 def main():
