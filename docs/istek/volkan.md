@@ -895,7 +895,7 @@ Durum: bekliyor
 Karar: Karar masası Mac'te main ile PR #21'in birleşik hâlini sıfırdan koştu (şehir 1–10 ve 21–30, Open-Meteo 2023 + 2024–2025). **Nisan dosyaları 1.3 ile 40/40 bayt bayt aynı** (`trafolar.csv`, `yuk_5dk.csv`), cevap anahtarının eski sütunları aynı; yeni on sütun geldi, UYARI yok. Yıl tepesi 23:35 tablosuyla birebir: 1–10'da tepe ayı Ağustos 198, Temmuz 80, Ocak 67, Haziran 51, Nisan 3, Şubat 1; kVA'yı aşan 17/400; akşam 207 V altı 8/400, en düşük 162,8 V. 21–30 (bilgi): Temmuz 160, Ocak 83, Ağustos 80, Haziran 77; aşan 9/400; 207 V altı 14/400, en düşük 170,6 V (yaz boyutlandırması üretici 1.5'te, 23:35) [Hesap: karar masası 00:15]. Sözleşme 1.4 onayı Civan'dan (GitHub APPROVED), Can'ın KONTROL'ü temiz.
 Birleştirme: karar masasının birleştirme komutu izin sisteminde durdu (Volkan'ın sözü başka oturumdan aktarıldı); Volkan KARAR oturumunda "birleştir" deyince merge commit, dal silinmez.
 Kalan küçük not (bloklamaz, Civan): `tepe_yil_kw` üç pencerenin (Nisan, yaz, kış) tepesi; sözleşme açıklamasına bir cümle, BUILD 1'in sonraki `yuk/` PR'ında.
-Durum: bekliyor (Volkan'ın sözü)
+Durum: yapıldı 00:27 — BUILD 1'in 13e8485 düzeltmesiyle yeniden test edildi (KARAR 00:27), Volkan'ın sözüyle birleşti (c53ab31)
 
 ## BAŞLA 00:16 — (BUILD 1 — yük) Muhittin 4 madde 1–4: yük temel katman, akşam tepesi ön sürümü, Kıb-Tek tepe verisi, öğlen yükü
 Karar: Yük tarafında açık PR işi kalmadı (#21 test edildi, söz bekliyor); BUILD 1 başlar. Dayanak [ADR-0018](../decisions/adr-0018-aksam-tepesi-on-surum.md) ve Muhittin'in dördüncü cevabı.
@@ -927,4 +927,20 @@ Ne: ADR-0017: `kac_ev_olasilik.py` `kac_ev.csv` sonuna `pv_uc` (`yesil` / `dolu_
 Açık (eksi değil): gerçekte dolu 47 trafonun yalnız üçte biri bayraklı; kalan dolular "başvuruda bakılır"da. Sözleşme sürüm satırına dokunmadım (PR #21 / #22 aynı satırda); 1.4 notu §6'da. Civan'a onay ve harita UYARI'sı (civan.md 00:23).
 Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23), docs/log/2026-11-01-volkan-panel-guvenli-uc.md
 Neden: Muhittin 4 madde 1; ADR-0017 "Sonuçlar" (BUILD 2).
+Durum: bekliyor
+
+## KARAR 00:27 — PR #19 ve #21 birleşti; PR #22 Mac'te birebir, iki şart kaldı; kayda koşullu evet için pilot şartı (BUILD 2 — panel)
+Karar: Volkan (KARAR oturumu): "Test ettiysen birleştir."
+1. **PR #19 birleşti** (07ea153; BUILD 2'nin d974753 düzeltmesi): cp1254 / noktalı virgül / ondalık virgül / iki bilgi satırı / gece 0 / üç faz, UTF-16 BOM'lu, SMA `sep=;`, İngilizce CSV ve xlsx kayıtları okunuyor; eski sonuçlar aynı.
+2. **PR #21 birleşti** (c53ab31; BUILD 1'in 13e8485 düzeltmesi, UYARI 00:20): Mac'te sıfırdan, Nisan dosyaları 1.3 ile 40/40 bayt bayt aynı; 1–10'da tepe ayı Temmuz 396 / Ocak 4, kVA aşan 22/400, 207 V altı 10/400 (en düşük 160,1 V), yıl tepesi sonra ÷ önce ortanca 1,04 — BUILD 1 ile birebir [Hesap: karar masası 00:25]. Can'a 1.5 uyarısı (can.md 00:24).
+3. **PR #22 Mac tekrarı birebir** (858a999; karar masasının kendi ürettiği 1.3 şehirleri 21–30, sablon → kac_ev_olasilik → sahte_kayit → basvuru_testi): motor iki kat varsayarken hemen evet / yanlış evet: yarı %10,7 / 1/766, beklenen %9,7 / 0/694, **iki kat %10,1 / 14/722 (%1,9)**, kusursuz %18,0 / 5/1.295; `aynen` ilk tabloyu birebir verdi (beklenen %10,5 / 1/751, iki kat 20/770); yanlış yeşil her satırda 0; yeniden kurma 396/400 trafo birebir [Hesap: karar masası 00:26].
+4. **BUILD 2'nin sorusuna karar — pilot şartı da gelir:** iki kat hatalı kayıtta yanlış evet %1,9 ama %95 aralığın üst ucu %3,2; tüzük madde 2 kapısı güvenle tutmuyor. Kural: motor iki kat hata varsayar **ve** gerçek Kıb-Tek kayıtlarıyla canlıda **kayda koşullu "hemen evet" ancak kayıt kalitesi sahada ölçüldükten sonra** (pilotta 20–30 kayıt: kademe, direk sırası, faz); o zamana kadar motorun kayda koşullu evet'i "önce ölç (kayıt teyidi)" olarak verilir. Haritanın kayıtsız yeşili bundan etkilenmez. Deneme şehirlerindeki ölçüm (gösterim) değişmez. BUILD 2: bir cümle günlüğe ve ROADMAP Faz 9'a, PR #22'de ya da sonraki `panel/` PR'ında.
+5. **PR #22 için kalan:** (a) dal main'e göre güncellenir (#21 birleşti; sözleşme sürüm satırında iki ibare birlikte); (b) Civan'ın §7 GitHub onayı (civan.md 00:18; şu an yalnız yorum var). İkisi tamamlanınca karar masası birleştirir (Volkan'ın sözü geçerli).
+Durum: bekliyor (#22: dal güncellemesi BUILD 2, onay Civan)
+
+## BAŞLA 00:27 — (BUILD 2 — panel) Muhittin 4: madde 1'in panel kısmı (güvenli uçlar) ve madde 5 (kademe, inverter geri çözümü)
+Karar: Panel tarafının PR işi bitti (#19 birleşti, #22 yalnız dal güncellemesi ve Civan onayı bekliyor); BUILD 2 başlar.
+1. **Güvenli uçlar ([ADR-0017](../decisions/adr-0017-pv-katmani-guvenli-uclar.md)):** `kac_ev_olasilik.py` `kac_ev.csv`'ye `pv_uc` (`yesil` / `dolu_bayrak` / `bos`; bayrak `p_bugun_asar` ≥ 0,7) yazar, sözleşme 1.4 notu (Civan ya da Can onayı); bayrak isabetini 1–10'da ölçer (karar masası: 20 bayrağın 15'i dolu), sahte kayıtlı görünümde aynı ölçü yan yana. Eşik ayarı yalnız 1–10'da; 21–30 daha önce görüldü (bilgi).
+2. **Kademe ve inverter geri çözümü (Muhittin 5):** (A) kademe ayrık öncülü: trafonun kendi ayarı kayıttan (Kıb-Tek istek metni madde 4); standart tek başına açmıyor (PR #20). (B) inverter geriliminden geri çözüm: sakin sabah ev gerilimi ≈ bara (datum), yüksek PV öğleninde salınım → hat empedansı; tek inverterden çıkış gerilimi ve hat parametresi. PR #19'daki okuyucu ve sahte kayıttaki `inverter` satırı buna bağlanır; Civan'ın notuna göre ham kayıt (zaman damgalı gerilim) girdi, `bara_v` / `esdeger_boy_m` motorun içinde çözülür. Ölçü: inverterli trafolarda yeşil / bayrak / renksiz payı ve yanlış yeşil (kapı); 1–10'da kur, 21–30 bir kez.
+Kurallar: dal `panel/`, PR başlığı "[Panel]"; yalnız karar masasına yaz (kutu girdisinin başlığında "(BUILD 2 — panel)"); yük konusu BUILD 1'in; Can'ın ve Civan'ın dosyalarına dokunma.
 Durum: bekliyor
