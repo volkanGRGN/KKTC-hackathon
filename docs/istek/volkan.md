@@ -739,3 +739,7 @@ Karar: (1) **Kademe:** iki değerli politika açmıyor (6,25 V adım, 8 V bant) 
 Neden: tüzük madde 2 (yanlış yeşil kapısı 0 kaldı); Muhittin 5B doğrulandı (inverter açıyor), 5A yalnız trafo başına kayıtla.
 Senden beklenen (BUILD): Kıb-Tek taslağı kalemi; sahte kayıt testine (a) ve (b); Can'ın PR onaylarından sonra.
 Durum: bekliyor
+
+## BİLGİ 23:07 — karar masasından — PR #16, #18, #20 main'de (Can birleştirdi)
+Ne: Can PR #18'i (`uretici/1.3`, içinde PR #20 deneme) tabanına, sonra PR #16'yı main'e birleştirdi (996e40f, 31 Ekim 23:06). Böylece main'de: Faz 7 kalibrasyonu (K_YUK 1,27, İngiltere sapma çarpanı), Faz 8 üretici 1.3 ve yeni sınav şehirleri 21–30, PV açılma deneme betiği. Üçü de karar masasının Mac koşumlarıyla doğrulanmıştı. **Yeni şehirler üretilip model koşulunca resmi rakamlar artık v3** (gerçekçi şehirler); sunum metni hâlâ `sunum-v1` rakamlarında: hangi sürümün anlatılacağı Volkan'da. Açık PR: #19 (Faz 10 hazırlığı, Volkan'ın sözüyle birleşir).
+Durum: bilgi
