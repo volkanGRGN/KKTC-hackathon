@@ -36,4 +36,4 @@ Fazlar, bitiş listeleri (DoD), kim ve ne zamana [ROADMAP.md](../ROADMAP.md)'de;
 Hedef: sunumdan önce her trafo için sayı + bant + güven + renk veren, sınavdan geçmiş uçtan uca hat ve onu gösteren panel.
 
 ## Uzmana sorulacaklar (fırsat olursa kampta)
-1. Kuzey'de kaç dağıtım trafosu var? 2. Hangi abone hangi trafoda — dijital mi? 3. Trafo başına hat uzunluğu / kablo kaydı var mı? 4. Evlerin hangi faza bağlı olduğu biliniyor mu? 5. Kıb-Tek'te taşınabilir yük analizörü var mı?
+1. Kuzey'de kaç dağıtım trafosu var? 2. Hangi abone hangi trafoda — dijital mi? 3. Trafo başına hat uzunluğu / kablo kaydı var mı? 4. Evlerin hangi faza bağlı olduğu biliniyor mu? 5. Kıb-Tek'te taşınabilir yük analizörü var mı? 6. Kaç konut abonesi mahsuplaşmada (çatı panelli)? Ülke geneli yaygınlık ([ADR-0006](decisions/adr-0006-panel-yayginligi-bugunun-kibrisi.md): BULAMADIM).

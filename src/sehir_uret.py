@@ -41,7 +41,7 @@ ISINIM_CSV = KOK / 'data' / 'raw' / 'open-meteo-lefkosa' / 'lefkosa_saatlik_2024
 CIKTI = KOK / 'data' / 'synthetic'
 
 SOZLESME_SURUMU = 1
-URETICI_SURUMU = '0.1'
+URETICI_SURUMU = '0.2'                   # 0.2: panel yaygınlığı %3–25 (ADR-0006), ayar.json LF
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -403,7 +403,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         trafo_sayisi=n_trafo, ay=AY,
         tuketim_carpani={s: round(rng.uniform(0.8, 1.2), 3) for s in siniflar},       # ±%20
         saat_kaymasi_dk={s: 5 * round(rng.uniform(-kayma_ust, kayma_ust) / 5) for s in siniflar},
-        panel_yayginligi=round(rng.uniform(0.10, 0.50), 3),                         # %10–50
+        panel_yayginligi=round(rng.uniform(0.03, 0.25), 3),                         # %3–25 [ADR-0006]
         yeni_panel_kw=YENI_PANEL_KW, v_sinir_v=V_SINIR,
         referans_enlem=REFERANS[0], referans_boylam=REFERANS[1],
         profil_kaynagi=profil_kaynagi, kac_ev_sira_sayisi=SIRA_SAYISI)
@@ -475,7 +475,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
              'v_max_bugun_v', 'v_min_bugun_v', 'kac_ev_aday', 'kac_ev_gercek', 'kac_ev_gercek_min',
              'kac_ev_gercek_max', 'kac_ev_tavan', 'kac_ev_sinir'], cevap_satir)
     ayar['sure_sn'] = round(time.time() - t0, 1)
-    with open(klasor / 'ayar.json', 'w', encoding='utf-8') as fh:
+    with open(klasor / 'ayar.json', 'w', encoding='utf-8', newline='') as fh:   # LF (karar masası 13:00)
         json.dump(ayar, fh, ensure_ascii=False, indent=1)
 
     vmax = max(r[13] for r in cevap_satir)

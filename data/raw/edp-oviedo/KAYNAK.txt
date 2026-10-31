@@ -1,0 +1,19 @@
+"Non-Synthetic European Low Voltage Test System" — Arboleya, Koirala, Suárez-Ramón, Mohamed (Universidad de Oviedo; EDP), Mendeley Data, v1, 30 Mayıs 2019.
+DOI: 10.17632/685vgp64sm.1 — https://data.mendeley.com/datasets/685vgp64sm/1
+Lisans: CC BY 4.0 (atıf: yazarlar + DOI).
+İndirildi: 31 Ekim 2026 (Can). Tek dosya:
+  Sim_files_190128_OK_V0.zip (306.777.569 bayt), SHA-256 4ac9986becb6447450e7cc8a7a236146faf7b595ab42d56f7c3eb2c1c8fb9967 (Mendeley API'deki değerle aynı)
+  https://data.mendeley.com/public-files/datasets/685vgp64sm/files/6fc11feb-0a40-4b31-8948-7f1ca4fc3636/file_downloaded
+Zip içindeki .m (MATLAB) dosyaları çalıştırılmadı; yalnız metin, CSV ve Excel okundu. Açılan küçük dosyalar: acik/ (depoya girmez).
+
+İçerik (8.159 dosya):
+- GIS_data/file1–7.xlsx: ham akıllı sayaç, SAATLİK, sayaç başına satır: Codigo Ct (trafo merkezi), Referencia (sayaç), Fecha, Activa E (çekilen kWh), Activa S (verilen kWh), reaktif. Tarih 2018-05-01 00:00 → 2018-05-21 00:00 (file1'de). file1: 4 trafo merkezi, 1.344 sayaç, 54 sayaçta Activa S > 0.
+- GIS_data/master.xlsx: trafo merkezi -> trafo (CLAVE TRAFO, POTENCIA TRAFO), AG hat ve segmentleri (uzunluk m, kablo tipi, yer altı/havai).
+- GIS_data/load.xlsx: sayaç referansı ve faz (M = tek faz); abone tipi (konut/ticari) YOK.
+- RunDss/: OpenDSS modeli. Load_indexed.txt (8.087 yük, bara ve faz), Transformer_ind.txt (30 trafo: 28 × 630, 1 × 1000, 1 × 250 kVA; 22/0,42 kV), Line_indexed_check.txt, fuse_indexed.txt (46 sigorta "!" ile açık = gözsüz/radyal işletme).
+- RunDss/day_20_profile/shape_N.csv: müşteri başına 481 değer, saatlik kW (Loadshape.txt: npts=481, minterval=60) = 20 gün.
+
+Sağlama (Can, 31 Ekim) [Hesap]:
+- Ağ trafodan izlenince 8.087 yükün 8.073'ü tek bir trafoya bağlanıyor, 14'ü hiçbirine; birden fazla trafoya bağlanan yok.
+- 29 trafoda yük var; trafo başına 73–621 müşteri. TD009456'nın 251 müşterisinin profili tamamen sıfır (veri eksik).
+- Trafo toplamı: 20 gün tepe 55–371 kW, öğlen (11–14) en düşük 25–163 kW; ağın günlük enerjisi 44,9–57,7 MWh.

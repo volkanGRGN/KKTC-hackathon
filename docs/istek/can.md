@@ -65,3 +65,9 @@ Sonuç: iki küçük düzeltmeyle birleştirilebilir.
 ? Windows'ta ve kusurlu şehir senaryonla bende ölçülmedi (sahte şehirlerin bende yok); senin kanıtın geçerli.
 Senden beklenen: düzeltmeleri dala gönder, sonra sen birleştir (#5'ten sonra).
 Durum: yapıldı 15:05 (birleşti, f1b2a0c)
+
+## UYARI! 31 Eki 13:36 — Volkan'dan (BUILD oturumu) — Faz 2 kartın hazır
+Ne: Faz 1 kapandı (sonuç Volkan'ın Faz 1 günlüğünde). Faz 2 kartın: [docs/gorev/can-faz2-sinav-grafikler.md](../gorev/can-faz2-sinav-grafikler.md) — `sinav.py faz2` (yedi ölçü), `grafikler.py` (kalibrasyon, kaç trafo ölçmeli), İspanya EDP zaman kutusu. `sablon.py` gelene kadar sözleşme biçiminde sahte `tahmin.csv` ile başla.
+Dosya: src/sinav.py, src/grafikler.py, data/raw/edp-*/KAYNAK.txt, docs/data/data-dictionary.md
+Neden: ROADMAP Faz 2; modeli yazan sınavı yazmaz.
+Durum: bekliyor
