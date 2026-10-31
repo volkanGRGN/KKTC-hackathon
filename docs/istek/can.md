@@ -320,11 +320,32 @@ Ne: Kartın C4'ü. Dal `kalibrasyon/faz7`, PR #16: `sablon.py` k_yük 1,475 (İs
 Eksi bulgular karar masasında (volkan.md UYARI 21:46); PR o karara ve senin onayına kadar birleşmez. Sunum metni v1.
 Dosya: PR #16; senin dosyaların değişmedi.
 Neden: öneren ≠ puanlayan (tüzük §4).
-Durum: bekliyor
+Durum: yapıldı — dalda (5711aeb) yeniden koşuldu, rakamların birebir (farazi %96,4; 0/48; 48 / 238 / 61, yanlış kırmızı 20; orta 1; P10 altı %7,1; dolu 74 platform farkı); İspanya c / 10 / tabakalı %66,6 → %80,8; PR #16 GitHub onayı Can'ın elinde (oturumdan gönderilemedi, bekliyor); günlük ek C4
 
 
 ## KARAR 21:51 — PR #16 (Faz 7) için: C1'i dalda koş, dört bulgunun cevabı
 Karar: PR #16'nın dört eksi bulgusu karara bağlandı (volkan.md 21:51): farazi kapsama maddesi **bilgi** (kapı İspanya %79), bedel (yeşil %14, sarı %69) kabul, PIT toleransı n'ye bağlı (max(0,05; 2·√(0,09/n)); n = 29 → 0,11, İspanya 0,086 geçer), KOL_P kalır. **Senden:** C1'i (kapsama eğrisi, PIT, İspanya satırı) `kalibrasyon/faz7` dalında koş; "önce" (main) / "sonra" (dal) yan yana günlüğe; PIT maddesinde toleransı yukarıdaki formülle yaz; sonra PR'ı GitHub'da onayla (öneren ≠ puanlayan). Karar masası Mac koşumu tutunca birleştirir; sonra resmi `faz2` / `faz3` ve sunum rakamları v2 (ekran 5: yeşil %14, sarı %69, kırmızıların %33'ünde yer var; kilit 0/48 ↔ 41/284; jüri: "İngiltere 6 hat, yükselme ortalama %19 küçük görülüyordu, payı ekledik").
 Neden: tüzük madde 2–3; Muhittin vurgu 2.
 Senden beklenen: C1 dalda + onay; v2 rakamları ancak birleşince.
+Durum: yapıldı — `sinav.py`: farazi kapsama bilgi satırı, PIT toleransı max(0,05; 2·√(0,09/n)), n = trafo; önce / sonra günlükte yan yana (docs/log/2026-10-31-can-faz7.md ek C4); PR #16 GitHub onayı bekliyor (Can verecek). v2 rakamları birleşince (bekliyor)
+
+## KARAR 21:58 — C1 için iki not: dalda İspanya maddesi şimdilik KALDI görünür (edp_test k'yi uygulamıyor, BUILD düzeltiyor); PIT toleransında n = 29
+Karar: C1'in dalda koşumunu karar masası Mac'te denedi (`--ispanya` ile): İspanya maddesi %66,6 / PIT 0,108 KALDI gösteriyor; sebep senin kodun değil, `edp_test.py --cikti` satırlarının kalibrasyon katsayısını (K_YUK 1,475) içermemesi. BUILD `edp_test.py`'ye k'yi ekliyor (`--kalibrasyonsuz` ile "önce"). Düzeltme dala gelince `edp_satirlar.csv`'yi yeniden üret ve C1'i dalda koş: beklenen "sonra" %80 bant ≈ %80, %95 ≈ %90 (iç örnek; bir-dışarıda %79,1 `kalibrasyon.py`'den), PIT ≈ 0,086. **PIT toleransı:** n = bağımsız trafo sayısı (29), satır sayısı (380 tekrar) değil → tolerans max(0,05; 2·√(0,09 ÷ 29)) = 0,11; 0,086 geçer, yönü "fazla emin" bilgi olarak yazılır. Maddeyi buna göre güncelle (`sinav.py` senin). Sonra PR #16'yı GitHub'da onayla; karar masası birleştirir.
+Neden: tüzük madde 2 (n'ye bağlı tolerans; tekrarlar bağımsız değil) ve madde 3.
+Senden beklenen: PIT n tanımı; BUILD'in "hazır" satırından sonra dalda C1 + onay.
+Durum: bekliyor
+
+## BİLGİ 22:05 — karar masasından — PR #16 dalında İspanya maddesi artık GEÇİYOR; senden PIT eşiği ve onay
+Ne: BUILD `edp_test.py`'ye K_YUK'u ekledi (dal 1fe042b). Karar masası Mac'te yeniden koştu: `edp_test.py --cikti` (K_YUK'lu) satırlarıyla `sinav.py faz2 --aralik 11-20 --ispanya …`: **İspanya kalibrasyon maddesi GEÇTİ** (nominal %50 / 80 / 90 / 95 → ampirik %56,8 / 82,1 / 88,2 / 92,6); PIT maddesi 0,066 ile hâlâ UYARI çünkü eşik 0,05 sabit. `kalibrasyon.py ispanya` aynı satırlarda k 1,000, bir-dışarıda %79,1.
+Senden beklenen: (1) PIT maddesinde tolerans = max(0,05; 2·√(0,09 ÷ n)), n = bağımsız trafo sayısı (İspanya 29 → 0,11; farazi 11–20'de n = 280 → 0,05); (2) `edp_satirlar.csv`'yi dalın `edp_test.py`'siyle yeniden üret (Windows), C1'i dalda koş, "önce / sonra" günlüğe; (3) PR #16'yı GitHub'da onayla. Sonra karar masası birleştirir, sen resmi `faz2` / `faz3`, sunum rakamları v2.
+Durum: bilgi
+
+## BİLGİ 22:06 — karar masasından — PR #16 bir tur daha: K_YUK 1,475 → 1,27; C1'i yeni dal başıyla koş
+Ne: BUILD'in bulgusu: İspanya katsayısı ölçülü trafo sayısına bağlı (5 ölçülü 1,93; 10 → 1,21; 15 → 1,33; 10 + 15 → 1,27); 1,475 beş ölçülülü denemelerle şişmişti. Model 12 ölçülüyle çalıştığı için katsayı 1,27 (dürüst kapsama %78,6). BUILD dala koyuyor, sınav 11–20 bir kez daha. **Senden:** dalın yeni başı gelince (kutuda "hazır") `edp_satirlar.csv`'yi yeniden üret, C1'i koş (PIT toleransı n = 29 → 0,11 ile), günlüğe "sonra" satırı, PR'ı onayla. Önceki koşumun boşa gitmedi: "önce" rakamların ve madde tanımların aynı.
+Durum: bilgi
+
+## KARAR 22:13 — PR #16 son dal başı (1cd7249, K_YUK 1,27) Mac'te koşuldu: senin İspanya maddende %95 ölçütü bilgi satırına iner; onay
+Karar: Mac'te dalın son hâliyle (`edp_test.py` K_YUK 1,27'li satırlar) senin C1 maddeni koştum: İspanya (c / 10 ölçülü / tabakalı) nominal %50 / 80 / 90 / 95 → ampirik %53,2 / **76,8** / 85,5 / **88,9**; PIT 0,071. %80 bant geçiyor (70–90), PIT n = 29 toleransıyla (0,11) geçiyor, **%95 bant 88,9 < 90 → maddeyi KALDI yazdırıyor**. Karar: tüzük madde 2'nin kapısı %80 bant + PIT; **%95 ölçütü n < 150 iken bilgi satırı** (29 trafoda %95 kapsamasının standart hatası ±5 puan; 88,9 gürültü içinde), n ≥ 150'de ölçüt olur. `sinav.py`'de (senin) %95'i "bilgi (n < 150)" yap; madde GEÇTİ olur. Not: senin kesitin 10 / tabakalı; `kalibrasyon.py` k'yi 10 + 15 kesitinden alıyor (orada %80 %80,0 iç örnek, bir-dışarıda %78,6, %95 %93,1); ikisi de günlüğe, resmi ölçü seninki.
+Farazi 11–20 (Mac, v2b): yanlış yeşil 0/49, yeşil 49, sarı %68,3, yanlış kırmızı %34,4, kaç ev orta 1, P10 altı %7,1 — BUILD'le tutuyor (yanlış kırmızı bir trafo farkı, bilinen).
+Senden beklenen: (1) %95 ölçütü bilgi (5 dk, main'e; PR'a BUILD main'i birleştirir); (2) **PR #16'yı GitHub'da onayla** (ajan değil sen); sonra karar masası birleştirir, sen sunum rakamlarını v2b yaparsın: yeşil %14, sarı %68, kırmızıların %33'ünde yer var, kilit 0/49 ↔ 41/284.
 Durum: bekliyor

@@ -182,6 +182,13 @@ SAF_FARK = 0.25                 # ADR-0008: model, saf tahminden ortanca ve P90'
 NOMINAL = (0.50, 0.80, 0.90, 0.95)
 KAPSAMA_95_MIN = 0.90
 PIT_KOVA, PIT_SAPMA_MAX = 10, 0.05
+
+
+def pit_tolerans(n):
+    """Karar masası 21:51 (tüzük madde 2): max(0,05; 2·√(0,09 ÷ n)), n = trafo sayısı; 29 trafoda 0,11."""
+    return max(PIT_SAPMA_MAX, 2 * math.sqrt(0.09 / n))
+
+
 # Resmi ölçü: faturalı girdi (ADR-0007), 10 ölçülü (PR #10 ana tablosu), tabakalı seçim (ürünün seçimi). Rastgele ile
 # havuzlanmaz: iki yolun hatası ters yönde, havuzda birbirini götürüyor (PIT 0,046 ↔ ayrı ayrı 0,068 / 0,108).
 ISPANYA_GIRDI, ISPANYA_N, ISPANYA_YOL = 'c', '10', 'tabakali'
@@ -362,9 +369,11 @@ def faz2(sehirler, ispanya=None):
     orta = st.median(kap.values())
     dusuk = min(kap.items(), key=lambda x: x[1])
     yuksek = max(kap.items(), key=lambda x: x[1])
-    _madde(m, KAPSAMA[0] <= orta <= KAPSAMA[1], f'%80 bant kapsama ortanca %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g}',
-           f'ortanca {_yuzde(orta)}; şehirler {_yuzde(dusuk[1])} ({dusuk[0]}) – {_yuzde(yuksek[1])} ({yuksek[0]}); '
-           f'dışarıda kalan: P10 altı {alt}, P90 üstü {ust}')
+    # Karar masası 21:51: farazi kapsama bilgi satırı; kapı gerçek veride (İspanya, madde 3b).
+    bilgi.append(f'%80 bant kapsama, farazi (eski madde, hedef %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g}; '
+                 f'kapı İspanya): ortanca {_yuzde(orta)}; şehirler {_yuzde(dusuk[1])} ({dusuk[0]}) – '
+                 f'{_yuzde(yuksek[1])} ({yuksek[0]}); dışarıda kalan: P10 altı {alt}, P90 üstü {ust} → '
+                 + ('geçer' if KAPSAMA[0] <= orta <= KAPSAMA[1] else 'geçmez'))
 
     # 3b. Kalibrasyon (Faz 7, karar masası 21:32): resmi ölçü gerçek veride (İspanya); farazi şehir bilgi.
     uclar = [(float(r['ogle_min_kw_p10']), float(r['ogle_min_kw_p90']), s['gercek'][r['trafo_no']])
@@ -372,30 +381,37 @@ def faz2(sehirler, ispanya=None):
     kf = kalibrasyon(uclar)
     bilgi.append('kalibrasyon, farazi (gösterim, havuz): ' + _kal_metin(kf)
                  + f"; %95 bant ≥ %{100 * KAPSAMA_95_MIN:g} → {'geçer' if kf['kapsama'][0.95] >= KAPSAMA_95_MIN else 'geçmez'}"
-                 + f"; PIT ≤ {PIT_SAPMA_MAX:g} → {'geçer' if kf['sapma'] <= PIT_SAPMA_MAX else 'geçmez'}")
+                 + f"; PIT ≤ {pit_tolerans(kf['n']):.3f} (n = {kf['n']} trafo) → "
+                 + ('geçer' if kf['sapma'] <= pit_tolerans(kf['n']) else 'geçmez'))
     if ispanya:
         satir = _csv(Path(ispanya))
 
         def _sec(girdi, n=ISPANYA_N, yol=None):
-            return [(float(r['alt']), float(r['ust']), float(r['y'])) for r in satir
-                    if r['girdi'] == girdi and r['n'] == n and (yol is None or r['yol'] == yol)]
+            return [r for r in satir if r['girdi'] == girdi and r['n'] == n and (yol is None or r['yol'] == yol)]
 
-        ki = kalibrasyon(_sec(ISPANYA_GIRDI, yol=ISPANYA_YOL))
+        def _kal(rows):
+            k = kalibrasyon([(float(r['alt']), float(r['ust']), float(r['y'])) for r in rows])
+            k['trafo'] = len({r['ct'] for r in rows})       # PIT toleransının n'i: tekrar değil, trafo
+            k['tol'] = pit_tolerans(k['trafo'])
+            return k
+
+        ki = _kal(_sec(ISPANYA_GIRDI, yol=ISPANYA_YOL))
         etiket = f'gerçek veri — İspanya (girdi {ISPANYA_GIRDI}, {ISPANYA_N} ölçülü, {ISPANYA_YOL}, bütün tekrarlar)'
         _madde(m, KAPSAMA[0] <= ki['kapsama'][0.80] <= KAPSAMA[1] and ki['kapsama'][0.95] >= KAPSAMA_95_MIN,
                f'kalibrasyon, {etiket}: %80 bant %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g} ve %95 bant ≥ %{100 * KAPSAMA_95_MIN:g}',
                _kal_metin(ki))
-        _madde(m, True if ki['sapma'] <= PIT_SAPMA_MAX else UYARI,
-               f'PIT düzlüğü, {etiket}: {PIT_KOVA} kovada en büyük sapma ≤ {PIT_SAPMA_MAX:g}',
-               f"{ki['sapma']:.3f}" + ('' if ki['sapma'] <= PIT_SAPMA_MAX else f"; {ki['yon']}"))
+        _madde(m, True if ki['sapma'] <= ki['tol'] else UYARI,
+               f'PIT düzlüğü, {etiket}: {PIT_KOVA} kovada en büyük sapma ≤ max(0,05; 2·√(0,09 ÷ n))',
+               f"{ki['sapma']:.3f}, tolerans {ki['tol']:.3f} (n = {ki['trafo']} trafo; karar masası 21:51)"
+               + ('' if ki['sapma'] <= ki['tol'] else f"; {ki['yon']}"))
         for g in ('a', 'b', 'c'):
             for n in ('5', '10', '15'):
                 for yol in ('rastgele', 'tabakali'):
                     u = _sec(g, n, yol)
                     if u:
-                        k = kalibrasyon(u)
+                        k = _kal(u)
                         bilgi.append(f'kalibrasyon, İspanya girdi {g}, {n} ölçülü, {yol}: %80 {_yuzde(k["kapsama"][0.80])}, '
-                                     f'%95 {_yuzde(k["kapsama"][0.95])}, PIT sapma {k["sapma"]:.3f} ({k["yon"]}), n = {k["n"]}')
+                                     f'%95 {_yuzde(k["kapsama"][0.95])}, PIT sapma {k["sapma"]:.3f} ({k["yon"]}; tolerans {k["tol"]:.3f}), n = {k["n"]} ({k["trafo"]} trafo)')
     else:
         _madde(m, UYARI, 'kalibrasyon, gerçek veri — İspanya', 'ölçülmedi: --ispanya <src/edp_test.py --cikti çıktısı> verilmedi')
 
