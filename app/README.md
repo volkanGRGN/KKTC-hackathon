@@ -56,7 +56,7 @@ Windows'ta `python3` yerine `python`. Sanal ortamı etkinleştirmeden çalışt�
 
 Eğri: ölçülü trafoda `yuk_5dk.csv`'nin gün 0 tüketimi; ölçülmeyende arketip eğrisi × ölçek (sözleşme §5) ve P10–P90 bandı.
 
-Etiket: şehir no ≥ 900 → "SAHTE VERİ — gösterim"; diğerleri → "örnek veri (farazi şehir) — gösterim".
+Etiket: şehir no ≥ 900 → "SAHTE VERİ — gösterim"; 800–899 → "GERÇEK ÖLÇÜM — <`ayar.json` `veri_kaynagi`> (Kıbrıs değil)"; diğerleri → "örnek veri (farazi şehir) — gösterim".
 
 ## Kurallar
 
@@ -67,5 +67,5 @@ Etiket: şehir no ≥ 900 → "SAHTE VERİ — gösterim"; diğerleri → "örne
 
 - **İnternetsiz açılış:** OSM dosyası varken tarayıcının istediği tek adres `localhost:8501` (ölçüldü); kapalı internetle ayrıca denenmedi. Dosya yoksa zemin `basemaps.cartocdn.com`'dan gelir ve internet kapalıyken görünmez.
 - OSM zemini yalnız Girne merkezi kapsar (~1 km × 1,1 km); dışındaki trafolar boş zeminde durur. Deniz çizilmiyor.
-- Mac'te denenmedi (Windows 11, Python 3.14, Streamlit 1.66'da denendi).
+- Windows 11 (Python 3.14, Streamlit 1.66) ve Mac (Python 3.13; karar masası, PR #9 incelemesi) denendi.
 - Faz 1 gerçek şehirlerinde bazı trafolar denizde (şehir üreticisi; Volkan'ın kutusunda istek var).

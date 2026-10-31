@@ -17,6 +17,7 @@ KOK = Path(__file__).resolve().parent.parent
 VERI_KOK = KOK / "data" / "synthetic"
 ANAHTAR = ["sehir", "trafo_no"]
 SAHTE_SEHIR_ALT_SINIR = 900  # sözleşme: sahte şehir tohumu 900–999
+GERCEK_VERI_SEHIRLERI = range(800, 900)  # sözleşme 1.2: gerçek ölçüm verisi (civan.md KARAR 15:12)
 
 RENKLER = {
     "yesil": [46, 160, 67, 230],
@@ -70,9 +71,20 @@ def birlesik_tablo(klasor):
     return tablo
 
 
-def etiket(sehir_no):
+def ayar_oku(klasor):
+    """Şehrin ayar.json'u; yoksa boş sözlük."""
+    yol = klasor / "ayar.json"
+    if not yol.exists():
+        return {}
+    return json.loads(yol.read_text(encoding="utf-8"))
+
+
+def etiket(sehir_no, ayar):
     if sehir_no >= SAHTE_SEHIR_ALT_SINIR:
         return "SAHTE VERİ — gösterim"
+    if sehir_no in GERCEK_VERI_SEHIRLERI:
+        kaynak = ayar.get("veri_kaynagi", "gerçek ölçüm verisi")
+        return f"GERÇEK ÖLÇÜM — {kaynak} (Kıbrıs değil)"
     return "örnek veri (farazi şehir) — gösterim"
 
 
@@ -217,6 +229,9 @@ def egri_ciz(klasor, veri, satir):
         return
     olculu_nolar = tuple(veri.loc[veri["olculdu"] == 1, "trafo_no"])
     yuk = olculu_yuk(str(klasor / "yuk_5dk.csv"), olculu_nolar)
+    if yuk.empty:
+        st.info("Eğri yok: bu şehirde ölçülü trafonun yük satırı bulunamadı.")
+        return
     gun_turu = yuk.loc[yuk["gun"] == 0, "gun_turu"].iloc[0]
     if satir["olculdu"] == 1:
         tablo, gun_turu = olculen_egri(yuk, satir["trafo_no"])
@@ -270,7 +285,7 @@ def main():
         return
     secili = st.sidebar.selectbox("Şehir", klasorler, format_func=lambda p: p.name)
     veri = sutun_verisi(birlesik_tablo(secili))
-    st.warning(etiket(int(veri["sehir"].iloc[0])))
+    st.warning(etiket(int(veri["sehir"].iloc[0]), ayar_oku(secili)))
     st.caption(renk_ozeti(veri))
     zemin = osm_zemin(str(OSM_DOSYASI))
     sol, sag = st.columns([3, 2])
