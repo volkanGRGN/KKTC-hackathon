@@ -1,6 +1,6 @@
 # Tablo biçimi sözleşmesi
 
-Sürüm 1.1 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
+Sürüm 1.2 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
 
 Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun eksik ya da yanlış geliyorsa önce bu dosyaya bak; değişiklik gerekiyorsa [Volkan'ın kutusuna](../istek/volkan.md) yaz. Örnek değerler biçimi göstermek içindir; ölçüm ya da sonuç değildir.
 
@@ -8,12 +8,13 @@ Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun ek
 
 - **Klasör:** her şehir `data/synthetic/sehir-<NNN>/` (NNN = tohum, üç hane: `sehir-007`). Depoya girmez (`.gitignore`), tohumla yeniden üretilir.
 - **Sahte şehir** (Civan'ın `app/ornek_veri.py`'si): tohum 900–999, aynı klasör düzeni (`sehir-901/`). Harita bu şehirlerde "SAHTE VERİ" yazar.
+- **Gerçek veri** (sürüm 1.2): şehir no 800–899, aynı klasör düzeni; `ayar.json`'da `veri_turu` = `gercek` ve `veri_kaynagi` (ör. `"EDP Oviedo 2018, Mendeley CC BY"`) zorunlu. Harita "GERÇEK ÖLÇÜM — <veri_kaynagi> (Kıbrıs değil)" yazar. Gerçek veride bulunmayan sütun boş bırakılır (ör. abone sınıfı yoksa hepsi `abone_konut`'ta, `yillik_tuketim_mwh` boş). Farazi şehir 1–799 (`veri_turu` = `farazi`).
 - **CSV:** UTF-8 (BOM yok), ayırıcı virgül, **ondalık nokta** (`12.5`; `12,5` değil), ilk satır başlık, satır sonu LF. **JSON da** UTF-8 ve LF (`newline=''`). Python'da `open(yol, 'w', encoding='utf-8', newline='')` + `csv`, ya da `pandas.to_csv(yol, index=False)`.
 - **Adlar:** sütun adları ve kategorik değerler ASCII küçük harf ve alt çizgi; Türkçe harf yok (`koy`, `carsi`, `isgunu`). Doğru/yanlış = `1`/`0`. Boş hücre = değer yok.
 - **Anahtar:** her tabloda `sehir` (int) ve `trafo_no` (str, `T01`…`T40`). (sehir, trafo_no) bütün dosyalarda aynı trafodur. Satırlar `trafo_no` sırasında.
-- **Yuvarlama:** kW 2 hane, V 1 hane, metre tam sayı, derece 6 hane, oran 3 hane.
+- **Yuvarlama:** kW ve MWh 2 hane, V 1 hane, metre tam sayı, derece 6 hane, oran 3 hane.
 - **Zaman:** yerel saat (EAC eğrileriyle aynı). `adim` 0–287; adım i = [i×5, i×5+5) dakika; `saat` adımın başı, `"HH:MM"`. **Öğlen penceresi** 11:00–14:00 = adım 132–167 (36 adım).
-- **Benzetilen günler (sürüm 1):** Nisan, 14 gün = 10 iş günü + 4 tatil. Nisan, Kıb-Tek'in 2023'te en az tükettiği ay [Kaynaklı: Kıb-Tek 2023 istatistik, aylık tüketim, Nisan 101.671 MWh; `data/raw/kibtek-istatistik/`].
+- **Benzetilen günler:** Nisan, ardışık 14 gün. Sürüm 1–1.1: 10 iş günü + 4 tatil (hafta sonu). **Sürüm 1.2:** hafta sonu ve KKTC resmi tatilleri (Ramazan Bayramı, 23 Nisan) `tatil`; 14 günde 4–7 tatil, liste `ayar.json` `bayramlar`'da. Hava yılı 2023 / 2024 / 2025. Nisan, Kıb-Tek'in 2023'te en az tükettiği ay [Kaynaklı: Kıb-Tek 2023 istatistik, aylık tüketim, Nisan 101.671 MWh; `data/raw/kibtek-istatistik/`].
 
 ## Dosyalar: kim yazar, kim okur
 
@@ -58,6 +59,7 @@ Satır = bir trafo.
 | `abone_su_motoru` | int | adet | `0` | su motorları tarifesi |
 | `panel_sayisi` | int | adet | `9` | bağlı panelli abone |
 | `panel_kw` | float | kW | `40.0` | bağlı panellerin kurulu toplamı |
+| `yillik_tuketim_mwh` | float | MWh | `142.38` | **1.2.** Trafodaki abonelerin son 12 ay fatura toplamı ([ADR-0007](../decisions/adr-0007-yillik-fatura-tuketimi-girdi.md)). Kıb-Tek faturayı bilir; abone–trafo eşleşmesi varsayımı abone sütunlarınınkiyle aynı. Üretici: abone yıllık enerjilerinin toplamı × fatura sapması 0,95–1,05 [Yorum]; brüt tüketim (mahsuplaşmalı panelli evin faturası net olabilir, [Yorum]). Boş olabilir (gerçek veri): model o zaman abone sayılarıyla çalışır |
 
 Varsayım: hat boyu ve kablonun Kıb-Tek kaydında olup olmadığı BULAMADIM ([plan](../01-plan.md), uzmana soru 3); burada biliniyor sayıldı. Faz dağılımı bilinmiyor sayıldı ([ADR-0002](../decisions/adr-0002-gerilim-ilk-surumde.md)) → cevap anahtarında.
 
@@ -104,12 +106,14 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | `kac_ev_gercek_max` | int | ev | `7` | en büyüğü |
 | `kac_ev_tavan` | int | 0/1 | `0` | 1 = adayların hepsi sığdı; gerçek kapasite daha yüksek olabilir (sayı alttan kesik). `kac_ev_aday` = 0 ise de 1; o trafoda kaç ev sütunları bilgi taşımaz |
 | `kac_ev_sinir` | str | — | `gerilim` | ortanca sırada ilk reddin nedeni (bugün zaten aşıyorsa bugünkü aşımın): `gerilim` / `isil` / `yok` (hiç ret yok) |
+| `mahalle_carpani` | float | oran | `0.932` | **1.2.** Trafonun küçük abonelerine (konut, ticari I, sanayi I, su motoru) uygulanan mahalle tüketim çarpanı, log-normal ([ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md)) |
+| `saat_kaymasi_dk` | int | dk | `-15` | **1.2.** Trafonun bütün abonelerine eklenen saat kayması, ±30 dk (sınıf başına şehir kaymasının üstüne) |
 
 **"Gerçek kaç ev" tanımı:** panelsiz konut aboneler rastgele sıraya dizilir (Kıb-Tek'in başvuru sırası gibi). Sırayla her birine 6,5 kW panel eklenir (ev tek fazlıysa kendi fazına) [ROADMAP Faz 1: bekleyen başvurular 5–8 kW, orta değer]. Kritik adımlarda (bugünkü en yüksek gerilimli 6 adım + en güçlü güneşli 3 adım) herhangi bir evde gerilim 259 V'u ya da trafo yükü kVA'yı aşarsa o başvuru reddedilir ve **sıradakine geçilir** (ilk retle durulmaz: hat ucundaki bir evin sığmaması trafoya yakın evi engellemez). Onaylanan ev sayısı sonuçtur. Bugün zaten aşıyorsa 0. 7 farklı sıra, ortanca.
 
 ## 4. `ayar.json` — şehrin ayarları (Faz 1)
 
-Zorunlu anahtarlar: `sehir`, `tohum`, `sozlesme_surumu` (bu dosyanın sürümü), `uretici_surumu`, `trafo_sayisi`, `tip_sayilari` ({tip: adet}), `ay`, `gun_turleri` (14 elemanlı liste), `profil_kaynagi` (`eac` ya da `yer_tutucu`), `isinim_kaynagi`, `tuketim_carpani` ({sınıf: oran}), `saat_kaymasi_dk` ({sınıf: dakika}), `panel_yayginligi`, `yeni_panel_kw`, `v_sinir_v`, `referans_enlem`, `referans_boylam`, `hava_yili` (yapay ışınımda boş), `sure_sn` (üretim süresi). Ek anahtar serbest. Aynı tohum aynı şehri verir: CSV'ler birebir, `ayar.json`'da yalnız `sure_sn` farklı olabilir.
+Zorunlu anahtarlar: `sehir`, `tohum`, `sozlesme_surumu` (bu dosyanın sürümü; 1.2'den metin, ör. `"1.2"`), `uretici_surumu`, `trafo_sayisi`, `tip_sayilari` ({tip: adet}), `ay`, `gun_turleri` (14 elemanlı liste), `profil_kaynagi` (`eac` ya da `yer_tutucu`), `isinim_kaynagi`, `tuketim_carpani` ({sınıf: oran}), `saat_kaymasi_dk` ({sınıf: dakika}), `panel_yayginligi`, `yeni_panel_kw`, `v_sinir_v`, `referans_enlem`, `referans_boylam`, `hava_yili` (yapay ışınımda boş), `sure_sn` (üretim süresi); gerçek veride (800–899) ayrıca `veri_turu` = `gercek` ve `veri_kaynagi`. Ek anahtar serbest. Sürüm 1.2 bilgi anahtarları (üretici yazar, kimse zorunlu okumaz): `veri_turu` (`farazi`), `tarihler`, `bayramlar` (14 gün içindeki resmi tatiller), `mahalle_sigma`, `mahalle_kayma_dk`, `faz_sapma` ({bölge: tek fazlı abone faz ağırlığı sapması}), `kiyi_kontrolu` (`true` = OSM kıyı çizgisiyle trafolar karada), `kva_tavan_sayisi` (gereken güç 1000 kVA'yı aşıp tavana kesilen trafo). Aynı tohum aynı şehri verir: CSV'ler birebir, `ayar.json`'da yalnız `sure_sn` farklı olabilir.
 
 `profil_kaynagi` = `yer_tutucu` olan şehir Faz 1 geçme sınavına girmez (Can'ın `profiller.py`'si gelmeden üretilmiştir).
 
@@ -136,7 +140,7 @@ Deneyler, aynı sütunlar:
 - `deney/tahmin_n<ölçülü>_t<tekrar>.csv`: 5 / 10 / 20 ölçülü, 5 tekrar (öğretici küme farklı tohumla).
 - `deney/tahmin_capraz_s<AAA>.csv`: şehirler arası. Model AAA şehrinin 12 ölçülüsüyle kuruldu, bu şehrin bütün trafolarını tahmin etti; `olculdu` hepsinde 0, `olculu_sayi` = 12, `arketip` AAA'nın arketip numarasıdır (bu şehrin `arketipler.csv`'siyle karşılaştırılmaz).
 
-**`sablon_ozet.json`** (bilgi, eşiksiz): ölçülü trafolar, küme sayısı ve siluetler, arketip adları, ortak ve küme başına abone katsayıları (kW/abone), bir-dışarıda hata, güven sayıları. Sınav okumaz; günlük ve sunum için.
+**`sablon_ozet.json`** (bilgi, eşiksiz): `fatura_kullanildi` (1.2), `taban` (1.2, hata tabanı), ölçülü trafolar, küme sayısı ve siluetler, arketip adları, ortak ve küme başına abone katsayıları (kW/abone), bir-dışarıda hata, güven sayıları. Sınav okumaz; günlük ve sunum için.
 
 **`arketipler.csv`** (yan dosya; satır = arketip × gün türü × adım): `sehir`, `arketip` (int), `arketip_adi` (str, ör. `aksam_tepeli_konut`), `gun_turu`, `adim`, `oran` (0–1, tepeye bölünmüş eğri; **brüt tüketimden**: ölçülü trafoların `tuketim_kw` gün türü ortalaması, net değil). Harita yan paneli tahmini eğriyi şöyle çizer: `oran` × (`ogle_min_kw` ÷ arketipin öğlen penceresindeki en düşük `oran`). Ölçekleme doğrulanmadı ([ADR-0001](../decisions/adr-0001-sekil-buyukluk-sablon.md)).
 

@@ -13,6 +13,20 @@ Yer tutucular: profiller.py ya da EAC Excel'i yoksa her sınıf eski benzetimin 
 
 Etiketler: [Kaynaklı] belge, [Hesap] bizim hesabımız, [Yorum] varsayım. Tip ayarlarının çoğu [Yorum].
 
+Sürüm 1.2 (sözleşme 1.2; ADR-0007, ADR-0008, karar masası 31 Ekim):
+- Mahalle farkı: trafo başına log-normal tüketim çarpanı (σ = MAHALLE_SIGMA) küçük abonelere (konut, ticari I,
+  sanayi I, su motoru); trafo başına saat kayması ±30 dk bütün abonelere. Sürüm 0.2'de rastgelelik yalnız şehir
+  ve ev başınaydı; 40–80 evin ortalamasında ev farkı sönüyor, konut trafolarında müşteri başına öğlen yükünün
+  trafodan trafoya değişimi gerçekten (İspanya EDP) çok düşük çıkıyordu (ADR-0008).
+- trafolar.csv'ye yillik_tuketim_mwh: abonelerin yıllık enerjisi toplamı × fatura sapması 0,95–1,05 (ADR-0007).
+- KKTC resmi tatilleri gun_turu = tatil (BAYRAMLAR); sürüm 0.2'de bayramlar iş günü sayılıyordu (PR #6 notu).
+- Kıyı: OSM kıyı çizgisi varsa trafo karada kalana dek yeniden çekilir (Civan'ın app/ornek_veri.py
+  kiyi_segmentleri() ve karada() fonksiyonları, aynen); yoksa eski "kuzeye en çok 400 m" kuralı + uyarı.
+- Faz dağılımı: tek fazlı abonelerin faz ağırlıkları kentsel ±%25, kırsal ±%50 [Kaynaklı: UKPN 2015].
+- Hava yılı 2023 / 2024 / 2025 (tüketim ve abone sayıları 2023).
+- ayar.json: mahalle_sigma, kiyi_kontrolu, kva_tavan_sayisi (gereken güç 1000 kVA'yı aşıp tavana kesilen trafo;
+  Nisan tepesi kVA'nın yarısının altında, şimdilik etkisiz; yaz benzetilirse yer tipi listeye 1600/2500 gerekir).
+
 Çalıştırma:
   python3 src/sehir_uret.py 7            # data/synthetic/sehir-007/
   python3 src/sehir_uret.py 1 20         # sehir-001 … sehir-020
@@ -37,11 +51,13 @@ sys.argv = _argv
 
 KOK = Path(__file__).resolve().parent.parent
 EAC_XLSX = KOK / 'data' / 'raw' / 'eac-profil-siniflari' / 'Offtake_Profile_Classes.xlsx'
-ISINIM_CSV = KOK / 'data' / 'raw' / 'open-meteo-lefkosa' / 'lefkosa_saatlik_2024_2025.csv'
+ISINIM_DOSYALARI = [KOK / 'data' / 'raw' / 'open-meteo-lefkosa' / ad
+                    for ad in ('lefkosa_saatlik_2023.csv', 'lefkosa_saatlik_2024_2025.csv')]
+KIYI_JSON = KOK / 'data' / 'raw' / 'osm-kasaba' / 'girne_kiyi.json'
 CIKTI = KOK / 'data' / 'synthetic'
 
-SOZLESME_SURUMU = 1
-URETICI_SURUMU = '0.2'                   # 0.2: panel yaygınlığı %3–25 (ADR-0006), ayar.json LF
+SOZLESME_SURUMU = '1.2'
+URETICI_SURUMU = '1.2'                   # 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -52,8 +68,21 @@ V_SINIR = tb.V_LIMIT                     # 259 V planlama sınırı
 SIRA_SAYISI = 7                          # "gerçek kaç ev" için başvuru sırası
 # Girne merkez: Civan'ın OSM alanının ortası [Kaynaklı: data/raw/osm-kasaba/KAYNAK.txt]
 REFERANS = (35.3375, 33.318)
-KUZEY_SINIRI_M = 400                     # kıyı: referansın kuzeyine en çok 400 m [Yorum]
+KUZEY_SINIRI_M = 400                     # kıyı dosyası yoksa: referansın kuzeyine en çok 400 m [Yorum]
 KVA_LISTESI = [25, 50, 100, 250, 400, 630, 1000]   # direk ≤ 400 [varsayım: Kıb-Tek şartnamesi, bağlantısı yok]; yer [Yorum]
+HAVA_YILLARI = [2023, 2024, 2025]
+# KKTC resmi tatilleri, Nisan [Kaynaklı: Ramazan Bayramı tarihleri Diyanet takvimi (Türkiye ile aynı ay takvimi;
+# KKTC Resmi Gazete listesi BULAMADIM), 23 Nisan KKTC'de resmi tatil]. Arife yarım günü iş günü sayıldı [Yorum].
+BAYRAMLAR = {dt.date(2023, 4, 21), dt.date(2023, 4, 22), dt.date(2023, 4, 23),
+             dt.date(2024, 4, 10), dt.date(2024, 4, 11), dt.date(2024, 4, 12), dt.date(2024, 4, 23),
+             dt.date(2025, 4, 1), dt.date(2025, 4, 23)}
+MAHALLE_SIGMA = 0.35                     # ADR-0008 "≈ 0,3" [Yorum]; 0,30'da konut trafosu CV şehir içi ortanca 0,29 çıktı, hedef 0,3–0,4 (şehir 1–10)
+MAHALLE_KAYMA_DK = 30                    # trafo başına saat kayması ±30 dk (ADR-0008)
+FATURA_SAPMA = (0.95, 1.05)              # tahmini okuma, farklı yıl (ADR-0007) [Yorum]
+# Tek fazlı abonelerin faz ağırlığı 1 ± bu oran: tek fazlı PV faz dengesizliği varsayımı kentsel %25, kırsal %50
+# [Kaynaklı: UKPN, "Validation of PV Connection Assessment Tool" kapanış raporu, Ofgem, Mart 2015]. Turistik ve
+# sanayi bölgesi kentsel sayıldı [Yorum].
+FAZ_SAPMA = {'kentsel': 0.25, 'turistik': 0.25, 'sanayi': 0.25, 'kirsal': 0.50}
 
 # Abone sınıfı: (profiller.py sınıfı, trafolar.csv sütunu, yıllık MWh / abone, üç faz olasılığı).
 # Yıllık MWh / abone [Hesap]: Kıb-Tek 2023 tarife sınıfı tüketimi (stat_2023) ÷ abone sayısı (veri sözlüğü).
@@ -70,6 +99,8 @@ SINIFLAR = {
     'yurt':      ('konut',        'abone_ticari2',   40 * 648494 / 175577, 1.0),
 }
 BUYUK = {'dukkan', 'otel', 'sanayi2', 'yurt'}      # hattın başına (trafoya yakın) konur [Yorum]
+# Mahalle çarpanı yalnız küçük abonelere: büyük abonenin kendi büyüklük farkı (σ = 0,3) zaten tek başına
+# trafoyu belirliyor; mahalle (gelir, ev büyüklüğü, boş yazlık, klima) konut ve küçük dükkânı ortak etkiler [Yorum].
 ABONE_SUTUNLARI = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm',
                    'abone_sanayi1', 'abone_sanayi2', 'abone_su_motoru']
 
@@ -129,9 +160,16 @@ def yillik_ortalama(veri, sinif):
     return toplam / gun
 
 
-def isinim_oku(yol):
-    """Open-Meteo saatlik CSV -> {tarih: 24 değer}, değer = eğik (30°, güney) ışınım ÷ 1000 W/m².
+def isinim_oku(yollar):
+    """Open-Meteo saatlik CSV'leri -> {tarih: 24 değer}, değer = eğik (30°, güney) ışınım ÷ 1000 W/m².
     Satır 'T12:00' = 11:00–12:00 ortalaması (KAYNAK.txt)."""
+    saatlik = {}
+    for yol in yollar:
+        saatlik.update(_isinim_dosyasi(yol))
+    return saatlik
+
+
+def _isinim_dosyasi(yol):
     saatlik = {}
     with open(yol, encoding='utf-8') as fh:
         satirlar = fh.read().splitlines()
@@ -209,37 +247,77 @@ def tip_sayilari(rng, n):
     return sayi
 
 
-def konum(rng, k):
+def kiyi_segmentleri():
+    """OSM kıyı çizgisi parçaları [((boylam, enlem), (boylam, enlem))]; dosya yoksa None.
+    Civan, app/ornek_veri.py (aynen; dosya yolu bu modülün)."""
+    if not KIYI_JSON.exists():
+        return None
+    veri = json.loads(KIYI_JSON.read_text(encoding="utf-8"))
+    segmentler = []
+    for yol in veri["elements"]:
+        noktalar = [(n["lon"], n["lat"]) for n in yol["geometry"]]
+        segmentler += list(zip(noktalar, noktalar[1:]))
+    return segmentler
+
+
+def karada(boylam, enlem, segmentler):
+    """Kuzeye ışın: kıyıyı tek sayıda kesiyorsa nokta karada (deniz kuzeyde). Civan, app/ornek_veri.py (aynen)."""
+    kesisme = 0
+    for (x1, y1), (x2, y2) in segmentler:
+        if (x1 > boylam) != (x2 > boylam):
+            y = y1 + (boylam - x1) * (y2 - y1) / (x2 - x1)
+            kesisme += y > enlem
+    return kesisme % 2 == 1
+
+
+def konum(rng, k, kiyi):
+    """Tipin alanından rastgele nokta; kıyı çizgisi varsa karada kalana dek, yoksa kuzeye en çok 400 m."""
     while True:
         if k[0] == 'halka':
             r, a = rng.uniform(k[1], k[2]), rng.uniform(0, 2 * math.pi)
             x, y = r * math.cos(a), r * math.sin(a)
         else:
             x, y = rng.uniform(k[1], k[2]), rng.uniform(k[3], k[4])
-        if y <= KUZEY_SINIRI_M:
-            return round(x), round(y)
+        x, y = round(x), round(y)
+        if kiyi is None:
+            if y <= KUZEY_SINIRI_M:
+                return x, y
+        elif karada(*reversed(enlem_boylam(x, y)), kiyi):
+            return x, y
 
 
-def sehir_kur(rng, n_trafo, ayar, tepe_orani):
+def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
     sayi = tip_sayilari(rng, n_trafo)
     tipler = [t for t in TIPLER for _ in range(sayi[t])]
     rng.shuffle(tipler)
-    trafolar = []
+    trafolar, tavan = [], 0
     for ti, tip in enumerate(tipler):
         a = TIPLER[tip]
         abone = []
         for sinif, (lo, hi) in a['abone'].items():
             abone += [sinif] * rng.randint(lo, hi)
         n_hat = min(rng.randint(*a['hat']), len(abone))
+        sig = ayar['mahalle_sigma']
+        mahalle = rng.lognormvariate(-sig ** 2 / 2, sig)
+        kayma = 5 * round(rng.uniform(-MAHALLE_KAYMA_DK, MAHALLE_KAYMA_DK) / 5)
         # boyut: sınıfın yıl içi tepesi (24 tipik gün) × yıllık ortalama kW, büyütme payı 1,2–2,0 [Yorum]
-        gerek = sum(SINIFLAR[s][2] * 1000 / 8760 * tepe_orani[s] * ayar['tuketim_carpani'][s] for s in abone)
-        gerek *= rng.uniform(1.2, 2.0)
+        # Plan tarife ortalamasıyla [Yorum]; mahalle çarpanı yalnız yılın tepesinde aşırı yük olacaksa girer
+        # (Kıb-Tek aşırı yüklenen trafoyu büyütür [Yorum]). Mahalle doğrudan boyuta girseydi gizli fark Kıb-Tek'in
+        # bildiği kva sütununa sızardı (şehir 1–10'da faturasız model artığıyla korelasyon 0,6); İspanya gerçek
+        # verisinde şebeke bilgisi müşteri sayısına bir şey katmadı (PR #10). Hiç girmeyince 800'de 3 trafo
+        # Nisan akşamında kVA'yı aştı (en kötü %121, 205,7 V).
+        tepe = {s: SINIFLAR[s][2] * 1000 / 8760 * tepe_orani[s] * ayar['tuketim_carpani'][s] for s in SINIFLAR}
+        gerek = sum(tepe[s] for s in abone) * rng.uniform(1.2, 2.0)
+        gerek = max(gerek, sum(tepe[s] * (1 if s in BUYUK else mahalle) for s in abone))
+        tavan += gerek > KVA_LISTESI[-1]
         kva = next((k for k in KVA_LISTESI if k >= gerek), KVA_LISTESI[-1])
-        x, y = konum(rng, a['konum'])
-        fw = [rng.uniform(0.8, 1.2) for _ in range(3)]
+        x, y = konum(rng, a['konum'], kiyi)
+        d = FAZ_SAPMA[a['bolge']]
+        fw = [rng.uniform(1 - d, 1 + d) for _ in range(3)]
         tr = dict(no=f'T{ti + 1:02d}', tip=tip, bolge=a['bolge'], kva=kva, x=x, y=y,
                   montaj='direk' if kva <= 400 else 'yer', kablo=rng.choice(a['kablo']),
-                  v0=round(rng.uniform(246.0, 250.0), 1), feeders=[], evler=[])
+                  v0=round(rng.uniform(246.0, 250.0), 1), mahalle=mahalle, kayma_dk=kayma,
+                  fatura_sapma=rng.uniform(*FATURA_SAPMA), feeders=[], evler=[])
         zb = 240.0 ** 2 / (kva * 1000 / 3)
         rt = 0.04 * zb / math.sqrt(5)                 # uk %4, X/R = 2 (eski benzetim)
         tr['zt'] = complex(rt, 2 * rt)
@@ -260,13 +338,22 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani):
                     if rng.random() < ayar['panel_yayginligi'] * (0.6 + 0.8 * konum_orani):
                         pv = 8.0 if uc_faz else rng.choice([5.0, 5.0, 5.0, 4.0, 3.0])
                 sigma = 0.35 if sinif == 'konut' else 0.3     # abone farkı [Yorum]
-                h = dict(id=len(tr['evler']), sinif=sinif, ph=ph, pv=pv,
-                         olcek=rng.lognormvariate(-sigma ** 2 / 2, sigma))
+                olcek = rng.lognormvariate(-sigma ** 2 / 2, sigma) * (1 if sinif in BUYUK else mahalle)
+                h = dict(id=len(tr['evler']), sinif=sinif, ph=ph, pv=pv, olcek=olcek)
                 f['houses'].append(h)
                 tr['evler'].append(h)
             tr['feeders'].append(f)
         trafolar.append(tr)
-    return trafolar, sayi
+    return trafolar, sayi, tavan
+
+
+def fatura_mwh(tr, ayar):
+    """trafolar.csv yillik_tuketim_mwh: abonelerin yıllık enerjisi (eğri yıllık ortalaması = 1 olduğu için abone
+    başına MWh × şehir çarpanı × abone ölçeği) toplamı × fatura sapması (ADR-0007). Brüt tüketim [Yorum]:
+    mahsuplaşmalı panelli evin faturası net olabilir; Kıb-Tek'in sayaçtan içeri alınan enerjiyi ayrı bilip
+    bilmediği BULAMADIM."""
+    return tr['fatura_sapma'] * sum(SINIFLAR[h['sinif']][2] * ayar['tuketim_carpani'][h['sinif']] * h['olcek']
+                                    for h in tr['evler'])
 
 
 # ---------- benzetim ----------
@@ -276,7 +363,7 @@ def yuk_serisi(tr, ayar, egriler, gun_turleri, rng):
     gunluk = {}
     for s in SINIFLAR:
         kw = SINIFLAR[s][2] * 1000 / 8760 * ayar['tuketim_carpani'][s]
-        k = ayar['saat_kaymasi_dk'][s] // 5
+        k = (ayar['saat_kaymasi_dk'][s] + tr['kayma_dk']) // 5
         for g in ('is', 'tatil'):
             eg = egriler[(s, g)]
             gunluk[(s, g)] = [kw * eg[(i - k) % ADIM] for i in range(ADIM)]
@@ -404,28 +491,34 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         tuketim_carpani={s: round(rng.uniform(0.8, 1.2), 3) for s in siniflar},       # ±%20
         saat_kaymasi_dk={s: 5 * round(rng.uniform(-kayma_ust, kayma_ust) / 5) for s in siniflar},
         panel_yayginligi=round(rng.uniform(0.03, 0.25), 3),                         # %3–25 [ADR-0006]
+        mahalle_sigma=MAHALLE_SIGMA, mahalle_kayma_dk=MAHALLE_KAYMA_DK, faz_sapma=FAZ_SAPMA,
         yeni_panel_kw=YENI_PANEL_KW, v_sinir_v=V_SINIR,
-        referans_enlem=REFERANS[0], referans_boylam=REFERANS[1],
+        referans_enlem=REFERANS[0], referans_boylam=REFERANS[1], veri_turu='farazi',
         profil_kaynagi=profil_kaynagi, kac_ev_sira_sayisi=SIRA_SAYISI)
 
-    # hava yılı ve günler: 2024 ya da 2025 Nisan'ından ardışık 14 gün
-    yil = rng.choice([2024, 2025])
+    # hava yılı ve günler: 2023, 2024 ya da 2025 Nisan'ından ardışık 14 gün; hafta sonu ve bayram tatil
+    yil = rng.choice(HAVA_YILLARI)
     bas = dt.date(yil, AY, rng.randint(1, 30 - GUN_SAYISI + 1))
     tarihler = [bas + dt.timedelta(days=d) for d in range(GUN_SAYISI)]
-    gun_turleri = ['tatil' if t.weekday() >= 5 else 'isgunu' for t in tarihler]
-    if ISINIM_CSV.exists():
-        saatlik = isinim_oku(ISINIM_CSV)
+    gun_turleri = ['tatil' if t.weekday() >= 5 or t in BAYRAMLAR else 'isgunu' for t in tarihler]
+    saatlik = isinim_oku([y for y in ISINIM_DOSYALARI if y.exists()])
+    if all(t in saatlik for t in tarihler):
         g = [x for t in tarihler for x in gunun_isinimi(saatlik, t)]
         ayar.update(isinim_kaynagi='open-meteo-lefkosa', hava_yili=yil)
     else:
-        print(f'UYARI: {ISINIM_CSV.name} yok; yapay ışınım kullanılıyor.')
+        print(f'UYARI: {yil} Nisan ışınımı yok (data/raw/open-meteo-lefkosa); yapay ışınım kullanılıyor.')
         g = yapay_isinim(random.Random(f'hava-{tohum}'))
         ayar.update(isinim_kaynagi='yapay', hava_yili=None)
-    ayar.update(gun_turleri=gun_turleri, tarihler=[t.isoformat() for t in tarihler])
+    ayar.update(gun_turleri=gun_turleri, tarihler=[t.isoformat() for t in tarihler],
+                bayramlar=[t.isoformat() for t in tarihler if t in BAYRAMLAR])
     m = og_carpani(g, random.Random(f'og-{tohum}'))
 
-    trafolar, sayi = sehir_kur(rng, n_trafo, ayar, tepe_orani)
-    ayar['tip_sayilari'] = sayi
+    kiyi = kiyi_segmentleri()
+    if kiyi is None:
+        print(f'UYARI: {KIYI_JSON.name} yok; yalnız "kuzeye en çok {KUZEY_SINIRI_M} m" kuralı '
+              '(bazı trafolar denize düşebilir; indirme komutu data/raw/osm-kasaba/KAYNAK.txt).')
+    trafolar, sayi, tavan = sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi)
+    ayar.update(tip_sayilari=sayi, kiyi_kontrolu=kiyi is not None, kva_tavan_sayisi=tavan)
 
     klasor = Path(cikti) / f'sehir-{tohum:03d}'
     klasor.mkdir(parents=True, exist_ok=True)
@@ -444,7 +537,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         trafo_satir.append([tohum, tr['no'], enlem, boylam, tr['x'], tr['y'], tr['bolge'], tr['montaj'],
                             tr['kva'], len(boylar), max(boylar), sum(boylar), tr['kablo'],
                             *[abone[c] for c in ABONE_SUTUNLARI], len(panelli),
-                            round(sum(h['pv'] for h in panelli), 2)])
+                            round(sum(h['pv'] for h in panelli), 2), round(fatura_mwh(tr, ayar), 2)])
 
         faz = [sum(1 for h in tr['evler'] if h['ph'] == p) for p in range(4)]
         cevap_satir.append([tohum, tr['no'], tr['tip'], tr['v0'], *faz,
@@ -453,7 +546,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                             round(cevap['tepe_kw'], 2), round(cevap['v_max_bugun_v'], 1),
                             round(cevap['v_min_bugun_v'], 1), cevap['kac_ev_aday'], cevap['kac_ev_gercek'],
                             cevap['kac_ev_gercek_min'], cevap['kac_ev_gercek_max'],
-                            cevap['kac_ev_tavan'], cevap['kac_ev_sinir']])
+                            cevap['kac_ev_tavan'], cevap['kac_ev_sinir'], round(tr['mahalle'], 3), tr['kayma_dk']])
 
         for i in range(len(g)):
             d, s = divmod(i, ADIM)
@@ -464,7 +557,8 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
 
     csv_yaz(klasor / 'trafolar.csv',
             ['sehir', 'trafo_no', 'enlem', 'boylam', 'x_m', 'y_m', 'bolge', 'montaj', 'kva', 'hat_sayisi',
-             'hat_boyu_max_m', 'hat_boyu_toplam_m', 'kablo', *ABONE_SUTUNLARI, 'panel_sayisi', 'panel_kw'],
+             'hat_boyu_max_m', 'hat_boyu_toplam_m', 'kablo', *ABONE_SUTUNLARI, 'panel_sayisi', 'panel_kw',
+             'yillik_tuketim_mwh'],
             trafo_satir)
     csv_yaz(klasor / 'yuk_5dk.csv',
             ['sehir', 'trafo_no', 'gun', 'gun_turu', 'adim', 'saat', 'tuketim_kw', 'uretim_kw', 'net_kw',
@@ -473,7 +567,8 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
             ['sehir', 'trafo_no', 'tip', 'v0_v', 'faz_a_ev', 'faz_b_ev', 'faz_c_ev', 'uc_faz_ev',
              'ogle_min_kw', 'ogle_min_kw_isgunu', 'ogle_min_kw_tatil', 'ogle_min_net_kw', 'tepe_kw',
              'v_max_bugun_v', 'v_min_bugun_v', 'kac_ev_aday', 'kac_ev_gercek', 'kac_ev_gercek_min',
-             'kac_ev_gercek_max', 'kac_ev_tavan', 'kac_ev_sinir'], cevap_satir)
+             'kac_ev_gercek_max', 'kac_ev_tavan', 'kac_ev_sinir', 'mahalle_carpani', 'saat_kaymasi_dk'],
+            cevap_satir)
     ayar['sure_sn'] = round(time.time() - t0, 1)
     with open(klasor / 'ayar.json', 'w', encoding='utf-8', newline='') as fh:   # LF (karar masası 13:00)
         json.dump(ayar, fh, ensure_ascii=False, indent=1)
@@ -488,7 +583,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='Deneme şehri üreticisi (Faz 1).')
+    ap = argparse.ArgumentParser(description='Deneme şehri üreticisi (Faz 1, sürüm 1.2).')
     ap.add_argument('ilk', type=int, help='tohum (şehir no)')
     ap.add_argument('son', type=int, nargs='?', help='verilirse ilk…son arası her tohum')
     ap.add_argument('--trafo', type=int, default=40, help='trafo sayısı (en az 21: 7 tip × 3)')
