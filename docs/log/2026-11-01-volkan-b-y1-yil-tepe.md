@@ -34,6 +34,7 @@
 ## Ne kaldı
 - β ve klima yaygınlığı varsayım; Can'ın eşzamanlılık ve sıcaklık eğimi sonucu gelince çapalanır (üretici 1.5 adayı).
 - Tasarım sıcaklığı (10 yılda bir sıcak akşam) üreticide yok; pencere yalnız şehrin hava yılının en sıcak haftası.
+- Düzeltme (karar masası 23:35): yaz ya da kış penceresi üretilemezse (EAC ya da hava yılının verisi yok) yıl tepesi sütunları boş, `ayar.json` `yil_tepe_kaynagi` = null, üretici UYARI yazar; önce sessizce Nisan tepesine düşüyordu. Veri varken çıktı aynı (sehir-003 bayt bayt).
 - B-Y2 (tepe modeli) ve 1.600 / 2.500 kVA: karar masası 23:18'le yük haritasının kodu Can'a geçti; bu PR (B-Y1) o karardan önce yazılmıştı, Can'a devredildi (onay ve üstüne devam).
 
 ## Deney defteri

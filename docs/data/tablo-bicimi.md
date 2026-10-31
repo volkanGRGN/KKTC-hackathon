@@ -114,7 +114,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | `tepe_saati` | str | SS:DD | `19:55` | **1.4.** `tepe_yil_kw`'nin saati (adımın başı) |
 | `tepe_ayi` | int | ay | `8` | **1.4.** `tepe_yil_kw`'nin ayı (1–12) |
 | `v_min_tepe_v` | float | V | `201.3` | **1.4.** Üç pencerede en düşük ev gerilimi (akşam düşümü; 207 V kontrolü) |
-| `tepe_yaz_kw`, `tepe_kis_kw` | float | kW | `88.23` | **1.4.** Yaz ve kış penceresinin net tepesi; pencere üretilmediyse boş |
+| `tepe_yaz_kw`, `tepe_kis_kw` | float | kW | `88.23` | **1.4.** Yaz ve kış penceresinin net tepesi. Pencerelerden biri üretilemediyse (EAC ya da hava yılının verisi yok) bütün yıl tepesi sütunları boş, `ayar.json` `yil_tepe_kaynagi` = null, üretici UYARI yazar; o şehir yük haritası sınavına girmez |
 | `kva_tavan` | int | 0/1 | `0` | **1.4.** 1 = gereken güç listedeki en büyük trafoyu (1000 kVA) aştı, listeye kesildi; tüketim doluluğu bu trafolarda üreticinin sınırı, ayrı raporlanır |
 | `klima_carpani` | float | oran | `1.12` | **1.4.** Trafonun sıcaklık duyarlılığı çarpanı (klima / ısıtma yaygınlığı), U(0,5; 1,5), gizli (mahalle çarpanı gibi) |
 | `tepe_yil_brut_kw` | float | kW | `91.40` | **1.4.** Aynı pencerelerde brüt tüketim tepesi (panelsiz); `tepe_yil_kw` ile farkı panelin tepeye etkisi (Can, volkan.md 23:12 sonrası madde 3) |

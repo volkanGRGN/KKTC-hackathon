@@ -764,8 +764,17 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                                   m=og_carpani(gm, random.Random(f'og14-{mev}-{tohum}'), og_ogle))
             ayar[f'{mev}_penceresi'] = {'tarihler': [d.isoformat() for d in gunler], 'gun_turleri': gt,
                                         'gunluk_ortalama_c': round(uc, 1)}
+    # Pencere eksikse yıl tepesi yazılmaz (sessizce Nisan tepesine düşmez; karar masası 23:35).
+    eksik = [mev for mev in MEVSIM_AYLARI if mev not in mevsimler]
+    if eksik:
+        sebep = ('EAC eğrileri yok' if profil_kaynagi != 'eac' else
+                 f'{yil} hava verisi yok (data/raw/open-meteo-lefkosa)' if ayar['isinim_kaynagi'] != 'open-meteo-lefkosa'
+                 else f'{yil} için {", ".join(eksik)} haftası bulunamadı')
+        print(f'UYARI: sehir-{tohum:03d}: yaz / kış penceresi üretilemedi ({sebep}); cevap anahtarında yıl tepesi '
+              'sütunları BOŞ, bu şehir yük haritası sınavına girmez.')
     ayar.update(mevsim_pencereleri=sorted(mevsimler), sicaklik_beta=SICAKLIK_BETA,
-                klima_yayginlik=list(KLIMA_YAYGINLIK), sicaklik_taban=SICAKLIK_TABAN)
+                klima_yayginlik=list(KLIMA_YAYGINLIK), sicaklik_taban=SICAKLIK_TABAN,
+                yil_tepe_kaynagi=None if eksik else 'nisan+yaz+kis')
     mevsim_satir = {mev: [] for mev in mevsimler}
 
     klasor = Path(cikti) / f'sehir-{tohum:03d}'
@@ -824,11 +833,11 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                             round(cevap['v_min_bugun_v'], 1), cevap['kac_ev_aday'], cevap['kac_ev_gercek'],
                             cevap['kac_ev_gercek_min'], cevap['kac_ev_gercek_max'],
                             cevap['kac_ev_tavan'], cevap['kac_ev_sinir'], round(tr['mahalle'], 3), tr['kayma_dk'],
-                            round(cevap['tepe_yil_kw'], 2), round(cevap['tepe_yil_kva'], 2), cevap['tepe_saati'],
-                            cevap['tepe_ayi'], round(cevap['v_min_tepe_v'], 1),
-                            '' if cevap['tepe_yaz_kw'] is None else round(cevap['tepe_yaz_kw'], 2),
-                            '' if cevap['tepe_kis_kw'] is None else round(cevap['tepe_kis_kw'], 2),
-                            tr['kva_tavan'], round(cevap['klima'], 3), round(cevap['brut'], 2)])
+                            *(['', '', '', '', '', '', ''] if eksik else
+                              [round(cevap['tepe_yil_kw'], 2), round(cevap['tepe_yil_kva'], 2), cevap['tepe_saati'],
+                               cevap['tepe_ayi'], round(cevap['v_min_tepe_v'], 1), round(cevap['tepe_yaz_kw'], 2),
+                               round(cevap['tepe_kis_kw'], 2)]),
+                            tr['kva_tavan'], round(cevap['klima'], 3), '' if eksik else round(cevap['brut'], 2)])
 
         for i in range(len(g)):
             d, s = divmod(i, ADIM)
