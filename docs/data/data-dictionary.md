@@ -22,8 +22,10 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Tarife sınıfı başına abone sayısı ve yıllık MWh (2023: toplam 219.931 tüketici, konut 175.577, ticari I 20.950, ticari II 494, sanayi I 1.227, sanayi II 352, su motorları 3.250).
 - Farazi şehirde trafo başına abone karışımı bu oranlardan kurulur. Trafo eşleşmesi YOK.
 
-**Kıb-Tek trafo şartnameleri** — [Kaynaklı, hafızadan]
+**Kıb-Tek trafo ve kablo şartnameleri** — **kaynak bağlantısı yok, doğrulanmadı** (BULAMADIM — varsayım)
 - Direk 25/50/100/250/400 kVA, 433 V (faz 250 V boşta), kademe yalnız enerjisizken; yer tipi 50–2.500 kVA. Adet ve konum yayımlanmıyor.
+- 30 Ekim araştırmasında şartname tarihleri not edilmiş (direk tipi 17.04.2018, yer tipi 24.09.2021), bağlantı kaydedilmemiş; 31 Ekim'de Can ve Volkan'ın aramalarında bulunamadı (arama izi: [Can'ın Faz 1 veri günlüğü](../log/2026-10-31-can-faz1-veri.md)).
+- Benzetimdeki kVA listesi, trafo çıkışı 250 V ve ABC 70/95 dirençleri (r 0,50 / 0,36 Ω/km) **varsayım** etiketiyle kullanılır.
 
 **Güney referans sayıları** — EAC on yıllık plan 2025–2034
 - 17.886 dağıtım trafosu (direk 11.048 ort. ~95 kVA; yer 6.838 ort. ~583 kVA), alçak gerilim 18.203 km, 615.479 tüketici. Kuzey'in trafo sayısı için vekil (~6.400, [Hesap]).
@@ -39,7 +41,16 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Almanya'nın 6 tip AG şebekesi (rural1–3, semiurb4–5, urban6): trafo kVA, hat boyları, kablo tipi, yük düğümleri. Yalnız ölçü kaynağı (hat boyu, kablo, trafo başına ev sayısı); pandapower'a geçilmiyor.
 - Kaynak: SimBench 1.6.3, veri ODbL 1.0. İndirildi 31 Ekim 2026; paket kurulmadan wheel içinden CSV.
 - Sağlama [Hesap]: trafodan en uzak eve 0,23–0,57 km, ortalama eve 0,09–0,20 km; trafo başına 13–118 yük; 160–630 kVA. Tablo KAYNAK.txt'de.
-- Yanlılık: Alman şebekesi, **yer altı kablosu** (NAYY 150/240 mm², r 0,21 / 0,13 Ω/km). [Yorum] Kıb-Tek mahalle hatları büyük ölçüde havai ABC 70/95; benzetimdeki varsayım r 0,50 / 0,36 Ω/km → aynı boyda hatta gerilim yükselmesi ~2–3 kat. Hat boyu ve ev sayısı SimBench'ten, kablo direnci Kıb-Tek şartnamesinden alınmalı (şartname adımı açık).
+- Yanlılık: Alman şebekesi, **yer altı kablosu** (NAYY 150/240 mm², r 0,21 / 0,13 Ω/km). [Yorum] Kıb-Tek mahalle hatları büyük ölçüde havai ABC 70/95; benzetimdeki varsayım r 0,50 / 0,36 Ω/km → aynı boyda hatta gerilim yükselmesi ~2–3 kat. Hat boyu ve ev sayısı SimBench'ten alınır; kablo direnci SimBench'ten alınmaz, benzetimdeki ABC varsayımı kalır (Kıb-Tek şartnamesi BULAMADIM, yukarıda).
+
+**OSM kasaba haritası** — `data/raw/osm-kasaba/`
+- Girne merkez (~1 km × 1,1 km) bina ve yol geometrisi (Overpass JSON). İndirildi 31 Ekim 2026 (Civan).
+- Kaynak: OpenStreetMap, ODbL 1.0; "© OpenStreetMap katkıcıları" atfı.
+- Ölçülü değil: gönüllü çizim. Sağlama [Hesap]: 974 bina (278'inde kat bilgisi), 330 yol.
+- Yanlılık: binaların %89'unun türü belirtilmemiş (konut/dükkân ayrımı çıkmaz); OSM'de trafo yok, trafo konumları farazi şehirden. Lapta elendi (aynı alanda 17 bina).
+- Kullanım: Faz 4 harita altlığı. Ayrıntı ve sorgu KAYNAK.txt'de.
+
+**Yurt yatak sayısı** — BULAMADIM — varsayım: yurt tipi konut eğrisinden türetilir ([ADR-0004](../decisions/adr-0004-veri-eac-profil-siniflari.md); Volkan onayı 31 Ekim).
 
 ## Adaylar (henüz indirilmedi)
 - **İspanya EDP gerçek şebeke** (Mendeley 685vgp64sm, CC BY 4.0): 30 trafo, 8.087 abone, 20 gün akıllı sayaç, GIS. Çözünürlük ve abone tipi bilgisi belirsiz → 2 saatlik zaman kutusu; gerçek doğrulama adayı.
@@ -47,7 +58,6 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 
 ## Üreteceğimiz
 
-**Deneme şehirleri (Faz 1 çıktısı)** — `data/synthetic/<şehir-no>/` (henüz yok; üretici yazılınca)
-- Trafo listesi: kVA, tip, abone karışımı, panel sayısı, hat boyu, faz dağılımı.
-- Her trafo için 5 dakikalık yük ve ev ev gerilim; "cevap anahtarı" olarak öğlen en düşük yük ve gerçek kaç ev sığar.
-- Her şehrin rastgeleleştirme ayarları kaydedilir (tohum dahil). Etiket: **gösterim, kanıt değil**.
+**Deneme şehirleri (Faz 1 çıktısı)** — `data/synthetic/sehir-<NNN>/`, `src/sehir_uret.py` üretir, depoya girmez.
+- Dosyalar, sütunlar ve birimler tek yerde: [tablo biçimi sözleşmesi](tablo-bicimi.md) (`trafolar.csv`, `yuk_5dk.csv`, `cevap_anahtari.csv`, `ayar.json`). Kıb-Tek'in bilmediği her şey (tip, faz dağılımı, trafo çıkış gerilimi, gerçek kaç ev) cevap anahtarında.
+- Etiket: **gösterim, kanıt değil**.

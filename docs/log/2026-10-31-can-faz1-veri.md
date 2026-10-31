@@ -28,3 +28,16 @@ Her aday için beş soru: (1) Kıbrıs/Akdeniz mi · (2) ölçülmüş mü · (3
 - Sıradaki: `src/profiller.py`.
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
+
+---
+
+## 2026-10-31 13:50 — ek girdi: Volkan'ın cevabı ve arama izi
+
+**Volkan'ın kararı** ([kutu](../istek/can.md)): Kıb-Tek şartnamesi "kaynak bağlantısı yok, doğrulanmadı"; benzetimdeki kVA listesi, 250 V ve r 0,50 / 0,36 Ω/km "varsayım". Yurt yatak sayısı için varsayım onaylandı. İkisi de veri sözlüğüne işlendi.
+
+**Arama izi (Kıb-Tek trafo/kablo şartnamesi, 31 Ekim):**
+- Web araması: "Kıb-Tek şartname havai hat ABC kablo 3x70 alçak gerilim trafo kVA" → yalnız TEDAŞ birim fiyatı (3x70+95 ABC), Moldova ihalesi, Taşkömürü trafo şartnameleri; Kıb-Tek belgesi yok.
+- Web araması: "kibtek.com ihale teknik şartname direk tipi trafo 433 V" → kibtek.com sonucu yok.
+- IEC 60228 alüminyum iletken direnç tablosu: açık önizlemelerde 70/95 mm² alüminyum satırı okunamadı (Cembre sayfasından dönen değerler bakır sütununa benziyor, kullanılmadı).
+- Volkan'ın ipucu, ODTÜ KKK trafo ihale dosyası (ncc.metu.edu.tr/sites/default/files/ihale-dosyasi-trafo17.pdf): sunucu bağlantıyı reddediyor (https ve http), web.archive'da kopya yok.
+- En yakın: benzetimdeki ABC değerleri (r 0,50 / 0,36 Ω/km, işletme sıcaklığında) — varsayım olarak kalır.
