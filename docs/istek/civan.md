@@ -70,3 +70,12 @@ Durum: bekliyor
 Ne: `kac_ev.csv`'nin sütun adları ve yeri aynı kalıyor (karamsar / iyimser / renk), üç ek sütun geliyor: `p_bugun_asar` (bugün sınırı aşma olasılığı), `p_iki_ev_sigar`, `kac_ev_orta`. BUILD yazar; sözleşme 1.3 notu senin ya da Can'ın onayına gelir (PR). Yan panel olduğu gibi çalışır; zaman kalırsa "bugün aşma olasılığı %x" ve orta sayı yan panele. Yeşil artık konut trafolarında da çıkıyor (sınavda yeşil %25); animasyonda renk karışımı doğal olur.
 Senden beklenen: PR onayı gelince bak; başka iş yok.
 Durum: bilgi
+
+## KARAR 19:13 — yan panelde ve dashboard'da kaç ev sayısının dili: "en az" yok, "yaklaşık N ev (A–B)"
+Karar: Can'ın ölçümü: olasılıklı hesapta karamsar sayı (çekilişlerin P10'u) trafoların %15'inde gerçeğin üstünde; yani taban değil, %80 bandın alt ucu. Bu yüzden:
+- Yan panel: manşet `kac_ev_orta` ("yaklaşık 4 ev"), yanında "(2–7)" = `kac_ev_karamsar`–`kac_ev_iyimser`; küçük yazı "%80 ihtimalle". `kac_ev_orta` sütunu gelene kadar yalnız "2–7 ev". **"En az" kelimesi hiçbir ekranda yok.**
+- Renk cümlesi: yeşil → "ilk 2 başvuru güvenle sığar (≥ %98)"; sarı → "önce ölç"; kırmızı → "ölç ya da güçlendir". Vaat renkte, sayıda değil.
+- Dashboard 2. kutu (18:46 kararı düzeltildi): "en az … en çok" değil, "büyük olasılıkla toplam A–B ev" (Σ karamsar – Σ iyimser), ortası varsa "yaklaşık N".
+Neden: ADR-0010'un vaadi yeşil kuralında (%98), sayıda değil; P10 "en az" diye yazılırsa trafoların %15'inde yanlış yönde söz vermiş oluruz.
+Senden beklenen: metin değişikliği, ≤ 15 dk; öncelik sırası aynı.
+Durum: bekliyor

@@ -203,3 +203,13 @@ Ne: (1) PR #15 (https://github.com/volkanGRGN/KKTC-hackathon/pull/15) `kac_ev.cs
 Dosya: PR #15; src/sinav.py (senin)
 Neden: karar masası 18:46 KARAR'ı; ROADMAP Faz 3 kutuları senin resmi koşunla dolacak.
 Durum: (2) yapıldı — `faz3` kaç ev ortası `kac_ev_orta` varsa ondan, yoksa (karamsar + iyimser) ÷ 2 (eski veride sonuç aynı: 9 / 3,5 / 5,75); (1) sözleşme 1.3 onayı bekliyor
+
+## KARAR 19:13 — volkan.md'deki "PR #15 deneme koşusu: karamsar sayı 36 trafoda gerçeğin üstünde" isteğine
+Karar: **Üçüncü yol: aralık kalır, "en az" kelimesi gider.**
+1. Olasılıklı hesapta `kac_ev_karamsar` çekilişlerin P10'u: taban değil, Faz 2'deki gibi **%80 bandın alt ucu**. P10 altı %15 (beklenen ~%10; iyimser yön, sebebi bilinen: üreticideki +%0,8 OG yükselmesi ve panellerin uca kayması → üretici 1.3). Bu bir **bilgi satırı**, geçme maddesi değil; Faz 2 bant kalibrasyonuyla aynı ölçü: "kaç ev bandı: P10 altı %x, P90 üstü %y" (tavansızlarda).
+2. **Dil:** manşet `kac_ev_orta` ("yaklaşık 4 ev"), yanında bant "(2–7)"; açılımı "%80 ihtimalle 2–7 ev". "En az" hiçbir yerde yazılmaz. `kac_ev_orta` sütunu gelene kadar yalnız "2–7 ev" (bandın ortasını hesaplama).
+3. **Vaat renkte:** yeşil trafoda "ilk 2 başvuru güvenle sığar (≥ %98)" (ADR-0010 kuralı; sütun gerekmez, `p_iki_ev_sigar` varsa yüzdesi). Sarıda "önce ölç", kırmızıda "ölç ya da güçlendir"; onlarda sayı yalnız bant. Senin ölçümün de bunu doğruluyor: P10 altı kalan 12 yeşilin hiçbiri dolu değil.
+4. Reddedilen: yalnız orta + renk → bant atılır, ADR-0001 ve Muhittin'e (tek sayı değil bant) ters; orta da yarı yarıya gerçeğin üstünde, tek sayı vaat gibi okunur. Tek denklem karamsarını taban olarak geri koymak → konutta yine 0 ev, 18:46 kararının tersi; istersen günlükte "en kötü durum" kıyas satırı olarak kalır.
+Neden: Kaç ev ürünün ana çıktısı ama vaadi renk taşıyor (ADR-0010: yeşil = %98); sayı bant olarak dürüst, taban olarak değil. Hesap değişmiyor, eşik değişmiyor; yalnız sütunun anlamı ve ekrandaki kelime.
+Senden beklenen: resmi `faz3`'te bant kalibrasyonu bilgi satırı; 36/240 bulgusu tipe göre günlüğe (yazdığın gibi); `docs/sunum`'da "en az … ev" varsa sil, ekran 5 cümlesi "yaklaşık N ev (A–B); yeşilse ilk 2 başvuru güvenle". Civan'a yan panel dilini yazdım; BUILD sözleşme açıklamasını düzeltiyor.
+Durum: bekliyor
