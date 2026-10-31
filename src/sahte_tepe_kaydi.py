@@ -5,7 +5,7 @@ veri gelince yalnız dosya değişir (Volkan 31 Ekim 23:00: "mock veriyle, gerç
 
 Okur (yalnız üretici çıktısı; gerçek kaydın yerine): cevap_anahtari.csv (`tepe_yaz_kw`), yuk_5dk_yaz.csv (yaz penceresi),
 trafolar.csv (konum, montaj).
-Yazar (sözleşme §8 adayı): kibtek_tepe.csv (trafo tepe kayıtları), kibtek_fider.csv (OG fider tepesi).
+Yazar (sözleşme §9 adayı): kibtek_tepe.csv (trafo tepe kayıtları), kibtek_fider.csv (OG fider tepesi).
 
 Kayıt türleri ve kusurları (hepsi [Yorum]; Kıb-Tek'in elindeki kayıtların türü ve doğruluğu BULAMADIM, uzmana soru):
   md_kaydi  Trafo maksimum talep göstergesi (sürüklenen ibreli ampermetre ya da sayaç yazmacı): sezonun en yükseği, zamanı

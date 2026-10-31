@@ -7,7 +7,7 @@ Parti kimliği: P9-kibtek-tepe-<gelis tarihi>
 Kaynak ve çekim tarihi: Kıb-Tek (docs/istek/kibtek-veri-istegi-taslak.md madde 7–10); data/raw/kibtek-tepe/KAYNAK.txt, SHA-256 veri gelince
 Kapsam: MD göstergesi olan trafolar (beklenen: yer tipi ağırlıklı; temsilî değil), yaz yük etüdü örneklemi,
    OG fider / merkez SCADA tepe geçmişi; gözlem penceresi en az bir yaz (Haziran–Eylül); eksik: direk tipi trafoların çoğu
-Veri sözleşmesi: kibtek_tepe.csv, kibtek_fider.csv (docs/data/tablo-bicimi.md §8); kW ya da A (en yüklü faz);
+Veri sözleşmesi: kibtek_tepe.csv, kibtek_fider.csv (docs/data/tablo-bicimi.md §9); kW ya da A (en yüklü faz);
    saat dilimi Europe/Nicosia; boş zaman = MD (sezon tepesi). Bilinen yanlılık: MD büyük trafoda; eski / sıfırlanmamış
    MD az gösterir; etüt tek okuma (tepe değil); fider tepesi kayıplı ve trafo listesi Kıb-Tek'in eşleşmesine bağlı
 Kullanım bölünmesi (DONDURULACAK <tarih saat>, değer görülmeden): kayıtlı trafolar trafo no karmasıyla ikiye:
@@ -20,11 +20,11 @@ Kapılar: (1) doğrulama trafolarında gerçeğin P90 tepenin üstünde payı �
 Sürüm: tepe ön v0 (PR #24) → v1 (yaz kayıtlarıyla yeniden-fit); ebeveyn v0
 ```
 
-Girdi: Kıb-Tek kayıtları §8 biçiminde, şehir (bölge) klasörüne; Open-Meteo Lefkoşa saatlik dosyası kayıt yılı için.
+Girdi: Kıb-Tek kayıtları §9 biçiminde, şehir (bölge) klasörüne; Open-Meteo Lefkoşa saatlik dosyası kayıt yılı için.
 Çıktı: `tepe.csv` (`tepe_kaynagi` = `kayit_md` / `kayit_etut`), `tepe_ozet.json` `kibtek` bölümü (kayıt R'leri, yeniden-fit önerisi, fider tablosu).
 
 Adımlar:
-1. Kaydı §8'e çevir (A → kW notu), KAYNAK.txt + SHA-256, kullanım bölünmesini veri açılmadan yaz ve dondur.
+1. Kaydı §9'a çevir (A → kW notu), KAYNAK.txt + SHA-256, kullanım bölünmesini veri açılmadan yaz ve dondur.
 2. `python3 src/tepe.py <kök>`: ayar payıyla koş; `tepe_ozet.json` `yeniden_fit_onerisi` (MD R ortancası ↔ Nisan R; bant P10 / P90) ve fider oranları.
 3. Yeniden-fit kararı KARAR'da (sürüm v1): popülasyon R'si montaj tipi içinde mi, bant kayıt artıklarından mı. Sonra doğrulama payında kapılar bir kez; hold-out defterine satır.
 4. Fider oranı |ln| > 0,15 olan fiderde eşleşme (abone → trafo → fider) ve kayıp önce kontrol edilir; model düzeltilmez.
