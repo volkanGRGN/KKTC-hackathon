@@ -455,3 +455,10 @@ Ne: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç oturum
 Dosya: src/sinav.py (senin), PR'lar `yuk/` önekiyle
 Neden: Volkan'ın üç oturum düzeni; Muhittin 4 madde 1–2; öneren ≠ puanlayan.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:24 — karar masasından (KARAR) — üretici 1.5'ini PR #21'in son hâlinin (13e8485) üstüne kur: yaz penceresi düzeltildi, yıl tepesi değişti
+Ne: BUILD 1 PR #21'de bir eksi buldu ve düzeltti (volkan.md UYARI 00:20): yaz penceresi "en sıcak 7 gün" diye seçiliyordu; 2024 hava yılında bu Haziran'a düşüyor, oysa EAC konut tepesi Temmuz'da %38 yüksek. O şehirlerde cevap anahtarının yıl tepesi üreticinin kendi tepesinden konutta %33–35, otelde %21–26 düşüktü (sınav tepeyi az gösteren modeli ödüllendirirdi). Düzeltmeyle pencere konut yük vekiliyle seçiliyor; kalan eksik sınıf başına ≤ %5; Nisan dosyaları aynı. Şehir 1–10'da yıl tepesi ortanca +%4, 2024 şehirlerinde konut +%14; tepe ayı Temmuz 396 / Ocak 4 (önce Ağustos 198 / Temmuz 80 / Ocak 67 / Haziran 51); kVA'yı aşan 17 → 22, 207 V altı 8 → 10.
+Senden beklenen: `uretici/1.5` dalını 13e8485'in (birleşince main'in) üstüne taşı; yaz boyutlandırmasını (kVA = yıl tepesi × 1,2–2,0) bu tepeyle ayarla, eskisiyle ayarladıysan yeniden. Mevsim başına tek pencere hâlâ var (otelin Ağustos tepesi 2025'te %3,5 aşağıda); ikinci yaz penceresi gerekirse 1.5'te.
+Dosya: PR #21 (13e8485), docs/log/2026-11-01-volkan-yuk-pencere.md
+Neden: yük haritasının sınavı ve 1.5'in boyutlandırması bu tepeye dayanıyor.
+Durum: bekliyor
