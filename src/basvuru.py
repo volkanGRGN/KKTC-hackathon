@@ -6,8 +6,8 @@ Haritanın olasılıklı hesabıyla aynı fizik ve aynı kapı (`kac_ev_olasilik
   - **durumlu:** o ana kadar onaylanmış ama kurulmamış başvurular (taahhüt) de ağa konur (ADR-0015 m. 1, ADR-0010 m. 2);
   - **kayda koşullu:** Kıb-Tek kaydı varsa (`sahte_kayit.kayit_oku`) bilinmeyenin çekilişi kayda koşullanır, kaydın
     kendi hata payıyla (kayıt öncülü daraltır, sıfırlamaz); kayıt yoksa bugünkü aralık:
-      bara      inverter kaydı varsa sakin an gerilimi ± inverter payı (`inv_bara_hata` verilirse ölçülmüş geri çözüm
-                hatası dağılımından: `inverter_geri_cozum.py`); yoksa kademe kaydı varsa kayıtlı kademenin
+      bara      inverter kaydı varsa: ham özet (`inverter_ham`) ise bara ölçümü − 1–10'da ölçülen kayma (`INV_BARA_HATA_Q`);
+                türetilmiş (`inverter`) ise sakin an gerilimi ± inverter payı (ya da `inv_bara_hata` dağılımı); yoksa kademe kaydı varsa kayıtlı kademenin
                 ±3,125 V penceresi (OG payı [Yorum]) olasılık p_dogru ile, değilse 244–252 V; kayıt yoksa 244–252 V
       hatlar    hat boyu kaydı × e^U(±hat payı) (bugün: en uzun hat × e^U(±0,47), diğerleri rastgele)
       yer, faz  kaydı olan panelli ev, taahhüt ve başvuran kayıtlı hattına ve yerine (direk sırası ÷ hattaki ev);
@@ -35,6 +35,15 @@ sys.argv = _argv
 CEKILIS = ko.CEKILIS
 KADEME_PENCERE_V = sk.KADEME_ADIM_V / 2           # ±3,125 V: kademe bilinince kalan OG payı [Yorum]
 VARSAYILAN_HATA = 'iki_kat'                       # kayıt kalitesi ölçülene kadar en kötü kayıt hatası (23:47)
+# İnverter ham özetinden bara ve hat boyu (Muhittin 4 madde 5B; karar masası 00:27: girdi ham kayıt, çözüm motorda).
+# Kalibrasyon yalnız geliştirme 1–10'dan (`inverter_geri_cozum.py --aralik 1-10 --kalibrasyon`) [Hesap]; nicelikler
+# %0, %5, …, %100. Bara: sabah ilk değer − gerçek boşta gerilim (V). Boy: ln(INV_BOY_C × ham boy ÷ gerçek hat boyu).
+INV_BARA_HATA_Q = [-9.75, -3.27, -2.15, -1.78, -1.54, -1.36, -1.23, -1.08, -0.98, -0.88, -0.79, -0.73, -0.67, -0.6,
+                   -0.54, -0.46, -0.41, -0.34, -0.28, -0.16, 0.96]     # 1.148 ev; hep aşağı, ortanca −0,79 V
+# Boy çevirici 1–10'da tutmadı: gerçek ÷ ham ortanca 0,292, düzeltilmiş hata P10–P90 ×0,30 … ×2,63 (±%20 içinde %19),
+# hat boyu kaydının ±%15'inden kötü. Kapalı (None): inverterli hatta da hat boyu kaydı ve model-sapma kalır.
+INV_BOY_C = None
+INV_BOY_HATA_Q = None
 
 
 def _faz_cek(kayitli, hp, rng, uc_p, fw):
@@ -45,6 +54,39 @@ def _faz_cek(kayitli, hp, rng, uc_p, fw):
             return p
         return rng.choice([q for q in (0, 1, 2) if q != p])
     return 3 if rng.random() < uc_p else rng.choices([0, 1, 2], weights=fw)[0]
+
+
+def _nicelden(q, rng):
+    """Nicelik listesinden ters dağılımla bir çekiliş (doğrusal ara değer)."""
+    u = rng.random() * (len(q) - 1)
+    i = int(u)
+    return q[i] + (q[min(i + 1, len(q) - 1)] - q[i]) * (u - i)
+
+
+def inverter_boy_ham(hid, v, kayit, tr):
+    """İnverterin eğiminden (V / kW kendi paneli) o hattın ham eşdeğer boyu (m), kayıtla. Bütün paneller aynı
+    ışınımla değiştiği için dV / dışınım = eğim × kendi kWp × verim; bundan trafonun payı (rt, trafodaki bütün
+    paneller) düşülür, kalan hattın direncine bölünür: hattaki kayıtlı paneller kayıtlı yerlerinde (min(yer_ev,
+    yer_panel) × kW), kaydı olmayanlar hatlara eşit ve düz; dengeli üç faz sadeleştirmesi (tek fazın farkı ve nötr
+    INV_BOY_C ile 1–10'da düzeltilir). Çözülemezse None (hat boyu kaydı kalır)."""
+    p = kayit['panelli'].get(hid)
+    if not p or v.get('egim_v_kw') is None:
+        return None
+    der = ko.tb.PV_DERATE
+    s_gozlem = v['egim_v_kw'] * p['kw'] * der                         # V / ışınım birimi
+    kva = tr['kva']
+    rt = 0.04 * (240.0 ** 2 / (kva * 1000 / 3)) / math.sqrt(5)
+    s_trafo = rt * tr['panel_kw'] * der * 1000 / 3 / 240.0
+    y = p['yer']
+    n_hat = max(1, len(kayit['hat_boy_m']))
+    toplam = sum(min(y, q['yer']) * q['kw'] for q in kayit['panelli'].values() if q['hat'] == v['hat'])
+    kalan = max(0.0, tr['panel_kw'] - sum(q['kw'] for q in kayit['panelli'].values()))
+    toplam += kalan / n_hat * (y - y * y / 2)
+    r_m = ko.tb.CABLES[tr['kablo']][0].real / 1000                   # ohm / m
+    s_metre = r_m * toplam * der * 1000 / 3 / 240.0
+    if s_metre <= 0 or s_gozlem <= s_trafo:
+        return None
+    return (s_gozlem - s_trafo) / s_metre
 
 
 def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
@@ -60,12 +102,19 @@ def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
     rt = 0.04 * zb / math.sqrt(5)
     boylar = [b * math.exp(rng.uniform(math.log(1 - hp['hat']), math.log(1 + hp['hat']))) for b in kayit['hat_boy_m']]
     n_hat = len(boylar)
-    inv_hat = {}
-    for v in kayit['inverter'].values():                 # aynı hatta birden çok inverter: ilki yeter
-        inv_hat.setdefault(v['hat'], v)
-    for j, v in inv_hat.items():
-        e = hp['inv_empedans']
-        boylar[j] = v['esdeger_boy_m'] * math.exp(rng.uniform(math.log(1 - e), math.log(1 + e)))
+    inv_hat, cozuldu = {}, set()
+    for hid, v in kayit['inverter'].items():             # aynı hatta birden çok inverter: ilki yeter
+        inv_hat.setdefault(v['hat'], (hid, v))
+    for j, (hid, v) in inv_hat.items():
+        if 'egim_v_kw' in v:                             # ham özet: boy motorda çözülür (1–10 kalibrasyonu)
+            ham = inverter_boy_ham(hid, v, kayit, tr) if INV_BOY_C else None
+            if ham and 0 <= j < n_hat:
+                boylar[j] = INV_BOY_C * ham * math.exp(-_nicelden(INV_BOY_HATA_Q, rng))
+                cozuldu.add(j)
+        else:                                            # türetilmiş (eski sahte kayıt): gerçek ± gürültü
+            e = hp['inv_empedans']
+            boylar[j] = v['esdeger_boy_m'] * math.exp(rng.uniform(math.log(1 - e), math.log(1 + e)))
+            cozuldu.add(j)
     # konumu kayıtlı evler: panelli (kaydı olan), taahhüt ve başvuran (formu olan)
     yerli = [('panelli', hid, p, p['kw']) for hid, p in kayit['panelli'].items()]
     yerli += [(i, None, k, kw) for i, (rol, k, kw) in enumerate(konumlu) if k is not None]
@@ -99,6 +148,9 @@ def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
             v0 = rng.uniform(lo, hi) if lo < hi else rng.uniform(*ko.V0)
         else:
             v0 = rng.uniform(*ko.V0)
+    elif inv_hat and all('bara_olcum_v' in v for v in kayit['inverter'].values()):   # ham özet
+        b = statistics_mean([v['bara_olcum_v'] for v in kayit['inverter'].values()])
+        v0 = b - _nicelden(INV_BARA_HATA_Q, rng)
     elif inv_hat:
         b = statistics_mean([v['bara_v'] for v in kayit['inverter'].values()])
         if hp.get('inv_bara_hata'):                     # ölçülmüş geri çözüm hatası (tahmin − gerçek), 1–10'dan
@@ -114,7 +166,7 @@ def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
             continue
         seg = boy / 1000 / len(hat)
         f = dict(zs=zc * seg, zn=znc * seg, houses=[], boy=boy)
-        if j in inv_hat:
+        if j in cozuldu:
             f['sapmasiz'] = True
         for k, e in enumerate(hat):
             c = e['sinif']

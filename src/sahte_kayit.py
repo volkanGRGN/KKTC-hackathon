@@ -135,10 +135,12 @@ def _faz_kaydi(ph, hp, rng):
     return FAZ_AD[ph]
 
 
-def kayit_uret(tr, hp, rng, inv_bara=None):
+def kayit_uret(tr, hp, rng, inv_bara=None, inv_ham=None):
     """Bir trafonun kayıtları (düzeyin kusurlarıyla). Dönüş sözlüğü kayit_oku ile aynı biçim.
     inv_bara: {ev id: V} inverter barası dışarıdan (`inverter_geri_cozum.py`'nin benzetimde geri çözdüğü sabah ilk
-    değer); verilirse gerçek + gürültü yerine o yazılır (rastgele akış aynı kalır)."""
+    değer); verilirse gerçek + gürültü yerine o yazılır (rastgele akış aynı kalır).
+    inv_ham: {ev id: (bara_olcum_v, egim_v_kw)} inverterin ham özeti (`inverter_kaydi.geri_coz`, benzetimde); verilirse
+    inverter kaydı türetilmiş değil ham özet olur, bara ve hat boyu motorda çözülür (karar masası 00:27)."""
     kad = min(KADEME_V, key=lambda v: abs(v - tr['v0']))
     u = rng.random()
     if u < hp['kademe_eksik']:
@@ -164,9 +166,14 @@ def kayit_uret(tr, hp, rng, inv_bara=None):
             f = tr['feeders'][j]
             e = hp['inv_empedans']
             bara = tr['v0'] + (rng.uniform(-hp['inv_bara_v'], hp['inv_bara_v']) if hp['inv_bara_v'] else 0.0)
-            inverter[h['id']] = dict(
-                bara_v=inv_bara[h['id']] if inv_bara and h['id'] in inv_bara else bara,
-                hat=j, esdeger_boy_m=f['boy'] * (math.exp(rng.uniform(math.log(1 - e), math.log(1 + e))) if e else 1.0))
+            boy = f['boy'] * (math.exp(rng.uniform(math.log(1 - e), math.log(1 + e))) if e else 1.0)
+            if inv_ham is not None:
+                if h['id'] in inv_ham:
+                    b, eg = inv_ham[h['id']]
+                    inverter[h['id']] = dict(hat=hj, bara_olcum_v=b, egim_v_kw=eg)
+            else:
+                inverter[h['id']] = dict(bara_v=inv_bara[h['id']] if inv_bara and h['id'] in inv_bara else bara,
+                                         hat=j, esdeger_boy_m=boy)
     return dict(kademe_v=kademe, hat_boy_m=hat, panelli=panelli, inverter=inverter)
 
 
@@ -195,7 +202,12 @@ def kayit_yaz(yol, sehir, kayitlar):
         for hid, p in k['panelli'].items():
             satir.append([sehir, no, 'panelli', hid, p['hat'], f"{p['yer']:.4f}", p['faz'], f"{p['kw']:.2f}", ''])
         for hid, v in k['inverter'].items():
-            satir.append([sehir, no, 'inverter', hid, v['hat'], '', '', '', f"{v['bara_v']:.2f};{v['esdeger_boy_m']:.1f}"])
+            if 'egim_v_kw' in v:
+                eg = '' if v['egim_v_kw'] is None else f"{v['egim_v_kw']:.4f}"
+                satir.append([sehir, no, 'inverter_ham', hid, v['hat'], '', '', '', f"{v['bara_olcum_v']:.2f};{eg}"])
+            else:
+                satir.append([sehir, no, 'inverter', hid, v['hat'], '', '', '',
+                              f"{v['bara_v']:.2f};{v['esdeger_boy_m']:.1f}"])
     with open(yol, 'w', encoding='utf-8', newline='') as fh:
         w = csv.writer(fh, lineterminator='\n')
         w.writerow(SUTUNLAR)
@@ -220,6 +232,10 @@ def kayit_oku(yol):
             elif r['tur'] == 'inverter':
                 b, e = r['deger'].split(';')
                 k['inverter'][int(r['abone_no'])] = dict(hat=int(r['hat_no']), bara_v=float(b), esdeger_boy_m=float(e))
+            elif r['tur'] == 'inverter_ham':
+                b, e = r['deger'].split(';')
+                k['inverter'][int(r['abone_no'])] = dict(hat=int(r['hat_no']), bara_olcum_v=float(b),
+                                                         egim_v_kw=float(e) if e else None)
     return out
 
 

@@ -59,6 +59,42 @@ Geliştirme 1–10 aynı yön: iki kat kayıtta yanlış evet R0 %1,1 → R1 %1,
 - Ölçülmüş bara hatası farazi şehirden; gerçekte pilotta (Faz 10, P6 inverter kaydı + akıllı priz gece seviyesi aynı evde) ölçülmeli. Gece seviyesi bilinirse sabah kayması doğrudan ölçülür.
 - PR #20 betiği (`pv_acilma.py`) değiştirilmedi; gerçekçi sürüm bu betik ve PR #22 motoru.
 
+## Ek (1 Kasım ~00:45): ham özet kayda, çözüm motorda (karar masası 00:27); hat boyu çevirici tutmadı
+**Neden:** karar masası 00:27 (Civan'ın notu): kayıtta türetilmiş değer değil inverterin ham kaydı olsun, bara ve hat boyu motorun içinde çözülsün; PR #19 okuyucusu buna bağlansın. Ölçü: inverterli trafolarda yeşil / bayrak / renksiz ve yanlış yeşil.
+
+**Yöntem:**
+- `inverter_kaydi.geri_coz(veri)`: gerçek kayıt ve benzetim için tek fonksiyon. Ham özet: bara ölçümü (her günün ilk geçerli değerinin ortancası) ve eğim (gündüz gerilim ↔ kendi panel gücü doğrusu, V/kW). Okuyucu güç sütununu da arar (W → kW); yoksa eğim boş. `inverter_geri_cozum.py` aynı fonksiyonu kullanır (1–10'da önceki bara ve eğimle 1.148 evde birebir).
+- Sözleşme §7: yeni satır türü `inverter_ham` (`bara_olcum_V;egim_V_kW`); eski `inverter` (türetilmiş) deneme için durur. Yazılıp okununca 36 satırda fark 0.
+- Motor (`basvuru.py`): `inverter_ham` varsa bara = ölçüm − hata, hata 1–10'da ölçülen nicelik dağılımından (`INV_BARA_HATA_Q`, 1.148 ev). Hat boyu için çevirici `inverter_boy_ham` (eğim × kendi kWp → trafonun payı düşülür → hattın kayıtlı panelleri ve direnciyle boy).
+- **Çevirici 1–10'da tutmadı** (olumsuz sonuç): gerçek ÷ ham boy ortancası 0,29; düzeltme sonrası hata P10–P90 ×0,30 … ×2,63, ±%20 içinde %19, ±%40 içinde %32 (21–30'da ×0,27 … ×2,72, %18). Hat boyu kaydı (±%15) bundan iyi. Sebep [Yorum]: tek fazlı evde gerilimi kendi fazı ve nötr belirliyor, diğer panellerin fazı ve yükler eğimi oynatıyor; dengeli üç faz sadeleştirmesi taşımıyor. Bu yüzden çevirici **kapalı** (`INV_BOY_C = None`): inverterli hatta da hat boyu kaydı ve model-sapma kalır. Ham özetteki eğim kayıtta durur; daha iyi bir çözüm (motor çekilişlerini gözlenen öğlen yükselmesine göre tartmak) sonraki iş.
+- **R3:** kayıt `inverter_ham`, motor barayı ölçülmüş hatayla, hat boyunu kayıttan. 1–10'da kuruldu; **sınav 21–30 bir kez** (~00:43). İnverterli trafo = "beklenen" kaydında en az bir inverter olan (her satırda aynı alt küme).
+
+**Sonuç: sınav 21–30 (bir kez)** [Hesap; farazi, sahte kayıt, gösterim]; motor iki kat varsayar. Parantezde R0 (bugünkü sahte kayıt, inverter = gerçek ± gürültü).
+
+| Kayıtlar | Hemen evet | Yanlış evet | 95% aralık | Yanlış evetli trafo |
+|---|---|---|---|---|
+| Yarı | %7,9 (%10,7) | 0/568 | %0–0,7 | 0/69 |
+| Beklenen | %7,8 (%9,7) | %0,2 (1/558) | %0,03–1,0 | 1/74 |
+| İki kat | %8,0 (%10,1) | %0,7 (4/576) (%1,9) | %0,3–1,8 | 2/76 |
+
+Yanlış yeşil her satırda 0. Geliştirme 1–10: hemen evet %9,7 / %9,1 / %9,3; yanlış evet 0/705, 2/663, 1/681.
+
+İnverterli trafolarda panel katmanı (aday evi olan 156 trafo; ADR-0017; bayrak = bugün aşma olasılığı ≥ 0,7):
+
+| Görünüm | Yeşil (yanlış) | Bayrak (gerçekte dolu) | Renksiz |
+|---|---|---|---|
+| Kayıtsız (resmi) | 0 (0) | 20 (14) | %87 |
+| Kayıtlı, yarı | 3 (0) | 9 (9) | %92 |
+| Kayıtlı, beklenen | 1 (0) | 15 (10) | %90 |
+| Kayıtlı, iki kat | 3 (0) | 13 (9) | %90 |
+
+Geliştirme 1–10 (141 trafo): resmi 4 (0) / 14 (11) / %87; kayıtlı 6–8 (0) / 14–15 (12–14) / %84–86. R0 1–10: kayıtlı 6–9 yeşil.
+
+**Bulgular (ek):**
+6. **Gerçekçi inverter kaydıyla motor güvenli:** iki kat hatalı kayıtta bile yanlış evet %0,7 (aralık üst ucu %1,8), yanlış yeşil 0. Bunun bedeli hemen evet: %10,1 → %8,0 (R0'a göre), çünkü inverter artık hattın direncini bildirmiyor ve barayı temkinli (ölçülmüş kaymayla) veriyor.
+7. **İnverter haritayı açmıyor:** inverterli trafolarda yeşil 0 → 1–3 (sınav), 4 → 6–8 (geliştirme); bayrak sayısı bazen düşüyor ama isabeti artıyor. PR #20'deki "her panelli trafoda bir inverterle yeşil %5 → %10" sonucu iyimser uçtu (bara ±1 V ve hat empedansı ±%20 doğru varsayılıyordu); gerçekçi hâlde (inverter panelli evlerin %20'sinde, bara ölçülmüş kaymayla, empedans çözülemiyor) tutmuyor. Sunum / jüri cümlesinde kullanılmamalı [Yorum].
+8. **Hat empedansı tek inverterden bu yöntemle çözülmüyor** (olumsuz sonuç, yukarıda). Muhittin 5B'nin bara yarısı çalışıyor (ölçülmüş kaymayla), empedans yarısı bu sadeleştirmeyle çalışmıyor.
+
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
 |---|---|---|---|---|---|
@@ -66,5 +102,6 @@ Geliştirme 1–10 aynı yön: iki kat kayıtta yanlış evet R0 %1,1 → R1 %1,
 | 1 Kas ~00:26 | aynı | 1–10 | aynı | ortanca −0,79 V, P10 −2,15, ≤ 1 V %62; hep aşağı | uçtan uca |
 | 1 Kas ~00:28 | motor v1.1 (iki kat) + R1 / R2 (bara hatası 1–10'dan) | 1–10 | R1 yanlış evet artar, R2 geri indirir | iki kat: %1,1 → %1,7 → %0,4 | 21–30 bir kez |
 | 1 Kas ~00:30 | aynı | 21–30 | aynı | geri çözüm −0,97 V; iki kat: R0 %1,9 → R1 %2,7 → R2 %1,3 (aralık %0,7–2,5); hemen evet %10,1 → %9,6; yanlış yeşil 0 | karar masasına (PR) |
+| 1 Kas ~00:43 | motor v1.2: `inverter_ham`, bara 1–10 nicelikleriyle, boy çevirici kapalı (1–10'da ×0,30–2,63) | 21–30 | gerçekçi inverterle yanlış evet < %2, inverterli trafoda açılır | iki kat 4/576 (%0,7; üst %1,8); hemen evet %8,0; inverterli yeşil 0 → 1–3, yanlış yeşil 0 | karar masasına (PR) |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
