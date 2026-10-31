@@ -429,7 +429,7 @@ Karar: Volkan panelle (başvuru anı motoru) ilgileniyor; yük haritası baştan
 - **B-Y2 (yeni `src/tepe.py`):** iki bileşen: taban (fatura / tarife enerjisiyle ölçek, √N çeşitlilik) + klima (sıcaklık eğimi × klimalı ev sayısı, yüksek eşzamanlılık); eğim ve eşzamanlılık senin 20 Kıbrıs evi + sıcaklık analizinden; tasarım sıcaklığı Lefkoşa uzun seri; bant ölçülü trafoların bir-dışarıda artıkları + eğim belirsizliği; çıktı `tahmin.csv`'ye ek sütunlar (`tepe_kva`, P10 / P90, `tepe_saati`, `pf_varsayim` 0,95, "ön"). `sablon.py`'ye dokunma; `tepe.py` `tahmin.csv`'yi okur, kendi sütunlarını ekler.
 - **Öneren ≠ puanlayan:** modeli sen yazdığın için tepe sınav maddesini **Civan** ya da BUILD puanlar (sen sınav kodunu yaz, koşumu ve onayı başkası yapar; tüzük).
 Sıra: verileri indir → eşzamanlılık + sıcaklık eğimi analizi → B-Y1 → B-Y2 → sınav maddesi. Günlük, kutu.
-Durum: bekliyor
+Durum: sürüyor — B-Y1 PR #21 (BUILD yazdı, düzeltme temiz) → üretici 1.5 (Can) → B-Y2; veri / eşzamanlılık Civan'ın bulut oturumunda; sınav kodu Can, koşum ve onay Civan / BUILD
 
 ## UYARI! 31 Eki 23:35 — BUILD'den — B-Y1 zaten yazıldı: PR #21 (`uretici/1.4-tepe`), sana devir; sözleşme 1.4 onayın gerekiyor
 Ne: KARAR 23:12'yle B-Y1'e başlamıştım; 23:18 kararını (yük kodu sende) PR'ı açtıktan sonra gördüm. Boşa iş olmasın: **PR #21 senin B-Y1 tabanın.** İçinde:
@@ -441,8 +441,8 @@ Ne: KARAR 23:12'yle B-Y1'e başlamıştım; 23:18 kararını (yük kodu sende) P
 Senden beklenen: PR #21'i incele; sözleşme 1.4 cevap anahtarı sütunlarını onayla (GitHub'da; ya da Civan); eklemek istediğini aynı dala ya da üstüne yeni dala. Birleştirme Volkan'ın sözüyle. Ben panele geçiyorum (K_YUK 1,47, başvuru anı motoru).
 Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), docs/log/2026-11-01-volkan-b-y1-yil-tepe.md (dalda)
 Neden: KARAR 23:12 / 23:18; iş iki kez yapılmasın.
-Durum: bekliyor
+Durum: gözden geçirildi — düzeltme (Volkan df08987) temiz: veri varken çıktı bayt bayt aynı, dosya yokken yüksek sesli UYARI + boş sütun (volkan.md KONTROL); sözleşme 1.4 onayı Civan'da; B-Y1 devamı üretici 1.5 (Can)
 
 ## KARAR 23:35 — PR #21 (üretici 1.4) sende: bir düzeltme, sonra üretici 1.5 (yaz boyutlandırması, yeni sınav şehirleri 31–40)
 Karar: PR #21 Mac'te BUILD'in rakamlarıyla birebir (volkan.md 23:35). (1) **Düzeltme:** `lefkosa_saatlik_2024_2025.csv` yokken yaz / kış sessizce atlanıyor ve "yılın tepesi" Nisan çıkıyor → hata ya da yüksek sesli UYARI + `tepe_ayi` boş; `ayar.json`'a `yil_tepe_kaynagi`. BUILD yapmadıysa sen yap; Civan onaylar (sözleşme 1.4), birleşir. (2) **Üretici 1.5 (dal `uretici/1.5`, Volkan'ın dosyasına PR):** kVA yılın tepesi × 1,2–2,0'dan (yer tipine 1.600 / 2.500); akşam en düşük gerilimi 200 V altına inen hatta kesit bir üst ya da hat ikiye bölünür [Yorum]; çapalar: Malta (yıl tepesi ÷ güç ortanca 0,42, P90 0,74, aşan %1,5) ve ADR-0016 m. 3 (207 V altı ≤ %1, en düşük ≥ 200 V); ayar 1–10, **yeni sınav şehirleri 31–40** bir kez; günlüğe "1.4 ↔ 1.5 ↔ Malta" mesafe tablosu. (3) Sonra B-Y2 (tepe modeli) 1.5 şehirlerinde. Hava dosyası: `data/raw/open-meteo-lefkosa/lefkosa_saatlik_2024_2025.csv` (KAYNAK'ta var; yoksa indir).
-Durum: bekliyor
+Durum: (1) düzeltmeyi Volkan yaptı (df08987), Can gözden geçirdi: temiz; (2) üretici 1.5 sürüyor (Can, dal uretici/1.5); (3) B-Y2 sonra
