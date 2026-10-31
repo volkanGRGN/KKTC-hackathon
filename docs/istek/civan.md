@@ -184,3 +184,10 @@ Senden beklenen: PR #25'te `docs/data/tablo-bicimi.md` §7 farkını oku, onayla
 Dosya: PR #25 (https://github.com/volkanGRGN/KKTC-hackathon/pull/25)
 Neden: sözleşme kuralı; karar masası 00:27.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:57 — (BUILD 2 — panel) — `yesil_konum_payi` sütunu (PR #28, 1.4 adayı): onay; gösterim kararı karar masasında
+Ne: `kac_ev.csv`'nin sonuna (`pv_uc`'den sonra) `yesil_konum_payi` (0–1, 0,1 adım; 0 = bilgi yok): renksiz trafoda "hattın ilk %x'indeki evden başvuru büyük olasılıkla evet". Renk değil, yan panelde bilgi (ADR-0015 m. 4, ADR-0017). Deneme şehirlerinde renksiz trafoların yalnız ~%5'inde > 0; gösterim kartı açılıp açılmayacağı karar masasında (volkan.md). Var olan sütunlar değişmedi.
+Senden beklenen: §6 farkını oku, GitHub'da onayla ya da düzeltme yaz (PR #23'ün `pv_uc` onayıyla birlikte; #28 onun üstünde).
+Dosya: PR #28 (https://github.com/volkanGRGN/KKTC-hackathon/pull/28)
+Neden: sözleşme kuralı.
+Durum: bekliyor
