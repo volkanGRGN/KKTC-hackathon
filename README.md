@@ -19,13 +19,16 @@ Ham veri depoda değil (açık depo, lisanslar belirsiz). Her `data/raw/<ad>/KAY
 
 ## Çalıştırma
 
-Şimdilik yalnız temel benzetim var (saf Python, bağımlılık istemez):
+**Deneme şehirleri (Faz 1):**
 
 ```bash
-python3 src/trafo_bos_kapasite.py 7 cikti.json
+python3 src/sehir_uret.py 7          # data/synthetic/sehir-007/
+python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
 ```
 
-2 saniyede 3 trafonun sonucunu yazar. Şehir üreticisi, model, kaç ev ve harita geldikçe buraya eklenecek (her biri kendi görev kartında).
+Şehir başına ~10 saniye (Mac). Çıktının biçimi [docs/data/tablo-bicimi.md](docs/data/tablo-bicimi.md). EAC Excel'i (`data/raw/eac-profil-siniflari/`) ve `src/profiller.py` yoksa yer tutucu eğri, Lefkoşa ışınım dosyası (`data/raw/open-meteo-lefkosa/`) yoksa yapay ışınım kullanır ve bunu ekrana ve `ayar.json`'a yazar; yer tutucu şehir Faz 1 sınavına girmez.
+
+**Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Model, kaç ev ve harita geldikçe buraya eklenecek.
 
 ## Repo haritası
 
