@@ -12,7 +12,7 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Ölçülü: konut ve konut+panel 68 ev (2016), küçük ticari 23, büyük ticari 79, otel 30, küçük sanayi 66, büyük sanayi 41. Su pompası, sokak aydınlatması, ısı depolama **ölçülmemiş**, kuraldan türetilmiş.
 - Yanlılık: Güney, Kuzey değil; konut 2016 ve 68 ev; ortalama eğri tek evin tepesini düşük gösterir. **5. sayfanın adı "L._COMM._STORES" ama otel sınıfıdır** (PDF sırasıyla doğrulandı).
 
-**Kıb-Tek istatistikleri** — `../veri/ham/` (stat_2023, stat_2024, tuketim_2024, tuketim_2025; PDF ve metin)
+**Kıb-Tek istatistikleri** — `data/raw/kibtek-istatistik/` (stat_2023, stat_2024, tuketim_2024, tuketim_2025; PDF; depoda yok, KAYNAK.txt'de nereden)
 - Tarife sınıfı başına abone sayısı ve yıllık MWh (2023: toplam 219.931 tüketici, konut 175.577, ticari I 20.950, ticari II 494, sanayi I 1.227, sanayi II 352, su motorları 3.250).
 - Farazi şehirde trafo başına abone karışımı bu oranlardan kurulur. Trafo eşleşmesi YOK.
 
@@ -32,7 +32,7 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 
 ## Üreteceğimiz
 
-**Farazi şehirler** — `data/synthetic/<şehir-no>/` (planlanan)
+**Deneme şehirleri (Faz 1 çıktısı)** — `data/synthetic/<şehir-no>/` (henüz yok; üretici yazılınca)
 - Trafo listesi: kVA, tip, abone karışımı, panel sayısı, hat boyu, faz dağılımı.
 - Her trafo için 5 dakikalık yük ve ev ev gerilim; "cevap anahtarı" olarak öğlen en düşük yük ve gerçek kaç ev sığar.
 - Her şehrin rastgeleleştirme ayarları kaydedilir (tohum dahil). Etiket: **gösterim, kanıt değil**.

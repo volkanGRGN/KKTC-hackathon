@@ -6,3 +6,9 @@ data/synthetic/
 __pycache__/
 *.pyc
 .DS_Store
+# Çalıştırma çıktıları
+*_sonuc.json
+cikti.json
+.venv/
+venv/
+.streamlit/

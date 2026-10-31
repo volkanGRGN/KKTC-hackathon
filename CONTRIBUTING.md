@@ -3,18 +3,39 @@
 Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı söyler. Aynı kuralların ajan dili [CLAUDE.md](CLAUDE.md); ikisi çelişmez, biri değişirse öteki aynı değişiklikte güncellenir.
 
 ## Dallar
-- **Şimdilik (Faz 0, kod başlamadan): dal açılmaz, doğrudan `main`'e gönderilir** (Volkan, 31 Ekim). Aşağıdaki dal ve PR kuralları Faz 1 başlayınca geçerli.
-- `main` her zaman çalışır durumda.
-- İş dalı: `tur/kisa-aciklama` (ör. `feat/profil-kumeleme`, `fix/veri-okuma`).
+- **Hackathon boyunca dal açılmaz, doğrudan `main`'e gönderilir** (Volkan, 31 Ekim); çakışmayı aşağıdaki dosya sahipliği önler. Dal ve PR kuralları hackathondan sonra.
+- `main` her zaman çalışır durumda; bozan kişi hemen düzeltir.
+- (Sonrası için) iş dalı: `tur/kisa-aciklama` (ör. `feat/profil-kumeleme`, `fix/veri-okuma`).
+
+## Paralel çalışma: dosya sahipliği (31 Ekim)
+Üçümüz yan yana, aynı anda, doğrudan `main`'e gönderiyoruz. Çakışmamanın tek yolu **herkesin yalnız kendi dosyalarına yazması**:
+
+| Kim | Yazdığı yerler |
+|---|---|
+| Volkan (+ Claude) | `src/sehir_uret.py`, `src/sablon.py`, `src/kac_ev.py`, `docs/method/`, `docs/decisions/`, `docs/data/tablo-bicimi.md`, `docs/gorev/` (görev kartları), kök belgeler (`README.md`, `DEVIR.md`, `ROADMAP.md`, `CONTRIBUTING.md`, `CLAUDE.md`), `docs/00-overview.md`, `docs/01-plan.md`, `docs/02-faz-0-ogrenim.md`, `docs/glossary.md` |
+| Can | `src/profiller.py` (EAC eğrilerini okuma ve tiplere çevirme), `src/sinav.py` (geçme sınavı ölçüleri), `src/grafikler.py`, `data/raw/*/KAYNAK.txt` (osm-* hariç), `docs/data/data-dictionary.md`, `docs/sunum/`, kendi günlükleri |
+| Civan | `app/` (harita + `app/ornek_veri.py` sahte veri), `data/raw/osm-*/` (KAYNAK dahil), kendi günlükleri |
+| Herkes | yalnız `docs/istek/<kişi>.md` kutuları (istek yazmak için), `NOTLAR.md` (sona ekleme; "Durum" satırı yalnız Volkan) ve kendi günlüğü |
+
+Dosyalar arasındaki sözleşme (hangi dosya hangi biçimde ne üretir) `docs/data/tablo-bicimi.md`'de; önce o yazılır, sonra herkes kendi dosyasına çekilir. **Planlama Volkan'da (+ Claude): görevler [docs/gorev/](docs/gorev/README.md) kartlarıyla verilir; Can ve Civan kartı uygular, soruyu istek kutusuna yazar.** Sınav kodunu (`sinav.py`) modeli yazan değil Can yazar: ölçü bağımsız olsun.
+
+- Başkasının dosyasına ekleme gerekiyorsa o dosyaya dokunma; **o kişinin istek kutusuna** yaz ([docs/istek/](docs/istek/README.md), başlık `UYARI!`), o kişi yapar ve durumu "yapıldı" yapar. Bekleyenler: `grep -n "Durum: bekliyor" docs/istek/*.md`.
+- Günlük dosya adı `YYYY-AA-GG-<kişi>-<konu>.md`; böylece günlükler de çakışmaz. (31 Ekim'den önceki iki günlük bu kalıptan önce yazıldı, istisna.)
+- Göndermeden önce `git pull --rebase`, sonra `git push`. Küçük ve sık commit.
+- Çakışma çıkarsa dokunma, yan yana birlikte çöz.
+- Üretilen şehirler (`data/synthetic/`) ve ham veri depoya girmez (`.gitignore`); tohumla yeniden üretilir / KAYNAK.txt'den indirilir.
 
 ## Commit
-- Küçük ve anlamlı parçalar. Mesaj: `tür: ne yaptı` (ör. `feat: arketip kümeleme eklendi`).
+- Küçük ve anlamlı parçalar. Mesaj alan önekiyle: `alan: ne yaptı` (ör. `sehir: panel yaygınlığı eklendi`, `veri: EAC injection indirildi`, `docs: sözlüğe tohum eklendi`). Alanlar: `sehir`, `sablon`, `kacev`, `veri`, `harita`, `sinav`, `docs`.
 - Push'tan önce `git pull --rebase`.
 
-## Pull Request
+## Pull Request (hackathon sonrası)
 - Şablonu doldur (ne değişti · hangi doküman/ADR güncellendi · kanıt).
-- En az 1 gözden geçiren onayı. Hackathonda gözden geçirme 15 dakikayı geçmesin.
+- En az 1 gözden geçiren onayı.
 - **Dokümanı bozan değişiklik aynı PR'da dokümanı düzeltir.**
+
+## Devir
+İş devrederken ya da faz bitince `DEVIR.md` güncellenir (yalnız Volkan): durum, kim nerede, bekleyen istekler, sıradaki üç adım. Eski hali silinir; geçmiş günlükte.
 
 ## Definition of Done
 - [ ] Kod çalışıyor ve test edildi; nasıl çalıştırıldığı README'de
@@ -29,6 +50,12 @@ Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı 
 - Her rakamın yanında etiketi olur: **[Kaynaklı]** yayın/rapor (adresiyle), **[Hesap]** bizim hesabımız, **[Yorum]** değerlendirme. Bulunamayan şey "BULAMADIM" diye yazılır, uydurulmaz.
 - Ham veri `data/raw/<kebab-ad>/` altına, yanında KAYNAK.txt (adres, indirme tarihi, lisans).
 - Farazi şehirden çıkan sonuç "gösterim" diye etiketlenir; kanıt değildir ([doğrulama protokolü](docs/method/validation.md)).
+
+## Mac + Windows birlikte
+- Dosya açarken hep `open(..., encoding='utf-8')` (yazma ve okuma). Windows'ta varsayılan kodlama farklı; bir kez bu yüzden bozuldu.
+- Satır sonları `.gitattributes` ile LF; Windows'ta "LF will be replaced by CRLF" uyarısı normal.
+- Yol ayırıcı için `pathlib` ya da `os.path.join`; elle `/` ya da `\\` yazma.
+- Komutlarda `python3` (Mac) = `python` (Windows).
 
 ## Düzen (5 kural)
 1. Her konu için tek kaynak; kopyalama, bağlantı ver.

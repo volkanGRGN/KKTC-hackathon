@@ -1,0 +1,9 @@
+# Python 3.10+ ; temel benzetim (src/trafo_bos_kapasite.py) saf Python, bunlar sonraki fazlar için
+numpy
+scipy
+scikit-learn
+pandas
+openpyxl        # EAC Excel'ini okumak için (Can, src/profiller.py)
+matplotlib      # grafikler (Can, src/grafikler.py)
+streamlit       # harita paneli (Civan, app/)
+pydeck          # 3D sütunlu harita (Civan, app/)

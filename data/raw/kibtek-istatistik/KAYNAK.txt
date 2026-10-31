@@ -1,0 +1,4 @@
+Kıb-Tek yıllık istatistik PDF'leri: 2023 ve 2024 istatistik (abone sayıları tarife sınıfına göre, "Toplam Tüketici Adetleri 1975-2023", 08.01.2024), 2024 ve 2025 aylık tüketim/üretim tabloları.
+Nereden: kibtek.com istatistik sayfası (tam bağlantı BULAMADIM; dosyalar Ekim 2026'da oradan indirildi, kopyası Volkan'da).
+Depoda yok (açık depo, kurum belgesi). Dosya adları: stat_2023.pdf, stat_2024.pdf, tuketim_2024.pdf, tuketim_2025.pdf.
+Kullanım: Faz 1 abone karışımı oranları (konut 175.577, ticari I 20.950, ticari II 494, sanayi I 1.227, sanayi II 352, su motorları 3.250; toplam 219.931, Aralık 2023).

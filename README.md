@@ -6,14 +6,31 @@ VCC-2 · Sürdürülebilir Kıbrıs Hackathonu · 31 Ekim – 1 Kasım 2026
 
 ## Kurulum
 
-Henüz kod yok. Plan: Python 3, numpy, scipy, scikit-learn, streamlit, pydeck. Kod gelince bu bölüm güncellenecek.
+Python 3.10 ya da üstü. Windows'ta `python3` yerine `python` yazın.
+
+```bash
+git clone https://github.com/volkanGRGN/KKTC-hackathon.git
+cd KKTC-hackathon
+python3 -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Ham veri depoda değil (açık depo, lisanslar belirsiz). Her `data/raw/<ad>/KAYNAK.txt` dosyasındaki adresten indirip aynı klasöre koyun; ilk gereken `data/raw/eac-profil-siniflari/`.
 
 ## Çalıştırma
 
-Henüz yok.
+Şimdilik yalnız temel benzetim var (saf Python, bağımlılık istemez):
+
+```bash
+python3 src/trafo_bos_kapasite.py 7 cikti.json
+```
+
+2 saniyede 3 trafonun sonucunu yazar. Şehir üreticisi, model, kaç ev ve harita geldikçe buraya eklenecek (her biri kendi görev kartında).
 
 ## Repo haritası
 
+- [DEVIR.md](DEVIR.md) — **şu an nerede kaldık**: açık faz, kim nerede, bekleyen istekler, sıradaki adım
+- [NOTLAR.md](NOTLAR.md) — fikre dair yeni bulduğunu at: kaynak, itiraz, fikir (herkes ekler, Volkan işler)
 - [docs/02-faz-0-ogrenim.md](docs/02-faz-0-ogrenim.md) — **yeni gelen buradan başlar**: sorun, kavramlar, okuma sırası, ilk uygulama
 - [ROADMAP.md](ROADMAP.md) — fazlar ve bitiş ölçütleri
 - [docs/00-overview.md](docs/00-overview.md) — amaç, kapsam, kapsam dışı, başarı ölçütü
@@ -25,6 +42,8 @@ Henüz yok.
 - [docs/decisions/](docs/decisions/) — karar kayıtları (ADR)
 - [docs/log/](docs/log/) — iş ve deney günlüğü (yalnız ekleme)
 - [data/raw/](data/raw/) — indirilen ham veri, her klasörde KAYNAK.txt
+- [docs/gorev/](docs/gorev/README.md) — görev kartları (Can ve Civan buradan iş alır)
+- [docs/istek/](docs/istek/README.md) — istek kutuları: başkasının dosyasında değişiklik istemek için
 - [CONTRIBUTING.md](CONTRIBUTING.md) — nasıl çalışıyoruz · [CLAUDE.md](CLAUDE.md) — aynı kurallar ajan için
 
 > Bu README kısa kalır. Derinlik `docs/` altındadır.

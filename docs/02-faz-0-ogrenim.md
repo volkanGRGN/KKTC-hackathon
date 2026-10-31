@@ -1,6 +1,6 @@
 # Faz 0 — Öğrenim: projeyi sıfırdan anlamak
 
-Kime: ekibin üç üyesi. Süre: 1–1,5 saat okuma + 15 dakika uygulama. Bitince aşağıdaki sorulara kendi cümlelerinle cevap verebiliyorsun; kimseye bir şey ezberletmiyoruz, her adımda "neden" var.
+Kime: ekibin üç üyesi. Süre: orta (okuma + kısa bir uygulama). Bitince aşağıdaki sorulara kendi cümlelerinle cevap verebiliyorsun; kimseye bir şey ezberletmiyoruz, her adımda "neden" var.
 
 ## 1. Sorun, üç cümlede
 
@@ -21,7 +21,7 @@ Soru: *%40 kuralı neden dolu bir trafoya "yer var" diyebilir?*
 **Adım 3 — Öğlen en düşük yük.** Güneş öğlen üretir; trafo o saatte ne kadar az elektrik çekiyorsa panelin fazlası o kadar az yer bulur. En tehlikeli an bahar öğleni: klima yok, güneş güçlü. Bu yüzden bizim tahmin etmek istediğimiz şey akşam tepesi değil, bahar öğlenindeki en düşük yük. Oku: [yöntem](method/modeling.md) bölüm 3.
 Soru: *Neden akşam tepesi değil, öğlen?*
 
-**Adım 4 — Şablon yöntemi (İngiltere).** Dört adım: birkaç trafoyu ölç → günlük eğrisi benzeyenleri grupla (şekil) → ölçülmeyen trafoyu abone karışımına bakıp bir gruba koy → abone sayısıyla büyüt (büyüklük). Evler akşam, dükkânlar öğlen, sanayi gün boyu düz çeker; şekli abone karışımı belirler. **Tipler önceden bilinmez, ölçümden çıkar**; İngiltere'de 10 çıktı, bizim tahminimiz Kıbrıs'ta ~7. %80 rakamı yöntemin İngiltere'nin kendi içindeki isabeti; İngiltere verisinin Kıbrıs'a benzerliği değil. Oku: [ADR-0001](decisions/adr-0001-sekil-buyukluk-sablon.md), [araştırma günlüğü bölüm 6](log/2026-10-31-kapsamli-arastirma.md).
+**Adım 4 — Şablon yöntemi (İngiltere).** Dört adım: birkaç trafoyu ölç → günlük eğrisi benzeyenleri grupla (şekil) → ölçülmeyen trafoyu abone karışımına bakıp bir gruba koy → abone sayısıyla büyüt (büyüklük). Evler akşam, dükkânlar öğlen, sanayi gün boyu düz çeker; şekli abone karışımı belirler. **Gruplar (arketipler) önceden bilinmez, ölçümden çıkar**; İngiltere'de 10 çıktı, biz 3–6 bekliyoruz. Dikkat: deneme şehrini kurarken verdiğimiz 7 "tip" (şehir konutu, köy, çarşı…) girdi; arketip, ölçümden çıkan gruptur. İkisi aynı sayıda olmak zorunda değil. %80 rakamı yöntemin İngiltere'nin kendi içindeki isabeti; İngiltere verisinin Kıbrıs'a benzerliği değil. Oku: [ADR-0001](decisions/adr-0001-sekil-buyukluk-sablon.md), [araştırma günlüğü bölüm 6](log/2026-10-31-kapsamli-arastirma.md).
 Soru: *"%80" ne demek, ne demek değil?*
 
 **Adım 5 — Kaç trafo ölçülür, ölçme nerede durur.** Tipleri bilmeden seçim, tipleri tahmin ettiren ipuçlarıyla yapılır: abone karışımı, büyüklük, direk/yer, şehir/köy/turistik/sanayi, panel sayısı. İlk turda her yönden çeşitli 20–50 trafo; sonra tur tur: az örneği kalan tipe ve sistemin "emin değilim" dediği trafoya. Durma: her tipte 5–10 ölçülü trafo var, yeni ölçümler sürpriz çıkarmıyor, hata hedefin altında. Bütün Kuzey için kaba hesap 120–170 trafo (%2–2,6). Oku: [doğrulama](method/validation.md) "temsil yanlılığı".
@@ -48,7 +48,7 @@ Soru: *Güney'in verisini kullanmanın zararı var mı?* (Yok; "gösterim" diye 
 8. [Kapsamlı araştırma](log/2026-10-31-kapsamli-arastirma.md) — uzun; kaynak lazım olunca.
 9. [Benzetim kodu](../src/trafo_bos_kapasite.py) — kodu okumak şart değil. Dosya önceki bir fikir için yazıldı; baştaki açıklama, bu projede hangi kısmının kullanıldığını söylüyor.
 
-## 4. Uygulama (15 dakika)
+## 4. Uygulama (kısa)
 
 1. Depoyu klonla, benzetimi çalıştır:
    ```bash
@@ -56,15 +56,15 @@ Soru: *Güney'in verisini kullanmanın zararı var mı?* (Yok; "gösterim" diye 
    ```
    2 saniyede üç trafonun sonucu gelir. `bugunku_tepe_v` alanına bak: T1 Kıyı 261 V, yani bugün bile sınırın üstünde; `kural_payi_kw` ise %40 kuralının hâlâ "yer var" dediği güç. İkisini yan yana gör: Adım 2'nin cevabı bu.
 2. Güney'in eğrilerini `data/raw/eac-profil-siniflari/KAYNAK.txt` adresinden indir; Excel'de DOMESTIC ve otel sayfasını (adı yanlış yazılmış: `L._COMM._STORES`) aç; Nisan iş günü sütununda öğlen 12:00 ile akşam 21:00 değerini karşılaştır. Evin öğlen yükü akşamın ~%70'i; otelinki yazın kışın 4 katı. Adım 3 ve 4'ün cevabı bu.
-3. [CONTRIBUTING](../CONTRIBUTING.md) oku; bir dal açıp küçük bir değişiklikle PR açmayı dene (ör. sözlüğe bir terim).
+3. [CONTRIBUTING](../CONTRIBUTING.md) oku; hackathon boyunca dal yok: kendi dosyanda küçük bir değişiklik yap (ör. kendi günlüğüne bir satır), `git pull --rebase`, sonra doğrudan `main`'e gönder.
 
 ## 5. Ne yapacağız
 
-Fazlar [yol haritasında](../ROADMAP.md). Faz 1 ve sonrasını Volkan yazacak; şimdilik yalnız bu fazı çalışın. Ayrıntılı iş kolları ve takvim [planda](01-plan.md).
+Fazlar ve geçme sınavları [yol haritasında](../ROADMAP.md); anlık durum [devir notunda](../DEVIR.md). Faz 1'den itibaren iş, Volkan'ın yazdığı [görev kartlarıyla](gorev/README.md) gelir; başkasının dosyasında değişiklik [istek kutusuyla](istek/README.md) istenir. Şimdilik yalnız bu fazı çalışın.
 
 ## 6. Faz 0 bitti sayılması için
 
 - [ ] 8 soruya kendi cümlelerinle cevap verebiliyorsun.
 - [ ] Benzetimi çalıştırdın, T1'in 261 V'unu gördün.
 - [ ] EAC verisini indirdin, ev ve otel eğrisine baktın.
-- [ ] Bir dal açıp PR açmayı biliyorsun.
+- [ ] `git pull --rebase` + doğrudan `main`'e küçük bir commit gönderdin.

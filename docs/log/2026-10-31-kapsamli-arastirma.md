@@ -1,6 +1,8 @@
 # Trafo Şablonu fikri — kapsamlı araştırma
 
-VCC-2 · Sürdürülebilir Kıbrıs Hackathonu · 31 Ekim 2026 gece
+VCC-2 · Sürdürülebilir Kıbrıs Hackathonu · 30→31 Ekim 2026 gecesi
+
+**Kim yazdı:** Volkan'ın oturumundaki Claude. Metindeki "ben" = bu Claude; "ajan" = Claude'un görevlendirdiği, kaynakları kendisi okuyan araştırma alt-ajanları. "Okundu" = kaynak PDF'i/sayfası gerçekten açılıp okundu; "arama özeti" = yalnız arama sonucundan alındı.
 
 **Etiketler:** [Kaynaklı] yayın/rapor · [Hesap] bizim hesabımız · [Yorum] değerlendirme · BULAMADIM → uzmana soru
 
