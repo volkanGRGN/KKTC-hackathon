@@ -153,4 +153,22 @@ Saf tahminlerdeki iki rakam: iki koşuda öğretici küme biraz farklı (fatura 
   2. Panelli evde fatura brüt mü net mi.
   3. Farazi faturalı isabeti gerçekçi kılmak için abone başına eğri farkı (aynı tarifede öğlen ÷ yıllık oranının abone abone değişmesi): sürüm 1.3 adayı.
 
+## Ek girdi — 31 Ekim 17:30: karar masasının üç cevabı (KARAR 17:26)
+
+1. **Saf tahmin tanımı.** Saf tahmin, modelin bildiği bilgiyle kuruluyor:
+   - faturasızda Σ öğlen ÷ Σ tarife enerjisi × trafonun tarife enerjisi;
+   - faturalıda Σ öğlen ÷ Σ fatura × fatura.
+
+   ADR-0008'in "Σ abone" tanımının yerine geçiyor; ADR dosyası düzenlenmedi.
+   - Sonuç: faturalı model geçiyor (ortanca %33, P90 %48 daha iyi).
+   - Faturasız model **ortancada geçmiyor** (%3); kazancı kötü uçta (P90 %33).
+   - `sablon.py` artık `sablon_ozet.json`'a iki saf tahmini de yazıyor: oran ve ölçülülerde bir-dışarıda hatası, modelinkiyle yan yana. Örnek sehir-012: model %4,2 / %10,9; saf tarife %16,5 / %40,7; saf fatura %6,0 / %16,1.
+   - Resmi kıyas Can'ın `sinav.py faz2`'si (PR #14). Can'ın ölçümü: saf tarife %25,2 / %67,2, saf fatura %5,5 / %15,2.
+2. **Panelli evin faturası: bu sürümde iyimser.**
+   - Sürüm 1.2 brüt tüketimi yazıyor. Gerçekte mahsuplaşmada fatura net: evin kendi tükettiği panel üretimi sayaçtan hiç geçmez. Bu yüzden brüt tüketimi Kıb-Tek de bilemez [Yorum].
+   - Sonuç: panelli trafolarda faturalı isabet iyimser.
+   - Üretici 1.3'te panelli evin faturası net yazılacak, model `panel_kw` × yıllık üretimle düzeltecek.
+   - Uzmana soru 7 (01-plan): çekilen ve verilen enerji ayrı kayıtlı mı?
+3. **Farazi faturalı isabet bir üst sınır.** Farazide %3,9, İspanya gerçek verisinde faturayla %10. Abone başına eğri farkı üretici 1.3'e (ADR-0009, trafo içi çeşitlilik).
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

@@ -450,6 +450,7 @@ def sehir_calistir(klasor, yalniz_ana=False):
                 csv_yaz(klasor / 'deney' / f'tahmin_n{n}_t{t}.csv', TAHMIN_SUTUNLARI, calistir(tr, X, A, olcum, s)[0])
 
     loo_hata = np.abs(np.exp(-m['loo_log_artik']) - 1)          # |tahmin − ölçülen| ÷ ölçülen
+    saf = saf_tahmin(tr, olcum, m)
     ozet = dict(sehir=sehir, fatura_kullanildi=fatura_var(tr), olculu=m['ids'], k=m['k'], siluet={str(k): round(v, 3) for k, v in m['siluet'].items()},
                 arketip_adlari=m['ad'], kume_uye_sayisi=[int((m['etiket'] == j).sum()) for j in range(m['k'])],
                 ortak_kw_abone={c: round(float(b), 3) for c, b in zip(ABONE, m['ortak'])},
@@ -459,6 +460,7 @@ def sehir_calistir(klasor, yalniz_ana=False):
                                                          for s in satirlar if s['olculdu'] == 0])), 2),
                 loo_hata_ortanca=round(float(np.median(loo_hata)), 3),
                 loo_hata_p90=round(float(np.quantile(loo_hata, 0.9)), 3),
+                saf_tahmin=saf,
                 gorulmemis_siniflar=[c for c, g in zip(ABONE, m['gorulmemis']) if g],
                 guven_sayilari={g: sum(1 for s in satirlar if s['olculdu'] == 0 and s['guven'] == g)
                                 for g in ('yuksek', 'orta', 'dusuk')},
@@ -466,6 +468,24 @@ def sehir_calistir(klasor, yalniz_ana=False):
     with open(klasor / 'sablon_ozet.json', 'w', encoding='utf-8', newline='') as fh:
         json.dump(ozet, fh, ensure_ascii=False, indent=1)
     return dict(tr=tr, X=X, A=A, olcum=olcum, secilen=secilen, ozet=ozet)
+
+
+def saf_tahmin(tr, olcum, m):
+    """ADR-0008 madde 1, tanım karar masası 31 Ekim 17:26: saf tahmin modelin bildiğiyle kurulur:
+    Σ öğlen ÷ Σ tarife enerjisi × trafonun tarife enerjisi; fatura varsa ayrıca Σ öğlen ÷ Σ fatura × fatura.
+    Ölçülülerde bir-dışarıda hatası, modelin `loo_hata_*`'sıyla yan yana (bilgi; resmi kıyas sinav.py faz2)."""
+    y = np.array([olcum[t]['ogle_min'] for t in m['ids']])
+    enerji = {'tarife': tr[ABONE].to_numpy(float) @ np.array([MWH[c] for c in ABONE])}
+    if fatura_var(tr):
+        enerji['fatura'] = tr[FATURA_SUTUNU].to_numpy(float)
+    out = {}
+    for ad, e in enerji.items():
+        es = e[m['secilen']]
+        tah = (y.sum() - y) / np.maximum(es.sum() - es, 1e-9) * es       # her ölçülü, kalanların oranıyla
+        h = np.abs(tah / np.maximum(y, 0.01) - 1)
+        out[ad] = dict(oran_kw_mwh=round(float(y.sum() / max(es.sum(), 1e-9)), 4),
+                       loo_hata_ortanca=round(float(np.median(h)), 3), loo_hata_p90=round(float(np.quantile(h, 0.9)), 3))
+    return out
 
 
 def capraz(klasorler, veriler):

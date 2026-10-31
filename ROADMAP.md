@@ -125,6 +125,9 @@ Yapılacaklar:
   - üretici 1.3 çapaları: korelasyon matrisi, P90/P95 kuyruk, hat üstünde PV konum dağılımı ve fazı, trafo içi çeşitlilik (Can'ın `edp_kiyas.py`'si);
   - "farazi − İspanya" fark ölçeri her sürümde.
   - Fatura dağılım sütunları (yüksek tüketen abone oranı, mevsimsellik; ADR-0009 madde 1a): sözleşme 1.3 adayı. Sözleşme 1.2'deki `yillik_tuketim_mwh` kalır.
+  - **Üretici 1.3** (karar masası 17:26):
+    - panelli evde `yillik_tuketim_mwh` net yazılır (mahsuplaşma), model `panel_kw` × yıllık üretimle (≈ 1.600 kWh/kWp [Yorum]) düzeltir; uzmana soru 7;
+    - abone başına eğri farkı: aynı tarifede öğlen ÷ yıllık oranı abone abone dağılsın (ADR-0009 trafo içi çeşitlilik). Bugün farazi faturalı %3,9 üst sınır, İspanya'da faturayla %10.
 
 Geçme sınavı (20–30 şehirde):
 - [ ] **Yanlış yeşil oranı ≤ %5** (dolu trafoya "yer var"); en kötü şehirde ≤ %10.
