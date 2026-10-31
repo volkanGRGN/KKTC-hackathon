@@ -6,7 +6,8 @@ docs/data/tablo-bicimi.md sözleşmesinde.
 
 Çalıştırma: python3 src/sinav.py faz1 data/synthetic
            python3 src/sinav.py faz2 data/synthetic [--aralik 11-20] [--ispanya <csv>]   (tahmin.csv: src/sablon.py;
-               --ispanya: src/edp_test.py --cikti çıktısı, kalibrasyonun gerçek veri ölçüsü)
+               --ispanya: src/edp_test.py --cikti çıktısı, kalibrasyonun gerçek veri ölçüsü;
+               --ispanya-tepe: aynı biçimde İspanya tepe satırları, yük haritasının gerçek veri ölçüsü)
            python3 src/sinav.py faz3 data/synthetic [--aralik 11-20]   (kac_ev.csv: src/kac_ev.py)
 Her madde için GEÇTİ / KALDI ve rakam yazar; hepsi geçerse çıkış kodu 0.
 """
@@ -197,6 +198,9 @@ def pit_tolerans(n):
 # havuzlanmaz: iki yolun hatası ters yönde, havuzda birbirini götürüyor (PIT 0,046 ↔ ayrı ayrı 0,068 / 0,108).
 ISPANYA_GIRDI, ISPANYA_N, ISPANYA_YOL = 'c', '10', 'tabakali'
 _Z80 = st.NormalDist().inv_cdf(0.90)
+# Yük haritası (Faz 11, ADR-0014; karar masası 23:02 m. 4, 23:12): yıl tepesi (net) tahmini. Geçici eşik [Yorum].
+TEPE_HATA_ORTANCA_MAX, TEPE_HATA_P90_MAX = 0.15, 0.35
+TEPE_SAAT_TOLERANS_DK = 60
 
 
 def _abone(r):
@@ -264,6 +268,13 @@ def _kal_metin(k):
             + f"; n = {k['n']}" + (f", atlanan {k['atla']}" if k['atla'] else ''))
 
 
+def _dakika_fark(a, b):
+    """İki "HH:MM" arasındaki fark, dakika, gün çevresinde (23:30 ↔ 00:15 = 45)."""
+    da, db = (int(x[:2]) * 60 + int(x[3:5]) for x in (a, b))
+    d = abs(da - db) % 1440
+    return min(d, 1440 - d)
+
+
 def faz2_oku(s):
     """Faz 2 dosyalarını şehir sözlüğüne ekler; eksikse eksik dosya adını döner."""
     k = s['klasor']
@@ -275,6 +286,8 @@ def faz2_oku(s):
         if r['gun_turu'] == 'isgunu':
             s['arketip'].setdefault(int(r['arketip']), [0.0] * 288)[int(r['adim'])] = float(r['oran'])
     s['deney'] = {p.stem: _csv(p) for p in sorted((k / 'deney').glob('tahmin_*.csv'))}
+    # Sözleşme 1.4 (öneri, volkan.md 23:12 sonrası): yük haritası tahmini ayrı dosyada; yoksa tepe bölümü "ölçülmedi".
+    s['tepe'] = _csv(k / 'tepe.csv') if (k / 'tepe.csv').exists() else None
     ozet = k / 'sablon_ozet.json'
     if ozet.exists():
         with open(ozet, encoding='utf-8') as fh:
@@ -320,7 +333,7 @@ def _ozet(sehir_deger):
     return st.median(v), (kotu[1], kotu[0])
 
 
-def faz2(sehirler, ispanya=None):
+def faz2(sehirler, ispanya=None, ispanya_tepe=None):
     """ROADMAP Faz 2 geçme sınavı + ADR-0008 saf tahmin + Faz 7 kalibrasyon. Yalnız ölçülmeyen trafolar (`olculdu` = 0).
 
     ispanya: src/edp_test.py --cikti CSV'si (sütunlar girdi, n, yol, y, alt, ust); yoksa kalibrasyon maddesi UYARI.
@@ -425,6 +438,45 @@ def faz2(sehirler, ispanya=None):
                                      f'%95 {_yuzde(k["kapsama"][0.95])}, PIT sapma {k["sapma"]:.3f} ({k["yon"]}; tolerans {k["tol"]:.3f}), n = {k["n"]} ({k["trafo"]} trafo)')
     else:
         _madde(m, UYARI, 'kalibrasyon, gerçek veri — İspanya', 'ölçülmedi: --ispanya <src/edp_test.py --cikti çıktısı> verilmedi')
+
+    # 3c. Yük haritası (Faz 11): yıl tepesi, net, kW. Farazi bilgi; gerçek veri (İspanya Mayıs tepesi) madde.
+    #     Ölçü kW ile: pf varsayımı (kVA) hatayı kirletmesin. Saat isabeti ±60 dk (bilgi).
+    tepe_sat = []
+    for s in sehirler:
+        if not s.get('tepe') or 'tepe_yil_kw' not in s['cevap'][0]:
+            continue
+        cevap = {r['trafo_no']: r for r in s['cevap']}
+        for r in s['tepe']:
+            if not int(r['olculdu']):
+                g = cevap[r['trafo_no']]
+                tepe_sat.append(dict(t=float(r['tepe_kw']), lo=float(r['tepe_kw_p10']), hi=float(r['tepe_kw_p90']),
+                                     g=float(g['tepe_yil_kw']), ts=r.get('tepe_saati'), gs=g.get('tepe_saati')))
+    if tepe_sat:
+        h = [abs(x['t'] - x['g']) / x['g'] for x in tepe_sat if x['g'] >= GERCEK_MIN_KW]
+        kt = kalibrasyon([(x['lo'], x['hi'], x['g']) for x in tepe_sat])
+        saat = [_dakika_fark(x['ts'], x['gs']) for x in tepe_sat if x['ts'] and x['gs']]
+        bilgi.append(f'yük haritası (tepe, net), farazi (gösterim): hata ortanca {_yuzde(st.median(h))}, P90 {_yuzde(_p90(h))} '
+                     f'(geçici eşik ≤ %{100 * TEPE_HATA_ORTANCA_MAX:g} / %{100 * TEPE_HATA_P90_MAX:g}); '
+                     f"%80 bant kapsama {_yuzde(kt['kapsama'][0.80])}, %95 {_yuzde(kt['kapsama'][0.95])}"
+                     + (f'; tepe saati ±{TEPE_SAAT_TOLERANS_DK} dk isabet '
+                        f'{_oran(sum(d <= TEPE_SAAT_TOLERANS_DK for d in saat), len(saat))}' if saat else '')
+                     + f'; n = {len(tepe_sat)}')
+    else:
+        bilgi.append('yük haritası (tepe), farazi: ölçülmedi (tepe.csv ya da cevap anahtarında tepe_yil_kw yok; sözleşme 1.4)')
+    if ispanya_tepe:
+        rows = [r for r in _csv(Path(ispanya_tepe))
+                if r.get('girdi', ISPANYA_GIRDI) == ISPANYA_GIRDI and r.get('n', ISPANYA_N) == ISPANYA_N
+                and r.get('yol', ISPANYA_YOL) == ISPANYA_YOL and r['alt'] and r['ust']]
+        h = [abs(float(r['tah']) - float(r['y'])) / float(r['y']) for r in rows if float(r['y']) > 0]
+        kt = kalibrasyon([(float(r['alt']), float(r['ust']), float(r['y'])) for r in rows])
+        ho, hp, k80 = st.median(h), _p90(h), kt['kapsama'][0.80]
+        _madde(m, ho <= TEPE_HATA_ORTANCA_MAX and hp <= TEPE_HATA_P90_MAX and KAPSAMA[0] <= k80 <= KAPSAMA[1],
+               f'yük haritası, gerçek veri — İspanya Mayıs tepesi ({ISPANYA_N} ölçülü, {ISPANYA_YOL}): hata ortanca '
+               f'≤ %{100 * TEPE_HATA_ORTANCA_MAX:g}, P90 ≤ %{100 * TEPE_HATA_P90_MAX:g}, %80 bant %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g}',
+               f'hata {_yuzde(ho)} / {_yuzde(hp)}; ' + _kal_metin(kt) + f" ({len({r['ct'] for r in rows})} trafo)")
+    else:
+        _madde(m, UYARI, 'yük haritası, gerçek veri — İspanya Mayıs tepesi',
+               'ölçülmedi: --ispanya-tepe <tepe satırları> verilmedi (B-Y2 çıktısı bekleniyor)')
 
     # 4. Şehirler arası: capraz hata ortancası ÷ şehir içi hata ortancası.
     oran = {}
@@ -678,7 +730,7 @@ def main():
     sys.stdout.reconfigure(encoding='utf-8')  # Windows'ta boruya yazarken cp1254 '≥' karakterinde çöküyordu
     if len(sys.argv) < 3 or sys.argv[1] not in ('faz1', 'faz2', 'faz3'):
         sys.exit('Kullanım: python3 src/sinav.py faz1|faz2|faz3 <şehir kökü, ör. data/synthetic> [--aralik 11-20] '
-                 '[--ispanya <edp_test.py --cikti CSV>]')
+                 '[--ispanya <edp_test.py --cikti CSV>] [--ispanya-tepe <tepe satırları CSV>]')
     faz = sys.argv[1]
     sehirler, atlanan = sehirleri_oku(sys.argv[2])
     if '--aralik' in sys.argv:
@@ -703,7 +755,8 @@ def main():
           + ('' if faz == 'faz1' else ' — gösterim, farazi şehirler') + '\n')
     if faz == 'faz2':
         ispanya = sys.argv[sys.argv.index('--ispanya') + 1] if '--ispanya' in sys.argv else None
-        maddeler, bilgi = faz2(sehirler, ispanya)
+        ispanya_tepe = sys.argv[sys.argv.index('--ispanya-tepe') + 1] if '--ispanya-tepe' in sys.argv else None
+        maddeler, bilgi = faz2(sehirler, ispanya, ispanya_tepe)
     else:
         maddeler, bilgi = {'faz1': faz1, 'faz3': faz3}[faz](sehirler)
     for gecti, ad, ayrinti in maddeler:
