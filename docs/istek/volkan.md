@@ -429,3 +429,29 @@ Karar:
 Neden: Bilginin değeri denemesi kırmızıyı bilginin, sarıyı karar biriminin düzelttiğini gösterdi; ADR-0010 kümülatif onay zaten başvuru bazlı. Ada araştırması jüri sorusunu cevaplıyor, hikâyeyi değiştirmiyor; Gozo testi bilgi yokluğunda rakam üretmez (CLAUDE.md: rakam uydurma). Faz 4'ün beş kutusu da açık ve Civan 17:28'den beri sessiz; en riskli yer orası.
 Senden beklenen (BUILD): yukarıdaki sıra; (2)'nin sonucu kutuya.
 Durum: (1) yapıldı 20:49 (BUILD) — ROADMAP Faz 3 ikinci sürüm: ADR-0012 maddesi ve dış sınama adayları (İngiltere, Gozo); Açık eksikler sarı satırı ADR-0012'ye bağlandı, 4. satıra S6 notu; üretici 1.3'e Malta trafo boyutu çapası; DEVIR. (2) yapıldı 20:55: Faz 4 Mac kontrolü civan.md KONTROL 20:55 ve ROADMAP Faz 4 (sayılar birebir ve 3 şehir [x]; tıklama 0,35–0,40 sn; dışarıya istek yok; Windows, ekran kaydı denenmedi). İki bulgu Civan'da: dil 19:13'e göre değil; %40 kuralının ev sayısı 701 trafonun 241'inde aday evden fazla. (3) yapıldı 20:58: konuşma notu taslağı güncel (İngiltere 5/6, pilot cümlesi %27 → %19 ve %4 yalnız konuşmada, kırmızı tanımı, kilit cümle 41/73 ↔ 0/87, yeşil %25 / sarı %62, sarı / Malta / Hawaii jüri cevapları, sehir-001 tıklama sırası T02 / T06 / T07, prova listesi). Prova insanların; BUILD'in yapacağı kalmadı.
+
+## UYARI! 31 Eki (20:58 sonrası) — Can'dan — Haritada Malta gibi iki sayılı kart: "yük için boş kapasite" + "güneş için boş kapasite" — yapalım mı, nasıl?
+**Ne yapmak istiyoruz:** Enemalta'nın haritasında her trafo merkezine tıklayınca iki sayı çıkıyor: "Available Load Capacity: 346 kVA" (tüketime kalan yer) ve "RES Available Capacity: 244 kWp" (güneşe kalan yer). Bizim harita bugün yalnız güneşe bakıyor (renk + kaç ev). İstediğimiz: her trafoda aynı iki sayı, ama dürüst hâli — tahmin, aralıklı, "ölçülmedi" etiketiyle: "Yük için boş: ~480 kW (…–…), Nisan · Güneş için boş: ~90 kW (78–91)". Sunum cümlesi önerisi [Yorum]: "Malta bu kartı her eve sayaç takarak çıkardı; biz az trafoyu ölçüp kalanını aynı biçimde, aralıkla gösteriyoruz." (Senin 20:43 bulgunu gördüm: Malta'nın güneş sayısı düz %25 tavan; bu bizim için daha da iyi — bizimki her trafoda fizikten.)
+
+**Teknik durum** (deneme: sınav şehirleri 11–20, #15 olasılıklı `kac_ev.csv`, ölçülmeyen trafolar; [Hesap: Can, scratchpad betiği, resmi değil] — gösterim):
+1. **Güneş için boş kapasite: zaten var.** `kac_ev_orta` × 6,5 kW, bant karamsar–iyimser × 6,5. Gerçeğe hata ortanca 13 kW (~2 ev), bant gerçeği %81,3 tutuyor (n 171, tavan = 0). Ama `isil_pay_kw` / `gerilim_pay_kw_*` hâlâ tek denklemden; onlardan kurulan bant %75,4 tutuyor → ikisi yan yana gösterilirse çelişebilir. Bu sayı yıl boyu geçerli (en kötü an bahar öğleni, ADR-0002).
+2. **Yük için boş kapasite: yok.** Model en yüksek yükü tahmin etmiyor (`tepe_kw` yalnız cevap anahtarında). Üç yol denedim; boş kapasite = `kva` − tahmini tepe (cos φ = 1 varsayımı):
+   | Yol | Tepe hatası ortanca / P90 | Boş kapasite hatası ortanca / P90 |
+   |---|---|---|
+   | Sözleşme §5 eğri ölçekleme (`ogle_min_kw` ÷ arketipin öğlen en düşük `oran`'ı) | %15,9 / %32,8 | 5,5 / 62,8 kW |
+   | Saf: fatura × ölçülülerin Σ tepe ÷ Σ fatura | %3,9 / %17,0 | 1,4 / 29,2 kW |
+   | **`ogle_min_kw` × ölçülülerin tepe ÷ öğlen oranı (arketip başına ortanca)** | **%4,0 / %10,4** | **1,5 / 13,1 kW** |
+   Yeni model yok; bir sütun. Ölçülü trafoda tepe zaten ölçülüyor. Yan bulgu: §5 yöntemiyle yan panelde çizilen eğrinin tepesi ~%16 düşük (ortalama gün eğrisi tek anın tepesini basık gösterir).
+3. **Sınırlar:** (a) Tepe **Nisan 14 günün** tepesi; Kıbrıs'ın gerçek tepesi Temmuz akşamı (klima). Malta'nınki yıl tepesi [Yorum]. (b) Farazi şehirde Nisan'da gücünü aşan trafo **yok** (0/280) → "dolu trafoya yük için yer var" hatası bu veride ölçülemiyor. (c) Malta kVA, biz kW; güç katsayısı Kıb-Tek için BULAMADIM.
+
+**Sorular:**
+1. **Kapsam:** "Yük için boş kapasite" katmanı ürüne girsin mi (bu gece mi, yoksa sunumda "sıradaki katman" mı)? Yeni ADR gerekir mi (00-overview "hackathonda yalnız panel katmanı")?
+2. **Sütun:** `sablon.py`'ye `tepe_kw` tahmini + P10/P90 (sözleşme 1.4) sen mi eklersin? Yöntem 3. yol mu; bant öğlen bandıyla aynı mı kurulur?
+3. **Yaz:** Ekranda "Nisan" etiketiyle mi kalsın, yoksa senin üretici 1.3 çapasındaki "Nisan/yıl tepe oranı (EAC profillerinden)" ile yıl tepesine çevrilsin mi (sınanmamış olur)?
+4. **Güneş sayısı:** Ekranda kW olarak hangisi: `kac_ev_orta` × 6,5 (benim önerim, rengiyle tutarlı) mı, pay sütunları mı? Pay sütunları da olasılıklı hesaba geçmeli mi?
+5. **Birim:** kW mı gösterelim, yoksa kVA için cos φ varsayımı mı (kaynak yok)?
+6. **Sınav:** Eklenirse `sinav.py faz2`'ye "tepe hatası" maddesi yazarım; eşik ne olsun (öğlendeki gibi ortanca ≤ %15, P90 ≤ %35 mi)? "Aşan trafoya yer var" ölçülemediği için bilgi satırı mı?
+Dosya: src/sablon.py (senin), docs/data/tablo-bicimi.md (senin), src/sinav.py (Can), app/ (Civan, kart görünümü)
+Neden: Can'ın isteği: harita Malta'nınki gibi her trafoda iki sayı göstersin; bugünkü model güneşe çok odaklı. Bloklamıyor.
+Durum: bekliyor
+
