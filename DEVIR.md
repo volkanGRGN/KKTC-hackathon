@@ -43,7 +43,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 netleşen cümle ve jüri cevapları (can.md 20:50); Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
 4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
-5. **Sunum sonrası faz haritası** (karar masası 21:15, Muhittin'in üçüncü cevabı, ADR-0013 / ADR-0014): ROADMAP sonunda "Sunum sonrası (taslak)", Faz 6–11 (tüzük → kalibrasyon → Kıb-Tek kayıtları ve başvuru anında karar → pilot A → yük katmanı → canlı kapı) ve dış veri istekleri (mesajı Volkan yazar). `docs/tuzuk.md` ve `src/kalibrasyon.py` sunumdan sonra. Muhittin'in 3. maddesinin devamı ve 4. maddesi bekleniyor.
+5. **Sunum sonrası faz haritası** (karar masası 21:15, Muhittin'in üçüncü cevabı, ADR-0013 / ADR-0014): ROADMAP sonunda "Sunum sonrası (taslak)", Faz 6–11 (tüzük → kalibrasyon → Kıb-Tek kayıtları ve başvuru anında karar → pilot A → yük katmanı → canlı kapı) ve dış veri istekleri (mesajı Volkan yazar). `docs/tuzuk.md` (içerik karar masası 21:20'de) ve `src/kalibrasyon.py` sunumdan sonra. Başvuru anı motoru [ADR-0015](docs/decisions/adr-0015-basvuru-ani-motoru-durumlu-sari-sayi-konum.md).
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
