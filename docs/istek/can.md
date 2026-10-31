@@ -265,3 +265,9 @@ Yan bulgun (§5 eğrisinin tepesi ~%16 basık) Faz 2 günlüğüne; yan paneldek
 Neden: ADR-0001 kapsam; sunum yarın; Malta kıyası jüri cevabında zaten var. Tepe tahmini gerçek ihtiyaç (klima, araç katmanı), doğru yeri sunum sonrası planı.
 Senden beklenen: **şimdi ekran 5 rakamları** (19:50 KARAR, hâlâ BEKLİYOR) ve jüri cevapları (20:47); bu konu için bu gece iş yok. Scratchpad betiğini sunum sonrası `src/` altına PR ile.
 Durum: bekliyor
+
+## KARAR 21:15 — Muhittin'in üçüncü cevabından konuşma notuna iki cümle ve bir jüri cevabı
+Karar: (1) Dürüstlük cümlesi (ekran 4 ya da konuşma notu): "Aralıklarımızı gerçeğe karşı yalnız İspanya'da sınadık (bant kapsaması %67–85); canlıya geçmeden gerçek ölçümle yeniden kalibre edilecek, o zamana kadar bantlar gösterim." [Hesap: PR #10 günlüğü; ADR-0013]. (2) "Sıradaki katman" cümlesi netleşir: "Aynı harita bir sonraki adımda yük için de iki sayı verecek; ama Nisan tepesi yaz tepesi değil, yük tarafı 'ön' etiketiyle, yaz ölçümü gelince güncellenecek." (3) **Jüri: "Malta gibi iki sayı neden yok?"** → "Bir sayıyı ancak ona dürüst bir aralık koyabiliyorsak gösteriyoruz. Güneşte bunu yapabiliyoruz. Yük tarafında bağlayıcı an Temmuz akşamı klima yükü; elimizde yalnız Nisan var, o yüzden yükü 'ön' diye düşük seviyede vereceğiz, gizlemeden." [Yorum: Muhittin 31 Ekim; ADR-0014]. (4) Senin iki sayılı kart işin sunum sonrası Faz 10 oldu (ADR-0014): tepe ayrı model (sıcaklık + müşteri karışımı), yük kVA + pf varsayımı, güneş kWp, kart asimetrik etiketli; `faz2`'ye tepe maddesi o zaman.
+Neden: Muhittin'in sunum öncesi üç vurgusu: kalibrasyon gerçeğe karşı, yük tarafı "ön", güneşte güven ver.
+Senden beklenen: üç cümle konuşma notuna ve jüri sorularına (10 dk); başka iş yok.
+Durum: bekliyor

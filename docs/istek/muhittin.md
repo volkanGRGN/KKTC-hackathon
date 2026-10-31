@@ -38,7 +38,7 @@ Gönderilecek metin (Volkan iletir):
 Ne denedik: (21:04: Can'ın "Malta gibi iki sayılı kart" sorusu eklendi, volkan.md 20:58 sonrası) Faz 3 bitti (olasılıklı hesap, ADR-0011); bilginin değeri denemesi (Faz 3 günlüğü 19:55): trafo çıkış gerilimi bilinince yanlış kırmızı %27 → %19, adres ve fazla %4; sarı %62 → %57, tam ağda %41. İngiltere geri-testi 6 hattın 5'i. Başvuru-anı kararı ADR-0012 (sınanmadı). Veri edinme yolları DEVIR'de (inverter kaydı, akıllı priz, plaka, Kıb-Tek kayıtları, pilot).
 Karar noktası: Volkan (20:52): "bundan sonra iş modeli verilerle iyileştirmek; bunu nasıl yapacağımızı, doğru talimatların ve belgelerin nasıl olması gerektiğini Muhittin'e soralım; veri işe yarar deniyor ama düzeltme önerilmiyor." Cevap ROADMAP "sunum sonrası / pilot" planına, üretici 1.3'e ve görev kartı kalıbına girer.
 Seçenekler: Aşağıdaki metinde bizim önerdiğimiz sıra var; Muhittin düzeltir ya da onaylar. Cevapsız kalırsa önerilen sırayla devam.
-Durum: bekliyor
+Durum: cevaplandı 21:15 (kısmen: 3. maddenin devamı ve 4. madde eksik; cevap: docs/log/2026-10-31-muhittin-cevap-3-veri-dongusu.md; kararlar ADR-0013, ADR-0014; faz haritası volkan.md 21:15)
 
 Gönderilecek metin (Volkan iletir):
 
