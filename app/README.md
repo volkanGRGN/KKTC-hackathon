@@ -42,6 +42,8 @@ Harita için yalnız `streamlit` (≥ 1.39), `pydeck` ve `pandas` gerekir.
 
 Windows'ta `python3` yerine `python`. Sanal ortamı etkinleştirmeden çalıştırmak için: `.venv\Scripts\python app\ornek_veri.py` ve `.venv\Scripts\python -m streamlit run app\harita.py`.
 
+**İnternetsiz zemin (isteğe bağlı):** `data/raw/osm-kasaba/girne_merkez.json` varsa zemin bu dosyadaki Girne merkez binaları (kat sayısıyla 3D) ve yollarıdır; internetten hiçbir şey istenmez. Yoksa Streamlit'in internetten gelen zemin haritası kullanılır. İndirme komutu [KAYNAK.txt](../data/raw/osm-kasaba/KAYNAK.txt)'de.
+
 **Kıyı kontrolü (isteğe bağlı):** `data/raw/osm-kasaba/girne_kiyi.json` varsa sahte trafolar karada tutulur; yoksa uyarı çıkar ve trafoların bir kısmı denize düşebilir. İndirme komutu [KAYNAK.txt](../data/raw/osm-kasaba/KAYNAK.txt)'de.
 
 ## Ne gösterir
@@ -63,6 +65,7 @@ Etiket: şehir no ≥ 900 → "SAHTE VERİ — gösterim"; diğerleri → "örne
 
 ## Bilinen eksikler
 
-- **İnternetsiz açılış:** sütunlar, tıklama ve panel yerelde çalışır; tek dış istek Streamlit'in zemin haritası (`basemaps.cartocdn.com`). İnternet kapalıyken sokak haritası gelmez. Kapalı internetle denenmedi.
+- **İnternetsiz açılış:** OSM dosyası varken tarayıcının istediği tek adres `localhost:8501` (ölçüldü); kapalı internetle ayrıca denenmedi. Dosya yoksa zemin `basemaps.cartocdn.com`'dan gelir ve internet kapalıyken görünmez.
+- OSM zemini yalnız Girne merkezi kapsar (~1 km × 1,1 km); dışındaki trafolar boş zeminde durur. Deniz çizilmiyor.
 - Mac'te denenmedi (Windows 11, Python 3.14, Streamlit 1.66'da denendi).
 - Faz 1 gerçek şehirlerinde bazı trafolar denizde (şehir üreticisi; Volkan'ın kutusunda istek var).

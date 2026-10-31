@@ -6,6 +6,7 @@ okunmaz; ölçülmeyen trafonun yuk_5dk.csv satırı da okunmaz (sözleşme).
 Çalıştırma: streamlit run app/harita.py
 """
 
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -29,6 +30,14 @@ METRE_BASINA_EV = 25  # sütun boyu çarpanı [Yorum]
 EN_KISA_SUTUN_EV = 0.5  # 0 ev yine de görünsün
 METRE_BASINA_KVA = 0.25  # kaç ev yokken boy: 1000 kVA = 250 m, renkli sütunlarla aynı ölçek
 SUTUN_YARICAP_M = 35
+
+# İnternetsiz zemin: OSM bina ve yolları (data/raw/osm-kasaba/KAYNAK.txt). Yoksa Streamlit'in
+# internetten gelen zemin haritası kullanılır.
+OSM_DOSYASI = KOK / "data" / "raw" / "osm-kasaba" / "girne_merkez.json"
+OSM_ATIF = "Zemin: © OpenStreetMap katkıcıları (ODbL)"
+KAT_YUKSEKLIGI_M = 3  # kat bilgisi olmayan bina 1 kat sayılır [Yorum]
+BINA_RENK = [72, 82, 100, 210]
+YOL_RENK = [105, 115, 135, 200]
 
 OGLE_ADIMLARI = range(132, 168)  # 11:00–14:00, sözleşme "Öğlen penceresi"
 GUN_TURU_ADI = {"isgunu": "iş günü", "tatil": "tatil"}
@@ -95,17 +104,61 @@ def harita_katmani(veri):
     )
 
 
-def harita(veri):
+def kat_sayisi(etiketler):
+    try:
+        return max(1, int(etiketler.get("building:levels", 1)))
+    except ValueError:
+        return 1
+
+
+@st.cache_data
+def osm_zemin(yol):
+    """OSM binaları (çokgen + yükseklik) ve yolları; dosya yoksa None."""
+    yol = Path(yol)
+    if not yol.exists():
+        return None
+    ogeler = json.loads(yol.read_text(encoding="utf-8"))["elements"]
+    binalar, yollar = [], []
+    for oge in ogeler:
+        if oge["type"] != "way":  # tek relation kale suru, atlandı
+            continue
+        noktalar = [[n["lon"], n["lat"]] for n in oge["geometry"]]
+        if "building" in oge["tags"]:
+            yukseklik = kat_sayisi(oge["tags"]) * KAT_YUKSEKLIGI_M
+            binalar.append({"cokgen": noktalar, "yukseklik": yukseklik})
+        elif "highway" in oge["tags"]:
+            yollar.append({"yol": noktalar})
+    return {"binalar": binalar, "yollar": yollar}
+
+
+def zemin_katmanlari(zemin):
+    yollar = pdk.Layer(
+        "PathLayer", id="yollar", data=zemin["yollar"], get_path="yol",
+        get_color=YOL_RENK, width_min_pixels=1, get_width=4,
+    )
+    binalar = pdk.Layer(
+        "PolygonLayer", id="binalar", data=zemin["binalar"], get_polygon="cokgen",
+        get_elevation="yukseklik", extruded=True, get_fill_color=BINA_RENK,
+    )
+    return [yollar, binalar]
+
+
+def harita(veri, zemin):
     gorunum = pdk.ViewState(
         latitude=veri["enlem"].mean(),
         longitude=veri["boylam"].mean(),
         zoom=13.5,
         pitch=45,
     )
+    katmanlar = [harita_katmani(veri)]
+    if zemin is None:
+        return pdk.Deck(
+            layers=katmanlar, initial_view_state=gorunum,
+            map_style=None, tooltip={"text": "{trafo_no}"},
+        )
     return pdk.Deck(
-        layers=[harita_katmani(veri)],
-        initial_view_state=gorunum,
-        map_style=None,  # altlık yok: internetsiz açılsın
+        layers=zemin_katmanlari(zemin) + katmanlar, initial_view_state=gorunum,
+        map_provider=None,  # internet zemini kapalı; zemin OSM dosyasından
         tooltip={"text": "{trafo_no}"},
     )
 
@@ -219,12 +272,15 @@ def main():
     veri = sutun_verisi(birlesik_tablo(secili))
     st.warning(etiket(int(veri["sehir"].iloc[0])))
     st.caption(renk_ozeti(veri))
+    zemin = osm_zemin(str(OSM_DOSYASI))
     sol, sag = st.columns([3, 2])
     with sol:
         durum = st.pydeck_chart(
-            harita(veri), on_select="rerun", selection_mode="single-object",
+            harita(veri, zemin), on_select="rerun", selection_mode="single-object",
             key=f"harita-{secili.name}",
         )
+        if zemin is not None:
+            st.caption(OSM_ATIF)
     with sag:
         satir = secili_satir(durum, veri)
         if satir is None:
