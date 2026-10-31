@@ -11,15 +11,15 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:49)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:52)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
 | PR #22 başvuru anı motoru + sahte kayıt (deneme) | BUILD 2 | Mac tekrarı birebir (KARAR 00:27); dal güncellendi, pilot şartı yazıldı (34c10ab) | §7 onayı (Civan) |
-| Öğlen yükü kontrolü, Kıb-Tek tepe verisi girişi (Muhittin 4 m. 3–4) | BUILD 1 | sırada | — |
+| PR #26 Kıb-Tek tepe verisi girişi (Muhittin 4 m. 3) | BUILD 1 | açıldı; BUILD 1'in notu bekleniyor, sonra TEST | — |
 | PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | Mac'te tuttu (KARAR 00:32) | §6 onayı (Civan / Can) |
-| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | yeni hâli bf19af4: ölçülmüş kayma, ham özet; inverter haritayı açmıyor (KARAR 00:49) | TEST'in Mac tekrarı; ROADMAP / kart satırları (BUILD 2); sonra #22 |
+| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | 8f93278: ölçülmüş kayma, ham özet, geri dönüş kalktı, kart satırı; inverter haritayı açmıyor (KARAR 00:49) | TEST'in Mac tekrarı; sonra #22 |
 | Sarıda konum payı (`yesil_konum_payi`, ADR-0015 m. 4) | BUILD 2 | sırada | — |
 | PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) | BUILD 1 | Mac'te birebir; İspanya kıl payı KALDI (%15,4); iki ADR uyum düzeltmesi (KARAR 00:42) | Velander + uzun seri (BUILD 1), §7/§8 numarası, onay (Civan / Can) |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | başladı: main sağlık koşusu | KARAR'ın yolladığı PR'lar |
