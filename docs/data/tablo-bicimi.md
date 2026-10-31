@@ -178,7 +178,7 @@ Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe b�
 | `tepe_kw_p10`, `tepe_kw_p90` | float | kW | `70.1`, `135.0` | Geniş bant: İspanya Mayıs tepesi artıkları (sağa çarpık) ⊕ eğim belirsizliği (ADR-0018 m. 2, 4) |
 | `tepe_saati` | str | SS:DD | `23:30` | Tepenin saati (ayın tipik günü) |
 | `tepe_ayi` | int | ay | `7` | Tepenin ayı (6–9, 1–2 ya da 4) |
-| `pf_varsayim` | float | — | `0.95` | Güç katsayısı varsayımı (ADR-0014) |
+| `pf_varsayim` | float | — | `0.95` | Güç katsayısı varsayımı (ADR-0014). Duyarlılık: kompanzasyon yükümlülüğünün alt sınırı 0,90 (Bakanlar Kurulu Önerge 2227/2010: kurulu gücü ≥ 25 kVA konut dışı ve üç fazlı konutlar, cos φ 0,90–1; tek fazlı konutta şart yok) alınırsa `tepe_kva` +%5,6, `bos_kva` o kadar azalır [Kaynaklı: KTEMO, data/raw/ktemo-dokumanlar] |
 | `tepe_kva`, `tepe_kva_p10`, `tepe_kva_p90` | float | kVA | `92.9` | `tepe_kw*` ÷ `pf_varsayim` |
 | `bos_kva` | float | kVA | `157.1` | `kva` − `tepe_kva` (yan panel) |
 | `bos_kva_p10` | float | kVA | `107.9` | `kva` − `tepe_kva_p90`: **haritanın "yük için boş" sayısı** (güvenli yön; ADR-0018 m. 6) |
