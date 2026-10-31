@@ -9,14 +9,24 @@ Ne: (1) Sözleşme (`docs/data/tablo-bicimi.md`, PR #4) ve gerçek şehir üreti
 Senden beklenen: bir şey yapman gerekmiyor; sahte veride yaygınlık aralığını uygula, PR'ını açınca ben incelerim (sonucu bu kutuya yazarım).
 Durum: bilgi
 
-## KARAR 31 Eki 15:18 — volkan.md'deki "gerçek şehirlerde trafolar denize düşüyor" isteğine
+## KARAR 31 Eki 15:12 — volkan.md'deki "gerçek şehirlerde trafolar denize düşüyor" isteğine
 Karar: Evet; `src/sehir_uret.py` `konum()` döngüsüne "karada mı" koşulu girer: senin `app/ornek_veri.py`'deki `kiyi_segmentleri()` + `karada()` olduğu gibi (docstring'de "Civan, app/ornek_veri.py" atfıyla), kıyı dosyası yoksa bugünkü 400 m kuralı + uyarı, `ayar.json`'a `kiyi_kontrolu`. Üretici sürüm 1.2 ile birlikte (fatura sütunu, mahalle çarpanı, bayramlar); şehirler o zaman yeniden üretilir. BUILD kıyı dosyasını KAYNAK.txt'deki komutla indirir.
 Neden: Haritada denizdeki trafo ilk göze batan hata; ölçümün (otel %31) doğru. Kod senin dosyandan kopyalanır, sen `src/`'ye dokunmazsın.
 Senden beklenen: hiçbir şey. (ana oturum: BUILD.)
 Durum: bilgi — iş ana oturumda
 
-## KARAR 31 Eki 15:18 — volkan.md'deki "sözleşme 1.2: gerçek veri şehir no 800–899 haritada nasıl etiketlensin?" isteğine
+## KARAR 31 Eki 15:12 — volkan.md'deki "sözleşme 1.2: gerçek veri şehir no 800–899 haritada nasıl etiketlensin?" isteğine
 Karar: 800–899 → şerit "GERÇEK ÖLÇÜM — <veri_kaynagi> (Kıbrıs değil)"; kaynak adı `ayar.json` `veri_kaynagi` anahtarından (ör. "EDP Oviedo 2018, Mendeley CC BY"), anahtar yoksa "gerçek ölçüm verisi". Sözleşme 1.2'ye "800–899 gerçek veri; `ayar.json`'da `veri_kaynagi` ve `veri_turu` = `gercek` zorunlu" satırını BUILD ekler. Not: şu an gerçek veri klasörü üretilmiyor (BUILD İspanya'yı ham veriden koştu, PR #10); bu kural ileride lazım olursa diye, acil değil. `yillik_tuketim_mwh` sahte üreticiye 1.2 gelince, evet.
 Neden: Etiket kuralı kartında, aralık sözleşmede; yanlış "farazi" etiketi jüri önünde dürüstlük sorunu olur.
 Senden beklenen: `app/harita.py` `etiket()`'e üçüncü dal (tek satır), PR #9'dan sonra doğrudan main; sözleşme 1.2 PR'ı açılınca onay için bak (Can ya da sen).
+Durum: bekliyor
+
+## PR İNCELEME 15:14 — PR #9 "harita: sahte şehir ve harita iskeleti (Civan Faz 1 kartı)"
+Sonuç: birleştirilebilir.
++ Mac'te çalıştırdım (Python 3.13, Streamlit 1.x, pydeck): `ornek_veri.py` üç şehri üretiyor, iki çalıştırma birebir aynı (diff), beş CSV başlığı sözleşme §1/§2/§5/§6 ile birebir, UTF-8 + LF + BOM yok; panel/konut oranı %11 (ADR-0006 aralığında), kVA listesi sözleşmeye uygun, üç renk de çıkıyor (901: yeşil 13 / sarı 24 / kırmızı 3), ölçülü 10/40. Kıyı dosyası yokken uyarı verip 400 m kuralına düşüyor.
++ `harita.py` tarayıcıda: "SAHTE VERİ — gösterim" şeridi, renk özeti, tıklama → yan panel (T06: kVA, bölge, abone, panel, öğlen yük + bant, güven, "ölçülmedi", kaç ev karamsar–iyimser, renk, %40 kuralı) ve P10–P90'lı tahmini eğri. Gerçek şehir klasörü (`sehir-001`, tahmin yok) yanına konunca: "örnek veri (farazi şehir)" şeridi, "Renk yok" notu, gri sütunlar, tıklayınca "Eğri yok: … Faz 2" — `cevap_anahtari.csv` okunmuyor. Kartın Mac maddesi sağlandı; günlüğüne "Mac: karar masası doğruladı" yazabilirsin.
++ Kod sözleşmeye sadık: yalnız ölçülü satırlar okunuyor (`olculu_yuk`), `validate="one_to_one"` birleştirme, eksik tabloda çökme yok, `map_style=None` / `map_provider=None` internetsiz yol, "kendin karar ver" kalemleri günlükte.
+− (küçük, birleşmeden sonra olur) `egri_ciz()`: `yuk.loc[yuk["gun"] == 0, "gun_turu"].iloc[0]` ölçülü satır hiç yoksa patlar; `if yuk.empty: st.info(...); return` bir satır. Ayrıca `etiket()`'e 800–899 dalı (KARAR 15:12).
+? İnternetsiz açılış ve OSM zemin bende denenmedi (kıyı ve bina dosyaları Mac'te yok; zemin Carto'dan geldi). Tıklama süresi senin ölçümün (0,55 sn); bende göz kararı anında.
+Senden beklenen: birleştir (kart: Volkan bakar → bakıldı); sonra küçük düzeltmeleri doğrudan main'e. `harita/iskelet` eski dalını silebilirsin.
 Durum: bekliyor

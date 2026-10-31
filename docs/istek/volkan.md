@@ -96,15 +96,15 @@ Durum: bekliyor
 Ne: `src/sehir_uret.py` `konum()` yalnız "y ≤ 400 m" ile kıyıyı düz sayıyor; Girne kıyısı limanın doğusunda güneye kıvrılıyor. OSM kıyı çizgisiyle ölçtüm [Hesap]: tip başına 2.000 örnekte otel %31 denizde (kutu −4000…4000 × 0…400), köy ve sulama %4, yurt %3, şehir konutu %2, çarşı ve sanayi %0; sehir-001'de 4/40 (T07, T13, T32 otel; T26 şehir konutu). Haritada jüri bunları denizde görür. Öneri: kıyı dosyası varsa `konum()` döngüsüne "karada mı" koşulu (kuzeye ışın, kıyıyı tek sayıda kesiyorsa kara; 10 satır, `app/ornek_veri.py` `kiyi_segmentleri()` + `karada()` ile aynı), yoksa bugünkü 400 m kuralı + uyarı (ışınım dosyasındaki gibi). Kıyı dosyası: `data/raw/osm-kasaba/girne_kiyi.json`, indirme komutu KAYNAK.txt'de. Sahte şehirlerde uyguladım (`harita/iskelet-2` 9703aa1, 120 trafoda denizde 0).
 Dosya: src/sehir_uret.py (konum), ayar.json'a istersen kiyi_kontrolu
 Neden: harita gerçek şehri gösterecek; denizdeki trafo sunumda ilk göze batan hata olur. Bloklamıyor.
-Durum: karar verildi 15:18 → civan.md (uygulama BUILD, üretici 1.2)
+Durum: karar verildi 15:12 → civan.md (uygulama BUILD, üretici 1.2)
 
 ## UYARI! 31 Eki 14:06 — Civan'dan — sözleşme 1.2: gerçek veri şehir no 800–899 haritada nasıl etiketlensin?
 Ne: KARAR 13:58'de sözleşme 1.2'ye "gerçek veri `sehir` 800–899" geliyor. Harita bugün kartın kuralıyla `sehir` ≥ 900 → "SAHTE VERİ — gösterim", diğer her şey → "örnek veri (farazi şehir) — gösterim" yazıyor; 800–899 da "farazi şehir" diye etiketlenir, yanlış olur. Önerim: 800–899 → "gerçek ölçüm verisi (<kaynak>, Kıbrıs değil)". Kaynak adı haritaya nereden gelsin: `ayar.json`'da bir anahtar mı (ör. `veri_kaynagi`)? Ayrıca 1.2'deki `yillik_tuketim_mwh` sütununu sahte üreticiye eklerim; sözleşme PR'ı açılınca Civan onayı için bakarım.
 Dosya: docs/data/tablo-bicimi.md (Genel kurallar, şehir no aralıkları), app/harita.py
 Neden: etiket kuralı kartta (Harita kuralları 1); şehir aralığı sözleşmede. Bloklamıyor.
-Durum: karar verildi 15:18 → civan.md
+Durum: karar verildi 15:12 → civan.md
 
-## KARAR 31 Eki 15:18 — BUILD'e: ADR-0008 (mahalle çarpanı, saf tahmin), PR #10 soruları, üretici 1.2 paketi
+## KARAR 31 Eki 15:12 — BUILD'e: ADR-0008 (mahalle çarpanı, saf tahmin), PR #10 soruları, üretici 1.2 paketi
 Karar: [ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md) kabul: farazi şehirler fazla düzenli (konut trafolarında müşteri başına öğlen yükü CV 0,08–0,14; gerçekte 0,46), Faz 2 sınavı saf tahminle geçiliyor. PR #10 günlüğündeki soru: ışınım yılına **2023 eklenir** (Open-Meteo'dan indir; tüketim ve abone sayısı 2023), hava yılı 2023/2024/2025'ten rastgele (ADR-0003 korunur). Sunum rakamı olarak gerçek veri cümlesi ADR-0008 madde 3.
 Senden beklenen (ana oturum), tek paket = üretici sürüm 1.2 + sözleşme 1.2 (Can/Civan onayı), sonra 20 şehir yeniden: (a) trafo başına mahalle çarpanı log-normal σ ≈ 0,3 + trafo başına saat kayması ±30 dk, `ayar.json` `mahalle_sigma`; (b) `yillik_tuketim_mwh` (ADR-0007); (c) KKTC bayramları `gun_turu = tatil` (2024: 10–12 Nisan, 23 Nisan; 2025: 1 Nisan, 23 Nisan; tarihleri doğrula); (d) kıyı kontrolü: Civan'ın `kiyi_segmentleri`/`karada` fonksiyonları `konum()`'a, atıfla; kıyı dosyası KAYNAK.txt komutuyla; (e) `kva_tavan_sayisi` `ayar.json`'a; (f) ışınım 2023 dosyası + rastgele yıl; (g) sözleşme 1.2: `yillik_tuketim_mwh`, "800–899 gerçek veri, `veri_kaynagi`/`veri_turu` zorunlu", `mahalle_sigma` ve `kiyi_kontrolu` bilgi anahtarları. Sonra `sablon.py` sütun varsa kullanır; Faz 2 sütunlu/sütunsuz + saf tahmin satırı yan yana günlüğe; ROADMAP Faz 5 dürüstlük cümlelerine ADR-0008 madde 3. PR #8 önce birleşsin (Can onayı bekleniyor), 1.2 onun üstüne.
 Durum: bekliyor
