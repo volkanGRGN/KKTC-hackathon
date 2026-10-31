@@ -282,3 +282,43 @@ Test: C1'i önce main'deki modelde koş (önce rakamları), sonra dalda (sonra);
 Neden: Muhittin'in üç vurgusundan ikincisi; ADR-0013 madde 2–3 (kalibrasyon kapısı gerçeğe karşı).
 Senden beklenen: C1 → C2 → C3 bu gece; C4 PR gelince. Takılırsan kutu. Sunum metni v1 rakamlarıyla kalır, değiştirme.
 Durum: bekliyor
+
+## KARAR 21:39 — "iki sayılı kart" ertelemesi kalktı (Volkan): Faz 11 senin, Faz 7 kartından sonra; sözleşme 1.4 PR'ı
+Karar: Volkan "sunuma daha var, dediklerimizi uygulayalım" dedi; 21:03'teki "bu gece ürüne girmez" ertelemesi kalkıyor. Sıra: önce Faz 7 kartın (C1–C3), sonra **Faz 11 yük katmanı**: (1) sözleşme 1.4 PR'ı (dal `sozlesme/1.4`): `tahmin.csv`'ye `tepe_kva`, `tepe_kva_p10`, `tepe_kva_p90`, `pf_varsayim` (0,95 [varsayım], ADR-0014), hepsi "ön" etiketli; (2) `tepe` hesabı senin 3. yolun (öğlen tahmini × ölçülülerin tepe/öğlen oranı, arketip başına) **başlangıç** olarak ayrı `src/tepe.py` (sözleşme 1.4 ile; `sablon.py`'ye dokunma), bant öğlen bandı gibi bir-dışarıda; (3) `sinav.py faz2`'ye tepe maddesi (geçici eşik ortanca ≤ %15 / P90 ≤ %35, bilgi: "aşan trafoya yük için yer var" farazide ölçülemiyor); (4) kart görünümü Civan'a (Faz 4 bitince): güneş kWp sıkı bant + güven rozeti, yük kVA geniş bant + "ön, yaz verisiyle güncellenecek", "toplanmaz" ibaresi. Sıcaklık normalizasyonu (ADR-0014 madde 2) yaz verisi gelince; şimdi "Nisan tepesi, ön". PR'ı karar masası inceler, BUILD birleştirir; sunum metnine ancak birleşince.
+Neden: Volkan'ın kararı; ADR-0014; Muhittin 5–6.
+Senden beklenen: C1–C3 → sonra bu; takılırsan kutu.
+Durum: bekliyor
+
+## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın
+Ne: Faz 7 kalibrasyon şimdi; senin kartın [docs/gorev/can-faz7-kalibrasyon-sinav.md](../gorev/can-faz7-kalibrasyon-sinav.md), tüzük [docs/tuzuk.md](../tuzuk.md). İlk adım **C1**: `sinav.py faz2`'ye kapsama eğrisi ve PIT maddeleri, farazi 11–20'de "önce" koşusu (main'deki model). Sonra C2 grafik, C3 hold-out defteri. BUILD'in PR'ı gelince C4. Faz 7 bitince Faz 11 (sözleşme 1.4, tepe sütunu "ön"; KARAR 21:4x). Sunum metni v1 rakamlarıyla kalır; PR birleşmeden değiştirme. Takılırsan kutu; bloklarsa Volkan'ı ara.
+Durum: bilgi
+
+## KARAR 21:44 — volkan.md'deki "kilit grafik yenilendi; Mac ↔ Windows bir trafo farkı" isteğine
+Karar: Senin önerdiğin gibi: PNG'yi Mac'te resmi veriden tek komutla çizdim (`grafikler.py faz3 … --aralik 11-20`) ve karar masası commit etti (senin dosyan, senin izninle): yanlış yeşil 0/87, dolu trafoya yer var 0/73; %40 kuralı 41/284, dolu 41/73. Slayt 10 ve ekran 5'teki "41/74" etiketi 41/73 olur (Windows notu kalkar). Fark platform kaynaklı: Mac'te aynı tohumla üç koşu (biri PYTHONHASHSEED=0) birebir aynı; Windows'ta bir trafo farklı. Tüzük madde 5'e "resmi rakam Mac koşumu" notu BUILD'de; sebep Faz 6'da aranır. Senin Faz 3 günlüğüne bir satır: "Windows'ta aynı main'den üretilen 20 şehirde dolu 74 / tavanlı 107 (Mac 73 / 108); sebep aranıyor".
+Neden: ürün rakamı tek kaynaktan olmalı; tüzük madde 5 (sonuç = commit + veri + tohum) platformu da anmalı.
+Senden beklenen: slayt 10 / ekran 5 etiketini 41/73 yap; günlük satırı; sonra C1'e devam.
+Durum: bekliyor
+
+## UYARI! 31 Eki 21:45 — Civan'dan (+ Claude) — Veri sözlüğüne Korsika satırı ve Kuzey trafo sayısı vekili (KARAR 21:39 madde 1; onay senin)
+Ne: Sözlük senin dosyan; aşağıdaki iki değişikliği sen ekle ya da "ekle" de, ben PR açayım. KAYNAK hazır: `data/raw/edf-sei-corse/KAYNAK.txt` (main'de).
+1. **"Güney referans sayıları" satırında** "Kuzey'in trafo sayısı için vekil (~6.400, [Hesap])" yerine: "Kuzey'in trafo sayısı için vekil **~6.400–6.700** [Hesap: 219.931 tüketici ÷ trafo başına 34,4 (Güney) ya da 32,9 (Korsika, aşağıda)]".
+2. **"Elimizde" altına yeni satır** (SimBench'ten sonra önerim):
+
+**Korsika EDF SEI açık veri — ada şebekesi ölçüsü** — `data/raw/edf-sei-corse/`
+- İki tablo: (1) yıllık OG/AG trafo merkezi sayısı ve hat boyları (2011–2025, ada toplamı); (2) belediye × sektör yıllık tüketim (MWh) ve teslim noktası sayısı. Birim km, adet, MWh/yıl; çözünürlük yıllık.
+- Kaynak: EDF SEI Corse, opendata-corse.edf.fr, Licence Ouverte 2.0. İndirildi 31 Ekim 2026 (Civan); SHA-256 KAYNAK.txt'de.
+- Ölçülü: işletmecinin kayıt sayımı (ölçüm değil, envanter).
+- Sağlama [Hesap]: 2024'te 8.144 trafo, 5.930 km AG hat, 267.925 teslim noktası → trafo başına 0,73 km ve 32,9 nokta (Güney 1,02 km ve 34,4).
+- Yanlılık: Kıbrıs değil; ada toplamı, mahalle dağılımı ve havai / yeraltı ayrımı yok; teslim noktası abone ile birebir değil [Yorum].
+- Kullanım: Kuzey trafo sayısı vekiline ikinci, bağımsız sağlama (~6.690); farazi şehirde trafo başına hat boyu için dış çapa (üretici 1.3 adayı).
+Dosya: docs/data/data-dictionary.md (senin); data/raw/edf-sei-corse/KAYNAK.txt (Civan)
+Neden: Karar masası 21:39 (1): Korsika vekili sözlüğe; ekran 6'daki "120–170 trafo" ve sunum metni değişmez.
+Durum: yeni
+
+## UYARI! 31 Eki 21:46 — Volkan'dan (BUILD oturumu) — Faz 7 PR #16 hazır: C1'i dalda koş (sen puanlarsın)
+Ne: Kartın C4'ü. Dal `kalibrasyon/faz7`, PR #16: `sablon.py` k_yük 1,475 (İspanya), `kac_ev_olasilik.py` gerilim sapma çarpanı (İngiltere 6 hat), `src/kalibrasyon.py`. Dalda yeniden üret: `python3 src/sablon.py data/synthetic` ve `python3 src/kac_ev_olasilik.py data/synthetic`; sonra C1 maddelerin ve `faz2`, `faz3` (11–20). BUILD'in bir kez koşusu (sen teyit et): faz2 kapsama şehir ortancası %87,5 → %96,4 (farazi madde KALIYOR); faz3 yanlış yeşil 0/48, yeşil 48, sarı 238, kırmızı 61 (yanlış 20); kaç ev orta 1, P10 altı %7,1. İspanya için `src/kalibrasyon.py ispanya` (edp_test.py --cikti çıktısıyla): %80 bant %65,7 → %79,1 bir-dışarıda.
+Eksi bulgular karar masasında (volkan.md UYARI 21:46); PR o karara ve senin onayına kadar birleşmez. Sunum metni v1.
+Dosya: PR #16; senin dosyaların değişmedi.
+Neden: öneren ≠ puanlayan (tüzük §4).
+Durum: bekliyor
+

@@ -1,0 +1,23 @@
+EDF SEI Corse açık veri — Korsika dağıtım şebekesi: OG/AG trafo merkezi sayısı, hat boyları, belediye bazında tüketim ve teslim noktası sayısı.
+Portal: https://opendata-corse.edf.fr/explore/
+İndirildi: 31 Ekim 2026, Civan (+ Claude), Opendatasoft dışa aktarma adresinden, her dosya tek istek.
+Lisans: Licence Ouverte / Open Licence 2.0 (Etalab) — atıf: "EDF SEI Corse, opendata-corse.edf.fr". Ham dosyalar depoya girmez (data/raw/ git dışı).
+Dosyalar yalnız CSV olarak okundu (csv modülü); çalıştırılmadı.
+
+1) lignes-et-postes-electriques-corse.csv — 689 bayt, SHA-256 239bdff0129468a9618cc6a897617b9b8c3d39eac264334575299d4f36923d5e, 15 satır (2011–2025)
+   İndirme: curl -L -o lignes-et-postes-electriques-corse.csv "https://opendata-corse.edf.fr/api/explore/v2.1/catalog/datasets/lignes-et-postes-electriques-corse/exports/csv?delimiter=%3B"
+   Ayraç ";", UTF-8 (BOM'lu). Sütunlar: territoire; annee; htb_total_km; hta_total_km; bt_total_km (km); postes_htb_hta_nombre; postes_hta_bt_nombre (adet).
+   Çözünürlük: yıllık, ada toplamı. AG hat havai / yeraltı ayrımı yok; trafo başına dağılım yok.
+   2024 satırı: hta 5.742 km, bt 5.930 km, OG/AG trafo merkezi 8.144.
+
+2) consommation-annuelle-par-commune-corse.csv — 539.724 bayt, SHA-256 626c02ffbc767d31d871db704aecbea3e8d739389913f79205ec990112be5a0a, 11.396 satır
+   İndirme: curl -L -o consommation-annuelle-par-commune-corse.csv "https://opendata-corse.edf.fr/api/explore/v2.1/catalog/datasets/consommation-annuelle-par-commune-corse/exports/csv?delimiter=%3B"
+   Ayraç ";", UTF-8 (BOM'lu). Sütunlar: territoire; commune; annee; code_insee; secteur (Résidentiel / Tertiaire / Industrie / Agriculture / Non affecté); consommation_mwh (MWh/yıl); nombre_de_pds (teslim noktası adedi; eski yıllarda boş olabilir).
+   2024 toplamı [Hesap: secteur başına toplam]: 267.925 teslim noktası (konut 221.310; ticari 35.859; sanayi 3.214; tarım 475; atanmamış 7.067); konut 943.762 MWh.
+
+Kullanım [Hesap, docs/log/2026-10-31-civan-ada-veri-setleri.md]:
+  trafo başına AG hat 5.930 ÷ 8.144 = 0,73 km (Güney Kıbrıs EAC: 18.203 ÷ 17.886 = 1,02 km)
+  trafo başına teslim noktası 267.925 ÷ 8.144 = 32,9 (Güney: 615.479 ÷ 17.886 = 34,4)
+  Kuzey trafo sayısı vekili: 219.931 tüketici (Kıb-Tek 2023) ÷ 32,9 ≈ 6.690 (Korsika) ve ÷ 34,4 ≈ 6.390 (Güney) → ~6.400–6.700.
+Çifte sayım: teslim noktası ≠ abone birebir değil (bir noktada birden fazla sayaç olabilir) [Yorum]; çapraz sağlama Güney oranıyla (yukarıda).
+Yanlılık: Korsika şebekesi Fransız işletme (EDF SEI), ada ama Kıbrıs değil; hat boyu ada toplamı, mahalle dağılımı bilinmez.
