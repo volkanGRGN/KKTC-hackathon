@@ -1,0 +1,12 @@
+Open-Meteo Historical Weather API (ERA5 tabanlı yeniden analiz), Lefkoşa, saatlik, 2024-01-01 – 2025-12-31.
+İndirildi: 31 Ekim 2026 (Can).
+Lisans: CC BY 4.0 (https://open-meteo.com/en/license); sunumda "Weather data by Open-Meteo.com" atfı.
+Adres (aynısını çalıştırınca aynı dosya iner):
+https://archive-api.open-meteo.com/v1/archive?latitude=35.1856&longitude=33.3823&start_date=2024-01-01&end_date=2025-12-31&hourly=shortwave_radiation,direct_normal_irradiance,diffuse_radiation,global_tilted_irradiance,temperature_2m,cloud_cover&tilt=30&azimuth=0&timezone=Europe%2FNicosia&format=csv
+
+Dosya adı: lefkosa_saatlik_2024_2025.csv
+Biçim: ilk 2 satır konum bilgisi (ızgara noktası 35.1845, 33.4056, 130 m), 3. satır boş, 4. satır başlık, sonra 17.544 saat.
+Sütunlar: time (yerel saat, Europe/Nicosia, yaz saati dahil), shortwave_radiation (yatay küresel, W/m²), direct_normal_irradiance, diffuse_radiation, global_tilted_irradiance (30° eğim, güneye), temperature_2m (°C), cloud_cover (%).
+Not: ışınım değerleri önceki saatin ortalaması (ör. 12:00 satırı = 11:00–12:00).
+
+Sağlama (Can, 31 Ekim): yatay yıllık 1.908 (2024) / 1.929 (2025) kWh/m²; 30° güney 2.099 / 2.127 kWh/m²; Nisan 11–14 ortalaması 787 / 769 W/m²; Haziran tepe saati 12.

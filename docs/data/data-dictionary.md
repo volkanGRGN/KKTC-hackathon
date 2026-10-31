@@ -22,7 +22,12 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 **Güney referans sayıları** — EAC on yıllık plan 2025–2034
 - 17.886 dağıtım trafosu (direk 11.048 ort. ~95 kVA; yer 6.838 ort. ~583 kVA), alçak gerilim 18.203 km, 615.479 tüketici. Kuzey'in trafo sayısı için vekil (~6.400, [Hesap]).
 
-**Güneş** — Open-Meteo (2024–2026 saatlik, CC BY) ve PVGIS, Lefkoşa. Önceki çalışmada kullanıldı; dosyası bu klasörde yok, yeniden indirilecek.
+**Güneş (hava yılı)** — `data/raw/open-meteo-lefkosa/`
+- Lefkoşa saatlik, 2024 ve 2025 (17.544 saat): yatay küresel, doğrudan, yaygın ve 30° güney eğimli ışınım (W/m²), sıcaklık, bulutluluk. Yerel saat (yaz saati dahil).
+- Kaynak: Open-Meteo Historical Weather API (ERA5 yeniden analiz), CC BY 4.0. İndirildi 31 Ekim 2026.
+- Ölçülü değil: uydu + model yeniden analizi, ~9 km ızgara; tek bulut geçişini göstermez (saatlik ortalama).
+- Sağlama [Hesap]: yatay yıllık 1.908 / 1.929 kWh/m² (2024 / 2025), Nisan 11–14 ortalaması ~780 W/m².
+- Kullanım: Faz 1 rastgeleleştirmede hava yılı 2024 / 2025. PVGIS ikinci kaynak olarak gerekirse.
 
 ## Adaylar (henüz indirilmedi)
 
