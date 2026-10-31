@@ -600,6 +600,7 @@ Karar:
 **Birleşme koşulu:** (a) karar masasının Mac koşumu (dal, 20 şehir sıfırdan; İspanya ve İngiltere komutları) BUILD'in rakamlarıyla tutar; (b) Can C1'i dalda koşar ve onaylar (öneren ≠ puanlayan). İkisi olunca karar masası birleştirir (Volkan'ın "işi bittikten sonra birleştir" izni). Sonra Can resmi `faz2` / `faz3`, sunum rakamları v2.
 **Civan'ın dış veri istek metinleri (21:46):** dışarıya mesaj Volkan'ın; öneri: (a) dil nötr ve teknik kalsın: "a low-voltage distribution network in the northern part of Cyprus (operator: Kıb-Tek)", siyasi niteleme yok; (b) ilk mesaj yalnız sorumlu yazara, EAC'den Ioannou ve KIOS'tan Kyriakides bilgi alıcısı **değil** (yazarın yönlendirmesiyle sonra). Volkan onaylarsa gönderir.
 Senden beklenen (BUILD): PR'a dokunma; ROADMAP Faz 2 kutu metni, tüzük madde 2 formülü ve günlük notları (2, 4) PR dalına (küçük commit); Can'a dalda C1 için haber kutuda (21:46'da yazılmış).
+İlerleme 21:55 (karar masası): İspanya Mac'te birebir (k 1,38–1,50 aralığı, %80 bir-dışarıda 0,791, PIT 0,100 → 0,086); İngiltere Mac'te birebir (5 → 6, bir-dışarıda 6/6, σ en az 0,12). Farazi 20 şehir koşumu sürüyor. Can'ın dalda C1 koşumu ve onayı bekleniyor.
 Durum: bekliyor
 
 ## UYARI! 31 Eki 21:53 — BUILD'den — Gozo dış sınaması (PR #17): tutmadı, bilgi eksik — test edin
@@ -609,4 +610,4 @@ Ne söylenebilir: ne "doğrulandı" ne "yanlış" (20:47'deki "bilgi eksik, raka
 Soru: PR #17 olumsuz sonuç olarak birleşsin mi (tüzük §3: olumsuz sonuçlar da yazılır; model kodu değişmiyor)? Sunumda söylenmez.
 Dosya: PR #17 (https://github.com/volkanGRGN/KKTC-hackathon/pull/17): src/gozo_dis_sinama.py, docs/log/2026-11-01-volkan-faz7-gozo.md
 Neden: Volkan'ın kuralı: eksi bulgulu PR karar masasında test edilir. Bloklamıyor; Faz 8 PR #16'dan sonra.
-Durum: bekliyor
+Durum: karar verildi 21:55 → olumsuz sonuç olarak BİRLEŞİR (tüzük §3: olumsuz sonuç da yazılır; model koduna dokunmuyor; günlük 'doğrulandı' demiyor). Birleştirmeyi karar masası denedi, izin sistemi incelemesiz birleştirmeyi reddetti; Volkan'ın açık 'birleştir' sözüyle yapılır.
