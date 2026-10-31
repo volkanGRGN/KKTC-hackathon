@@ -6,6 +6,7 @@ docs/data/tablo-bicimi.md sözleşmesinde.
 
 Çalıştırma: python3 src/sinav.py faz1 data/synthetic
            python3 src/sinav.py faz2 data/synthetic [--aralik 11-20]   (tahmin.csv: src/sablon.py)
+           python3 src/sinav.py faz3 data/synthetic [--aralik 11-20]   (kac_ev.csv: src/kac_ev.py)
 Her madde için GEÇTİ / KALDI ve rakam yazar; hepsi geçerse çıkış kodu 0.
 """
 import csv
@@ -403,19 +404,128 @@ def faz2(sehirler):
     return m, bilgi
 
 
+YANLIS_YESIL_MAX, YANLIS_YESIL_SEHIR_MAX = 0.05, 0.10
+CANLI_BUTCE = 0.02              # ADR-0010: canlıya geçiş bütçesi (bilgi)
+YANLIS_KIRMIZI_HEDEF = 0.20
+KAC_EV_HATA_MAX = 2.0
+SARI_HEDEF = 0.30
+
+
+def faz3_oku(s):
+    k = s['klasor'] / 'kac_ev.csv'
+    if not k.exists():
+        return 'kac_ev.csv yok'
+    s['kac_ev'] = {r['trafo_no']: r for r in _csv(k)}
+    return None
+
+
+def _oran(pay, payda):
+    return f'{_yuzde(pay / payda)} ({pay}/{payda})' if payda else '— (0/0)'
+
+
+def faz3(sehirler):
+    """ROADMAP Faz 3 geçme sınavı. Küme: kac_ev_aday > 0 (aday = 0 ayrı sayılır); dolu = kac_ev_gercek = 0."""
+    m, bilgi = [], []
+    satir, adaysiz = [], 0
+    for s in sehirler:
+        for r in s['cevap']:
+            if int(r['kac_ev_aday']) == 0:
+                adaysiz += 1
+                continue
+            k = s['kac_ev'][r['trafo_no']]
+            satir.append(dict(sehir=s['ad'], tip=r['tip'], gercek=int(r['kac_ev_gercek']),
+                              tavan=int(r['kac_ev_tavan']), renk=k['renk'], kar=int(k['kac_ev_karamsar']),
+                              iyi=int(k['kac_ev_iyimser']), k40=int(k['kural40_ev']), sinir=k['sinir_karamsar']))
+    dolu = [x for x in satir if x['gercek'] == 0]
+
+    def yanlis_yesil(yer_var):
+        """(yanlış, yer var denen, şehir başına {şehir: (yanlış, yer var)})"""
+        ys = [x for x in satir if yer_var(x)]
+        sehir = {}
+        for x in ys:
+            a, b = sehir.get(x['sehir'], (0, 0))
+            sehir[x['sehir']] = (a + (x['gercek'] == 0), b + 1)
+        return sum(x['gercek'] == 0 for x in ys), len(ys), sehir
+
+    # 1. Yanlış yeşil (model): yeşil denip gerçekte dolu.
+    yy, ny, sehir = yanlis_yesil(lambda x: x['renk'] == 'yesil')
+    kotu = max(sehir.items(), key=lambda x: x[1][0] / x[1][1]) if sehir else None
+    kotu_oran = kotu[1][0] / kotu[1][1] if kotu else 0.0
+    _madde(m, ny > 0 and yy / ny <= YANLIS_YESIL_MAX and kotu_oran <= YANLIS_YESIL_SEHIR_MAX,
+           f'yanlış yeşil ≤ %{100 * YANLIS_YESIL_MAX:g}, en kötü şehirde ≤ %{100 * YANLIS_YESIL_SEHIR_MAX:g}',
+           f'{_oran(yy, ny)}; en kötü şehir ' + (f'{_oran(*kotu[1])} {kotu[0]}' if kotu else '— (yeşil yok)')
+           + f'; yeşili olan şehir {len(sehir)}/{len(sehirler)}; dolu trafoya yeşil {_oran(yy, len(dolu))}')
+    bilgi.append(f'canlı bütçe (ADR-0010) yanlış yeşil < %{100 * CANLI_BUTCE:g}: '
+                 + ('tutuyor' if ny and yy / ny < CANLI_BUTCE else 'tutmuyor' if ny else 'yeşil yok')
+                 + f' ({_oran(yy, ny)}; farazi şehir, gösterim)')
+
+    # 2. %40 kuralı aynı ölçüyle: "yer var" = kural40_ev ≥ 1.
+    ky, nk, sehir40 = yanlis_yesil(lambda x: x['k40'] >= 1)
+    kotu40 = max(sehir40.items(), key=lambda x: x[1][0] / x[1][1]) if sehir40 else None
+    _madde(m, True, '%40 kuralının yanlış yeşili aynı trafolarda, yan yana',
+           f'%40 kuralı {_oran(ky, nk)} (en kötü şehir ' + (f'{_oran(*kotu40[1])} {kotu40[0]}' if kotu40 else '—')
+           + f'), model {_oran(yy, ny)}; dolu trafoya "yer var": %40 kuralı {_oran(ky, len(dolu))}, model {yy}/{len(dolu)}')
+
+    # 3. Yanlış kırmızı: kırmızı denip gerçekte ≥ 1 ev sığan (hedef; aşarsa UYARI).
+    kir = [x for x in satir if x['renk'] == 'kirmizi']
+    yk = sum(x['gercek'] >= 1 for x in kir)
+    _madde(m, True, f'yanlış kırmızı raporlandı (hedef ≤ %{100 * YANLIS_KIRMIZI_HEDEF:g})',
+           f'{_oran(yk, len(kir))}; kırmızı payı {_oran(len(kir), len(satir))}; dolu yakalanan (kırmızı) '
+           f'{sum(x["gercek"] == 0 for x in kir)}/{len(dolu)}'
+           + ('' if not kir or yk / len(kir) <= YANLIS_KIRMIZI_HEDEF else '; UYARI: hedefin üstünde (kırmızı kuralı karar masasında)'))
+
+    # 4. Kaç ev hatası (tavan = 1 olanlar ayrı: gerçek alttan kesik).
+    kes = [x for x in satir if not x['tavan']]
+    hata = {ad: st.median(abs(f(x) - x['gercek']) for x in kes) for ad, f in
+            (('karamsar', lambda x: x['kar']), ('iyimser', lambda x: x['iyi']), ('ortası', lambda x: (x['kar'] + x['iyi']) / 2))}
+    gecen = [ad for ad, h in hata.items() if h <= KAC_EV_HATA_MAX]
+    _madde(m, bool(gecen), f'kaç ev hatası ortanca ≤ {KAC_EV_HATA_MAX:g} ev (en az bir sayı)',
+           ', '.join(f'{ad} {h:g}' for ad, h in hata.items()) + f' ev; eşiği geçen: {", ".join(gecen) or "yok"}; '
+           f'n = {len(kes)}, tavan = 1 ayrı {len(satir) - len(kes)}')
+    bilgi.append('kaç ev hatası ortancası, tavan = 1 dahil (gerçek alttan kesik): ' + ', '.join(
+        f'{ad} {st.median(abs(f(x) - x["gercek"]) for x in satir):g}' for ad, f in
+        (('karamsar', lambda x: x['kar']), ('iyimser', lambda x: x['iyi']), ('ortası', lambda x: (x['kar'] + x['iyi']) / 2)))
+        + f' ev (n = {len(satir)})')
+
+    # 5. Sarı oranı (hedef; aşarsa UYARI).
+    sari = sum(x['renk'] == 'sari' for x in satir)
+    _madde(m, True, f'sarı oranı raporlandı (hedef ≤ %{100 * SARI_HEDEF:g})',
+           _oran(sari, len(satir)) + ('' if sari / len(satir) <= SARI_HEDEF else '; UYARI: hedefin üstünde, sebep BUILD günlüğünde'))
+
+    # Bilgi.
+    bilgi.append(f'küme: kac_ev_aday > 0 {len(satir)} trafo ({len(dolu)} dolu); aday = 0 ayrı {adaysiz}')
+    renk = Counter(x['renk'] for x in satir)
+    bilgi.append('renk: ' + ', '.join(f'{r} {renk.get(r, 0)}' for r in ('yesil', 'sari', 'kirmizi')))
+    for t in TIPLER:
+        xs = [x for x in satir if x['tip'] == t]
+        if xs:
+            c = Counter(x['renk'] for x in xs)
+            bilgi.append(f'  {t} (n {len(xs)}, dolu {sum(x["gercek"] == 0 for x in xs)}): '
+                         + ', '.join(f'{r} {c.get(r, 0)}' for r in ('yesil', 'sari', 'kirmizi'))
+                         + f'; ortanca gerçek / karamsar / iyimser {st.median(x["gercek"] for x in xs):g} / '
+                         f'{st.median(x["kar"] for x in xs):g} / {st.median(x["iyi"] for x in xs):g} ev')
+    ic = sum(x['kar'] <= x['gercek'] <= x['iyi'] for x in kes)
+    bilgi.append(f'gerçek [karamsar, iyimser] aralığında (tavan = 0): {_oran(ic, len(kes))}; '
+                 f'gerçek < karamsar {sum(x["gercek"] < x["kar"] for x in kes)}, gerçek > iyimser {sum(x["gercek"] > x["iyi"] for x in kes)}')
+    sn = Counter(x['sinir'] for x in satir)
+    bilgi.append('sinir_karamsar: ' + ', '.join(f'{k} {n}' for k, n in sn.most_common()))
+    return m, bilgi
+
+
 def main():
     sys.stdout.reconfigure(encoding='utf-8')  # Windows'ta boruya yazarken cp1254 '≥' karakterinde çöküyordu
-    if len(sys.argv) < 3 or sys.argv[1] not in ('faz1', 'faz2'):
-        sys.exit('Kullanım: python3 src/sinav.py faz1|faz2 <şehir kökü, ör. data/synthetic> [--aralik 11-20]')
+    if len(sys.argv) < 3 or sys.argv[1] not in ('faz1', 'faz2', 'faz3'):
+        sys.exit('Kullanım: python3 src/sinav.py faz1|faz2|faz3 <şehir kökü, ör. data/synthetic> [--aralik 11-20]')
     faz = sys.argv[1]
     sehirler, atlanan = sehirleri_oku(sys.argv[2])
     if '--aralik' in sys.argv:
         a, b = map(int, sys.argv[sys.argv.index('--aralik') + 1].split('-'))
         sehirler = [s for s in sehirler if a <= s['no'] <= b]
-    if faz == 'faz2':
+    if faz != 'faz1':
+        oku = faz2_oku if faz == 'faz2' else faz3_oku
         kalan = []
         for s in sehirler:
-            eksik = faz2_oku(s)
+            eksik = oku(s)
             if eksik:
                 atlanan.append((s['ad'], eksik))
             else:
@@ -427,8 +537,8 @@ def main():
         sys.exit(f'{sys.argv[2]} altında sınava girecek şehir yok.')
     trafo = sum(len(s['cevap']) for s in sehirler)
     print(f"Faz {faz[-1]} geçme sınavı: {len(sehirler)} şehir ({sehirler[0]['ad']}…{sehirler[-1]['ad']}), {trafo} trafo"
-          + (' — gösterim, farazi şehirler' if faz == 'faz2' else '') + '\n')
-    maddeler, bilgi = (faz1 if faz == 'faz1' else faz2)(sehirler)
+          + ('' if faz == 'faz1' else ' — gösterim, farazi şehirler') + '\n')
+    maddeler, bilgi = {'faz1': faz1, 'faz2': faz2, 'faz3': faz3}[faz](sehirler)
     for gecti, ad, ayrinti in maddeler:
         print(f"[{'GEÇTİ' if gecti else 'KALDI'}] {ad}: {ayrinti}")
     print('\nBilgi:')

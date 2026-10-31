@@ -118,14 +118,82 @@ def kac_trafo(sehirler, cikti):
     return yol, list(zip(n_list, orta, p10, p90, kap))
 
 
+def kilit(sehirler, cikti, aralik):
+    """Sunumun kilit grafiği: dolu trafoya "yer var" — model yeşili ile %40 kuralı, aynı trafolarda."""
+    yer = {'Bizim yöntem\n(yeşil)': lambda k: k['renk'] == 'yesil',
+           '%40 kuralı\n(bugünkü pratik)': lambda k: int(k['kural40_ev']) >= 1}
+    yanlis, toplam, dolu_yer, sehir_oran = {}, {}, {}, {}
+    dolu = 0
+    for ad, f in yer.items():
+        yanlis[ad] = toplam[ad] = dolu_yer[ad] = 0
+        sehir_oran[ad] = []
+    for s in sehirler:
+        say = {ad: [0, 0] for ad in yer}
+        for r in s['cevap']:
+            if int(r['kac_ev_aday']) == 0:
+                continue
+            k = s['kac_ev'][r['trafo_no']]
+            d = int(r['kac_ev_gercek']) == 0
+            dolu += d
+            for ad, f in yer.items():
+                if f(k):
+                    say[ad][0] += d
+                    say[ad][1] += 1
+                    dolu_yer[ad] += d
+        for ad in yer:
+            yanlis[ad] += say[ad][0]
+            toplam[ad] += say[ad][1]
+            if say[ad][1]:
+                sehir_oran[ad].append(100 * say[ad][0] / say[ad][1])
+    renk = ['#2e7d32', '#c62828']
+    adlar = list(yer)
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.8))
+    oran = [100 * yanlis[a] / toplam[a] if toplam[a] else 0 for a in adlar]
+    a1.bar([0, 1], oran, color=renk, width=0.55)
+    for i, a in enumerate(adlar):
+        a1.plot([i] * len(sehir_oran[a]), sehir_oran[a], 'k.', alpha=0.45)
+        ust = max([oran[i]] + sehir_oran[a])
+        a1.text(i, ust + 1, f'%{oran[i]:.0f}\n{yanlis[a]} / {toplam[a]}', ha='center', va='bottom', fontsize=11)
+    a1.set_xticks([0, 1], adlar)
+    a1.set_ylabel('"yer var" dediklerinden gerçekte dolu (%)')
+    a1.set_title('Yanlış yeşil: "yer var" dedi, trafo doluydu\n(nokta = şehir)')
+    a1.set_ylim(0, max(30, max(max(v, default=0) for v in sehir_oran.values()) + 12))
+    pay = [100 * dolu_yer[a] / dolu if dolu else 0 for a in adlar]
+    a2.bar([0, 1], pay, color=renk, width=0.55)
+    for i, a in enumerate(adlar):
+        a2.text(i, pay[i] + 1.5, f'{dolu_yer[a]} / {dolu}', ha='center', va='bottom', fontsize=11)
+    a2.set_xticks([0, 1], adlar)
+    a2.set_ylabel('dolu trafoların "yer var" denen payı (%)')
+    a2.set_title(f'Dolu {dolu} trafodan kaçına "yer var" dendi')
+    a2.set_ylim(0, 100)
+    fig.suptitle(f'Dolu trafoya "yer var" demek — farazi şehir, gösterim ({aralik})', color='#b71c1c', fontsize=11)
+    fig.tight_layout()
+    yol = Path(cikti) / 'kilit_yanlis_yesil.png'
+    fig.savefig(yol, dpi=150)
+    plt.close(fig)
+    return yol, {a: (yanlis[a], toplam[a], dolu_yer[a], dolu) for a in adlar}
+
+
 def main():
     sys.stdout.reconfigure(encoding='utf-8')
-    if len(sys.argv) < 4 or sys.argv[1] != 'faz2':
-        sys.exit('Kullanım: python3 src/grafikler.py faz2 <şehir kökü> <çıktı klasörü> [--aralik 11-20]')
+    if len(sys.argv) < 4 or sys.argv[1] not in ('faz2', 'faz3'):
+        sys.exit('Kullanım: python3 src/grafikler.py faz2|faz3 <şehir kökü> <çıktı klasörü> [--aralik 11-20]')
     sehirler, _ = sinav.sehirleri_oku(sys.argv[2])
+    aralik = 'şehir ' + (sys.argv[sys.argv.index('--aralik') + 1] if '--aralik' in sys.argv else 'hepsi')
     if '--aralik' in sys.argv:
         a, b = map(int, sys.argv[sys.argv.index('--aralik') + 1].split('-'))
         sehirler = [s for s in sehirler if a <= s['no'] <= b]
+    if sys.argv[1] == 'faz3':
+        sehirler = [s for s in sehirler if not sinav.faz3_oku(s)]
+        if not sehirler:
+            sys.exit('kac_ev.csv olan şehir yok (önce src/kac_ev.py).')
+        cikti = Path(sys.argv[3])
+        cikti.mkdir(parents=True, exist_ok=True)
+        yol, s = kilit(sehirler, cikti, aralik)
+        print(yol)
+        for a, (y, t, dy, d) in s.items():
+            print(f"  {a.splitlines()[0]}: yanlış yeşil {y}/{t}, dolu trafoya yer var {dy}/{d}")
+        return
     sehirler = [s for s in sehirler if not sinav.faz2_oku(s)]
     if not sehirler:
         sys.exit('tahmin.csv olan şehir yok (önce src/sablon.py).')
