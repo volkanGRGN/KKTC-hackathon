@@ -32,7 +32,7 @@ Dosyalar arasındaki sözleşme (hangi dosya hangi biçimde ne üretir) `docs/da
 - Üretilen şehirler (`data/synthetic/`) ve ham veri depoya girmez (`.gitignore`); tohumla yeniden üretilir / KAYNAK.txt'den indirilir.
 
 ## Commit
-- Küçük ve anlamlı parçalar. Mesaj alan önekiyle: `alan: ne yaptı` (ör. `sehir: panel yaygınlığı eklendi`, `veri: EAC injection indirildi`, `docs: sözlüğe tohum eklendi`). Alanlar: `sehir`, `sablon`, `kacev`, `veri`, `harita`, `sinav`, `docs`.
+- **Sık commit** (Volkan, 31 Ekim): her anlamlı adımdan sonra küçük bir commit ve hemen `git pull --rebase` + `git push`; işi saatlerce yerelde biriktirme. Küçük ve anlamlı parçalar. Mesaj alan önekiyle: `alan: ne yaptı` (ör. `sehir: panel yaygınlığı eklendi`, `veri: EAC injection indirildi`, `docs: sözlüğe tohum eklendi`). Alanlar: `sehir`, `sablon`, `kacev`, `veri`, `harita`, `sinav`, `docs`.
 - Push'tan önce `git pull --rebase`.
 
 ## Pull Request (dal açıldığında)
