@@ -34,7 +34,7 @@ Bayraklıların bugün 259 V'u aşan payı her satırda isabetle sayıca aynı �
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
 |---|---|---|---|---|---|
-| 1 Kas ~00:30 | v2b + `pv_uc` (bayrak 0,7), ayar yok | 1–10 | resmi sütunlar değişmez; yanlış yeşil 0, bayrak isabeti ölçüyü geçer | ilk 13 sütun birebir; 20/0, bayrak %75 (15/20) ≥ %59; renksiz %89 | PR, harita Civan'a |
-| 1 Kas ~00:31 | aynı + sahte kayıt (PR #22, iki kat varsayım) | 1–10 | kayıtla iki uç güçlenir, yanlış yeşil 0 | yeşil 28–32, bayrak %79–89, yanlış yeşil 0 | bilgi |
+| 1 Kas ~00:20 | v2b + `pv_uc` (bayrak 0,7), ayar yok | 1–10 | resmi sütunlar değişmez; yanlış yeşil 0, bayrak isabeti ölçüyü geçer | ilk 13 sütun birebir; 20/0, bayrak %75 (15/20) ≥ %59; renksiz %89 | PR, harita Civan'a |
+| 1 Kas ~00:21 | aynı + sahte kayıt (PR #22, iki kat varsayım) | 1–10 | kayıtla iki uç güçlenir, yanlış yeşil 0 | yeşil 28–32, bayrak %79–89, yanlış yeşil 0 | bilgi |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
