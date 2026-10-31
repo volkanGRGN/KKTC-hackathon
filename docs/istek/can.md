@@ -186,3 +186,8 @@ Karar:
 4. KTTO Mart 2023 adresi: ben de iki aramada bulamadım; slaytta "[Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı]" yaz, bulunursa değişir. `python-calamine` requirements'a BUILD ekliyor.
 Senden beklenen: slayt 5 ve dürüstlük cümlesi; `faz3` bilgi satırı (aralık kapsaması) + yeniden koşum; bant düzeltmesi gelince `faz2` yeniden; günlüğe.
 Durum: (1) yapıldı — slayt 5 (1.2 + İspanya), dürüstlük cümlesi 4 (fatura), KTTO etiketi; sunum 7 ekrana bölündü (docs/sunum/ekranlar.md, 17:32 BİLGİ); (2) yapıldı — `aralık kapsaması` bilgi satırı (1–20 %70,0, sınav %69,6), kırmızı (b) ile yeniden koşum ve kaç ev sebebi günlükte (082c80c); bant düzeltmesi gelince `faz2` yeniden koşulacak (bekliyor)
+## UYARI! 31 Eki 17:50 — Civan'dan — dashboard'da "şebeke doluluğu" nasıl hesaplansın? (aynı soru volkan.md ve can.md'de)
+Ne: Haritadan ayrı bir dashboard sayfası (veri ve hesap) şehrin şebeke doluluğunu gösterecek. Hangi tanım doğru: (a) trafo başına öğlen en düşük yük ÷ trafo gücü (`tahmin.csv` `ogle_min_kw` ÷ `trafolar.csv` `kva`); (b) panel payının ne kadarı dolu (`kac_ev.csv` gerilim/ısıl pay ve kaç ev); (c) kWh: yıllık tüketim (`yillik_tuketim_mwh`) ve öğlen güneşinin ne kadarı şebekeye sığar; (d) başka? Yalnız sözleşmedeki sütunlarla, cevap anahtarı olmadan hesaplanacak.
+Dosya: app/ (Civan, yeni dashboard sayfası)
+Neden: Tanım net değilse ekranda yanlış ya da anlamsız rakam gösteririz.
+Durum: bekliyor

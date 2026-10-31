@@ -276,3 +276,9 @@ Ne: Volkan'ın isteğiyle `kac_ev.py`'nin bütün varsayımları listelendi ve t
 Dosya: docs/log/2026-10-31-volkan-faz3-varsayimlar.md
 Neden: Volkan "modelin yanlış bulmasının çözümü nedir" sorusu; kod inceleme rehberindeki "ölçülmemiş sayı" kuralı. Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 17:50 — Civan'dan — dashboard'da "şebeke doluluğu" nasıl hesaplansın? (aynı soru volkan.md ve can.md'de)
+Ne: Haritadan ayrı bir dashboard sayfası (veri ve hesap) şehrin şebeke doluluğunu gösterecek. Hangi tanım doğru: (a) trafo başına öğlen en düşük yük ÷ trafo gücü (`tahmin.csv` `ogle_min_kw` ÷ `trafolar.csv` `kva`); (b) panel payının ne kadarı dolu (`kac_ev.csv` gerilim/ısıl pay ve kaç ev); (c) kWh: yıllık tüketim (`yillik_tuketim_mwh`) ve öğlen güneşinin ne kadarı şebekeye sığar; (d) başka? Yalnız sözleşmedeki sütunlarla, cevap anahtarı olmadan hesaplanacak.
+Dosya: app/ (Civan, yeni dashboard sayfası)
+Neden: Tanım net değilse ekranda yanlış ya da anlamsız rakam gösteririz.
+Durum: bekliyor
