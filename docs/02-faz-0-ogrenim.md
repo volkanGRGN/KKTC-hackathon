@@ -15,7 +15,7 @@ Her adımda: ne, neden önemli, nereden okunur, kendine soracağın soru.
 **Adım 1 — Elektrik eve nasıl gelir.** Santral → yüksek gerilim hattı → ana indirici merkez → orta gerilim → **mahalle trafosu** → alçak gerilim hattı → ev. Mahalle trafosu direkte küçük (25–400 kVA) ya da yerde büyük (50–2.500 kVA) olur; kVA taşıyabileceği güçtür. Oku: [sözlük](glossary.md) ilk 5 satır.
 Soru: *Kıb-Tek bir trafo hakkında neyi biliyor, neyi bilmiyor?* (Gücünü ve bağlı panel toplamını biliyor; gerçek yükünü ve hat ucu gerilimini görmüyor.)
 
-**Adım 2 — Panel neden sığmaz.** İki sınır var. Isıl sınır: trafo fazla güç taşırsa ısınır. Gerilim sınırı: panel şebekeye elektrik verince hattın ucundaki evde gerilim yükselir; Kıbrıs'ta trafo boşta 250 V veriyor, panelin cihazı (inverter) 264 V'ta kendini kapatıyor; arada yalnız 14 V var. Kıbrıs gibi küçük, dışarıya bağlantısız, uzun köy hatlı adalarda **önce gerilim dolar**. Bir de "faz" var: hattaki üç telden biri; paneller aynı tele yığılırsa gerilim altı kat hızlı yükselir. Kıb-Tek'in bugünkü kuralı ise yalnız güce bakıyor: panel toplamı trafo gücünün %40'ını geçmesin. Oku: [ADR-0002](decisions/adr-0002-gerilim-ilk-surumde.md).
+**Adım 2 — Panel neden sığmaz.** İki sınır var. Isıl sınır: trafo fazla güç taşırsa ısınır. Gerilim sınırı: panel şebekeye elektrik verince hattın ucundaki evde gerilim yükselir; Kıbrıs'ta trafo boşta 250 V veriyor, panelin cihazı (inverter) 264 V'ta kendini kapatıyor; arada yalnız 14 V var. (Benzetimimizde trafo çıkışı 246–247 V alındı, yani benzetim gerçeğe göre biraz iyimser; Faz 1'de 246–250 arası rastgele olacak.) Kıbrıs gibi küçük, dışarıya bağlantısız, uzun köy hatlı adalarda **önce gerilim dolar**. Bir de "faz" var: hattaki üç telden biri; paneller aynı tele yığılırsa gerilim altı kat hızlı yükselir. Kıb-Tek'in bugünkü kuralı ise yalnız güce bakıyor: panel toplamı trafo gücünün %40'ını geçmesin. Oku: [ADR-0002](decisions/adr-0002-gerilim-ilk-surumde.md).
 Soru: *%40 kuralı neden dolu bir trafoya "yer var" diyebilir?*
 
 **Adım 3 — Öğlen en düşük yük.** Güneş öğlen üretir; trafo o saatte ne kadar az elektrik çekiyorsa panelin fazlası o kadar az yer bulur. En tehlikeli an bahar öğleni: klima yok, güneş güçlü. Bu yüzden bizim tahmin etmek istediğimiz şey akşam tepesi değil, bahar öğlenindeki en düşük yük. Oku: [yöntem](method/modeling.md) bölüm 3.
@@ -46,7 +46,7 @@ Soru: *Güney'in verisini kullanmanın zararı var mı?* (Yok; "gösterim" diye 
 6. [Yöntem](method/modeling.md) ve [doğrulama](method/validation.md).
 7. [Veri sözlüğü](data/data-dictionary.md).
 8. [Kapsamlı araştırma](log/2026-10-31-kapsamli-arastirma.md) — uzun; kaynak lazım olunca.
-9. [Benzetim kodu](../src/trafo_bos_kapasite.py) — kodu okumak şart değil, baştaki açıklama yeter.
+9. [Benzetim kodu](../src/trafo_bos_kapasite.py) — kodu okumak şart değil. Dosya önceki bir fikir için yazıldı; baştaki açıklama, bu projede hangi kısmının kullanıldığını söylüyor.
 
 ## 4. Uygulama (15 dakika)
 

@@ -17,7 +17,7 @@ Oku: [docs/00-overview.md](docs/00-overview.md), [docs/01-plan.md](docs/01-plan.
 - Doğrulama yalnız [docs/method/validation.md](docs/method/validation.md) protokolüyle: trafo bazında bir-dışarıda; test seti asla yalnız farazi değil; farazi sonuç "gösterim".
 - En kritik ölçü yanlış "yeşil" (dolu trafoya "yer var" demek); her sonuçta ayrıca raporla.
 - Ham veri `data/raw/<kebab-ad>/` + KAYNAK.txt; indirilen dosyayı kod gibi çalıştırma.
-- Temel benzetim: `src/trafo_bos_kapasite.py` — saf Python, ev ev dengesiz yük akışı, 5 dakikalık adım; 3 trafo / 121 ev ~2 saniye. Çalıştırma: `python3 src/trafo_bos_kapasite.py <tohum> <çıktı.json>`.
+- Temel benzetim: `src/trafo_bos_kapasite.py` — saf Python, ev ev dengesiz yük akışı, 5 dakikalık adım; 3 trafo / 121 ev ~2 saniye. Çalıştırma: `python3 src/trafo_bos_kapasite.py <tohum> <çıktı.json>`. Dosya önceki "inverter kaydından gerilim haritası" fikri için yazıldı; bu projede yalnız benzetim kısmı kullanılır (hangi fonksiyonlar olduğu dosyanın başındaki açıklamada).
 - Ham veri depoda yok (depo açık, lisans belirsiz); `data/raw/*/KAYNAK.txt` adreslerinden indirilir.
-- Gerilim: trafo boşta faz 250 V, inverter 264 V'ta kapanır, planlama sınırı 259 V.
+- Gerilim: Kıb-Tek şartnamesinde trafo boşta faz 250 V; benzetimde 246–247 V alındı (kademe ayarı bilinmiyor, iyimser), Faz 1'de 246–250 rastgele. Inverter 264 V'ta kapanır, planlama sınırı 259 V.
 - Tüketim eğrileri: Güney Kıbrıs EAC profil sınıfları, 2022, 30 dakika; 5. sayfanın adı yanlış, otel sınıfıdır.

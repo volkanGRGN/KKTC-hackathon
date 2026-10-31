@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Benzetim mahallesi: inverter kaydından trafo grubu bulma + boş panel kapasitesi.
 
+Trafo Şablonu projesinde bu dosyanın yalnız benzetim kısmı kullanılır: 1–2. adımlar
+(build, irradiance, mv_factor, loads_series, solve, house_voltages, simulate) ve 5. adımdaki
+gerçek değer hesabı (violates, truth). 3–4. adımlar (residual_diffs, cluster, group_room,
+sensitivities, estimate_fits) önceki "inverter kaydından gerilim haritası" fikrine ait;
+şablon projesinde kullanılmıyor.
+
 Saf Python (numpy yok). Yapı:
 1. Üç trafolu, topolojisi bilinen bir mahalle kurulur (tek fazlı evler, havai hat).
 2. 14 bahar günü 5 dakikalık adımlarla dengesiz yük akışı hesaplanır.
@@ -35,6 +41,8 @@ CABLES = {  # ohm/km, işletme sıcaklığında; nötr 54,6 mm² taşıyıcı
 }
 
 # (uzunluk m, kablo, ev sayısı, yön derece) ; pv_p: panel olasılığı (hat başı, hat sonu)
+# v0: trafo çıkış faz gerilimi, V. Kıb-Tek şartnamesi boşta 250 V; kademe ayarı bilinmiyor,
+# burada 246–247 alındı (şartnameden iyimser). Faz 1'de 246–250 arası rastgele olacak.
 TRAFO_SPECS = [
     dict(ad='T1 Kıyı', kva=250, v0=246.0, xy=(0, 0), pv_p=(0.15, 0.5), phase_w=(0.38, 0.33, 0.29),
          feeders=[(420, 'ABC70', 24, 10), (320, 'ABC70', 16, 200)]),

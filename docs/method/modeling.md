@@ -20,7 +20,7 @@ Gerekçeler: [ADR-0001](../decisions/adr-0001-sekil-buyukluk-sablon.md), [ADR-00
 ## 4. Kaç ev sığar
 
 - Isıl: trafo gücü + öğlen en düşük yük − mevcut panel. Yanına bugünkü %40 kuralı.
-- Gerilim: pay = 259 − 250 V − trafo yükselmesi; etkin mesafe hat boyunun yarısı; tek faz karamsar, dengeli üç faz iyimser.
+- Gerilim: pay = 259 − trafo çıkış gerilimi − trafo yükselmesi; etkin mesafe hat boyunun yarısı; tek faz karamsar, dengeli üç faz iyimser. Trafo çıkışı: şartname boşta 250 V, kademe ayarı bilinmiyor → 246–250 V arası (benzetim şu an 246–247 kullanıyor).
 - Sonuç = küçüğü ÷ 6,5 kW. İki senaryo: karamsar (düşük yük P10, faz bilinmiyor) ve iyimser.
 
 ## 5. Belirsizlik ve renk
