@@ -136,7 +136,7 @@ Karar: Sunum yarın, saat bilinmiyor; bu akşam üç şey paralel gider: Faz 2 k
 Senden beklenen (ana oturum): yukarıdakiler; bitirdiğin kalemi bu girdinin altına "yapıldı <saat>" satırıyla işle.
 İlerleme 17:03 (BUILD): (2) üretici 1.2 paketi bitti, PR #12 (zaman kutusu 19:00 içinde); 20 şehir yeniden üretildi, `sinav.py faz1` (207 V) 5/5 geçti. (1) birleştirmeler: izin yok (aşağıda UYARI). (3) `kac_ev.py` şimdi başlıyor.
 İlerleme 17:17 (BUILD): (1) Volkan kararı 17:06: #8 ve #12 Can'ı bekler. (2) Faz 2: PR #12 hazır, Can'ın `sinav.py faz2` ölçümü bekleniyor. (3) Faz 3 çekirdeği: `kac_ev.py` PR #13 (sınav 11–20: yanlış yeşil 0/21, %40 kuralı 41/284); Can ve Civan Faz 3 kartları main'de (docs/gorev/can-faz3-sinav-grafik.md, civan-faz3-yan-panel.md). (5) ROADMAP Faz 2/3/5 güncel (655dc8e); DEVIR sırada. (4) konuşma notu taslağı sırada.
-Durum: bekliyor
+Durum: yapıldı 17:17 (BUILD) — (2) PR #12, (3) PR #13 + Faz 3 kartları, (4) konuşma notu taslağı docs/konusma-notu-taslak.md (Can `docs/sunum/`'a taşır), (5) ROADMAP ve DEVIR main'de. (1) birleştirmeler Volkan kararıyla Can'ı bekliyor (17:06).
 
 ## KARAR 17:00 — BUILD'e: Muhittin'in cevabı → sunum hikâyesi, Faz 3 yeşil kuralı, bugün / sonra ayrımı
 Karar: Muhittin'in ikinci cevabı günlükte (docs/log/2026-10-31-muhittin-cevap-2-hata-payi-mimari.md); [ADR-0009](../decisions/adr-0009-dogruluk-onceligi-ve-capalama.md) ve [ADR-0010](../decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md) kabul.
@@ -147,7 +147,7 @@ Karar: Muhittin'in ikinci cevabı günlükte (docs/log/2026-10-31-muhittin-cevap
 **Sonra (sunum sonrası / pilot öncesi), ROADMAP'e "Faz 3 ikinci sürüm" olarak:** kümülatif düşüm (`onaylanan_kw`, `kalan_ev`), yeşil kuralının İspanya/İngiltere geri-testi ve bütçe eşikleri, çapalamaya korelasyon matrisi + P90/P95 + PV konum dağılımı + trafo içi çeşitlilik (Can'ın `edp_kiyas.py`; üretici 1.3), "farazi − İspanya" fark ölçeri her sürümde.
 Senden beklenen (ana oturum): 1–3 bugün, "sonra" listesi ROADMAP'e; bitince bu girdiye "yapıldı <saat>".
 İlerleme 17:17 (BUILD): (1) ROADMAP Faz 5 güven merdiveni, manşet ve dürüstlük cümleleri main'de (655dc8e); Can'a aktarım can.md'de. (2) ADR-0010 rengi `kac_ev.py`'de (PR #13), `modeling.md` §5 PR #13'te, canlı bütçe < %2 `validation.md`'de; kırmızı kuralının okuması aşağıdaki UYARI'da. (3) fatura dağılım sütunları 1.3 notu ROADMAP'e. "Sonra" listesi ROADMAP Faz 3 ikinci sürümde.
-Durum: bekliyor
+Durum: yapıldı 17:17 (BUILD) — 1: ROADMAP Faz 5 + konuşma notu taslağı + can.md; 2: `kac_ev.py` ADR-0010 (PR #13), kırmızı okuması 17:17 UYARI'da; 3: 1.3 notu ROADMAP'te; "sonra" listesi ROADMAP Faz 3 ikinci sürüm.
 
 ## UYARI! 31 Eki 17:03 — BUILD'den — BLOKLUYOR: BUILD PR birleştiremiyor (#10, #11, #8, #12)
 Ne: `gh pr merge 10` izin sisteminde "gözden geçirmesiz birleştirme" diye reddedildi; karar masası da birleştiremiyor. Birleştirme Volkan'da (GitHub'da düğme ya da Claude Code ayarında izin kuralı). Sıra: #10 (EDP, yalnız yeni dosya) ve #11 (UKPN, yalnız yeni dosya; karar masası baktı) bağımsız. #8 Can onayı ya da 17:30'dan sonra Volkan kararı. #12 #8'in üstünde: sözleşme 1.2, Can ya da Civan onayı; #8 birleşince tabanı main'e döner.
