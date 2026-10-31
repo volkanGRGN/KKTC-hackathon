@@ -91,3 +91,15 @@ Karar: Evet, ekle: `trafolar.csv`'ye `yillik_tuketim_mwh`; üretici abone başı
 Neden: Hata tek büyük müşterili trafolarda (%21–25), abone sayısı büyüklüğü göstermiyor; İngiltere de müşteri sayısının yanında yıllık tüketimle ölçekliyor [Yorum]. Ayrım kuralı korunuyor: fatura Kıb-Tek'in bildiği şey.
 Senden beklenen (ana oturum): PR #8 olduğu gibi birleşsin (Can onayı; can.md'ye yazdım). Sonra ayrı küçük PR: sözleşme 1.2 (`yillik_tuketim_mwh` + gerçek veri `sehir` 800–899 satırı) + `sehir_uret.py` (sütun, bayram listesi, `kva_tavan_sayisi`; can.md 13:55 KARAR) + `sablon.py` (varsa kullan); 20 şehir yeniden; Faz 2 ölçümünü iki koşuyla günlüğe. Can/Civan onayı.
 Durum: bekliyor
+
+## UYARI! 31 Eki 14:06 — Civan'dan — gerçek şehirlerde trafolar denize düşüyor (otellerin %31'i)
+Ne: `src/sehir_uret.py` `konum()` yalnız "y ≤ 400 m" ile kıyıyı düz sayıyor; Girne kıyısı limanın doğusunda güneye kıvrılıyor. OSM kıyı çizgisiyle ölçtüm [Hesap]: tip başına 2.000 örnekte otel %31 denizde (kutu −4000…4000 × 0…400), köy ve sulama %4, yurt %3, şehir konutu %2, çarşı ve sanayi %0; sehir-001'de 4/40 (T07, T13, T32 otel; T26 şehir konutu). Haritada jüri bunları denizde görür. Öneri: kıyı dosyası varsa `konum()` döngüsüne "karada mı" koşulu (kuzeye ışın, kıyıyı tek sayıda kesiyorsa kara; 10 satır, `app/ornek_veri.py` `kiyi_segmentleri()` + `karada()` ile aynı), yoksa bugünkü 400 m kuralı + uyarı (ışınım dosyasındaki gibi). Kıyı dosyası: `data/raw/osm-kasaba/girne_kiyi.json`, indirme komutu KAYNAK.txt'de. Sahte şehirlerde uyguladım (`harita/iskelet-2` 9703aa1, 120 trafoda denizde 0).
+Dosya: src/sehir_uret.py (konum), ayar.json'a istersen kiyi_kontrolu
+Neden: harita gerçek şehri gösterecek; denizdeki trafo sunumda ilk göze batan hata olur. Bloklamıyor.
+Durum: bekliyor
+
+## UYARI! 31 Eki 14:06 — Civan'dan — sözleşme 1.2: gerçek veri şehir no 800–899 haritada nasıl etiketlensin?
+Ne: KARAR 13:58'de sözleşme 1.2'ye "gerçek veri `sehir` 800–899" geliyor. Harita bugün kartın kuralıyla `sehir` ≥ 900 → "SAHTE VERİ — gösterim", diğer her şey → "örnek veri (farazi şehir) — gösterim" yazıyor; 800–899 da "farazi şehir" diye etiketlenir, yanlış olur. Önerim: 800–899 → "gerçek ölçüm verisi (<kaynak>, Kıbrıs değil)". Kaynak adı haritaya nereden gelsin: `ayar.json`'da bir anahtar mı (ör. `veri_kaynagi`)? Ayrıca 1.2'deki `yillik_tuketim_mwh` sütununu sahte üreticiye eklerim; sözleşme PR'ı açılınca Civan onayı için bakarım.
+Dosya: docs/data/tablo-bicimi.md (Genel kurallar, şehir no aralıkları), app/harita.py
+Neden: etiket kuralı kartta (Harita kuralları 1); şehir aralığı sözleşmede. Bloklamıyor.
+Durum: bekliyor
