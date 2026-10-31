@@ -82,7 +82,7 @@ Durum: bekliyor
 Karar: `src/sinav.py` `V_ALT = 207.0` (EN 50160 alt sınırı: 230 V −%10); madde adı "hiçbir trafoda v_min_bugun_v < 207 V". ROADMAP satırını BUILD değiştiriyor.
 Neden: Yeni şehirlerde (gerçek ışınım, %3–25) 3/800 trafo 211–215 V; benzetim bozuk değil, uzun kırsal hat ve büyük yüklü tek hat. Gerekçe volkan.md'deki KARAR'da.
 Senden beklenen: tek satır değişiklik, doğrudan main (kendi dosyan); günlüğe bir satır.
-Durum: bekliyor
+Durum: yapıldı (66b51e6; eski 20 şehirde en düşük 216,0 V → GEÇTİ; ek: Windows'ta boruya UTF-8 çıktı düzeltmesi)
 
 ## KARAR 31 Eki 13:55 — volkan.md'deki "İspanya EDP kullanılabilir" isteğine
 Karar: Evet, çıkarma betiğini sen yaz (zaman kutusu 1 saat): `src/edp_oku.py` (yeni, senin). Çıktı `data/raw/edp-oviedo/turetilmis/` altına (gitignore'da, betikle yeniden üretilir): (1) `trafolar.csv` sözleşme §1 sütunlarıyla, `sehir` = 801 (gerçek veri 800–899 [Yorum]; sözleşmeye satırı BUILD ekler), `kva`, `hat_boyu_max_m` varsa, `abone_konut` = toplam müşteri (sınıf yok [Yorum]), kalan abone sütunları 0, `panel_sayisi`/`panel_kw` 0 (2018 İspanya AG'de çatı PV ihmal [Yorum]); (2) `yuk_saatlik.csv`: `sehir, trafo_no, gun, gun_turu, saat, net_kw` (21 gün × 24; 5 dakikaya açma yok, model tarafı karar verir; `tuketim_kw` = `net_kw` varsayımı [Yorum]); (3) `cevap_anahtari.csv` yalnız `ogle_min_kw` (11–14, 21 gün, saatlikten) ve `tepe_kw`; `tip` boş. TD009456 (tamamen sıfır) dışarıda, sayısı KAYNAK.txt'de.
@@ -106,7 +106,7 @@ Durum: bilgi — iş ana oturumda
 Karar: (1) Kontrol listesi **evet, şimdi**: veri sözlüğünün başına 8–10 satırlık "yeni veri eklerken" listesi (birim, çözünürlük, saat damgasının anlamı, saat dilimi, SHA-256, çifte sayım riski, hangi kaynakla çapraz sağlanacağı, lisans, etiket Kaynaklı/Hesap/Yorum). Senin dosyan, doğrudan main, ≤ 15 dk. (2) `src/veri_sagla.py` **evet ama sonra**: önce `sinav.py faz2` + grafikler + EDP betiği (kartın ve bugünkü üç KARAR); onlar bitince zaman kutusu 1 saat. İçerik: EAC sınıf eğrileri × Kıb-Tek sınıf başına yıllık tüketim → aylık toplam ↔ Kıb-Tek 2023 aylık tüketim (Nisan dahil 12 ay, sapma eşiği [Yorum] %15); EAC çatı güneşi tipik günü ↔ Open-Meteo Nisan ışınım şekli (tepe saati ±1 saat, öğlen/akşam oranı); üretici 20 şehrin abone başına yıllık enerjisi ↔ Kıb-Tek sınıf ortalaması (±%10). Her madde GEÇTİ/KALDI + rakam, `profiller.py` sağlamasıyla aynı kalıp; kalan madde eşiğe uydurulmaz, günlüğe yazılır. Yeni dosya senin (veri adımı); ilk sürüm dal + PR.
 Neden: Kontrol listesi Muhittin'in ortak sınavının ("her rakam etiketli", "çifte sayım yok") günlük karşılığı, ucuz. Çapraz sağlama değerli (modelin ölçeği Kıb-Tek yıllık tüketimine dayanıyor; EAC × Kıb-Tek aylık toplamı tutmuyorsa büyüklük yanlış) ama Faz 2 geçme sınavı önce; "çok duraksıyoruz" (Volkan).
 Senden beklenen: (1) bugün; (2) kart işlerinden sonra, günlüğe sonuç. Soru gerekmez.
-Durum: bekliyor
+Durum: (1) yapıldı (d9e69a7, 9 madde); (2) bekliyor — kart işlerinden sonra
 
 ## KARAR 31 Eki 15:12 — Can'ın "Faz 2 sınavı farazi şehirde fazla kolay olabilir" önerisine (Volkan iletti)
 Karar: Üç öneri de kabul; gerekçe ve ölçüler [ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md). Rakamların benimkiyle tutuyor (şehir konutu CV şehir içi 0,08, havuz 0,13; seninki 0,14).
@@ -116,7 +116,7 @@ Durum: bekliyor
 ## KARAR 31 Eki 15:12 — 13:55'teki "İspanya EDP türetme betiği" kararı iptal
 Karar: `src/edp_oku.py` gerekmiyor: BUILD, PR #10'da (`src/edp_test.py`) ham sayaç verisinden doğrudan koştu, üstelik trafo başı ölçüm cihazlarını (ZIVS… sayaçları) buldu ve ondalık virgül hatasını düzeltti; PR #10 günlüğünü oku (docs/log/2026-10-31-volkan-edp-gercek.md). TD009456 ham veride doluymuş, OpenDSS profilinde sıfır; günlüğüne bir satır düşersin.
 Senden beklenen: hiçbir şey; yukarıdaki (2) ile yetin.
-Durum: bilgi
+Durum: bilgi — TD009456 satırı günlüğe, KAYNAK.txt'ye ve veri sözlüğüne eklendi (eac1fe7)
 
 ## BİLGİ 15:29 — karar masasından — İngiltere gerilim verisi adayı (UK Power Networks, PV bağlantı aracı doğrulaması)
 Ne: Volkan'ın sorusu üzerine araştırıldı; veri sözlüğü "Adaylar"a satır olarak girsin (senin dosyan), **indirme şimdi değil** (sunum öncesi zaman yok; pilot öncesi Faz 3 doğrulaması için). Gerçekler [Kaynaklı: UKPN "Validation of PV Connection Assessment Tool" kapanış raporu v1.1, Mart 2015, Ofgem; veri sayfası London Datastore]:
@@ -127,7 +127,7 @@ Ne: Volkan'ın sorusu üzerine araştırıldı; veri sözlüğü "Adaylar"a sat�
 - Diğer İngiltere adayları: SPEN "Flexible Networks" (Strathclyde): 150+ ikincil trafo, 10 dk V/I/P/Q, Ara 2012–Eyl 2015, kayıt + onay gerekli, lisans belirsiz, PV odağı yok. NGED "LV Load Monitor Data": 301 trafo CSV, bazıları girişli, çözünürlük sayfada yazmıyor (Volkan kaydı). ENWL LVNS (200 trafo, 2013–14) açık değil. Low Carbon London: 5.567 ev, 30 dk, 2011–14, CC BY; ev düzeyi, trafo değil.
 Neden: İspanya gerilim vermiyor; gerilim fiziğini gerçek veride sınayabilecek tek açık set bu. Ama yalnız 20 trafo, İngiltere şebekesi (230 V nominal, çoğu yeraltı Al), bahar verisi saatlik; bizim ABC70/95 havai Kıbrıs hattına fizik taşınır, rakam taşınmaz.
 Senden beklenen: veri sözlüğü "Adaylar"a satır (yukarıdaki rakamlarla), KAYNAK yok (indirilmedi). Başka bir şey değil.
-Durum: bilgi
+Durum: yapıldı (eac1fe7) — veri bu arada indirildiği için (6fde357, KAYNAK.txt var) satır "Elimizde" altında; PR #11 sonucu ve 16:27 kararı eklendi
 
 ## KARAR 16:50 — iş sırası (yeniden planlama; kartlar BUILD'den gelecek, beklemeden başla)
 Karar: Sıra: (1) PR #8'i GitHub'da onayla (sözleşme kısmı, 5 dk); (2) `sinav.py`: `V_ALT = 207.0` + Faz 2'ye "saf tahmin" satırı (ADR-0008) + aday = 0 ayrımı zaten yaptın; (3) `docs/sunum/` klasörünü aç: slayt listesi, kaynak slaydı, dürüstlük cümleleri, itiraz slaydı (ROADMAP Faz 5; rakamlar: farazi %8,6 üst sınır, İspanya %25 → fatura ile %10, İngiltere 6 hatta 4'ü ±%40, Kıbrıs pilot); (4) Faz 3 kartı gelince `sinav.py faz3` (yanlış yeşil / yanlış kırmızı / kaç ev hatası / sarı oranı; %40 kuralı yan yana) ve `grafikler.py` kilit grafiği; (5) `src/edp_kiyas.py` + günlük; (6) veri kontrol listesi. Gerçek `tahmin.csv` ve `kac_ev.csv` BUILD'den gelince sınavları koş, rakamları günlüğe.
