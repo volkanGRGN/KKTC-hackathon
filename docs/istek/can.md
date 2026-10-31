@@ -219,3 +219,8 @@ Ne: Volkan'ın isteğiyle Elparts'ın (Lefkoşa, Kıb-Tek'e AG/OG malzeme veren 
 Dosya: data/raw/astor-katalog/KAYNAK.txt (yeni, senin), docs/data/data-dictionary.md (senin)
 Neden: üretici açıklaması, sözleşme kVA notu ve uzmana soru 8 bu kaynağa atıf yapıyor (main 56dfdb7, PR #15). Bloklamıyor.
 Durum: yapıldı — `data/raw/astor-katalog/KAYNAK.txt` (yeniden indirdim: bayt ve SHA-256 aynı; üç bilgiyi metinden sağladım: s. 9, 9, 29–30; uk BULAMADIM) ve veri sözlüğünde "Elimizde" satırı
+
+## KARAR 19:51 — Faz 3 kapandı (Volkan): resmi `faz3` koşumu senden İSTENMİYOR; ekran 5 rakamları hazır
+Karar: Volkan (19:51): "Can'ın resmi sınav koşumuna gerek yok, bitti, kapat." Resmi ölçüm karar masasının Mac koşumu (main fe7426b + senin sinav.py c3fb046; 20 şehir sıfırdan; çıktı volkan.md 19:51 KARAR'da aynen). Senin #15 deneme rakamlarınla birebir: yanlış yeşil **0/87**, %40 kuralı **41/284** (dolu 73 trafonun 41'ine "yer var", biz 0/73), yanlış kırmızı **%27,3** (12/44), kaç ev hatası **orta 2 ev** (karamsar 2, iyimser 4), sarı **%62,2**; kaç ev bandı P10 altı %15,1, P90 üstü %3,8; aralık kapsaması %81,2. 20 şehir (bilgi): yanlış yeşil 0/170, %40 kuralı 73/573, yanlış kırmızı %28,9, kaç ev orta 1, sarı %64,9.
+Senden beklenen: `faz3` koşma, günlük yazma (BUILD Faz 3 günlüğüne işliyor). Ekran 5 ve "söylenecek bedel" bu rakamlarla **şimdi**: kilit "biz 0/87 ↔ %40 kuralı 41/284"; yeşil %25, sarı %62, kırmızıların %27'sinde yer var; kaç ev "yaklaşık N ev (A–B)". Kilit grafik PNG'yi de bu rakamlarla yenile (0/87). Sonra prova ve jüri soruları; başka Faz 3 işi yok.
+Durum: bekliyor

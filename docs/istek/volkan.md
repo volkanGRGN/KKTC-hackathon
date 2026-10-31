@@ -340,3 +340,60 @@ Neden 0,98: 0,95'te dolu trafoya ilk "yer var" geliyor (geliştirme şehirlerind
 Neden: Sunum yarın; Faz 3'ün ürünü (yanlış yeşil 0, kaç ev ≤ 2) geçti, kalan iki hedef bilgi eksikliğinden ve bu gece ayarla kapanmaz (varsayım envanteri). (a) bu zayıflığı pilotun rakamlı isteğine çeviriyor, ekran 6'yı güçlendiriyor. 4 ve 5'in kökü üretici; gece yeniden üretim sınavı ve sunum rakamlarını bozar.
 Senden beklenen (yeni BUILD, DEVIR'den devralır): (1) ROADMAP Faz 3 kutuları Can'ın resmi `faz3`'üyle + "Açık eksikler" bölümü + DEVIR; (2) (a) denemesi, 60 dk; (3) (b) tablosunu Faz 3 günlüğüne. Sonra Faz 5 (prova).
 Durum: bekliyor
+
+## KARAR 19:51 — BUILD'e: Faz 3 KAPANDI (Volkan); Can'ın resmi koşumu beklenmez, kutular karar masasının koşumuyla
+Karar: Volkan (19:51, sohbette): "Can'ın resmi sınav koşumuna gerek yok, bitti, kapat." Faz 3 resmi ölçümü = karar masasının Mac koşumu: main'in son hâli (fe7426b + Can'ın sinav.py c3fb046), 20 şehir sıfırdan üretildi (üretici 1.2, EAC profilleri, Open-Meteo 2023, kıyı kontrolü), `sablon.py` → `kac_ev_olasilik.py` → `sinav.py faz3`. Sınav şehirleri 11–20 resmi, 1–20 bilgi. ROADMAP Faz 3 kutuları: [x] yanlış yeşil 0/87 (en kötü şehir 0/12); [x] %40 kuralı yan yana 41/284 (%14,4), dolu trafoya "yer var" 41/73 ↔ biz 0/73; [x] yanlış kırmızı raporlandı %27,3 (12/44), hedef üstü, sebep bilgi eksikliği (19:51 öncesi 19:44 KARAR tablosu); [x] kaç ev hatası orta 2 ev (karamsar 2, iyimser 4; n 239, tavanlı 108 ayrı); [x] sarı raporlandı %62,2 (216/347), hedef üstü, sebep aynı. Başlık "(bitti 31 Ekim, gösterim; açık eksikler pilotta)". Etiket: "karar masası koşumu, Mac, 31 Ekim 19:35–19:50; Can'ın #15 deneme koşusuyla birebir (0/87, %27,3, %62,2, 2 ev)".
+Senden beklenen (BUILD): ROADMAP Faz 3 kutuları ve "Açık eksikler" bölümü (19:44 KARAR); Faz 3 günlüğüne aşağıdaki iki çıktı aynen (başlığıyla "karar masası koşumu"); DEVIR "Faz 3 bitti". Can'a ayrıca yazdım: koşum istenmiyor, ekran 5 rakamları buradan.
+
+Sınav çıktısı, 11–20 (resmi):
+```
+Faz 3 geçme sınavı: 10 şehir (sehir-011…sehir-020), 400 trafo — gösterim, farazi şehirler
+
+[GEÇTİ] yanlış yeşil ≤ %5, en kötü şehirde ≤ %10: %0.0 (0/87); en kötü şehir %0.0 (0/12) sehir-011; yeşili olan şehir 10/10; dolu trafoya yeşil %0.0 (0/73)
+[GEÇTİ] %40 kuralının yanlış yeşili aynı trafolarda, yan yana: %40 kuralı %14.4 (41/284) (en kötü şehir %26.1 (6/23) sehir-014), model %0.0 (0/87); dolu trafoya "yer var": %40 kuralı %56.2 (41/73), model 0/73
+[UYARI] yanlış kırmızı raporlandı (hedef ≤ %20): %27.3 (12/44); kırmızı payı %12.7 (44/347); dolu yakalanan (kırmızı) 32/73; hedefin üstünde
+[GEÇTİ] kaç ev hatası ortanca ≤ 2 ev (en az bir sayı): karamsar 2, iyimser 4, ortası (kac_ev_orta) 2 ev; eşiği geçen: karamsar, ortası (kac_ev_orta); n = 239, tavan = 1 ayrı 108
+[UYARI] sarı oranı raporlandı (hedef ≤ %30): %62.2 (216/347); hedefin üstünde, sebep BUILD günlüğünde
+
+Bilgi:
+  canlı bütçe (ADR-0010) yanlış yeşil < %2: tutuyor (%0.0 (0/87); farazi şehir, gösterim)
+  kaç ev hatası ortancası, tavan = 1 dahil (gerçek alttan kesik): karamsar 1, iyimser 1, ortası (kac_ev_orta) 1 ev (n = 347)
+  küme: kac_ev_aday > 0 347 trafo (73 dolu); aday = 0 ayrı 53
+  renk: yesil 87, sari 216, kirmizi 44
+    sehir_konutu (n 139, dolu 35): yesil 6, sari 110, kirmizi 23; ortanca gerçek / karamsar / iyimser 14 / 0 / 19 ev
+    koy (n 57, dolu 30): yesil 1, sari 35, kirmizi 21; ortanca gerçek / karamsar / iyimser 0 / 0 / 11 ev
+    carsi (n 43, dolu 0): yesil 28, sari 15, kirmizi 0; ortanca gerçek / karamsar / iyimser 9 / 9 / 9 ev
+    otel (n 42, dolu 0): yesil 35, sari 7, kirmizi 0; ortanca gerçek / karamsar / iyimser 4 / 4 / 4 ev
+    sulama (n 30, dolu 7): yesil 0, sari 30, kirmizi 0; ortanca gerçek / karamsar / iyimser 2 / 1 / 3 ev
+    yurt (n 36, dolu 1): yesil 17, sari 19, kirmizi 0; ortanca gerçek / karamsar / iyimser 5 / 6 / 6 ev
+  aralık kapsaması (gerçek kac_ev_gercek [karamsar, iyimser] içinde; tavan = 0): %81.2 (194/239); gerçek < karamsar 36, gerçek > iyimser 9
+  kaç ev bandı (tavan = 0; beklenen ~%10 / ~%10): P10 altı %15.1 (36/239), P90 üstü %3.8 (9/239); P10 altı tipe göre: sehir_konutu 20 (fark ortanca 5 ev), carsi 6 (fark ortanca 1 ev), yurt 5 (fark ortanca 2 ev), sulama 2 (fark ortanca 1 ev), otel 2 (fark ortanca 1 ev), koy 1 (fark ortanca 1 ev); P10 altı yeşil 12, bunlardan dolu 0
+  sinir_karamsar: gerilim 347
+```
+
+Sınav çıktısı, 1–20 (bilgi):
+```
+Faz 3 geçme sınavı: 20 şehir (sehir-001…sehir-020), 800 trafo — gösterim, farazi şehirler
+
+[GEÇTİ] yanlış yeşil ≤ %5, en kötü şehirde ≤ %10: %0.0 (0/170); en kötü şehir %0.0 (0/10) sehir-001; yeşili olan şehir 20/20; dolu trafoya yeşil %0.0 (0/128)
+[GEÇTİ] %40 kuralının yanlış yeşili aynı trafolarda, yan yana: %40 kuralı %12.7 (73/573) (en kötü şehir %26.1 (6/23) sehir-014), model %0.0 (0/170); dolu trafoya "yer var": %40 kuralı %57.0 (73/128), model 0/128
+[UYARI] yanlış kırmızı raporlandı (hedef ≤ %20): %28.9 (22/76); kırmızı payı %10.8 (76/701); dolu yakalanan (kırmızı) 54/128; hedefin üstünde
+[GEÇTİ] kaç ev hatası ortanca ≤ 2 ev (en az bir sayı): karamsar 3, iyimser 3, ortası (kac_ev_orta) 1 ev; eşiği geçen: ortası (kac_ev_orta); n = 484, tavan = 1 ayrı 217
+[UYARI] sarı oranı raporlandı (hedef ≤ %30): %64.9 (455/701); hedefin üstünde, sebep BUILD günlüğünde
+
+Bilgi:
+  canlı bütçe (ADR-0010) yanlış yeşil < %2: tutuyor (%0.0 (0/170); farazi şehir, gösterim)
+  kaç ev hatası ortancası, tavan = 1 dahil (gerçek alttan kesik): karamsar 1, iyimser 1, ortası (kac_ev_orta) 1 ev (n = 701)
+  küme: kac_ev_aday > 0 701 trafo (128 dolu); aday = 0 ayrı 99
+  renk: yesil 170, sari 455, kirmizi 76
+    sehir_konutu (n 277, dolu 55): yesil 12, sari 237, kirmizi 28; ortanca gerçek / karamsar / iyimser 16 / 0 / 18 ev
+    koy (n 117, dolu 59): yesil 1, sari 72, kirmizi 44; ortanca gerçek / karamsar / iyimser 0 / 0 / 10 ev
+    carsi (n 83, dolu 0): yesil 55, sari 28, kirmizi 0; ortanca gerçek / karamsar / iyimser 10 / 10 / 11 ev
+    otel (n 79, dolu 0): yesil 62, sari 17, kirmizi 0; ortanca gerçek / karamsar / iyimser 4 / 4 / 4 ev
+    sulama (n 64, dolu 13): yesil 0, sari 60, kirmizi 4; ortanca gerçek / karamsar / iyimser 2 / 1 / 3 ev
+    yurt (n 81, dolu 1): yesil 40, sari 41, kirmizi 0; ortanca gerçek / karamsar / iyimser 6 / 6 / 7 ev
+  aralık kapsaması (gerçek kac_ev_gercek [karamsar, iyimser] içinde; tavan = 0): %79.3 (384/484); gerçek < karamsar 65, gerçek > iyimser 35
+  kaç ev bandı (tavan = 0; beklenen ~%10 / ~%10): P10 altı %13.4 (65/484), P90 üstü %7.2 (35/484); P10 altı tipe göre: sehir_konutu 35 (fark ortanca 5 ev), yurt 12 (fark ortanca 1.5 ev), carsi 7 (fark ortanca 1 ev), koy 4 (fark ortanca 2.5 ev), otel 4 (fark ortanca 1 ev), sulama 3 (fark ortanca 1 ev); P10 altı yeşil 15, bunlardan dolu 0
+  sinir_karamsar: gerilim 701
+```
+Durum: bekliyor
