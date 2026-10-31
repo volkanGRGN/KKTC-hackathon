@@ -167,8 +167,8 @@ Yapılacaklar — kod:
 Geçme sınavı:
 - [ ] Tıklama ile yan panel ≤ 1 saniyede açılıyor; 40 trafoda takılma yok. — Mac (BUILD, 20:55): 6 tıklamada 0,35–0,40 sn; 40'ın hepsi denenmedi.
 - [x] Yan paneldeki sayılar Faz 3 tablosuyla birebir (3 trafo elle kontrol). — Mac (BUILD, 20:55): 3 şehirde 6 trafo birebir; renk sayıları aynı. Dil 19:13 kararına göre değil ve %40 kuralının ev sayısı aday evden fazla çıkabiliyor (civan.md KONTROL 20:55).
-- [ ] İnternet kapalıyken açılıyor; 2 dakikalık ekran kaydı var. — Mac (BUILD, 20:55): OSM zemin dosyasıyla 98/98 istek yerel, dışarıya istek yok; ağ fiilen kapatılmadı; zemin dosyası depoda yok, sunum bilgisayarına indirilmeli. Ekran kaydı yok.
-- [ ] Windows ve Mac'te çalıştı; README'de komut. — Mac çalıştı (BUILD, 20:55; streamlit 1.66.1); Windows denenmedi; README'de komut var.
+- [ ] İnternet kapalıyken açılıyor; 2 dakikalık ekran kaydı var. — Zemin dosyasıyla dışarıya istek yok, iki platformda ölçüldü (Mac BUILD 20:55: 98/98 yerel; Windows Civan 21:29). Zemin dosyası depoda yok, sunum bilgisayarına indirilmeli. **Ekran kaydı 1 Kasım sabah provada** (Civan, yedek: sunum bilgisayarı çökerse PDF + kayıt); ağ fiilen kapalı deneme isteğe bağlı (karar masası 21:44). Ekran kaydı yok.
+- [x] Windows ve Mac'te çalıştı; README'de komut. — Mac (BUILD 20:55, streamlit 1.66.1) ve Windows (Civan KONTROL 21:29); README'de komut ve sunum bilgisayarı satırı (karar masası 21:44).
 - [x] En az 3 şehir seçilebiliyor; "örnek veri" etiketi her ekranda. — Mac (BUILD, 20:55): 001, 011, 020 seçildi; etiket her şehirde.
 
 ## Faz 5 — Sunum ve prova: hikâye, canlı gösteri, itirazlara hazır cevap

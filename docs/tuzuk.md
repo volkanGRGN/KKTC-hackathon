@@ -10,6 +10,7 @@ Yazan: BUILD (31 Ekim gece, karar masası 21:20 ve 21:32). Sahibi Volkan.
 3. **Kalibrasyon gerçeğe karşı.** Bant kapsaması, PIT histogramı ve nominal–ampirik kapsama eğrisi gerçek doğrulama verisinde ölçülür, yalnız üreticiyle değil. Fazla eminlik düzeltilmeden bant yayınlanmaz: model-sapma terimi ya da şişirme katsayısı (`src/kalibrasyon.py`).
 4. **Güncelleme periyodik ve sürümlü.** Sessiz, sürekli daraltma yok. Sayı ya da sapma tetikleyince yeniden-fit, sürüm numarasıyla. Ham veri saklanır. Çerçeve hiyerarşik: popülasyon dağılımı + ölçülen trafonun kendi değeri.
 5. **Her rakam kaynağa iner:** ham veri kimliği + betik + commit + tohum. Model, üretici ve veri birlikte sürümlenir; her sonuç bu üçlüyü (+ tohum) anar.
+   - **Platform:** resmi rakamlar karar masasının Mac koşumundan. Başka platformda yeniden üretilen şehirler gösterim içindir, sınav için değil: aynı tohumla Mac ↔ Windows'ta bir trafo farklı çıktı, Mac kendi içinde deterministik (karar masası 21:44). Sebep Faz 6'da aranır (Python 3.14 ↔ 3.12, kayan nokta); sonuç satırı platformu ve Python sürümünü de anar.
 6. **Hedefler türetilir.** Doğrulama: 0 ihlalle %95 güvenle "< %2" için ~150 bağımsız karar noktası (3/n kuralı). Ayar: plato, yani gerçek ile üretilen dağılım arasındaki mesafe düzleşene kadar; sayı değil.
 7. **Sıra.** Trafo çıkış gerilimi ucuz ilk adım ama yanlış kırmızıda ~%19'da platoya oturur. Büyük kazanç abone–trafo, adres ve faz kaydında (ADR-0012, ADR-0015). Ucuz inverter verisi gece kör; yük tarafı ayrı (ADR-0014).
 
