@@ -14,9 +14,10 @@ Sınav maddesi Can'ın (`sinav.py faz3`, 3b); bu betik BUILD 2'nin geliştirme �
 `basvuru.harita_rengi`'den, `basvuru_testi.py`'nin tohumlarıyla (renkler o tablonun aynısı). PR #22 kodu
 (`basvuru.py`, `sahte_kayit.py`) gerekir. Etiket: farazi şehir, gösterim.
 
-`--konum`: konum payı doğrulaması (ADR-0015 m. 4; `yesil_konum_payi`): payı > 0 olan trafolarda hattın ilk x'indeki her
-panelsiz konutun tek başvurusu (6,5 kW) gerçek ağda kritik anlarda sığıyor mu (`sahte_kayit.gercekte_asar`, cevap
-anahtarının tanımı). Ölçü: konum payı yanlış evet (kapı ≤ %2), bilgi verilen başvuru payı. PR #22 kodu gerekir.
+`--konum`: konum payı analizi (ADR-0015 m. 4; `kac_ev_olasilik.konum_payi`, `kac_ev.csv`'ye yazılmaz — karar masası
+01:01): payı > 0 olan trafolarda hattın ilk x'indeki her panelsiz konutun tek başvurusu (6,5 kW) gerçek ağda kritik
+anlarda sığıyor mu (`sahte_kayit.gercekte_asar`, cevap anahtarının tanımı). Ölçü: konum payı yanlış evet (kapı ≤ %2),
+bilgi verilen başvuru payı. PR #22 kodu gerekir.
 
 Çalıştırma:
   python3 src/guvenli_uc.py data/synthetic/u13 --aralik 1-10
@@ -80,9 +81,13 @@ def konum_dogrula(klasor):
         sys.exit('--konum için PR #22 kodu (src/sahte_kayit.py) gerekir.')
     klasor = Path(klasor)
     sehir = sk.gercek_sehir(klasor)
+    trafolar = {r['trafo_no']: r for r in _csv(klasor / 'trafolar.csv')}
+    tahmin = {r['trafo_no']: r for r in _csv(klasor / 'tahmin.csv')}
     out = []
     for r in _csv(klasor / 'kac_ev.csv'):
-        x = float(r['yesil_konum_payi'])
+        tr = {k: (v if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(v)) for k, v in trafolar[r['trafo_no']].items()}
+        x = 0.0 if float(r['p_bugun_asar']) > 1 - ko.YESIL_P else ko.konum_payi(     # haritayla çelişmesin
+            tr, tahmin[r['trafo_no']], random.Random(f'konum-{trafolar[r["trafo_no"]]["sehir"]}-{r["trafo_no"]}'))
         gtr = sehir['trafolar'][r['trafo_no']]
         ad = sk.adaylar(gtr)
         icinde = []

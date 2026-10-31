@@ -5,7 +5,7 @@
 ## Yöntem
 - `src/kac_ev_olasilik.py` `konum_payi()`: başvuranın hattı ve hattaki yeri biliniyor (başvuru formu), gerisi resmi hesabın aynı çekilişleriyle (ağ, bara, OG, öğlen yükü, panellerin yeri, model-sapma; ayrı rastgele akış, resmi sütunlar değişmez). Her çekilişte her hatta, y = 0,1 … 1,0 yerindeki eve (o hattın y'yi geçen ilk evi, temkinli) tek 6,5 kW başvuru eklenir; 259 V ya da kVA aşılırsa o yer ve ötesi düşer. Pay = 40 çekilişin hepsinde ve bütün hatlarda sığan en büyük y (P ≥ %98, haritanın yeşil eşiği; 40 çekilişte "hepsi"). Yük güveni yüksek değilse ya da haritanın bugün aşma olasılığı > 0,02 ise 0 (haritayla çelişmesin). Yalnız panelli evlerden oluşan kol atlanır (başvuran panelsiz).
 - Hat bilinmediği için harita düzeyinde **en kötü hat** belirler (en uzun hat genelde): pay her hat için geçerli.
-- `kac_ev.csv` sonuna `yesil_konum_payi` (sözleşme §6, 1.4 adayı). 1–10 ve 21–30'da yeniden koşuldu, ilk 13 sütun eski çıktıyla 800 satırda birebir.
+- `kac_ev.csv` sonuna `yesil_konum_payi` (sözleşme §6, 1.4 adayı) yazıldı; 1–10 ve 21–30'da yeniden koşuldu, ilk 13 sütun eski çıktıyla 800 satırda birebir. (Karar masası 01:01'den sonra sütun çıkarıldı; aşağıda.)
 - Doğrulama `src/guvenli_uc.py --konum` (PR #22'nin `sahte_kayit`'i gerekir): payı > 0 olan trafolarda hattın ilk x'indeki her panelsiz konutun tek başvurusu gerçek ağda kritik anlarda sığıyor mu (cevap anahtarının tanımı).
 - 1–10'da kuruldu (ayar yok; eşik yeşilinki); **sınav 21–30 bir kez** (~00:56). Platform BUILD 2 klasörü, Mac, Python 3.12.13; üretici 1.3 (K_YUK 1,47).
 
@@ -32,6 +32,9 @@ Renksiz trafolarda payın neden 0 olduğu (sınav 21–30, 336 trafo): yük güv
 - Gösterim Civan'da (civan.md UYARI): yalnız renksiz trafoda ve pay > 0 ise yan panelde bir cümle; renk değişmez.
 - Kayıtlarla konum payı (PR #22 motoruyla, başvuranın kayıtlı yeri + diğer panellerin kayıtlı yeri) ölçülmedi; başvuru anı motoru zaten başvuranın yeriyle karar veriyor (PR #22: hemen evet %3,8 → %9,7).
 - Güven eşiği ve "40 çekilişin hepsi" kuralı yeşilinkiyle aynı; gevşetmek 1–10'da ayrı bir karar.
+
+## Karar (karar masası 01:01)
+Haritaya kart yok, `kac_ev.csv`'ye `yesil_konum_payi` sütunu yok: renksiz trafoda neredeyse hep boş kalıyor; evin konumuna göre kararı başvuru anı motoru (PR #22) zaten veriyor. Sütunu yazan kısım çıkarıldı (`kac_ev.csv` ilk 13 sütun + `pv_uc` aynen), sözleşme §6 satırı geri alındı; `konum_payi()` ve `guvenli_uc.py --konum` analiz olarak kaldı (aynı tohumlar, 1–10'da sonuç birebir: renksiz 18 trafo, 0/34). Sonuç ROADMAP Faz 9'a: "denendi, renksizde bilgi vermiyor; darboğaz yük güveni ve bugünkü aşma olasılığı". Panelde evet'in darboğazının öğlen yük güveni olduğu bulgusu BUILD 1'e gidiyor (karar masası).
 
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
