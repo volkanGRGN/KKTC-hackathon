@@ -525,7 +525,7 @@ Ne ölçüldü: main'deki `app/` (ada78f3 sonrası), Windows 11, Python 3.14.5, 
 - **+ Windows'ta 3 şehir:** renk sayıları Mac'le aynı (001: 13 / 22 / 5; 011: 15 / 25 / 0; 020: 13 / 27 / 0); 001 T30, T39 ve 011 T06'da yan panel açıldı.
 - **+ Dışarıya istek yok:** OSM zemin dosyası varken sayfa 98 isteğin 98'ini localhost'tan aldı (Mac'le aynı).
 - **+ README:** "Sunum bilgisayarı" satırı (zemin dosyası depoda yok, önceden indir).
-- **? Açık:** ağ fiilen kapalıyken açılış ve 2 dakikalık ekran kaydı; ikisini Civan elle yapacak. ROADMAP Faz 4 kutuları senin dosyan; Windows maddesi işaretlenebilir.
+- **? Açık:** ağ fiilen kapalıyken açılış ve 2 dakikalık ekran kaydı **ertelendi** (Civan: kontrol katmanı, sunum yerinde internet ve elektrik var; sonra yapılacak). ROADMAP Faz 4 kutuları senin dosyan; Windows maddesi işaretlenebilir.
 Dosya: app/harita.py, app/README.md
 Neden: KARAR 20:56 (4). Bloklamıyor.
 Durum: yeni
