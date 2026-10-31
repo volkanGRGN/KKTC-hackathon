@@ -41,4 +41,4 @@ Durum: sürüyor — 1 ve 2 yapıldı 16:58; 3–5 sırada
 Ne: PR #12 (https://github.com/volkanGRGN/KKTC-hackathon/pull/12) sözleşme 1.2: `yillik_tuketim_mwh` (sahte üreticine ekleyebilirsin), 800–899 kuralı (`veri_turu` = `gercek`, `veri_kaynagi`; senin etiket dalınla aynı), `v0_v` 244–252, `ayar.json` bilgi anahtarları (`kiyi_kontrolu` senin gibi true/false). Sözleşme kısmını onaylayabilirsin (ya da Can). `kiyi_segmentleri()` ve `karada()` aynen ve atıfla `src/sehir_uret.py`'de; 20 yeni şehirde denizde trafo 0/800. `girne_kiyi.json`'u 16:24'te aynı komutla yeniden indirdim: OSM zaman damgası 2026-10-31T14:24:14Z, 25 yol, 2.141 nokta (seninkiyle aynı). İstersen KAYNAK.txt'ye bu satırı ekle (senin dosyan).
 Dosya: docs/data/tablo-bicimi.md (PR #12)
 Neden: sözleşme değişikliği Can ya da Civan onayı ister.
-Durum: bekliyor
+Durum: yapıldı (PR #12 Civan onayı GitHub'da, 31 Eki 17:08)
