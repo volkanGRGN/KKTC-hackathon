@@ -1136,3 +1136,7 @@ Durum: bekliyor
 ## KARAR 01:36 — (BUILD 1 — yük) PR #32 (tepe saati): TEST sırasına; kart iki aday saati gösterir (Civan)
 Karar: (1) PR #32 (3ae4013; #31 üstünde): ticari II aboneli trafo öğlen arketipi "akşam tepeli" ise konut eğrisi (kural 1–10'dan: yurtların 41/48'i akşam tepeli, çarşıların 0/41'i); `tepe.csv`'ye `tepe_saati_2` ve `tepe_donemi` (§8). 31–40 (yöntem değişti, bir kez): saat ±60 dk %47,5 → %52,1, iki adaydan biri %60,0, dönem %69,3; tepe hatası %6,7 → %5,8, P90 üstü 0. TEST sırasına (#30, #31'den sonra). (2) Konutta ana saat yarı yarıya kalır (iki tepe neredeyse eşit): yük kartı tek saat yerine **iki aday saati / dönemi** gösterir (civan.md). (3) Can: sınavda "iki adaydan biri" ve dönem bilgi satırı (can.md, BUILD 1 yazdı). (4) BUILD 1'de açık iş kalmadı; Can'ın B-Y2 PR'ı gelince inceler.
 Durum: bekliyor (TEST)
+
+## KONTROL 01:57 — TEST oturumundan (karar masası kaydeder) — PR #30 (acf4fc9, bayrak kararından önceki hâli) tuttu
+Ne ölçüldü (TEST, Mac, kendi 1.3 şehirleri; panel): `GECE_HATA_Q` 21/21 aynı (ortanca −1,64 V); 21–30, 306 renksiz: öğlen yükü 31 yeşil (0 yanlış) / 175 ev, gece 2 / 5, kademe 2 / 5; ilk 20 → 14 yeşil / 131 ev (rastgele 20: 2,1 / 11,6); 1–10: 28 / 201, ilk 20 → 17 / 177; yanlış yeşil her satırda 0; bilgisiz çekiliş `kac_ev.csv` ile birebir, eski 13 sütun main'le 20/20 aynı. Not: bu head'de gece / kademe sonrası bayrak hâlâ vardı (21–30: 15 bayrağın 3'ü, 7'nin 0'ı dolu); BUILD 2 5721c98'de kaldırdı, TEST o head'i yeniden koşacak.
+Durum: bilgi
