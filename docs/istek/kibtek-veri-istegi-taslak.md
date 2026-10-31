@@ -26,7 +26,7 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 > 1. **Abone–trafo eşleşmesi:** her abonenin bağlı olduğu dağıtım trafosu (ve varsa hat / direk numarası), tarife sınıfıyla. Abone yerine anonim sıra numarası yeterli.
 > 2. **Mahsuplaşmalı (panelli) aboneler:** bağlı oldukları trafo ve hat / direk numarası, kurulu güç (kWp), bağlantı tipi (tek faz / üç faz) ve tek fazlıysa hangi faz.
 > 3. **Trafo başına fatura toplamı:** son bir yılın aylık ya da yıllık toplamı (kWh), tarife sınıfına göre. Mahsuplaşma sayaçlarında çekilen ve verilen enerji ayrı kayıtlıysa ikisi ayrı.
-> 4. **Trafo listesi:** güç (kVA), tip (direk / yer), yaklaşık konum. Varsa kademe ayarı ve kısa devre gerilimi (uk, plaka bilgisi).
+> 4. **Trafo listesi:** güç (kVA), tip (direk / yer), yaklaşık konum, kısa devre gerilimi (uk, plaka bilgisi). **Her trafonun kendi kademe ayarı:** devreye alma kaydı ya da son ayar kaydı (genel standart değil, trafo başına); kayıt yoksa ayarın nasıl belirlendiği.
 > 5. **Hat kaydı:** trafo başına alçak gerilim hat sayısı, hat boyları ve kablo kesitleri; özellikle hat uçlarındaki kesit.
 > 6. **Bekleyen başvurular:** trafo bazında sayı ve istenen güç (kWp).
 >
@@ -44,3 +44,5 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 - [ ] Kampta uzmanın cevabıyla kısalt: hangi kayıt dijital, hangisi yok (soru 2–4, 6–10).
 - [ ] Kişisel veri mevzuatına uygunluk: anonim numara ve trafo / hat düzeyi yeterli; adres istenmiyor.
 - [ ] Rakamlar: İspanya %10 [Hesap: PR #10]; "%27 → %4" farazi şehir üst sınırı, metne konmadı, konuşmada etiketiyle.
+- Kademe neden trafo başına (BUILD, 31 Ekim 23:15): PV açılma denemesinde (PR #20, gerçekçi şehirler) Kıb-Tek'in iki değerli kademe *standardını* bilmek açmadı (adım 6,25 V, belirsizlik 8 V'tan dar değil); açan, trafonun kendi ayarı. Gerçekçi kayıt hata oranları (kademe kaydı ne kadar doğru, abone–trafo eşleşmesi, faz kaydının doluluğu) kampta uzmana sorulur; sahte kayıt testi bu oranlarla kurulur (ROADMAP Faz 9).
+- [ ] Yük haritası öne alındı (karar masası 23:12): tepe kalemleri (Muhittin 4 madde 3: trafo maksimum talep kayıtları ya da yaz yük etüdü, OG fider tepe geçmişi + sıcaklık, ticari / sanayi kayıtlı maksimum talep) bu metne eklensin mi, konu satırı yük + panel mi olsun: karar masasında.

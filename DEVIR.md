@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 22:25 — Gozo PR #17 birleşti (olumsuz sonuç); PR #16 Can'ın onayında, PR #18 karar masası Mac koşumunda.
+**Güncellendi:** 31 Ekim 2026, 23:20 — BUILD yeni oturumda (önceki bağlam doldu). PR #16 / #17 / #18 / #20 main'de, resmi rakamlar v3; Can'ın sınav işleri kontrol edildi ve onaylandı; sıra değişti: yük haritası (Faz 11) öne, panel sunumda anlatılmayacak.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -43,12 +43,10 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 netleşen cümle ve jüri cevapları (can.md 20:50); Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
 4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
-5. **Faz 6–12 başladı** (Volkan 21:39): ROADMAP "Faz 6–12 — Modeli gerçek veriyle iyileştirme". Tüzük yazıldı (Faz 6). Sıra: Faz 7 (PR #16) → Faz 8 üretici çapalama ve yeni sınav şehirleri → Faz 11 sözleşme 1.4 (Can) → Gozo dış sınaması (BUILD) → Faz 9 Kıb-Tek istek metni (BUILD taslak, Volkan gönderir). Sunum `sunum-v1` yedek.
-6. **Faz 7 PR #16 karar masasında test** (iş kuralı, Volkan 21:46: eksi bulgulu PR karar masasında test edilir, düzelmeden birleşmez): dört eksi bulgu volkan.md UYARI 21:46. Birleşmeden Faz 8'e geçilmez; Gozo ve Kıb-Tek taslağı beklerken yapılabilir.
-
-7. **Faz 7 (kalibrasyon gerçeğe karşı) dalda, sonuçlar** (Volkan 21:32, karar masası; `kalibrasyon/faz7`, PR): `src/kalibrasyon.py`, `sablon.py` k_yük 1,27 (İspanya, 12 ölçülüye en yakın 10 + 15; karar masası 22:0x), `kac_ev_olasilik.py` gerilim sapma çarpanı (İngiltere 6 hat). Sınav 11–20 bir kez: yanlış yeşil 0/49, yeşil %25 → %14, yanlış kırmızı %27 → %33, kaç ev P10 altı %15 → %7; Faz 2 farazi kapsama %93 (bilgi). [Günlük](docs/log/2026-11-01-volkan-faz7-kalibrasyon.md). Can C1 / C4 dalda koşar, onaylar; Volkan "birleştir" der. Sunum `sunum-v1` etiketiyle (main 0db616e), v1 rakamları.
-
-8. **Faz 8 (üretici 1.3) dalda** (`uretici/1.3`, PR, taban PR #16): farazi şehir gerçeğe çapalandı; yeni sınav 21–30'da yanlış yeşil 0/17 ama yeşil %5 (konut 0), yanlış kırmızı %51; Faz 1 ve Faz 2'de birer madde kalıyor. Eksi bulgular karar masasında; düzelmeden birleşmez. Yerel şehirler `data/synthetic/u13/` (sunum şehirleri `data/synthetic/` v1, dokunulmadı).
+5. **Faz 6–12** (ROADMAP "Faz 6–12", 23:15 güncel): Faz 7 kalibrasyonu (PR #16), Faz 8 üretici 1.3 ve sınav şehirleri 21–30 (PR #18), PV açılma denemesi (PR #20), Gozo (PR #17) main'de. Can'ın 21–30 puanlaması BUILD'le ve karar masasının Mac koşumuyla birebir (can.md KONTROL 23:15). Açık PR #19 (Faz 10 hazırlığı), Volkan'ın sözüyle birleşir. Sunum sürümü (v1 / v3) Volkan'da. BUILD'in yerel 1.3 şehirleri `data/synthetic/u13/` (sunum şehirleri `data/synthetic/` v1, dokunulmadı).
+6. **Karar masasında bekleyen (BUILD'in):** K_YUK rastgele + tabakalı havuzundan, ürün tabakalı seçiyor; 1,47 önerisi (volkan.md UYARI 23:15).
+7. **BUILD sırası (karar masası 23:12):** (1) B-Y1 üretici yıl boyu tepe: Temmuz ve Ocak haftası, cevap anahtarına tepe sütunları (sözleşme 1.4, dal + PR); (2) B-Y2 ayrı tepe modeli iskeleti (Can'ın eşzamanlılık ve sıcaklık eğimi sonucu geldikçe); (3) sahte Kıb-Tek kayıtları testi (panel, dal `deneme/sahte-kayit`); ROADMAP her adımda.
+8. **Can:** sözleşme 1.4 tepe sütunları → `faz2` tepe maddesi → eşzamanlılık / sıcaklık eğimi (Civan'ın bulut oturumu `deneme/eszamanlilik` yardımcı). KIOS e-postası hackathon sonrasına.
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
