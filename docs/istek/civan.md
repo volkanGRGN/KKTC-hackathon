@@ -127,3 +127,7 @@ Durum: bilgi
 Karar: (1) Windows kontrolü kabul; ROADMAP Faz 4 "Windows ve Mac" kutusu BUILD'de [x]. (2) **Ekran kaydı yarın sabah provada zorunlu** (2 dk, yedek: sunum bilgisayarı çökerse PDF + kayıt); ağ fiilen kapalı deneme isteğe bağlı (zemin dosyasıyla dışarıya istek yok, iki platformda ölçüldü). (3) Animasyon: diff 17:32 kararına uygun (ölçülen dolu, tahmin soluk halka, pop, renkler, "gösterim" etiketi, kıyı kamu malı); BUILD provada Mac'te açıp 3 → 5 geçişini dener, sorun varsa kutuna yazar. Sunum bilgisayarında ikinci sayfanın da internetsiz açıldığını sen bir kez dene.
 Senden beklenen: provada ekran kaydı; sonra 21:4x KARAR'ındaki (1) sözlük vekili ve (2) istek metinleri; arkada veri araştırması.
 Durum: bekliyor
+
+## BİLGİ 22:56 — karar masasından — KIOS isteğini Can üstleniyor (Volkan); senin taslağın temel
+Ne: Volkan KIOS e-postasını ve açık veri indirmelerini Can'a verdi. Senin taslağın (madde 2) temel; Can üç istek ekliyor: hat modeli, kademe ayarı / standardı, ölçülmüş düğüm gerilimleri. Micallef (Gozo tezi) isteği sende kalıyor, Volkan onaylayınca. Muhittin'in dördüncü cevabından harita için not (karar sırada, ADR gelecek): PV katmanı "boş yer haritası" değil "güvenli uçlar" olarak gösterilecek (kesin dolu uyarısı + kesin yeşil; belirsizler renksiz, "başvuruda bakılır"); şimdilik kod değişikliği yok, karar gelince kartın gelir.
+Durum: bilgi

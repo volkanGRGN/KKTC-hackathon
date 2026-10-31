@@ -66,7 +66,7 @@ Gönderilecek metin (Volkan iletir):
 Ne denedik: Muhittin'in üçüncü cevabı uygulandı (tüzük, kalibrasyon gerçeğe karşı: Faz 7; üretici gerçeğe çapalandı ve yeni sınav şehirleri: Faz 8). Gerçekçi sınav şehirlerinde (21–30, karar masası Mac koşumu) yük hatası %12 / %27, panel kararında yeşil %5, sarı %78, kırmızıların %51'inde yer var; 400 trafonun 400'ünde bağlayan sınır gerilim. Model fatura üstüne az ekliyor (farazi %9, İspanya'da sıfır).
 Karar noktası: Volkan (22:45): "akşam yükü için modeli eğitmek lazım, modelin çıktıları kötü oldu, Muhittin'e soralım." Odak: yük katmanı (öğlen + akşam tepesi) temel, panel katmanı donuk. Cevap Faz 11'in (yük katmanı) yöntemini ve ürünün sunumunu belirler.
 Seçenekler: aşağıdaki metinde planımız; Muhittin düzeltir ya da onaylar.
-Durum: bekliyor
+Durum: cevaplandı 22:56 (cevap: docs/log/2026-10-31-muhittin-cevap-4-odak-tepe-kademe.md; test BUILD'de, KIOS Can'da; ADR'ler karar masasında sırada)
 
 Gönderilecek metin (Volkan iletir):
 

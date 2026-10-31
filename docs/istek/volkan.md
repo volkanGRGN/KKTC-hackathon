@@ -692,3 +692,14 @@ Ne: Korsika açık verisini (opendata.edf.fr, Licence Ouverte 2.0) taradım. Mah
 Dosya: docs/log/2026-10-31-can-korsika-veri.md; veri sözlüğü "Adaylar".
 Neden: jüri "neden Nisan öğleni?" derse dış kanıt: yalıtık bir adada güneşin sığmama sorunu baharda en büyük. Mekanizma farklı (Korsika'da sistem sınırı, bizde trafo gerilimi) — bunu söylemeden kullanılmaz. Sunum metni v1'de kalıyor; jüri cevabına girip girmeyeceği senin kararın.
 Durum: bilgi
+
+## KARAR 22:56 — BUILD'e: test — "PV'yi tamamen bırakmadan, inverter geri çözümü ve kademe öncülüyle ne kadar açılır" (Volkan; Muhittin 5B)
+Karar: Volkan (22:56): "panelde gerilimi tamamen salmadan, eldeki verilerle devam etsek ne kadar iyileşir, test edelim." Muhittin'in dördüncü cevabı (günlük) madde 5: kademe ayrık ve politikayla belirli; inverterin sakin an gerilimi ≈ trafo barası, öğlen salınımı hat empedansı. Test `src/bilgi_degeri.py`'nin gerçekçi sürümü olarak (resmi hesap ve rakamlar değişmez, dal `deneme/pv-acilma`):
+- **Şehirler:** üretici 1.3 (PR #18 dalı); geliştirme 1–10'da yöntemi kur, sınav 21–30 **bir kez**.
+- **S0** bugün (olasılıklı, v2b). **S-kademe:** bara gerilimi sürekli 244–252 yerine **ayrık öncül**: 5 kademe (±2 × %2,5 adım; boşta 250 V merkez) içinden politika iki değer ("Kıb-Tek standardı biliniyor, trafonun hangisinde olduğu bilinmiyor" [Yorum, varsayım; gerçek standart Kıb-Tek'ten istenecek]). **S-inverter:** trafoda en az bir panelli ev varsa, o evin inverter kaydından (benzetimin ev gerilimi): sakin an (05:00–06:30, net yük en düşük) ortancası → bara tahmini, **gürültü ±1 V** (inverter ölçüm doğruluğu + gece OG [Yorum]); öğlen salınımı / panel akımı → hat empedansı tahmini, **gürültü ±%20**; hangi evin verisi olduğu rastgele (hat ucunda olmak zorunda değil). **S-ikisi.** Panelli ev olmayan trafoda S0 kalır.
+- **Ölçüler:** yanlış yeşil (kapı), yeşil, sarı, yanlış kırmızı (kırmızı kovası), kaç ev bandı; ayrıca yalnız "panelli evi olan trafolar" alt kümesinde. Deneme şehirlerinde trafoların %77'sinde, sarıların %75'inde en az bir panelli ev var [Hesap: karar masası].
+- **Beklenen (eski şehirlerin bilginin değeri tablosundan, üst sınır):** bara bilinince yanlış kırmızı %27 → %19, sarı az düşer; bara + yer + faz %4. Gürültülü inverter tahmini bunun altında kalır; ne kadar altında kaldığı testin sorusu.
+- Etiket: "gösterim; inverter verisi her panelli evden gelmez, pilotta ev sahibi izniyle".
+Neden: Muhittin 5B'ye göre PV'yi dondurmak erken olabilir; kanıtı bu test verir. Ucuz (bilgi_degeri.py var).
+Senden beklenen (BUILD): dal + günlük tablosu (S0 / S-kademe / S-inverter / S-ikisi × tüm trafolar / panelli evi olanlar), 60–90 dk; kutuya UYARI; karar masası Mac'te tekrarlar.
+Durum: bekliyor
