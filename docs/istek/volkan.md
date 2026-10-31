@@ -198,3 +198,28 @@ Ne: `kac_ev.py` (PR #13) yeşil kuralı tuttu: sınav şehirleri 11–20'de yanl
 Dosya: src/kac_ev.py, docs/log/2026-10-31-volkan-faz3.md (PR #13)
 Neden: ADR-0010 karar masasının; okumayı ben seçmedim, düz okumayla bıraktım (CLAUDE.md: ADR'ye ters düşecek işi önce sor). Bloklamıyor: Can ve Civan kurala bağlı değil, yalnız `kac_ev.csv` değişir.
 Durum: bekliyor
+
+## UYARI! 31 Eki 15:25 — Can'dan — Faz 2 sınavı resmi sonuç (PR #14) + edp_kiyas + sunum iskeleti
+Ne: (1) **PR #14** `sinav.py faz2` + `grafikler.py` (dal `sinav/faz2`; yeni modül → Volkan bakar, Can birleştirir). PR #12 dalının 1.2 üreticisi + `sablon.py` ile 20 şehir, Windows. Sınav şehirleri 11–20, 7/7 GEÇTİ:
+- doğru arketip %98,2
+- hata %3,8 / P90 %8,0
+- kapsama %83,9
+- şehirler arası 1,08 (en kötü 1,81)
+- düşük güven %0
+- saf (Σ abone) %172 / %672
+
+Bilgi satırları:
+- Saf tahmin tarife enerjisiyle %25,2 / %67,2, faturayla %5,5 / %15,2. Model faturalı saftan %31 / %48 düşük; ≥ %25 ölçütü dar geçiyor.
+- Güven etiketi hatayı ayırmıyor: yüksek %3,8, orta %5,1, düşük n = 3.
+- Kalibrasyonda bant yukarı kayık: P10 altı ~%11, P90 üstü ~%4. Yanlış yeşil yönü.
+
+Faz 1, 1.2'de 5/5; konut CV 0,32. Rakamların senin geliştirme ölçümünle tutuyor. (2) `src/edp_kiyas.py` main'de, gerçek İspanya ↔ farazi konut:
+- CV 0,45 ↔ 0,32 (eski şehirler 0,09)
+- saf tahmin %25,5 ↔ %25,4 (eski %6,6)
+- eğri benzerliği 0,93 ↔ 0,99 (hâlâ tekdüze, 1.3 trafo içi çeşitlilik)
+
+(3) `docs/sunum/` iskeleti main'de (güven merdiveni, itiraz ve kaynak slaydı, dürüstlük cümleleri, 8 jüri sorusu). Slayt 5'te farazi rakam için %8,6 (PR #8) mi, 1.2 %3,9 / %22 mi; senin 17:17 notuna göre 1.2'yi koyacağım. Slayt 1'deki KTTO Mart 2023 raporunun adresi BULAMADIM (araştırma günlüğünde yalnız ad).
+(4) Not: `edp_kiyas.py` hızlı okuma için `python-calamine` kullanıyor (yoksa openpyxl'e düşüyor); senin `edp_test.py` de istiyor, `requirements.txt`'de yok (kök belge, senin).
+Dosya: PR #14, src/edp_kiyas.py, docs/log/2026-10-31-can-faz2.md, docs/sunum/
+Neden: karar masası 16:50 sırası (2), (3), (5); ADR-0008 madde 1, 2, 4; 17:03 UYARI.
+Durum: bekliyor

@@ -70,13 +70,13 @@ Durum: yapıldı 15:05 (birleşti, f1b2a0c)
 Ne: Faz 1 kapandı (sonuç Volkan'ın Faz 1 günlüğünde). Faz 2 kartın: [docs/gorev/can-faz2-sinav-grafikler.md](../gorev/can-faz2-sinav-grafikler.md) — `sinav.py faz2` (yedi ölçü), `grafikler.py` (kalibrasyon, kaç trafo ölçmeli), İspanya EDP zaman kutusu. `sablon.py` gelene kadar sözleşme biçiminde sahte `tahmin.csv` ile başla.
 Dosya: src/sinav.py, src/grafikler.py, data/raw/edp-*/KAYNAK.txt, docs/data/data-dictionary.md
 Neden: ROADMAP Faz 2; modeli yazan sınavı yazmaz.
-Durum: bekliyor
+Durum: yapıldı 15:25 — PR #14 (`sinav.py faz2`, `grafikler.py`); 20 şehir (1.2) sonucu docs/log/2026-10-31-can-faz2.md; EDP adımı 31 Ekim öğlen
 
 ## UYARI! 31 Eki 13:51 — Volkan'dan (BUILD oturumu) — PR #8: sözleşme 1.1 onayı + sablon.py geldi
 Ne: [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8) `src/sablon.py` ilk sürüm ve sözleşme 1.1: `deney/tahmin_capraz_s<AAA>.csv` (kartındaki ad), `sablon_ozet.json` (bilgi), JSON da LF, §5 `oran` **brüt** (`tuketim_kw`; senin sorun). Sözleşme değişikliği olduğu için onayın gerekiyor; sütunlara bakman yeter. Birleşince `python3 src/sablon.py data/synthetic` (~1 dk) gerçek `tahmin.csv` üretir; sahte dosyayı bırakıp `sinav.py faz2`'yi bununla koş.
 Dosya: docs/data/tablo-bicimi.md, src/sablon.py
 Neden: CONTRIBUTING "Dallar" 1 ve 2 (sözleşme + yeni modül). Model ayarları yalnız şehir 1–10'da denendi; 11–20'yi sınav için ayrı raporlarsan iyi olur (Faz 2 günlüğü).
-Durum: sözleşme onaylandı (GitHub, CanSahin77); `sablon.py` ile `faz2` birleşmeyi ve yeniden üretimi bekliyor
+Durum: yapıldı — sözleşme onaylandı; `sinav.py faz2` gerçek `tahmin.csv` (PR #12 dalı, 1.2) ile koşuldu, 11–20 ayrı raporlandı (günlük)
 
 ## KARAR 31 Eki 13:55 — Faz 1 eşiği 216 V → 207 V (BUILD'in sorusuna karar)
 Karar: `src/sinav.py` `V_ALT = 207.0` (EN 50160 alt sınırı: 230 V −%10); madde adı "hiçbir trafoda v_min_bugun_v < 207 V". ROADMAP satırını BUILD değiştiriyor.
@@ -106,12 +106,12 @@ Durum: bilgi — iş ana oturumda
 Karar: (1) Kontrol listesi **evet, şimdi**: veri sözlüğünün başına 8–10 satırlık "yeni veri eklerken" listesi (birim, çözünürlük, saat damgasının anlamı, saat dilimi, SHA-256, çifte sayım riski, hangi kaynakla çapraz sağlanacağı, lisans, etiket Kaynaklı/Hesap/Yorum). Senin dosyan, doğrudan main, ≤ 15 dk. (2) `src/veri_sagla.py` **evet ama sonra**: önce `sinav.py faz2` + grafikler + EDP betiği (kartın ve bugünkü üç KARAR); onlar bitince zaman kutusu 1 saat. İçerik: EAC sınıf eğrileri × Kıb-Tek sınıf başına yıllık tüketim → aylık toplam ↔ Kıb-Tek 2023 aylık tüketim (Nisan dahil 12 ay, sapma eşiği [Yorum] %15); EAC çatı güneşi tipik günü ↔ Open-Meteo Nisan ışınım şekli (tepe saati ±1 saat, öğlen/akşam oranı); üretici 20 şehrin abone başına yıllık enerjisi ↔ Kıb-Tek sınıf ortalaması (±%10). Her madde GEÇTİ/KALDI + rakam, `profiller.py` sağlamasıyla aynı kalıp; kalan madde eşiğe uydurulmaz, günlüğe yazılır. Yeni dosya senin (veri adımı); ilk sürüm dal + PR.
 Neden: Kontrol listesi Muhittin'in ortak sınavının ("her rakam etiketli", "çifte sayım yok") günlük karşılığı, ucuz. Çapraz sağlama değerli (modelin ölçeği Kıb-Tek yıllık tüketimine dayanıyor; EAC × Kıb-Tek aylık toplamı tutmuyorsa büyüklük yanlış) ama Faz 2 geçme sınavı önce; "çok duraksıyoruz" (Volkan).
 Senden beklenen: (1) bugün; (2) kart işlerinden sonra, günlüğe sonuç. Soru gerekmez.
-Durum: (1) yapıldı (d9e69a7, 9 madde); (2) bekliyor — kart işlerinden sonra
+Durum: (1) yapıldı (d9e69a7, 9 madde); (2) bekliyor — kart işlerinden sonra (Faz 3 kartı önce)
 
 ## KARAR 31 Eki 15:12 — Can'ın "Faz 2 sınavı farazi şehirde fazla kolay olabilir" önerisine (Volkan iletti)
 Karar: Üç öneri de kabul; gerekçe ve ölçüler [ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md). Rakamların benimkiyle tutuyor (şehir konutu CV şehir içi 0,08, havuz 0,13; seninki 0,14).
 Senden beklenen: (1) `sinav.py faz2`'ye "saf tahmin" satırı: ölçülülerde Σ öğlen ÷ Σ abone × abone; geçme = model ortanca ve P90 saf tahminden ≥ %25 düşük [Yorum]; rakamla günlüğe. (2) Karşılaştırma betiğin `src/edp_kiyas.py` (senin, doğrudan main) + rakamlar günlüğe (CV, eğri benzerliği, saf tahmin farazi/gerçek), "gerçek veri — İspanya" etiketiyle. (3) `sinav.py faz1`'e bilgi satırı: konut trafolarında müşteri başına öğlen yükü CV, şehir içi ortanca ve havuz (ADR-0008 hedefi 0,3–0,4; yeniden üretimden sonra bakılacak). (4) Sunum cümlesi Faz 5'e BUILD yazar. Üreticideki mahalle çarpanı BUILD'de.
-Durum: bekliyor
+Durum: yapıldı — (1) saf tahmin maddesi PR #14; (2) `src/edp_kiyas.py` main (8435348, 6ff169c) + günlük; (3) faz1 CV satırı PR #14 (1.2'de 0,32, havuz 0,43)
 
 ## KARAR 31 Eki 15:12 — 13:55'teki "İspanya EDP türetme betiği" kararı iptal
 Karar: `src/edp_oku.py` gerekmiyor: BUILD, PR #10'da (`src/edp_test.py`) ham sayaç verisinden doğrudan koştu, üstelik trafo başı ölçüm cihazlarını (ZIVS… sayaçları) buldu ve ondalık virgül hatasını düzeltti; PR #10 günlüğünü oku (docs/log/2026-10-31-volkan-edp-gercek.md). TD009456 ham veride doluymuş, OpenDSS profilinde sıfır; günlüğüne bir satır düşersin.
@@ -133,18 +133,18 @@ Durum: yapıldı (eac1fe7) — veri bu arada indirildiği için (6fde357, KAYNAK
 Karar: Sıra: (1) PR #8'i GitHub'da onayla (sözleşme kısmı, 5 dk); (2) `sinav.py`: `V_ALT = 207.0` + Faz 2'ye "saf tahmin" satırı (ADR-0008) + aday = 0 ayrımı zaten yaptın; (3) `docs/sunum/` klasörünü aç: slayt listesi, kaynak slaydı, dürüstlük cümleleri, itiraz slaydı (ROADMAP Faz 5; rakamlar: farazi %8,6 üst sınır, İspanya %25 → fatura ile %10, İngiltere 6 hatta 4'ü ±%40, Kıbrıs pilot); (4) Faz 3 kartı gelince `sinav.py faz3` (yanlış yeşil / yanlış kırmızı / kaç ev hatası / sarı oranı; %40 kuralı yan yana) ve `grafikler.py` kilit grafiği; (5) `src/edp_kiyas.py` + günlük; (6) veri kontrol listesi. Gerçek `tahmin.csv` ve `kac_ev.csv` BUILD'den gelince sınavları koş, rakamları günlüğe.
 Neden: Sunum yarın; Faz 2 kapanışı, Faz 3 ölçüleri ve sunum iskeleti aynı akşama sığmalı; en kısa yolu olan işler önde.
 Senden beklenen: yukarıdaki sıra; takılırsan kutu.
-Durum: bekliyor
+Durum: (1) (2) (3) (5) (6) yapıldı (PR #14, 83b0f11 sunum, 8435348 edp_kiyas); (4) Faz 3 kartı geldi, sıradaki iş
 
 ## BİLGİ 17:00 — karar masasından — Muhittin'in cevabı sunuma ve sınava nasıl giriyor
 Ne: Sunum iskeletinde hikâye "güven merdiveni" (dört basamak, her birine tek iddia + tek rakam, hepsi "saf tahmine göre ne kadar iyi"); manşet rakam **İspanya %25 → %10**, farazi %8,6 destek. Dürüstlük cümlesi: "gerilimde 6 hattın 4'ü ±%40, 2 ıskalama uca kümelenme → karamsar senaryo". Faz 3 sınavındaki yanlış yeşil ölçüsü aynen; ADR-0010 yeşil kuralını (karamsar + marj + yüksek güven) BUILD `kac_ev.py`'ye koyuyor, sen ölçersin. `edp_kiyas.py`'ye sunum sonrası ek: korelasyon matrisi ve P90/P95 (ADR-0009), şimdi değil.
 Senden beklenen: sunum iskeletini buna göre kur; başka iş yok.
-Durum: bilgi
+Durum: bilgi — sunum iskeleti güven merdiveniyle kuruldu (83b0f11)
 
 ## UYARI! 31 Eki 17:03 — Volkan'dan (BUILD oturumu) — PR #12: sözleşme 1.2 onayı + yeni şehirler + KAYNAK satırı
 Ne: (1) PR #12 (https://github.com/volkanGRGN/KKTC-hackathon/pull/12) sözleşme 1.2: `trafolar.csv` → `yillik_tuketim_mwh`; `cevap_anahtari.csv` → `mahalle_carpani`, `saat_kaymasi_dk`; bayramlar `tatil` (14 günde 4–7 tatil); `v0_v` 244–252; gerçek veri 800–899; `ayar.json` bilgi anahtarları. Sözleşme kısmını onayla (ya da Civan). `sinav.py`'nin okuduğu sütunlar değişmedi, yalnız eklendi. (2) Yeni şehirler (dalda ya da birleşince): önce iki indirme, sonra `python3 src/sehir_uret.py 1 20` ve `python3 src/sablon.py data/synthetic`. Benim ölçümüm: `sinav.py faz1` (207 V) 5/5 geçti; Faz 2 sınav şehirleri faturalı %3,9 / P90 %8,3, faturasız %22 / %55 (günlük: docs/log/2026-10-31-volkan-uretici-1-2.md). (3) **Senin dosyan** `data/raw/open-meteo-lefkosa/KAYNAK.txt`'e 2023 satırı (ben indirdim, sen yaz): `lefkosa_saatlik_2023.csv`, aynı adres `start_date=2023-01-01&end_date=2023-12-31`, 31 Ekim 16:30, 386.495 bayt, SHA-256 8cd56dd0d088e9ee4bff138ddc19a91be8931a9701ace92667af3a48771f4889; sağlama yatay 1.903, 30° güney 2.102 kWh/m², Nisan 11–14 eğik ortalama 754 W/m²; ilk denemede sunucu zaman aşımı verdi. (4) Saf tahmin tanımı için karar masasına öneri yazdım (volkan.md 17:03): Σ abone yerine tarife enerjisi / fatura. Karar gelene kadar ADR-0008 tanımını koş, yanına bu ikisini de koyarsan iyi olur.
 Dosya: docs/data/tablo-bicimi.md (PR #12), data/raw/open-meteo-lefkosa/KAYNAK.txt
 Neden: sözleşme değişikliği Can ya da Civan onayı ister; KAYNAK senin dosyan.
-Durum: bekliyor
+Durum: yapıldı — (1) PR #12 onaylandı; (2) 1.2 şehirleri üretildi, Faz 1 5/5, Faz 2 7/7; (3) KAYNAK.txt 2023 satırı (8290893); (4) iki tanım bilgi satırı (PR #14): tarife %25,2 / %67,2, fatura %5,5 / %15,2, model ikisinden de ≥ %25 düşük
 
 ## UYARI! 31 Eki 17:17 — Volkan'dan (BUILD oturumu) — Faz 3 kartın hazır; sunum iskeletine yeni rakamlar
 Ne: (1) Kart: docs/gorev/can-faz3-sinav-grafik.md (`sinav.py faz3` + kilit grafik). `kac_ev.py` PR #13'te (#12'nin üstünde); birleşene kadar `kac-ev/ilk-surum` dalından üret. (2) Sunum iskeleti için (ROADMAP Faz 5 "güven merdiveni" main'de): manşet İspanya %25 → %10 (PR #10); gerilim 6 hattın 4'ü ±%40 (PR #11); farazi 1.2 faturalı %3,9 / faturasız %22 (destek, üst sınır); **kilit grafik: dolu trafoya "yer var" — biz 0/21, %40 kuralı 41/284 (%14)** (sınav şehirleri 11–20, gösterim). Hepsi senin resmi ölçümünle teyit edilecek.

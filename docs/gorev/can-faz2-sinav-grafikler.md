@@ -49,3 +49,5 @@ Kartı yazan: Volkan (+ Claude), 31 Ekim 2026. Sözleşme: [docs/data/tablo-bici
 **Karar masasına yaz (`volkan.md`, bekleme, sıradaki işe geç):** bir ölçünün tanımı belirsizse (ör. "gerçek küme" kuralı bir tipte saçma sonuç veriyorsa); eşik tartışmalıysa (değeri ayarlama); EDP kullanılabilir çıkarsa; `tahmin.csv`'de sözleşmede olmayan bir sütuna ihtiyaç.
 
 **Takılırsan:** önce sahte `tahmin.csv` ile tek şehirde dene; sonra istek kutusu (sormadan) / bloklarsa sesli.
+
+Bitti 31 Eki 15:25 (Can), kanıt: PR #14 (`sinav.py faz2` 20 şehirde, 7 madde; 11–20 hepsi GEÇTİ; `outputs/faz2_kalibrasyon.png`, `outputs/faz2_kac_trafo.png`); sonuçlar docs/log/2026-10-31-can-faz2.md; EDP sözlük satırı + KAYNAK.txt; `sinav.py faz1` bozulmadı (5/5). PR #14 birleşmeyi bekliyor.

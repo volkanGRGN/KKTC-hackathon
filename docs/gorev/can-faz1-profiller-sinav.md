@@ -49,3 +49,5 @@ Kartı yazan: Volkan (+ Claude), 31 Ekim 2026. Sözleşme: [docs/data/tablo-bici
 **Karar masasına yaz (`volkan.md`, bekleme, sıradaki işe geç):** `profiller.py` imzası ya da sınıf adı değişmeli mi; sözleşmede eksik ya da çelişkili sütun; bir sağlama eşiğinde kalırsa eşik mi değişmeli (değeri ayarlama); Faz 1 sınav maddesinin anlamı belirsizse.
 
 **Takılırsan:** önce şehir üreticisini `sehir/ilk-surum` dalından al ve bir şehir üret; sonra istek kutusu (sormadan) / bloklarsa sesli.
+
+Bitti 31 Eki (Can), kanıt: PR #5 (f3615ba) ve PR #7 (f1b2a0c) birleşti; `profiller.py` 5/5 sağlama Windows + Mac; `sinav.py faz1` 1.2 şehirlerinde 5/5 (docs/log/2026-10-31-can-faz1.md); 207 V eşiği 66b51e6.
