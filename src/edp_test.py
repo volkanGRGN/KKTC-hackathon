@@ -251,6 +251,20 @@ def calistir(X, B, y, egri, sec, hedef):
     return orta, orta * alt, orta * ust, [guven(p[j], uzak[j], beklenen) for j in range(len(hedef))]
 
 
+def velander_B(X, B, y, egri, sec, n, izgara=np.arange(0.0, 3.0 + 1e-9, 0.25)):
+    """Tepe için fatura sütunu × (1 + c ÷ √müşteri) (ADR-0018 m. 5; tepe.py'deki Velander biçimi). c YALNIZ ölçülülerde
+    seçilir: modelin ölçülülerdeki log artıklarının kareler toplamı en küçük olan."""
+    en = None
+    for c in izgara:
+        Bc = B * (1 + c / np.sqrt(n))[:, None]
+        m = kur(X[sec], Bc[sec], y[sec], egri[sec])
+        t = tahmin(m, X[sec], Bc[sec])[0]
+        sse = float((np.log(y[sec] / np.maximum(t, .01)) ** 2).sum())
+        if en is None or sse < en[0]:
+            en = (sse, Bc)
+    return en[1]
+
+
 # ---------- seçim ----------
 
 def sec_tabakali(X, n, rng):
@@ -283,6 +297,9 @@ def deney(tr, olcum, ozet, sekil, faz):
                     'c': (np.column_stack([temel, np.log1p(tr.fatura_kwh / tr.musteri)]),
                           tr[['fatura_kwh']].to_numpy(float)),
                 }
+                if HEDEF == 'tepe':                  # ADR-0018 m. 5: Velander biçimi, tepe.py ile aynı (c ölçülülerden)
+                    Xc, Bc = girdi['c']
+                    girdi['c'] = (Xc, velander_B(Xc, Bc, y, egri, sec, tr.musteri.to_numpy(float)))
                 for ad, (X, B) in girdi.items():
                     orta, alt, ust, gv = calistir(X, B, y, egri, sec, hedef)
                     for j, h in enumerate(hedef):

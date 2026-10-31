@@ -167,7 +167,7 @@ Satır = bir trafo.
 
 "Ölçülmedi" etiketi = `tahmin.csv`'de `olculdu` = 0. Harita `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`'yi (sehir, trafo_no) ile birleştirir.
 
-## 7. `tepe.csv` — Faz 11 yılın tepesi, ön sürüm (1.4 adayı; Can ya da Civan onayı)
+## 8. `tepe.csv` — Faz 11 yılın tepesi, ön sürüm (1.4 adayı; Can ya da Civan onayı; §7 PR #22'nin `kayitlar.csv`'si)
 Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe bölümü) ve harita (yük kartı). Satır = trafo; harita `(sehir, trafo_no)` ile birleştirir. Sütun adları Can'ın önerisiyle (volkan.md 23:12 sonrası). Model `cevap_anahtari.csv`'yi okumaz; `ayar.json`'dan yalnız `hava_yili`. Dosyalar tablosuna satır PR #21 (sözleşme 1.4) birleşince eklenir (iki PR aynı satırlara dokunmasın).
 
 | Sütun | Tür | Birim | Örnek | Açıklama |

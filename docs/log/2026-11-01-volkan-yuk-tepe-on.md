@@ -68,4 +68,23 @@
 | 1 Kas 00:30 | tepe.py ön | 1–10 | EAC ay eğrisi × fatura × Nisan oranı yaz tepesini taşır | ortanca %6,1, kapsama %98, üst kaçış 0 | kabul (ayar yok) |
 | 1 Kas 00:35 | tepe.py ön | 21–30 bir kez | aynı | ortanca %6,0, kapsama %98,6, üst kaçış 0 | PR; karar masası Mac'te tekrarlar |
 
+## Ek — KARAR 00:50 düzeltmeleri (Velander varsayılanı, tasarım sıcaklığı uzun seriden)
+- **Velander varsayılanı (ADR-0018 m. 5):** ölçülmeyen trafoda R = R0 × (1 + c ÷ √n), n = enerji ÷ konut abonesinin yıllık enerjisi (3,69 MWh). c ölçülü 12 trafonun Nisan R'lerinden ızgarayla (0–3); bant c = 0 ile max(2ĉ; 0,5) arası, karelerin toplamıyla banda. Şehir 1–10'da ĉ: 6 şehirde 0, ötekilerde 0,05 / 0,25 / 0,35 / 1,0; 21–30'da 0–0,5 [Hesap]. Üreticinin ev ev gürültüsü küçük trafoyu az sivriltiyor; gerçek ev verisinde (Can'ın B-Y2'si) c büyük çıkabilir.
+- **İspanya'da aynı biçim:** `edp_test.py --hedef tepe`, girdi c: fatura × (1 + c ÷ √müşteri), c yalnız ölçülülerde ızgarayla (0–3). Tabakalı denemelerde c = 0 seçiliyor; sonuç birebir aynı: 10 ölçülü %15,4 / %36,1, %80 bant %80,3; k 1,164, artık nicelleri aynı [Hesap]. **İspanya maddesi kıl payı KALDI olarak kalır** (KARAR 00:50: eşik oynatılmaz). Denenen ve kullanılmayan: serbest iki sütunlu NNLS (fatura ve √(fatura × ortalama)) hatayı %19,2 / %39,6'ya çıkardı (10 ölçülüyle iki katsayı fazla); Kıbrıs'taki tek katsayılı biçimle aynı değil.
+- **Tasarım sıcaklığı (ADR-0018 m. 4):** Lefkoşa 2015–2025 saatlik sıcaklık (Open-Meteo, 11 yıl, KAYNAK.txt'te adres ve SHA-256; 2023–2025 saatleri eski dosyalarla birebir). Her ay için yılın en uç gününün (günlük ortalama) iklim ay ortalamasından farkı, 11 yılın %90'lık değeri ("10 yılda bir" [Yorum]): Haziran 6,4 °C, Temmuz 4,7, Ağustos 4,4, Eylül 4,9; Ocak 6,4, Şubat 6,7 (yıllık uçların ortancası 4,1 / 2,9 / 2,8 / 3,0; 4,3 / 5,1) [Hesap]. "3 yıl + 2 °C" kalktı. Tasarım ÷ hava yılı tepesi (1–10): ortanca 1,019, P10 1,006, P90 1,065 (önceki kuralla 1,056).
+
+| Yeni yöntem [Hesap; farazi, gösterim] | Şehir 1–10 (280) | Sınav 21–30, bir kez (280) |
+|---|---|---|
+| Hata ortanca / P90 | %6,0 / %15,3 | %5,8 / %17,7 |
+| Sapma (ortanca) | +%3,9 | +%2,9 |
+| %80 bant kapsama | %98,6 | %99,3 |
+| Gerçek P90'ın üstünde | %0 | %0 |
+| Tepe saati ±60 dk | %42,1 | %45,4 |
+
+| Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
+|---|---|---|---|---|---|
+| 1 Kas ~01:50 | tepe.py + Velander, uzun seri | 1–10 | küçük trafoda tepe az çıkıyor | ĉ çoğunlukla 0; hata %6,1 → %6,0, sapma +%3,6 → +%3,9 | kabul (ADR-0018 m. 5) |
+| 1 Kas ~02:00 | edp_test --hedef tepe, Velander | İspanya | aynı biçim İspanya'da | tabakalıda c = 0, birebir; serbest iki sütun %19,2 | tek katsayılı biçim; İspanya KALDI kalır |
+| 1 Kas ~02:05 | tepe.py + Velander | 21–30 bir kez | aynı | %5,8 / %17,7, kapsama %99,3, P90 üstü 0 | PR #24; karar masası tekrarlar |
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
