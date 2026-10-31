@@ -905,3 +905,19 @@ Karar: Yük tarafında açık PR işi kalmadı (#21 test edildi, söz bekliyor);
 4. **Öğlen yükü (madde 4, ADR-0018 m. 7):** "fatura × oran + kalibre bant" (K_YUK 1,47) öğlen için üretim yöntemi kalır. Kontrol: panelli abonede öğlen net yükü panelin kendi tüketimiyle düşülüyor mu, fatura net ise iki kez düşülüyor mu; 1–10'da ölç, gerekiyorsa düzelt.
 Kurallar: dal `yuk/`, PR başlığı "[Yük]"; yalnız karar masasına yaz (kutu girdisinin başlığında "(BUILD 1 — yük)"); panel konusu BUILD 2'nin; Can'ın (`sinav.py`, `profiller.py`, `grafikler.py`) ve Civan'ın (`app/`) dosyalarına dokunma. Her PR'dan sonra karar masasına mesaj; karar masası Mac'te tekrarlar.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:18 — (BUILD 2 — panel) — PR #22 iki kat hata koşumu yapıldı (sınırda: %2,6 → %1,9, güvenle değil); PR #19 iki eksi düzeltildi — test edin
+Ne: (1) **PR #22** (KARAR 23:47 / 00:10 madde 1–3): motor kayıt hatasını iki kat varsayar (`basvuru.VARSAYILAN_HATA`; `basvuru_testi.py --model-hata iki_kat|aynen`, `aynen` ilk koşumu verir; 1–10'da birebir sağlandı). Sınav 21–30 bir kez [Hesap; farazi, sahte kayıt, gösterim]:
+| Kayıtların gerçek hatası | Hemen evet | Yanlış evet | 95% aralık | Yanlış evetli trafo |
+|---|---|---|---|---|
+| Yarı | %10,7 (önce %11,9) | %0,1 (1/766) | %0,02–0,7 | 1/84 |
+| Beklenen | %9,7 (önce %10,5) | %0,0 (0/694) | %0–0,55 | 0/85 |
+| İki kat | %10,1 (önce %10,7) | **%1,9** (14/722; önce %2,6) | **%1,2–3,2** | **6/94** |
+| Kusursuz | %18,0 | %0,4 (5/1.295) | %0,2–0,9 | 3/104 |
+Önce ölç ~%70; yanlış yeşil her satırda 0. Tüzük madde 2'ye cümle (KARAR'ın sözcükleriyle); sözleşme §7'ye Civan'ın iki notu (sürüm satırı, dosyalar tablosu, inverter `deger` türetilmiş + ayrı sütun önerisi). (2) **PR #19** (KARAR 00:10): UTF-16 yalnız BOM ya da çok NUL baytıyla; ayraç ve başlık zaman + gerilim adayı içeren satırdan. Eski kod karar masasının hatasını birebir veriyor, yeni kod cp1254 / `;` / iki bilgi satırı / gece 0 / üç faz kaydını okuyor; SMA `sep=;`, İngilizce CSV, UTF-16 BOM'lu, xlsx aynı sonuç.
+Eksi (PR #22): **kural iki kat hatalı kayıtta yanlış evet'i sınırın hemen altına çekiyor ama güvenle değil** — aralığın üst ucu %3,2, 14 yanlış evet 6 trafoda (biri 5); kusursuz bilgide de 5 yanlış evet kalıyor (öğlen yükü / OG), yani hata payını büyütmek bunu sıfırlamaz. Bedel küçük (beklenen kayıtta 751 → 694 evet).
+Soru (PR #22): kural yeterli mi, yoksa (b) pilot şartı (sahada 20–30 kayıt ölçülene kadar hemen evet yok, yalnız önce ölç / hayır) mı? BUILD 2 eşik değiştirmedi, ayar yapmadı. Deneme olarak birleşmeye engel değil (resmi hesap değişmez).
+Kalan (PR #22): PR #21 birleşince dal main'e göre güncellenir (sözleşme sürüm satırı tek satır çakışır, iki ibare birlikte kalır); §7 GitHub onayı Civan'dan istendi (civan.md 00:18).
+Dosya: PR #22 (858a999; https://github.com/volkanGRGN/KKTC-hackathon/pull/22), docs/log/2026-11-01-volkan-panel-iki-kat-hata.md; PR #19 (d974753; https://github.com/volkanGRGN/KKTC-hackathon/pull/19). Mac tekrarı: `python3 src/basvuru_testi.py data/synthetic/u13 --aralik 21-30 --json x.json` (iki kat varsayılan; `--model-hata aynen` ilk tablo).
+Neden: KARAR 23:47, 00:10; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir).
+Durum: bekliyor

@@ -163,3 +163,10 @@ Ayrıca: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç o
 Dosya: app/ (senin), docs/data/tablo-bicimi.md (onay)
 Neden: Muhittin 4 madde 1.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:18 — (BUILD 2 — panel) — PR #22 sözleşme §7: iki notun işlendi, GitHub onayı
+Ne: Senin iki notun `docs/data/tablo-bicimi.md`'ye işlendi (PR #22, 858a999): (1) sürüm satırına "1.4 adayı, deneme: §7 `kayitlar.csv`" ve dosyalar tablosuna `kayitlar.csv` satırı (yazan `src/sahte_kayit.py`, gerçekte Kıb-Tek; okuyan `basvuru.py`, `basvuru_testi.py`; harita ve resmi hesap okumaz; Faz 9); (2) `inverter` satırının `deger`i için "türetilmiş değer, ham kayıt değil; gerçek kayıtta önce geri çözüm adımı gerekir" notu ve 1.4 kesinleşirken iki ayrı sütun önerisi (`bara_v`, `esdeger_boy_m`). Sütun adları ve sırası değişmedi; harita bugün bu dosyayı okumuyor.
+Senden beklenen: farkı oku, GitHub'da onayla ya da düzeltme yaz. Sürüm satırı PR #21'le aynı satır: PR #21 önce birleşir, sonra PR #22 dalı güncellenir (iki ibare birlikte).
+Dosya: PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
+Neden: CONTRIBUTING sözleşme kuralı; karar masası 00:10 madde 3 ve 5.
+Durum: bekliyor
