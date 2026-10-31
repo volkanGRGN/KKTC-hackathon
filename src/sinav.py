@@ -20,7 +20,8 @@ from pathlib import Path
 
 TIPLER = ['sehir_konutu', 'koy', 'carsi', 'otel', 'sanayi', 'sulama', 'yurt']
 V_SINIR = 259.0                # planlama sınırı (en az bir trafo bunu aşmalı: yöntemin görecek şeyi var)
-V_ALT = 207.0                  # EN 50160 alt sınırı (230 V −%10); bunun altı = benzetim bozuk (karar masası 13:55)
+V_ALT = 207.0                  # EN 50160 alt sınırı (230 V −%10) (karar masası 13:55)
+V_ALT_PAY, V_EN_DUSUK = 0.01, 200.0   # ADR-0016 m. 3: 207 V altı trafo ≤ %1 ve en düşük ≥ 200 V (uzun köy hattı gerçekçi)
 TIP_SEHIR_MIN = 3              # her şehirde her tipten; bütün şehirlerde 3 x şehir sayısı (20 şehirde 60)
 ROADMAP_SEHIR = 20             # ROADMAP eşikleri bu şehir sayısı için yazıldı
 SURE_MAX_SN = 60.0             # şehirlerin üretildiği makinede (karar masası 31 Ekim)
@@ -105,12 +106,14 @@ def faz1(sehirler):
     bilgi.append(f'259 V üstü trafo olan şehir: {len(sehirler) - len(sifir)}/{len(sehirler)}'
                  + (f"; hiç aşmayan: {', '.join(sifir[:5])}" if sifir else ''))
 
-    # 4. Hiçbir trafoda V_ALT (207 V) altı yok.
+    # 4. Gerilim alt sınırı (ADR-0016 m. 3): V_ALT (207 V) altı trafo payı ≤ %1 ve en düşük ≥ 200 V.
     v_min = [(float(r['v_min_bugun_v']), s['ad'], r['trafo_no']) for s in sehirler for r in s['cevap']]
     en_dusuk = min(v_min)
     alti = [x for x in v_min if x[0] < V_ALT]
-    _madde(m, not alti, f'hiçbir trafoda v_min_bugun_v < {V_ALT:g} V',
-           f'en düşük {en_dusuk[0]:.1f} V ({en_dusuk[1]} {en_dusuk[2]}); altında {len(alti)} trafo')
+    _madde(m, len(alti) / len(v_min) <= V_ALT_PAY and en_dusuk[0] >= V_EN_DUSUK,
+           f'v_min_bugun_v < {V_ALT:g} V olan trafo ≤ %{100 * V_ALT_PAY:g} ve en düşük ≥ {V_EN_DUSUK:g} V',
+           f'en düşük {en_dusuk[0]:.1f} V ({en_dusuk[1]} {en_dusuk[2]}); {V_ALT:g} V altında {_oran(len(alti), len(v_min))}'
+           + (': ' + ', '.join(f'{a} {b} {v:.1f} V' for v, a, b in sorted(alti)[:5]) if alti else ''))
 
     # 5. Üretim süresi.
     sureler = [(s['ayar'].get('sure_sn'), s['ad']) for s in sehirler]
@@ -181,6 +184,7 @@ SAF_FARK = 0.25                 # ADR-0008: model, saf tahminden ortanca ve P90'
 # Kalibrasyon (Faz 7, karar masası 21:32; ADR-0013): nominal bant ↔ ampirik kapsama ve PIT düzlüğü.
 NOMINAL = (0.50, 0.80, 0.90, 0.95)
 KAPSAMA_95_MIN = 0.90
+KAPSAMA_95_N_MIN = 150             # karar masası 22:13: n < 150 trafoda %95 ölçütü bilgi (29 trafoda SH ±5 puan)
 PIT_KOVA, PIT_SAPMA_MAX = 10, 0.05
 
 
@@ -397,9 +401,16 @@ def faz2(sehirler, ispanya=None):
 
         ki = _kal(_sec(ISPANYA_GIRDI, yol=ISPANYA_YOL))
         etiket = f'gerçek veri — İspanya (girdi {ISPANYA_GIRDI}, {ISPANYA_N} ölçülü, {ISPANYA_YOL}, bütün tekrarlar)'
-        _madde(m, KAPSAMA[0] <= ki['kapsama'][0.80] <= KAPSAMA[1] and ki['kapsama'][0.95] >= KAPSAMA_95_MIN,
-               f'kalibrasyon, {etiket}: %80 bant %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g} ve %95 bant ≥ %{100 * KAPSAMA_95_MIN:g}',
+        k95_olcut = ki['trafo'] >= KAPSAMA_95_N_MIN
+        k95_tutar = ki['kapsama'][0.95] >= KAPSAMA_95_MIN
+        _madde(m, KAPSAMA[0] <= ki['kapsama'][0.80] <= KAPSAMA[1] and (k95_tutar or not k95_olcut),
+               f'kalibrasyon, {etiket}: %80 bant %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g}'
+               + (f' ve %95 bant ≥ %{100 * KAPSAMA_95_MIN:g}' if k95_olcut else ''),
                _kal_metin(ki))
+        if not k95_olcut:
+            bilgi.append(f"%95 bant, İspanya (bilgi: {ki['trafo']} trafo < {KAPSAMA_95_N_MIN}, karar masası 22:13): "
+                         f"{_yuzde(ki['kapsama'][0.95])} → ölçüt (≥ %{100 * KAPSAMA_95_MIN:g}) "
+                         + ('tutar' if k95_tutar else 'tutmaz'))
         _madde(m, True if ki['sapma'] <= ki['tol'] else UYARI,
                f'PIT düzlüğü, {etiket}: {PIT_KOVA} kovada en büyük sapma ≤ max(0,05; 2·√(0,09 ÷ n))',
                f"{ki['sapma']:.3f}, tolerans {ki['tol']:.3f} (n = {ki['trafo']} trafo; karar masası 21:51)"
@@ -467,18 +478,16 @@ def faz2(sehirler, ispanya=None):
     for ad, (tanim, oz) in saflar.items():
         kendi = (ad == 'fatura') == faturali
         if oz is None:
-            if kendi:
-                _madde(m, False, f'saf tahmin ({ad})', 'veri yok (sözleşme 1.2 öncesi şehir)')
-            else:
-                bilgi.append(f'saf tahmin ({ad}): veri yok (sözleşme 1.2 öncesi şehir)')
+            bilgi.append(f'saf tahmin ({ad}): veri yok (sözleşme 1.2 öncesi şehir)')
             continue
         so, sp, n = oz
         gecer = mo <= (1 - SAF_FARK) * so and mp <= (1 - SAF_FARK) * sp
         ayr = (f'model {_yuzde(mo)} / {_yuzde(mp)}, saf {_yuzde(so)} / {_yuzde(sp)} '
                f'(model {_fark(mo, so)} / {_fark(mp, sp)}; {n} şehir)')
-        if kendi:
-            _madde(m, gecer, f'saf tahmin ({ad}: {tanim}): model ortanca ve P90\'da ≥ %{100 * SAF_FARK:g} düşük',
-                   ayr + f"; model {'faturalı' if faturali else 'faturasız'} koşmuş (sablon_ozet.json)")
+        if kendi:   # ADR-0016 m. 1: geçme şartı değil, bilgi (öğlen yükünü fatura söyler)
+            bilgi.append(f'saf tahmin ({ad}: {tanim}), modelin koştuğu (ADR-0016: bilgi): {ayr}; '
+                         f"model {'faturalı' if faturali else 'faturasız'} koşmuş (sablon_ozet.json) → "
+                         f'eski ölçüt (≥ %{100 * SAF_FARK:g} düşük) ' + ('geçer' if gecer else 'geçmez'))
         else:
             bilgi.append(f'saf tahmin ({ad}: {tanim}), modelin koşmadığı bilgi: {ayr} → ölçüt '
                          + ('geçer' if gecer else 'geçmez'))
@@ -521,7 +530,8 @@ def faz2(sehirler, ispanya=None):
 
 YANLIS_YESIL_MAX, YANLIS_YESIL_SEHIR_MAX = 0.05, 0.10
 CANLI_BUTCE = 0.02              # ADR-0010: canlıya geçiş bütçesi (bilgi)
-YANLIS_KIRMIZI_HEDEF = 0.20
+KIRMIZI_ASAN_MIN = 0.50         # ADR-0016 m. 2: kırmızı kovasında gerçekte aşan pay ≥ %50 (eski "yanlış kırmızı ≤ %20" kalktı)
+P_KOVA = (0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0001)   # p_bugun_asar kovaları; kırmızı 0,5 üstü (ADR-0011)
 KAC_EV_HATA_MAX = 2.0
 SARI_HEDEF = 0.30
 
@@ -553,7 +563,8 @@ def faz3(sehirler):
             orta = float(k['kac_ev_orta']) if k.get('kac_ev_orta') not in (None, '') else (kar + iyi) / 2
             satir.append(dict(sehir=s['ad'], tip=r['tip'], gercek=int(r['kac_ev_gercek']),
                               tavan=int(r['kac_ev_tavan']), renk=k['renk'], kar=kar, iyi=iyi, orta=orta,
-                              k40=int(k['kural40_ev']), sinir=k['sinir_karamsar']))
+                              k40=int(k['kural40_ev']), sinir=k['sinir_karamsar'],
+                              p=float(k['p_bugun_asar']) if k.get('p_bugun_asar') not in (None, '') else None))
     dolu = [x for x in satir if x['gercek'] == 0]
     orta_ad = 'ortası (kac_ev_orta)' if any(k.get('kac_ev_orta') not in (None, '')
                                             for s in sehirler for k in s['kac_ev'].values()) else 'ortası'
@@ -586,13 +597,34 @@ def faz3(sehirler):
            f'%40 kuralı {_oran(ky, nk)} (en kötü şehir ' + (f'{_oran(*kotu40[1])} {kotu40[0]}' if kotu40 else '—')
            + f'), model {_oran(yy, ny)}; dolu trafoya "yer var": %40 kuralı {_oran(ky, len(dolu))}, model {yy}/{len(dolu)}')
 
-    # 3. Yanlış kırmızı: kırmızı denip gerçekte ≥ 1 ev sığan (hedef; aşarsa UYARI).
+    # 3. Kırmızı kovası (ADR-0016 m. 2, karar masası 22:21): kırmızı = bugün aşma olasılığı ≥ 0,5 (ADR-0011); olasılık
+    #    kalibreyse kırmızıların bir kısmı aşmaz. Gerçekte aşan = dolu (kac_ev_gercek = 0; eski yanlış kırmızının tersi).
+    #    Eşik 0,5 − 2·√(0,25 ÷ n), n = kırmızı trafo sayısı (PIT ve %95 maddeleriyle aynı mantık).
     kir = [x for x in satir if x['renk'] == 'kirmizi']
-    yk = sum(x['gercek'] >= 1 for x in kir)
-    asti = bool(kir) and yk / len(kir) > YANLIS_KIRMIZI_HEDEF
-    _madde(m, UYARI if asti else True, f'yanlış kırmızı raporlandı (hedef ≤ %{100 * YANLIS_KIRMIZI_HEDEF:g})',
-           f'{_oran(yk, len(kir))}; kırmızı payı {_oran(len(kir), len(satir))}; dolu yakalanan (kırmızı) '
-           f'{sum(x["gercek"] == 0 for x in kir)}/{len(dolu)}' + ('; hedefin üstünde' if asti else ''))
+    asan = sum(x['gercek'] == 0 for x in kir)
+    if kir:
+        esik = KIRMIZI_ASAN_MIN - 2 * math.sqrt(0.25 / len(kir))
+        ps = [x['p'] for x in kir if x['p'] is not None]
+        yon = ''
+        if ps:
+            ort = st.mean(ps)
+            yon = (f'; ortalama olasılık {_yuzde(ort)} → '
+                   + ('olasılık karamsar (aşan, söylenenden az)' if asan / len(kir) < ort else 'olasılık iyimser'))
+        _madde(m, asan / len(kir) >= esik, 'kırmızı kovası: gerçekte aşan (dolu) pay ≥ 0,5 − 2·√(0,25 ÷ n)',
+               f'{_oran(asan, len(kir))}, eşik {esik:.2f} (n = {len(kir)} kırmızı); yanlış kırmızı (bilgi) '
+               f'{_oran(len(kir) - asan, len(kir))}; kırmızı payı {_oran(len(kir), len(satir))}; dolu yakalanan (kırmızı) '
+               f'{asan}/{len(dolu)}' + yon)
+    else:
+        _madde(m, UYARI, 'kırmızı kovası: gerçekte aşan (dolu) pay ≥ 0,5 − 2·√(0,25 ÷ n)', 'kırmızı trafo yok')
+    if any(x['p'] is not None for x in satir):
+        kova = []
+        for a, b in zip(P_KOVA, P_KOVA[1:]):
+            ic = [x for x in satir if x['p'] is not None and a <= x['p'] < b]
+            if ic:
+                kova.append(f'{a:g}–{min(b, 1):g}: n {len(ic)}, ortalama olasılık {_yuzde(st.mean(x["p"] for x in ic))}, '
+                            f'gerçekte dolu {_yuzde(sum(x["gercek"] == 0 for x in ic) / len(ic))}')
+        bilgi.append('bugün aşma olasılığı kovaları (p_bugun_asar ↔ gerçekte dolu; kalibreyse ikisi yakın): '
+                     + ' | '.join(kova))
 
     # 4. Kaç ev hatası (tavan = 1 olanlar ayrı: gerçek alttan kesik).
     kes = [x for x in satir if not x['tavan']]
