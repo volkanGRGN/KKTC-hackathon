@@ -293,6 +293,11 @@ def bir_disarida(X_tam, A, olcum, secilen, trafo_no):
 
 
 BANT_YONTEMI = 'nicel'                  # 'nicel': artıkların P10–P90'ı; 'uyumlu': küçük örnek düzeltmeli sıra
+# Bant tahmin etrafında simetrik (log ölçekte): genişlik P10–P90 aralığının yarısı. 12 ölçülünün bir-dışarıda artıkları
+# sağa çarpık çıkıyordu, ölçülmeyende gerçek ise tahminin altına daha sık düştü (Can, Faz 2: P10 altı %11, P90 üstü
+# %4 → düşük yükü kaçırmak = yanlış yeşil yönü). Artık ortancası ~0 (şehir 1–10: %0,1), yani kayma tahminde değil
+# bandın şeklinde. Şehir 1–10: P10 altı %14 → %11, P90 üstü %8 → %13; sınav 11–20: %11 → %6, %4 → %6 (Faz 2 günlüğü).
+BANT_SIMETRIK = True
 TABAN_HATA = 0.05                       # model hatası tabanının alt sınırı (çok aboneli trafoda bile) [Yorum]
 # Taban artıklardan seçilir (taban_sec). Sürüm 1.2 şehirlerinde mahalle farkı (ADR-0008) abone sayısıyla
 # sönmüyor: sabit 0,05 tabanla çok aboneli konut trafosu "yüksek güven" alıp en çok yanılan oluyordu.
@@ -374,6 +379,9 @@ def calistir(tr, X_tam, A, olcum_hepsi, secilen, hedef=None):
     taban = taban_sec(r, A[secilen], TABAN_HATA if faturali else TABAN_FATURASIZ)
     u = r / olcek_birimi(A[secilen], taban)
     alt, ust = bant_carpanlari(u)
+    if BANT_SIMETRIK:
+        yari = (math.log(ust) - math.log(alt)) / 2
+        alt, ust = math.exp(-yari), math.exp(yari)
     u_ortanca = float(np.median(np.abs(u)))
     m.update(loo_log_artik=r, bant=(alt, ust), taban=taban)
     hedef_tr = tr if hedef is None else hedef[0]
