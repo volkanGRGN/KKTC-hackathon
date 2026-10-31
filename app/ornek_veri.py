@@ -33,6 +33,7 @@ YER_KVA = (630, 1000)
 BOLGELER = ("kentsel", "kirsal", "turistik", "sanayi")
 YENI_PANEL_KW = 6.5
 PANEL_YAYGINLIGI = (0.03, 0.25)  # konut abonelerinin payı, ADR-0006
+PANEL_KW = (4.0, 6.5)  # bir çatı paneli, kW (civan.md 13:33, Volkan)
 
 SOZLESME_SURUMU = 1
 ADIM_SAYISI = 288  # 5 dakikalık adım, bir gün
@@ -145,7 +146,7 @@ def trafo_satiri(rng, sehir, no, yayginlik, segmentler):
     abone = aboneler(rng, bolge, kva)
     konut = abone["abone_konut"]
     panel_sayisi = min(konut, round(konut * yayginlik * rng.uniform(0.5, 1.5)))
-    panel_kw = round(sum(rng.uniform(4, 8) for _ in range(panel_sayisi)), 2)
+    panel_kw = round(sum(rng.uniform(*PANEL_KW) for _ in range(panel_sayisi)), 2)
     return {
         "sehir": sehir, "trafo_no": f"T{no:02d}", "enlem": enlem, "boylam": boylam,
         "x_m": x, "y_m": y, "bolge": bolge, "montaj": montaj, "kva": kva,
