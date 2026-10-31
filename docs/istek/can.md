@@ -88,7 +88,7 @@ Durum: bekliyor
 Karar: Evet, çıkarma betiğini sen yaz (zaman kutusu 1 saat): `src/edp_oku.py` (yeni, senin). Çıktı `data/raw/edp-oviedo/turetilmis/` altına (gitignore'da, betikle yeniden üretilir): (1) `trafolar.csv` sözleşme §1 sütunlarıyla, `sehir` = 801 (gerçek veri 800–899 [Yorum]; sözleşmeye satırı BUILD ekler), `kva`, `hat_boyu_max_m` varsa, `abone_konut` = toplam müşteri (sınıf yok [Yorum]), kalan abone sütunları 0, `panel_sayisi`/`panel_kw` 0 (2018 İspanya AG'de çatı PV ihmal [Yorum]); (2) `yuk_saatlik.csv`: `sehir, trafo_no, gun, gun_turu, saat, net_kw` (21 gün × 24; 5 dakikaya açma yok, model tarafı karar verir; `tuketim_kw` = `net_kw` varsayımı [Yorum]); (3) `cevap_anahtari.csv` yalnız `ogle_min_kw` (11–14, 21 gün, saatlikten) ve `tepe_kw`; `tip` boş. TD009456 (tamamen sıfır) dışarıda, sayısı KAYNAK.txt'de.
 Neden: Veriyi sen tanıyorsun, BUILD `sablon.py`'de; eleme 4/5 doğru. EDP'nin görevi eğitmek değil benzetimin yanlılığını görmek (ADR-0003 kanıt sırası: İngiltere → İspanya gerçek → farazi). Sınıf yok diye modelin yalnız kVA + müşteri + hat boyuyla koşması da sonuç: "gerçek veri, sınıfsız" başlığıyla raporlanır, "gösterim" değil.
 Senden beklenen: betik + üç dosya + günlüğe satır (`docs/log/2026-10-31-can-faz2.md`); bitince volkan.md'ye "EDP türetilmiş dosyalar hazır" (BUILD koşar, 2i). NGED şimdi değil.
-Durum: bekliyor
+Durum: iptal 15:18 — BUILD ham veriden doğrudan koştu (PR #10, edp_test.py); betik gerekmez
 
 ## KARAR 31 Eki 13:55 — volkan.md'deki "sözleşme §5: arketipler.csv oran brüt mü net mi?" isteğine
 Karar: **Brüt** (`tuketim_kw`). BUILD'in PR #8'indeki sözleşme 1.1 tam bunu yazıyor: "`oran` … brüt tüketimden: ölçülü trafoların `tuketim_kw` gün türü ortalaması, net değil". Kartındaki "gerçek küme" kuralı ve harita formülü buna uyuyor; `sinav.py faz2` böyle kalsın.
@@ -107,3 +107,13 @@ Karar: (1) Kontrol listesi **evet, şimdi**: veri sözlüğünün başına 8–1
 Neden: Kontrol listesi Muhittin'in ortak sınavının ("her rakam etiketli", "çifte sayım yok") günlük karşılığı, ucuz. Çapraz sağlama değerli (modelin ölçeği Kıb-Tek yıllık tüketimine dayanıyor; EAC × Kıb-Tek aylık toplamı tutmuyorsa büyüklük yanlış) ama Faz 2 geçme sınavı önce; "çok duraksıyoruz" (Volkan).
 Senden beklenen: (1) bugün; (2) kart işlerinden sonra, günlüğe sonuç. Soru gerekmez.
 Durum: bekliyor
+
+## KARAR 31 Eki 15:18 — Can'ın "Faz 2 sınavı farazi şehirde fazla kolay olabilir" önerisine (Volkan iletti)
+Karar: Üç öneri de kabul; gerekçe ve ölçüler [ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md). Rakamların benimkiyle tutuyor (şehir konutu CV şehir içi 0,08, havuz 0,13; seninki 0,14).
+Senden beklenen: (1) `sinav.py faz2`'ye "saf tahmin" satırı: ölçülülerde Σ öğlen ÷ Σ abone × abone; geçme = model ortanca ve P90 saf tahminden ≥ %25 düşük [Yorum]; rakamla günlüğe. (2) Karşılaştırma betiğin `src/edp_kiyas.py` (senin, doğrudan main) + rakamlar günlüğe (CV, eğri benzerliği, saf tahmin farazi/gerçek), "gerçek veri — İspanya" etiketiyle. (3) `sinav.py faz1`'e bilgi satırı: konut trafolarında müşteri başına öğlen yükü CV, şehir içi ortanca ve havuz (ADR-0008 hedefi 0,3–0,4; yeniden üretimden sonra bakılacak). (4) Sunum cümlesi Faz 5'e BUILD yazar. Üreticideki mahalle çarpanı BUILD'de.
+Durum: bekliyor
+
+## KARAR 31 Eki 15:18 — 13:55'teki "İspanya EDP türetme betiği" kararı iptal
+Karar: `src/edp_oku.py` gerekmiyor: BUILD, PR #10'da (`src/edp_test.py`) ham sayaç verisinden doğrudan koştu, üstelik trafo başı ölçüm cihazlarını (ZIVS… sayaçları) buldu ve ondalık virgül hatasını düzeltti; PR #10 günlüğünü oku (docs/log/2026-10-31-volkan-edp-gercek.md). TD009456 ham veride doluymuş, OpenDSS profilinde sıfır; günlüğüne bir satır düşersin.
+Senden beklenen: hiçbir şey; yukarıdaki (2) ile yetin.
+Durum: bilgi
