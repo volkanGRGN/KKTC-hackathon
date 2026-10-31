@@ -42,6 +42,8 @@ python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da 
 
 **Kaç ev (Faz 3):** `python3 src/kac_ev_olasilik.py data/synthetic` → her şehirde `kac_ev.csv` (karamsar / orta / iyimser, renk, bugün aşma olasılığı, %40 kuralı; ADR-0011). `tahmin.csv` ister; şehir başına 3–5 saniye. Yedek yol (tek denklem, 0,1 sn): `python3 src/kac_ev.py data/synthetic`; aynı dosyayı üç ek sütunsuz yazar. Bilginin değeri denemesi (yalnız deney, dosya yazmaz): `python3 src/bilgi_degeri.py data/synthetic --aralik 1-10`.
 
+**Kalibrasyon (Faz 7):** `python3 src/kalibrasyon.py ispanya <edp_test.py --cikti çıktısı>` ve `python3 src/kalibrasyon.py ingiltere <ukpn_olasilik.py CEKILIS_JSON çıktısı>` → yük bandı katsayısı k (`sablon.py` `K_YUK`) ve gerilim sapma çarpanı (`kac_ev_olasilik.py` `SAPMA_MU`, `SAPMA_SIGMA`); `--deneme` bilinen dağılımla sınar. Kurallar [docs/tuzuk.md](docs/tuzuk.md).
+
 **Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
 
 **Gerilim doğrulaması** (gerçek veri, İngiltere UKPN; sanal ortam ister): `python3 src/ukpn_test.py data/raw/ukpn-pv-dogrulama ukpn_sonuc.csv` — ~30 saniye; veri `data/raw/ukpn-pv-dogrulama/KAYNAK.txt`'ten indirilip `acik/` altına açılır. Sonuç [günlükte](docs/log/2026-10-31-volkan-ukpn-gerilim.md).
