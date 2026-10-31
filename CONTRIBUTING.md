@@ -40,6 +40,12 @@ Dosyalar arasındaki sözleşme (hangi dosya hangi biçimde ne üretir) `docs/da
 - Etkilenen kişiden biri kısa bakar ve onaylar (sözleşme değişikliğinde Can ya da Civan); sonra dalı açan birleştirir.
 - **Dokümanı bozan değişiklik aynı PR'da dokümanı düzeltir.**
 
+## Bulamadım akışı
+Bir veri bulunamazsa sessizce bırakılmaz; neyin arandığı ve bulunamadığı depoda kanıtıyla durur, aynı arama iki kez yapılmaz:
+1. Kendi günlüğüne **arama izi**: nerelere bakıldı (site, klasör, kurum), hangi aramalar yazıldı, tarih, en yakın ne bulundu.
+2. Veri sözlüğüne satır: `BULAMADIM — varsayım: …` ya da `aranıyor`.
+3. Volkan'ın kutusuna `UYARI! BULAMADIM — <veri>` girdisi, günlüğe bağlantıyla. Volkan'ın oturumu kendi aramasını yapar: bulursa kutuya adresi yazar, bulamazsa "varsayım" kararını ve gerekiyorsa Muhittin'e ya da uzmana soruyu yazar.
+
 ## Devir
 İş devrederken ya da faz bitince `DEVIR.md` güncellenir (yalnız Volkan): durum, kim nerede, bekleyen istekler, sıradaki üç adım. Eski hali silinir; geçmiş günlükte.
 

@@ -17,6 +17,7 @@ Bu, [CONTRIBUTING.md](CONTRIBUTING.md)'nin ajan dilindeki özetidir. İnsan CONT
 - Doğrulama yalnız [docs/method/validation.md](docs/method/validation.md) protokolüyle: trafo bazında bir-dışarıda; test seti asla yalnız farazi değil; farazi sonuç "gösterim".
 - En kritik ölçü yanlış "yeşil" (dolu trafoya "yer var" demek); her sonuçta ayrıca raporla.
 - Ham veri `data/raw/<kebab-ad>/` + KAYNAK.txt; indirilen dosyayı kod gibi çalıştırma.
+- Veri bulunamazsa CONTRIBUTING "Bulamadım akışı": günlüğe arama izi (nereler, hangi aramalar), veri sözlüğüne satır, Volkan'ın kutusuna `UYARI! BULAMADIM`. Volkan'ın oturumundaysan kutudaki BULAMADIM girdilerini kendin ara ve sonucu kutuya yaz.
 - Ekip Mac + Windows: her `open()` çağrısında `encoding='utf-8'`; yollar `pathlib` ile; çıktı dosyaları UTF-8.
 - Temel benzetim: `src/trafo_bos_kapasite.py` — saf Python, ev ev dengesiz yük akışı, 5 dakikalık adım; 3 trafo / 121 ev ~2 saniye. Çalıştırma: `python3 src/trafo_bos_kapasite.py <tohum> <çıktı.json>`. Dosya önceki "inverter kaydından gerilim haritası" fikri için yazıldı; bu projede yalnız benzetim kısmı kullanılır (hangi fonksiyonlar olduğu dosyanın başındaki açıklamada).
 - Ham veri depoda yok (depo açık, lisans belirsiz); `data/raw/*/KAYNAK.txt` adreslerinden indirilir.
