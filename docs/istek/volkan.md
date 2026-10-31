@@ -963,3 +963,12 @@ Soru: motor inverter barasını ölçülmüş kaymayla mı kullansın (R2; bedel
 Dosya: PR #25 (taban PR #22; https://github.com/volkanGRGN/KKTC-hackathon/pull/25), docs/log/2026-11-01-volkan-panel-inverter-geri-cozum.md (dalda)
 Neden: Muhittin 4 madde 5; karar masası 22:56 / 23:03; BUILD 2 görevi.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:45 — (BUILD 1 — yük) — Akşam tepesi ön sürümü PR #24'te (Muhittin 4 madde 2, ADR-0018): İspanya Mayıs tepesi faturayla %15,4, farazi %6; test edin
+Ne: `src/tepe.py` her trafoda yılın net tepesini (kW, kVA), saatini, ayını ve geniş bandını yazar (`tepe.csv`, sözleşme §7 adayı, Can'ın sütun adları + `kor_nokta`; `guven` = on). Yöntem: EAC 2022 ay tipik günü × faturadan sınıf enerjisi × ölçülü 12 trafonun Nisan oranı; Haziran–Eylül ve Ocak–Şubat taraması, ayın en sıcak / soğuk günü terimi; eğim EAC'nin aylar arası farkından (konut yaz %3,0/°C) [Hesap]; bant İspanya Mayıs artıklarından (P10 −0,218, P90 +0,420; sağa çarpık) ⊕ eğim × 0,5–2. Haritanın "yük için boş" sayısı `bos_kva_p10` (P90 tepeden). `edp_test.py --hedef tepe` İspanya tepe satırlarını yazar (K_TEPE 1,164); öğlen satırları main'le bayt bayt aynı.
+Rakamlar [Hesap]: **İspanya Mayıs tepesi (gerçek), 10 ölçülü tabakalı: hata ortanca %15,4, P90 %36,1, %80 bant %80,3** (15 ölçülü %13,4 / %34,8 / %79,6). Farazi (gösterim; iyimser, üretici de EAC): 1–10 ölçülmeyen 280 trafo %6,1 / %15,9, kapsama %98,2; **21–30 bir kez** %6,0 / %17,7, kapsama %98,6; gerçeğin bandın üstüne çıktığı trafo 0/560; sapma fazla tahmin yönünde (+%3, çarşı +%14–18).
+Eksiler: (1) İspanya'da hata Can'ın geçici eşiğinin (%15 / %35) kıl payı üstünde: fatura × oran Mayıs tepesinde bu kadar. (2) Tepe saati zayıf (±60 dk %42–45): konutun Temmuz gününde iki tepe (16–17 ve 23); yurt ticari II tarifesiyle büyük ticaret eğrisini alıyor. (3) Eşzamanlılık yuvası boş (Can'ın B-Y2'si); Velander varsayılanı eklenmedi, ölçülmeyende abone sayısına göre sapma yok (günlükte). (4) Tasarım sıcaklığı 3 yıllık seriden + 2 °C [Yorum]: Lefkoşa 10 yıllık seri yerelde yok; Open-Meteo arşivinden açık veri olarak indirilebilir, indirmedim. (5) Akşam gerilimi (`v_min_tepe_v`) tahmini yok.
+Soru: İspanya maddesi kıl payı kalıyor; eşik [Yorum] Can'ın. Ön sürüm bu hâliyle birleşsin mi (öneri: evet, "ön" etiketi ve eşik notuyla)?
+Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), docs/log/2026-11-01-volkan-yuk-tepe-on.md (dalda)
+Neden: BAŞLA 00:16 madde 1–2; ADR-0018.
+Durum: bekliyor
