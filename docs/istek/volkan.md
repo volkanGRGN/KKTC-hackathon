@@ -233,7 +233,7 @@ Faz 1, 1.2'de 5/5; konut CV 0,32. Rakamların senin geliştirme ölçümünle tu
 (4) Not: `edp_kiyas.py` hızlı okuma için `python-calamine` kullanıyor (yoksa openpyxl'e düşüyor); senin `edp_test.py` de istiyor, `requirements.txt`'de yok (kök belge, senin).
 Dosya: PR #14, src/edp_kiyas.py, docs/log/2026-10-31-can-faz2.md, docs/sunum/
 Neden: karar masası 16:50 sırası (2), (3), (5); ADR-0008 madde 1, 2, 4; 17:03 UYARI.
-Durum: bekliyor
+Durum: karar verildi 17:38 → can.md (slayt 5 rakamı 1.2 + İspanya; KTTO adresi aranıyor) + volkan.md (BUILD: bant kayması, requirements)
 
 ## UYARI! 31 Eki 15:50 — Can'dan — Faz 3 sınavı resmi sonuç (PR #14'e eklendi) + kaç ev maddesi KALDI
 Ne: `sinav.py faz3` ve kilit grafik PR #14'te (dal `sinav/faz2`, ikinci commit). Girdi: `kac-ev/ilk-surum` dalındaki `kac_ev.py`, Faz 2'deki 1.2 şehirleri, kırmızı kuralı varsayılan (`karamsar_yeni_ev`). Sınav şehirleri 11–20 senin ölçümünle birebir:
@@ -251,7 +251,7 @@ Soru: madde tanımı hangisi olsun (kart: ayrı → KALDI; dahil → iyimser 2, 
 Dosya: PR #14 (src/sinav.py, src/grafikler.py), docs/log/2026-10-31-can-faz3.md, docs/sunum/
 Neden: karar masası 16:50 (4), 17:17 UYARI; kart "karar masasına yaz: eşik tartışmalıysa".
 BUILD görüşü 17:33: Can haklı; kartı ben yazdım, tanım kartınki kalsın (tavanlılar ayrı) → madde KALDI. Benim "iyimser 2 ev" ölçümüm tavanlıları dahil ettiği için yapay küçüktü; Faz 3 günlüğüne düzeltme yazıldı (PR #13, a534b67). Kırmızı kuralı (b) PR #13'te; `faz3` yeniden koşulmalı (kırmızı %31, yanlış kırmızı %42, sarı %63 bekleniyor). PR #14 birleşti 17:32.
-Durum: bekliyor
+Durum: karar verildi 17:38 → can.md: kart tanımı kalır (tavanlılar ayrı), madde KALDI; aralık kapsaması bilgi satırı
 
 ## UYARI! 31 Eki 16:05 — Can'dan — 17:26 kararı uygulandı: faturasız model saf tahmini geçmiyor (KALDI)
 Ne: `sinav.py faz2` 6. madde artık modelin koştuğu bilgiye göre (`sablon_ozet.json` `fatura_kullanildi`); Σ abone kalktı (PR #14 @ d0207fb). Sınav şehirleri 11–20:
@@ -264,4 +264,9 @@ Ne: `sinav.py faz2` 6. madde artık modelin koştuğu bilgiye göre (`sablon_oze
 Faturasızda öğlen hatası maddesi de KALDI (%20,6 / %50,7). Düşük güven %100 (UYARI). Geliştirme 1–10'da kapsama da KALDI (%69,6). Ayrıntı docs/log/2026-10-31-can-faz2.md.
 Neden: karar masası 17:26 ("KALDI ise KALDI"). Sunum için anlamı: farazide de Faz 2'yi geçiren şey fatura; İspanya'daki %25 → %10 ile aynı mesaj.
 Dosya: PR #14, docs/log/2026-10-31-can-faz2.md
+Durum: karar verildi 17:38 → can.md: Faz 2 faturalı koşuyla kapanır, faturasız KALDI dürüstlük cümlesine
+
+## KARAR 17:38 — BUILD'e: Faz 2 resmi sonuçtan iki küçük iş (bant kayması, requirements) ve Faz 2 kapanışı
+Karar: (1) **Bant yukarı kayık** (Can: gerçek P10'un altında %11, P90'ın üstünde %4): öğlen yükünü yüksek tahmin etmek paneli fazla sığdırır → yanlış yeşil yönü. `sablon.py`'de bir-dışarıda artıkların ortancasıyla kayma düzeltmesi (tahmin ve bant birlikte kaydırılır), 30 dk zaman kutusu; sonra Can `faz2`'yi yeniden koşar. Olmazsa günlüğe "bant %7 yukarı kayık, yanlış yeşil yönü, 1.3" notu. (2) `requirements.txt`'e `python-calamine` (isteğe bağlı, hızlı Excel okuma; yoksa openpyxl) satırı. (3) **Faz 2 kapanır**: resmi ölçüm Can'ın `sinav.py faz2`'si, faturalı koşuyla 7/7 GEÇTİ (ADR-0007 faturayı girdi yaptı); faturasız koşu KALDI ve ROADMAP'te "bilgi: fatura olmadan model saf tahmini ortancada geçmiyor (%10), kazanç P90'da" satırıyla kalır. ROADMAP Faz 2 kutuları Can'ın rakamlarıyla [x]; Faz 2 başlığına "(bitti 31 Ekim, faturalı)". (4) Can'ın bulamadığı KTTO Mart 2023 rapor adresi: karar masası aradı, iki aramada bulunamadı; slaytta "[Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı]" etiketi; bulunursa güncellenir.
+Senden beklenen (ana oturum): (1)–(3) bugün; DEVIR.
 Durum: bekliyor

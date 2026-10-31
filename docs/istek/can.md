@@ -177,3 +177,12 @@ Ne: Volkan: "Can onaylasın". PR #13 (https://github.com/volkanGRGN/KKTC-hackath
 Dosya: PR #13
 Neden: sözleşme değişikliği Can ya da Civan onayı ister; ROADMAP Faz 3 kutuları senin yeniden koşmana bağlı.
 Durum: yapıldı — PR #13 sözleşme kısmı GitHub'da onaylandı (CanSahin77); faz3 a534b67 ile yeniden koşuldu: yanlış yeşil 0/21, kırmızı %30,5, yanlış kırmızı %42,5, sarı %63,4, kaç ev KALDI (docs/log/2026-10-31-can-faz3.md)
+
+## KARAR 17:38 — volkan.md'deki üç isteğine (Faz 2 resmi sonuç, Faz 3 kaç ev maddesi, faturasız KALDI)
+Karar:
+1. **Faz 2 kapanır, faturalı koşuyla** (7/7 GEÇTİ, resmi ölçüm senin). Faturasız KALDI dürüstçe kalır; sunum cümlesi: "Fatura olmadan model ortalama trafoda basit hesaptan pek iyi değil; fatura girince hata dörtte bire iniyor. İspanya'da da aynı: %25 → %10." Slayt 5'e **1.2 rakamları** (faturalı %3,8 / P90 %8,0; faturasız %20,6 / %50,7) ve yanına İspanya %10 / %25; farazi rakam "üst sınır (gösterim)" etiketli, manşet İspanya. %8,6 (PR #8) artık kullanılmaz.
+2. **Kaç ev maddesi KALDI**, kartın tanımı kalır (tavanlılar ayrı; BUILD de katılıyor). Eşik (≤ 2 ev) oynatılmaz; sebep günlüğe [Yorum]: ±4 V bara gerilimi belirsizliği ve karamsar/iyimser aralığının genişliği. Bilgi satırı ekle: **aralık kapsaması** = gerçek `kac_ev_gercek`, [karamsar, iyimser] aralığının içinde kalan trafo oranı (ürünün asıl çıktısı aralık; 1.3'te ROADMAP maddesi adayı). Kırmızı kuralı (b) ile `faz3`'ü yeniden koş (BUILD PR #13'e koydu), sarı/kırmızı yeni oranları günlüğe.
+3. **Faturasız saf tahmin KALDI**: kabul, tanım doğru; "KALDI" kalır. Güven etiketi faturalıda ayırmıyor (yüksek %3,8 / orta %5,1) → bilgi, sorun değil (hepsi iyi). **Bant yukarı kayık** (P10 altı %11 / P90 üstü %4 → yanlış yeşil yönü): önemli bulgu, BUILD `sablon.py`'de kayma düzeltmesi yapacak (30 dk); gelince `faz2`'yi yeniden koş.
+4. KTTO Mart 2023 adresi: ben de iki aramada bulamadım; slaytta "[Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı]" yaz, bulunursa değişir. `python-calamine` requirements'a BUILD ekliyor.
+Senden beklenen: slayt 5 ve dürüstlük cümlesi; `faz3` bilgi satırı (aralık kapsaması) + yeniden koşum; bant düzeltmesi gelince `faz2` yeniden; günlüğe.
+Durum: bekliyor
