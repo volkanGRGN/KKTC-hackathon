@@ -54,6 +54,15 @@ def sehirleri_oku(kok):
     return sayilan, atlanan
 
 
+UYARI = 'UYARI'                 # "raporla" maddeleri: hedef aşıldı, ama ROADMAP'e göre geçmeyi bozmaz
+
+
+def _fark(model, saf):
+    """Model hatasının saf tahmine göre farkı: '%31 düşük' ya da '%218 yüksek'."""
+    f = 1 - model / saf
+    return f'%{100 * abs(f):.1f} ' + ('düşük' if f >= 0 else 'yüksek')
+
+
 def _madde(sonuc, gecti, ad, ayrinti):
     sonuc.append((gecti, ad, ayrinti))
 
@@ -330,8 +339,8 @@ def faz2(sehirler):
           / sum(not int(r['olculdu']) for r in s['tahmin']) for s in sehirler}
     o, k = _ozet(dg)
     ayr = f'ortanca {_yuzde(o)}, en kötü {_yuzde(k[0])} ({k[1]})'
-    _madde(m, True, f'düşük güven oranı raporlandı (hedef ≤ %{100 * DUSUK_GUVEN_MAX:g})',
-           ayr + ('' if o <= DUSUK_GUVEN_MAX else '; UYARI: hedefin üstünde, sebep BUILD günlüğünde'))
+    _madde(m, True if o <= DUSUK_GUVEN_MAX else UYARI, f'düşük güven oranı raporlandı (hedef ≤ %{100 * DUSUK_GUVEN_MAX:g})',
+           ayr + ('' if o <= DUSUK_GUVEN_MAX else '; hedefin üstünde, sebep BUILD günlüğünde'))
 
     # 6. Saf tahmin (ADR-0008, karar masası 17:26): model hangi bilgiyle koştuysa o saf tahminle karşılaştırılır.
     #    faturasız: Σ öğlen ÷ Σ tarife enerjisi × tarife enerjisi; faturalı: Σ öğlen ÷ Σ fatura × fatura.
@@ -369,7 +378,7 @@ def faz2(sehirler):
         so, sp, n = oz
         gecer = mo <= (1 - SAF_FARK) * so and mp <= (1 - SAF_FARK) * sp
         ayr = (f'model {_yuzde(mo)} / {_yuzde(mp)}, saf {_yuzde(so)} / {_yuzde(sp)} '
-               f'(model {_yuzde(1 - mo / so)} / {_yuzde(1 - mp / sp)} düşük; {n} şehir)')
+               f'(model {_fark(mo, so)} / {_fark(mp, sp)}; {n} şehir)')
         if kendi:
             _madde(m, gecer, f'saf tahmin ({ad}: {tanim}): model ortanca ve P90\'da ≥ %{100 * SAF_FARK:g} düşük',
                    ayr + f"; model {'faturalı' if faturali else 'faturasız'} koşmuş (sablon_ozet.json)")
@@ -478,10 +487,10 @@ def faz3(sehirler):
     # 3. Yanlış kırmızı: kırmızı denip gerçekte ≥ 1 ev sığan (hedef; aşarsa UYARI).
     kir = [x for x in satir if x['renk'] == 'kirmizi']
     yk = sum(x['gercek'] >= 1 for x in kir)
-    _madde(m, True, f'yanlış kırmızı raporlandı (hedef ≤ %{100 * YANLIS_KIRMIZI_HEDEF:g})',
+    asti = bool(kir) and yk / len(kir) > YANLIS_KIRMIZI_HEDEF
+    _madde(m, UYARI if asti else True, f'yanlış kırmızı raporlandı (hedef ≤ %{100 * YANLIS_KIRMIZI_HEDEF:g})',
            f'{_oran(yk, len(kir))}; kırmızı payı {_oran(len(kir), len(satir))}; dolu yakalanan (kırmızı) '
-           f'{sum(x["gercek"] == 0 for x in kir)}/{len(dolu)}'
-           + ('' if not kir or yk / len(kir) <= YANLIS_KIRMIZI_HEDEF else '; UYARI: hedefin üstünde (kırmızı kuralı karar masasında)'))
+           f'{sum(x["gercek"] == 0 for x in kir)}/{len(dolu)}' + ('; hedefin üstünde' if asti else ''))
 
     # 4. Kaç ev hatası (tavan = 1 olanlar ayrı: gerçek alttan kesik).
     kes = [x for x in satir if not x['tavan']]
@@ -498,8 +507,9 @@ def faz3(sehirler):
 
     # 5. Sarı oranı (hedef; aşarsa UYARI).
     sari = sum(x['renk'] == 'sari' for x in satir)
-    _madde(m, True, f'sarı oranı raporlandı (hedef ≤ %{100 * SARI_HEDEF:g})',
-           _oran(sari, len(satir)) + ('' if sari / len(satir) <= SARI_HEDEF else '; UYARI: hedefin üstünde, sebep BUILD günlüğünde'))
+    asti = sari / len(satir) > SARI_HEDEF
+    _madde(m, UYARI if asti else True, f'sarı oranı raporlandı (hedef ≤ %{100 * SARI_HEDEF:g})',
+           _oran(sari, len(satir)) + ('; hedefin üstünde, sebep BUILD günlüğünde' if asti else ''))
 
     # Bilgi.
     bilgi.append(f'küme: kac_ev_aday > 0 {len(satir)} trafo ({len(dolu)} dolu); aday = 0 ayrı {adaysiz}')
@@ -549,7 +559,7 @@ def main():
           + ('' if faz == 'faz1' else ' — gösterim, farazi şehirler') + '\n')
     maddeler, bilgi = {'faz1': faz1, 'faz2': faz2, 'faz3': faz3}[faz](sehirler)
     for gecti, ad, ayrinti in maddeler:
-        print(f"[{'GEÇTİ' if gecti else 'KALDI'}] {ad}: {ayrinti}")
+        print(f"[{UYARI if gecti == UYARI else 'GEÇTİ' if gecti else 'KALDI'}] {ad}: {ayrinti}")
     print('\nBilgi:')
     for satir in bilgi:
         print('  ' + satir)
