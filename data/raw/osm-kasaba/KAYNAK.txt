@@ -28,3 +28,20 @@ curl -A "KKTC-hackathon/0.1 (github.com/volkanGRGN/KKTC-hackathon)" -o girne_kiy
 Dosya: ~139 KB; 25 kıyı yolu, 2.141 nokta. OSM kuralı: deniz yolun sağında.
 Kullanım: noktadan kuzeye ışın; kıyıyı tek sayıda kesiyorsa karada (app/ornek_veri.py `karada()`).
 Sağlama (Civan, 31 Ekim) [Hesap]: referans noktası karada. Şehir üreticisinin konum kuralıyla tip başına 2.000 örnek: otel %31 denizde, köy %4, sulama %4, yurt %3, şehir konutu %2, çarşı ve sanayi %0. sehir-001'de 40 trafonun 4'ü denizde (3 otel, 1 şehir konutu).
+
+---
+Üçüncü ve dördüncü dosya: girne_genis.json ve girne_elektrik.json — farazi şehirlerin bütün trafolarını kapsayan geniş zemin ve OSM'deki gerçek elektrik şebekesi (harita ve görsel için).
+İndirildi: 31 Ekim 2026, 21:06 (Civan). OSM veri zaman damgası: girne_genis 2026-10-31T19:05:04Z, girne_elektrik 2026-10-31T19:04:04Z. Lisans: ODbL 1.0, aynı atıf.
+Alan (güney, batı, kuzey, doğu): 35.27, 33.24, 35.36, 33.40 — referanstan (35.3375, 33.318) batıya ve doğuya ~7 km, güneye ~7,5 km; üreticinin en uzak köy halkasını (7 km) kapsar, kuzeyi deniz.
+Sorgular (kıyı dosyasındaki User-Agent ile; ilk denemede 502 döndü, 15 saniye sonra geçti):
+curl -A "KKTC-hackathon/0.1 (github.com/volkanGRGN/KKTC-hackathon)" -o girne_genis.json https://overpass-api.de/api/interpreter --data-urlencode 'data=[out:json][timeout:240][bbox:35.27,33.24,35.36,33.40];(way["building"];relation["building"];way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service)$"];);out geom;'
+curl -A "KKTC-hackathon/0.1 (github.com/volkanGRGN/KKTC-hackathon)" -o girne_elektrik.json https://overpass-api.de/api/interpreter --data-urlencode 'data=[out:json][timeout:120][bbox:35.27,33.24,35.36,33.40];(nwr["power"];);out geom;'
+Dosyalar: girne_genis.json ~7,3 MB; girne_elektrik.json ~38 KB.
+
+Sağlama (Civan, 31 Ekim) [Hesap]:
+- girne_genis: 10.563 öğe; 6.694 bina (kat bilgisi olan 1.472); 3.869 yol (residential 2.030, service 1.204, unclassified 187, tertiary 157, primary 148, trunk 97). Yaya yolları ve merdivenler alınmadı.
+- girne_elektrik: 149 öğe; 11 hat (power=line), 130 direk (power=tower), 3 trafo merkezi (substation, way), 1 substation düğümü, 3 transformer (2 düğüm, 1 way), 1 generator.
+
+Bilinen eksikler:
+- OSM'deki elektrik verisi yalnız yüksek/orta gerilim omurgası (hat, direk, merkez); mahalle trafoları ve evlere giden alçak gerilim hatları yok. Haritadaki mahalle trafoları farazi şehirden, evlere giden teller şematik çizimdir (gösterim), gerçek güzergâh değil.
+- Bina sayısı OSM'nin çizildiği kadar; Girne merkezi dışında eksik çizim olabilir.
