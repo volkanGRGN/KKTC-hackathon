@@ -553,7 +553,7 @@ Karar: Volkan (21:39): "Malta vs. için 'bu gece sunum var, olmaz' demişsin; fa
 4. **Değişmeyen:** tüzük kapıları (yanlış yeşil ≤ %2, kalibrasyon) her PR'da; ayar farazi şehre göre yapılmaz; Civan'ın Faz 4 işleri (ağ kapalı açılış, ekran kaydı) ve prova ekipten düşmez.
 Neden: Volkan'ın kararı; sunumun hikâyesi değişmiyor, yalnız rakamlar PR'larla güncelleniyor; ertelemeler karar masasının temkiniydi, Volkan kaldırdı.
 Senden beklenen (BUILD): ROADMAP başlık ve ibareler (10 dk), DEVIR "Faz 6–12 başladı"; B1–B3 devam; sonra Gozo ve Faz 8. Kıb-Tek istek metni taslağı `docs/istek/kibtek-veri-istegi-taslak.md` (Volkan gönderir).
-Durum: kısmen 21:46 (BUILD) — (1) ROADMAP başlığı "Faz 6–12 — Modeli gerçek veriyle iyileştirme", ertelemeler kalktı, Kim satırı, sıra; Gozo Faz 7'ye (dış sınama listesinde), Faz 9'a istek metni, Faz 11'e Can'ın sözleşme 1.4 işi; DEVIR "Faz 6–12 başladı". (2) Gozo dış sınaması ve (3) Kıb-Tek istek taslağı yapıldı 21:50: `docs/istek/kibtek-veri-istegi-taslak.md` (kişisel veri yok, anonim numara + trafo / hat / direk; 6 kalem; gönderen Volkan, kampta uzmanla kısalır); Faz 8, PR #16'nın bulguları kapanınca.
+Durum: kısmen 21:46 (BUILD) — (1) ROADMAP başlığı "Faz 6–12 — Modeli gerçek veriyle iyileştirme", ertelemeler kalktı, Kim satırı, sıra; Gozo Faz 7'ye (dış sınama listesinde), Faz 9'a istek metni, Faz 11'e Can'ın sözleşme 1.4 işi; DEVIR "Faz 6–12 başladı". (2) Gozo dış sınaması yapıldı 21:53: PR #17, tutmadı (UYARI 21:53); (3) Kıb-Tek istek taslağı yapıldı 21:50: `docs/istek/kibtek-veri-istegi-taslak.md` (kişisel veri yok, anonim numara + trafo / hat / direk; 6 kalem; gönderen Volkan, kampta uzmanla kısalır); Faz 8, PR #16'nın bulguları kapanınca.
 
 ## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın (BUILD)
 Ne: BUILD kartı [docs/gorev/volkan-faz7-kalibrasyon.md](../gorev/volkan-faz7-kalibrasyon.md): B1 `src/kalibrasyon.py` → B2 İspanya k_yük → B3 İngiltere model-sapma + sınav 11–20 bir kez → PR (Can onaylar). Sonra Gozo dış sınaması (30 dk), Faz 8 üretici çapalama ve yeni sınav şehirleri (dal + PR), Kıb-Tek veri istek taslağı. Önce ROADMAP başlık değişikliği (KARAR 21:4x, 10 dk). Can C1'den, Civan Faz 4'ün kalanından başlıyor; bildirim kutularda.
@@ -600,4 +600,13 @@ Karar:
 **Birleşme koşulu:** (a) karar masasının Mac koşumu (dal, 20 şehir sıfırdan; İspanya ve İngiltere komutları) BUILD'in rakamlarıyla tutar; (b) Can C1'i dalda koşar ve onaylar (öneren ≠ puanlayan). İkisi olunca karar masası birleştirir (Volkan'ın "işi bittikten sonra birleştir" izni). Sonra Can resmi `faz2` / `faz3`, sunum rakamları v2.
 **Civan'ın dış veri istek metinleri (21:46):** dışarıya mesaj Volkan'ın; öneri: (a) dil nötr ve teknik kalsın: "a low-voltage distribution network in the northern part of Cyprus (operator: Kıb-Tek)", siyasi niteleme yok; (b) ilk mesaj yalnız sorumlu yazara, EAC'den Ioannou ve KIOS'tan Kyriakides bilgi alıcısı **değil** (yazarın yönlendirmesiyle sonra). Volkan onaylarsa gönderir.
 Senden beklenen (BUILD): PR'a dokunma; ROADMAP Faz 2 kutu metni, tüzük madde 2 formülü ve günlük notları (2, 4) PR dalına (küçük commit); Can'a dalda C1 için haber kutuda (21:46'da yazılmış).
+Durum: bekliyor
+
+## UYARI! 31 Eki 21:53 — BUILD'den — Gozo dış sınaması (PR #17): tutmadı, bilgi eksik — test edin
+Ne: KARAR 21:39 madde 2a. `src/gozo_dis_sinama.py` Srug F1 hattında (Graz 2016, Tablo 3) 400 çekiliş; hat boyu, kablo, faz, panel yeri aralıktan. Makalenin dört sonucunu birden tutan çekiliş **%0** (1/400). Tek tek, v1: bugün sorun yok %13, +1 kWp aşım %95, +1 kWp bir adım aşağı sorun yok %61, +2 kWp en alt kademe aşım %23. v2'de (Faz 7 s) %15 / %95 / %51 / %36.
+Sebep iki bilinmeyen: (1) öğlen bara gerilimi: merkezler mevsimlik kademe ayarı istiyordu, "normal kademe = 250 V" öğlen doğru olmayabilir; 3 V payda bugünkü 26,7 kWp aşıyor. (2) Bugünkü panellerin dağılımı ve fazı. Hiçbir hat boyu / kablo dördünü birlikte tutturmuyor.
+Ne söylenebilir: ne "doğrulandı" ne "yanlış" (20:47'deki "bilgi eksik, rakam üretmez" sezginiz doğru çıktı); Gozo'da da kaldıraç hat değil bara ve panel dağılımı. Micallef tezi gelirse tek tahminle yeniden.
+Soru: PR #17 olumsuz sonuç olarak birleşsin mi (tüzük §3: olumsuz sonuçlar da yazılır; model kodu değişmiyor)? Sunumda söylenmez.
+Dosya: PR #17 (https://github.com/volkanGRGN/KKTC-hackathon/pull/17): src/gozo_dis_sinama.py, docs/log/2026-11-01-volkan-faz7-gozo.md
+Neden: Volkan'ın kuralı: eksi bulgulu PR karar masasında test edilir. Bloklamıyor; Faz 8 PR #16'dan sonra.
 Durum: bekliyor
