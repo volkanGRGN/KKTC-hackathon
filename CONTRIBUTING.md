@@ -25,6 +25,7 @@ Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı 
 
 Dosyalar arasındaki sözleşme (hangi dosya hangi biçimde ne üretir) `docs/data/tablo-bicimi.md`'de; önce o yazılır, sonra herkes kendi dosyasına çekilir. **Planlama Volkan'da (+ Claude): görevler [docs/gorev/](docs/gorev/README.md) kartlarıyla verilir; Can ve Civan kartı uygular, soruyu istek kutusuna yazar.** Sınav kodunu (`sinav.py`) modeli yazan değil Can yazar: ölçü bağımsız olsun.
 
+- **İstek kutusuna yazmak için izin istenmez**; yaz, gönder, sıradaki işe geç. Kim neye karar verir: [docs/istek/README.md](docs/istek/README.md#kim-neye-karar-verir).
 - Başkasının dosyasına ekleme gerekiyorsa o dosyaya dokunma; **o kişinin istek kutusuna** yaz ([docs/istek/](docs/istek/README.md), başlık `UYARI!`), o kişi yapar ve durumu "yapıldı" yapar. Bekleyenler: `grep -n "Durum: bekliyor" docs/istek/*.md`.
 - Günlük dosya adı `YYYY-AA-GG-<kişi>-<konu>.md`; böylece günlükler de çakışmaz. (31 Ekim'den önceki iki günlük bu kalıptan önce yazıldı, istisna.)
 - Göndermeden önce `git pull --rebase`, sonra `git push`. Küçük ve sık commit.

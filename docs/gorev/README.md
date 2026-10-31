@@ -15,7 +15,9 @@ Adımlar: 1., 2., 3. (her biri ≤ 1 saat)
 Nasıl denenir: komut + beklenen çıktı
 Bitti sayılması için: ölçülebilir 2–4 madde (ROADMAP geçme sınavından)
 Dokunulmayacak dosyalar: …
-Takılırsan: önce şunu dene …; sonra istek kutusu / sesli
+Kendin karar ver (sorma, günlüğe yaz): …
+Karar masasına yaz (volkan.md, bekleme, sıradaki işe geç): …
+Takılırsan: önce şunu dene …; sonra istek kutusu (sormadan) / bloklarsa sesli
 ```
 
 Sıra: önce `docs/data/tablo-bicimi.md` (sözleşme), sonra Faz 1 kartları (Can: profiller; Civan: ornek_veri + harita iskeleti), sonra bizim kod.
