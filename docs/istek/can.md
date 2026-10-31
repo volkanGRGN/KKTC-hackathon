@@ -18,7 +18,7 @@ Durum: yapıldı 13:50
 Karar: Madde sağlamada kalır, eşik değişir: "çarşı Nisan tatil öğleni / iş günü öğleni (11–14)" aralığı **0,6–0,9** olur ("pazar" kelimesi kalkar, "tatil" olur). Şehir üreticisine ayrıca varsayım konmaz; sözleşmedeki `gun_turu` zaten `isgunu` / `tatil`, EAC'nin tatil tipik günüyle birebir.
 Neden: ROADMAP'teki "yarısından az" eşiği pazar için yazılmıştı; EAC'de pazar ayrı yok, tatil tipik günü cumartesi + pazar + bayram ortalaması ve Kıbrıs'ta dükkânlar cumartesi açık [Yorum], o yüzden yarıya inmesi beklenmez. Sağlamanın amacı "tatilde çarşı düşüyor mu, veri doğru okunuyor mu": üst sınır 0,9 düşüşü, alt sınır 0,6 yanlış sütun okumayı (tatil ≈ 0) yakalar. Mac'te senin kodunla doğruladım [Hesap, PR #5 @ 3bfef6a]: çarşı Nisan 0,83; ay ay 0,64–0,83 (en yükseği Nisan); küçük ticari 0,59–0,84; konut 1,00–1,44 (tatilde artıyor, beklendiği gibi). Eşik [Yorum]. ADR-0004 EAC'yi sınırlarıyla seçti, bu da o sınırlardan biri; yöntem kararı değişmiyor, yeni ADR gerekmez.
 Senden beklenen: PR #5'te `saglama()` son maddesinin adı "çarşı Nisan tatil öğleni / iş günü öğleni (11–14)", aralığı (0.6, 0.9) olsun; günlüğündeki tabloya yeni satır ("eşik karar masasında değişti 12:25"; eski KALDI satırı silinmez). Veri sözlüğündeki EAC satırına yanlılık olarak "cumartesi = pazar = bayram, tek tatil tipik günü" ekle. ROADMAP Faz 1'deki "pazar günü çarşı öğleni iş gününün yarısından az" satırını Volkan'ın ana oturumu düzeltir; sen dokunma.
-Durum: bekliyor
+Durum: yapıldı 14:35 (PR #5 @ f76edda: aralık 0,6–0,9, 5/5 GEÇTİ; günlüğe yeni satır; veri sözlüğüne yanlılık)
 
 ## PR İNCELEME 31 Eki 12:25 — PR #5 "veri: profiller.py ilk sürüm (EAC sınıf eğrileri, 5 dk, sağlama)"
 Sonuç: sağlama eşiği düzeltilince birleştirilebilir (yukarıdaki ilk KARAR).
@@ -28,4 +28,4 @@ Sonuç: sağlama eşiği düzeltilince birleştirilebilir (yukarıdaki ilk KARAR
 − Günlükteki tabloya yeni sonuç satırı (append-only; eski satır kalır).
 ? Windows'ta çıktı ve Türkçe karakter: sen çalıştırdın, bende ölçülmedi. 14 "tamamen sıfır" sınıf-günün hepsi `isi_depolama` (kullanmadığımız sınıf) [Hesap]; sorun değil, günlüğe bir kelime yeter.
 Senden beklenen: iki düzeltmeyi dala gönder, sonra kartın dediği gibi sen birleştir (Volkan'ın bakması = bu inceleme).
-Durum: bekliyor
+Durum: düzeltmeler dalda 14:35 (f76edda); birleştirme Can'ın onayını bekliyor
