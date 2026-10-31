@@ -297,7 +297,7 @@ Durum: bilgi
 Karar: Senin önerdiğin gibi: PNG'yi Mac'te resmi veriden tek komutla çizdim (`grafikler.py faz3 … --aralik 11-20`) ve karar masası commit etti (senin dosyan, senin izninle): yanlış yeşil 0/87, dolu trafoya yer var 0/73; %40 kuralı 41/284, dolu 41/73. Slayt 10 ve ekran 5'teki "41/74" etiketi 41/73 olur (Windows notu kalkar). Fark platform kaynaklı: Mac'te aynı tohumla üç koşu (biri PYTHONHASHSEED=0) birebir aynı; Windows'ta bir trafo farklı. Tüzük madde 5'e "resmi rakam Mac koşumu" notu BUILD'de; sebep Faz 6'da aranır. Senin Faz 3 günlüğüne bir satır: "Windows'ta aynı main'den üretilen 20 şehirde dolu 74 / tavanlı 107 (Mac 73 / 108); sebep aranıyor".
 Neden: ürün rakamı tek kaynaktan olmalı; tüzük madde 5 (sonuç = commit + veri + tohum) platformu da anmalı.
 Senden beklenen: slayt 10 / ekran 5 etiketini 41/73 yap; günlük satırı; sonra C1'e devam.
-Durum: bekliyor
+Durum: yapıldı — slayt 10 ve ekran 5 etiketi 41/73 (Mac koşumu, Windows notu kalktı); Faz 3 günlüğüne platform farkı eki
 
 ## UYARI! 31 Eki 21:45 — Civan'dan (+ Claude) — Veri sözlüğüne Korsika satırı ve Kuzey trafo sayısı vekili (KARAR 21:39 madde 1; onay senin)
 Ne: Sözlük senin dosyan; aşağıdaki iki değişikliği sen ekle ya da "ekle" de, ben PR açayım. KAYNAK hazır: `data/raw/edf-sei-corse/KAYNAK.txt` (main'de).
@@ -313,7 +313,7 @@ Ne: Sözlük senin dosyan; aşağıdaki iki değişikliği sen ekle ya da "ekle"
 - Kullanım: Kuzey trafo sayısı vekiline ikinci, bağımsız sağlama (~6.690); farazi şehirde trafo başına hat boyu için dış çapa (üretici 1.3 adayı).
 Dosya: docs/data/data-dictionary.md (senin); data/raw/edf-sei-corse/KAYNAK.txt (Civan)
 Neden: Karar masası 21:39 (1): Korsika vekili sözlüğe; ekran 6'daki "120–170 trafo" ve sunum metni değişmez.
-Durum: yeni
+Durum: yapıldı — iki değişiklik sözlükte (rakamlar sağlandı: 219.931 ÷ 34,4 = 6.393, ÷ 32,9 = 6.685; 5.930 ÷ 8.144 = 0,73)
 
 ## UYARI! 31 Eki 21:46 — Volkan'dan (BUILD oturumu) — Faz 7 PR #16 hazır: C1'i dalda koş (sen puanlarsın)
 Ne: Kartın C4'ü. Dal `kalibrasyon/faz7`, PR #16: `sablon.py` k_yük 1,475 (İspanya), `kac_ev_olasilik.py` gerilim sapma çarpanı (İngiltere 6 hat), `src/kalibrasyon.py`. Dalda yeniden üret: `python3 src/sablon.py data/synthetic` ve `python3 src/kac_ev_olasilik.py data/synthetic`; sonra C1 maddelerin ve `faz2`, `faz3` (11–20). BUILD'in bir kez koşusu (sen teyit et): faz2 kapsama şehir ortancası %87,5 → %96,4 (farazi madde KALIYOR); faz3 yanlış yeşil 0/48, yeşil 48, sarı 238, kırmızı 61 (yanlış 20); kaç ev orta 1, P10 altı %7,1. İspanya için `src/kalibrasyon.py ispanya` (edp_test.py --cikti çıktısıyla): %80 bant %65,7 → %79,1 bir-dışarıda.

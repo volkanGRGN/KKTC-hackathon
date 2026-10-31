@@ -41,7 +41,7 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Benzetimdeki kVA listesi, trafo çıkışı 250 V ve ABC 70/95 dirençleri (r 0,50 / 0,36 Ω/km) **varsayım** etiketiyle kullanılır.
 
 **Güney referans sayıları** — EAC on yıllık plan 2025–2034
-- 17.886 dağıtım trafosu (direk 11.048 ort. ~95 kVA; yer 6.838 ort. ~583 kVA), alçak gerilim 18.203 km, 615.479 tüketici. Kuzey'in trafo sayısı için vekil (~6.400, [Hesap]).
+- 17.886 dağıtım trafosu (direk 11.048 ort. ~95 kVA; yer 6.838 ort. ~583 kVA), alçak gerilim 18.203 km, 615.479 tüketici. Kuzey'in trafo sayısı için vekil **~6.400–6.700** [Hesap: 219.931 tüketici ÷ trafo başına 34,4 (Güney) ya da 32,9 (Korsika, aşağıda)].
 
 **Güneş (hava yılı)** — `data/raw/open-meteo-lefkosa/`
 - Lefkoşa saatlik, 2024 ve 2025 (17.544 saat): yatay küresel, doğrudan, yaygın ve 30° güney eğimli ışınım (W/m²), sıcaklık, bulutluluk. Yerel saat (yaz saati dahil).
@@ -55,6 +55,14 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Kaynak: SimBench 1.6.3, veri ODbL 1.0. İndirildi 31 Ekim 2026; paket kurulmadan wheel içinden CSV.
 - Sağlama [Hesap]: trafodan en uzak eve 0,23–0,57 km, ortalama eve 0,09–0,20 km; trafo başına 13–118 yük; 160–630 kVA. Tablo KAYNAK.txt'de.
 - Yanlılık: Alman şebekesi, **yer altı kablosu** (NAYY 150/240 mm², r 0,21 / 0,13 Ω/km). [Yorum] Kıb-Tek mahalle hatları büyük ölçüde havai ABC 70/95; benzetimdeki varsayım r 0,50 / 0,36 Ω/km → aynı boyda hatta gerilim yükselmesi ~2–3 kat. Hat boyu ve ev sayısı SimBench'ten alınır; kablo direnci SimBench'ten alınmaz, benzetimdeki ABC varsayımı kalır (Kıb-Tek şartnamesi BULAMADIM, yukarıda).
+
+**Korsika EDF SEI açık veri — ada şebekesi ölçüsü** — `data/raw/edf-sei-corse/`
+- İki tablo: (1) yıllık OG/AG trafo merkezi sayısı ve hat boyları (2011–2025, ada toplamı); (2) belediye × sektör yıllık tüketim (MWh) ve teslim noktası sayısı. Birim km, adet, MWh/yıl; çözünürlük yıllık.
+- Kaynak: EDF SEI Corse, opendata-corse.edf.fr, Licence Ouverte 2.0. İndirildi 31 Ekim 2026 (Civan); SHA-256 KAYNAK.txt'de.
+- Ölçülü: işletmecinin kayıt sayımı (ölçüm değil, envanter).
+- Sağlama [Hesap]: 2024'te 8.144 trafo, 5.930 km AG hat, 267.925 teslim noktası → trafo başına 0,73 km ve 32,9 nokta (Güney 1,02 km ve 34,4).
+- Yanlılık: Kıbrıs değil; ada toplamı, mahalle dağılımı ve havai / yeraltı ayrımı yok; teslim noktası abone ile birebir değil [Yorum].
+- Kullanım: Kuzey trafo sayısı vekiline ikinci, bağımsız sağlama (~6.690); farazi şehirde trafo başına hat boyu için dış çapa (üretici 1.3 adayı).
 
 **OSM kasaba haritası** — `data/raw/osm-kasaba/`
 - Girne merkez (~1 km × 1,1 km) bina ve yol geometrisi (Overpass JSON). İndirildi 31 Ekim 2026 (Civan).
