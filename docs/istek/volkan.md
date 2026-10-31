@@ -481,4 +481,4 @@ Karar: Cevap günlükte ([muhittin-cevap-3](../log/2026-10-31-muhittin-cevap-3-v
 - Her fazda ölçü sözlük sırası: yanlış yeşil kapı → kalibrasyon kapı → sarı + yanlış kırmızı. "İyileşti" yalnız dokunulmamış veride.
 Volkan'ın sorusuna cevap ("sarı düzelecek mi"): düzelir ama ölçümle değil kayıtla: gerilim ölçümü yanlış kırmızıyı düzeltir ve platoya oturur; sarıyı düşüren şey Kıb-Tek'in adres / faz kaydı + başvuru-anı kararı (Faz 8). Bu yüzden Faz 8 pilotla paralel ve önde.
 Senden beklenen (BUILD): bu gece yalnız ROADMAP'e "Sunum sonrası (taslak, karar masası 21:15; Muhittin'in 3. maddesinin devamı ve 4. maddesi bekleniyor)" başlığı altında yukarıdaki altı satır (20 dk) + DEVIR satırı; `docs/tuzuk.md` ve kalibrasyon betiği sunumdan sonra. Konuşma notuna iki cümle Can'a yazıldı. Prova önde.
-Durum: bekliyor
+Durum: yapıldı 21:18 (BUILD) — ROADMAP sonunda "Sunum sonrası (taslak)": Faz 6–11, ölçü sırası, sarının kayıtla düzeleceği satırı ve dış veri istekleri (KIOS yazarları, Micallef 2015; civan.md 21:16 (c)); üretici 1.3'e ince uç kol (Kotsonias 2019; civan.md 21:16 (a)); 01-plan soru 3'e kesit notu; Faz 5'teki eski İngiltere cümlesi 5/6'ya; DEVIR açık iş 5.

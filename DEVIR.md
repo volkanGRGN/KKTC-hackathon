@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 20:55 — karar masası 20:47 (ADR-0012, ada ülkeleri) işlendi; sırada Faz 4 Mac kontrolü.
+**Güncellendi:** 31 Ekim 2026, 21:18 — karar masası 20:47 işlendi (Faz 4 Mac kontrolü, konuşma notu); 21:15 sunum sonrası faz haritası ROADMAP'te.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -42,6 +42,8 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 2. **Faz 5:** [konuşma notu taslağı](docs/konusma-notu-taslak.md) 20:58'te güncel (karar masası 20:47 cümleleri, sehir-001 tıklama sırası, prova listesi). Can `docs/sunum/`'a taşır; ekran 5 rakamları orada hâlâ "BEKLİYOR". Gece 2 prova. Konuşma notuna "%4" cümlesi: "Kıb-Tek'in kendi kayıtlarında panelli abonenin adresi ve fazı varsa %4'e" (karar masası 20:47).
 3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 netleşen cümle ve jüri cevapları (can.md 20:50); Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
 4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
+
+5. **Sunum sonrası faz haritası** (karar masası 21:15, Muhittin'in üçüncü cevabı, ADR-0013 / ADR-0014): ROADMAP sonunda "Sunum sonrası (taslak)", Faz 6–11 (tüzük → kalibrasyon → Kıb-Tek kayıtları ve başvuru anında karar → pilot A → yük katmanı → canlı kapı) ve dış veri istekleri (mesajı Volkan yazar). `docs/tuzuk.md` ve `src/kalibrasyon.py` sunumdan sonra. Muhittin'in 3. maddesinin devamı ve 4. maddesi bekleniyor.
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.

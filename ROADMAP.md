@@ -125,6 +125,7 @@ Yapılacaklar:
     - trafo güç listesi: ASTOR kataloğu (2020; Elparts'ın sattığı marka) yağlı dağıtım trafosunu 50–5000 kVA, kompakt trafo merkezini 1000 / 1600 kVA veriyor. Listedeki 25 kVA kaynaksız: kaynak bulunmazsa liste 50'den başlar; yaz benzetilirse yer tipine 1600. Kademe değiştirici var, adımı BULAMADIM (uzmana soru 8);
     - öğlen orta gerilim değişimi şehir başına −%0,4…+%0,8 aralığından (bugün sabit +%0,8; UKPN'de öğlen bara geceden ~1 V düşük; karar masası 18:46, varsayım envanteri K2). Sınav şehirleri bu gece donuk;
     - panelli evde `yillik_tuketim_mwh` net yazılır (mahsuplaşma), model `panel_kw` × yıllık üretimle (≈ 1.600 kWh/kWp [Yorum]) düzeltir; uzmana soru 7;
+    - ince uç kol senaryosu (karar masası 21:16, Civan'ın ada veri setleri bulgusu): uç kollarda 16–22 mm² havai iletken (Rac 1,23–1,91 Ω/km); olasılıklı hesabın kol çekilişine (ADR-0011 kol yapısı) ince iletkenle girer [Kaynaklı: Kotsonias vd. (KIOS + EAC), ISGT-Europe 2019, Zenodo 10.5281/zenodo.3561929, CC BY 4.0]. Kıb-Tek'in kesiti uzmana soru 3;
     - trafo boyutu çapası (karar masası 20:47): Malta en yüksek talep ÷ güç P10/50/90 0,13 / 0,42 / 0,74 (yılın tepesi, 1.331 trafo merkezi [Hesap: Enemalta kapasite haritası verisi, 31 Ekim; ham veri depoda yok]); bizim Nisan tepesi ÷ kVA 0,16 / 0,27 / 0,47. Kıyas için Nisan / yıl tepe oranı EAC profillerinden türetilir; bugünkü "gerek × 1,2–2,0" [Yorum] buna göre;
     - abone başına eğri farkı: aynı tarifede öğlen ÷ yıllık oranı abone abone dağılsın (ADR-0009 trafo içi çeşitlilik). Bugün farazi faturalı %3,9 üst sınır, İspanya'da faturayla %10.
 
@@ -185,7 +186,7 @@ Yapılacaklar:
     3. İngiltere (gerilim, dış geçerlilik);
     4. Kıbrıs pilotu (saha).
   - **Manşet rakam: İspanya %25 → %10** ("hiç görmediğimiz 29 gerçek trafoda, Kıb-Tek'in zaten elinde olan abone sayısı + faturayla").
-  - İkinci vurgu: gerilimde 6 hattın 4'ü ±%40, 2 ıskalama uca kümelenme → karamsar senaryo.
+  - İkinci vurgu: gerilimde İngiltere'nin 6 gerçek hattının 5'inde ölçülen yükselme olasılıklı hesabın güvenli sınırının altında; birinde küçük gördük → canlıda yeşil önce pilotla sınanır (karar masası 18:46, ADR-0011).
   - Farazi rakamlar destek, manşet değil. Farazi 1.2'de faturasız %22, faturalı %3,9 (iyimser üst sınır).
   - Kilit grafik: yanlış yeşil, biz 0 / %40 kuralı %14.
 - Akış (eski taslak, merdivene yerleşir): Güney %47'sini atıyor → Kuzey'de 2.670 bekliyor, Kıb-Tek mahalleyi görmüyor → İngiltere 800 trafo, %80 → bizim uyarlama (öğlen + gerilim, Kıbrıs'a özel; **fotoğraf değil film**: bugün kurulumcu gerilimi tek noktada, tek gün ölçüyor, komşular panel ekledikçe baharda sınır aşılıyor ve kimse önceden görmüyor; biz trafonun gün ve mevsim boyu davranışını tahmin edip "kaç ev daha ekleyince sınıra gelir" sorusuna önceden cevap veriyoruz) → canlı harita → %40 kuralıyla yan yana yanlış yeşil → pilot (20–50 → 120–170 trafo, ~20 bin € + pens, baharda) → itirazlar ve triyaj.
@@ -199,3 +200,20 @@ Geçme sınavı:
 - [ ] Dürüstlük cümleleri konuşma notunda ve provada söylendi.
 - [ ] Her rakamın slaytta kaynağı ya da etiketi var (rakam sayısı = etiket sayısı).
 - [ ] Yedekler açıldı ve çalıştı.
+
+## Sunum sonrası (taslak, karar masası 21:15; Muhittin'in 3. maddesinin devamı ve 4. maddesi bekleniyor)
+
+Sıra Muhittin'in uyarısıyla: ucuz olan değil, sarıyı ve yanlış kırmızıyı en çok düşüren önde. Dayanak: [Muhittin'in üçüncü cevabı](docs/log/2026-10-31-muhittin-cevap-3-veri-dongusu.md), [ADR-0013](docs/decisions/adr-0013-veri-dongusu-tuzugu.md) (veri döngüsü tüzüğü), [ADR-0014](docs/decisions/adr-0014-yuk-katmani-ayri-tepe-modeli.md) (yük katmanı), [ADR-0012](docs/decisions/adr-0012-sari-trafoda-karar-basvuru-aninda.md) (başvuru anında karar).
+
+- **Faz 6 — Tüzük ve döngü altyapısı** (ilk hafta): `docs/tuzuk.md` (ADR-0013'ün yedi maddesi + veri partisi görev kartı şablonu; Muhittin'in 3. maddesinin devamı gelince tamamlanır); hold-out defteri; sürümleme (model + üretici + veri + tohum); `src/kalibrasyon.py` (PIT histogramı, nominal–ampirik kapsama eğrisi, şişirme katsayısı). Bitti: tüzük var, her görev kartı ona referans veriyor, kalibrasyon betiği İspanya ve İngiltere artıklarında koşuyor.
+- **Faz 7 — Kalibrasyon gerçeğe karşı** (İspanya yük, İngiltere gerilim, gelen inverter kayıtları): bantlar gerçek artıklarla şişirilir ya da model-sapma terimi eklenir; "fazla emin" düzeltilmeden bant yayınlanmaz. Bitti: nominal %80 gerçek doğrulamada %70–90; PIT düz.
+- **Faz 8 — Kıb-Tek kayıtları ve başvuru anında karar** (sarıyı asıl düşüren): abone–trafo eşleşmesi, panelli abonenin adresi ve fazı, başvuru formuna hat / direk bilgisi (uzmana soru 2–4, 6–8); ADR-0012 başvuru anı hesabı yazılır ve farazi şehirde "başvuru anı yanlış evet oranı" ile sınanır. Bitti: Kıb-Tek'ten kayıt geldi ya da gelmeyeceği belli; başvuru anı kararı farazide yanlış yeşil ≤ %2.
+- **Faz 9 — Pilot A, ucuz ölçüm** (Faz 8'le paralel): akıllı priz gece seviyesi (birkaç ev), inverter kayıtları (izinle), trafo plakası ve kademe; her ölçülü trafo partisi ayar / doğrulama diye bölünür (ADR-0013 madde 1). Hedef: yanlış kırmızı %27 → ~%19 (plato; fazla satılmaz), yeşil kuralının ilk Kıbrıs geri-testi. Bitti: en az 1 parti işlendi, hold-out defteri açık, kapılar tutuyor.
+- **Faz 10 — Yük katmanı** (ADR-0014): ayrı tepe modeli (sıcaklık + müşteri karışımı), hava normalizasyonu, kVA + güç katsayısı varsayımı, iki sayılı kart asimetrik ("ön"); yaz ölçümü gelene kadar düşük güven. Bitti: kart var, yük tarafı "ön" etiketli, sınav maddesi (tepe hatası) bilgi satırı.
+- **Faz 11 — Canlı geçiş kapısı:** dokunulmamış gerçek hold-out'ta ~150 bağımsız karar noktası, 0 ihlal (yanlış yeşil < %2, %95 güven), kalibrasyon toleransta, sürümlü yayın; sarı trafolarda geçici ölçüm cihazı (asıl pilot). Bitti: iki kapı geçildi, ilk sürüm Kıb-Tek'e teslim.
+- Her fazda ölçü sırası: yanlış yeşil kapısı → kalibrasyon kapısı → sarı ve yanlış kırmızı. "İyileşti" yalnız dokunulmamış veride söylenir.
+- Sarı düzelir ama ölçümle değil kayıtla: gerilim ölçümü yanlış kırmızıyı düzeltir ve platoya oturur; sarıyı düşüren Kıb-Tek'in adres / faz kaydı ve başvuru anında karar (Faz 8). Bu yüzden Faz 8 pilotla paralel ve önde.
+
+**Dış veri istekleri** (karar masası 21:16; mesajı Volkan yazar, ekip yazmaz):
+- KIOS yazarları (Kotsonias vd. 2019): Kıbrıs AG hat modeli ve EAC'nin 60 tüketici verisi.
+- Micallef 2015 yüksek lisans tezi (Malta Üniversitesi, "Request a copy"): Gozo hat boyu ve kablo; dış sınama adayı Gozo hattını koşulabilir yapar ([ada ülkeleri günlüğü](docs/log/2026-10-31-volkan-ada-ulkeleri.md)).
