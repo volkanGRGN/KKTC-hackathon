@@ -328,3 +328,9 @@ Karar: PR #16'nın dört eksi bulgusu karara bağlandı (volkan.md 21:51): faraz
 Neden: tüzük madde 2–3; Muhittin vurgu 2.
 Senden beklenen: C1 dalda + onay; v2 rakamları ancak birleşince.
 Durum: bekliyor
+
+## KARAR 21:58 — C1 için iki not: dalda İspanya maddesi şimdilik KALDI görünür (edp_test k'yi uygulamıyor, BUILD düzeltiyor); PIT toleransında n = 29
+Karar: C1'in dalda koşumunu karar masası Mac'te denedi (`--ispanya` ile): İspanya maddesi %66,6 / PIT 0,108 KALDI gösteriyor; sebep senin kodun değil, `edp_test.py --cikti` satırlarının kalibrasyon katsayısını (K_YUK 1,475) içermemesi. BUILD `edp_test.py`'ye k'yi ekliyor (`--kalibrasyonsuz` ile "önce"). Düzeltme dala gelince `edp_satirlar.csv`'yi yeniden üret ve C1'i dalda koş: beklenen "sonra" %80 bant ≈ %80, %95 ≈ %90 (iç örnek; bir-dışarıda %79,1 `kalibrasyon.py`'den), PIT ≈ 0,086. **PIT toleransı:** n = bağımsız trafo sayısı (29), satır sayısı (380 tekrar) değil → tolerans max(0,05; 2·√(0,09 ÷ 29)) = 0,11; 0,086 geçer, yönü "fazla emin" bilgi olarak yazılır. Maddeyi buna göre güncelle (`sinav.py` senin). Sonra PR #16'yı GitHub'da onayla; karar masası birleştirir.
+Neden: tüzük madde 2 (n'ye bağlı tolerans; tekrarlar bağımsız değil) ve madde 3.
+Senden beklenen: PIT n tanımı; BUILD'in "hazır" satırından sonra dalda C1 + onay.
+Durum: bekliyor
