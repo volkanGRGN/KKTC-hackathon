@@ -102,14 +102,14 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | `kac_ev_gercek` | int | ev | `4` | ev ev benzetimle "kaç ev daha sığar"; 7 başvuru sırasının ortancası (tanım aşağıda) |
 | `kac_ev_gercek_min` | int | ev | `2` | 7 sıranın en küçüğü |
 | `kac_ev_gercek_max` | int | ev | `7` | en büyüğü |
-| `kac_ev_tavan` | int | 0/1 | `0` | 1 = adayların hepsi sığdı; gerçek kapasite daha yüksek olabilir (sayı alttan kesik) |
-| `kac_ev_sinir` | str | — | `gerilim` | ortanca sırada ilk aşımın nedeni: `gerilim` / `isil` / `yok` (tavan) |
+| `kac_ev_tavan` | int | 0/1 | `0` | 1 = adayların hepsi sığdı; gerçek kapasite daha yüksek olabilir (sayı alttan kesik). `kac_ev_aday` = 0 ise de 1; o trafoda kaç ev sütunları bilgi taşımaz |
+| `kac_ev_sinir` | str | — | `gerilim` | ortanca sırada ilk reddin nedeni (bugün zaten aşıyorsa bugünkü aşımın): `gerilim` / `isil` / `yok` (hiç ret yok) |
 
-**"Gerçek kaç ev" tanımı:** panelsiz konut aboneler rastgele sıraya dizilir (Kıb-Tek'in başvuru sırası gibi). Sırayla her birine 6,5 kW panel eklenir (ev tek fazlıysa kendi fazına) [ROADMAP Faz 1: bekleyen başvurular 5–8 kW, orta değer]. Kritik adımlarda (bugünkü en yüksek gerilimli 6 adım + en güçlü güneşli 3 adım) herhangi bir evde gerilim 259 V'u ya da trafo yükü kVA'yı aşınca durulur; o ana kadar eklenen ev sayısı sonuçtur. Bugün zaten aşıyorsa 0. 7 farklı sıra, ortanca.
+**"Gerçek kaç ev" tanımı:** panelsiz konut aboneler rastgele sıraya dizilir (Kıb-Tek'in başvuru sırası gibi). Sırayla her birine 6,5 kW panel eklenir (ev tek fazlıysa kendi fazına) [ROADMAP Faz 1: bekleyen başvurular 5–8 kW, orta değer]. Kritik adımlarda (bugünkü en yüksek gerilimli 6 adım + en güçlü güneşli 3 adım) herhangi bir evde gerilim 259 V'u ya da trafo yükü kVA'yı aşarsa o başvuru reddedilir ve **sıradakine geçilir** (ilk retle durulmaz: hat ucundaki bir evin sığmaması trafoya yakın evi engellemez). Onaylanan ev sayısı sonuçtur. Bugün zaten aşıyorsa 0. 7 farklı sıra, ortanca.
 
 ## 4. `ayar.json` — şehrin ayarları (Faz 1)
 
-Zorunlu anahtarlar: `sehir`, `tohum`, `sozlesme_surumu` (bu dosyanın sürümü), `uretici_surumu`, `trafo_sayisi`, `tip_sayilari` ({tip: adet}), `ay`, `gun_turleri` (14 elemanlı liste), `profil_kaynagi` (`eac` ya da `yer_tutucu`), `isinim_kaynagi`, `tuketim_carpani` ({sınıf: oran}), `saat_kaymasi_dk` ({sınıf: dakika}), `panel_yayginligi`, `yeni_panel_kw`, `v_sinir_v`, `referans_enlem`, `referans_boylam`. Ek anahtar serbest.
+Zorunlu anahtarlar: `sehir`, `tohum`, `sozlesme_surumu` (bu dosyanın sürümü), `uretici_surumu`, `trafo_sayisi`, `tip_sayilari` ({tip: adet}), `ay`, `gun_turleri` (14 elemanlı liste), `profil_kaynagi` (`eac` ya da `yer_tutucu`), `isinim_kaynagi`, `tuketim_carpani` ({sınıf: oran}), `saat_kaymasi_dk` ({sınıf: dakika}), `panel_yayginligi`, `yeni_panel_kw`, `v_sinir_v`, `referans_enlem`, `referans_boylam`, `hava_yili` (yapay ışınımda boş), `sure_sn` (üretim süresi). Ek anahtar serbest. Aynı tohum aynı şehri verir: CSV'ler birebir, `ayar.json`'da yalnız `sure_sn` farklı olabilir.
 
 `profil_kaynagi` = `yer_tutucu` olan şehir Faz 1 geçme sınavına girmez (Can'ın `profiller.py`'si gelmeden üretilmiştir).
 
