@@ -19,7 +19,7 @@ Durum: bilgi — iş ana oturumda
 Karar: 800–899 → şerit "GERÇEK ÖLÇÜM — <veri_kaynagi> (Kıbrıs değil)"; kaynak adı `ayar.json` `veri_kaynagi` anahtarından (ör. "EDP Oviedo 2018, Mendeley CC BY"), anahtar yoksa "gerçek ölçüm verisi". Sözleşme 1.2'ye "800–899 gerçek veri; `ayar.json`'da `veri_kaynagi` ve `veri_turu` = `gercek` zorunlu" satırını BUILD ekler. Not: şu an gerçek veri klasörü üretilmiyor (BUILD İspanya'yı ham veriden koştu, PR #10); bu kural ileride lazım olursa diye, acil değil. `yillik_tuketim_mwh` sahte üreticiye 1.2 gelince, evet.
 Neden: Etiket kuralı kartında, aralık sözleşmede; yanlış "farazi" etiketi jüri önünde dürüstlük sorunu olur.
 Senden beklenen: `app/harita.py` `etiket()`'e üçüncü dal (tek satır), PR #9'dan sonra doğrudan main; sözleşme 1.2 PR'ı açılınca onay için bak (Can ya da sen).
-Durum: bekliyor
+Durum: yapıldı 16:58 (d617701: etiket() 800–899 dalı; README)
 
 ## PR İNCELEME 15:14 — PR #9 "harita: sahte şehir ve harita iskeleti (Civan Faz 1 kartı)"
 Sonuç: birleştirilebilir.
@@ -29,10 +29,10 @@ Sonuç: birleştirilebilir.
 − (küçük, birleşmeden sonra olur) `egri_ciz()`: `yuk.loc[yuk["gun"] == 0, "gun_turu"].iloc[0]` ölçülü satır hiç yoksa patlar; `if yuk.empty: st.info(...); return` bir satır. Ayrıca `etiket()`'e 800–899 dalı (KARAR 15:12).
 ? İnternetsiz açılış ve OSM zemin bende denenmedi (kıyı ve bina dosyaları Mac'te yok; zemin Carto'dan geldi). Tıklama süresi senin ölçümün (0,55 sn); bende göz kararı anında.
 Senden beklenen: birleştir (kart: Volkan bakar → bakıldı); sonra küçük düzeltmeleri doğrudan main'e. `harita/iskelet` eski dalını silebilirsin.
-Durum: bekliyor
+Durum: yapıldı 16:58 (birleşti e16972e; boş-ölçülü koruması ve etiket d617701; günlükte "Mac: karar masası doğruladı"; eski harita/iskelet dalı şimdilik silinmedi)
 
 ## KARAR 16:50 — iş sırası (yeniden planlama; Faz 3 kartı BUILD'den gelecek, beklemeden başla)
 Karar: Sıra: (1) PR #9'u birleştir (incelendi, birleştirilebilir); sonra doğrudan main. (2) `etiket()`'e 800–899 dalı + `egri_ciz` boş-ölçülü koruması (PR incelemesi). (3) Yan panel gerçek Faz 3 tablosuna hazır olsun: `kac_ev.csv` gelince karamsar–iyimser, renk, %40 kuralı, "ölçülmedi" etiketi (`olculdu` = 0) ve "aday yok" durumu (`kac_ev_aday` = 0 → "panelsiz konut yok"). (4) Faz 4 sınavı: internet kapalıyken açılış denemesi (OSM zemini var), 2 dakikalık ekran kaydı, 3 şehir seçimi, Mac denemesi (karar masası yaptı, günlüğüne yaz), yan panel sayıları 3 trafoda elle kontrol. (5) Zaman kalırsa kıyı çizgisini zemine çiz, OSM alanını genişlet. Sunumda canlı gösteriyi sen yapacaksın; akış için Can'ın `docs/sunum/` iskeletine bak.
 Neden: Sunum yarın; harita jürinin tıklayacağı şey, Faz 3 tablosu gelir gelmez bağlanmalı.
 Senden beklenen: yukarıdaki sıra; takılırsan kutu.
-Durum: bekliyor
+Durum: sürüyor — 1 ve 2 yapıldı 16:58; 3–5 sırada
