@@ -52,11 +52,20 @@ def sehir_klasorleri():
     return sorted(p for p in VERI_KOK.iterdir() if (p / "trafolar.csv").exists())
 
 
-@st.cache_data
+def degisim_zamani(yol):
+    """Önbellek anahtarı: dosya yeniden üretilince değişir, harita eski veriyi göstermez."""
+    yol = Path(yol)
+    return yol.stat().st_mtime_ns if yol.exists() else None
+
+
 def tablo_oku(yol):
     """CSV'yi okur; dosya yoksa None (Faz 1'de tahmin ve kac_ev henüz olmaz)."""
-    yol = Path(yol)
-    if not yol.exists():
+    return _tablo_oku(yol, degisim_zamani(yol))
+
+
+@st.cache_data
+def _tablo_oku(yol, zaman):
+    if zaman is None:
         return None
     return pd.read_csv(yol, encoding="utf-8", dtype={"trafo_no": str})
 
@@ -123,13 +132,16 @@ def kat_sayisi(etiketler):
         return 1
 
 
-@st.cache_data
 def osm_zemin(yol):
     """OSM binaları (çokgen + yükseklik) ve yolları; dosya yoksa None."""
-    yol = Path(yol)
-    if not yol.exists():
+    return _osm_zemin(yol, degisim_zamani(yol))
+
+
+@st.cache_data
+def _osm_zemin(yol, zaman):
+    if zaman is None:
         return None
-    ogeler = json.loads(yol.read_text(encoding="utf-8"))["elements"]
+    ogeler = json.loads(Path(yol).read_text(encoding="utf-8"))["elements"]
     binalar, yollar = [], []
     for oge in ogeler:
         if oge["type"] != "way":  # tek relation kale suru, atlandı
@@ -183,9 +195,13 @@ def renk_ozeti(veri):
     return "Trafolar: " + " · ".join(parcalar) + " · sütun boyu: kaç ev (karamsar)"
 
 
-@st.cache_data
 def olculu_yuk(yol, olculu_nolar):
     """yuk_5dk.csv'den YALNIZ ölçülü trafoların satırları (ölçülmeyenin satırı cevap anahtarıdır)."""
+    return _olculu_yuk(yol, olculu_nolar, degisim_zamani(yol))
+
+
+@st.cache_data
+def _olculu_yuk(yol, olculu_nolar, zaman):
     sutunlar = ["trafo_no", "gun", "gun_turu", "adim", "saat", "tuketim_kw"]
     parcalar = pd.read_csv(
         yol, encoding="utf-8", usecols=sutunlar, dtype={"trafo_no": str}, chunksize=50_000
