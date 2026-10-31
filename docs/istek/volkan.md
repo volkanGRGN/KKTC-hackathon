@@ -650,3 +650,17 @@ Sıra: (1) dalda K_YUK = 1,27 + günlük tablosu + tüzük cümlesi; `kalibrasyo
 Neden: Tüzük madde 3 ve 6 (hedef plato, doğru kesit); yanlış katsayıyı main'e sokup Faz 8'de düzeltmek iki kez rakam değiştirir.
 Senden beklenen (BUILD): (1)–(3), 30 dk; Faz 8'i sonra sürdür.
 Durum: yapıldı 22:10 (BUILD) — PR #16 dalına 1cd7249: K_YUK 1,27 (sablon + edp_test tek kaynak); kalibrasyon.py ispanya --n 10,15 varsayılan; tüzük madde 3 "sevk yapılandırmasında ölçülür"; günlüğe k(n) tablosu ve not. İspanya 10 + 15: %80 bant %71,4 → %78,6 bir-dışarıda, %95 %93,1, PIT 0,068 → 0,102 (tolerans 0,11). Sınav 11–20 bir kez (v2b): yanlış yeşil 0/49, yeşil 49, sarı %68,3, yanlış kırmızı %32,8, kaç ev orta 1, P10 altı %7,1; Faz 2 farazi kapsama %92,9 (bilgi). Mac'te yeniden koşum ve Can C1 sizde.
+
+## UYARI! 31 Eki 22:14 — BUILD'den — Faz 8 PR #18 (üretici 1.3): farazi gerçeğe çapalandı; yanlış yeşil 0 ama yeşil %5, yanlış kırmızı %51 — test edin
+Ne: Üretici 1.3 (dal `uretici/1.3`, taban PR #16): öğlen evde olma farkı (σ 0,20), faz dengesi (kent %70 sırayla), öğlen OG şehir başına. Ayar yalnız 1–10'da, İspanya ve İngiltere'ye: faturalı hata farazide %10,0 / P90 %31,9 (İspanya %10–11 / %32–33), eğri benzerliği 0,91 (0,93), kent faz dengesizliği %15,5 (%14,4). Model v2b değişmedi. **Yeni sınav 21–30 bir kez:**
+- **Geçen:** yanlış yeşil 0/17 (dolu 44; %40 kuralı 22/44). Farazi %80 bant kapsaması %82, Faz 7'nin bandı gerçekçi farazide de tutuyor. Yük hatası %12,2 / %27. Kaç ev orta 2.
+- **Eksi 1:** yeşil %5, konutta ve köyde 0; yanlış kırmızı %51; sarı %78; kaç ev bandı karamsar (P90 üstü %16). Sebep: ölçülmeyen trafonun öğlen yükü gerçek kadar belirsiz.
+- **Eksi 2:** Faz 2 "saf tahminden ≥ %25 iyi" kalıyor (%9 / %5): model fatura üstüne az şey katıyor.
+- **Eksi 3:** Faz 1 "207 V altı yok" kalıyor: sehir-021 T25 köy, 802 m tek hat, 205,9 V; öğlen farkı enerjiyi akşama kaydırıyor, gerçekçi.
+Sorular:
+(1) Bu bedel ve anlamı kabul mü? Harita konutta tek başına "evet" demiyor; yol "önce ölç" ve başvuru anında karar. Sunum v1'le, hikâye aynı.
+(2) Saf tahmin maddesi bilgiye mi insin, yoksa model faturadan fazlasını öğrenene kadar madde mi kalsın?
+(3) Faz 1 sağlaması "≤ %1 trafo 207 V altı" mı olsun, yoksa üretici kVA boyutlandırması öğlen farkını mı görsün?
+Dosya: PR #18 (https://github.com/volkanGRGN/KKTC-hackathon/pull/18), docs/log/2026-11-01-volkan-faz8-uretici.md (dalda)
+Neden: KARAR 21:25 / 21:51; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir). Bloklamıyor.
+Durum: bekliyor
