@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 20:00 — Faz 3 kapandı (Volkan 19:51); bilginin değeri denemesi yapıldı.
+**Güncellendi:** 31 Ekim 2026, 20:45 — Faz 3 kapandı (Volkan 19:51); bilginin değeri denemesi; ada ülkeleri taraması.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -40,9 +40,13 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
    - jüri cevabı "sarıyı azaltan şey ölçüm" deneme ile tam tutmuyor, yeni cümle önerildi;
    - ürün önerisi: sarı trafoda karar başvuru anında, evin adresi ve fazıyla (sınanmadı);
    - ekran 6 "Kıb-Tek'ten yeni veri istemiyoruz" ↔ %4 için panelli abonenin adresi ve fazı gerekiyor.
-2. **Faz 5:** konuşma notu taslağını Can'ın `docs/sunum/`'u ile birleştirmek; gece 2 prova.
-3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 cümlesinin ilk yarısı.
-4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
+2. **Karar masasının cevabı bekleniyor** (volkan.md UYARI 20:43, [ada ülkeleri günlüğü](docs/log/2026-10-31-volkan-ada-ulkeleri.md)):
+   - sunum / jüri cümlesi: Malta'nın açık haritası da düz %25 tavan (Kıb-Tek %40), Hawaii %15 → %250;
+   - Gozo hattında dış sınama (30 dk);
+   - üretici 1.3 trafo boyutu çapası (Malta talep ÷ güç).
+3. **Faz 5:** konuşma notu taslağını Can'ın `docs/sunum/`'u ile birleştirmek; gece 2 prova.
+4. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 cümlesinin ilk yarısı; Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
+5. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
