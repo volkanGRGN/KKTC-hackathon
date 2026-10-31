@@ -759,4 +759,20 @@ Ne: Faz 11 satırı ("ayrı tepe modeli, sıcaklık + müşteri karışımı, ha
 6. ROADMAP başındaki MVP tanımı ("her trafo için öğlen doluluk…") yalnız güneş tarafını anlatıyor; yük haritası Faz 11'le ürünün ikinci çıktısı oluyorsa tanıma bir cümle.
 Dosya: ROADMAP.md (Faz 11 satırı, MVP tanımı), gerekirse ADR-0014'e not
 Neden: Can'ın oturumunda netleşti (yük haritası = tüketim doluluğu, akşam odaklı ama saat sabitlenmez). Bloklamıyor; Can verileri indirip eşzamanlılık / sıcaklık eğimiyle devam ediyor, tepe saatini her trafo için raporlayacak.
+Durum: karar verildi 23:12 → volkan.md (KARAR aşağıda): altı madde kabul; 3. yol başlangıç değil; yük tarafının BUILD işi tanımlandı ve sahte kayıt testinin önüne alındı
+
+## KARAR 23:12 — BUILD'e: yük haritası (Faz 11) — Can'ın altı maddesi kabul; BUILD'in yük tarafı işi; sıra değişti (Volkan: panel sunumda anlatılmayacak, yük haritası öne)
+Karar: Volkan (23:12): "Güneş paneli güzel bir yere gelmeden anlatılmayacak; Can şebeke yük haritasını yapıyor; bizim de şebeke yüküyle ilgili build etmemiz gerekiyor." Can'ın altı maddesi **kabul** (ROADMAP ve MVP tanımı BUILD'in):
+1. **İki ayrı soru:** güneş sığar mı (bahar öğleni, en düşük yük, gerilim yükselmesi, 259 V) ↔ trafo ne kadar dolu (yılın en yüksek saati, kVA ve akşam gerilim düşümü, **207 V**). Bağımsız; panel akşam tepesini düşürmez.
+2. **Tepe anı saate kilitlenmez:** her trafoda yılın en yüksek saati bulunur ve **saati raporlanır** (konut yaz akşamı, çarşı yaz öğleni…).
+3. **Net yükle:** trafodan geçen net yük; panel arttıkça tepe akşama kayar ve sivrilir.
+4. **Eşzamanlılık** (N ev birlikte tepe ÷ N × tek ev tepesi; sıcak akşamlar ayrı) Faz 11 satırına.
+5. **Can'ın 3. yolu (öğlen × oran) başlangıç bile değil**; 21:39 ve 23:02 kararlarındaki "başlangıç" ibaresi geri alınır (ADR-0014 m. 1 ile tutarlı). Tepe ayrı model.
+6. **MVP tanımına cümle:** "Her trafo için iki çıktı: trafo ne kadar dolu (yılın en yüksek saati, kVA, saatiyle) ve güneş için ne kadar yer var (bahar öğleni; panel katmanı veri geldikçe açılır)."
+**BUILD'in yük tarafı işi (yeni, öncelikli):**
+- **B-Y1 Üretici, yıl boyu tepe:** `sehir_uret.py` bugün yalnız Nisan (AY = 4). EAC 2022 sınıf eğrileri 12 ayın tipik iş günü / tatilini içeriyor: aynı şehirler için **Temmuz (ve Ocak) haftası** üretilsin (aynı tohum, aynı ağ); Open-Meteo saatlik sıcaklık ve ışınım o aya; yer trafosu listesine 1.600 / 2.500 kVA (yaz tepesinde aşan varsa); cevap anahtarına **`tepe_yil_kw`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`** (akşam düşümü, 207 V kontrolü). Net yük üzerinden.
+- **B-Y2 Tepe modeli, ayrı:** iki bileşen (Muhittin 2 + Can): taban (fatura / tarife enerjisiyle ölçek, çeşitlilik √N) + klima (sıcaklık eğimi × klimalı ev sayısı, yüksek eşzamanlılık); eğim ve eşzamanlılık **Can'ın 20 Kıbrıs evi + sıcaklık analizinden**; tasarım sıcaklığı Lefkoşa uzun seriden; bant ölçülü trafoların bir-dışarıda artıklarından + eğim belirsizliği; İspanya Mayıs tepesiyle gerçek kontrol (Can'ın sınavı). Çıktı sözleşme 1.4: `tepe_kva`, P10 / P90, `tepe_saati`, `pf_varsayim` (0,95), "ön" etiketi. Can'ın eşzamanlılık sonucu gelene kadar iskelet + Velander varsayılanı [Yorum].
+- **Sıra:** (1) Can kontrolü (sürüyor) → (2) **B-Y1** → (3) **B-Y2** (Can'ın sonucu geldikçe) → (4) sahte Kıb-Tek kayıtları testi (panel; sunumda anlatılmayacağı için arkaya) → (5) ROADMAP Faz 6–12. Volkan isterse 2–3 ile 4 yer değiştirir.
+Neden: sunumda anlatılacak olan yük haritası; tepe modeli BUILD'in dosyalarında (üretici, model); Can'ın veri ve sınav tarafıyla birleşir.
+Senden beklenen (BUILD devri): ROADMAP Faz 11 + MVP cümlesi (10 dk); B-Y1 dalda + PR (sözleşme 1.4 cevap anahtarı sütunları: Can ya da Civan onayı); B-Y2 iskelet. Karar masası Mac'te doğrular.
 Durum: bekliyor

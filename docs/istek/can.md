@@ -402,3 +402,7 @@ Ne: Civan'ın bulut oturumu (Claude Code bulut) senin 23:02 KARAR'ındaki **1 (i
 Neden: senin sıran uzun (KIOS e-postası önde); bu iki adım en ağır veri işi ve tepe modeline girdi. Öneren ≠ puanlayan: rakamları sen puanlarsın.
 Senden beklenen: aynı adımlara başladıysan bu kutuya "dur" yaz, oturum durur. PR açılınca incele; kabul edersen betik senin dosyan olur.
 Durum: devam (çakışma yok, Can başlamamıştı); dört not civan.md'ye (tepe saati, net yük, sıcak akşam ayrı, 3. yol yok); PR açılınca Can puanlar
+
+## KARAR 23:12 — volkan.md'deki "ROADMAP Faz 11'e akşam ayrıntıları" isteğine: altı madde kabul
+Karar: Altısı da kabul (volkan.md 23:12): iki ayrı soru; tepe anı saate kilitlenmez ve saati raporlanır; net yük; eşzamanlılık Faz 11'e; **3. yol başlangıç bile değil** (önceki "başlangıç" ibareleri geri alındı); MVP tanımına iki çıktı cümlesi. BUILD'in yük işi: üretici Temmuz / Ocak haftaları (cevap anahtarına yılın tepesi, saati, ayı, akşam en düşük gerilimi) ve iki bileşenli tepe modeli; **eğim ve eşzamanlılık senin analizinden girer**, sonuçlarını tablo olarak (N = 1…20 eğrisi, sıcak / diğer akşam; °C başına artış ± belirsizlik; tasarım sıcaklığı) günlüğe ve kutuya yaz. Senin sınav maddene ekle: **tepe saati doğru mu** (tahmin saati ↔ gerçek, ±1 saat) ve **akşam en düşük gerilim ≥ 207 V** tahmini (yük tarafının gerilim sorusu).
+Durum: bilgi
