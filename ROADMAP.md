@@ -10,7 +10,7 @@ Taslak 31 Ekim; ekiple oturtuluyor. Süreler kaba: kısa < orta < uzun; saat yok
 
 **Her fazda ortak sınav (Muhittin):** ilgili doküman güncel · sonuç `docs/log/` altında gerçek rakamla · karar değiştiyse yeni ADR · farazi sonuç "gösterim" etiketli · her rakam [Kaynaklı]/[Hesap]/[Yorum].
 
-**Roller (Volkan, 31 Ekim):** Planlama, sözleşmeler ve görev kartları Volkan'da (+ Claude; en güçlü model ve en geniş bütçe burada); Can ve Civan kartları uygular ([docs/gorev/](docs/gorev/README.md)). Volkan, Can ve Claude çekirdek hatta birlikte ilerler (Faz 1 → 2 → 3); veri aramayı her fazın kendi adımı olarak Volkan ve Can yapar. Civan harita fazındadır (Faz 4), veri aramaya girmez. Sunum (Faz 5) en sonda, hepsi birlikte.
+**Roller (Volkan, 31 Ekim):** Planlama, sözleşmeler ve görev kartları Volkan'da (+ Claude; en güçlü model ve en geniş bütçe burada); Can ve Civan kartları uygular ([docs/gorev/](docs/gorev/README.md)). Volkan, Can ve Claude çekirdek hatta birlikte ilerler (Faz 1 → 2 → 3); veri aramayı her fazın kendi adımı olarak **Can yapar** (indirme, KAYNAK, veri sözlüğü); Volkan indirmez, yalnız eleme kararını onaylar (31 Ekim, iş iki kez yapılmasın diye). Civan harita fazındadır (Faz 4), veri aramaya girmez. Sunum (Faz 5) en sonda, hepsi birlikte.
 
 **Bağımlılıklar:** 1 → 2 → 3 → 4 (gerçek veri) → 5. Faz 4 iskeleti, Faz 1'den çıkan **tablo biçimi** kararlaştırılır kararlaştırılmaz sahte veriyle başlar.
 
@@ -31,7 +31,7 @@ Taslak 31 Ekim; ekiple oturtuluyor. Süreler kaba: kısa < orta < uzun; saat yok
 - Can → `src/profiller.py`: EAC Excel'ini okur, 12 sınıfı 7 tipe çevirir, 30 dk → 5 dk açar, iş günü/tatil ve ay seçer, sağlama rakamlarını yazdırır (öğlen/akşam oranı, otel yaz/kış); + veri adımı (`data/raw/<veri>/KAYNAK.txt`, `docs/data/data-dictionary.md`), `docs/log/…-can-faz1.md`. Şehir üreticisi bu dosyayı çağırır.
 - Civan → `app/ornek_veri.py` (tablo biçimine uygun sahte şehir) + `app/harita.py` iskeleti; `data/raw/osm-kasaba/`.
 
-Yapılacaklar — veri (Volkan, Can; her aday için eleme: Kıbrıs/Akdeniz mi · ölçülmüş mü · ≤ 1 saat mi · kaynak ve lisans var mı · bu fazda kullanılacağı belli mi; üçten az "evet" → elenir, nedeni günlükte):
+Yapılacaklar — veri (Can yapar, Volkan eleme kararını onaylar; her aday için eleme: Kıbrıs/Akdeniz mi · ölçülmüş mü · ≤ 1 saat mi · kaynak ve lisans var mı · bu fazda kullanılacağı belli mi; üçten az "evet" → elenir, nedeni günlükte):
 - Lefkoşa saatlik güneş 2024 ve 2025 (Open-Meteo, CC BY) — hava yılı.
 - EAC "Injection" profil sınıfları (panelli evin şebekeye verdiği eğri; EAC arşiv klasöründe).
 - SimBench alçak gerilim şebekeleri (yalnız hat boyu, kablo kesiti, trafo başına ev sayısı).
@@ -64,7 +64,7 @@ Geçme sınavı:
 - Can → `src/sinav.py` (2h dahil): tahmin tablosu + cevap anahtarını alır, geçme sınavındaki her ölçüyü hesaplar (doğru arketip oranı, öğlen hata ortanca/P90, bant kapsama, şehirler arası fark, düşük güven oranı); `src/grafikler.py`: kalibrasyon ve "kaç trafo ölçmeli" grafikleri; + gerçek veri adayları (İspanya EDP, NGED) inceleme ve KAYNAK; `docs/log/…-can-faz2.md`. Modeli yazan sınavı yazmaz.
 - Civan → `app/harita.py` yan panel ve tıklama (sahte veriyle).
 
-Yapılacaklar — veri (Volkan, Can; gerçek doğrulama adayları, aynı eleme):
+Yapılacaklar — veri (Can yapar, Volkan onaylar; gerçek doğrulama adayları, aynı eleme). İstisna: NGED kaydını Volkan açar (hesap onun):
 - İspanya EDP gerçek şebeke (Mendeley, CC BY): trafo başına toplam yük çıkıyor mu, çözünürlük, abone tipi.
 - İngiltere NGED "LV Load Monitor Data" (301 gerçek trafo; kayıt gerekiyor, Volkan açar).
 
