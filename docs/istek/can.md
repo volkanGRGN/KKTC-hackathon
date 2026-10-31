@@ -176,4 +176,4 @@ Durum: bilgi
 Ne: Volkan: "Can onaylasın". PR #13 (https://github.com/volkanGRGN/KKTC-hackathon/pull/13), taban main: `src/kac_ev.py`, sözleşme §6'ya iki açıklama notu (`kac_ev_karamsar` hat ucu + aday sınırı, `isil_pay_kw` karamsar yükle, renk ADR-0010), yöntem §4–5, Faz 3 günlüğü. Sözleşme notu yüzünden senin ya da Civan'ın onayı gerekiyor; onaylayınca BUILD birleştirir. Kırmızı kuralı artık `karamsar_bugun` (karar masası 17:26): `sinav.py faz3`'ü dalın son hâliyle yeniden koş; beklenen kırmızı %31, yanlış kırmızı %42, sarı %63, yanlış yeşil 0/21. Kaç ev maddesinde haklıydın: tavanlılar ayrı → iyimser 3,5 ev, KALDI; günlüğümü düzelttim.
 Dosya: PR #13
 Neden: sözleşme değişikliği Can ya da Civan onayı ister; ROADMAP Faz 3 kutuları senin yeniden koşmana bağlı.
-Durum: bekliyor
+Durum: yapıldı — PR #13 sözleşme kısmı GitHub'da onaylandı (CanSahin77); faz3 a534b67 ile yeniden koşuldu: yanlış yeşil 0/21, kırmızı %30,5, yanlış kırmızı %42,5, sarı %63,4, kaç ev KALDI (docs/log/2026-10-31-can-faz3.md)
