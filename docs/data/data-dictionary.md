@@ -35,9 +35,13 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Sağlama [Hesap]: yatay yıllık 1.908 / 1.929 kWh/m² (2024 / 2025), Nisan 11–14 ortalaması ~780 W/m².
 - Kullanım: Faz 1 rastgeleleştirmede hava yılı 2024 / 2025. PVGIS ikinci kaynak olarak gerekirse.
 
-## Adaylar (henüz indirilmedi)
+**SimBench alçak gerilim şebekeleri** — `data/raw/simbench/`
+- Almanya'nın 6 tip AG şebekesi (rural1–3, semiurb4–5, urban6): trafo kVA, hat boyları, kablo tipi, yük düğümleri. Yalnız ölçü kaynağı (hat boyu, kablo, trafo başına ev sayısı); pandapower'a geçilmiyor.
+- Kaynak: SimBench 1.6.3, veri ODbL 1.0. İndirildi 31 Ekim 2026; paket kurulmadan wheel içinden CSV.
+- Sağlama [Hesap]: trafodan en uzak eve 0,23–0,57 km, ortalama eve 0,09–0,20 km; trafo başına 13–118 yük; 160–630 kVA. Tablo KAYNAK.txt'de.
+- Yanlılık: Alman şebekesi, **yer altı kablosu** (NAYY 150/240 mm², r 0,21 / 0,13 Ω/km). [Yorum] Kıb-Tek mahalle hatları büyük ölçüde havai ABC 70/95; benzetimdeki varsayım r 0,50 / 0,36 Ω/km → aynı boyda hatta gerilim yükselmesi ~2–3 kat. Hat boyu ve ev sayısı SimBench'ten, kablo direnci Kıb-Tek şartnamesinden alınmalı (şartname adımı açık).
 
-- **SimBench** (Almanya, ODbL): 6 alçak gerilim şebekesi; hat boyu, kablo, ev sayısı için ölçü kaynağı.
+## Adaylar (henüz indirilmedi)
 - **İspanya EDP gerçek şebeke** (Mendeley 685vgp64sm, CC BY 4.0): 30 trafo, 8.087 abone, 20 gün akıllı sayaç, GIS. Çözünürlük ve abone tipi bilgisi belirsiz → 2 saatlik zaman kutusu; gerçek doğrulama adayı.
 - **NGED LV Load Monitor Data** (İngiltere): 301 CSV, gerçek trafo ölçümü; kayıt istiyor (kaydı Volkan yapmalı).
 

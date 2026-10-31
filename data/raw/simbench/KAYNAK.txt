@@ -1,0 +1,20 @@
+SimBench (Almanya), alçak gerilim şebekeleri; sürüm 1.6.3, "1-complete_data-mixed-all-0-sw" veri seti.
+İndirildi: 31 Ekim 2026 (Can). Lisans: veri ODbL 1.0, kod BSD-3 (https://simbench.readthedocs.io/en/stable/about/license.html). Atıf: SimBench, simbench.de.
+Nasıl: paket KURULMADAN wheel indirildi, içinden yalnız CSV'ler çıkarıldı:
+  python -m pip download simbench==1.6.3 --no-deps -d <geçici klasör>
+  wheel (zip) içinden simbench/networks/1-complete_data-mixed-all-0-sw/ altındaki Line.csv, LineType.csv, Node.csv, Load.csv,
+  Transformer.csv, TransformerType.csv, RES.csv, Switch.csv bu klasöre.
+Kaynak depo: https://github.com/e2nIEE/simbench
+
+Biçim: noktalı virgül ayraçlı CSV. Alçak gerilim satırları voltLvl = 7 (OG/AG trafo voltLvl = 6). Alt şebeke adı LVt.1nn (t = tip 1–6,
+nn = kopya; aynı tipin kopyaları birebir aynı). Trafo nodeLV'den hatlara bağlantı kapalı anahtarlar (Switch.csv, cond = 1) üzerinden.
+
+Sağlama (Can, 31 Ekim): trafo LV düğümünden yük düğümlerine en kısa hat yolu.
+tip            kVA   yük (konut)  toplam hat km  en uzak eve km  ortalama eve km  kablo
+LV1 rural1     160    13 (3)       0,56          0,245           0,087            NAYY 4x150
+LV2 rural2     250    99 (92)      1,47          0,565           0,198            NAYY 4x150
+LV3 rural3     400   118 (113)     2,35          0,479           0,192            NAYY 4x150
+LV4 semiurb4   400    41 (32)      0,75          0,229           0,110            NAYY 4x150
+LV5 semiurb5   630   104 (92)      1,79          0,389           0,188            NAYY 4x240
+LV6 urban6     630   111 (102)     1,08          0,259           0,110            NAYY 4x240
+Kablo direnci (LineType.csv): 4x150 r = 0,2067 Ω/km, 4x240 r = 0,1267 Ω/km.
