@@ -39,7 +39,7 @@
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
 |---|---|---|---|---|---|
-| 31 Eki ~23:45 | üretici 1.4, saatlik ΔT | 1–10 | yaz haftası konut tepesini akşama koyar | konut tepesi 17:00'ye kaydı (EAC gece tepesi kayboldu) | günlük ΔT'ye geç |
-| 31 Eki ~23:55 | üretici 1.4, günlük ΔT | 1–10 | aynı | konut 00:xx / 20:xx, çarşı ve otel öğlen; Nisan birebir | kabul; 21–30 bir kez üret |
+| 31 Eki ~23:20 | üretici 1.4, saatlik ΔT | 1–10 | yaz haftası konut tepesini akşama koyar | konut tepesi 17:00'ye kaydı (EAC gece tepesi kayboldu) | günlük ΔT'ye geç |
+| 31 Eki ~23:23 | üretici 1.4, günlük ΔT | 1–10 | aynı | konut 00:xx / 20:xx, çarşı ve otel öğlen; Nisan birebir | kabul; 21–30 bir kez üret |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
