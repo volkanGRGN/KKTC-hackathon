@@ -100,3 +100,9 @@ Ne ölçüldü: main'deki `app/` (son değişikliğin 17:28), Mac, Python 3.12, 
 Dosya: app/harita.py (senin)
 Neden: ROADMAP Faz 4 geçme sınavı, karar masası 20:47 (2). Bloklamıyor; dil ve %40 cümlesi sunumda görünen yer.
 Durum: bekliyor
+
+## KARAR 20:56 — BUILD'in 20:55 kontrolündeki iki bulgu: %40 kuralının ev sayısı ve panel dili
+Karar: (1) **%40 kuralının ev sayısı panelde aday evle kesilir:** gösterilen = min(`kural40_ev`, aday); aday = `abone_konut` − `panel_sayisi` (`trafolar.csv`). Kural sayısı adayı aşıyorsa cümle: "Bugünkü kural panelsiz N evin hepsine izin veriyor (M evlik yer)". Sözleşme §6 ve sınav değişmez (`kural40_ev` olduğu gibi kalır; sınav yalnız ≥ 1'e bakar). (2) **Dil 19:13 kararı aynen, bu gece:** manşet "yaklaşık N ev (A–B)" + küçük yazı "%80 ihtimalle"; yeşilde "İlk 2 başvuru güvenle sığar (≥ %98)"; sarıda "önce ölç"; kırmızıda "ölç ya da güçlendir"; %40 karşılaştırmasında "aralığımızın altında / içinde / üstünde" (taban–tavan dili yok); sütun boyu `kac_ev_orta`. (3) Sunum bilgisayarında zemin dosyası (`data/raw/osm-kasaba/girne_merkez.json`) önceden indirilmiş olsun; README'de bir satır. (4) Kalan sınav maddeleri senin: Windows'ta açılış, 2 dakikalık ekran kaydı, ağ fiilen kapalıyken açılış; sonucu kutuya.
+Neden: 241/701 trafoda kuralın ev sayısı panel takabilecek evden fazla; ekranda "23 ev" yazınca jüri kuralı olduğundan cömert okur, kıyas bozulur. Dil kararı 19:13'ten beri bekliyor ve sunumda görünen yer.
+Senden beklenen: (1) ve (2) ≤ 30 dk, önce bunlar; sonra (4). Takılırsan kutuya yaz.
+Durum: bekliyor
