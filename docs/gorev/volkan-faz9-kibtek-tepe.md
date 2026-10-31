@@ -37,4 +37,6 @@ Kendin karar ver (sorma, günlüğe yaz): A → kW dönüşümü, eksik / bozuk 
 Karar masasına yaz (volkan.md, bekleme, sıradaki işe geç): popülasyon R'si ve bant yeniden-fiti (sürüm), `--fider-duzelt`'in açılması.
 Takılırsan: önce sahte kayıtla aynı komutu koş (kod mu veri mi); sonra istek kutusu.
 
+**Pilotta ölçüm cihazı net ölçer (KARAR 00:57 madde 3):** trafo başındaki cihaz brüt tüketimi değil trafodan geçen net yükü görür (tüketim − o trafodaki panellerin üretimi). `sablon.py` ölçülü trafodan brüt (`tuketim_kw`) okuyor, `tepe.py` net (`net_kw`) okuyor. Gerçek ölçümde öğlen hesabı için ölçülünün üretimi geri eklenir: panel kW (Kıb-Tek kaydı) × o günün ışınımı (Open-Meteo) × PR; bunun hatası (yön, gölge, kirlilik, inverter kapanması) ölçülmedi. Akşam tepesi güneş battıktan sonra olduğu için orada fark küçük. Faz 10 pilot kartında ölçüm sırası buna göre: panelli ölçülü trafoda ayrıca bir inverter kaydı (PR #19 okuyucusu) üretimi ölçer.
+
 Sahte kayıtla ölçülen (1 Kasım, [günlük](../log/2026-11-01-volkan-yuk-kibtek-tepe.md)) [Hesap; farazi, gösterim]: kayıtlardan popülasyona doğrudan aktarım tahmini −%2 / −%4 kaydırdı (güvensiz yön; MD büyük trafoda), fider oranıyla yukarıdan aşağı düzeltme hatayı %6 → %13 artırdı; ikisi de kapalı, karar sürümlü yeniden-fitte.

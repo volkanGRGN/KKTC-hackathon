@@ -48,4 +48,8 @@
 - MD kaydı olan trafo değişmedi (1–10 %3,7 / %12,1; 21–30 %3,3 / %9,7; P90 üstü 0). Fider kayıt ÷ tahmin: 1–10 ortanca 0,996 (P10 0,898, P90 1,137), 21–30 1,003 (0,920; 1,173); |ln| > 0,15: 7 ve 9 / 50. Fider düzeltmesi yine kötüleştiriyor (%12,8 / %15,5).
 - Sözleşme numarası: §7 PR #22 (`kayitlar.csv`), §8 `tepe.csv`, §9 bu dosyalar (KARAR 00:50).
 
+## Ek — KARAR 00:57 kararları
+- Kayıtlardan popülasyona aktarım **kapalı kalır**. Açma şartı: yer tipine göre tabakalı seçim + kayıtların ayar / doğrulama payına bölünmesi; doğrulama payında %80 bant %70–90 ve fazla tahmin yönü korunursa, B-Y2 eşzamanlılığıyla sürümlü yeniden-fitte. Fider oranıyla düzeltme kapalı, yalnız kontrol.
+- Pilotta trafo başı cihazı net ölçer: öğlen hesabında ölçülünün üretimi geri eklenmeli (panel kW × ışınım × PR; hatası ölçülmedi). Not Faz 9 kartında; `sablon.py` bugün ölçülüden brüt okuyor (deneme şehrinde mümkün, gerçekte değil).
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
