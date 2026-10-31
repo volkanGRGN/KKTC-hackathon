@@ -20,7 +20,7 @@ Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun ek
 | Dosya | Yazan | Okuyan | Faz |
 |---|---|---|---|
 | `trafolar.csv` | `src/sehir_uret.py` (Volkan) | `sablon.py`, `kac_ev.py`, `sinav.py`, harita | 1 |
-| `yuk_5dk.csv` | `src/sehir_uret.py` | `sablon.py` (**yalnız ölçülü trafoların satırları**), harita yan paneli, `sinav.py` | 1 |
+| `yuk_5dk.csv` | `src/sehir_uret.py` | `sablon.py` ve harita yan paneli (**yalnız ölçülü trafoların satırları**; ölçülmeyenin eğrisi `arketipler.csv`'den), `sinav.py` (hepsi) | 1 |
 | `cevap_anahtari.csv` | `src/sehir_uret.py` | **yalnız** `sinav.py` ve `grafikler.py` | 1 |
 | `ayar.json` | `src/sehir_uret.py` | herkes (bilgi) | 1 |
 | `tahmin.csv`, `arketipler.csv` | `src/sablon.py` (Volkan) | `kac_ev.py`, `sinav.py`, harita | 2 |
