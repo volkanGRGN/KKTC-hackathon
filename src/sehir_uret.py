@@ -85,7 +85,7 @@ KIYI_JSON = KOK / 'data' / 'raw' / 'osm-kasaba' / 'girne_kiyi.json'
 CIKTI = KOK / 'data' / 'synthetic'
 
 SOZLESME_SURUMU = '1.2'
-URETICI_SURUMU = '1.4'                   # 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
+URETICI_SURUMU = '1.5'                   # 1.5: trafo gücü yıl tepesinden, akşam düşümüne göre hat tasarımı; 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -97,7 +97,16 @@ SIRA_SAYISI = 7                          # "gerçek kaç ev" için başvuru sır
 # Girne merkez: Civan'ın OSM alanının ortası [Kaynaklı: data/raw/osm-kasaba/KAYNAK.txt]
 REFERANS = (35.3375, 33.318)
 KUZEY_SINIRI_M = 400                     # kıyı dosyası yoksa: referansın kuzeyine en çok 400 m [Yorum]
-KVA_LISTESI = [25, 50, 100, 250, 400, 630, 1000]   # direk ≤ 400 [varsayım: Kıb-Tek şartnamesi, bağlantısı yok]; yer [Yorum]
+KVA_LISTESI = [25, 50, 100, 250, 400, 630, 1000, 1600, 2500]   # direk ≤ 400 [varsayım: Kıb-Tek şartnamesi, bağlantısı yok]; yer [Yorum]
+# 1.5 (Faz 11, karar masası 23:35): 1600 / 2500 yer tipi [Kaynaklı: ASTOR kataloğu, kompakt trafo merkezi 1000 / 1600 kVA;
+# yağlı dağıtım trafosu 5000 kVA'ya kadar]. Trafo gücü yılın tepesine göre (yaz tasarım payı + büyük abonenin bilinen
+# büyüklüğü); hat akşam (tepe) düşümüne göre tasarlanır. Çapa: Malta yıl tepesi ÷ güç ortanca 0,42, P90 0,74, aşan %1,5
+# [Hesap: Enemalta kapasite haritası, karar masası 20:47]; ADR-0016 m. 3 (207 V altı ≤ %1, en düşük ≥ 200 V).
+DT_TASARIM_C = 5.0                      # yaz tasarım sıcaklık farkı: en sıcak hafta − ay ortalaması [Yorum; Lefkoşa 2023–25 haftalarıyla sağlanacak]
+MARJ = (1.2, 2.0)                       # büyütme payı, trafo seçiminde [Yorum; Malta çapasıyla ayarlanır]
+HAT_DUSUM_TASARIM_V = 24.0              # tasarım tepesinde hat sonu faz düşümü üst sınırı: 244 V bara − 5 V trafo − 24 ≈ 215 V [Yorum]
+BUYUK_BAGLANTI_M = 30                   # büyük abone (otel, büyük dükkân / sanayi, yurt) baradan kendi kablosuyla [Yorum]
+KABLO_AKIM_A = 250                      # ABC95 faz akımı üst sınırı, paralel kablo sayısı için [Yorum: Kıb-Tek / üretici değeri BULAMADIM]
 # Dayanak [Kaynaklı: ASTOR A.Ş. kataloğu 2020, Elparts'ın sattığı marka, elparts.co]: yağlı dağıtım trafosu 50–5000 kVA
 # (25 kVA bunun altında, kaynaksız; üretici 1.3'te kaynak ya da 50'den başlayan liste), kompakt trafo merkezi 1000 ve
 # 1600 kVA (yaz benzetilirse yer tipi listeye 1600). Kıb-Tek'e özel güç listesi BULAMADIM.
@@ -444,21 +453,17 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
         # bildiği kva sütununa sızardı (şehir 1–10'da faturasız model artığıyla korelasyon 0,6); İspanya gerçek
         # verisinde şebeke bilgisi müşteri sayısına bir şey katmadı (PR #10). Hiç girmeyince 800'de 3 trafo
         # Nisan akşamında kVA'yı aştı (en kötü %121, 205,7 V).
-        tepe = {s: SINIFLAR[s][2] * 1000 / 8760 * tepe_orani[s] * ayar['tuketim_carpani'][s] for s in SINIFLAR}
-        gerek = sum(tepe[s] for s in abone) * rng.uniform(1.2, 2.0)
-        gerek = max(gerek, sum(tepe[s] * (1 if s in BUYUK else mahalle) for s in abone))
-        tavan += gerek > KVA_LISTESI[-1]
-        kva = next((k for k in KVA_LISTESI if k >= gerek), KVA_LISTESI[-1])
+        # 1.5: tasarım tepesi = sınıfın tipik gün tepesi × yaz sıcaklık payı (1 + β_yaz · ΔT_tasarım); büyük abonenin kendi
+        # büyüklüğü (olcek) Kıb-Tek'çe bilinir (kayıtlı en yüksek talep, Muhittin) ve girer; küçük abonede tarife ortalaması.
+        tepe = {s: SINIFLAR[s][2] * 1000 / 8760 * tepe_orani[s] * ayar['tuketim_carpani'][s]
+                * (1 + SICAKLIK_BETA['yaz'][s] * DT_TASARIM_C) for s in SINIFLAR}
+        marj = rng.uniform(*MARJ)                     # 1.4'teki çekilişle aynı sırada (rastgele akış korunur)
         x, y = konum(rng, a['konum'], kiyi)
         d = FAZ_SAPMA[a['bolge']]
         fw = [rng.uniform(1 - d, 1 + d) for _ in range(3)]
-        tr = dict(no=f'T{ti + 1:02d}', tip=tip, bolge=a['bolge'], kva=kva, x=x, y=y, kva_tavan=int(gerek > KVA_LISTESI[-1]),
-                  montaj='direk' if kva <= 400 else 'yer', kablo=rng.choice(a['kablo']),
+        tr = dict(no=f'T{ti + 1:02d}', tip=tip, bolge=a['bolge'], x=x, y=y, kablo=rng.choice(a['kablo']),
                   v0=round(rng.uniform(*V0_BANT), 1), mahalle=mahalle, kayma_dk=kayma,
                   fatura_sapma=rng.uniform(*FATURA_SAPMA), feeders=[], evler=[])
-        zb = 240.0 ** 2 / (kva * 1000 / 3)
-        rt = 0.04 * zb / math.sqrt(5)                 # uk %4, X/R = 2 (eski benzetim)
-        tr['zt'] = complex(rt, 2 * rt)
         rng.shuffle(abone)
         hatlar = [abone[i::n_hat] for i in range(n_hat)]
         for hat in hatlar:
@@ -481,8 +486,83 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
                 f['houses'].append(h)
                 tr['evler'].append(h)
             tr['feeders'].append(f)
+        # 1.5: güç evler belli olunca (büyük abonenin olcek'i girer); gizli mahalle yalnız aşırı yük olacaksa (1.4 kuralı).
+        plan = {h['id']: tepe[h['sinif']] * (h['olcek'] if h['sinif'] in BUYUK else 1.0) for h in tr['evler']}
+        buyuk_ayir(tr, plan)
+        gerek = sum(plan.values()) * marj
+        gerek = max(gerek, sum(tepe[h['sinif']] * h['olcek'] for h in tr['evler']))
+        tavan += gerek > KVA_LISTESI[-1]
+        tr['kva'] = kva = next((k for k in KVA_LISTESI if k >= gerek), KVA_LISTESI[-1])
+        tr['kva_tavan'] = int(gerek > KVA_LISTESI[-1])
+        tr['montaj'] = 'direk' if kva <= 400 else 'yer'
+        zb = 240.0 ** 2 / (kva * 1000 / 3)
+        rt = 0.04 * zb / math.sqrt(5)                 # uk %4, X/R = 2 (eski benzetim)
+        tr['zt'] = complex(rt, 2 * rt)
+        tr['marj'] = marj                             # hat tasarımı trafoyla aynı tasarım yüküne bakar
+        hat_tasarla(tr, plan)
         trafolar.append(tr)
     return trafolar, sayi, tavan
+
+
+def buyuk_ayir(tr, plan):
+    """1.5: büyük abone alçak gerilim hattının ortasında değil, baradan kendi kısa kablosuyla (yüke göre paralel) beslenir
+    [Yorum]. 1.4'te otel ortak hatta ABC95'in birkaç katı akım çekiyordu: yaz tepesinde benzetim çöktü (15–190 V).
+    Evler kurulduktan sonra taşınır: rastgele akış (faz, panel, ölçek çekilişleri) 1.4 ile aynı kalır."""
+    zc, znc = tb.CABLES['ABC95']
+    yeni = []
+    for f in tr['feeders']:
+        for h in [h for h in f['houses'] if h['sinif'] in BUYUK]:
+            f['houses'].remove(h)
+            i_a = plan[h['id']] * 1000 / (3 * 230.0)
+            n = max(1, math.ceil(i_a / KABLO_AKIM_A))
+            seg = BUYUK_BAGLANTI_M / 1000 / n
+            yeni.append(dict(zs=zc * seg, zn=znc * seg, houses=[h], boy=BUYUK_BAGLANTI_M, paralel=n))
+        if f['houses']:
+            seg = f['boy'] / 1000 / len(f['houses'])
+            zc0, znc0 = tb.CABLES[tr['kablo']]
+            f['zs'], f['zn'] = zc0 * seg, znc0 * seg
+    tr['feeders'] = [f for f in tr['feeders'] if f['houses']] + yeni
+
+
+def hat_dusumu(tr, f, plan):
+    """Tasarım tepesinde hat sonu faz düşümü, V (kaba): yük hatta düzgün dağılmış → I × |z_hat| ÷ 2, en yüklü faz;
+    z_hat = (faz + nötr parça empedansı) × parça sayısı (`zs`, `zn` evler arası tek parçanın empedansı). Tasarım yükü
+    trafo seçimindekiyle aynı (plan × büyütme payı); en yüklü faz 1 + FAZ_SAPMA (kentsel 1,25, kırsal 1,5; UKPN)."""
+    p_kw = sum(plan[h['id']] for h in f['houses']) * tr['marj']
+    i_a = p_kw * 1000 / (3 * 230.0) * (1 + FAZ_SAPMA[tr['bolge']])
+    return i_a * abs((f['zs'] + f['zn']) * len(f['houses'])) / 2
+
+
+def hat_tasarla(tr, plan):
+    """1.5: tasarım düşümü sınırı aşan trafoda önce kesit ABC95 (bütün trafo; trafolar.csv tek kablo sütunu), sonra
+    aşan hat ikiye bölünür (evler sırayla iki hatta, aynı boy; akım yarıya iner) [Yorum: Kıb-Tek'in güçlendirme pratiği
+    BULAMADIM]. Yeni kablo türü eklenmez (direnci kaynaksız olurdu)."""
+    def tazele():
+        zc, znc = tb.CABLES[tr['kablo']]
+        for f in tr['feeders']:
+            if 'paralel' in f:                        # büyük abonenin kendi bağlantısı
+                continue
+            seg = f['boy'] / 1000 / max(len(f['houses']), 1)
+            f['zs'], f['zn'] = zc * seg, znc * seg
+    tr['hat_tasarim'] = 'ilk'
+    if all(hat_dusumu(tr, f, plan) <= HAT_DUSUM_TASARIM_V for f in tr['feeders'] if 'paralel' not in f):
+        return
+    if tr['kablo'] != 'ABC95':       # (büyük abonenin kendi bağlantısı zaten ABC95)
+        tr['kablo'] = 'ABC95'
+        tazele()
+        tr['hat_tasarim'] = 'kesit'
+    for _ in range(3):
+        asan = [f for f in tr['feeders'] if hat_dusumu(tr, f, plan) > HAT_DUSUM_TASARIM_V and len(f['houses']) >= 2
+                and 'paralel' not in f]
+        if not asan:
+            break
+        for f in asan:
+            ev = f['houses']
+            yeni = [dict(zs=0, zn=0, houses=ev[k::2], boy=f['boy']) for k in (0, 1)]
+            tr['feeders'][tr['feeders'].index(f)] = yeni[0]
+            tr['feeders'].append(yeni[1])
+        tazele()
+        tr['hat_tasarim'] = 'bolme'
 
 
 def uretici13(trafolar, tohum):
@@ -753,6 +833,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         print(f'UYARI: {KIYI_JSON.name} yok; yalnız "kuzeye en çok {KUZEY_SINIRI_M} m" kuralı '
               '(bazı trafolar denize düşebilir; indirme komutu data/raw/osm-kasaba/KAYNAK.txt).')
     trafolar, sayi, tavan = sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi)
+    ayar['hat_tasarim'] = {k: sum(tr['hat_tasarim'] == k for tr in trafolar) for k in ('ilk', 'kesit', 'bolme')}   # 1.5
     uretici13(trafolar, tohum)
     ayar.update(tip_sayilari=sayi, kiyi_kontrolu=kiyi is not None, kva_tavan_sayisi=tavan, v0_bant_v=list(V0_BANT),
                 faz_dengesizlik_ortanca=round(statistics.median(d for tr in trafolar
