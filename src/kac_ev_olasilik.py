@@ -19,12 +19,15 @@ konutlar rastgele sırayla 6,5 kW alırsa kaçı sığar (sığmayan atlanır, c
 başvuru sığıyor mu. Renk (ADR-0010 olasılıkla):
   kırmızı = bugün aşma olasılığı ≥ KIRMIZI_P;  yeşil = ilk iki başvurunun sığma olasılığı ≥ YESIL_P ve güven
   yüksek (marj = 1 ev);  diğerleri sarı.
+Panel katmanı "güvenli uçlar" (ADR-0017, Muhittin 4 madde 1; `pv_uc`): yeşil = yukarıdaki yeşil; `dolu_bayrak` = bugün
+  aşma olasılığı ≥ BAYRAK_P ("büyük olasılıkla dolu", ret değil); arası `bos` (renksiz, "başvuruda bakılır").
 Sayılar: kac_ev_karamsar = çekilişlerin P10'u, kac_ev_iyimser = P90'ı, kac_ev_orta = ortanca.
 
 Faz 3'ün resmi hesabı (ADR-0011, karar masası 18:46).
 Okur: trafolar.csv, tahmin.csv. cevap_anahtari.csv'yi okumaz.
 Yazar: kac_ev.csv, sözleşme §6 (1.3): karamsar / iyimser / renk bu hesaptan; isil_pay_kw, gerilim_pay_kw_*,
-sinir_karamsar, kural40_ev tek denklemden (kac_ev.py); ek sütunlar p_bugun_asar, p_iki_ev_sigar, kac_ev_orta.
+sinir_karamsar, kural40_ev tek denklemden (kac_ev.py); ek sütunlar p_bugun_asar, p_iki_ev_sigar, kac_ev_orta;
+1.4 adayı: sonda pv_uc (ADR-0017).
 
 Çalıştırma:
   python3 src/kac_ev_olasilik.py data/synthetic --sehir 3
@@ -46,6 +49,7 @@ KOK = Path(__file__).resolve().parent.parent
 CEKILIS = 40
 KIRMIZI_P = 0.5                         # bugün aşma olasılığı bunun üstündeyse kırmızı [Yorum]
 YESIL_P = 0.98                          # ilk iki başvurunun sığma olasılığı (canlı bütçe %2, ADR-0010)
+BAYRAK_P = 0.7                          # "büyük olasılıkla dolu" bayrağı (ADR-0017; ilkeden, sınava bakılmadan)
 
 ABONE = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm', 'abone_sanayi1', 'abone_sanayi2',
          'abone_su_motoru']
@@ -234,12 +238,19 @@ def sehir_calistir(klasor):
             renk = 'sari'
         satirlar.append({**tek[r['trafo_no']], 'kac_ev_karamsar': nicel(kac, 0.1), 'kac_ev_iyimser': nicel(kac, 0.9),
                          'renk': renk, 'p_bugun_asar': round(p_bugun, 3), 'p_iki_ev_sigar': round(p_iki, 3),
-                         'kac_ev_orta': nicel(kac, 0.5)})
+                         'kac_ev_orta': nicel(kac, 0.5), 'pv_uc': pv_uc(renk, p_bugun)})
     ke.csv_yaz(klasor / 'kac_ev.csv', SUTUNLAR, satirlar)
     return satirlar
 
 
-SUTUNLAR = ke.SUTUNLAR + ['p_bugun_asar', 'p_iki_ev_sigar', 'kac_ev_orta']      # sözleşme §6, 1.3
+def pv_uc(renk, p_bugun):
+    """Panel katmanının üç durumu (ADR-0017): yeşil / büyük olasılıkla dolu bayrağı / renksiz."""
+    if renk == 'yesil':
+        return 'yesil'
+    return 'dolu_bayrak' if p_bugun >= BAYRAK_P else 'bos'
+
+
+SUTUNLAR = ke.SUTUNLAR + ['p_bugun_asar', 'p_iki_ev_sigar', 'kac_ev_orta', 'pv_uc']   # sözleşme §6, 1.3; pv_uc 1.4 adayı
 
 
 def main():
@@ -254,7 +265,8 @@ def main():
     for k in klasorler:
         s = sehir_calistir(k)
         renkler = {c: sum(1 for x in s if x['renk'] == c) for c in ('yesil', 'sari', 'kirmizi')}
-        print(f'{k.name}: {renkler}')
+        uclar = {c: sum(1 for x in s if x['pv_uc'] == c) for c in ('yesil', 'dolu_bayrak', 'bos')}
+        print(f'{k.name}: {renkler}; panel katmanı {uclar}')
 
 
 if __name__ == '__main__':
