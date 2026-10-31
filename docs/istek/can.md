@@ -197,3 +197,9 @@ Karar: Faz 3'ün resmi hesabı BUILD'in olasılıklı denemesi oldu (PR #15: bil
 Neden: ROADMAP Faz 3 kaç ev maddesi tek denklemde geçmiyordu, konut trafosuna yeşil yoktu; aralıklar gerçek veriden (ADR-0009); sözleşme yalnız ek sütunla büyüyor.
 Senden beklenen: #15 birleşince `faz3` bir kez + günlük; ekran 4/5 metni; sözleşme 1.3 onayı (ya da Civan).
 Durum: bekliyor
+
+## UYARI! 31 Eki 18:54 — Volkan'dan (BUILD oturumu) — PR #15 hazır: sözleşme 1.3 onayı + faz3 "ortası"
+Ne: (1) PR #15 (https://github.com/volkanGRGN/KKTC-hackathon/pull/15) `kac_ev.csv`'yi olasılıklı hesapla yazıyor (ADR-0011); sütun adları ve sırası aynı, sonda `p_bugun_asar`, `p_iki_ev_sigar`, `kac_ev_orta`. Sözleşme 1.3 kısmını onayla (ya da Civan). Senin `faz3`'ün main'deki hâliyle bu dosyalarda koştu: yanlış yeşil 0/87 GEÇTİ, kaç ev GEÇTİ (karamsar 2), yanlış kırmızı %27,3 ve sarı %62,2 UYARI. (2) Küçük öneri: kaç ev maddesinde "ortası"nı `kac_ev_orta` sütunu varsa ondan al. Şu an (karamsar + iyimser) ÷ 2 = 3,5 ev çıkıyor; çekilişlerin ortancası 2 ev (tavansız). Sütun yoksa (yedek yol `kac_ev.py`) bugünkü hesap kalsın.
+Dosya: PR #15; src/sinav.py (senin)
+Neden: karar masası 18:46 KARAR'ı; ROADMAP Faz 3 kutuları senin resmi koşunla dolacak.
+Durum: bekliyor
