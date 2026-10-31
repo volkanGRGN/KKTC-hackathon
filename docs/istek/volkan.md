@@ -782,4 +782,11 @@ Ne: 22:56 / 23:02 KARAR'daki KIOS e-postasını (kademe ayarı / EAC standardı 
 Bu gece sıram: sözleşme 1.4 tepe sütunları taslağı (`tepe_kva`, P10 / P90, `pf_varsayim`) → `sinav.py faz2` tepe maddesi → Civan'ın eşzamanlılık / sıcaklık analizini puanlama.
 Dosya: — (sıra değişikliği)
 Neden: zaman; dışarıdan cevap bekleyen iş hackathon süresinde ürün üretmez.
+
+## UYARI! 31 Eki 23:15 — BUILD'den — Can'ın main'deki sınav işleri onaylandı; bir eksi: K_YUK İspanya'da iki seçim yolunu karıştırıyor (ürünün yolu için bant biraz dar)
+Ne: Can'ın beş commit'i (76c1bb2, e0e72f2, 6e1dff3, 5d8af73, 1c65f58) Mac'te, üretici 1.3 şehirleri 21–30 ve main'in İspanya satırlarıyla koşuldu (ayrıntı can.md KONTROL 23:15): faz1 5/5, faz2 7/7 (İspanya %76,8, PIT 0,071 ≤ 0,113, n = 28 trafo), faz3 yanlış yeşil 0/17, kırmızı kovası %49 ≥ 0,37; sarı %78 UYARI (beklenen). PIT, %95 ve kırmızı kovası toleranslarında n bağımsız trafo sayısı. **Onay.**
+**Eksi (BUILD'in, Can'ın değil):** sınav ürünün seçimini ölçüyor (c / 10 / tabakalı); K_YUK 1,27 ise c / 10 + 15 / rastgele + tabakalı havuzundan. İki yolun hatası ters yönde (Can'ın sinav.py notu): rastgele k 1,07, tabakalı k 1,47. Sınav kesitinde bir-dışarıda %80 kapsama: bugünkü K ile %75,3, tabakalı K (1,47) ile %80,8. KARAR 22:06'nın ilkesi ("kalibrasyon sevk yapılandırmasında ölçülür": 12 ölçülü **ve tabakalı seçim**) tabakalıyı gösteriyor. Geliştirme 1–10'da K 1,47 ile renk değişmiyor (yeşil 20, kırmızı 53, sarı 281, yanlış yeşil 0/20); yalnız bant genişliyor (P90 ÷ P10 ortanca 1,37 → 1,44).
+Soru: K_YUK 1,27 → 1,47 (10 + 15, tabakalı) olsun mu? Olursa: `sablon.py` + `edp_test.py` tek sabit, `kalibrasyon.py ispanya`'ya yol süzgeci, 21–30 bir kez (faz2 + faz3), Can faz2'yi yeniden koşar. Olmazsa günlüğe "K iki yolun ortalaması; tabakalıda bant %5 puan dar" notu.
+Dosya: docs/istek/can.md (KONTROL 23:15); veri BUILD scratchpad'inde (edp_test main, kalibrasyonsuz ve K'lı satırlar).
+Neden: Volkan'ın isteği (Can'ın işini kontrol et, onayla); tüzük madde 3 (kalibrasyon doğru kesitte). Bloklamıyor: BUILD sahte kayıt testine geçiyor.
 Durum: bekliyor

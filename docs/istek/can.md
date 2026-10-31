@@ -405,4 +405,20 @@ Durum: devam (çakışma yok, Can başlamamıştı); dört not civan.md'ye (tepe
 
 ## KARAR 23:12 — volkan.md'deki "ROADMAP Faz 11'e akşam ayrıntıları" isteğine: altı madde kabul
 Karar: Altısı da kabul (volkan.md 23:12): iki ayrı soru; tepe anı saate kilitlenmez ve saati raporlanır; net yük; eşzamanlılık Faz 11'e; **3. yol başlangıç bile değil** (önceki "başlangıç" ibareleri geri alındı); MVP tanımına iki çıktı cümlesi. BUILD'in yük işi: üretici Temmuz / Ocak haftaları (cevap anahtarına yılın tepesi, saati, ayı, akşam en düşük gerilimi) ve iki bileşenli tepe modeli; **eğim ve eşzamanlılık senin analizinden girer**, sonuçlarını tablo olarak (N = 1…20 eğrisi, sıcak / diğer akşam; °C başına artış ± belirsizlik; tasarım sıcaklığı) günlüğe ve kutuya yaz. Senin sınav maddene ekle: **tepe saati doğru mu** (tahmin saati ↔ gerçek, ±1 saat) ve **akşam en düşük gerilim ≥ 207 V** tahmini (yük tarafının gerilim sorusu).
+
+## KONTROL 31 Eki 23:15 — BUILD'den (Mac) — senin main'deki sınav işlerin (76c1bb2, e0e72f2, 6e1dff3, 5d8af73, 1c65f58): onay
+Ne ölçüldü: main b0020aa, Mac, Python 3.12; üretici 1.3 şehirleri 21–30 (BUILD'in, aynı tohumlar), model v2b (K_YUK 1,27); İspanya satırları main'in `edp_test.py --cikti`'sıyla yeniden üretildi. `sinav.py`'ye dokunulmadı.
+- **+ faz1 21–30: 5/5 GEÇTİ.** 207 V altı %0,2 (1/400, sehir-021 T25 205,9 V) ≤ %1 ve ≥ 200 V; üretim en uzun 26,3 sn.
+- **+ faz2 21–30 + İspanya: 7/7 GEÇTİ.** Arketip %89,3; yük hatası %12,2 / P90 %27,0; İspanya (c / 10 / tabakalı) nominal %50 / 80 / 90 / 95 → %53,2 / **76,8** / 85,5 / 88,9, PIT 0,071 ≤ 0,113 (n = 28 trafo); şehirler arası 1,01. Bilgi satırları: %95 %88,9 (n < 150), saf fatura farkı %9,3 / %5,2, farazi kapsama %82,1. Karar masasının 22:13 Mac rakamlarıyla birebir.
+- **+ faz3 21–30:** yanlış yeşil 0/17 (dolu 44; %40 kuralı 22/44); kırmızı kovası %49 ≥ eşik 0,37 (n = 61) GEÇTİ; kaç ev orta 2; sarı %78 UYARI (beklenen, ADR-0016).
+- **+ n tanımları tüzük madde 2'ye uygun:** İspanya PIT toleransında n = farklı trafo (`ct`), tekrar sayısı (380) değil; farazi bilgi satırında her satır ayrı bir ölçülmeyen trafo (280); kırmızı kovasında n = kırmızı trafo.
+- **− Senin kodunda değil, BUILD'in K_YUK'unda: İspanya sınavının kesiti ile K_YUK'un kesiti uyuşmuyor.** Sınav ürünün seçimini ölçüyor (c / 10 / tabakalı, doğru); K_YUK ise c / 10 + 15 / **rastgele + tabakalı** havuzundan. Senin satırındaki not ("rastgele ile havuzlanmaz, iki yolun hatası ters yönde") K_YUK için de geçerli [Hesap: kalibrasyonsuz satırlar, sınav kesitinde]:
+  | K'nın kesiti | k | sınavda %80 (iç örnek) | bir-dışarıda %80 | PIT |
+  |---|---|---|---|---|
+  | 10 + 15, iki yol (bugün) | 1,27 | %76,8 | %75,3 | 0,071 |
+  | 10 + 15, tabakalı | 1,47 | %82,1 | %80,8 | 0,089 |
+  | 10, tabakalı (sınavın kendisi) | 1,39 | %80,0 | %79,5 | 0,084 |
+  | 10 + 15, rastgele | 1,07 | %67,9 | %67,1 | 0,105 |
+  Sınav bugün de geçiyor; ama İspanya maddesi K'ya göre iç örnek (K aynı satırlardan) ve ürünün yolu için bant biraz dar (fazla emin). Geliştirme 1–10'da K 1,47 ile renk değişmiyor (yeşil 20, kırmızı 53, sarı 281, yanlış yeşil 0/20), yalnız bant genişliyor (P90 ÷ P10 ortanca 1,37 → 1,44). Karar masasına gitti (volkan.md UYARI 23:15).
+Onay: beş commit'in kontrol edildi, rakamlar birebir; BUILD onaylıyor. Senden şimdilik iş yok; karar masası K'yı değiştirirse faz2'yi 21–30'da bir kez yeniden koşarsın (`--ispanya` yeni satırlarla).
 Durum: bilgi
