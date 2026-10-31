@@ -15,13 +15,13 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 
 ## Metin
 
-> **Konu:** Dağıtım trafolarında çatı güneş paneli kapasitesi — veri işbirliği talebi
+> **Konu:** Dağıtım trafolarının doluluğu ve çatı güneş paneli kapasitesi — veri işbirliği talebi
 >
 > Sayın [ad, unvan],
 >
-> [Ekip / kurum adı] olarak, Kıb-Tek'in dağıtım trafolarına ölçüm cihazı takmadan "bu trafoya kaç ev daha panel bağlanabilir" sorusunu trafo trafo cevaplayan açık bir hesaplama aracı geliştiriyoruz. Araç Kıb-Tek'in zaten elinde olan bilgiyle (trafo başına abone sayısı ve fatura toplamı) çalışıyor. İspanya'da 29 gerçek trafoda, ölçmediğimiz trafolarda öğlen yükünü ortanca %10 hatayla tahmin etti. Gerilim hesabını İngiltere'de 6 gerçek hatta sınadık.
+> [Ekip / kurum adı] olarak, Kıb-Tek'in dağıtım trafolarına ölçüm cihazı takmadan iki soruyu trafo trafo cevaplayan açık bir hesaplama aracı geliştiriyoruz: "bu trafo yılın en yüksek saatinde ne kadar dolu" ve "bu trafoya kaç ev daha panel bağlanabilir". Araç Kıb-Tek'in zaten elinde olan bilgiyle (trafo başına abone sayısı ve fatura toplamı) çalışıyor. İspanya'da 29 gerçek trafoda, ölçmediğimiz trafolarda öğlen yükünü ortanca %10 hatayla tahmin etti. Gerilim hesabını İngiltere'de 6 gerçek hatta sınadık.
 >
-> Bekleyen başvuruları güvenle açmanın önündeki en büyük belirsizlik, panelli evlerin hattın neresinde ve hangi fazda olduğu. Bu bilgi bilinince hatalı "dolu" kararları belirgin biçimde azalıyor. Bu yüzden aşağıdaki kayıtları, **kişisel bilgi olmadan**, paylaşmanızı rica ediyoruz:
+> Trafo doluluğunda en büyük belirsizlik yaz akşamı klima tepesi: elimizdeki gerçek veri bahar ayına ait. Bekleyen panel başvurularını güvenle açmanın önündeki en büyük belirsizlik ise panelli evlerin hattın neresinde ve hangi fazda olduğu. Bu bilgi bilinince hatalı "dolu" kararları belirgin biçimde azalıyor. Bu yüzden aşağıdaki kayıtları, **kişisel bilgi olmadan**, paylaşmanızı rica ediyoruz:
 >
 > 1. **Abone–trafo eşleşmesi:** her abonenin bağlı olduğu dağıtım trafosu (ve varsa hat / direk numarası), tarife sınıfıyla. Abone yerine anonim sıra numarası yeterli.
 > 2. **Mahsuplaşmalı (panelli) aboneler:** bağlı oldukları trafo ve hat / direk numarası, kurulu güç (kWp), bağlantı tipi (tek faz / üç faz) ve tek fazlıysa hangi faz.
@@ -30,7 +30,14 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 > 5. **Hat kaydı:** trafo başına alçak gerilim hat sayısı, hat boyları ve kablo kesitleri; özellikle hat uçlarındaki kesit.
 > 6. **Bekleyen başvurular:** trafo bazında sayı ve istenen güç (kWp).
 >
-> Bu kayıtların tamamı gerekmiyor. Yalnız 1 ve 2 bile, başvuru geldiğinde o ev için "sığar / önce ölç / sığmaz" kararını vermemize yetiyor. Kayıtların hangi biçimde tutulduğunu (dijital, kâğıt, coğrafi bilgi sistemi) öğrenmek de bizim için değerli.
+> Trafo doluluğu (yılın en yüksek yükü) için:
+>
+> 7. **Trafo en yüksek yük kayıtları:** trafo başına maksimum talep / yükleme kayıtları; yoksa bir yaz yük etüdü (pens ampermetreyle örneklem bile yeterli). Akıllı sayaç varsa aylık maksimum talep yazmacı.
+> 8. **Orta gerilim fider / merkez tepe geçmişi (SCADA),** zaman damgalı; aynı saatlerin sıcaklığıyla eşleşebilecek biçimde (trafo trafo hesabı yukarıdan doğrulamak için).
+> 9. **Ticari ve sanayi abonelerin kayıtlı maksimum talebi** (müşteri listesi ve tarife sınıfıyla; madde 1'deki anonim numarayla).
+> 10. **Hava verisi:** Kıb-Tek'in kendi kullandığı sıcaklık kaydı varsa (yoksa açık arşiv kullanırız).
+>
+> Bu kayıtların tamamı gerekmiyor. Panel tarafında yalnız 1 ve 2 bile, başvuru geldiğinde o ev için "sığar / önce ölç / sığmaz" kararını vermemize yetiyor; doluluk tarafında yalnız 7 (bir örneklem bile) yaz tepesini tahminden ölçüme çeviriyor. Kayıtların hangi biçimde tutulduğunu (dijital, kâğıt, coğrafi bilgi sistemi) öğrenmek de bizim için değerli.
 >
 > Veriyi yalnız bu çalışmada kullanacağız, yayımlamayacağız ve sonuçları sizinle paylaşacağız. İsterseniz tek bir bölgede 20–50 trafoluk bir örnekle başlayabiliriz.
 >
@@ -45,4 +52,4 @@ Verdiğimiz sözler (tutabileceğimiz kadar):
 - [ ] Kişisel veri mevzuatına uygunluk: anonim numara ve trafo / hat düzeyi yeterli; adres istenmiyor.
 - [ ] Rakamlar: İspanya %10 [Hesap: PR #10]; "%27 → %4" farazi şehir üst sınırı, metne konmadı, konuşmada etiketiyle.
 - Kademe neden trafo başına (BUILD, 31 Ekim 23:15): PV açılma denemesinde (PR #20, gerçekçi şehirler) Kıb-Tek'in iki değerli kademe *standardını* bilmek açmadı (adım 6,25 V, belirsizlik 8 V'tan dar değil); açan, trafonun kendi ayarı. Gerçekçi kayıt hata oranları (kademe kaydı ne kadar doğru, abone–trafo eşleşmesi, faz kaydının doluluğu) kampta uzmana sorulur; sahte kayıt testi bu oranlarla kurulur (ROADMAP Faz 9).
-- [ ] Yük haritası öne alındı (karar masası 23:12): tepe kalemleri (Muhittin 4 madde 3: trafo maksimum talep kayıtları ya da yaz yük etüdü, OG fider tepe geçmişi + sıcaklık, ticari / sanayi kayıtlı maksimum talep) bu metne eklensin mi, konu satırı yük + panel mi olsun: karar masasında.
+- [x] Yük haritası öne alındı (karar masası 23:12): tepe kalemleri metne eklendi (madde 7–10; Muhittin 4 madde 3), konu satırı ve giriş yük + panel (karar masası, 1 Kasım 00:35; [ADR-0018](../decisions/adr-0018-aksam-tepesi-on-surum.md)). Trafo başına kademe ayarı madde 4'te kalır (Muhittin 4 madde 5A; PR #20: standart değil trafonun kendi ayarı açıyor). Trafo → abone → faz bağlantısı madde 1–2'de.

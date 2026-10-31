@@ -2,7 +2,14 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
+**Güncellendi:** 1 Kasım 2026, 00:40 (KARAR) — üç oturum düzeni, ADR-0017 / 0018. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
+
+## Kim nerede (1 Kasım 00:40; Volkan'ın üç oturumu, CONTRIBUTING "Volkan'ın üç oturumu")
+- **KARAR:** Volkan adına karar, istek kutusu (`docs/istek/volkan.md`), PR testi (resmi rakam Mac koşusu) ve birleştirme, ADR.
+- **BUILD 1 — yük haritası** (dal `yuk/`, PR "[Yük]"): Muhittin 4 madde 1–4 — yük temel katman, akşam tepesi ön sürümü ([ADR-0018](docs/decisions/adr-0018-aksam-tepesi-on-surum.md), `src/tepe.py`), Kıb-Tek tepe verisinin girişi, öğlen yükü; Can'ın yük PR'larını inceler.
+- **BUILD 2 — panel gerilimi** (dal `panel/`, PR "[Panel]"): PR #19 ve #22'yi bitirir; Muhittin 4 madde 1'in panel kısmı (güvenli uçlar, [ADR-0017](docs/decisions/adr-0017-pv-katmani-guvenli-uclar.md)) ve madde 5 (kademe, inverter geri çözümü).
+- **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
+- BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
