@@ -45,7 +45,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 
 5. **Faz 6–12** (ROADMAP "Faz 6–12", 23:15 güncel): Faz 7 kalibrasyonu (PR #16), Faz 8 üretici 1.3 ve sınav şehirleri 21–30 (PR #18), PV açılma denemesi (PR #20), Gozo (PR #17) main'de. Can'ın 21–30 puanlaması BUILD'le ve karar masasının Mac koşumuyla birebir (can.md KONTROL 23:15). Açık PR #19 (Faz 10 hazırlığı), Volkan'ın sözüyle birleşir. Sunum sürümü (v1 / v3) Volkan'da. BUILD'in yerel 1.3 şehirleri `data/synthetic/u13/` (sunum şehirleri `data/synthetic/` v1, dokunulmadı).
 6. **K_YUK 1,47** (karar masası 23:13; ürünün tabakalı seçimi): sınav 21–30 bir kez, renkler aynı, İspanya %82,1 (Faz 7 günlüğü Ek 3). B-Y1 PR #21 Can'a devredildi (yük haritası kodu Can'da, karar masası 23:18).
-7. **BUILD sırası (karar masası 23:18; Volkan panelde):** sahte Kıb-Tek kayıtları + başvuru anı motoru (ADR-0012 / 0015; dal `deneme/sahte-kayit`) → ROADMAP Faz 6–12. Yük haritası kodu (B-Y1 / B-Y2) Can'da, BUILD onaylar.
+7. **Panel (BUILD; karar masası 23:18):** başvuru anı motoru + sahte Kıb-Tek kayıtları PR #22'de (hemen evet %3,8 → %10,5, yanlış evet %0,1; iki kat kayıt hatasında %2,6), karar masasının testinde (volkan.md UYARI 23:46). PR #21 (üretici 1.4) düzeltmeyle hazır, Civan'ın sözleşme onayını bekliyor. Yük haritası kodu (B-Y2, üretici 1.5) Can'da, BUILD onaylar.
 8. **Can:** sözleşme 1.4 tepe sütunları → `faz2` tepe maddesi → eşzamanlılık / sıcaklık eğimi (Civan'ın bulut oturumu `deneme/eszamanlilik` yardımcı). KIOS e-postası hackathon sonrasına.
 
 ## Bilinen sorunlar ve kararlar

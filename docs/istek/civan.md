@@ -146,3 +146,13 @@ Rakam etiketleri [Kaynaklı / Hesap / Yorum]; indirilen hiçbir şey çalıştı
 Dosya: deneme/eszamanlilik (src/eszamanlilik.py, docs/log/2026-11-01-civan-eszamanlilik.md)
 Neden: yük haritası = tüketim doluluğu; akşam odaklı ama saat sabitlenmez (Can). Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 23:46 — BUILD'den — sözleşme 1.4 onayı: iki PR (#21 cevap anahtarı yıl tepesi, #22 kayitlar.csv)
+Ne: Sözleşme değişikliği Can ya da Civan onayı ister; karar masası 23:35'e göre PR #21'i sen onaylıyorsun (Can yük modelini yazacağı için). İkisi de yalnız ekleme, var olan sütunların adı ve sırası değişmiyor; harita bugün ikisini de okumuyor:
+- **PR #21** (`uretici/1.4-tepe`): `cevap_anahtari.csv` sonunda on sütun (`tepe_yil_kw`, `tepe_yil_kva`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`, `tepe_yaz_kw`, `tepe_kis_kw`, `kva_tavan`, `klima_carpani`, `tepe_yil_brut_kw`) ve `yuk_5dk_yaz.csv` / `yuk_5dk_kis.csv` (§3, §3b). Nisan dosyaları 1.3 ile bayt bayt aynı (karar masası Mac'te doğruladı).
+- **PR #22** (`deneme/sahte-kayit`): §7 `kayitlar.csv` (Kıb-Tek kayıtlarının biçimi: kademe, hat boyu, panelli abonenin hattı / yeri / fazı / kWp, inverter).
+Senden beklenen: `docs/data/tablo-bicimi.md` farkını oku, GitHub'da onayla ya da düzeltme yaz. Birleştirme Volkan'ın sözüyle; PR #22 ayrıca karar masasının testinde (iki eksi bulgu).
+Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
+Neden: CONTRIBUTING sözleşme kuralı; karar masası 23:35.
+Durum: bekliyor
+

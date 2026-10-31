@@ -832,4 +832,21 @@ Karar: Karar masası Mac'te 1–10'u PR #21'le üretti: Nisan çıktıları 1.3 
 **Yaz boyutlandırması: evet, üretici 1.5'te, yeni sınav şehirleriyle (31–40)** (tüzük madde 1: donuk 21–30 bozulmaz). Gerçek şebeke trafoyu yılın tepesine göre seçer ve uzun hatta gerilim şikâyetini kesit / kademeyle giderir; bugünkü 1.4'te otellerin beşte biri aşıyor ve 163 V'a inen köy hattı var, ikisi de gerçekçi değil. **Çapalar:** Malta haritası (yıl tepesi ÷ güç ortanca 0,42, P90 0,74; aşan %1,5) ve ADR-0016 m. 3 (207 V altı ≤ %1 trafo, en düşük ≥ 200 V). Kural [Yorum]: kVA, yılın tepesi × 1,2–2,0'dan seçilir (yer tipine 1.600 / 2.500); akşam en düşük gerilim 200 V'un altına inen hatta kesit bir üst (ABC95) ya da hat ikiye bölünür (Kıb-Tek pratiği BULAMADIM, uzmana soru). Ayar geliştirme 1–10'da, sınav 31–40 bir kez. Panel tarafı (BUILD'in başvuru anı testi) şimdilik 1.3 şehirleri 21–30'da kalır; 1.5 gelince bir kez yeniden.
 Neden: yük haritasının sınavı yaz tepesine dayanacak; "gerçek" dediğimiz cevap anahtarı gerçekçi değilse tepe modeli yanlış hedefe ayarlanır.
 Senden beklenen: BUILD devri: düzeltmeyi PR #21'e (5 dk) ya da Can'a bırak (B-Y1 artık Can'da); Can: 1.5 (can.md).
+Durum: yapıldı 23:44 (BUILD) — PR #21'e df08987: yaz / kış penceresi üretilemezse yıl tepesi sütunları boş, yüksek sesli UYARI ("bu şehir yük haritası sınavına girmez"), `ayar.json` `yil_tepe_kaynagi` (null / "nisan+yaz+kis"); veri varken çıktı aynı (sehir-003 bayt bayt), yalnız 2023 dosyasıyla sehir-001'de sütunlar boş. Sözleşme onayı Civan'da (civan.md UYARI 23:46)
+
+## UYARI! 31 Eki 23:46 — BUILD'den — Başvuru anı motoru + sahte Kıb-Tek kayıtları (PR #22): hemen evet %3,8 → %10,5, yanlış evet %0,1; iki eksi — test edin
+Ne: KARAR 23:18 (ADR-0012 / 0015; 23:02 / 23:03 düzeltmeleriyle). `src/sahte_kayit.py` gerçek ağı üreticinin tohumuyla yeniden kurar (cevap anahtarının "gerçek kaç ev"i 21–30'da 396/400 trafoda birebir) ve kayıtları kusurlarıyla yazar (`kayitlar.csv`, sözleşme 1.4 adayı §7); `src/basvuru.py` motor (haritayla aynı fizik ve kapı, durumlu, kayda koşullu, kaydın hata payıyla); `src/basvuru_testi.py` 3 sıra × en çok 8 başvuru akışı, gerçek ağla kıyas. 1–10'da kuruldu, ayar yok; **sınav 21–30 bir kez** (üretici 1.3, K_YUK 1,47):
+| | Hemen evet | Yanlış evet | Önce ölç | Harita yeşil / kırmızı |
+|---|---|---|---|---|
+| Kayıtsız (bugün) | %3,8 (276/7.179) | %0,7 (2/276) | %67,6 | 17 / 61 |
+| Sahte, hatalar yarı | %11,9 | %0,2 | %69,2 | 29 / 34 |
+| **Sahte, beklenen** | **%10,5** | **%0,1** (1/751) | %67,5 | 30 / 41 |
+| Sahte, hatalar iki kat | %10,7 | **%2,6** (20/770) | %68,8 | 35 / 41 |
+| Kusursuz bilgi | %18,0 | %0,4 | %61,1 | 26 / 38 |
+Aynı akışta %40 kuralının evetlerinin %13,4'ü yanlış (495/3.699). Harita kayıtlarla: yanlış yeşil 0; kırmızıların gerçekte aşan payı %49 → %63. Şehir konutunda hemen evet 6 → 257 / 3.408.
+Eksiler: (1) **kayıt hataları beklenenin iki katıysa yanlış evet %2,6, sınır %2'yi aşıyor** (geliştirmede %1,5): model kaydın hata payını doğru bilmeli; Kıb-Tek kayıtlarının doğruluğu pilotta sahada bir örnekle ölçülmeden motor evet dememeli. (2) **Başvuruların üçte ikisi yine "önce ölç"**: yarısı, öğlen yükü tahmini yüksek güvenli olmayan trafolarda (kural gereği orada evet yok; güveni yüksek trafolarda hemen evet %7,6 → %20,6). Darboğaz ağ kaydı değil yük tarafı.
+Sorular: (1) Kayıt doğruluğu için kural: "kayıt kalitesi sahada ölçülene kadar motor iki kat hata varsayar" mı (yanlış evet güvenli, evet payı düşer), yoksa pilot şartı mı? (2) PR #22 deneme olarak birleşsin mi (resmi hesap değişmiyor)?
+Kalan: sarı trafoda konum payı (`yesil_konum_payi`, ADR-0015 m. 4) ve kayıtlarla kaç ev bandı ölçülmedi.
+Dosya: PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22), docs/log/2026-11-01-volkan-sahte-kayit.md (dalda)
+Neden: KARAR 23:18; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir, düzelmeden birleşmez).
 Durum: bekliyor
