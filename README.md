@@ -35,9 +35,12 @@ python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
 ```bash
 python3 src/sablon.py data/synthetic               # her şehir: tahmin.csv, arketipler.csv, deney/ (5/10/20 ölçülü, şehirler arası)
 python3 src/sablon.py data/synthetic --sehir 7 --yalniz-ana
+python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da kullanma (kıyas)
 ```
 
-Şehir başına ~1 saniye. Yöntem [docs/method/modeling.md](docs/method/modeling.md); sınav `python3 src/sinav.py faz2 data/synthetic` (Can).
+Şehir başına ~1 saniye. Yöntem [docs/method/modeling.md](docs/method/modeling.md); sınav `python3 src/sinav.py faz2 data/synthetic` (Can). Sürüm 1.2 şehirleri için önce iki indirme: kıyı (`data/raw/osm-kasaba/KAYNAK.txt`) ve Open-Meteo 2023 (`data/raw/open-meteo-lefkosa/`); yoksa üretici uyarıp eski kurala / yapay ışınıma düşer.
+
+**Kaç ev (Faz 3):** `python3 src/kac_ev.py data/synthetic` → her şehirde `kac_ev.csv` (karamsar / iyimser, renk, %40 kuralı). `tahmin.csv` ister; şehir başına 0,1 saniyenin altında.
 
 **Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
 
