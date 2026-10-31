@@ -300,7 +300,7 @@ def kac_ev_metni(satir):
         st.markdown(f":blue[**Bugünkü kural (%40): {kural} ev** — en kötü durumdan "
                     "bile az; kural bekletmeye gerek olmayan başvuruları bekletiyor]")
     else:
-        st.markdown(f"Bugünkü kural (%40): {kural} ev — tahminimizle uyumlu")
+        st.markdown(f"Bugünkü kural (%40): {kural} ev — aralığımızın içinde")
 
 
 def yan_panel(klasor, veri, satir):
