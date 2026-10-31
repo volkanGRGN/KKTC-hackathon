@@ -34,7 +34,7 @@ Hepsi "hiç model kullanmadan yapılan basit hesaba göre ne kadar iyi" diye anl
 ## Ekran 5: kilit cümle
 "Dolu trafoya 'yer var' demek en pahalı hata. Bugünkü %40 kuralı 73 dolu trafonun 41'ine 'yer var' diyor. Bizim 87 yeşilimizin hiçbiri dolu değil." [Hesap: sınav şehirleri 11–20, karar masası koşumu; gösterim]
 
-Grafik dosyası Can'ın Windows yeniden koşumundan (aynı main, 20 şehir sıfırdan, `grafikler.py faz3 --aralik 11-20`): sol yarı resmi koşumla birebir (0/87, 41/284); sağ yarıda dolu trafo **74**, karar masası koşumunda **73** (Mac ↔ Windows yeniden üretimde bir trafo farkı); konuşmada resmi rakam söylenir: 41/73.
+Grafik dosyası karar masasının Mac koşumundan, resmi veriden (0/87 ↔ 41/284, dolu 41/73; karar masası 21:44).
 
 ## Ekran 5: söylenecek bedel
 Rakamlar karar masası koşumundan (karar masası 19:51; main fe7426b + `sinav.py` c3fb046, 20 şehir sıfırdan, sınav şehirleri 11–20, 347 trafo; Can'ın #15 deneme koşusuyla birebir). Eski tek denklem rakamları (%6 / %63 / %42, 0/21) artık kullanılmaz.

@@ -5,12 +5,14 @@ Modeli ya da üreteci yazan sınavı yazmaz (CONTRIBUTING); bu dosya Can'ın. Ok
 docs/data/tablo-bicimi.md sözleşmesinde.
 
 Çalıştırma: python3 src/sinav.py faz1 data/synthetic
-           python3 src/sinav.py faz2 data/synthetic [--aralik 11-20]   (tahmin.csv: src/sablon.py)
+           python3 src/sinav.py faz2 data/synthetic [--aralik 11-20] [--ispanya <csv>]   (tahmin.csv: src/sablon.py;
+               --ispanya: src/edp_test.py --cikti çıktısı, kalibrasyonun gerçek veri ölçüsü)
            python3 src/sinav.py faz3 data/synthetic [--aralik 11-20]   (kac_ev.csv: src/kac_ev.py)
 Her madde için GEÇTİ / KALDI ve rakam yazar; hepsi geçerse çıkış kodu 0.
 """
 import csv
 import json
+import math
 import statistics as st
 import sys
 from collections import Counter
@@ -176,6 +178,14 @@ KAPSAMA = (0.70, 0.90)
 CAPRAZ_MAX = 1.5
 DUSUK_GUVEN_MAX = 0.25
 SAF_FARK = 0.25                 # ADR-0008: model, saf tahminden ortanca ve P90'da en az %25 düşük
+# Kalibrasyon (Faz 7, karar masası 21:32; ADR-0013): nominal bant ↔ ampirik kapsama ve PIT düzlüğü.
+NOMINAL = (0.50, 0.80, 0.90, 0.95)
+KAPSAMA_95_MIN = 0.90
+PIT_KOVA, PIT_SAPMA_MAX = 10, 0.05
+# Resmi ölçü: faturalı girdi (ADR-0007), 10 ölçülü (PR #10 ana tablosu), tabakalı seçim (ürünün seçimi). Rastgele ile
+# havuzlanmaz: iki yolun hatası ters yönde, havuzda birbirini götürüyor (PIT 0,046 ↔ ayrı ayrı 0,068 / 0,108).
+ISPANYA_GIRDI, ISPANYA_N, ISPANYA_YOL = 'c', '10', 'tabakali'
+_Z80 = st.NormalDist().inv_cdf(0.90)
 
 
 def _abone(r):
@@ -206,6 +216,41 @@ def _hatalar(tahmin, gercek):
             continue
         h.append(abs(float(r['ogle_min_kw']) - g) / g)
     return h, atla
+
+
+def kalibrasyon(uclar):
+    """[(P10, P90, gerçek)] -> nominal bantların ampirik kapsaması ve PIT kovaları.
+
+    Bant log uzayında normal sayılır [Yorum]: orta = P10 ile P90'ın log ortası, σ = log genişlik ÷ (2 × 1,2816).
+    %50 / 90 / 95 bantlar ve PIT (gerçeğin tahmin dağılımındaki yüzdeliği) bundan türetilir; %80 bant P10–P90'ın
+    kendisidir. sablon.py bandı log uzayında simetrik (orta tam ortada); edp_test.py bandı değil, o yüzden orta
+    tahmin değil bandın kendi ortası alınır.
+    """
+    nd = st.NormalDist()
+    kap, kova, n, atla = dict.fromkeys(NOMINAL, 0), [0] * PIT_KOVA, 0, 0
+    for lo, hi, g in uclar:
+        if not (0 < lo < hi) or g <= 0:
+            atla += 1
+            continue
+        z = (math.log(g) - (math.log(lo) + math.log(hi)) / 2) / ((math.log(hi) - math.log(lo)) / (2 * _Z80))
+        for q in NOMINAL:
+            kap[q] += abs(z) <= nd.inv_cdf(0.5 + q / 2)
+        kova[min(int(nd.cdf(z) * PIT_KOVA), PIT_KOVA - 1)] += 1
+        n += 1
+    pay = [k / n for k in kova]
+    return dict(n=n, atla=atla, kapsama={q: kap[q] / n for q in NOMINAL}, pit=pay,
+                sapma=max(abs(p - 1 / PIT_KOVA) for p in pay),
+                yon='fazla emin' if pay[0] + pay[-1] > 2 / PIT_KOVA else 'fazla geniş',
+                alt=sum(pay[:PIT_KOVA // 2]))
+
+
+def _kal_metin(k):
+    return ('nominal ' + ' / '.join(f'%{100 * q:g}' for q in NOMINAL) + ' → ampirik '
+            + ' / '.join(_yuzde(k['kapsama'][q]) for q in NOMINAL)
+            + f"; PIT en büyük sapma {k['sapma']:.3f} (uçlarda {_yuzde(k['pit'][0] + k['pit'][-1])} → {k['yon']}; "
+            + f"gerçek tahmin ortasının altında {_yuzde(k['alt'])}), kovalar "
+            + ' '.join(f'{100 * p:.0f}' for p in k['pit'])
+            + f"; n = {k['n']}" + (f", atlanan {k['atla']}" if k['atla'] else ''))
 
 
 def faz2_oku(s):
@@ -264,8 +309,11 @@ def _ozet(sehir_deger):
     return st.median(v), (kotu[1], kotu[0])
 
 
-def faz2(sehirler):
-    """ROADMAP Faz 2 geçme sınavı + ADR-0008 saf tahmin. Yalnız ölçülmeyen trafolar (`olculdu` = 0)."""
+def faz2(sehirler, ispanya=None):
+    """ROADMAP Faz 2 geçme sınavı + ADR-0008 saf tahmin + Faz 7 kalibrasyon. Yalnız ölçülmeyen trafolar (`olculdu` = 0).
+
+    ispanya: src/edp_test.py --cikti CSV'si (sütunlar girdi, n, yol, y, alt, ust); yoksa kalibrasyon maddesi UYARI.
+    """
     m, bilgi = [], []
     for s in sehirler:
         s['gercek'] = {r['trafo_no']: float(r['ogle_min_kw']) for r in s['cevap']}
@@ -317,6 +365,39 @@ def faz2(sehirler):
     _madde(m, KAPSAMA[0] <= orta <= KAPSAMA[1], f'%80 bant kapsama ortanca %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g}',
            f'ortanca {_yuzde(orta)}; şehirler {_yuzde(dusuk[1])} ({dusuk[0]}) – {_yuzde(yuksek[1])} ({yuksek[0]}); '
            f'dışarıda kalan: P10 altı {alt}, P90 üstü {ust}')
+
+    # 3b. Kalibrasyon (Faz 7, karar masası 21:32): resmi ölçü gerçek veride (İspanya); farazi şehir bilgi.
+    uclar = [(float(r['ogle_min_kw_p10']), float(r['ogle_min_kw_p90']), s['gercek'][r['trafo_no']])
+             for s in sehirler for r in s['tahmin'] if not int(r['olculdu'])]
+    kf = kalibrasyon(uclar)
+    bilgi.append('kalibrasyon, farazi (gösterim, havuz): ' + _kal_metin(kf)
+                 + f"; %95 bant ≥ %{100 * KAPSAMA_95_MIN:g} → {'geçer' if kf['kapsama'][0.95] >= KAPSAMA_95_MIN else 'geçmez'}"
+                 + f"; PIT ≤ {PIT_SAPMA_MAX:g} → {'geçer' if kf['sapma'] <= PIT_SAPMA_MAX else 'geçmez'}")
+    if ispanya:
+        satir = _csv(Path(ispanya))
+
+        def _sec(girdi, n=ISPANYA_N, yol=None):
+            return [(float(r['alt']), float(r['ust']), float(r['y'])) for r in satir
+                    if r['girdi'] == girdi and r['n'] == n and (yol is None or r['yol'] == yol)]
+
+        ki = kalibrasyon(_sec(ISPANYA_GIRDI, yol=ISPANYA_YOL))
+        etiket = f'gerçek veri — İspanya (girdi {ISPANYA_GIRDI}, {ISPANYA_N} ölçülü, {ISPANYA_YOL}, bütün tekrarlar)'
+        _madde(m, KAPSAMA[0] <= ki['kapsama'][0.80] <= KAPSAMA[1] and ki['kapsama'][0.95] >= KAPSAMA_95_MIN,
+               f'kalibrasyon, {etiket}: %80 bant %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g} ve %95 bant ≥ %{100 * KAPSAMA_95_MIN:g}',
+               _kal_metin(ki))
+        _madde(m, True if ki['sapma'] <= PIT_SAPMA_MAX else UYARI,
+               f'PIT düzlüğü, {etiket}: {PIT_KOVA} kovada en büyük sapma ≤ {PIT_SAPMA_MAX:g}',
+               f"{ki['sapma']:.3f}" + ('' if ki['sapma'] <= PIT_SAPMA_MAX else f"; {ki['yon']}"))
+        for g in ('a', 'b', 'c'):
+            for n in ('5', '10', '15'):
+                for yol in ('rastgele', 'tabakali'):
+                    u = _sec(g, n, yol)
+                    if u:
+                        k = kalibrasyon(u)
+                        bilgi.append(f'kalibrasyon, İspanya girdi {g}, {n} ölçülü, {yol}: %80 {_yuzde(k["kapsama"][0.80])}, '
+                                     f'%95 {_yuzde(k["kapsama"][0.95])}, PIT sapma {k["sapma"]:.3f} ({k["yon"]}), n = {k["n"]}')
+    else:
+        _madde(m, UYARI, 'kalibrasyon, gerçek veri — İspanya', 'ölçülmedi: --ispanya <src/edp_test.py --cikti çıktısı> verilmedi')
 
     # 4. Şehirler arası: capraz hata ortancası ÷ şehir içi hata ortancası.
     oran = {}
@@ -548,7 +629,8 @@ def faz3(sehirler):
 def main():
     sys.stdout.reconfigure(encoding='utf-8')  # Windows'ta boruya yazarken cp1254 '≥' karakterinde çöküyordu
     if len(sys.argv) < 3 or sys.argv[1] not in ('faz1', 'faz2', 'faz3'):
-        sys.exit('Kullanım: python3 src/sinav.py faz1|faz2|faz3 <şehir kökü, ör. data/synthetic> [--aralik 11-20]')
+        sys.exit('Kullanım: python3 src/sinav.py faz1|faz2|faz3 <şehir kökü, ör. data/synthetic> [--aralik 11-20] '
+                 '[--ispanya <edp_test.py --cikti CSV>]')
     faz = sys.argv[1]
     sehirler, atlanan = sehirleri_oku(sys.argv[2])
     if '--aralik' in sys.argv:
@@ -571,7 +653,11 @@ def main():
     trafo = sum(len(s['cevap']) for s in sehirler)
     print(f"Faz {faz[-1]} geçme sınavı: {len(sehirler)} şehir ({sehirler[0]['ad']}…{sehirler[-1]['ad']}), {trafo} trafo"
           + ('' if faz == 'faz1' else ' — gösterim, farazi şehirler') + '\n')
-    maddeler, bilgi = {'faz1': faz1, 'faz2': faz2, 'faz3': faz3}[faz](sehirler)
+    if faz == 'faz2':
+        ispanya = sys.argv[sys.argv.index('--ispanya') + 1] if '--ispanya' in sys.argv else None
+        maddeler, bilgi = faz2(sehirler, ispanya)
+    else:
+        maddeler, bilgi = {'faz1': faz1, 'faz3': faz3}[faz](sehirler)
     for gecti, ad, ayrinti in maddeler:
         print(f"[{UYARI if gecti == UYARI else 'GEÇTİ' if gecti else 'KALDI'}] {ad}: {ayrinti}")
     print('\nBilgi:')
