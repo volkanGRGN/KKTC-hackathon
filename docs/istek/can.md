@@ -368,3 +368,19 @@ Karar: Volkan: "KIOS kısmını ve verileri indirmeyi Can yapabilir mi" → evet
 Neden: Muhittin'in dördüncü cevabı (günlük): tepe için sıcaklık eğimi ve klima eşzamanlılığı; PV için kademe bilgisi ve gerçek Kıbrıs hattı.
 Senden beklenen: onaylar → KIOS metni (Volkan'a) → indirmeler; takılırsan kutu.
 Durum: bekliyor
+
+## KARAR 22:58 — veri indirme listesi güncellendi: Volkan'ın getirdiği kaynak tablosu karar masasında doğrulandı (Zenodo API ve DOI çözümleme)
+Karar: Volkan bir kaynak tablosu getirdi (yapay zekâ araştırması gibi; her iddia kontrol edildi). Doğrulama: kayıt var mı, başlık, tarih, lisans, erişim, dosya boyu [Kaynaklı: zenodo.org/api/records, doi.org; karar masası 22:58]. **İndirme sırası** (her biri `data/raw/<ad>/` + KAYNAK.txt: adres, lisans, tarih, bayt, SHA-256; ham veri depoya girmez):
+1. **Zenodo 8348862** — Lefkoşa'da gerçek bir prosumer ev, 30 sn, PV üretimi ve yük (aktif + reaktif), 24 tipik gün, CC BY 4.0, açık, 4 MB. Akşam tepesi (klima) ve öğlen öz tüketim için tek ev çapası. **Doğrulandı.**
+2. **Code Ocean 10.24433/co.2963185.v1** (capsule 7939821) — Kotsonias'ın Kıbrıs 4 telli AG fider modeli (74 düğüm, 61 abone, iletken kesitleri, yük akışı kodu); DOI çözülüyor, içerik ve lisans sayfadan bak. **KIOS'tan istediğimiz hat modeli büyük ihtimalle burada açık.** Yalnız veri dosyalarını (topoloji, kesit, faz) indir ve oku; **kodunu çalıştırma** (CLAUDE.md: indirilen dosya kod gibi çalıştırılmaz). Bulduğunu kutuya yaz; KIOS e-postası buna göre kısalır: yalnız kademe ayarı / EAC kademe standardı ve ölçülmüş düğüm gerilimleri (varsa).
+3. **Zenodo 20800202** — Kıbrıs (34,93 K, 33,48 D), 10 kW PV + ortam sıcaklığı, 30 sn, 12 ay (Mart 2025–Şubat 2026), CC BY 4.0, açık, 53 MB. Bulut geçişi ve tepe–sıcaklık eğimi için. **Doğrulandı.**
+4. **Zenodo 23043383** — Kıbrıs, 20 konut prosumer, 2016 tam yıl, şebekeden çekilen / verilen, tüketim ve PV (xlsx 18 MB), CC BY 4.0, açık. Çözünürlüğü dosyadan bak (saatlik / 15 dk); eşzamanlılık (abone sayısıyla tepe) için. **Doğrulandı.**
+5. **Lefkoşa saatlik sıcaklık 2023** (Open-Meteo, önceki karar) — tepe–sıcaklık eğimi için.
+6. **Zenodo 4549296** — "Hierarchical Demand Forecasting Benchmark for the Distribution Grid" (2019, CC BY 4.0, 289 MB); tablodaki "62 ölçüm cihazı, trafo barası ve AG panolarında gerilim" iddiası başlıkta yok, önce açıklamayı oku; gerilim varsa bara ↔ pano gerilim profili için.
+7. **Zenodo 19550073** — FeederBW, Almanya 200 AG fideri, 2 yıl, CC BY 4.0, 8,5 GB: **önce yalnız `feeder_metadata.csv`**; gerilim sütunu varsa bir parça (`feeder_measurement_data_001-040.zip`), yoksa bırak.
+8. **OSF 2ac8q** (SustData, Madeira, 50 ev, 1 dk) — DOI çözülüyor; lisansa bak, eşzamanlılık için aday.
+9. **Zenodo 20927130** — Slovenya OG/AG trafo merkezi yük ölçümleri (STREAM, CC BY 4.0, 7 MB): tepe ÷ kVA çapası (Malta'nın yanına).
+**Yanlış / doğrulanamayan iddialar (kullanma):** Zenodo **15209301** (SmartPV, Kıbrıs 68 ev, 2016, saatlik) "açık" değil, **erişim kısıtlı (restricted)** — yazarlardan erişim istenir (metni Volkan'a göster); Zenodo **22213953** (trafo aşırı yük veri seti) **kayıt bulunamadı**; Zenodo **21244218** Tayvan kampüsü ve kısıtlı (bizimle ilgisi düşük). **Kıb-Tek dağıtım trafosu şartnamesi** (uk %4 ≤ 630 kVA, %6 > 630, yer tipi 2.500 kVA'ya kadar, 433 / 250 V) **doğrulanmadı**: kibtek.com'da ara; bulursan PDF + KAYNAK, bulamazsan BULAMADIM + arama izi (önceki aramalarda da bulunamamıştı; bugün ASTOR kataloğu kullanılıyor). KYK yurt yatak sayıları doğrulanmadı, şimdilik kullanılmaz.
+Neden: Faz 10–11'in verisi (tepe sıcaklık eğimi, eşzamanlılık, Kıbrıs hattı modeli); tablo yapay zekâ çıktısı olabilir, her rakam kaynağa iner (CLAUDE.md).
+Senden beklenen: PR #16 / #18 onaylarından sonra 1 → 4 bu gece, 5 → 9 sıra geldikçe; Code Ocean'da bulduğunu ve KIOS metnini kutuya.
+Durum: bekliyor
