@@ -27,7 +27,12 @@ RENK_ADI = {"yesil": "yeşil", "sari": "sarı", "kirmizi": "kırmızı"}
 
 METRE_BASINA_EV = 25  # sütun boyu çarpanı [Yorum]
 EN_KISA_SUTUN_EV = 0.5  # 0 ev yine de görünsün
+METRE_BASINA_KVA = 0.25  # kaç ev yokken boy: 1000 kVA = 250 m, renkli sütunlarla aynı ölçek
 SUTUN_YARICAP_M = 35
+
+OGLE_ADIMLARI = range(132, 168)  # 11:00–14:00, sözleşme "Öğlen penceresi"
+GUN_TURU_ADI = {"isgunu": "iş günü", "tatil": "tatil"}
+GUVEN_ADI = {"yuksek": "yüksek", "orta": "orta", "dusuk": "düşük"}
 
 
 def sehir_klasorleri():
@@ -70,9 +75,9 @@ def sutun_verisi(tablo):
         rgba = pd.Series([GRI] * len(tablo), index=tablo.index)
     if "kac_ev_karamsar" in tablo:
         ev = tablo["kac_ev_karamsar"].fillna(0)
+        yukseklik = ev.clip(lower=EN_KISA_SUTUN_EV) * METRE_BASINA_EV
     else:
-        ev = tablo["kva"] / 10
-    yukseklik = ev.clip(lower=EN_KISA_SUTUN_EV) * METRE_BASINA_EV
+        yukseklik = tablo["kva"] * METRE_BASINA_KVA
     return tablo.assign(rgba=rgba, yukseklik=yukseklik)
 
 
@@ -107,10 +112,101 @@ def harita(veri):
 
 def renk_ozeti(veri):
     if "renk" not in veri:
-        return "Renk yok (kaç ev tablosu henüz yok): sütunlar gri, boy kVA ÷ 10."
+        return "Renk yok (kaç ev tablosu henüz yok): sütunlar gri, boy kVA ile orantılı."
     sayilar = veri["renk"].value_counts()
     parcalar = [f"{RENK_ADI[r]} {sayilar.get(r, 0)}" for r in RENKLER]
     return "Trafolar: " + " · ".join(parcalar) + " · sütun boyu: kaç ev (karamsar)"
+
+
+@st.cache_data
+def olculu_yuk(yol, olculu_nolar):
+    """yuk_5dk.csv'den YALNIZ ölçülü trafoların satırları (ölçülmeyenin satırı cevap anahtarıdır)."""
+    sutunlar = ["trafo_no", "gun", "gun_turu", "adim", "saat", "tuketim_kw"]
+    parcalar = pd.read_csv(
+        yol, encoding="utf-8", usecols=sutunlar, dtype={"trafo_no": str}, chunksize=50_000
+    )
+    return pd.concat(p[p["trafo_no"].isin(olculu_nolar)] for p in parcalar)
+
+
+def saat_ekseni(adimlar):
+    return [f"{a // 12:02d}:{a % 12 * 5:02d}" for a in adimlar]
+
+
+def olculen_egri(yuk, trafo_no):
+    """Ölçülü trafonun gün 0 tüketimi; dönüş (tablo, gün türü)."""
+    gun0 = yuk[(yuk["trafo_no"] == trafo_no) & (yuk["gun"] == 0)].sort_values("adim")
+    tablo = pd.DataFrame(
+        {"ölçülen tüketim (kW)": gun0["tuketim_kw"].to_numpy()}, index=gun0["saat"]
+    )
+    return tablo, gun0["gun_turu"].iloc[0]
+
+
+def tahmini_egri(arketipler, satir, gun_turu):
+    """Sözleşme §5: oran × (öğlen tahmini ÷ arketipin öğlen penceresindeki en düşük oranı)."""
+    a = arketipler[arketipler["arketip"] == satir["arketip"]]
+    ogle_min_oran = a[a["adim"].isin(OGLE_ADIMLARI)]["oran"].min()
+    egri = a[a["gun_turu"] == gun_turu].sort_values("adim")
+    oran = egri["oran"].to_numpy() / ogle_min_oran
+    return pd.DataFrame(
+        {
+            "tahmin (kW)": oran * satir["ogle_min_kw"],
+            "P10 (kW)": oran * satir["ogle_min_kw_p10"],
+            "P90 (kW)": oran * satir["ogle_min_kw_p90"],
+        },
+        index=saat_ekseni(egri["adim"]),
+    )
+
+
+def egri_ciz(klasor, veri, satir):
+    """Ölçülüde ölçülen, ölçülmeyende arketipten tahmin; tahmin tablosu yoksa eğri yok."""
+    if "olculdu" not in veri:
+        st.info("Eğri yok: hangi trafonun ölçülü olduğu tahmin tablosu (Faz 2) gelince belli olur.")
+        return
+    olculu_nolar = tuple(veri.loc[veri["olculdu"] == 1, "trafo_no"])
+    yuk = olculu_yuk(str(klasor / "yuk_5dk.csv"), olculu_nolar)
+    gun_turu = yuk.loc[yuk["gun"] == 0, "gun_turu"].iloc[0]
+    if satir["olculdu"] == 1:
+        tablo, gun_turu = olculen_egri(yuk, satir["trafo_no"])
+        baslik = "Ölçülen tüketim"
+    else:
+        arketipler = tablo_oku(str(klasor / "arketipler.csv"))
+        if arketipler is None:
+            st.info("Eğri yok: arketipler.csv bulunamadı.")
+            return
+        tablo = tahmini_egri(arketipler, satir, gun_turu)
+        baslik = "Tahmini tüketim, %80 bant (P10–P90)"
+    st.markdown(f"**{baslik}** · gün 0, {GUN_TURU_ADI.get(gun_turu, gun_turu)}")
+    st.line_chart(tablo, height=220)
+
+
+def yan_panel(klasor, veri, satir):
+    abone = int(satir.filter(like="abone_").sum())
+    st.subheader(f"Trafo {satir['trafo_no']}")
+    st.markdown(
+        f"{int(satir['kva'])} kVA · {satir['bolge']} · {satir['montaj']}  \n"
+        f"{abone} abone · {int(satir['panel_sayisi'])} panel, {satir['panel_kw']:.1f} kW"
+    )
+    if "olculdu" in veri:
+        olcum = "ölçüldü" if satir["olculdu"] == 1 else "**ölçülmedi**"
+        st.markdown(
+            f"Öğlen en düşük yük: **{satir['ogle_min_kw']:.1f} kW** "
+            f"(%80 bant {satir['ogle_min_kw_p10']:.1f}–{satir['ogle_min_kw_p90']:.1f})  \n"
+            f"Güven: {GUVEN_ADI.get(satir['guven'], satir['guven'])} · {olcum}"
+        )
+    if "renk" in veri:
+        st.markdown(
+            f"Kaç ev daha panel: **{int(satir['kac_ev_karamsar'])}–"
+            f"{int(satir['kac_ev_iyimser'])}** (karamsar–iyimser) · "
+            f"{RENK_ADI[satir['renk']]}  \n"
+            f"%40 kuralı: {int(satir['kural40_ev'])} ev"
+        )
+    egri_ciz(klasor, veri, satir)
+
+
+def secili_satir(durum, veri):
+    """Haritada tıklanan trafo; seçim yoksa None."""
+    indisler = durum.selection.indices.get("trafolar", [])
+    return veri.iloc[indisler[0]] if indisler else None
 
 
 def main():
@@ -123,7 +219,19 @@ def main():
     veri = sutun_verisi(birlesik_tablo(secili))
     st.warning(etiket(int(veri["sehir"].iloc[0])))
     st.caption(renk_ozeti(veri))
-    st.pydeck_chart(harita(veri))
+    sol, sag = st.columns([3, 2])
+    with sol:
+        durum = st.pydeck_chart(
+            harita(veri), on_select="rerun", selection_mode="single-object",
+            key=f"harita-{secili.name}",
+        )
+    with sag:
+        satir = secili_satir(durum, veri)
+        if satir is None:
+            st.info("Bir trafoya (sütuna) tıkla.")
+        else:
+            yan_panel(secili, veri, satir)
 
 
-main()
+if __name__ == "__main__":
+    main()
