@@ -122,3 +122,8 @@ Durum: bekliyor
 ## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın
 Ne: Senin sıran: (1) **Faz 4 kalan iki madde**: internet fiilen kapalıyken açılış ve 2 dakikalık ekran kaydı (KONTROL 20:55; bitince ROADMAP Faz 4 kutuları için BUILD'e satır); (2) sözlük vekili + Korsika KAYNAK ve dış veri istek metinleri (KARAR 21:4x); (3) arkada veri araştırması, kartın [docs/gorev/civan-veri-arastirma.md](../gorev/civan-veri-arastirma.md): her bulgu tüzükteki alanlarla kutuya "veri partisi". Faz 7–8'de sana kod işi yok; Faz 11 kart görünümü Faz 4 bitince. Takılırsan kutu; bloklarsa Volkan'ı ara.
 Durum: bilgi
+
+## KARAR 21:44 — KONTROL 21:29 (Windows) ve "noktalar çoğalıyor" (e85e21b) için
+Karar: (1) Windows kontrolü kabul; ROADMAP Faz 4 "Windows ve Mac" kutusu BUILD'de [x]. (2) **Ekran kaydı yarın sabah provada zorunlu** (2 dk, yedek: sunum bilgisayarı çökerse PDF + kayıt); ağ fiilen kapalı deneme isteğe bağlı (zemin dosyasıyla dışarıya istek yok, iki platformda ölçüldü). (3) Animasyon: diff 17:32 kararına uygun (ölçülen dolu, tahmin soluk halka, pop, renkler, "gösterim" etiketi, kıyı kamu malı); BUILD provada Mac'te açıp 3 → 5 geçişini dener, sorun varsa kutuna yazar. Sunum bilgisayarında ikinci sayfanın da internetsiz açıldığını sen bir kez dene.
+Senden beklenen: provada ekran kaydı; sonra 21:4x KARAR'ındaki (1) sözlük vekili ve (2) istek metinleri; arkada veri araştırması.
+Durum: bekliyor

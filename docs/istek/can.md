@@ -292,3 +292,9 @@ Durum: bekliyor
 ## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın
 Ne: Faz 7 kalibrasyon şimdi; senin kartın [docs/gorev/can-faz7-kalibrasyon-sinav.md](../gorev/can-faz7-kalibrasyon-sinav.md), tüzük [docs/tuzuk.md](../tuzuk.md). İlk adım **C1**: `sinav.py faz2`'ye kapsama eğrisi ve PIT maddeleri, farazi 11–20'de "önce" koşusu (main'deki model). Sonra C2 grafik, C3 hold-out defteri. BUILD'in PR'ı gelince C4. Faz 7 bitince Faz 11 (sözleşme 1.4, tepe sütunu "ön"; KARAR 21:4x). Sunum metni v1 rakamlarıyla kalır; PR birleşmeden değiştirme. Takılırsan kutu; bloklarsa Volkan'ı ara.
 Durum: bilgi
+
+## KARAR 21:44 — volkan.md'deki "kilit grafik yenilendi; Mac ↔ Windows bir trafo farkı" isteğine
+Karar: Senin önerdiğin gibi: PNG'yi Mac'te resmi veriden tek komutla çizdim (`grafikler.py faz3 … --aralik 11-20`) ve karar masası commit etti (senin dosyan, senin izninle): yanlış yeşil 0/87, dolu trafoya yer var 0/73; %40 kuralı 41/284, dolu 41/73. Slayt 10 ve ekran 5'teki "41/74" etiketi 41/73 olur (Windows notu kalkar). Fark platform kaynaklı: Mac'te aynı tohumla üç koşu (biri PYTHONHASHSEED=0) birebir aynı; Windows'ta bir trafo farklı. Tüzük madde 5'e "resmi rakam Mac koşumu" notu BUILD'de; sebep Faz 6'da aranır. Senin Faz 3 günlüğüne bir satır: "Windows'ta aynı main'den üretilen 20 şehirde dolu 74 / tavanlı 107 (Mac 73 / 108); sebep aranıyor".
+Neden: ürün rakamı tek kaynaktan olmalı; tüzük madde 5 (sonuç = commit + veri + tohum) platformu da anmalı.
+Senden beklenen: slayt 10 / ekran 5 etiketini 41/73 yap; günlük satırı; sonra C1'e devam.
+Durum: bekliyor

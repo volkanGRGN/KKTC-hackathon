@@ -492,7 +492,7 @@ Durum: yapıldı 21:21 (BUILD) — ROADMAP "Sunum sonrası" başlığındaki bek
 Ne: Karar masası 19:51'in istediği kilit grafik (docs/sunum/kilit_yanlis_yesil.png) yenilendi. Resmi koşumun dosyaları bende olmadığı için grafik Windows'ta aynı main'den 20 şehir sıfırdan üretilerek çizildi. Sol yarı resmi koşumla birebir: yanlış yeşil 0/87, %40 kuralı 41/284; yanlış kırmızı %27,3 (12/44), sarı %62,2, kaç ev orta 2 ev da aynı. Fark: dolu trafo **74** (resmi 73), bu yüzden sağ yarı "41/74" yazıyor; tavanlı 107 (resmi 108). Slayt 10 ve ekran 5'e etiket yazıldı; konuşmada resmi 41/73 söylenir. Bu `faz3` çıktısı günlüğe yazılmadı (19:51'e göre resmi koşum istenmiyor; yalnız grafik için). İsterseniz grafik Mac'te resmi veriden tek komutla birebir çizilir: `python3 src/grafikler.py faz3 data/synthetic docs/sunum --aralik 11-20` (dosya Can'ın; PNG'yi bana gönderin ya da onaylarsanız BUILD commit'lesin).
 Dosya: docs/sunum/kilit_yanlis_yesil.png (Can)
 Neden: Aynı tohumla Mac ve Windows bir trafoda farklı sonuç veriyor; prova notundaki "sunum bilgisayarında yeniden üretilirse tek tük trafo farklı çıkar" uyarısının ölçülmüş hâli. Bloklamıyor.
-Durum: bekliyor
+Durum: karar verildi 21:44 → can.md: PNG Mac'te resmi veriden çizildi ve karar masası commit etti (0/87 ↔ 41/284; dolu 41/73); Mac'te üç koşu birebir aynı, fark platform (Windows ↔ Mac), bilinen sorun
 
 ## UYARI! 31 Eki 21:24 — BUILD'den — Sunum sonrası faz haritası: Muhittin'e giden sıradaki "üreticiyi gerçeğe çapala, sınav şehirlerini yeniden üret" adımı Faz 6–11'de yok
 Ne: Muhittin'e 20:52'de giden sıra dört adımdı: (1) trafo çıkış gerilimi; (2) her ölçülen trafoyla aralıkları yeniden ayarla; (3) deneme şehri üreticisini gerçek dağılımlara çapala ve sınav şehirlerini yeniden üret; (4) başvuru-anı kararını sına. Muhittin "sıra büyük ölçüde doğru" dedi, üç uyarı ekledi. ROADMAP "Sunum sonrası" Faz 6–11'de (1) Faz 9'da, (2) Faz 7'de, (4) Faz 8'de var. **(3) hiçbir fazda yok**; kalemleri yalnız ROADMAP Faz 3 "ikinci sürüm / üretici 1.3" listesinde duruyor, sıralı plana bağlı değil.
@@ -528,7 +528,7 @@ Ne ölçüldü: main'deki `app/` (ada78f3 sonrası), Windows 11, Python 3.14.5, 
 - **? Açık:** ağ fiilen kapalıyken açılış ve 2 dakikalık ekran kaydı **ertelendi** (Civan: kontrol katmanı, sunum yerinde internet ve elektrik var; sonra yapılacak). ROADMAP Faz 4 kutuları senin dosyan; Windows maddesi işaretlenebilir.
 Dosya: app/harita.py, app/README.md
 Neden: KARAR 20:56 (4). Bloklamıyor.
-Durum: yeni
+Durum: karar verildi 21:44 → civan.md: Windows kutusu [x] (BUILD ROADMAP); ekran kaydı yarın sabah provada zorunlu (yedek), ağ kapalı test isteğe bağlı; animasyon (e85e21b) karara uygun, BUILD provada Mac'te açar
 
 ## KARAR 21:32 — BUILD'e: Faz 7 (kalibrasyon gerçeğe karşı) ŞİMDİ başlıyor; Volkan + Can paralel; Faz 6 tüzük de bu gece
 Karar: Volkan (21:32): "sunuma daha var, Faz 7'ye başlayalım; Can ile benim aramda paylaştıralım, paralel yapıp test edelim." Sunum sonrası planı öne çekildi: **Faz 6 (belge) ve Faz 7 bu gece / yarın sabah**, Faz 8 sunum sonrası. Önce güvenlik: main'in bugünkü hâli `sunum-v1` etiketiyle işaretlenir (git tag, BUILD); Faz 7 kodu **dalda + PR** (model değişikliği, Can onayı); PR birleşmezse sunum v1 ile yapılır, hikâye değişmez.
@@ -558,3 +558,8 @@ Durum: bekliyor
 ## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın (BUILD)
 Ne: BUILD kartı [docs/gorev/volkan-faz7-kalibrasyon.md](../gorev/volkan-faz7-kalibrasyon.md): B1 `src/kalibrasyon.py` → B2 İspanya k_yük → B3 İngiltere model-sapma + sınav 11–20 bir kez → PR (Can onaylar). Sonra Gozo dış sınaması (30 dk), Faz 8 üretici çapalama ve yeni sınav şehirleri (dal + PR), Kıb-Tek veri istek taslağı. Önce ROADMAP başlık değişikliği (KARAR 21:4x, 10 dk). Can C1'den, Civan Faz 4'ün kalanından başlıyor; bildirim kutularda.
 Durum: bilgi
+
+## KARAR 21:44 — BUILD'e: Faz 4 Windows kutusu, ekran kaydı, animasyon kontrolü, Mac ↔ Windows farkı notu
+Karar: (1) ROADMAP Faz 4 "Windows ve Mac'te çalıştı" [x] (Civan KONTROL 21:29 + BUILD 20:55); "internet kapalıyken açılıyor; ekran kaydı" kutusu: zemin dosyasıyla dışarıya istek yok (iki platformda ölçüldü), **ekran kaydı yarın sabah provada alınır** (Civan, yedek; sunum bilgisayarı çökerse PDF + kayıt), ağ fiilen kapalı deneme isteğe bağlı. (2) Civan'ın "noktalar çoğalıyor" geçişi main'de (e85e21b: ikinci sayfa, pop 0 → %115 → %100, ölçülen dolu / tahmin soluk halka, renkler, "gösterim" etiketi, Natural Earth kıyısı kamu malı); karar masası diff'i inceledi, 17:32 kararına uygun; **BUILD provada Mac'te açıp 3 → 5 geçişini dener** (2 dk), sorun varsa civan.md. (3) Kilit grafik: Can'ın isteğiyle karar masası Mac'te resmi veriden yeniden çizdi ve commit etti (`docs/sunum/kilit_yanlis_yesil.png`: 0/87 ↔ 41/284, dolu 41/73). Mac'te aynı tohumla üç koşu (biri PYTHONHASHSEED=0) birebir aynı: üretici Mac'te deterministik; fark Windows ↔ Mac (platform / sürüm), bir trafo. Tüzük madde 5'e not (BUILD, 2 satır): "resmi rakamlar karar masasının Mac koşumundan; başka platformda yeniden üretilen şehirler gösterim için, sınav için değil; sebep Faz 6'da aranır (Python 3.14 ↔ 3.12, kayan nokta)".
+Senden beklenen (BUILD): ROADMAP Faz 4 iki kutu metni, tüzük notu (5 dk, B1'i bölme; B1 bitince); provada animasyon.
+Durum: bekliyor
