@@ -124,4 +124,20 @@ python3 src/sinav.py faz2 data/synthetic --aralik 11-20; python3 src/sinav.py fa
 
 Birleşme koşulu (karar masası): karar masasının Mac koşumu BUILD rakamlarıyla tutar **ve** Can C1'i dalda koşup onaylar; sonra karar masası birleştirir, Can resmi `faz2` / `faz3`, sunum rakamları v2.
 
+## Ek girdi — 31 Ekim 22:15: İspanya satırları artık yayımlanan bandı taşıyor (karar masası 22:0x)
+- **Sorun:** `edp_test.py --cikti` satırlarındaki alt / üst bant K_YUK'u içermiyordu; k yalnız `sablon.py`'de ve `kalibrasyon.py`'nin içindeydi. Can'ın resmi İspanya maddesi bu satırlarla "KALDI" gösterdi (%80 bant %66,6, PIT 0,108).
+- **Düzeltme:** `edp_test.py` bandı `sablon.K_YUK` ile log ölçekte genişletiyor (tek kaynak). `--kalibrasyonsuz` "önce" ve k'nin hesabı için. Tüzük madde 2'de n = bağımsız trafo / karar noktası (İspanya 29; satırlar tekrar).
+- **Sağlama (Mac, BUILD):**
+
+| `edp_test.py` | k (`kalibrasyon.py ispanya`) | %80 bant | %95 bant | PIT sapması |
+|---|---|---|---|---|
+| `--kalibrasyonsuz` | 1,475 | %65,7 | %81,3 | 0,100 |
+| varsayılan (K_YUK) | 1,000 | %80,0 (iç örnek) | %90,3 | 0,086 (tolerans 0,11) |
+
+- Komutlar (önceki komut bloğunun yerine):
+```
+python3 src/edp_test.py <GIS_data> --kalibrasyonsuz --cikti edp_once.csv && python3 src/kalibrasyon.py ispanya edp_once.csv   # k
+python3 src/edp_test.py <GIS_data> --cikti edp_sonra.csv && python3 src/kalibrasyon.py ispanya edp_sonra.csv                   # sağlama: k ≈ 1
+```
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

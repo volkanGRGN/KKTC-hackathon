@@ -21,7 +21,8 @@ Saf Python (statistics), bağımlılık yok.
 
 Çalıştırma:
   python3 src/kalibrasyon.py --deneme                                 # bilinen dağılım: k ≈ 1 ve ≈ 1,5
-  python3 src/kalibrasyon.py ispanya edp_satirlar.csv [--girdi c]     # src/edp_test.py --cikti çıktısı
+  python3 src/kalibrasyon.py ispanya edp_satirlar.csv [--girdi c]     # src/edp_test.py --kalibrasyonsuz --cikti çıktısı
+                                                                     # (K_YUK'lu satırlarla k ≈ 1 çıkmalı: sağlama)
   python3 src/kalibrasyon.py ingiltere ukpn_cekilis.json [--durum "faz bilinmeyen"]   # ukpn_olasilik CEKILIS_JSON
   ... --cikti ozet.json                                               # özet JSON'a da
 """
