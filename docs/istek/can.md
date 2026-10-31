@@ -76,7 +76,7 @@ Durum: bekliyor
 Ne: [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8) `src/sablon.py` ilk sürüm ve sözleşme 1.1: `deney/tahmin_capraz_s<AAA>.csv` (kartındaki ad), `sablon_ozet.json` (bilgi), JSON da LF, §5 `oran` **brüt** (`tuketim_kw`; senin sorun). Sözleşme değişikliği olduğu için onayın gerekiyor; sütunlara bakman yeter. Birleşince `python3 src/sablon.py data/synthetic` (~1 dk) gerçek `tahmin.csv` üretir; sahte dosyayı bırakıp `sinav.py faz2`'yi bununla koş.
 Dosya: docs/data/tablo-bicimi.md, src/sablon.py
 Neden: CONTRIBUTING "Dallar" 1 ve 2 (sözleşme + yeni modül). Model ayarları yalnız şehir 1–10'da denendi; 11–20'yi sınav için ayrı raporlarsan iyi olur (Faz 2 günlüğü).
-Durum: bekliyor
+Durum: sözleşme onaylandı (GitHub, CanSahin77); `sablon.py` ile `faz2` birleşmeyi ve yeniden üretimi bekliyor
 
 ## KARAR 31 Eki 13:55 — Faz 1 eşiği 216 V → 207 V (BUILD'in sorusuna karar)
 Karar: `src/sinav.py` `V_ALT = 207.0` (EN 50160 alt sınırı: 230 V −%10); madde adı "hiçbir trafoda v_min_bugun_v < 207 V". ROADMAP satırını BUILD değiştiriyor.
@@ -94,7 +94,7 @@ Durum: iptal 15:12 — BUILD ham veriden doğrudan koştu (PR #10, edp_test.py);
 Karar: **Brüt** (`tuketim_kw`). BUILD'in PR #8'indeki sözleşme 1.1 tam bunu yazıyor: "`oran` … brüt tüketimden: ölçülü trafoların `tuketim_kw` gün türü ortalaması, net değil". Kartındaki "gerçek küme" kuralı ve harita formülü buna uyuyor; `sinav.py faz2` böyle kalsın.
 Neden: ADR-0001 şekli tüketim eğrisinden kümeler; net eğri panel payıyla değişir, şekil ile PV karışır. Hedef `ogle_min_kw` de brüt (§3). Ölçülü trafoda brütün netten çıkarılabildiği varsayımı §2'de [Yorum].
 Senden beklenen: PR #8'in **sözleşme kısmını** (docs/data/tablo-bicimi.md, 12 satır: şehirler arası deney dosyası, `sablon_ozet.json`, JSON LF, `oran` brüt) GitHub'da gözden geçirip onayla; sözleşme değişikliği Can ya da Civan onayı istiyor, §5 senin sınavını ilgilendiriyor. `sablon.py` kodunu incelemen gerekmez. Onaydan sonra BUILD birleştirir.
-Durum: bekliyor
+Durum: yapıldı (PR #8 GitHub'da onaylandı, CanSahin77; BUILD birleştirir)
 
 ## KARAR 31 Eki 13:55 — volkan.md'deki "bilgi: PR #6 okuma notları" isteğine
 Karar: Okundu; iki not da doğru, ikisi de şimdi yeniden üretim gerektirmiyor (Faz 2 bu şehirlerde koşuyor). (1) Bayramlar: sürüm 1'de "bayramlar iş günü sayıldı [Yorum]" notu; bir sonraki yeniden üretimde (sözleşme 1.2 ya da Faz 3 öncesi) KKTC resmi tatilleri `gun_turu = tatil` olsun: 2024 Ramazan Bayramı 10–12 Nisan, 23 Nisan; 2025'te 1 Nisan (bayramın son günü) ve 23 Nisan [Kaynaklı: resmi takvim; tarihler BUILD tarafından doğrulanır]. EAC'nin tatil tipik günü bayramı zaten kapsıyor, tutarlı. (2) 1000 kVA tavanı: Nisan tepesi ≤ %50 kVA, şimdilik etkisiz; üretici `ayar.json`'a `kva_tavan_sayisi` yazsın (bilgi; ek anahtar serbest). Yaz benzetilirse yer tipi listeye 1600/2500 (veri sözlüğü: yer tipi 50–2.500 kVA) — o zaman sözleşme değişikliği.
