@@ -72,6 +72,9 @@ SIRA_SAYISI = 7                          # "gerçek kaç ev" için başvuru sır
 REFERANS = (35.3375, 33.318)
 KUZEY_SINIRI_M = 400                     # kıyı dosyası yoksa: referansın kuzeyine en çok 400 m [Yorum]
 KVA_LISTESI = [25, 50, 100, 250, 400, 630, 1000]   # direk ≤ 400 [varsayım: Kıb-Tek şartnamesi, bağlantısı yok]; yer [Yorum]
+# Dayanak [Kaynaklı: ASTOR A.Ş. kataloğu 2020, Elparts'ın sattığı marka, elparts.co]: yağlı dağıtım trafosu 50–5000 kVA
+# (25 kVA bunun altında, kaynaksız; üretici 1.3'te kaynak ya da 50'den başlayan liste), kompakt trafo merkezi 1000 ve
+# 1600 kVA (yaz benzetilirse yer tipi listeye 1600). Kıb-Tek'e özel güç listesi BULAMADIM.
 HAVA_YILLARI = [2023, 2024, 2025]
 # KKTC resmi tatilleri, Nisan [Kaynaklı: Ramazan Bayramı tarihleri Diyanet takvimi (Türkiye ile aynı ay takvimi;
 # KKTC Resmi Gazete listesi BULAMADIM), 23 Nisan KKTC'de resmi tatil]. Arife yarım günü iş günü sayıldı [Yorum].
@@ -86,6 +89,8 @@ FATURA_SAPMA = (0.95, 1.05)              # tahmini okuma, farklı yıl (ADR-0007
 # sanayi bölgesi kentsel sayıldı [Yorum].
 FAZ_SAPMA = {'kentsel': 0.25, 'turistik': 0.25, 'sanayi': 0.25, 'kirsal': 0.50}
 # Trafo çıkışı (boşta faz gerilimi): şartname 250 V, kademe ayarı bilinmiyor; Kıbrıs dağılımı BULAMADIM. Bant ±4 V
+# Kademe değiştirici var: dağıtım trafoları boşta (ya da yük altında) kademe değiştiricili [Kaynaklı: ASTOR kataloğu 2020];
+# adım sayısı ve yüzdesi katalogda yok, BULAMADIM (uzmana soru 8). Bandın sebebi bu sahadaki elle ayar.
 # [Yorum; karar masası 16:27: UKPN 20 trafoda gece ortanca 245,0 V, +1 ss 248,2 V, siteler arası ss 3,3 V; PR #11].
 V0_BANT = (244.0, 252.0)
 

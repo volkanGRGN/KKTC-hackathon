@@ -122,6 +122,7 @@ Yapılacaklar:
   - "farazi − İspanya" fark ölçeri her sürümde.
   - Fatura dağılım sütunları (yüksek tüketen abone oranı, mevsimsellik; ADR-0009 madde 1a): sözleşme 1.3 adayı. Sözleşme 1.2'deki `yillik_tuketim_mwh` kalır.
   - **Üretici 1.3** (karar masası 17:26):
+    - trafo güç listesi: ASTOR kataloğu (2020; Elparts'ın sattığı marka) yağlı dağıtım trafosunu 50–5000 kVA, kompakt trafo merkezini 1000 / 1600 kVA veriyor. Listedeki 25 kVA kaynaksız: kaynak bulunmazsa liste 50'den başlar; yaz benzetilirse yer tipine 1600. Kademe değiştirici var, adımı BULAMADIM (uzmana soru 8);
     - öğlen orta gerilim değişimi şehir başına −%0,4…+%0,8 aralığından (bugün sabit +%0,8; UKPN'de öğlen bara geceden ~1 V düşük; karar masası 18:46, varsayım envanteri K2). Sınav şehirleri bu gece donuk;
     - panelli evde `yillik_tuketim_mwh` net yazılır (mahsuplaşma), model `panel_kw` × yıllık üretimle (≈ 1.600 kWh/kWp [Yorum]) düzeltir; uzmana soru 7;
     - abone başına eğri farkı: aynı tarifede öğlen ÷ yıllık oranı abone abone dağılsın (ADR-0009 trafo içi çeşitlilik). Bugün farazi faturalı %3,9 üst sınır, İspanya'da faturayla %10.
