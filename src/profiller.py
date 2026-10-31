@@ -11,10 +11,9 @@ Katmanlar:
 3. sinif_egrisi() / tip_egrisi(): sınıfın ya da 7 trafo tipinin günlük eğrisi.
 4. saglama(): ROADMAP Faz 1 "veri sağlaması" rakamları.
 
-GEÇİCİ: oku() ve bes_dakika() dışındaki fonksiyon imzaları ve TIPLER sözleşme değildir. İmza
-docs/data/tablo-bicimi.md ve Can'ın Faz 1 görev kartıyla gelecek; şehir üreticisi gelene kadar bunlara
-bağlanmasın. Açık soru: EAC değerleri her abonenin kendi kVA hakkına göre; sınıfları abone sayısıyla
-karıştırmak yanlış ağırlık verir (su pompası 1,0 pu köy eğrisini şişiriyor), kVA ile ağırlıklanmalı.
+Sözleşme (docs/data/tablo-bicimi.md, Can'ın Faz 1 kartı): şehir üreticisi oku() ve sinif_egrisi()'ni
+çağırır; adları, imzaları ve sınıf adlarını değiştirmeden önce Volkan'ın kutusu. pu -> kW çevirisi ve
+tiplerin abone karışımı şehir üreticisinde, burada değil.
 
 Çalıştırma: python3 src/profiller.py [xlsx yolu]
 """
@@ -45,9 +44,10 @@ AYLAR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', '
 YARIM_SAAT = 48
 ADIM = 288                                   # 5 dakika
 
+# Yalnız sağlama için. Şehir üreticisi trafo başına abone sayısını kendi kurar ve sınıf eğrilerini
+# toplar (ROADMAP Faz 1).
 # 7 trafo tipi = sınıf karışımı (ağırlıklar toplamı 1). Eğriler panelsiz sınıflardan;
 # panel üretimi şehir üreticisinde Open-Meteo ışınımıyla ayrıca eklenir (iki kez sayılmasın).
-# TASLAK: karışım oranları varsayım; Volkan onaylayana kadar değişebilir.
 TIPLER = {
     'sehir_konutu': {'konut': 0.90, 'kucuk_ticari': 0.10},
     'koy': {'konut': 0.80, 'kucuk_ticari': 0.10, 'su_pompasi': 0.10},
@@ -147,6 +147,12 @@ def saglama(veri):
     gun_ort = lambda eg: sum(eg) / len(eg)
     otel = gun_ort(sinif_egrisi(veri, 'otel', 7)) / gun_ort(sinif_egrisi(veri, 'otel', 1))
     sonuc.append(('otel iş günü ortalaması Temmuz / Ocak', otel, 3.0, 5.0))
+
+    # 5 dk açma günlük enerjiyi koruyor mu: her sınıf x 24 tipik gün, en uzak oran.
+    oranlar = [sum(bes_dakika(seri)) / ADIM / (sum(seri) / YARIM_SAAT)
+               for gunler in veri.values() for seri in gunler.values() if sum(seri)]
+    en_uzak = max(oranlar, key=lambda o: abs(o - 1))
+    sonuc.append((f'5 dk açma enerji oranı, {len(oranlar)} gün içinde en uzak', en_uzak, 0.99, 1.01))
 
     # ROADMAP "pazar"; EAC'de pazar ayrı yok, tatil tipik günü kullanılır.
     tatil = _ort(tip_egrisi(veri, 'carsi', 4, 'tatil'), 11, 14)
