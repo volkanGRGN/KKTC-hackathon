@@ -55,7 +55,7 @@
 
 ## Eksiler (kalan)
 1. İspanya gerçek veride tepe hatası Can'ın geçici eşiğinin kıl payı üstünde (10 tabakalı: %15,4 / %36,1); fatura × oran Mayıs tepesinde bu kadar iyi. Kıb-Tek tepe verisi gelince yeniden fit.
-2. Eşzamanlılık yok: R abone sayısına bağlı değil (küçük trafoda tepe ÷ ortalama daha yüksek); Can'ın B-Y2'si (iki bileşen: taban √N, klima ~doğrusal) `eszamanlilik` yuvasına.
+2. Eşzamanlılık yok: R abone sayısına bağlı değil; Can'ın B-Y2'si (iki bileşen: taban √N, klima ~doğrusal) `eszamanlilik` yuvasına. Velander varsayılanı eklenmedi, çünkü ölçülü 120 trafoda R abone sayısına zayıf bağlı (ln R = 0,290 − 0,056 ln N, r −0,40) ama ölçülmeyen 280 trafoda sapma abone kovalarına göre değişmiyor: ≤ 10 abone ortanca +%1,8, 10–25 +%4,9, 25–50 +%1,7, 50–100 +%4,8 [Hesap: şehir 1–10]; küçük trafoda yalnız yayılım geniş (P10 −%11). Düzeltme sapmayı azaltmazdı.
 3. Eğim Güney Kıbrıs'ın aylar arası farkından; gün gün eğim (sıcak dalga içi) ve Kuzey Kıbrıs farkı ölçülmedi; Can'ın 20 ev + sıcaklık fiti gelince değişir.
 4. Akşam gerilimi (`v_min_tepe_v`) tahmin edilmiyor; Can'ın sınavı okuyabiliyor; sonraki adım (hat boyu + tepe yükü ile düşüm).
 5. Tasarım sıcaklığı yalnız 3 yıllık seriden + 2 °C [Yorum]; 10 yıllık Lefkoşa serisi BULAMADIM (indirilmedi).
