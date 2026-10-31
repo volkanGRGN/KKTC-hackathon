@@ -28,7 +28,18 @@ python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
 
 Şehir başına ~10 saniye (Mac). Çıktının biçimi [docs/data/tablo-bicimi.md](docs/data/tablo-bicimi.md). EAC Excel'i (`data/raw/eac-profil-siniflari/`) ve `src/profiller.py` yoksa yer tutucu eğri, Lefkoşa ışınım dosyası (`data/raw/open-meteo-lefkosa/`) yoksa yapay ışınım kullanır ve bunu ekrana ve `ayar.json`'a yazar; yer tutucu şehir Faz 1 sınavına girmez.
 
-**Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Model, kaç ev ve harita geldikçe buraya eklenecek.
+Üretimden sonra `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak: Excel okuyucusu (`openpyxl`) kurulu değilse üretici sessizce yer tutucuya düşer (sanal ortamı açmadan çalıştırınca bir kez oldu).
+
+**Şablon modeli (Faz 2):**
+
+```bash
+python3 src/sablon.py data/synthetic               # her şehir: tahmin.csv, arketipler.csv, deney/ (5/10/20 ölçülü, şehirler arası)
+python3 src/sablon.py data/synthetic --sehir 7 --yalniz-ana
+```
+
+Şehir başına ~1 saniye. Yöntem [docs/method/modeling.md](docs/method/modeling.md); sınav `python3 src/sinav.py faz2 data/synthetic` (Can).
+
+**Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
 
 ## Repo haritası
 
