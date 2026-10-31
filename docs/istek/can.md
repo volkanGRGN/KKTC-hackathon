@@ -151,3 +151,9 @@ Ne: (1) Kart: docs/gorev/can-faz3-sinav-grafik.md (`sinav.py faz3` + kilit grafi
 Dosya: docs/gorev/can-faz3-sinav-grafik.md, ROADMAP.md (Faz 5)
 Neden: karar masası 16:50 iş sırası (4) ve 17:00 BİLGİ.
 Durum: bekliyor
+
+## KARAR 17:26 — `sinav.py faz2` saf tahmin satırının kesin tanımı (ADR-0008 madde 1 düzeltmesi)
+Karar: İki saf tahmin, model hangi bilgiyle koştuysa onunla karşılaştırılır: **faturasız** → ölçülü trafolarda Σ öğlen en düşük ÷ Σ tarife enerjisi × trafonun tarife enerjisi (tarife enerjisi = sınıf başına abone sayısı × sınıfın yıllık ortalaması, `sehir_uret.py` SINIFLAR; Kıb-Tek bunu bilir); **faturalı** → Σ öğlen ÷ Σ `yillik_tuketim_mwh` × trafonun `yillik_tuketim_mwh`. Geçme: modelin ortanca ve P90 hatası ilgili saf tahminden ≥ %25 düşük. "Σ abone" tanımı kaldırıldı (karışık şehirde otel = 1 abone, anlamsız).
+Neden: BUILD'in 1.2 ölçümü: Σ abone saf tahmini %176 hata veriyor, kıyas değil; tarife enerjili saf tahmin %23 / %82, faturalı %5,8 / %16. Model faturalıda geçiyor, faturasızda ortancada geçmiyor; ikisini de rakamıyla yaz, "KALDI" ise KALDI.
+Senden beklenen: `faz2`'ye iki satır ("saf tahmin (tarife)" ve "saf tahmin (fatura)"), `sablon.py --faturasiz` koşusunu da ölç; günlüğe.
+Durum: bekliyor
