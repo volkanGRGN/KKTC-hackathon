@@ -50,7 +50,7 @@ Geçme sınavı:
 - [x] 40 trafolu şehir ≤ 60 saniyede üretiliyor; aynı tohum aynı şehri veriyor (iki çalıştırma birebir). En uzun 16,1 sn (Mac); tohum: [can-faz1](docs/log/2026-10-31-can-faz1.md); [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
 - [x] Veri sağlaması: konut öğlen/akşam oranı 0,6–0,8; çarşı tepesi 11–14 arasında; otel Temmuz/Ocak 3–5×; çarşı Nisan tatil öğleni / iş günü öğleni 0,6–0,9 (EAC'de pazar ayrı yok; karar masası 31 Ekim; ilk taslak "pazar günü yarısından az" idi). 5/5: [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
 - [x] 7 tipin 7'si en az 3 trafoda var; 20 şehirde her tipten ≥ 60 trafo. En az sanayi 73: [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
-- [~] En az bir trafo bugün 259 V üstü (yöntemin görecek bir şeyi var); hiçbir trafo 216 V altı değil (benzetim bozuk değil). 259 V üstü 119/800 geçti; 216 V altı 3 trafo (en düşük 211,4 V, otel / uzun köy hattı / sanayi) → eşik karar masasında, Faz 2'yi bloklamıyor: [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
+- [x] En az bir trafo bugün 259 V üstü (yöntemin görecek bir şeyi var); hiçbir trafo 207 V altı değil (benzetim bozuk değil). Eşik 207 V (EN 50160 alt sınır; karar masası 31 Ekim; ilk taslak 216). 259 V üstü 119/800 geçti; 207 V altı 0/800 (216 V altı 3 trafo, en düşük 211,4 V, bulgu olarak günlükte): [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
 - [x] Windows'ta çalıştı ve çıktı UTF-8 (Can onayı): [can-faz1](docs/log/2026-10-31-can-faz1.md)
 - [x] Veri adımı: her aday için veri sözlüğünde satır ya da "elendi + neden"; indirilenlerin KAYNAK.txt'si eksiksiz: [veri sözlüğü](docs/data/data-dictionary.md), [can-faz1-veri](docs/log/2026-10-31-can-faz1-veri.md)
 
@@ -144,9 +144,9 @@ Geçme sınavı:
 
 Yapılacaklar:
 - Akış: Güney %47'sini atıyor → Kuzey'de 2.670 bekliyor, Kıb-Tek mahalleyi görmüyor → İngiltere 800 trafo, %80 → bizim uyarlama (öğlen + gerilim, Kıbrıs'a özel; **fotoğraf değil film**: bugün kurulumcu gerilimi tek noktada, tek gün ölçüyor, komşular panel ekledikçe baharda sınır aşılıyor ve kimse önceden görmüyor; biz trafonun gün ve mevsim boyu davranışını tahmin edip "kaç ev daha ekleyince sınıra gelir" sorusuna önceden cevap veriyoruz) → canlı harita → %40 kuralıyla yan yana yanlış yeşil → pilot (20–50 → 120–170 trafo, ~20 bin € + pens, baharda) → itirazlar ve triyaj.
-- Dürüstlük cümleleri: "%80 İngiltere'de gerçek veride; farazi şehir gösterim; Kıbrıs'taki doğruluğu pilot söyler." + temsil yanlılığı: "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz."
+- Dürüstlük cümleleri: "%80 İngiltere'de gerçek veride; farazi şehir gösterim; Kıbrıs'taki doğruluğu pilot söyler." + temsil yanlılığı: "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz." + gerçek veri ([ADR-0008](docs/decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md) madde 3): "Farazi şehir isabeti gerçek isabetin üst sınırıdır. Gerçek veride, İspanya'da 29 trafoda sınadık: yalnız müşteri sayısıyla ~%25, fatura bilgisiyle ~%10 ortanca hata. Kıbrıs'taki doğruluğu pilot söyler."
 - İtiraz slaydı (adalet, yanlış evet/hayır maliyeti, hesap verebilirlik, komşu etkisi, zamanla bozulma) → ret değil triyaj, insan onayı, itiraz eden ölçüm ister.
-- Kaynak slaydı; PDF ve ekran kaydı yedeği.
+- Kaynak slaydı (UKPN "Validation of PV Connection Assessment Tool" kapanış raporu, Ofgem, Mart 2015: bara gerilimi 248 V tasarım varsayımı, gündüz en düşük talep 200–400 W/müşteri, faz dengesizliği kentsel %25 / kırsal %50; [Faz 1 günlüğü](docs/log/2026-10-31-volkan-faz1.md) dış çapa); PDF ve ekran kaydı yedeği.
 
 Geçme sınavı:
 - [ ] 2 prova yapıldı, ikisi de ≤ 7 dakika.
