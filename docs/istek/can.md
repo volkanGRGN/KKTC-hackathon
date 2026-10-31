@@ -64,4 +64,4 @@ Sonuç: iki küçük düzeltmeyle birleştirilebilir.
 − Yukarıdaki iki KARAR'ın sinav.py kalemleri: süre ayrıntısına `isinim_kaynagi` / `profil_kaynagi`; aday = 0 trafo sayısı ve aday > 0 üzerinden tavan/sınır.
 ? Windows'ta ve kusurlu şehir senaryonla bende ölçülmedi (sahte şehirlerin bende yok); senin kanıtın geçerli.
 Senden beklenen: düzeltmeleri dala gönder, sonra sen birleştir (#5'ten sonra).
-Durum: düzeltmeler dalda 15:00 (de55442); birleştirme Can'ın onayını bekliyor
+Durum: yapıldı 15:05 (birleşti, f1b2a0c)
