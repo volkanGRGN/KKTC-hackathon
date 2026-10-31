@@ -201,6 +201,7 @@ _Z80 = st.NormalDist().inv_cdf(0.90)
 # Yük haritası (Faz 11, ADR-0014; karar masası 23:02 m. 4, 23:12): yıl tepesi (net) tahmini. Geçici eşik [Yorum].
 TEPE_HATA_ORTANCA_MAX, TEPE_HATA_P90_MAX = 0.15, 0.35
 TEPE_SAAT_TOLERANS_DK = 60
+V_AKSAM_MIN = V_ALT             # yük tarafının gerilim sorusu: akşam (tepe) en düşük ev gerilimi ≥ 207 V (karar masası 23:12)
 
 
 def _abone(r):
@@ -441,16 +442,24 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
 
     # 3c. Yük haritası (Faz 11): yıl tepesi, net, kW. Farazi bilgi; gerçek veri (İspanya Mayıs tepesi) madde.
     #     Ölçü kW ile: pf varsayımı (kVA) hatayı kirletmesin. Saat isabeti ±60 dk (bilgi).
-    tepe_sat = []
+    #     Yıl tepesi boş şehir (yaz / kış penceresi üretilemedi, `ayar.json` yil_tepe_kaynagi boş) sayılmaz.
+    tepe_sat, tepe_bos = [], []
     for s in sehirler:
         if not s.get('tepe') or 'tepe_yil_kw' not in s['cevap'][0]:
+            continue
+        if any(r['tepe_yil_kw'] == '' for r in s['cevap']):
+            tepe_bos.append(s['ad'])
             continue
         cevap = {r['trafo_no']: r for r in s['cevap']}
         for r in s['tepe']:
             if not int(r['olculdu']):
                 g = cevap[r['trafo_no']]
                 tepe_sat.append(dict(t=float(r['tepe_kw']), lo=float(r['tepe_kw_p10']), hi=float(r['tepe_kw_p90']),
-                                     g=float(g['tepe_yil_kw']), ts=r.get('tepe_saati'), gs=g.get('tepe_saati')))
+                                     g=float(g['tepe_yil_kw']), ts=r.get('tepe_saati'), gs=g.get('tepe_saati'),
+                                     vt=float(r['v_min_tepe_v']) if r.get('v_min_tepe_v') else None,
+                                     vg=float(g['v_min_tepe_v']) if g.get('v_min_tepe_v') else None))
+    if tepe_bos:
+        bilgi.append(f'yük haritası: yıl tepesi boş, sayılmadı: {", ".join(tepe_bos)} (yaz / kış penceresi üretilemedi)')
     if tepe_sat:
         h = [abs(x['t'] - x['g']) / x['g'] for x in tepe_sat if x['g'] >= GERCEK_MIN_KW]
         kt = kalibrasyon([(x['lo'], x['hi'], x['g']) for x in tepe_sat])
@@ -461,6 +470,15 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
                      + (f'; tepe saati ±{TEPE_SAAT_TOLERANS_DK} dk isabet '
                         f'{_oran(sum(d <= TEPE_SAAT_TOLERANS_DK for d in saat), len(saat))}' if saat else '')
                      + f'; n = {len(tepe_sat)}')
+        # Akşam gerilimi: "yeterli" (≥ 207 V) dediğimiz trafoda gerçekte altına iniyorsa yük tarafının yanlış yeşili.
+        v = [x for x in tepe_sat if x['vt'] is not None and x['vg'] is not None]
+        if v:
+            dusuk = [x for x in v if x['vg'] < V_AKSAM_MIN]
+            yeter = [x for x in v if x['vt'] >= V_AKSAM_MIN]
+            bilgi.append(f'akşam en düşük gerilim ≥ {V_AKSAM_MIN:g} V (farazi, gösterim): gerçekte altında {_oran(len(dusuk), len(v))}, '
+                         f'yakalanan {sum(x["vt"] < V_AKSAM_MIN for x in dusuk)}/{len(dusuk)}; "yeterli" dediğimiz {len(yeter)} '
+                         f'trafodan gerçekte altında {sum(x["vg"] < V_AKSAM_MIN for x in yeter)}; hata ortanca '
+                         f'{st.median(abs(x["vt"] - x["vg"]) for x in v):.1f} V')
     else:
         bilgi.append('yük haritası (tepe), farazi: ölçülmedi (tepe.csv ya da cevap anahtarında tepe_yil_kw yok; sözleşme 1.4)')
     if ispanya_tepe:
