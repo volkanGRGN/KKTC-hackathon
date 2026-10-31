@@ -949,3 +949,17 @@ Durum: bekliyor
 Karar: Karar masası Mac'te main ile PR #23'ün (f9d52bc) birleşik hâlini kendi ürettiği 1.3 şehirleri 1–10'da koştu (`sablon.py` → `kac_ev_olasilik.py` → `guvenli_uc.py --aralik 1-10`): aday evli 354 trafo, dolu 47; yeşil 20, **yanlış yeşil 0/20**; bayrak 20, **gerçekte dolu 15/20 (%75) ≥ %59 (ortalama p 0,78'in n toleranslısı) GEÇER**; bayrağın yakaladığı dolu 15/47; renksiz %88,7; eski kırmızının dolu payı %54,7 — BUILD 2 ve ADR-0017 tablosuyla birebir. `kac_ev.csv`'nin ilk 13 sütunu main'in çıktısıyla 400/400 satırda aynı, yalnız sonda `pv_uc` [Hesap: karar masası 00:31]. Eksi bulgu yok.
 Kalan: sözleşme §6 notu (1.4 adayı `pv_uc`) için Civan ya da Can GitHub onayı (civan.md 00:23). Onay gelince karar masası birleştirir (Volkan'ın sözü geçerli). #22 ile aynı dosyanın farklı bölümleri; #22 önce birleşirse dal güncellemesi gerekebilir.
 Durum: bekliyor (onay Civan / Can)
+
+## UYARI! 1 Kasım 00:36 — (BUILD 2 — panel) — Muhittin madde 5: (A) taslakta var; (B) inverter geri çözümü benzetimde: bara hep düşük çıkıyor, motorun bugünkü varsayımıyla yanlış evet %2,7 (PR #25) — test edin
+Ne: (A) Kıb-Tek taslağı madde 4'te trafo başına kademe ayarı ve devreye alma kaydı zaten var (00:14); yeni iş yok. (B) PR #20'de ve PR #22'de inverter kaydı "gerçek + gürültü" (±1 / ±2 V) idi; karar masası 23:03'ün düzeltmeleri (%20 kapsama, empedans yalnız inverterin hattında) PR #22 motorunda var, PR #20 betiğinde yok. Şimdi geri çözüm benzetimde gerçekten yapıldı (`inverter_geri_cozum.py`: yalnız gündüz, sabah ilk değer → bara). Bulgu [Hesap; farazi, gösterim]: **geri çözülen bara hep gerçekten düşük**, ortanca −0,8 V (1–10) / −1,0 V (21–30), P10 −2,15 V, ≤ 1 V evlerin %52–62'si; alt kuyruk P1 −5,4 V. Güvensiz yön. Uçtan uca, sınav 21–30 bir kez, kayıtlar iki kat hatalı:
+| | Hemen evet | Yanlış evet |
+|---|---|---|
+| R0 bugünkü sahte kayıt | %10,1 | %1,9 (14/722) |
+| R1 gerçek geri çözüm, motor aynı | %10,8 | **%2,7** (21/772, 11 trafo) |
+| R2 gerçek geri çözüm, motor 1–10'da ölçülen hata dağılımıyla | %9,6 | **%1,3** (9/692, 5 trafo; aralık %0,7–2,5) |
+Beklenen kayıtta R1 %0,9 → R2 %0,3; yanlış yeşil her yerde 0. Ayrıca PR #20'nin sakin anı (05:00–06:30) adımlarının üçte birinde inverter uyuyor.
+Eksi: (1) PR #22'nin iki kat kuralı bu kaymayı kapsamıyor; gerçekçi inverter kaydıyla sınır aşılıyor. (2) R2'de de güvenle %2 altı değil (üst aralık %2,5). (3) Hat empedansı geri çözümü (eğim → eşdeğer boy) yapılmadı; eğim günden güne çok oynuyor (ortanca %21–23, P90 ~%100), empedans kaydı hâlâ gerçek ± gürültü.
+Soru: motor inverter barasını ölçülmüş kaymayla mı kullansın (R2; bedel hemen evet −1 puan), yoksa inverter barası pilotta gece seviyesi (akıllı priz, Faz 10 P7) aynı evde ölçülene kadar hiç kullanılmasın mı?
+Dosya: PR #25 (taban PR #22; https://github.com/volkanGRGN/KKTC-hackathon/pull/25), docs/log/2026-11-01-volkan-panel-inverter-geri-cozum.md (dalda)
+Neden: Muhittin 4 madde 5; karar masası 22:56 / 23:03; BUILD 2 görevi.
+Durum: bekliyor
