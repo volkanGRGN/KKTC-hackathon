@@ -1111,3 +1111,12 @@ Karar: Volkan (01:2x): "sen onayla" → PR #27 GitHub'da Volkan hesabıyla onayl
 4. **ADR-0019:** BUILD 1'in ölçümüyle (güven etiketi hatayı ayırmıyor, güvenlik zaten bantta; karşı-olgu yeşil 17 → 47, yanlış yeşil 0) yeşil ve başvuru anı "evet" kapısında "güven yüksek" şartı kalkar; yürürlük şartı BUILD 2'nin uygulaması ve **dokunulmamış 1.5 şehirleri 31–40'ta bir kez** yanlış yeşil kapısının tutması (TEST tekrarlar).
 5. **BUILD 1 sıradaki:** (a) KARAR 01:25 madde 1 (sistem puantı sağlaması), madde 3 (güç katsayısı duyarlılığı) ve KTEMO günlüğü; (b) #27 birleşti: `tepe.py` ve akşam gerilimini üretici 1.5 şehirlerinde (1–10 ayar, 31–40 bir kez) koş, sonucu günlüğe.
 Durum: bekliyor (BUILD 2: #25 düzeltmesi, ADR-0019 uygulaması; BUILD 1: 5; onaylar: Can / Civan)
+
+## UYARI! 1 Kasım 01:28 — (BUILD 1 — yük) — Üretici 1.5'te yük modeli tutuyor (yöntem değişmedi); sistem tepe ÷ ortalama: üretici 1,95, model 2,30, Kıb-Tek 1,76; PR #31
+Ne: KARAR 01:22 (a) ve 01:25 (madde 1, 3, KTEMO günlüğü). Yük modeli (PR #24 / #26 / #29) üretici 1.5 şehirlerinde koşuldu, ayar yapılmadı [Hesap; farazi]: yılın tepesi 1–10 %7,5 / %18,4 (P90 üstü 1/280, otel), **31–40 bir kez %6,7 / %15,3, P90 üstü 0**; akşam gerilimi 31–40 hata 3,5 V, 207 V altı 2/2 yakalandı, "yeterli" 232'de 0 yanlış; uyarı 1.4'teki 107'den 48'e indi (1.5'in hat tasarımı). Sistem karşılaştırması (1–10): toplam yükün tepe ÷ yıllık ortalaması üretici 1,95, model (trafo tahminlerinin eşzamanlı toplamı) 2,30; **Kıb-Tek 2022 1,76** (368 MW ÷ 1.836 GWh; KTEMO'daki Kıb-Tek sunumu, slayt 38).
+Eksi: model şehir toplamında %31 sivri: trafo başına bilerek yukarıda ve R ev ev dalgalanmayı içeriyor; trafo tahminleri toplanarak fider / sistem tepesi bulunmaz. Üretici %11 sivri. Kıyas kaba (ada sanayi ve turizm içerir; Kıb-Tek GWh üretim tabanlı; çatı paneli öz tüketimi yok).
+Ayrıca: KTEMO günlüğü ve kaynak kaydı (adres, SHA-256, sayfa / slayt); sözleşme §8 `pf_varsayim` notu (0,90 ile `tepe_kva` +%5,6).
+Soru: Üreticinin yıl tepesi ÷ ortalamasını Kıb-Tek 1,76'ya çapalayalım mı (üretici 1.6, Can), yoksa Kıb-Tek'in saatlik sistem yükü (istek metni madde 8) gelene kadar not olarak mı kalsın (öneri: not; tek sayı kaba)?
+Dosya: PR #31 (https://github.com/volkanGRGN/KKTC-hackathon/pull/31; #29'un üstünde), docs/log/2026-11-01-volkan-yuk-uretici15.md, docs/log/2026-11-01-volkan-ktemo-tarama.md (dalda)
+Neden: KARAR 01:22, 01:25.
+Durum: bekliyor
