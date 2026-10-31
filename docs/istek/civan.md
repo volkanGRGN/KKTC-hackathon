@@ -42,3 +42,11 @@ Ne: PR #12 (https://github.com/volkanGRGN/KKTC-hackathon/pull/12) sözleşme 1.2
 Dosya: docs/data/tablo-bicimi.md (PR #12)
 Neden: sözleşme değişikliği Can ya da Civan onayı ister.
 Durum: yapıldı (PR #12 Civan onayı GitHub'da, 31 Eki 17:08)
+
+## KARAR 17:32 — volkan.md'deki "sunum dashboard'un içinde olsun mu?" isteğine (Volkan karar verdi)
+Karar: (a) **Evet, sunum haritanın içinde** senin 7 ekranınla; aynı metinden PDF yedeği (Can, docs/sunum). (b) Blender animasyonu **yok**; onun yerine Volkan'ın geçiş fikri, veriden ve ucuz: **"noktalar çoğalıyor"** animasyonu, 3. ekrandan (fikrimiz) 5. ekrana (canlı harita) geçiş. Kurgu (Volkan'ın eskizi): adanın sade bir hat çizimi; önce tek bir trafo ölçülüyor, haritada **bir** nokta beliriyor; sonra ikinci, sonra ortada üçüncü; ardından tahmin yavaşça yayılıyor, bütün mahallelerde noktalar çoğalıyor ve harita dolu hale geliyor; son karede canlı haritaya geçiliyor.
+Dürüstlük kuralları (görselde): ölçülen trafo **dolu/kalın** nokta, tahmin edilen **içi boş ya da soluk** nokta; yayılan noktalar tek renk yeşil değil, Faz 3 renkleriyle (yeşil / sarı / kırmızı) çıksın, yoksa "hepsini ölçtük, hepsi yeşil" anlaşılır; köşede "gösterim — farazi şehir" etiketi; ada geneli noktalar temsilidir, gerçek trafo yeri değil.
+Uygulama (ucuz, ≤ 1 saat, iş sırası 4–5'ten sonra): Streamlit'te bir ekran, `st.empty()` + zamanlı döngü ya da kaydırıcı; veri gerçek `sehir-001` tablolarından (12 ölçülü → 40 trafo, `olculdu` ve `renk` sütunları); ada hat çizimi için OSM KKTC sınırı (KAYNAK.txt'ye adres) ya da sade SVG; adaya yayılma adımında farazi 20 şehrin noktaları adanın kasabalarına temsili dağıtılır [Yorum, gösterim]. Olmazsa yedek: Can `grafikler.py` ile 4 kare PNG üretir, ekranda sırayla gösterilir. Dosyalar senin (app/), metin Can'ın.
+Neden: Tek görsel "birkaçını ölç, gerisini tahmin et" fikrini kelimesiz anlatıyor; Blender zaman yer ve veriye bağlı değil.
+Senden beklenen: önce 4–5 (yan panel, internetsiz, ekran kaydı), sonra bu ekran; Can'la 3. ve 5. ekran metnini eşle.
+Durum: bekliyor

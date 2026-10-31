@@ -191,7 +191,7 @@ Neden: tek ekran, slayttan haritaya geçiş yok; rakamlar veriden gelir;
 teknik terimler (arketip, kVA, P10) sunum dilinde yok.
 Karar gereken: (a) sunum dashboard'da mı, slaytta mı;
 (b) animasyona zaman ayrılsın mı (iş sırası 4–5 öncelikli kalır).
-Durum: Yalnız Volkan (sunum hikâyesi) — Volkan'a soruldu 17:26; karar masası önerisi: 7 ekran dashboard'da evet + PDF yedeği aynı metinden, animasyon hayır
+Durum: karar verildi 17:32 (Volkan) → civan.md + can.md: dashboard içinde ekranlar, geçiş animasyonu Volkan'ın "noktalar çoğalıyor" fikri, Blender yok
 
 ## UYARI! 31 Eki 17:17 — BUILD'den — Faz 3: ADR-0010'daki "kırmızı = karamsar sınırı aşıyor" hangi okuma?
 Ne: `kac_ev.py` (PR #13) yeşil kuralı tuttu: sınav şehirleri 11–20'de yanlış yeşil 0/21 (%40 kuralı 41/284 = %14; dolu 74 trafonun 41'ine "yer var"). Kırmızı için metin üç türlü okunuyor, sınav 11–20 (347 trafo, 74 dolu): (a) **karamsar_yeni_ev** (bekleyen ev hattın ucunda sığmıyor; düz okuma, şu an varsayılan): kırmızı %68, yanlış kırmızı %69, dolu yakalanan 74/74, sarı %26; (b) **karamsar_bugun** (karamsar senaryoda yeni panelsiz bugün aşıyor): kırmızı %31, yanlış kırmızı %42, dolu yakalanan 61/74, sarı %63; (c) **beklenen_bugun** (her belirsizliğin ortasında bugün aşıyor): kırmızı %3, yanlış kırmızı %17, dolu yakalanan 10/74, sarı %90. Yeşil üçünde aynı. Sebep: dolu trafoların hemen hepsi bugün zaten 259 V üstünde ve bunu en çok ±4 V bilinmeyen bara gerilimi belirliyor; hiçbir eşik ikisini birden iyi yapmıyor. Önerim (b): kırmızı = "karamsar senaryoda bugün bile sınırda; önce ölç ya da güçlendir"; dolu trafoların %82'si kırmızı, sarı %63. (a) haritayı jüriye "her konut ve köy trafosu kırmızı" gösterir (kırmızıların üçte ikisinde yer var). Kod tek satır (`KIRMIZI_KURALI`).

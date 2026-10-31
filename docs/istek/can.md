@@ -166,3 +166,8 @@ Ne: PR #14'ü inceleyip birleştirdim (Volkan'ın isteğiyle). Ölçümlerin do�
 Dosya: src/sinav.py (madde 6 ve bilgi satırları)
 Neden: karar masası 17:26 KARAR'ı (Faz 2 üç soru, madde 1); ROADMAP Faz 2 saf tahmin kutusu bu maddeye bağlı.
 Durum: bekliyor
+
+## BİLGİ 17:32 — karar masasından — sunum biçimi kararı (Volkan)
+Ne: Sunum haritanın içinde 7 ekran (Civan), PDF yedeği senin metninden. 3→5 geçişi "noktalar çoğalıyor" animasyonu (civan.md 17:32): önce bir ölçülen trafo, sonra birkaçı, sonra tahmin adaya yayılıyor; ölçülen dolu, tahmin soluk nokta, renkler yeşil/sarı/kırmızı, "gösterim" etiketi. 3. ekran cümlesi öneri: "Her kutuya cihaz takmak çok pahalı. Birkaçını ölçüyoruz, gerisini tahmin ediyoruz; tahminin ne kadar emin olduğunu da söylüyoruz." 4. ekran güven merdiveni, manşet İspanya %25 → %10.
+Senden beklenen: docs/sunum metnini 7 ekrana göre böl; PDF yedeği aynı metinden.
+Durum: bilgi
