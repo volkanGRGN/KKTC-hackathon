@@ -1019,3 +1019,11 @@ Tekrar: main + #24 ile 1–10 / 21–30 üret → `python3 src/tepe.py <kök> --
 Dosya: PR #24 (855a6c3), PR #26 (1e158e1), docs/log/2026-11-01-volkan-yuk-tepe-on.md "Ek" (dalda)
 Neden: KARAR 00:50.
 Durum: bekliyor
+
+## UYARI! 1 Kas — Can'dan — Üretici 1.5 hazır: PR #27 (taban PR #21); Mac koşumu ve onay
+Ne: Karar masası 23:35 (2). `uretici/1.5` (PR #27, https://github.com/volkanGRGN/KKTC-hackathon/pull/27; önce PR #21 birleşmeli). Üç değişiklik: trafo gücü yılın tepesinden (yaz tasarım payı, büyük abonenin büyüklüğü, 1.600 / 2.500 kVA); büyük abone baradan kendi kablosuyla (1.4'teki otel aşımı ve gerilim çöküşünün sebebi ortak hattaki büyük akımdı); hat akşam tepesine göre (kesit, bölme). Sonuç, sınav şehirleri 31–40 (bir kez): yıl tepesi ÷ güç P50 / P90 **0,43 / 0,67** (Malta 0,42 / 0,74), aşan **%0,8** (Malta %1,5; 1.4 %4,3), 207 V altı **%0,5**, en düşük **202,8 V** (1.4: 162,8). faz2 / faz3 GEÇTİ (yanlış yeşil 0/28).
+İki açık nokta: (1) **faz1 üretim süresi KALDI** (en uzun 112 sn): makine yükü, 1.4 kodu aynı anda aynı şehirde 70,6 sn (1.5: 73,4 sn) → Mac'te boş makinede ölç. (2) **Doğru arketip ortancası %75,0**, eşikte (21–30'da %89,3; en kötü sehir-033 %42,9); sebep bilinmiyor [Yorum], 1.5 ölçülü trafo eğrisini değiştirmemeli — karar masası baksın. Dalın şablonu K_YUK 1,27 (main 1,47); PR #21 tabanı.
+Sınav kodu benim, modeli de ben yazdım: öneren ≠ puanlayan → Mac koşumu ve onay karar masası / Civan / BUILD.
+Dosya: PR #27; docs/log/2026-11-01-can-uretici-1.5.md (dalda)
+Neden: yük haritası gerçekçi şebekede sınanmalı; tepe modeli (B-Y2) 1.5 şehirlerinde kurulacak. Bloklamıyor.
+Durum: bekliyor
