@@ -164,11 +164,11 @@ Yapılacaklar — kod:
 - İsteğe bağlı: tıklanan trafonun sonucunu düz Türkçeyle anlatan açıklama katmanı (dil modeli; ambalaj, asıl değer değil).
 
 Geçme sınavı:
-- [ ] Tıklama ile yan panel ≤ 1 saniyede açılıyor; 40 trafoda takılma yok.
-- [ ] Yan paneldeki sayılar Faz 3 tablosuyla birebir (3 trafo elle kontrol).
-- [ ] İnternet kapalıyken açılıyor; 2 dakikalık ekran kaydı var.
-- [ ] Windows ve Mac'te çalıştı; README'de komut.
-- [ ] En az 3 şehir seçilebiliyor; "örnek veri" etiketi her ekranda.
+- [ ] Tıklama ile yan panel ≤ 1 saniyede açılıyor; 40 trafoda takılma yok. — Mac (BUILD, 20:55): 6 tıklamada 0,35–0,40 sn; 40'ın hepsi denenmedi.
+- [x] Yan paneldeki sayılar Faz 3 tablosuyla birebir (3 trafo elle kontrol). — Mac (BUILD, 20:55): 3 şehirde 6 trafo birebir; renk sayıları aynı. Dil 19:13 kararına göre değil ve %40 kuralının ev sayısı aday evden fazla çıkabiliyor (civan.md KONTROL 20:55).
+- [ ] İnternet kapalıyken açılıyor; 2 dakikalık ekran kaydı var. — Mac (BUILD, 20:55): OSM zemin dosyasıyla 98/98 istek yerel, dışarıya istek yok; ağ fiilen kapatılmadı; zemin dosyası depoda yok, sunum bilgisayarına indirilmeli. Ekran kaydı yok.
+- [ ] Windows ve Mac'te çalıştı; README'de komut. — Mac çalıştı (BUILD, 20:55; streamlit 1.66.1); Windows denenmedi; README'de komut var.
+- [x] En az 3 şehir seçilebiliyor; "örnek veri" etiketi her ekranda. — Mac (BUILD, 20:55): 001, 011, 020 seçildi; etiket her şehirde.
 
 ## Faz 5 — Sunum ve prova: hikâye, canlı gösteri, itirazlara hazır cevap
 

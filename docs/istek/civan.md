@@ -79,3 +79,24 @@ Karar: Can'ın ölçümü: olasılıklı hesapta karamsar sayı (çekilişlerin 
 Neden: ADR-0010'un vaadi yeşil kuralında (%98), sayıda değil; P10 "en az" diye yazılırsa trafoların %15'inde yanlış yönde söz vermiş oluruz.
 Senden beklenen: metin değişikliği, ≤ 15 dk; öncelik sırası aynı.
 Durum: bekliyor
+
+## KONTROL 20:55 — BUILD'den (Mac) — Faz 4 sınavı, Mac kısmı (karar masası 20:47)
+Ne ölçüldü: main'deki `app/` (son değişikliğin 17:28), Mac, Python 3.12, streamlit 1.66.1, pydeck 0.9.3. Şehirler sehir-001, -011, -020 (olasılıklı `kac_ev.csv`, sözleşme 1.3). BUILD `app/`'e dokunmadı.
+- **+ Sayılar tabloyla birebir.** 6 trafo: 001 T16, T37, T18; 011 T27; 020 T33, T24. Renk, kaç ev aralığı, %40 kuralı, sınırı belirleyen, kVA / bölge / montaj / abone / panel, ölçüldü / güven, öğlen yükü bandı `kac_ev.csv`, `trafolar.csv`, `tahmin.csv` ile aynı. Renk sayıları üç şehirde de aynı (001: 13 / 22 / 5; 011: 15 / 25 / 0; 020: 13 / 27 / 0).
+- **+ Tıklama hızlı.** 6 tıklamada yan panel 351–399 ms'de açıldı (sınır 1 sn). 40 trafonun hepsi denenmedi.
+- **+ 3 şehir seçilebiliyor;** "örnek veri (farazi şehir) — gösterim" her şehirde.
+- **+ İnternetsiz.** OSM zemin dosyası varken sayfa 98 isteğin 98'ini localhost'tan aldı, dışarıya istek yok. Ağ fiilen kapatılmadı. **Dikkat:** `data/raw/osm-kasaba/girne_merkez.json` depoda yok (gitignore). Sunum bilgisayarında önceden indirilmiş olmalı, yoksa zemin internetten gelir. BUILD KAYNAK.txt'deki komutla indirdi: 1.304 öğe, senin sağlamanla aynı.
+- **− Dil 19:13 kararına göre değil** (KARAR 19:13 hâlâ "bekliyor"):
+  - kaç ev "16–17 ev" diye yazıyor; manşet `kac_ev_orta` yok. Olmalı: "yaklaşık 17 ev (16–17)", küçük yazı "%80 ihtimalle";
+  - yeşil cümlesi "En kötü durumda bile yer var". Olmalı: "İlk 2 başvuru güvenle sığar (≥ %98)";
+  - %40 karşılaştırma metinleri ("en kötü durumdan bile az", "en iyimser tahminimizden fazla") karamsar ve iyimseri taban ve tavan gibi okuyor. Öneri: "aralığımızın altında / üstünde";
+  - sütun boyu karamsar sayı; orta sayı önerilir (karar masasının).
+- **− %40 kuralının ev sayısı, panel takabilecek evden fazla çıkabiliyor.** `kural40_ev` = kalan kW payı ÷ 6,5 (sözleşme §6); panelsiz konut sayısıyla kesilmiyor.
+  - Örnek sehir-001 T30: 400 kVA, 15 konut abonesi, 2'si panelli, yani aday 13. Panel "Bugünkü kural (%40): 23 ev — en iyimser tahminimizden fazla" diyor; bizim aralık 10–13.
+  - 20 şehirde aday > 0 olan 701 trafonun 241'inde kuralın sayısı aday evden fazla [Hesap].
+  - Doğru cümle: "kural panelsiz 13 evin hepsine izin veriyor (23 evlik yer)".
+  - BUILD önerisi: sözleşme ve sınav değişmeden, panelde min(`kural40_ev`, aday) göster; aşıyorsa "hepsine izin veriyor (N evlik yer)". Sınavın %40 ölçüsü (`kural40_ev` ≥ 1) etkilenmez.
+- **? Denenmedi:** Windows, 2 dakikalık ekran kaydı, 40 trafonun hepsi, ağ fiilen kapalıyken açılış.
+Dosya: app/harita.py (senin)
+Neden: ROADMAP Faz 4 geçme sınavı, karar masası 20:47 (2). Bloklamıyor; dil ve %40 cümlesi sunumda görünen yer.
+Durum: bekliyor
