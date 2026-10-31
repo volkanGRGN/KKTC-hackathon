@@ -1,6 +1,6 @@
 # ADR-0015: Başvuru-anı motoru durumlu ve haritayla aynı model; sarı düz renk değil sayı + konum; işletme kaldıraçları ayrı kategori
 
-Tarih: 2026-10-31 · Durum: kabul (sunum sonrası, Faz 8) · ADR-0012 üstüne (onu tamamlar) · kaynak: Muhittin'in üçüncü cevabı, 4. madde ([günlük](../log/2026-10-31-muhittin-cevap-3-veri-dongusu.md)) · karar masası 21:20
+Tarih: 2026-10-31 · Durum: kabul (sunum sonrası, Faz 9) · ADR-0012 üstüne (onu tamamlar) · kaynak: Muhittin'in üçüncü cevabı, 4. madde ([günlük](../log/2026-10-31-muhittin-cevap-3-veri-dongusu.md)) · karar masası 21:20
 
 ## Bağlam
 ADR-0012 sarı trafoda kararı başvuru anında, başvuranın adresiyle vermeyi seçti (sınanmadı). Muhittin güçlü onayladı: sarının %41 tabanı model cehaleti değil gerçek konumsal serbestlik; hiçbir trafo düzeyi veri bunu kaldırmaz, ancak başvuranın gerçek konumu kaldırır. Üç dikkat noktası ve tamamlayıcı yollar ekledi.
@@ -13,5 +13,5 @@ ADR-0012 sarı trafoda kararı başvuru anında, başvuranın adresiyle vermeyi 
 5. **İşletme kaldıraçları ayrı kategori:** izin varsa kademe ayarı, faz dengeleme, inverter volt-var ile "sarı → ucuz aksiyonla yeşil"; ürün bunu ayrı etiketle gösterir, vaat etmez. Uzmana soru 10: Kıb-Tek'te bu üç kaldıraç için izin / uygulama var mı?
 
 ## Sonuçlar
-- ROADMAP Faz 8 (Kıb-Tek kayıtları + başvuru-anı) bu beş maddeyle; Faz 10 kartına sarı "sayı + konum" gösterimi (Civan).
+- ROADMAP Faz 9 (Kıb-Tek kayıtları + başvuru-anı) bu beş maddeyle; Faz 11 kartına sarı "sayı + konum" gösterimi (Civan).
 - Sunumda değişiklik yok; jüri cevabındaki "sınanmadı" etiketi kalır.

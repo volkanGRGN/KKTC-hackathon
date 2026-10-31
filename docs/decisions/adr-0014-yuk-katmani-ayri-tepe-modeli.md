@@ -14,4 +14,4 @@ Harita panele özgü kalmamalı (Volkan, 31 Ekim). Malta'nın haritası her traf
 
 ## Sonuçlar
 - Sözleşme 1.4 adayı: `tepe_kva` + P10/P90 + `pf_varsayim`; `sablon.py` ya da ayrı `tepe.py` (ana oturum); Can `sinav.py faz2`'ye tepe maddesi (geçici eşik ortanca ≤ %15 / P90 ≤ %35 [Yorum]); Civan kart görünümü.
-- ROADMAP "sunum sonrası" Faz 10 (karar masası 21:15).
+- ROADMAP "sunum sonrası" Faz 11 (karar masası 21:15; yeniden numara 21:25).
