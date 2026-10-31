@@ -5,6 +5,7 @@ Modeli ya da üreteci yazan sınavı yazmaz (CONTRIBUTING); bu dosya Can'ın. Ok
 docs/data/tablo-bicimi.md sözleşmesinde.
 
 Çalıştırma: python3 src/sinav.py faz1 data/synthetic
+           python3 src/sinav.py faz2 data/synthetic [--aralik 11-20]   (tahmin.csv: src/sablon.py)
 Her madde için GEÇTİ / KALDI ve rakam yazar; hepsi geçerse çıkış kodu 0.
 """
 import csv
@@ -43,7 +44,10 @@ def sehirleri_oku(kok):
         if ayar.get('profil_kaynagi') == 'yer_tutucu':
             atlanan.append((k.name, 'profil_kaynagi = yer_tutucu'))
             continue
-        sayilan.append(dict(ad=k.name, ayar=ayar,
+        if ayar.get('veri_turu') == 'gercek':
+            atlanan.append((k.name, 'veri_turu = gercek (farazi şehir sınavına girmez)'))
+            continue
+        sayilan.append(dict(ad=k.name, no=int(ayar.get('sehir', k.name[6:])), klasor=k, ayar=ayar,
                             trafolar=_csv(k / 'trafolar.csv'),
                             cevap=_csv(k / 'cevap_anahtari.csv')))
     return sayilan, atlanan
@@ -131,21 +135,300 @@ def faz1(sehirler):
         bilgi.append('kac_ev_sinir (aday > 0): ' + ', '.join(f'{k} {sinir.get(k, 0)}' for k in ('gerilim', 'isil', 'yok')))
         tavan = sum(int(r['kac_ev_tavan']) for r in adayli)
         bilgi.append(f'kac_ev_tavan = 1 oranı (aday > 0): {tavan / len(adayli):.3f} ({tavan}/{len(adayli)})')
+
+    # ADR-0008: konut trafolarında abone başına öğlen yükünün trafodan trafoya değişimi (hedef CV 0,3–0,4).
+    cv_sehir, havuz = [], []
+    for s in sehirler:
+        abone = {r['trafo_no']: _abone(r) for r in s['trafolar']}
+        x = [float(r['ogle_min_kw']) / abone[r['trafo_no']] for r in s['cevap']
+             if r['tip'] == 'sehir_konutu' and abone.get(r['trafo_no'])]
+        havuz += x
+        if len(x) > 1:
+            cv_sehir.append(_cv(x))
+    if cv_sehir:
+        bilgi.append(f'şehir konutu trafolarında abone başına öğlen yükü CV (ADR-0008, hedef 0,3–0,4): '
+                     f'şehir içi ortanca {st.median(cv_sehir):.2f} (şehirler {min(cv_sehir):.2f}–{max(cv_sehir):.2f}), '
+                     f'havuz {_cv(havuz):.2f}; abone başına ortanca {1000 * st.median(havuz):.0f} W')
+    return m, bilgi
+
+
+ABONE = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm', 'abone_sanayi1', 'abone_sanayi2',
+         'abone_su_motoru']
+# Abone başına yıllık MWh: Kıb-Tek 2023 tarife sınıfı tüketimi ÷ abone [Kaynaklı: Kıb-Tek 2023 istatistik,
+# data/raw/kibtek-istatistik/; sablon.py ile aynı kaynak, sınav kendi kopyasını tutar]. Yalnız saf tahmin bilgisi.
+MWH_ABONE = {'abone_konut': 648494 / 175577, 'abone_ticari1': 210978 / 20950, 'abone_ticari2': 169496 / 494,
+             'abone_turizm': 215147 / 171, 'abone_sanayi1': 22391 / 1227, 'abone_sanayi2': 95996 / 352,
+             'abone_su_motoru': 51256 / 3250}
+GERCEK_MIN_KW = 1.0             # gerçek öğlen yükü bunun altındaysa göreli hata anlamsız: atla, say
+ARKETIP_MIN = 0.75
+HATA_ORTANCA_MAX, HATA_P90_MAX = 0.15, 0.30
+KAPSAMA = (0.70, 0.90)
+CAPRAZ_MAX = 1.5
+DUSUK_GUVEN_MAX = 0.25
+SAF_FARK = 0.25                 # ADR-0008: model, saf tahminden ortanca ve P90'da en az %25 düşük
+
+
+def _abone(r):
+    return sum(int(r.get(a) or 0) for a in ABONE)
+
+
+def _cv(x):
+    return st.pstdev(x) / st.mean(x) if len(x) > 1 and st.mean(x) else float('nan')
+
+
+def _p90(x):
+    return st.quantiles(x, n=10, method='inclusive')[-1] if len(x) > 1 else x[0]
+
+
+def _yuzde(x):
+    return f'%{100 * x:.1f}'
+
+
+def _hatalar(tahmin, gercek):
+    """Ölçülmeyen trafolarda göreli hata. (hata listesi, atlanan sayısı)."""
+    h, atla = [], 0
+    for r in tahmin:
+        if int(r['olculdu']):
+            continue
+        g = gercek[r['trafo_no']]
+        if g < GERCEK_MIN_KW:
+            atla += 1
+            continue
+        h.append(abs(float(r['ogle_min_kw']) - g) / g)
+    return h, atla
+
+
+def faz2_oku(s):
+    """Faz 2 dosyalarını şehir sözlüğüne ekler; eksikse eksik dosya adını döner."""
+    k = s['klasor']
+    if not (k / 'tahmin.csv').exists() or not (k / 'arketipler.csv').exists():
+        return 'tahmin.csv / arketipler.csv yok'
+    s['tahmin'] = _csv(k / 'tahmin.csv')
+    s['arketip'] = {}
+    for r in _csv(k / 'arketipler.csv'):
+        if r['gun_turu'] == 'isgunu':
+            s['arketip'].setdefault(int(r['arketip']), [0.0] * 288)[int(r['adim'])] = float(r['oran'])
+    s['deney'] = {p.stem: _csv(p) for p in sorted((k / 'deney').glob('tahmin_*.csv'))}
+    # Gerçek küme için iş günü ortalama tüketim eğrisi (yalnız ölçülmeyen trafolar).
+    olcusuz = {r['trafo_no'] for r in s['tahmin'] if not int(r['olculdu'])}
+    top = {t: [0.0] * 288 for t in olcusuz}
+    gun = {t: set() for t in olcusuz}
+    with open(k / 'yuk_5dk.csv', encoding='utf-8', newline='') as fh:
+        for r in csv.DictReader(fh):
+            t = r['trafo_no']
+            if t in top and r['gun_turu'] == 'isgunu':
+                top[t][int(r['adim'])] += float(r['tuketim_kw'])
+                gun[t].add(r['gun'])
+    s['egri'] = {t: [v / len(gun[t]) for v in e] for t, e in top.items() if gun[t]}
+    return None
+
+
+def _gercek_kume(egri, arketip):
+    tepe = max(egri) or 1.0
+    e = [v / tepe for v in egri]
+    return min(arketip, key=lambda a: sum((x - y) ** 2 for x, y in zip(e, arketip[a])))
+
+
+def _saf(s, olcu):
+    """ADR-0008 saf tahmini: ölçülülerde Σ öğlen ÷ Σ olcu × trafonun olcu'su. olcu: trafo_no -> sayı."""
+    olculu = [r['trafo_no'] for r in s['tahmin'] if int(r['olculdu'])]
+    pay = sum(s['gercek'][t] for t in olculu)
+    payda = sum(olcu[t] for t in olculu)
+    if not payda:
+        return None
+    k = pay / payda
+    return [dict(trafo_no=t, olculdu='0', ogle_min_kw=k * olcu[t]) for t in s['gercek']
+            if t not in olculu]
+
+
+def _ozet(sehir_deger):
+    """{şehir: değer} -> (ortanca, (en kötü değer, şehir)) ; en kötü = en büyük."""
+    v = list(sehir_deger.values())
+    kotu = max(sehir_deger.items(), key=lambda x: x[1])
+    return st.median(v), (kotu[1], kotu[0])
+
+
+def faz2(sehirler):
+    """ROADMAP Faz 2 geçme sınavı + ADR-0008 saf tahmin. Yalnız ölçülmeyen trafolar (`olculdu` = 0)."""
+    m, bilgi = [], []
+    for s in sehirler:
+        s['gercek'] = {r['trafo_no']: float(r['ogle_min_kw']) for r in s['cevap']}
+        s['tip'] = {r['trafo_no']: r['tip'] for r in s['cevap']}
+
+    # 1. Doğru arketip oranı.
+    dogru = {}
+    for s in sehirler:
+        n = [int(r['arketip']) == _gercek_kume(s['egri'][r['trafo_no']], s['arketip'])
+             for r in s['tahmin'] if not int(r['olculdu']) and r['trafo_no'] in s['egri']]
+        if n:
+            dogru[s['ad']] = sum(n) / len(n)
+    orta = st.median(dogru.values())
+    kotu = min(dogru.items(), key=lambda x: x[1])
+    _madde(m, orta >= ARKETIP_MIN, f'doğru arketip oranı ortanca ≥ %{100 * ARKETIP_MIN:g}',
+           f'ortanca {_yuzde(orta)}, en kötü {_yuzde(kotu[1])} ({kotu[0]})')
+
+    # 2. Öğlen en düşük yük hatası: şehir başına ortanca ve P90, sonra şehirlerin ortancası ve en kötüsü.
+    h_ort, h_p90, atla_top, havuz = {}, {}, 0, []
+    for s in sehirler:
+        h, atla = _hatalar(s['tahmin'], s['gercek'])
+        atla_top += atla
+        s['hata'] = h
+        havuz += h
+        h_ort[s['ad']], h_p90[s['ad']] = st.median(h), _p90(h)
+    o, k = _ozet(h_ort)
+    p, kp = _ozet(h_p90)
+    _madde(m, o <= HATA_ORTANCA_MAX and p <= HATA_P90_MAX,
+           f'öğlen en düşük yük hatası ortanca ≤ %{100 * HATA_ORTANCA_MAX:g}, P90 ≤ %{100 * HATA_P90_MAX:g}',
+           f'ortanca {_yuzde(o)} (en kötü {_yuzde(k[0])} {k[1]}), P90 {_yuzde(p)} (en kötü {_yuzde(kp[0])} {kp[1]}); '
+           f'n = {len(havuz)}, gerçek < {GERCEK_MIN_KW:g} kW atlanan {atla_top}')
+
+    # 3. %80 bant kapsama.
+    kap, alt, ust = {}, 0, 0
+    for s in sehirler:
+        ic = []
+        for r in s['tahmin']:
+            if int(r['olculdu']):
+                continue
+            g = s['gercek'][r['trafo_no']]
+            lo, hi = float(r['ogle_min_kw_p10']), float(r['ogle_min_kw_p90'])
+            ic.append(lo <= g <= hi)
+            alt += g < lo
+            ust += g > hi
+        kap[s['ad']] = sum(ic) / len(ic)
+    orta = st.median(kap.values())
+    dusuk = min(kap.items(), key=lambda x: x[1])
+    yuksek = max(kap.items(), key=lambda x: x[1])
+    _madde(m, KAPSAMA[0] <= orta <= KAPSAMA[1], f'%80 bant kapsama ortanca %{100 * KAPSAMA[0]:g}–{100 * KAPSAMA[1]:g}',
+           f'ortanca {_yuzde(orta)}; şehirler {_yuzde(dusuk[1])} ({dusuk[0]}) – {_yuzde(yuksek[1])} ({yuksek[0]}); '
+           f'dışarıda kalan: P10 altı {alt}, P90 üstü {ust}')
+
+    # 4. Şehirler arası: capraz hata ortancası ÷ şehir içi hata ortancası.
+    oran = {}
+    for s in sehirler:
+        h = []
+        for ad, d in s['deney'].items():
+            if ad.startswith('tahmin_capraz_'):
+                h += _hatalar(d, s['gercek'])[0]
+        if h and h_ort[s['ad']]:
+            oran[s['ad']] = st.median(h) / h_ort[s['ad']]
+    if oran:
+        o, k = _ozet(oran)
+        _madde(m, o <= CAPRAZ_MAX, f'şehirler arası hata ÷ şehir içi hata ≤ {CAPRAZ_MAX:g}',
+               f'ortanca {o:.2f}, en kötü {k[0]:.2f} ({k[1]}); {CAPRAZ_MAX:g} üstü {sum(v > CAPRAZ_MAX for v in oran.values())} şehir')
+    else:
+        _madde(m, False, f'şehirler arası hata ÷ şehir içi hata ≤ {CAPRAZ_MAX:g}', 'deney/tahmin_capraz_*.csv yok')
+
+    # 5. Düşük güven oranı (aşarsa UYARI, KALDI değil; kart).
+    dg = {s['ad']: sum(r['guven'] == 'dusuk' for r in s['tahmin'] if not int(r['olculdu']))
+          / sum(not int(r['olculdu']) for r in s['tahmin']) for s in sehirler}
+    o, k = _ozet(dg)
+    ayr = f'ortanca {_yuzde(o)}, en kötü {_yuzde(k[0])} ({k[1]})'
+    _madde(m, True, f'düşük güven oranı raporlandı (hedef ≤ %{100 * DUSUK_GUVEN_MAX:g})',
+           ayr + ('' if o <= DUSUK_GUVEN_MAX else '; UYARI: hedefin üstünde, sebep BUILD günlüğünde'))
+
+    # 6. Saf tahmin (ADR-0008): Σ öğlen ÷ Σ abone × abone.
+    s_ort, s_p90 = {}, {}
+    for s in sehirler:
+        abone = {r['trafo_no']: _abone(r) for r in s['trafolar']}
+        saf = _saf(s, abone)
+        if saf:
+            h = _hatalar(saf, s['gercek'])[0]
+            s_ort[s['ad']], s_p90[s['ad']] = st.median(h), _p90(h)
+    mo, mp = st.median(h_ort.values()), st.median(h_p90.values())
+    so, sp = st.median(s_ort.values()), st.median(s_p90.values())
+    _madde(m, mo <= (1 - SAF_FARK) * so and mp <= (1 - SAF_FARK) * sp,
+           f'model saf tahminden (Σ öğlen ÷ Σ abone × abone) ortanca ve P90\'da ≥ %{100 * SAF_FARK:g} düşük',
+           f'model {_yuzde(mo)} / {_yuzde(mp)}, saf {_yuzde(so)} / {_yuzde(sp)} '
+           f'(fark {_yuzde(1 - mo / so)} / {_yuzde(1 - mp / sp)})')
+
+    # 7. Ölçülü / ölçülmeyen tip dağılımı (bilgi; ROADMAP: karşılaştırılmış, günlükte).
+    olc, olcz = Counter(), Counter()
+    fark = {}
+    for s in sehirler:
+        a = Counter(s['tip'][r['trafo_no']] for r in s['tahmin'] if int(r['olculdu']))
+        b = Counter(s['tip'][r['trafo_no']] for r in s['tahmin'] if not int(r['olculdu']))
+        olc.update(a)
+        olcz.update(b)
+        na, nb = sum(a.values()), sum(b.values())
+        fark[s['ad']] = sum(abs(a[t] / na - b[t] / nb) for t in TIPLER) / 2   # toplam varyasyon uzaklığı
+    o, k = _ozet(fark)
+    _madde(m, True, 'ölçülü / ölçülmeyen tip dağılımı karşılaştırıldı',
+           'ölçülü ' + ', '.join(f'{t} {olc[t]}' for t in TIPLER) + ' | ölçülmeyen '
+           + ', '.join(f'{t} {olcz[t]}' for t in TIPLER)
+           + f'; şehir başına fark (TV uzaklığı) ortanca {o:.2f}, en çok {k[0]:.2f} ({k[1]})')
+
+    # Bilgi (eşiksiz): saf tahminin iki başka tanımı (BUILD önerisi, volkan.md 17:03; karar gelene kadar madde
+    # ADR-0008 tanımıyla). Aynı ≥ %25 ölçütü yanında yazılır.
+    def _saf_bilgi(ad, olcu_fn):
+        d = {}
+        for s in sehirler:
+            olcu = olcu_fn(s)
+            saf = _saf(s, olcu) if olcu else None
+            if saf:
+                h = _hatalar(saf, s['gercek'])[0]
+                d[s['ad']] = (st.median(h), _p90(h))
+        if not d:
+            return f'saf tahmin {ad}: veri yok (sözleşme 1.2 öncesi şehir)'
+        fo, fp = st.median(v[0] for v in d.values()), st.median(v[1] for v in d.values())
+        gecer = mo <= (1 - SAF_FARK) * fo and mp <= (1 - SAF_FARK) * fp
+        return (f'saf tahmin {ad}: {_yuzde(fo)} / {_yuzde(fp)}; model bundan {_yuzde(1 - mo / fo)} / '
+                f'{_yuzde(1 - mp / fp)} düşük → ≥ %{100 * SAF_FARK:g} ölçütü {"geçer" if gecer else "geçmez"} ({len(d)} şehir)')
+
+    def _tarife(s):
+        return {r['trafo_no']: sum(int(r.get(a) or 0) * MWH_ABONE[a] for a in ABONE) for r in s['trafolar']}
+
+    def _fatura(s):
+        f = {r['trafo_no']: float(r['yillik_tuketim_mwh']) for r in s['trafolar'] if r.get('yillik_tuketim_mwh')}
+        return f if len(f) == len(s['trafolar']) else None
+
+    bilgi.append(_saf_bilgi('tarife enerjisiyle (Σ öğlen ÷ Σ abone × Kıb-Tek sınıf ortalaması)', _tarife))
+    bilgi.append(_saf_bilgi('faturayla (Σ öğlen ÷ Σ yillik_tuketim_mwh × fatura)', _fatura))
+    bilgi.append(f'havuz (bütün ölçülmeyenler): ortanca {_yuzde(st.median(havuz))}, P90 {_yuzde(_p90(havuz))}, n = {len(havuz)}')
+    guv = {}
+    for s in sehirler:
+        hata = iter(s['hata'])
+        for r in s['tahmin']:
+            if not int(r['olculdu']) and s['gercek'][r['trafo_no']] >= GERCEK_MIN_KW:
+                guv.setdefault(r['guven'], []).append(next(hata))
+    bilgi.append('güvene göre hata ortancası (yüksek < orta < düşük olmalı): ' + ', '.join(
+        f'{g} {_yuzde(st.median(guv[g]))} (n {len(guv[g])})' for g in ('yuksek', 'orta', 'dusuk') if g in guv))
+    tip_h = {}
+    for s in sehirler:
+        hata = iter(s['hata'])
+        for r in s['tahmin']:
+            if not int(r['olculdu']) and s['gercek'][r['trafo_no']] >= GERCEK_MIN_KW:
+                tip_h.setdefault(s['tip'][r['trafo_no']], []).append(next(hata))
+    bilgi.append('tip başına hata ortancası: ' + ', '.join(
+        f'{t} {_yuzde(st.median(tip_h[t]))} (n {len(tip_h[t])})' for t in TIPLER if t in tip_h))
     return m, bilgi
 
 
 def main():
     sys.stdout.reconfigure(encoding='utf-8')  # Windows'ta boruya yazarken cp1254 '≥' karakterinde çöküyordu
-    if len(sys.argv) < 3 or sys.argv[1] != 'faz1':
-        sys.exit('Kullanım: python3 src/sinav.py faz1 <şehir kökü, ör. data/synthetic>')
+    if len(sys.argv) < 3 or sys.argv[1] not in ('faz1', 'faz2'):
+        sys.exit('Kullanım: python3 src/sinav.py faz1|faz2 <şehir kökü, ör. data/synthetic> [--aralik 11-20]')
+    faz = sys.argv[1]
     sehirler, atlanan = sehirleri_oku(sys.argv[2])
+    if '--aralik' in sys.argv:
+        a, b = map(int, sys.argv[sys.argv.index('--aralik') + 1].split('-'))
+        sehirler = [s for s in sehirler if a <= s['no'] <= b]
+    if faz == 'faz2':
+        kalan = []
+        for s in sehirler:
+            eksik = faz2_oku(s)
+            if eksik:
+                atlanan.append((s['ad'], eksik))
+            else:
+                kalan.append(s)
+        sehirler = kalan
     for ad, neden in atlanan:
         print(f'UYARI: {ad} sayılmadı ({neden})')
     if not sehirler:
         sys.exit(f'{sys.argv[2]} altında sınava girecek şehir yok.')
     trafo = sum(len(s['cevap']) for s in sehirler)
-    print(f'Faz 1 geçme sınavı: {len(sehirler)} şehir, {trafo} trafo\n')
-    maddeler, bilgi = faz1(sehirler)
+    print(f"Faz {faz[-1]} geçme sınavı: {len(sehirler)} şehir ({sehirler[0]['ad']}…{sehirler[-1]['ad']}), {trafo} trafo"
+          + (' — gösterim, farazi şehirler' if faz == 'faz2' else '') + '\n')
+    maddeler, bilgi = (faz1 if faz == 'faz1' else faz2)(sehirler)
     for gecti, ad, ayrinti in maddeler:
         print(f"[{'GEÇTİ' if gecti else 'KALDI'}] {ad}: {ayrinti}")
     print('\nBilgi:')
