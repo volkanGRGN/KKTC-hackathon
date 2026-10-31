@@ -3,9 +3,15 @@
 Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı söyler. Aynı kuralların ajan dili [CLAUDE.md](CLAUDE.md); ikisi çelişmez, biri değişirse öteki aynı değişiklikte güncellenir.
 
 ## Dallar
-- **Hackathon boyunca dal açılmaz, doğrudan `main`'e gönderilir** (Volkan, 31 Ekim); çakışmayı aşağıdaki dosya sahipliği önler. Dal ve PR kuralları hackathondan sonra.
+- **Varsayılan: kendi dosyanda küçük ve çalışır değişiklik → doğrudan `main`.** Çakışmayı aşağıdaki dosya sahipliği önler.
+- **Gerektiğinde dal aç** (Volkan, 31 Ekim). Dört durum:
+  1. Ortak sözleşme değişikliği (`docs/data/tablo-bicimi.md`): başkasının kodunu etkiler.
+  2. `main`'i bozabilecek büyük ya da yarım iş: yeni modülün ilk sürümü, yeniden yazım.
+  3. Deneme: belki atılacak iş.
+  4. Birden fazla kişinin dosyasına dokunan iş.
+- Dal adı alan önekiyle: `alan/kisa-aciklama` (ör. `sehir/ilk-surum`, `sablon/kumeleme`, `harita/yan-panel`).
+- Dal kısa ömürlü: aynı gün birleşir ya da silinir.
 - `main` her zaman çalışır durumda; bozan kişi hemen düzeltir.
-- (Sonrası için) iş dalı: `tur/kisa-aciklama` (ör. `feat/profil-kumeleme`, `fix/veri-okuma`).
 
 ## Paralel çalışma: dosya sahipliği (31 Ekim)
 Üçümüz yan yana, aynı anda, doğrudan `main`'e gönderiyoruz. Çakışmamanın tek yolu **herkesin yalnız kendi dosyalarına yazması**:
@@ -29,9 +35,9 @@ Dosyalar arasındaki sözleşme (hangi dosya hangi biçimde ne üretir) `docs/da
 - Küçük ve anlamlı parçalar. Mesaj alan önekiyle: `alan: ne yaptı` (ör. `sehir: panel yaygınlığı eklendi`, `veri: EAC injection indirildi`, `docs: sözlüğe tohum eklendi`). Alanlar: `sehir`, `sablon`, `kacev`, `veri`, `harita`, `sinav`, `docs`.
 - Push'tan önce `git pull --rebase`.
 
-## Pull Request (hackathon sonrası)
+## Pull Request (dal açıldığında)
 - Şablonu doldur (ne değişti · hangi doküman/ADR güncellendi · kanıt).
-- En az 1 gözden geçiren onayı.
+- Etkilenen kişiden biri kısa bakar ve onaylar (sözleşme değişikliğinde Can ya da Civan); sonra dalı açan birleştirir.
 - **Dokümanı bozan değişiklik aynı PR'da dokümanı düzeltir.**
 
 ## Devir
