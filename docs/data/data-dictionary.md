@@ -87,6 +87,13 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - [Kaynaklı: katalog s. 9, 29–30] (1) yağlı dağıtım trafosu 50–5000 kVA (listemizdeki 25 kVA bunun altında, kaynaksız); (2) dağıtım trafoları boşta ya da yük altında kademe değiştiricili → bara gerilimi bandının sebebi; adımı BULAMADIM; (3) kompakt trafo merkezi 1000 ve 1600 kVA. Kısa devre gerilimi (uk): BULAMADIM.
 - Yanlılık: Türkiye üreticisinin genel yelpazesi; Kıb-Tek'in hangi güç ve tipte trafo aldığını söylemez. Kullanım: üretici kVA aralığı açıklaması (ROADMAP üretici 1.3), sözleşme kVA notu, uzmana soru 8 (main 56dfdb7, PR #15).
 
+**Enemalta kapasite haritası (Malta) — trafo merkezi başına boş kapasite** — `data/raw/enemalta-kapasite/`
+- Enemalta "Available Capacity" sayfasının verisi (`?capacity_json=1`), JSON, 1.332 trafo merkezi. İndirildi 31 Ekim 2026 (Volkan, Can sağladı); SHA-256 KAYNAK.txt'de. Üç ayda bir güncellenir.
+- Lisans: BULAMADIM → kaynak gösterilir, ham veri depoda yok. Birim kVA (güç, en yüksek talep, boş kapasite) ve kWp (ek panel); konum ED50 / UTM 33N.
+- Ölçülü: kısmen — en yüksek talep kaydedilmiş, saat damgası ve hangi yıla ait olduğu yazılı değil. Ek panel kapasitesi Enemalta'nın hesabı (trafo boşluğu, kurulu panel, gerilim kararlılığı), bağlayıcı değil.
+- [Hesap: ada ülkeleri günlüğü] ek panel ÷ trafo gücü hiçbir merkezde %25'in üstünde değil; kural Enemalta'nın yazdığı değil, bizim çıkarımımız.
+- Yanlılık: Malta şebekesi (akıllı sayaçlı, yoğun kentsel); trafo merkezi düzeyinde toplam, tek trafo değil. Kullanım: jüri cevabı (Malta %25 ↔ Kıb-Tek %40) ve kaynak slaydı (karar masası 20:47); üretici 1.3 trafo boyutu çapası adayı (ROADMAP).
+
 ## Adaylar (henüz indirilmedi)
 - **NGED LV Load Monitor Data** (İngiltere): 301 CSV, gerçek trafo ölçümü; kayıt istiyor (kaydı Volkan yapmalı).
 

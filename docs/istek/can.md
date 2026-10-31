@@ -185,7 +185,7 @@ Karar:
 3. **Faturasız saf tahmin KALDI**: kabul, tanım doğru; "KALDI" kalır. Güven etiketi faturalıda ayırmıyor (yüksek %3,8 / orta %5,1) → bilgi, sorun değil (hepsi iyi). **Bant yukarı kayık** (P10 altı %11 / P90 üstü %4 → yanlış yeşil yönü): önemli bulgu, BUILD `sablon.py`'de kayma düzeltmesi yapacak (30 dk); gelince `faz2`'yi yeniden koş.
 4. KTTO Mart 2023 adresi: ben de iki aramada bulamadım; slaytta "[Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı]" yaz, bulunursa değişir. `python-calamine` requirements'a BUILD ekliyor.
 Senden beklenen: slayt 5 ve dürüstlük cümlesi; `faz3` bilgi satırı (aralık kapsaması) + yeniden koşum; bant düzeltmesi gelince `faz2` yeniden; günlüğe.
-Durum: (1) yapıldı — slayt 5 (1.2 + İspanya), dürüstlük cümlesi 4 (fatura), KTTO etiketi; sunum 7 ekrana bölündü (docs/sunum/ekranlar.md, 17:32 BİLGİ); (2) yapıldı — `aralık kapsaması` bilgi satırı (1–20 %70,0, sınav %69,6), kırmızı (b) ile yeniden koşum ve kaç ev sebebi günlükte (082c80c); bant düzeltmesi gelince `faz2` yeniden koşulacak (bekliyor)
+Durum: (1) yapıldı — slayt 5 (1.2 + İspanya), dürüstlük cümlesi 4 (fatura), KTTO etiketi; sunum 7 ekrana bölündü (docs/sunum/ekranlar.md, 17:32 BİLGİ); (2) yapıldı — `aralık kapsaması` bilgi satırı (1–20 %70,0, sınav %69,6), kırmızı (b) ile yeniden koşum ve kaç ev sebebi günlükte (082c80c); bant düzeltmesi geldi (fa6f24d, bant simetrik); `faz2` yeni bantla 7/7 GEÇTİ — BUILD koştu 17:42 (volkan.md KARAR 17:38 durumu)
 ## UYARI! 31 Eki 17:50 — Civan'dan — dashboard'da "şebeke doluluğu" nasıl hesaplansın? (aynı soru volkan.md ve can.md'de)
 Ne: Haritadan ayrı bir dashboard sayfası (veri ve hesap) şehrin şebeke doluluğunu gösterecek. Hangi tanım doğru: (a) trafo başına öğlen en düşük yük ÷ trafo gücü (`tahmin.csv` `ogle_min_kw` ÷ `trafolar.csv` `kva`); (b) panel payının ne kadarı dolu (`kac_ev.csv` gerilim/ısıl pay ve kaç ev); (c) kWh: yıllık tüketim (`yillik_tuketim_mwh`) ve öğlen güneşinin ne kadarı şebekeye sığar; (d) başka? Yalnız sözleşmedeki sütunlarla, cevap anahtarı olmadan hesaplanacak.
 Dosya: app/ (Civan, yeni dashboard sayfası)
@@ -230,7 +230,7 @@ Ne: Karar masası 19:44'ün istediği cümle (bilginin değeri denemesi, sınav 
 Bilgi (sunum dili için, karar masasında): sarıyı bilgi az düşürüyor (%62 → %57; ağın tamamı bilinse %41). Jüri "sarı neden çok" derse cevap karar masasından gelecek.
 Dosya: docs/sunum/ekranlar.md (ekran 6), docs/sunum/konusma-notu.md
 Neden: karar masası 19:44 (a). Bloklamıyor.
-Durum: bekliyor
+Durum: yapıldı — karar masası 20:47'nin netleşen cümlesiyle (ekran 6 ve slayt 8'de yalnız %27 → %19; %4 yalnız konuşma notunda)
 
 ## UYARI! 31 Eki 20:43 — Volkan'dan (BUILD oturumu) — yeni kaynak: Enemalta kapasite haritası verisi (Malta) — KAYNAK ve sözlük satırı
 Ne: Ada ülkeleri taramasında (docs/log/2026-10-31-volkan-ada-ulkeleri.md) Malta'nın açık kapasite haritasının verisi bulundu ve bir kez indirildi. Lisans yazılı değil: ham dosya depoya girmez, BUILD'in elinde depo dışında. Senden `data/raw/enemalta-kapasite/KAYNAK.txt` ve veri sözlüğüne "Elimizde" satırı. KAYNAK için bilgiler:
@@ -240,7 +240,7 @@ Ne: Ada ülkeleri taramasında (docs/log/2026-10-31-volkan-ada-ulkeleri.md) Malt
 - Sayfanın söylediği: ek panel kapasitesi "transformer spare capacity, the installed RES capacity as well as grid voltage stability criteria"; üç ayda bir güncellenir; bağlayıcı değil. Lisans: BULAMADIM.
 Dosya: data/raw/enemalta-kapasite/KAYNAK.txt (yeni, senin), docs/data/data-dictionary.md (senin)
 Neden: günlükteki Malta rakamları (izin tavanı %25, talep ÷ güç) bu kaynağa atıf yapıyor. Bloklamıyor.
-Durum: bekliyor
+Durum: yapıldı — `data/raw/enemalta-kapasite/KAYNAK.txt` (bir kez yeniden indirdim: 401.361 bayt, SHA-256 aynı, 1.332 kayıt; %25'in üstünde 0 merkez sağlandı) ve veri sözlüğünde "Elimizde" satırı
 
 ## KARAR 20:47 — sunum: jüri cevapları (sarı, Malta, Hawaii), ekran 6 cümlesi, kaynak slaydı satırları
 Karar: Aşağıdaki cümleler konuşma notuna ve jüri sorularına; slayt metnine yalnız ekran 6 cümlesi. Düz dil; mecaz yok.
@@ -251,7 +251,7 @@ Karar: Aşağıdaki cümleler konuşma notuna ve jüri sorularına; slayt metnin
 5. **Kaynak slaydına** iki satır: Enemalta kapasite haritası (adres günlükte, lisans belirsiz, veri depoda yok); HECO 2014 belgesi. Gozo hattı sunuma girmez.
 Neden: BUILD'in 19:59 ve 20:43 bulguları; hikâye aynı, yalnız jüri cevapları ve bir slayt cümlesi değişiyor.
 Senden beklenen: konuşma notu + jüri soruları + ekran 6 metni; kaynak slaydı. Başka iş yok; sonra prova.
-Durum: bekliyor
+Durum: yapıldı — `docs/sunum/konusma-notu.md` (pilot cümlesi, %4 yalnız konuşmada, jüri 9–11: sarı / Malta / düz kural-Hawaii; Gozo yok), `ekranlar.md` ekran 6, `slaytlar.md` slayt 8 ve kaynak slaydına Enemalta + HECO 2014
 
 ## KARAR 21:04 — volkan.md'deki "Malta gibi iki sayılı kart" isteğine
 Karar: Fikir iyi ve ölçümün (3. yol: tepe hatası %4 / %10) kullanılabilir; ama **bu gece ürüne girmez**: kapsam ADR-0001 / 00-overview ("yalnız panel katmanı"), Faz 4 ve prova önde, Civan'da beş iş bekliyor. Cevaplar:

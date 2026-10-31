@@ -15,6 +15,14 @@ Anlatan: Volkan. Slayt numaraları [slaytlar.md](slaytlar.md) ile aynı. Rakamla
 4. **Fatura** (karar masası 17:38): "Fatura olmadan model ortalama trafoda basit hesaptan pek iyi değil; fatura girince hata dörtte bire iniyor. İspanya'da da aynı: %25 → %10." [Hesap: farazi 11–20 faturasız %20,6, faturalı %3,8 (gösterim); İspanya PR #10]
 5. **Temsil yanlılığı:** "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz."
 
+## Kilit cümle (ekran 5, slayt 10)
+"Dolu trafoya 'yer var' demek en pahalı hata. Bugünkü %40 kuralı 73 dolu trafonun 41'ine 'yer var' diyor. Bizim 87 yeşilimizin hiçbiri dolu değil." Bedeli hemen arkasından: "Yeşil %25, sarı %62; bu bilerek: konut trafolarında ölçmeden evet demiyoruz. Kırmızıların %27'sinde gerçekte yer var; kırmızı ret değil, 'ölç ya da güçlendir'." [Hesap: sınav şehirleri 11–20, karar masası koşumu (19:51); gösterim]
+
+## Pilot cümlesi (ekran 6, slayt 8; karar masası 20:47)
+- Ekranda yazan: "Harita için Kıb-Tek'ten yeni veri istemiyoruz: abone sayısı ve fatura toplamı zaten elinde. Pilotta ilk ölçeceğimiz şey trafonun çıkış gerilimi; o tek ölçüm 'dolu' dediğimiz trafolardaki yanılmayı %27'den %19'a indirir."
+- Yalnız konuşmada (slaytta yazılmaz): "Kıb-Tek'in kayıtlarında panelli abonenin adresi ve fazı da varsa %4'e."
+- İkisinin etiketi: [Hesap: bilginin değeri denemesi, farazi şehir 11–20, kusursuz bilgi üst sınırı; docs/log/2026-10-31-volkan-faz3.md]
+
 ## Jüri soruları ve cevap iskeleti (ROADMAP Faz 5: 8 soru, her birine ekipten en az iki kişi)
 Kaynak: [araştırma günlüğü](../log/2026-10-31-kapsamli-arastirma.md) bölüm 8, ADR-0005, ADR-0010. Cevaplar iskelet [Yorum]; provada kişi adı yazılır.
 
@@ -28,8 +36,13 @@ Kaynak: [araştırma günlüğü](../log/2026-10-31-kapsamli-arastirma.md) böl�
 | 6 | Model yanlış "yer var" derse? | Yeşil yalnız karamsar senaryo marjla geçiyor ve güven yüksekse; canlı bütçe yanlış yeşil < %2; sarılara ölçüm cihazı | |
 | 7 | "Yapay zekâ hayır dedi" — kim hesap verir? | Ret yok, triyaj var; son karar Kıb-Tek mühendisinin; itiraz eden gerçek ölçüm ister | |
 | 8 | Paneller arttıkça model eskimez mi? | Eskir; ölçüm cihazları her ilkbahar sarılara dolaşır, şablon yenilenir | |
+| 9 | Sarı çok, eşiği gevşetsenize? | "Eşiği gevşetsek dolu trafoya 'yer var' demeye başlarız. Ölçüm kırmızıdaki yanılmayı düzeltir: trafonun çıkış gerilimi bilinince yanlış kırmızı %27'den %19'a iner. Sarının çoğu ise 'bir sonraki başvuru hattın neresinden gelecek' sorusu; onu haritada değil başvuru anında, evin adresiyle tek tek hesaplarız." [Hesap: bilginin değeri denemesi, farazi 11–20, kusursuz bilgi üst sınırı; son cümle **sınanmadı**, ADR-0012; slaytta yazılmaz] (karar masası 20:47; eski "sarıyı azaltan şey ölçüm" cümlesi kullanılmaz) | |
+| 10 | Malta akıllı sayaçla çözdü, siz neden sayaçsız? | "Akıllı sayacı olan Malta bile kapasite haritasında trafo başına düz bir tavan gösteriyor: izin hiçbir merkezde gücün %25'ini geçmiyor; Kıb-Tek'in kuralı %40. Biz her trafoya gerilimle ayrı bakıyoruz." [Hesap: Enemalta kapasite haritası verisi, 1.332 merkez, 31 Ekim 2026; lisans belirsiz, ham veri depoda yok; Enemalta'nın yazdığı kural değil bizim çıkarımımız]. Devamı: "Malta'da da sınırı gerilim ve trafo kademesi koymuş; trafolar boşta 250 volt, Kıb-Tek'le aynı." [Kaynaklı: Micallef & Weissenbacher, Graz 2016, https://www.tugraz.at/fileadmin/user_upload/Events/Eninnov2016/files/lf/Session_B1/LF_Weissenbacher.pdf] (karar masası 20:47) | |
+| 11 | Düz kural neden kötü? | "Hawaii düz kuralı kanıt geldikçe tepe yükün %15'inden gündüz en düşük yükün %250'sine çıkardı; ölçülmeyen hattı benzer ölçülen hattan tahmin ediyor, bizim yöntemin emsali." [Kaynaklı: HECO 2014; Sunrun, New York ITWG 2022; adresler [ada ülkeleri günlüğü](../log/2026-10-31-volkan-ada-ulkeleri.md)] (karar masası 20:47) | |
+
+Gozo hattı sunuma ve cevaplara girmez (karar masası 20:47).
 
 ## Bekleyenler
-- Slayt 9 canlı harita (Faz 4) ve slayt 10 %40 kuralı karşılaştırması (Faz 3): rakam gelince bu nota bir cümle.
+- Slayt 9 canlı harita (Faz 4): Civan'ın panel dili düzelince bu nota tıklama cümleleri (sıra BUILD taslağında: sehir-001 T02, T06, T07).
 - KTTO raporunun adresi (slayt 1): BULAMADIM.
 - Prova süreleri (2 prova, ≤ 7 dk) ve yedekler (PDF, ekran kaydı).

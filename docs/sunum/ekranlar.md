@@ -13,8 +13,8 @@ Biçim kararı: Volkan 17:32 (can.md BİLGİ, civan.md). Sunum Civan'ın harita 
 | **2 Mahalle şebekesi** | "Her mahallenin köşesinde gri bir kutu (trafo) var; elektriğin evden önceki son durağı. Kıb-Tek bu kutuları izlemiyor; dolu mu boş mu bilmiyor. Bu yüzden temkinli: evler sırada bekliyor." | Direk, kutu, evler | **~2.670 bekleyen başvuru** [Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı] | 50 sn |
 | **3 Fikrimiz** | "Her kutuya cihaz takmak çok pahalı. Birkaçını ölçüyoruz, gerisini tahmin ediyoruz; tahminin ne kadar emin olduğunu da söylüyoruz." | "Noktalar çoğalıyor": önce bir ölçülen trafo, sonra birkaçı, sonra tahmin adaya yayılıyor (ölçülen dolu, tahmin soluk; yeşil / sarı / kırmızı; "gösterim") — 3 → 5 geçişi | İngiltere aynı yöntemle ~%80 tuttu [Kaynaklı: Ofgem, WPD LV Templates 2015] | 45 sn |
 | **4 Neden inanılır** (güven merdiveni) | "Kıbrıs'ı ölçemiyoruz. Yöntemi ölçebildiğimiz her yerde sınadık." | Dört basamak; manşet büyük | **İspanya, 29 gerçek trafo: %25 → %10** (yalnız müşteri sayısıyla → fatura toplamıyla, ortanca hata) [Hesap: PR #10, EDP Oviedo 2018, CC BY] | 2 dk |
-| **5 Canlı harita** | "Bir kutuya tıklayın: yaklaşık N ev daha sığar (A–B); yeşilse ilk 2 başvuru güvenle. Bugünkü kural ne diyor, yanında." (N = `kac_ev_orta`, A–B = karamsar–iyimser, "%80 ihtimalle A–B ev"; "en az" yazılmaz — karar masası 19:13) | Canlı harita; yanında kilit grafik [kilit_yanlis_yesil.png](kilit_yanlis_yesil.png) | **Dolu trafoya "yer var": bugünkü %40 kuralı 41/284, biz 0/21** [Hesap: sınav şehirleri 11–20, `sinav.py faz3`] — gösterim; #15 birleşince olasılıklı hesapla yenilenir (BEKLİYOR) | 1 dk |
-| **6 Pilot** | "Baharda birkaç düzine trafoyu ölçelim; ilk ölçeceğimiz şey trafonun çıkış gerilimi. Kıb-Tek'ten yeni veri istemiyoruz: abone sayısı ve fatura toplamı zaten elinde." | Takvim + cihaz | **Ada geneli için 120–170 trafo** [Hesap: araştırma günlüğü §7; İngiltere'de ölçülen pay %2,6] | 30 sn |
+| **5 Canlı harita** | "Bir kutuya tıklayın: yaklaşık N ev daha sığar (A–B); yeşilse ilk 2 başvuru güvenle. Bugünkü kural ne diyor, yanında." (N = `kac_ev_orta`, A–B = karamsar–iyimser, "%80 ihtimalle A–B ev"; "en az" yazılmaz — karar masası 19:13) | Canlı harita; yanında kilit grafik [kilit_yanlis_yesil.png](kilit_yanlis_yesil.png) | **Dolu trafoya "yer var": bugünkü %40 kuralı 73 dolu trafonun 41'ine, biz hiçbirine** (yeşil yanlışı: biz 0/87, %40 kuralı 41/284) [Hesap: sınav şehirleri 11–20, olasılıklı hesap (ADR-0011), karar masası koşumu 31 Ekim 19:35–19:50, `sinav.py faz3`] — gösterim | 1 dk |
+| **6 Pilot** | "Harita için Kıb-Tek'ten yeni veri istemiyoruz: abone sayısı ve fatura toplamı zaten elinde. Pilotta ilk ölçeceğimiz şey trafonun çıkış gerilimi; o tek ölçüm 'dolu' dediğimiz trafolardaki yanılmayı %27'den %19'a indirir." (karar masası 20:47) | Takvim + cihaz | **Ada geneli için 120–170 trafo** [Hesap: araştırma günlüğü §7; İngiltere'de ölçülen pay %2,6]; cümledeki %27 → %19 [Hesap: bilginin değeri denemesi, farazi şehir 11–20, kusursuz bilgi üst sınırı; docs/log/2026-10-31-volkan-faz3.md] | 30 sn |
 
 ## Ekran 4: dört basamak (ekranda kısa, konuşmada açılır)
 
@@ -31,11 +31,15 @@ Hepsi "hiç model kullanmadan yapılan basit hesaba göre ne kadar iyi" diye anl
 - Manşet orta sayı: "yaklaşık 4 ev"; yanında bant "(2–7)", açılımı "%80 ihtimalle 2–7 ev" [Yorum: örnek değer, rakam değil]. "En az … ev" hiçbir yerde yazılmaz: bandın alt ucu taban değil, gerçek trafoların ~%10–15'inde altına düşer.
 - Vaat renkte: yeşilde "ilk 2 başvuru güvenle sığar (≥ %98)"; sarıda "önce ölç"; kırmızıda "ölç ya da güçlendir". Sarı ve kırmızıda sayı yalnız bant.
 
+## Ekran 5: kilit cümle
+"Dolu trafoya 'yer var' demek en pahalı hata. Bugünkü %40 kuralı 73 dolu trafonun 41'ine 'yer var' diyor. Bizim 87 yeşilimizin hiçbiri dolu değil." [Hesap: sınav şehirleri 11–20, karar masası koşumu; gösterim]
+
 ## Ekran 5: söylenecek bedel
-Faz 3 hesabı olasılıklıya geçti (ADR-0011, PR #15). Rakamlar **BEKLİYOR**: #15 birleşince Can'ın `sinav.py faz3` koşumundan gelir; aşağıdaki eski rakamlar (tek denklem) o zamana kadar kullanılmaz. Karar masasının beklediği (BUILD'in bir kezlik ölçümü, resmi değil): yeşil %25, sarı %62, kırmızıların %27'sinde yer var; kilit grafik biz 0/87 ↔ %40 kuralı 41/284.
-- Yeşil az: konut trafolarında ölçmeden "evet" demiyoruz. — BEKLİYOR (eski: %6)
-- Trafoların çoğu sarı, yani "önce ölç". — BEKLİYOR (eski: %63)
-- Kırmızıların bir kısmında gerçekte yer var: kırmızı "ret" değil, "ölç ya da güçlendir". — BEKLİYOR (eski: %42) [Hesap: sınav 11–20, `sinav.py faz3`]
+Rakamlar karar masası koşumundan (karar masası 19:51; main fe7426b + `sinav.py` c3fb046, 20 şehir sıfırdan, sınav şehirleri 11–20, 347 trafo; Can'ın #15 deneme koşusuyla birebir). Eski tek denklem rakamları (%6 / %63 / %42, 0/21) artık kullanılmaz.
+- Yeşil az: konut trafolarında ölçmeden "evet" demiyoruz. — **yeşil %25** (87/347; şehir konutunda 6/139)
+- Trafoların çoğu sarı, yani "önce ölç". — **sarı %62** (216/347)
+- Kırmızıların bir kısmında gerçekte yer var: kırmızı "ret" değil, "ölç ya da güçlendir". — **kırmızıların %27'sinde yer var** (12/44)
+- Kaç ev: orta sayının ortanca hatası 2 ev (tavansız 239 trafo); gerçek %80 bandın içinde %81 [Hesap: sınav 11–20, `sinav.py faz3`, karar masası koşumu; gösterim]
 
 ## PDF yedeği
 Aynı 7 ekran, her biri bir sayfa: cümle + görselin ekran görüntüsü + rakam ve etiketi. Ekran görüntüleri Civan'ın uygulamasından (Faz 4); son sayfa kaynaklar ([slaytlar.md](slaytlar.md) "Kaynak slaydı").

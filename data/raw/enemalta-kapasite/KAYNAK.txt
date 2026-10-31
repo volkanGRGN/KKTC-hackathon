@@ -1,0 +1,23 @@
+Enemalta (Malta dağıtım şirketi) "Available Capacity" haritasının verisi — trafo merkezi başına güç, kaydedilmiş en yüksek talep, boş kapasite, ek panel kapasitesi.
+Sayfa: https://enemalta.com.mt/available-capacity/
+Veri adresi: https://enemalta.com.mt/available-capacity/?capacity_json=1 (sayfanın kendi haritası bu adresi okuyor)
+İndirildi: 31 Ekim 2026, ilk kez Volkan (BUILD oturumu, 20:37, tek istek); Can aynı adresten bir kez yeniden indirip sağladı (31 Ekim akşam).
+  capacity.json — 401.361 bayt, SHA-256 27be61a703890d92a981f2a3fb7d925a4b6d398d2858dde3434d251142675b60 (iki indirmede aynı), JSON, 1.332 kayıt ("value" listesi).
+  İndirme: curl -L -o capacity.json "https://enemalta.com.mt/available-capacity/?capacity_json=1"
+  Sayfa veriyi üç ayda bir güncelliyor; sonraki indirmede SHA-256 değişebilir.
+Lisans: BULAMADIM (sayfada yazılı değil) → kaynak gösterilir. Ham dosya depoya girmez.
+Dosya yalnız JSON olarak okundu (json.load); çalıştırılmadı.
+
+Alanlar:
+  substationName, locality — trafo merkezi adı, yerleşim
+  sumOfTransformersRating — merkezdeki trafoların toplam gücü (kVA)
+  sumOfMaximumDemand — kaydedilmiş en yüksek talep (kVA)
+  availableCapacity — güç − en yüksek talep (kVA)
+  totalPVCapacity — haritada "RES Available Capacity" (kWp; ek panel kapasitesi)
+  lat / lng — adlarına rağmen ED50 / UTM 33N bileşenleri; sayfa easting = lat + 400000 − 55, northing = lng + 3900000 − 195
+  (ayrıca @odata.etag, ItemInternalId, featid, id)
+
+Sayfanın söylediği: ek panel kapasitesi "transformer spare capacity, the installed RES capacity as well as grid voltage stability criteria" ile hesaplanıyor; bağlayıcı değil.
+
+Kullanım [Hesap: docs/log/2026-10-31-volkan-ada-ulkeleri.md]: totalPVCapacity ÷ sumOfTransformersRating hiçbir merkezde %25'in üstünde değil (Can sağladı: gücü olan 1.331 kayıtta üstünde 0). Bu Enemalta'nın yazdığı kural değil, veriden çıkarım. Tam %25'te olan merkez sayısı karşılaştırmanın hassasiyetine bağlı (günlükte 245; Can'ın tam eşitlik sayımında 240).
+Sunumda: jüri cevabı "Malta %25 ↔ Kıb-Tek %40" ve kaynak slaydı (karar masası 20:47).
