@@ -454,38 +454,39 @@ Ne: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç oturum
 3. **[ADR-0017](../decisions/adr-0017-pv-katmani-guvenli-uclar.md) (panel güvenli uçlar):** `faz3`'e bayrak isabeti maddesi: `p_bugun_asar` ≥ 0,7 olan trafoların gerçekte dolu payı ≥ ortalama olasılıklarının n toleranslısı (≈ %70 − 2·√(0,21 ÷ n)); kırmızı kovası satırı bilgiye iner; bilgi: bayrağın yakaladığı dolu payı, renksiz kalan pay. Karar masasının ölçümü (aday evli trafolar): 1–10'da bayrak 20, 15'i dolu (%75); 21–30'da 26, 18'i dolu (%69, daha önce görüldü).
 Dosya: src/sinav.py (senin), PR'lar `yuk/` önekiyle
 Neden: Volkan'ın üç oturum düzeni; Muhittin 4 madde 1–2; öneren ≠ puanlayan.
-Durum: bekliyor
+Durum: yapıldı — `faz3`: bayrak isabeti maddesi (p ≥ 0,7; dolu payı ≥ p̄ − 2·√(p̄(1 − p̄)/n); `pv_uc` varsa ondan), kırmızı kovası bilgi, güvenli uçlar bilgi satırı (yakalanan dolu, renksiz kalan); veri / eşzamanlılık analizi Civan'ın bulut oturumunda (dalı henüz yok); üretici 1.5 PR #27; B-Y2 sırada
 
 ## UYARI! 1 Kasım 00:24 — karar masasından (KARAR) — üretici 1.5'ini PR #21'in son hâlinin (13e8485) üstüne kur: yaz penceresi düzeltildi, yıl tepesi değişti
 Ne: BUILD 1 PR #21'de bir eksi buldu ve düzeltti (volkan.md UYARI 00:20): yaz penceresi "en sıcak 7 gün" diye seçiliyordu; 2024 hava yılında bu Haziran'a düşüyor, oysa EAC konut tepesi Temmuz'da %38 yüksek. O şehirlerde cevap anahtarının yıl tepesi üreticinin kendi tepesinden konutta %33–35, otelde %21–26 düşüktü (sınav tepeyi az gösteren modeli ödüllendirirdi). Düzeltmeyle pencere konut yük vekiliyle seçiliyor; kalan eksik sınıf başına ≤ %5; Nisan dosyaları aynı. Şehir 1–10'da yıl tepesi ortanca +%4, 2024 şehirlerinde konut +%14; tepe ayı Temmuz 396 / Ocak 4 (önce Ağustos 198 / Temmuz 80 / Ocak 67 / Haziran 51); kVA'yı aşan 17 → 22, 207 V altı 8 → 10.
 Senden beklenen: `uretici/1.5` dalını 13e8485'in (birleşince main'in) üstüne taşı; yaz boyutlandırmasını (kVA = yıl tepesi × 1,2–2,0) bu tepeyle ayarla, eskisiyle ayarladıysan yeniden. Mevsim başına tek pencere hâlâ var (otelin Ağustos tepesi 2025'te %3,5 aşağıda); ikinci yaz penceresi gerekirse 1.5'te.
 Dosya: PR #21 (13e8485), docs/log/2026-11-01-volkan-yuk-pencere.md
 Neden: yük haritasının sınavı ve 1.5'in boyutlandırması bu tepeye dayanıyor.
-Durum: bekliyor
+Durum: gerek kalmadı — karar masası birleşik ağacı (main + 1.5) Mac'te koştu, hedefler tuttu (KARAR 01:20: 31–40 0,44 / 0,68, aşan %0,5, en düşük 201,1 V, süre 55,6 sn); rakamlar dalın günlüğüne eklendi (6096d1e); dal yeniden kurulmadı
 
 ## UYARI! 1 Kasım 00:49 — karar masasından (KARAR) — "tek inverter kaydıyla yeşil %5 → %10" rakamı sunumda ve jüri cevabında kullanılmasın
 Ne: PR #20'nin (PV açılma denemesi) "her panelli trafoda bir evin inverter kaydıyla yeşil %5 → %10, konut 0 → 9/142" sonucu iyimser uçtu: inverterden çıkan bara ±1 V, empedans ±%20 doğru varsayılıyordu. BUILD 2 geri çözümü benzetimde gerçekten yaptı (PR #25): geri çözülen bara hep biraz düşük çıkıyor (ortanca −0,8…−1,0 V), eğimden hat boyu tutmuyor; gerçekçi hâlde inverter haritayı açmıyor (inverterli 156 trafoda yeşil 0 → 1–3). Sunum dosyalarında bu cümle yok (karar masası baktı); jüri cevabına ya da ekran 6'ya eklenmesin. Doğru cümle: "İnverter kaydı haritayı açmıyor; başvuru anında, ölçülmüş sapmayla, yanlış evet'i düşürüyor (iki kat hatalı kayıtta %1,9 → %0,7; deneme, gösterim)."
 Dosya: docs/sunum/ (senin)
 Neden: PR #25 sonucu (volkan.md UYARI 00:46, BUILD 2); test sürüyor.
-Durum: bekliyor
+Durum: yapıldı — sunum dosyalarında cümle yok (karar masasıyla aynı); eklenmeyecek
 
 ## UYARI! 1 Kasım 01:00 — karar masasından (KARAR) — küçük: `sinav.py faz2 --ispanya-tepe <olmayan dosya>` çöküyor
 Ne: TEST oturumunun main sağlık koşusunda (volkan.md KONTROL 01:00) bayrak verilip dosya bulunamayınca "ölçülmedi" yerine dosya bulunamadı hatasıyla duruyor; bayrak hiç verilmezse doğru. Öneri: dosya yoksa yüksek sesli UYARI + madde "ölçülmedi". Ayrıca bilgi: üretici 1.4 şehir başına ~22–25 sn; faz1 süre maddesi iki üretim aynı anda koşunca 58,1 / 60 sn'ye çıktı (tek başına geçiyor).
 Dosya: src/sinav.py (senin)
 Neden: TEST sağlık koşusu. Acil değil.
+Durum: yapıldı — dosya yoksa yüksek sesli UYARI, madde "ölçülmedi"
 
 ## UYARI! 1 Kasım 01:05 — Civan'dan — KAYNAK.txt ve sözlük satırı: EMO birim fiyatları (ölçüm maliyeti)
 Ne: `data/raw/ktemo-birim-fiyat/` indirildi (1 Kasım 2026, git dışı). KAYNAK.txt yaz: kaynak KTMMOB Elektrik Mühendisleri Odası, `https://www.ktemo.org/dokumanlar.php`; dosyalar ve adresleri günlükte; lisans belirtilmemiş (kamuya açık indirme). Veri sözlüğüne satır: PİD Elektrik Tesisatları Asgari Birim Fiyat Ekim 2024 (TL/adet; akım trafosu, pano), EMO Proje ve Kontrollük Asgari Birim Fiyat Rev.13 (mühendis saati = asgari ücretin %5'i). Yanlılık: PİD fiyatları Ekim 2024, enflasyonla güncel değil; "asgari" fiyat, piyasa fiyatı değil.
 Dosya: data/raw/ktemo-birim-fiyat/KAYNAK.txt, docs/data/data-dictionary.md
 Neden: her indirilen veri sözlükte satır olmalı; ikisi de senin dosyan. Ayrıntı ve arama izi: docs/log/2026-11-01-civan-olcum-maliyeti.md
-Durum: bekliyor
+Durum: yapıldı — `data/raw/ktemo-birim-fiyat/KAYNAK.txt` (beş dosya Can'ca yeniden indirildi, bayt ve SHA-256; üç rakam PDF'te sağlandı) ve veri sözlüğü satırı
 
 ## UYARI! 1 Kasım 01:10 — (BUILD 1 — yük) — `sinav.py faz2` akşam gerilimi maddesi: "yeterli" kararı `v_min_tepe_v_p10`'dan
 Ne: PR #29 `tepe.csv`'ye `v_min_tepe_v` (çekilişlerin ortancası), `v_min_tepe_v_p10`, `v_min_tepe_v_p90`, `p_aksam_207` yazıyor (sözleşme §8). Senin maddende "yeterli" = `v_min_tepe_v` ≥ 207. Ortancayla deneme şehirlerinde yük tarafının yanlış yeşili çıkıyor (1–10'da 3/263, 21–30'da 5/259 "yeterli" trafo gerçekte 207 V altında); P10 ile 0/178 ve 0/173 [Hesap]. Hata ölçüsü (|Δ|) ortancayla kalabilir.
 Senden beklenen: "yeterli" kararını `v_min_tepe_v_p10` ≥ 207 V'a (sütun yoksa ortancaya düş) çevir; istersen `p_aksam_207`'yi bilgi satırına ekle. Kararın kendisi KARAR'da (volkan.md UYARI aynı saat).
 Dosya: src/sinav.py (senin); PR #29
 Neden: güvenli yön (ADR-0018 m. 6 ile aynı ilke).
-Durum: bekliyor
+Durum: yapıldı — "yeterli" = `v_min_tepe_v_p10` ≥ 207 V (yoksa ortanca); hata ortancayla; `p_aksam_207` bilgi
 
 ## UYARI! 1 Kasım 01:20 — karar masasından (KARAR) — BLOKLUYOR — testi geçen PR'lar GitHub onayı bekliyor; ikinizden biri onaylasın
 Ne: Karar masası Mac'te test etti, hepsi tuttu; birleştirme izin sisteminde ancak GitHub'da bir onay varsa geçiyor. Volkan'ın açtığı PR'ları Volkan kendisi onaylayamıyor. Onay sırası (her biri için GitHub'da "Approve" yeter; rakamlar volkan.md KARAR 01:12 / 01:20):
