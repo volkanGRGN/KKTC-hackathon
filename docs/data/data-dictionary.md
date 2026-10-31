@@ -52,8 +52,14 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 
 **Yurt yatak sayısı** — BULAMADIM — varsayım: yurt tipi konut eğrisinden türetilir ([ADR-0004](../decisions/adr-0004-veri-eac-profil-siniflari.md); Volkan onayı 31 Ekim).
 
+**İspanya EDP gerçek AG şebekesi — gerçek doğrulama adayı** — `data/raw/edp-oviedo/`
+- 30 trafo (28 × 630, 1 × 1000, 1 × 250 kVA), 8.087 müşteri; **saatlik** akıllı sayaç, 1–21 Mayıs 2018 (20 gün); GIS'ten hat boyları ve kablo; sayaç başına çekilen ve verilen enerji.
+- Kaynak: Arboleya vd., Universidad de Oviedo + EDP, Mendeley Data 2019, DOI 10.17632/685vgp64sm.1, CC BY 4.0. İndirildi 31 Ekim 2026.
+- Ölçülü: evet, gerçek sayaç. Müşteri → trafo eşleşmesi çıkarılabiliyor (ham dosyada trafo merkezi kodu var; ağ izlenince 8.087 yükün 8.073'ü tek trafoya). [Hesap] 29 trafonun öğlen (11–14) en düşük yükü 25–163 kW.
+- Eksik / yanlılık: **abone tipi (tarife sınıfı) yok**, yalnız müşteri sayısı ve faz; kentsel, kuzey İspanya [Yorum: Oviedo çevresi], Akdeniz iklimi değil; saatlik (bizim 5 dk); bir trafonun (TD009456, 251 müşteri) verisi tamamen sıfır; çatı paneli az (bir dosyada 1.344 sayacın 54'ünde şebekeye verme).
+- Eleme: Kıbrıs/Akdeniz H · ölçülmüş E · ≤ 1 saat E · kaynak ve lisans E · bu fazda kullanımı belli E (Faz 2 2i) → 4/5, **alındı**. Kullanım: modelin bir-trafo-dışarıda doğrulaması gerçek veride; girdi yalnız toplam müşteri sayısı ve kVA olabilir.
+
 ## Adaylar (henüz indirilmedi)
-- **İspanya EDP gerçek şebeke** (Mendeley 685vgp64sm, CC BY 4.0): 30 trafo, 8.087 abone, 20 gün akıllı sayaç, GIS. Çözünürlük ve abone tipi bilgisi belirsiz → 2 saatlik zaman kutusu; gerçek doğrulama adayı.
 - **NGED LV Load Monitor Data** (İngiltere): 301 CSV, gerçek trafo ölçümü; kayıt istiyor (kaydı Volkan yapmalı).
 
 ## Üreteceğimiz
