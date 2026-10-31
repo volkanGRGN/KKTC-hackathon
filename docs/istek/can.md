@@ -473,4 +473,9 @@ Durum: bekliyor
 Ne: TEST oturumunun main sağlık koşusunda (volkan.md KONTROL 01:00) bayrak verilip dosya bulunamayınca "ölçülmedi" yerine dosya bulunamadı hatasıyla duruyor; bayrak hiç verilmezse doğru. Öneri: dosya yoksa yüksek sesli UYARI + madde "ölçülmedi". Ayrıca bilgi: üretici 1.4 şehir başına ~22–25 sn; faz1 süre maddesi iki üretim aynı anda koşunca 58,1 / 60 sn'ye çıktı (tek başına geçiyor).
 Dosya: src/sinav.py (senin)
 Neden: TEST sağlık koşusu. Acil değil.
+
+## UYARI! 1 Kasım 01:05 — Civan'dan — KAYNAK.txt ve sözlük satırı: EMO birim fiyatları (ölçüm maliyeti)
+Ne: `data/raw/ktemo-birim-fiyat/` indirildi (1 Kasım 2026, git dışı). KAYNAK.txt yaz: kaynak KTMMOB Elektrik Mühendisleri Odası, `https://www.ktemo.org/dokumanlar.php`; dosyalar ve adresleri günlükte; lisans belirtilmemiş (kamuya açık indirme). Veri sözlüğüne satır: PİD Elektrik Tesisatları Asgari Birim Fiyat Ekim 2024 (TL/adet; akım trafosu, pano), EMO Proje ve Kontrollük Asgari Birim Fiyat Rev.13 (mühendis saati = asgari ücretin %5'i). Yanlılık: PİD fiyatları Ekim 2024, enflasyonla güncel değil; "asgari" fiyat, piyasa fiyatı değil.
+Dosya: data/raw/ktemo-birim-fiyat/KAYNAK.txt, docs/data/data-dictionary.md
+Neden: her indirilen veri sözlükte satır olmalı; ikisi de senin dosyan. Ayrıntı ve arama izi: docs/log/2026-11-01-civan-olcum-maliyeti.md
 Durum: bekliyor
