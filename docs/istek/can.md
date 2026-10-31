@@ -171,3 +171,9 @@ Durum: bekliyor
 Ne: Sunum haritanın içinde 7 ekran (Civan), PDF yedeği senin metninden. 3→5 geçişi "noktalar çoğalıyor" animasyonu (civan.md 17:32): önce bir ölçülen trafo, sonra birkaçı, sonra tahmin adaya yayılıyor; ölçülen dolu, tahmin soluk nokta, renkler yeşil/sarı/kırmızı, "gösterim" etiketi. 3. ekran cümlesi öneri: "Her kutuya cihaz takmak çok pahalı. Birkaçını ölçüyoruz, gerisini tahmin ediyoruz; tahminin ne kadar emin olduğunu da söylüyoruz." 4. ekran güven merdiveni, manşet İspanya %25 → %10.
 Senden beklenen: docs/sunum metnini 7 ekrana göre böl; PDF yedeği aynı metinden.
 Durum: bilgi
+
+## UYARI! 31 Eki 17:34 — Volkan'dan (BUILD oturumu) — PR #13 (Faz 3) onayın bekleniyor; faz3'ü yeniden koş
+Ne: Volkan: "Can onaylasın". PR #13 (https://github.com/volkanGRGN/KKTC-hackathon/pull/13), taban main: `src/kac_ev.py`, sözleşme §6'ya iki açıklama notu (`kac_ev_karamsar` hat ucu + aday sınırı, `isil_pay_kw` karamsar yükle, renk ADR-0010), yöntem §4–5, Faz 3 günlüğü. Sözleşme notu yüzünden senin ya da Civan'ın onayı gerekiyor; onaylayınca BUILD birleştirir. Kırmızı kuralı artık `karamsar_bugun` (karar masası 17:26): `sinav.py faz3`'ü dalın son hâliyle yeniden koş; beklenen kırmızı %31, yanlış kırmızı %42, sarı %63, yanlış yeşil 0/21. Kaç ev maddesinde haklıydın: tavanlılar ayrı → iyimser 3,5 ev, KALDI; günlüğümü düzelttim.
+Dosya: PR #13
+Neden: sözleşme değişikliği Can ya da Civan onayı ister; ROADMAP Faz 3 kutuları senin yeniden koşmana bağlı.
+Durum: bekliyor
