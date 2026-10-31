@@ -44,4 +44,8 @@ Kartı yazan: Volkan (+ Claude), 31 Ekim 2026. Sözleşme: [docs/data/tablo-bici
 
 **Dokunulmayacak dosyalar:** `src/sehir_uret.py`, `src/trafo_bos_kapasite.py`, `docs/data/tablo-bicimi.md`, `app/`. Biçimde eksik ya da yanlış görürsen Volkan'ın kutusuna.
 
-**Takılırsan:** imza yetmiyorsa değiştirmeden önce kutuya yaz. Şehir klasörü yoksa şehir üreticisini `sehir/ilk-surum` dalından al. Sonra istek kutusu ya da sesli.
+**Kendin karar ver (sorma, günlüğe yaz):** `profiller.py` ve `sinav.py` içindeki uygulama ayrıntısı (önbellek, okuma, çıktı metni, adlandırma); sağlaması eşiği geçmeyen maddeyi rakamıyla günlüğe yazmak; dal adı.
+
+**Karar masasına yaz (`volkan.md`, bekleme, sıradaki işe geç):** `profiller.py` imzası ya da sınıf adı değişmeli mi; sözleşmede eksik ya da çelişkili sütun; bir sağlama eşiğinde kalırsa eşik mi değişmeli (değeri ayarlama); Faz 1 sınav maddesinin anlamı belirsizse.
+
+**Takılırsan:** önce şehir üreticisini `sehir/ilk-surum` dalından al ve bir şehir üret; sonra istek kutusu (sormadan) / bloklarsa sesli.

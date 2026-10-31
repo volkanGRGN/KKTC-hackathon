@@ -49,4 +49,8 @@ Harita kuralları:
 
 **Dokunulmayacak dosyalar:** `src/`, `docs/data/tablo-bicimi.md`, `data/raw/` (osm-* hariç), `.gitignore`. Biçimde eksik görürsen Volkan'ın kutusuna.
 
-**Takılırsan:** tıklama gelmiyorsa `streamlit --version` (≥ 1.39), katmanda `id` ve `pickable`; olmazsa yedek olarak kenar çubuğuna trafo seçme kutusu (`st.selectbox`), sonra sor. Sonra istek kutusu ya da sesli.
+**Kendin karar ver (sorma, günlüğe yaz):** sahte değerlerin dağılımı; renk tonları, sütun boyu çarpanı, yan panel düzeni; dal adı; 6. adımı (OSM altlığı) yapıp yapmamak.
+
+**Karar masasına yaz (`volkan.md`, bekleme, sıradaki işe geç):** haritanın ihtiyacı olup sözleşmede olmayan sütun; referans noktasını değiştirmek; tıklama çalışmazsa seçme kutusu yedeğinin kalıcı olup olmayacağı.
+
+**Takılırsan:** tıklama gelmiyorsa `streamlit --version` (≥ 1.39), katmanda `id` ve `pickable`; olmazsa kenar çubuğuna trafo seçme kutusu (`st.selectbox`) koyup devam et; sonra istek kutusu (sormadan) / bloklarsa sesli.
