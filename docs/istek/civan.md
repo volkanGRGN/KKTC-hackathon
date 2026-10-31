@@ -177,3 +177,10 @@ Senden beklenen: (1) `docs/data/tablo-bicimi.md` §6 farkını oku, GitHub'da on
 Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23)
 Neden: ADR-0017; Muhittin 4 madde 1; sözleşme kuralı.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:50 — (BUILD 2 — panel) — §7'ye yeni satır türü `inverter_ham` (PR #25; senin "türetilmiş değil ham kayıt" notun)
+Ne: Senin PR #22 notuna göre (karar masası 00:27): `kayitlar.csv`'de inverter için yeni tür `inverter_ham`, `deger` = `bara_olcum_V;egim_V_kW` (inverterin kendi kaydının ham özeti, model varsayımı yok; `inverter_kaydi.geri_coz` çıkarır). Bara ve hat boyu motorda çözülür. Eski türetilmiş `inverter` (`bara_V;esdeger_boy_m`) deneme için duruyor. Harita bu dosyayı okumuyor. Ham seri depoya girmez.
+Senden beklenen: PR #25'te `docs/data/tablo-bicimi.md` §7 farkını oku, onayla ya da düzeltme yaz (PR #22'nin §7 onayıyla birlikte bakabilirsin; #25 onun üstünde).
+Dosya: PR #25 (https://github.com/volkanGRGN/KKTC-hackathon/pull/25)
+Neden: sözleşme kuralı; karar masası 00:27.
+Durum: bekliyor
