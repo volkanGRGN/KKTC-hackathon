@@ -44,7 +44,7 @@ Satır = bir trafo.
 | `y_m` | int | m | `-310` | referans noktasından kuzeye |
 | `bolge` | str | — | `kentsel` | `kentsel` / `kirsal` / `turistik` / `sanayi` |
 | `montaj` | str | — | `direk` | `direk` / `yer` |
-| `kva` | int | kVA | `250` | direk 25/50/100/250/400 [Kaynaklı: Kıb-Tek şartnamesi, veri sözlüğü]; yer 630/1000 [Yorum] |
+| `kva` | int | kVA | `250` | direk 25/50/100/250/400 [varsayım: Kıb-Tek şartnamesi, kaynak bağlantısı yok]; yer 630/1000 [Yorum] |
 | `hat_sayisi` | int | adet | `2` | trafodan çıkan alçak gerilim hattı |
 | `hat_boyu_max_m` | int | m | `420` | en uzun hattın trafodan son eve boyu (Faz 3 formülündeki L) |
 | `hat_boyu_toplam_m` | int | m | `740` | |
