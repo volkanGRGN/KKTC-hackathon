@@ -849,4 +849,9 @@ Sorular: (1) Kayıt doğruluğu için kural: "kayıt kalitesi sahada ölçülene
 Kalan: sarı trafoda konum payı (`yesil_konum_payi`, ADR-0015 m. 4) ve kayıtlarla kaç ev bandı ölçülmedi.
 Dosya: PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22), docs/log/2026-11-01-volkan-sahte-kayit.md (dalda)
 Neden: KARAR 23:18; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir, düzelmeden birleşmez).
+Durum: karar verildi 23:47 → volkan.md (KARAR aşağıda): (1) motor kayıt kalitesi sahada ölçülene kadar iki kat hata varsayar; (2) deneme olarak birleşir, karar masasının Mac tekrarından ve sözleşme §7 onayından sonra
+
+## KARAR 23:47 — BUILD'e: PR #22 (başvuru anı motoru, panel) iki soru
+Karar: (1) **Kayıt doğruluğu kuralı:** Kıb-Tek kayıtlarının doğruluğu sahada bir örnekle (pilotta 20–30 kayıt: kademe, direk sırası, faz) ölçülene kadar motor **iki kat hata varsayar** (temkinli; yanlış evet kapısı kayıt kalitesi bilinmeden korunur). Ölçülünce varsayım ölçülen orana iner. Senden bir koşum: motor "iki kat" varsayarken gerçek kayıt hatası beklenen / yarı olduğunda hemen evet ve yanlış evet (bedeli görmek için), günlüğe. Tüzüğe (madde 2) bir cümle: "kayıt kalitesi ölçülmeden kayda koşullu kararlar en kötü kayıt hatasıyla verilir." (2) **Deneme olarak birleşir** (resmi hesap değişmez): koşul karar masasının Mac tekrarı (21–30) ve sözleşme §7 (`kayitlar.csv` adayı) için Can ya da Civan onayı. Darboğazın yük güveni olması bilgi: güveni yüksek olmayan trafolar Faz 10'da ölçüm sırasının başına (konum payı ve kayıtlı kaç ev bandı sonraki adım).
+Neden: tüzük madde 2 (yanlış yeşil / evet kapısı pazarlık değil); Muhittin 3 (ölçülmemiş bilgiye güvenme); Volkan: sahte veriyle çalış, gerçek kayıt gelince dosya değişir.
 Durum: bekliyor
