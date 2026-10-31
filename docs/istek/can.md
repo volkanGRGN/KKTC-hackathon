@@ -320,14 +320,14 @@ Ne: Kartın C4'ü. Dal `kalibrasyon/faz7`, PR #16: `sablon.py` k_yük 1,475 (İs
 Eksi bulgular karar masasında (volkan.md UYARI 21:46); PR o karara ve senin onayına kadar birleşmez. Sunum metni v1.
 Dosya: PR #16; senin dosyaların değişmedi.
 Neden: öneren ≠ puanlayan (tüzük §4).
-Durum: bekliyor
+Durum: yapıldı — dalda (5711aeb) yeniden koşuldu, rakamların birebir (farazi %96,4; 0/48; 48 / 238 / 61, yanlış kırmızı 20; orta 1; P10 altı %7,1; dolu 74 platform farkı); İspanya c / 10 / tabakalı %66,6 → %80,8; PR #16 GitHub'da onaylandı; günlük ek C4
 
 
 ## KARAR 21:51 — PR #16 (Faz 7) için: C1'i dalda koş, dört bulgunun cevabı
 Karar: PR #16'nın dört eksi bulgusu karara bağlandı (volkan.md 21:51): farazi kapsama maddesi **bilgi** (kapı İspanya %79), bedel (yeşil %14, sarı %69) kabul, PIT toleransı n'ye bağlı (max(0,05; 2·√(0,09/n)); n = 29 → 0,11, İspanya 0,086 geçer), KOL_P kalır. **Senden:** C1'i (kapsama eğrisi, PIT, İspanya satırı) `kalibrasyon/faz7` dalında koş; "önce" (main) / "sonra" (dal) yan yana günlüğe; PIT maddesinde toleransı yukarıdaki formülle yaz; sonra PR'ı GitHub'da onayla (öneren ≠ puanlayan). Karar masası Mac koşumu tutunca birleştirir; sonra resmi `faz2` / `faz3` ve sunum rakamları v2 (ekran 5: yeşil %14, sarı %69, kırmızıların %33'ünde yer var; kilit 0/48 ↔ 41/284; jüri: "İngiltere 6 hat, yükselme ortalama %19 küçük görülüyordu, payı ekledik").
 Neden: tüzük madde 2–3; Muhittin vurgu 2.
 Senden beklenen: C1 dalda + onay; v2 rakamları ancak birleşince.
-Durum: bekliyor
+Durum: yapıldı — `sinav.py`: farazi kapsama bilgi satırı, PIT toleransı max(0,05; 2·√(0,09/n)), n = trafo; önce / sonra günlükte yan yana (docs/log/2026-10-31-can-faz7.md ek C4); PR #16 onaylandı. v2 rakamları birleşince (bekliyor)
 
 ## KARAR 21:58 — C1 için iki not: dalda İspanya maddesi şimdilik KALDI görünür (edp_test k'yi uygulamıyor, BUILD düzeltiyor); PIT toleransında n = 29
 Karar: C1'in dalda koşumunu karar masası Mac'te denedi (`--ispanya` ile): İspanya maddesi %66,6 / PIT 0,108 KALDI gösteriyor; sebep senin kodun değil, `edp_test.py --cikti` satırlarının kalibrasyon katsayısını (K_YUK 1,475) içermemesi. BUILD `edp_test.py`'ye k'yi ekliyor (`--kalibrasyonsuz` ile "önce"). Düzeltme dala gelince `edp_satirlar.csv`'yi yeniden üret ve C1'i dalda koş: beklenen "sonra" %80 bant ≈ %80, %95 ≈ %90 (iç örnek; bir-dışarıda %79,1 `kalibrasyon.py`'den), PIT ≈ 0,086. **PIT toleransı:** n = bağımsız trafo sayısı (29), satır sayısı (380 tekrar) değil → tolerans max(0,05; 2·√(0,09 ÷ 29)) = 0,11; 0,086 geçer, yönü "fazla emin" bilgi olarak yazılır. Maddeyi buna göre güncelle (`sinav.py` senin). Sonra PR #16'yı GitHub'da onayla; karar masası birleştirir.

@@ -618,3 +618,10 @@ Karar: Karar masası Can'ın C1 maddelerini dalda koştu (Mac, `--ispanya` ile):
 Neden: tüzük madde 3 ve 5 (sınav, sevk edilen modeli ölçer; k tek yerde); öneren ≠ puanlayan korunur (k'yi BUILD üretir, Can ölçer).
 Senden beklenen (BUILD): (1) ve (3) dala; kutuya "hazır" satırı. Faz 8 başlangıcını bölme.
 Durum: bekliyor
+
+## UYARI! 31 Eki (21:55 sonrası) — Can'dan — PR #16 puanlandı ve onaylandı; iki bilgi
+Ne: C1 dalda koşuldu (Windows, 5711aeb; şehirlerin kopyası, sınav main'deki `sinav.py`). BUILD'in rakamları birebir: farazi %80 kapsama %96,4 (artık bilgi), `faz3` yanlış yeşil 0/48, yeşil / sarı / kırmızı 48 / 238 / 61, yanlış kırmızı 20/61, kaç ev orta 1, P10 altı %7,1 (dolu 74: bilinen platform farkı). Kapı (İspanya, c / 10 / tabakalı, bir-dışarıda k): %80 bant %66,6 → **%80,8**, %95 %83,4 → **%91,3**, PIT 0,108 → 0,058 → GEÇTİ. PR #16 GitHub'da onaylandı. `sinav.py`'de 21:51 işlendi (farazi kapsama bilgi; PIT toleransı n = trafo sayısıyla).
+Bilgi (PR'ı bloklamaz, günlükte): (1) **Tek k ortalamayı düzeltiyor, koşulu değil:** aynı k ile c / 10 / rastgele %92 / %99 (PIT 0,132 fazla geniş, toleransı aşıyor), c / 5 her iki yol %71–72 / %84 (hâlâ fazla emin). k'nın ölçülü sayısına ve seçime bağlı olması gerekir [Yorum]; Faz 10 / pilot adayı. (2) **PIT toleransı 29 trafoda ayırt etmiyor:** "önce" (0,108, açıkça fazla emin) de 0,113 ile geçiyor; bu gece kapıyı taşıyan kapsama maddesi. Hold-out defterine BUILD'in ayar bakışı (k, s) ve karar masasının 21:55 teyidi satır olarak eklendi (6, 7).
+Dosya: PR #16 (onay), docs/log/2026-10-31-can-faz7.md, docs/log/holdout-defteri.md
+Neden: KARAR 21:51 birleşme koşulu (b). Bloklamıyor.
+Durum: bekliyor
