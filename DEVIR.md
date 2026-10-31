@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 19:45 — ilk BUILD oturumu doldu, yeni BUILD oturumuna devir.
+**Güncellendi:** 31 Ekim 2026, 20:00 — Faz 3 kapandı (Volkan 19:51); bilginin değeri denemesi yapıldı.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -17,41 +17,35 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
   - Saf tahmin (fatura) %5,5 / %15,2 → model %31 / %48 iyi.
   - Faturasız model saf tahmini ortancada geçmiyor (bilgi).
   - Gerçek veri: İspanya %25 → faturayla %10.
-- **Faz 3: resmi hesap olasılıklı** ([ADR-0011](docs/decisions/adr-0011-faz3-olasilikli-hesap.md)). `src/kac_ev_olasilik.py` main'de ([PR #15](https://github.com/volkanGRGN/KKTC-hackathon/pull/15) birleşti 19:37). `kac_ev.csv` sözleşme 1.3: §6 + `p_bugun_asar`, `p_iki_ev_sigar`, `kac_ev_orta`. Tek denklem `kac_ev.py` yedek ve pay sütunlarının kaynağı.
-  - Can'ın `faz3`'ü PR #15 dalındaki dosyalarla, sınav 11–20:
+- **Faz 3 bitti (31 Ekim 19:51, gösterim; açık eksikler pilotta).** Resmi hesap olasılıklı ([ADR-0011](docs/decisions/adr-0011-faz3-olasilikli-hesap.md), `src/kac_ev_olasilik.py`; tek denklem `kac_ev.py` yedek). `kac_ev.csv` sözleşme 1.3.
+  - Resmi sınav = karar masası koşumu (Mac, 19:35–19:50, 20 şehir sıfırdan), sınav 11–20:
     - yanlış yeşil 0/87 GEÇTİ;
-    - %40 kuralı 41/284 (%14);
-    - kaç ev GEÇTİ (karamsar 2, orta 2);
-    - yanlış kırmızı %27 ve sarı %62 UYARI.
-  - **Resmi koşu main'de bir kez daha yapılacak (Can).** ROADMAP Faz 3 kutuları onunla dolacak.
+    - %40 kuralı 41/284 yan yana; dolu trafoya "yer var" %40 kuralı 41/73, biz 0/73;
+    - kaç ev orta 2 GEÇTİ;
+    - yanlış kırmızı %27,3 ve sarı %62,2 hedef üstü, raporlandı.
+  - ROADMAP Faz 3'te kutular [x] ve **"Açık eksikler"** tablosu (bu gece / pilot).
+  - **Bilginin değeri** (üst sınır, farazi şehir): bara gerilimi bilinirse yanlış kırmızı %19; bara + panelli evin yeri + faz %4. Sarı ancak %57, ağın tamamıyla %41: sarı bilgi değil yeşilin sorusu ("sıradaki başvuru kimden"). Karar masasına UYARI 19:59.
+  - Yeşil eşiği 0,98 kalır (karar masası 19:44, eşiğin bedeli tablosu günlükte).
   - Dil (karar masası 19:13): karamsar–iyimser %80 bant, "en az" değil; manşet "yaklaşık N ev (A–B)"; vaat renkte.
   - Günlükler:
-    - [tek denklem](docs/log/2026-10-31-volkan-faz3.md);
+    - [Faz 3](docs/log/2026-10-31-volkan-faz3.md): tek denklem, resmi sınav çıktıları, eşiğin bedeli, bilginin değeri;
     - [varsayım envanteri](docs/log/2026-10-31-volkan-faz3-varsayimlar.md): hiçbir ayar kırmızıyı düzeltmiyor; öğlen OG +%0,8 UKPN'le çelişiyor;
     - [olasılıklı](docs/log/2026-10-31-volkan-faz3-olasilik.md);
     - [İngiltere geri-testi](docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md): 6 hattın 5'i kapsandı, Bancroft kaçtı; yeşil bütçesi gerçek veride doğrulanmadı.
 - **Faz 4** (Civan): harita ve yan panel Faz 3 tablosuna bağlı. Açık: internetsiz açılış, 2 dk ekran kaydı, 20 şehirde kontrol.
-- **Faz 5** (paralel): `docs/sunum/` (Can) ve [konuşma notu taslağı](docs/konusma-notu-taslak.md) (BUILD). Hikâye "güven merdiveni"; dashboard içinde 7 ekran (Volkan 17:32). Ekran 5 rakamları Can'ın main'deki `faz3` koşusuyla. 2 prova yapılmadı.
+- **Faz 5** (paralel): `docs/sunum/` (Can) ve [konuşma notu taslağı](docs/konusma-notu-taslak.md) (BUILD). Hikâye "güven merdiveni"; dashboard içinde 7 ekran (Volkan 17:32). Ekran 5 rakamları karar masası koşumundan (can.md 19:51); ekran 6 cümlesi Can'da (can.md 19:59). 2 prova yapılmadı.
 
-## Açık işler (yeni BUILD oturumu buradan başlar)
-1. **Faz 3 eksik listesi karar masasında** (19:44'te gönderildi, cevap volkan.md'ye gelecek):
-   - yanlış kırmızı %27 (hedef ≤ %20);
-   - sarı %62 (hedef ≤ %30);
-   - yeşil bütçesi gerçek veride doğrulanmadı (İngiltere 5/6);
-   - olasılık düşük uçta iyimser (%10–30 kovası → %43);
-   - kaç ev aralığı taban değil (P10 altı %15);
-   - faturasız ortancada geçmiyor.
-2. **BUILD'in iki önerisi, karar masası onayı bekliyor:**
-   - (a) Bilginin değeri denemesi: bara gerilimi / panelli evlerin adresi / faz bilinseydi yanlış kırmızı ve sarı ne kadar düşer. Yalnız şehir 1–10'da, sonra 11–20 bir kez.
-   - (b) Yeşil eşiği tablosu: 0,98 / 0,95 / 0,90 için yeşil, sarı, yanlış yeşil.
-3. **Can:**
-   - main'de `sinav.py faz3` bir kez;
-   - ekran 5 rakamları;
-   - ASTOR kataloğu KAYNAK ve sözlük satırı (can.md 19:26).
-   - Sonra BUILD ROADMAP Faz 3 kutularını doldurur: yanlış yeşil ve kaç ev GEÇTİ; yanlış kırmızı ve sarı "KALDI, sebep günlükte".
-4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
+## Açık işler (BUILD)
+1. **Karar masasının cevabı bekleniyor** (volkan.md UYARI 19:59, bilginin değeri):
+   - jüri cevabı "sarıyı azaltan şey ölçüm" deneme ile tam tutmuyor, yeni cümle önerildi;
+   - ürün önerisi: sarı trafoda karar başvuru anında, evin adresi ve fazıyla (sınanmadı);
+   - ekran 6 "Kıb-Tek'ten yeni veri istemiyoruz" ↔ %4 için panelli abonenin adresi ve fazı gerekiyor.
+2. **Faz 5:** konuşma notu taslağını Can'ın `docs/sunum/`'u ile birleştirmek; gece 2 prova.
+3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 cümlesinin ilk yarısı.
+4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
 ## Bilinen sorunlar ve kararlar
+- BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
 - Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Üretici 1.2 iki yeni dosya ister: kıyı (`osm-kasaba`) ve Open-Meteo 2023 (README).
 - **Sanal ortam şart** (`pip install -r requirements.txt`). `openpyxl` yoksa üretici sessizce yer tutucu eğriye düşer; `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak.
 - **Ayar disiplini:**
@@ -66,6 +60,6 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
 ## Sıradaki üç adım
-1. Karar masasının Faz 3 eksik listesi cevabını uygula (volkan.md). Onay gelirse (a) bilginin değeri, (b) yeşil eşiği tablosu.
-2. Can'ın main'deki `faz3` koşusundan sonra ROADMAP Faz 3 kutuları ve ekran 5.
-3. Faz 5: konuşma notu taslağını Can'ın `docs/sunum/`'u ile birleştirmek; gece 2 prova.
+1. Karar masasının 19:59 cevabını uygula (jüri cevabı, ekran 6 cümlesi; başvuru anında hesap pilot listesine girerse ROADMAP).
+2. Faz 5: konuşma notu ↔ `docs/sunum/` birleştirme (Can'la, kutudan); 2 prova.
+3. Faz 4 kontrol: Civan'ın yan paneli sözleşme 1.3 sütunlarıyla (kutudan, `app/`'e yazmadan).
