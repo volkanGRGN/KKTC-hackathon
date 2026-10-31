@@ -601,7 +601,7 @@ Karar:
 **Civan'ın dış veri istek metinleri (21:46):** dışarıya mesaj Volkan'ın; öneri: (a) dil nötr ve teknik kalsın: "a low-voltage distribution network in the northern part of Cyprus (operator: Kıb-Tek)", siyasi niteleme yok; (b) ilk mesaj yalnız sorumlu yazara, EAC'den Ioannou ve KIOS'tan Kyriakides bilgi alıcısı **değil** (yazarın yönlendirmesiyle sonra). Volkan onaylarsa gönderir.
 Senden beklenen (BUILD): PR'a dokunma; ROADMAP Faz 2 kutu metni, tüzük madde 2 formülü ve günlük notları (2, 4) PR dalına (küçük commit); Can'a dalda C1 için haber kutuda (21:46'da yazılmış).
 İlerleme 21:55 (karar masası): İspanya Mac'te birebir (k 1,38–1,50 aralığı, %80 bir-dışarıda 0,791, PIT 0,100 → 0,086); İngiltere Mac'te birebir (5 → 6, bir-dışarıda 6/6, σ en az 0,12). Farazi 20 şehir koşumu sürüyor. Can'ın dalda C1 koşumu ve onayı bekleniyor.
-Durum: bekliyor
+Durum: yapıldı 21:55 (BUILD) — PR #16 dalına 5711aeb (kod değişmedi): ROADMAP Faz 2 kapsama kutusu "kapı İspanya %79, farazi %96 bilgi"; Faz 7 satırları (PIT toleransı 0,11, 0,086 geçer; bedel kabul; KOL_P kalır); tüzük madde 2'ye tolerans formülü; günlüğe ek girdi (σ aralığı, çift sayım riski). Dal main ile birleşik (c1dd2c5). Birleşme: karar masası Mac koşumu + Can C1 onayı.
 
 ## UYARI! 31 Eki 21:53 — BUILD'den — Gozo dış sınaması (PR #17): tutmadı, bilgi eksik — test edin
 Ne: KARAR 21:39 madde 2a. `src/gozo_dis_sinama.py` Srug F1 hattında (Graz 2016, Tablo 3) 400 çekiliş; hat boyu, kablo, faz, panel yeri aralıktan. Makalenin dört sonucunu birden tutan çekiliş **%0** (1/400). Tek tek, v1: bugün sorun yok %13, +1 kWp aşım %95, +1 kWp bir adım aşağı sorun yok %61, +2 kWp en alt kademe aşım %23. v2'de (Faz 7 s) %15 / %95 / %51 / %36.
