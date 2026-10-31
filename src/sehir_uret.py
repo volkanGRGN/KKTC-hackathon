@@ -53,7 +53,7 @@ SIRA_SAYISI = 7                          # "gerçek kaç ev" için başvuru sır
 # Girne merkez: Civan'ın OSM alanının ortası [Kaynaklı: data/raw/osm-kasaba/KAYNAK.txt]
 REFERANS = (35.3375, 33.318)
 KUZEY_SINIRI_M = 400                     # kıyı: referansın kuzeyine en çok 400 m [Yorum]
-KVA_LISTESI = [25, 50, 100, 250, 400, 630, 1000]   # direk ≤ 400 [Kaynaklı: şartname, belgesi BULAMADIM]; yer [Yorum]
+KVA_LISTESI = [25, 50, 100, 250, 400, 630, 1000]   # direk ≤ 400 [varsayım: Kıb-Tek şartnamesi, bağlantısı yok]; yer [Yorum]
 
 # Abone sınıfı: (profiller.py sınıfı, trafolar.csv sütunu, yıllık MWh / abone, üç faz olasılığı).
 # Yıllık MWh / abone [Hesap]: Kıb-Tek 2023 tarife sınıfı tüketimi (stat_2023) ÷ abone sayısı (veri sözlüğü).
