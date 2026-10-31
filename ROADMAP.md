@@ -42,13 +42,13 @@ Yapılacaklar — veri (Can yapar, Volkan eleme kararını onaylar; her aday iç
 Yapılacaklar — kod (Claude):
 - Can'ın `profiller.py`'sinden abone sınıfı eğrilerini al (30 dk → 5 dk açma orada); 7 tipin abone karışımı ve abone başına büyüklük (Kıb-Tek yıllık tüketimi) şehir üreticisinde; bahar iş günü ve tatil günü.
 - Sözleşmeyi yaz: [docs/data/tablo-bicimi.md](docs/data/tablo-bicimi.md). Civan ve Can baştan hepsine göre kurar: trafo tablosu, 5 dakikalık yük, cevap anahtarı, Faz 2 tahmin tablosu, Faz 3 kaç ev tablosu. Tip ve faz dağılımı Kıb-Tek'in bilmediği şeyler olduğu için trafo tablosunda değil cevap anahtarında.
-- Rastgeleleştirme: tüketim ±%20, saat kayması ±30–60 dk, panel yaygınlığı %10–50, hava yılı 2024/2025, trafo çıkışı 246–250 V, faz dağılımı.
+- Rastgeleleştirme: tüketim ±%20, saat kayması ±30–60 dk, panel yaygınlığı %3–25 ([ADR-0006](docs/decisions/adr-0006-panel-yayginligi-bugunun-kibrisi.md); ilk taslak %10–50 idi), hava yılı 2024/2025, trafo çıkışı 246–250 V, faz dağılımı.
 - Cevap anahtarı: öğlen (11–14) en düşük yük (iş günü ve tatil) + ev ev benzetimle gerçek "kaç ev sığar" (259 V; ev başına 6,5 kW: bekleyen başvurular 5–8 kW, orta değer; eski benzetim kendi içinde 5 kW kullanır).
 - README'de komut; günlük.
 
 Geçme sınavı:
 - [ ] 40 trafolu şehir ≤ 60 saniyede üretiliyor; aynı tohum aynı şehri veriyor (iki çalıştırma birebir).
-- [ ] Veri sağlaması: konut öğlen/akşam oranı 0,6–0,8; çarşı tepesi 11–14 arasında; otel Temmuz/Ocak 3–5×; pazar günü çarşı öğleni iş gününün yarısından az.
+- [ ] Veri sağlaması: konut öğlen/akşam oranı 0,6–0,8; çarşı tepesi 11–14 arasında; otel Temmuz/Ocak 3–5×; çarşı Nisan tatil öğleni / iş günü öğleni 0,6–0,9 (EAC'de pazar ayrı yok; karar masası 31 Ekim; ilk taslak "pazar günü yarısından az" idi).
 - [ ] 7 tipin 7'si en az 3 trafoda var; 20 şehirde her tipten ≥ 60 trafo.
 - [ ] En az bir trafo bugün 259 V üstü (yöntemin görecek bir şeyi var); hiçbir trafo 216 V altı değil (benzetim bozuk değil).
 - [ ] Windows'ta çalıştı ve çıktı UTF-8 (Can onayı).
