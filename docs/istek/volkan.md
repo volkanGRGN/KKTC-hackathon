@@ -277,12 +277,6 @@ Dosya: docs/log/2026-10-31-volkan-faz3-varsayimlar.md
 Neden: Volkan "modelin yanlış bulmasının çözümü nedir" sorusu; kod inceleme rehberindeki "ölçülmemiş sayı" kuralı. Bloklamıyor.
 Durum: karar verildi 18:46 → volkan.md (KARAR aşağıda): K2 bu gece değişmez, üretici 1.3'te aralık; K9/K6 değişmez
 
-## UYARI! 31 Eki 17:50 — Civan'dan — dashboard'da "şebeke doluluğu" nasıl hesaplansın? (aynı soru volkan.md ve can.md'de)
-Ne: Haritadan ayrı bir dashboard sayfası (veri ve hesap) şehrin şebeke doluluğunu gösterecek. Hangi tanım doğru: (a) trafo başına öğlen en düşük yük ÷ trafo gücü (`tahmin.csv` `ogle_min_kw` ÷ `trafolar.csv` `kva`); (b) panel payının ne kadarı dolu (`kac_ev.csv` gerilim/ısıl pay ve kaç ev); (c) kWh: yıllık tüketim (`yillik_tuketim_mwh`) ve öğlen güneşinin ne kadarı şebekeye sığar; (d) başka? Yalnız sözleşmedeki sütunlarla, cevap anahtarı olmadan hesaplanacak.
-Dosya: app/ (Civan, yeni dashboard sayfası)
-Neden: Tanım net değilse ekranda yanlış ya da anlamsız rakam gösteririz.
-Durum: karar verildi 18:46 → civan.md: üç kutu (renk dağılımı, kaç ev toplamı ↔ %40 kuralı, panel payı doluluğu); öğlen yük ÷ kVA 'doluluk' değil
-
 ## UYARI! 31 Eki 17:58 — BUILD'den — Faz 3 olasılıklı hesap (PR #15): resmi hesap olsun mu?
 Ne: Volkan'ın isteğiyle (modelin yanlış bulduğu yerlerin çözümü) Faz 3 olasılıklı denendi: her trafonun ağı Kıb-Tek'in bildikleriyle kurulur, bilinmeyenler (bara, OG değişimi, hat/sıra, faz, panelin yeri, yük) gerçek veriye dayalı aralıktan 40 kez çekilir, ev ev benzetim koşar. Sınav 11–20 (bir kez, gösterim): yeşil %28, **yanlış yeşil 0/97** (tek denklem 0/21; %40 kuralı 41/284); **yanlış kırmızı %23** (tek denklem %42); **kaç ev hatası 2** (tek denklem 3,5; eşik ≤ 2); sarı %63 (aynı). Bedeli: dolu 74 trafonun 23'ü kırmızı, gerisi sarı ("önce ölç"). Olasılıklar orta ve yüksek kovada gerçekle tutuyor, düşük uçta iyimser (üretici UKPN'le çelişen +%0,8 OG yükselmesi içeriyor; aralıklar üreticiye uydurulmadı). Soru: Faz 3'ün resmi hesabı bu olsun mu? Olursa sözleşme §6'ya üç sütun (`p_bugun_asar`, `p_iki_ev_sigar`, `kac_ev_orta`), Civan'ın paneli ve Can'ın `faz3`'ü güncellenir; kırmızı eşiği 0,5 ilkeden (ayarlanmadı, bedeli günlükte tablo). Canlı için yeşil kuralı gerçek veride (İngiltere 6 hat) geri-test şart.
 Dosya: src/kac_ev_olasilik.py, docs/log/2026-10-31-volkan-faz3-olasilik.md (PR #15, PR #13'ün üstünde)
