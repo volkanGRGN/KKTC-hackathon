@@ -322,3 +322,9 @@ Dosya: PR #16; senin dosyaların değişmedi.
 Neden: öneren ≠ puanlayan (tüzük §4).
 Durum: bekliyor
 
+
+## KARAR 21:51 — PR #16 (Faz 7) için: C1'i dalda koş, dört bulgunun cevabı
+Karar: PR #16'nın dört eksi bulgusu karara bağlandı (volkan.md 21:51): farazi kapsama maddesi **bilgi** (kapı İspanya %79), bedel (yeşil %14, sarı %69) kabul, PIT toleransı n'ye bağlı (max(0,05; 2·√(0,09/n)); n = 29 → 0,11, İspanya 0,086 geçer), KOL_P kalır. **Senden:** C1'i (kapsama eğrisi, PIT, İspanya satırı) `kalibrasyon/faz7` dalında koş; "önce" (main) / "sonra" (dal) yan yana günlüğe; PIT maddesinde toleransı yukarıdaki formülle yaz; sonra PR'ı GitHub'da onayla (öneren ≠ puanlayan). Karar masası Mac koşumu tutunca birleştirir; sonra resmi `faz2` / `faz3` ve sunum rakamları v2 (ekran 5: yeşil %14, sarı %69, kırmızıların %33'ünde yer var; kilit 0/48 ↔ 41/284; jüri: "İngiltere 6 hat, yükselme ortalama %19 küçük görülüyordu, payı ekledik").
+Neden: tüzük madde 2–3; Muhittin vurgu 2.
+Senden beklenen: C1 dalda + onay; v2 rakamları ancak birleşince.
+Durum: bekliyor
