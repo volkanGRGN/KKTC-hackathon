@@ -124,7 +124,7 @@ Durum: karar verildi 16:27 → volkan.md (KARAR aşağıda); Volkan'a iletildi
 Karar: (1) **Fizik değişmez**: `solve()` İngiltere'de 6 hat ucu evin 4'ünde ölçülen yükselmenin 0,84–1,39 katını verdi (ortanca 0,87) [Hesap, PR #11 günlüğü]; ADR-0002'nin fiziği gerçek veride ilk kez tutuyor. (2) **Faz 3 karamsar senaryo hat ucu + evin fazı**: `kac_ev.py` karamsar durumda bekleyen panelleri hattın **ucuna** (etkin mesafe = hat boyu, yarısı değil) ve tek faza koyar; iyimser durum eşit yayılmış + dengeli üç faz kalır. Gerekçe: paneller uca toplanınca eşit yayılmış model yükselmeyi 2–4 kat az gösteriyor (UKPN 2 sitede 0,22 / 0,52; UKPN'in kendi modeli 0,43) → yanlış yeşil yönü. ADR-0002'nin "tek faz karamsar / dengeli iyimser" kuralının içinde; yeni ADR yok, `docs/method/modeling.md` §4'teki "etkin mesafe hat boyunun yarısı" satırı "karamsar: hat boyu, iyimser: yarısı" olur. (3) **Trafo çıkış gerilimi bandı 246–250 → 244–252 V** (üretici 1.2): İngiltere'de siteler arası bara gerilimi yayılımı ss 3,3 V, bizimki 1,2 V; Kıbrıs dağılımı BULAMADIM, UKPN tasarım varsayımı 248 V bizim merkezimizle aynı; bant ±4 V [Yorum, ss 2,3 V, ikisinin arası]. Pilotun ilk ölçeceği şey bara gerilimi dağılımı: validation.md "gerçek veri" bölümüne satır. (4) Faz dengesizliği çapası doğrulandı: kentsel ortanca %14, P84 %30; bizim üretici %29 ortanca (karamsar). 1.2'de kentsel ±%25 / kırsal ±%50 kalır; üretici dengesizliği raporlasın (`ayar.json` `faz_dengesizlik_ortanca`). (5) PR #11 birleşsin (karar masası baktı; kod kurallara uygun, veri depoya girmiyor).
 Senden beklenen (ana oturum): Faz 3 kartı ve `src/kac_ev.py`'de (2); üretici 1.2'de (3) ve (4); `modeling.md` §4 ve `validation.md` satırları; Faz 5 dürüstlük cümlesine: "Gerilim fiziğini İngiltere'de 6 gerçek hatta sınadık: dördünde ±%40 içinde, ikisinde paneller hat ucunda toplandığı için model yükselmeyi az gösterdi; bu yüzden karamsar senaryomuz panelleri hattın ucuna koyar." PR #11'i birleştir (ben deniyorum; olmazsa sen).
 İlerleme 17:03 (BUILD): (3) trafo çıkışı 244–252 V ve (4) `faz_dengesizlik_ortanca` PR #12'de (c934d48; 20 şehir ortancası %20,7). (2) `kac_ev.py` ile şimdi; `modeling.md` §4, `validation.md`, Faz 5 cümlesi bu akşam. (5) PR #11: BUILD'in birleştirme izni yok (aşağıda UYARI).
-Durum: bekliyor
+Durum: yapıldı 17:17 (BUILD) — (2) `kac_ev.py` karamsar = hat ucu + tek faz, PR #13; (3) 244–252 V ve (4) `faz_dengesizlik_ortanca` PR #12; `modeling.md` §4 PR #13; `validation.md` satırları ve Faz 5 gerilim cümlesi main'de (655dc8e). (5) PR #11'i birleştirmek Volkan'da (BUILD'in izni yok).
 
 ## KARAR 16:50 — BUILD'e: yeniden planlama (Volkan: "PR'ı birleştir, fazları buna göre düzenle, Can ve Civan'ın yükünü yeniden dağıt")
 Karar: Sunum yarın, saat bilinmiyor; bu akşam üç şey paralel gider: Faz 2 kapanışı, Faz 3 çekirdeği, Faz 5 başlangıcı. Zaman kutuları kesin.
@@ -135,6 +135,7 @@ Karar: Sunum yarın, saat bilinmiyor; bu akşam üç şey paralel gider: Faz 2 k
 5. ROADMAP: Faz 2 başlığına durum, Faz 3 ve Faz 5 "başladı 31 Ekim akşam"; kartları docs/gorev'e; DEVIR tazele. Can ve Civan'ın kutularına iş sırasını ben yazdım (can.md / civan.md 16:50); kartlar gelince onlar kartı esas alır.
 Senden beklenen (ana oturum): yukarıdakiler; bitirdiğin kalemi bu girdinin altına "yapıldı <saat>" satırıyla işle.
 İlerleme 17:03 (BUILD): (2) üretici 1.2 paketi bitti, PR #12 (zaman kutusu 19:00 içinde); 20 şehir yeniden üretildi, `sinav.py faz1` (207 V) 5/5 geçti. (1) birleştirmeler: izin yok (aşağıda UYARI). (3) `kac_ev.py` şimdi başlıyor.
+İlerleme 17:17 (BUILD): (1) Volkan kararı 17:06: #8 ve #12 Can'ı bekler. (2) Faz 2: PR #12 hazır, Can'ın `sinav.py faz2` ölçümü bekleniyor. (3) Faz 3 çekirdeği: `kac_ev.py` PR #13 (sınav 11–20: yanlış yeşil 0/21, %40 kuralı 41/284); Can ve Civan Faz 3 kartları main'de (docs/gorev/can-faz3-sinav-grafik.md, civan-faz3-yan-panel.md). (5) ROADMAP Faz 2/3/5 güncel (655dc8e); DEVIR sırada. (4) konuşma notu taslağı sırada.
 Durum: bekliyor
 
 ## KARAR 17:00 — BUILD'e: Muhittin'in cevabı → sunum hikâyesi, Faz 3 yeşil kuralı, bugün / sonra ayrımı
@@ -145,6 +146,7 @@ Karar: Muhittin'in ikinci cevabı günlükte (docs/log/2026-10-31-muhittin-cevap
 3. Fatura: sözleşme 1.2'deki `yillik_tuketim_mwh` kalır; dağılım sütunları (yüksek tüketen abone oranı) 1.3'e not.
 **Sonra (sunum sonrası / pilot öncesi), ROADMAP'e "Faz 3 ikinci sürüm" olarak:** kümülatif düşüm (`onaylanan_kw`, `kalan_ev`), yeşil kuralının İspanya/İngiltere geri-testi ve bütçe eşikleri, çapalamaya korelasyon matrisi + P90/P95 + PV konum dağılımı + trafo içi çeşitlilik (Can'ın `edp_kiyas.py`; üretici 1.3), "farazi − İspanya" fark ölçeri her sürümde.
 Senden beklenen (ana oturum): 1–3 bugün, "sonra" listesi ROADMAP'e; bitince bu girdiye "yapıldı <saat>".
+İlerleme 17:17 (BUILD): (1) ROADMAP Faz 5 güven merdiveni, manşet ve dürüstlük cümleleri main'de (655dc8e); Can'a aktarım can.md'de. (2) ADR-0010 rengi `kac_ev.py`'de (PR #13), `modeling.md` §5 PR #13'te, canlı bütçe < %2 `validation.md`'de; kırmızı kuralının okuması aşağıdaki UYARI'da. (3) fatura dağılım sütunları 1.3 notu ROADMAP'e. "Sonra" listesi ROADMAP Faz 3 ikinci sürümde.
 Durum: bekliyor
 
 ## UYARI! 31 Eki 17:03 — BUILD'den — BLOKLUYOR: BUILD PR birleştiremiyor (#10, #11, #8, #12)
@@ -186,4 +188,10 @@ Neden: tek ekran, slayttan haritaya geçiş yok; rakamlar veriden gelir;
 teknik terimler (arketip, kVA, P10) sunum dilinde yok.
 Karar gereken: (a) sunum dashboard'da mı, slaytta mı;
 (b) animasyona zaman ayrılsın mı (iş sırası 4–5 öncelikli kalır).
+Durum: bekliyor
+
+## UYARI! 31 Eki 17:17 — BUILD'den — Faz 3: ADR-0010'daki "kırmızı = karamsar sınırı aşıyor" hangi okuma?
+Ne: `kac_ev.py` (PR #13) yeşil kuralı tuttu: sınav şehirleri 11–20'de yanlış yeşil 0/21 (%40 kuralı 41/284 = %14; dolu 74 trafonun 41'ine "yer var"). Kırmızı için metin üç türlü okunuyor, sınav 11–20 (347 trafo, 74 dolu): (a) **karamsar_yeni_ev** (bekleyen ev hattın ucunda sığmıyor; düz okuma, şu an varsayılan): kırmızı %68, yanlış kırmızı %69, dolu yakalanan 74/74, sarı %26; (b) **karamsar_bugun** (karamsar senaryoda yeni panelsiz bugün aşıyor): kırmızı %31, yanlış kırmızı %42, dolu yakalanan 61/74, sarı %63; (c) **beklenen_bugun** (her belirsizliğin ortasında bugün aşıyor): kırmızı %3, yanlış kırmızı %17, dolu yakalanan 10/74, sarı %90. Yeşil üçünde aynı. Sebep: dolu trafoların hemen hepsi bugün zaten 259 V üstünde ve bunu en çok ±4 V bilinmeyen bara gerilimi belirliyor; hiçbir eşik ikisini birden iyi yapmıyor. Önerim (b): kırmızı = "karamsar senaryoda bugün bile sınırda; önce ölç ya da güçlendir"; dolu trafoların %82'si kırmızı, sarı %63. (a) haritayı jüriye "her konut ve köy trafosu kırmızı" gösterir (kırmızıların üçte ikisinde yer var). Kod tek satır (`KIRMIZI_KURALI`).
+Dosya: src/kac_ev.py, docs/log/2026-10-31-volkan-faz3.md (PR #13)
+Neden: ADR-0010 karar masasının; okumayı ben seçmedim, düz okumayla bıraktım (CLAUDE.md: ADR'ye ters düşecek işi önce sor). Bloklamıyor: Can ve Civan kurala bağlı değil, yalnız `kac_ev.csv` değişir.
 Durum: bekliyor

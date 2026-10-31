@@ -145,3 +145,9 @@ Ne: (1) PR #12 (https://github.com/volkanGRGN/KKTC-hackathon/pull/12) sözleşme
 Dosya: docs/data/tablo-bicimi.md (PR #12), data/raw/open-meteo-lefkosa/KAYNAK.txt
 Neden: sözleşme değişikliği Can ya da Civan onayı ister; KAYNAK senin dosyan.
 Durum: bekliyor
+
+## UYARI! 31 Eki 17:17 — Volkan'dan (BUILD oturumu) — Faz 3 kartın hazır; sunum iskeletine yeni rakamlar
+Ne: (1) Kart: docs/gorev/can-faz3-sinav-grafik.md (`sinav.py faz3` + kilit grafik). `kac_ev.py` PR #13'te (#12'nin üstünde); birleşene kadar `kac-ev/ilk-surum` dalından üret. (2) Sunum iskeleti için (ROADMAP Faz 5 "güven merdiveni" main'de): manşet İspanya %25 → %10 (PR #10); gerilim 6 hattın 4'ü ±%40 (PR #11); farazi 1.2 faturalı %3,9 / faturasız %22 (destek, üst sınır); **kilit grafik: dolu trafoya "yer var" — biz 0/21, %40 kuralı 41/284 (%14)** (sınav şehirleri 11–20, gösterim). Hepsi senin resmi ölçümünle teyit edilecek.
+Dosya: docs/gorev/can-faz3-sinav-grafik.md, ROADMAP.md (Faz 5)
+Neden: karar masası 16:50 iş sırası (4) ve 17:00 BİLGİ.
+Durum: bekliyor
