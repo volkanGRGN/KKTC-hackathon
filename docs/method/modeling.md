@@ -61,6 +61,6 @@ Kod: `src/kac_ev.py`. Girdi: `trafolar.csv` (kVA, hat sayısı ve en uzun hat bo
   - Eşikler [Yorum]; günlükte gerekçe.
 - **Renk (Faz 3, [ADR-0010](../decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md)):**
   - **yeşil** = karamsar senaryo bekleyen evi marjla alıyor (marj = gerilim payının %10'u, en az 1 ev: karamsarda en az ~2 ev sığmalı) **ve** güven yüksek;
-  - **kırmızı** = karamsar sınırı aşıyor. Kod üç okumayı tanır (`KIRMIZI_KURALI`): `karamsar_yeni_ev` (bekleyen ev hattın ucunda sığmıyor; metnin düz okuması, varsayılan), `karamsar_bugun` (karamsar senaryoda yeni panelsiz bugün aşıyor), `beklenen_bugun` (her belirsizliğin ortasında bugün aşıyor). Ölçüleri Faz 3 günlüğünde; seçim karar masasında;
-  - **sarı** = diğerleri: sınırda ya da güven orta / düşük → sınırlı onay ya da önce ölçüm (ölçüm cihazı sarılara).
+  - **kırmızı** = karamsar senaryoda bugün aşıyor (yeni panel olmadan hat ucu 259 V üstünde ya da ısıl pay eksi): "önce ölç ya da güçlendir"; **sarı** = sınırda (karamsar bugün aşmıyor ama bekleyen ev sığmıyor) ya da güven orta / düşük. Karar masası 17:26 bu okumayı seçti (`KIRMIZI_KURALI = karamsar_bugun`); kod öbür iki okumayı da tanır (`karamsar_yeni_ev`: bekleyen ev hattın ucunda sığmıyor; `beklenen_bugun`). Yanlış kırmızı ve sarı oranı ROADMAP hedeflerinin üstünde: sebep ±4 V bilinmeyen bara gerilimi, pilotun ilk ölçeceği şey ([Faz 3 günlüğü](../log/2026-10-31-volkan-faz3.md));
+  - sarı → sınırlı onay ya da önce ölçüm (ölçüm cihazı sarılara).
   - Renk, panelsiz konut abone sayısıyla sınırlanmamış fiziğe bakar (başvuru ticari aboneden de gelebilir).

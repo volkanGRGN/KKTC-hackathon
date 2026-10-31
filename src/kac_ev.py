@@ -15,8 +15,9 @@ Her yeni ev (6,5 kW) bu gerilimi sabit bir miktar artırır; sınıra (259 V) ka
             paneller uca toplanınca eşit yayılmış model yükselmeyi 2–4 kat az gösterdi; karar masası 16:27),
             mevcut panellerin yarısı aynı fazda, hat üstünde yük indirimi yok.
   iyimser:  P90 yük, 246 V, yeni ve mevcut paneller hat boyunun yarısında, dengeli üç faz.
-Renk (ADR-0010): yeşil = karamsar en az 1 ev + marj (marj = payın %10'u, en az 1 ev) ve güven yüksek;
-kırmızı = karamsar senaryoda 1 ev bile sığmıyor; diğerleri sarı (sınırda ya da güven orta / düşük).
+Renk (ADR-0010; okuma karar masası 17:26): yeşil = karamsar en az 1 ev + marj (marj = payın %10'u, en az 1 ev)
+ve güven yüksek; kırmızı = karamsar senaryoda BUGÜN, yeni panel olmadan, sınır aşılıyor ya da ısıl pay eksi
+("önce ölç ya da güçlendir"); sarı = karamsar bugün aşmıyor ama bekleyen ev sığmıyor, ya da güven orta / düşük.
 
 Çalıştırma:
   python3 src/kac_ev.py data/synthetic            # her şehir: kac_ev.csv
@@ -57,9 +58,9 @@ SENARYO = {
                      yeni_mesafe=0.5, mevcut_mesafe=0.5, hat_yuk_indirimi=True),
 }
 # Kırmızı kuralı. ADR-0010 metni: "kırmızı = karamsar sınırı aşıyor". 'karamsar_yeni_ev': karamsar senaryoda (bekleyen
-# panel hattın ucunda) 1 ev bile sığmıyor (metnin düz okuması, varsayılan). 'karamsar_bugun': karamsar senaryoda
-# yeni panel olmadan bugün aşıyor. 'beklenen_bugun': beklenen senaryoda bugün aşıyor. Ölçüler Faz 3 günlüğünde.
-KIRMIZI_KURALI = 'karamsar_yeni_ev'
+# panel hattın ucunda) 1 ev bile sığmıyor (metnin düz okuması). 'karamsar_bugun': karamsar senaryoda yeni panel olmadan
+# bugün aşıyor (karar masası 17:26 seçti). 'beklenen_bugun': beklenen senaryoda bugün aşıyor. Ölçüler Faz 3 günlüğünde.
+KIRMIZI_KURALI = 'karamsar_bugun'
 MARJ_ORAN, MARJ_EV = 0.10, 1.0          # yeşil marjı: gerilim payının %10'u, en az 1 ev [ADR-0010, Yorum]
 KURAL40 = 0.40                          # bugünkü kural: bağlı panel ≤ trafo gücünün %40'ı
 
