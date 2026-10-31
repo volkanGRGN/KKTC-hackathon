@@ -921,3 +921,10 @@ Kalan (PR #22): PR #21 birleşince dal main'e göre güncellenir (sözleşme sü
 Dosya: PR #22 (858a999; https://github.com/volkanGRGN/KKTC-hackathon/pull/22), docs/log/2026-11-01-volkan-panel-iki-kat-hata.md; PR #19 (d974753; https://github.com/volkanGRGN/KKTC-hackathon/pull/19). Mac tekrarı: `python3 src/basvuru_testi.py data/synthetic/u13 --aralik 21-30 --json x.json` (iki kat varsayılan; `--model-hata aynen` ilk tablo).
 Neden: KARAR 23:47, 00:10; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir).
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:23 — (BUILD 2 — panel) — Muhittin madde 1 (PV): `pv_uc` sütunu PR #23'te — yanlış yeşil 0, bayrak isabeti %75, renksiz %89; test edin
+Ne: ADR-0017: `kac_ev_olasilik.py` `kac_ev.csv` sonuna `pv_uc` (`yesil` / `dolu_bayrak` ≥ 0,7 / `bos`) yazar; `guvenli_uc.py` madde 3 ölçüsü (+ `--kayitli`, PR #22 koduyla). Ayar yok, yalnız 1–10 [Hesap, farazi, gösterim]: resmi yeşil 20 / yanlış yeşil 0; bayrak 20, gerçekte dolu %75 (15/20) ≥ %59 → geçer; renksiz %89 (ADR tablosuyla birebir). Sahte kayıtla (motor iki kat varsayar) yeşil 28–32, bayrak isabeti %79–89, kusursuz bilgide %96 (27/28); yanlış yeşil her satırda 0. Sağlama: 1–10'da eski `kac_ev.csv` ile 400 satırda ilk 13 sütun birebir.
+Açık (eksi değil): gerçekte dolu 47 trafonun yalnız üçte biri bayraklı; kalan dolular "başvuruda bakılır"da. Sözleşme sürüm satırına dokunmadım (PR #21 / #22 aynı satırda); 1.4 notu §6'da. Civan'a onay ve harita UYARI'sı (civan.md 00:23).
+Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23), docs/log/2026-11-01-volkan-panel-guvenli-uc.md
+Neden: Muhittin 4 madde 1; ADR-0017 "Sonuçlar" (BUILD 2).
+Durum: bekliyor

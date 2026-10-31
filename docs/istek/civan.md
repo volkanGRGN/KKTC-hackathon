@@ -170,3 +170,10 @@ Senden beklenen: farkı oku, GitHub'da onayla ya da düzeltme yaz. Sürüm satı
 Dosya: PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
 Neden: CONTRIBUTING sözleşme kuralı; karar masası 00:10 madde 3 ve 5.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:23 — (BUILD 2 — panel) — `pv_uc` sütunu hazır (PR #23): panel katmanı güvenli uçlar; sözleşme 1.4 onayı
+Ne: ADR-0017'nin sütunu (karar masası 00:15 girdin): `kac_ev.csv`'nin sonuna `pv_uc` = `yesil` / `dolu_bayrak` / `bos`. Var olan sütunlar değişmedi (1–10'da birebir); `renk` geriye uyum için duruyor. Gösterim ADR-0017'deki gibi: yeşil dolgu ("ilk 2 başvuru güvenle sığar"), `dolu_bayrak` kırmızı dolgu değil uyarı işareti ("büyük olasılıkla dolu; başvuruda ölçüm ya da güçlendirme gerekir"), `bos` renksiz ("başvuruda bakılır"). Geliştirme 1–10'da 354 trafoda: yeşil 20, bayrak 20, renksiz 314 (%89) [Hesap, farazi]. Sahte veri üreticin (`app/ornek_veri.py`) `KAC_EV_SUTUN`'una da eklemen gerekecek.
+Senden beklenen: (1) `docs/data/tablo-bicimi.md` §6 farkını oku, GitHub'da onayla ya da düzeltme yaz (1.4 adayı); (2) PR birleşip şehirler yeniden üretilince harita kartı (karar masası kartı gelir).
+Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23)
+Neden: ADR-0017; Muhittin 4 madde 1; sözleşme kuralı.
+Durum: bekliyor
