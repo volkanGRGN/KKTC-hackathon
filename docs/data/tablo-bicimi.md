@@ -151,8 +151,8 @@ Satır = bir trafo.
 | Sütun | Tür | Birim | Örnek | Açıklama |
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
-| `kac_ev_karamsar` | int | ev | `1` | **1.3:** olasılıklı hesabın çekilişlerinin P10'u (ADR-0011): bekleyen panelsiz konutlar rastgele sırayla 6,5 kW alır, sığmayan atlanır. Panelsiz konut abone sayısıyla sınırlı. (Yedek yol `kac_ev.py`: P10 yük, tek faz, 250 V, paneller hat ucunda.) |
-| `kac_ev_iyimser` | int | ev | `6` | **1.3:** çekilişlerin P90'ı; aynı sınır. (Yedek: P90 yük, dengeli üç faz, 246 V, hat ortası.) |
+| `kac_ev_karamsar` | int | ev | `1` | **1.3:** olasılıklı hesabın çekilişlerinin P10'u (ADR-0011); %80 bandın alt ucu, "en az" değil (sınavda gerçek bunun altında %15 trafoda; karar masası 19:13): bekleyen panelsiz konutlar rastgele sırayla 6,5 kW alır, sığmayan atlanır. Panelsiz konut abone sayısıyla sınırlı. (Yedek yol `kac_ev.py`: P10 yük, tek faz, 250 V, paneller hat ucunda.) |
+| `kac_ev_iyimser` | int | ev | `6` | **1.3:** çekilişlerin P90'ı; %80 bandın üst ucu, "en çok" değil; aynı sınır. (Yedek: P90 yük, dengeli üç faz, 246 V, hat ortası.) |
 | `isil_pay_kw` | float | kW | `142.0` | trafonun ısınmadan alabileceği ek panel (karamsar: P10 yük) |
 | `gerilim_pay_kw_karamsar` | float | kW | `8.60` | |
 | `gerilim_pay_kw_iyimser` | float | kW | `41.30` | |
@@ -161,7 +161,7 @@ Satır = bir trafo.
 | `kural40_ev` | int | ev | `9` | %40 kuralının dediği: ⌊max(0, 0,4 × `kva` − `panel_kw`) ÷ 6,5⌋ |
 | `p_bugun_asar` | float | oran | `0.125` | **1.3:** bugün (yeni panelsiz, öğlen güneşi, en düşük yük) 259 V ya da kVA'nın aşılma olasılığı; ≥ 0,5 → kırmızı |
 | `p_iki_ev_sigar` | float | oran | `0.975` | **1.3:** rastgele ilk iki başvurunun ikisinin de sığma olasılığı; ≥ 0,98 ve güven yüksek → yeşil |
-| `kac_ev_orta` | int | ev | `3` | **1.3:** çekilişlerin ortancası (haritada gösterilecek tek sayı) |
+| `kac_ev_orta` | int | ev | `3` | **1.3:** çekilişlerin ortancası (haritada gösterilecek tek sayı: "yaklaşık N ev (karamsar–iyimser)"). Vaat sayıda değil renkte: yeşil = ilk iki başvuru ≥ %98 sığar |
 
 `isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda.
 
