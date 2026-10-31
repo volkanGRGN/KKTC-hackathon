@@ -748,3 +748,15 @@ Durum: bilgi
 Ne: (1) `kontrol/harita-v3`: PR #16/#18/#20 sonrası v3 şehirlerinde (1–30) haritanın açıldığını ve yan paneldeki sayıların her trafoda `kac_ev.csv` ile birebir olduğunu otomatik denetler (ROADMAP Faz 4 "40 trafo" ve "20 şehir" kutuları); yalnız `app/` + Civan günlüğü. (2) `deneme/eszamanlilik`: Can'ın 23:02 kartındaki 1–3 (indirme, eşzamanlılık eğrisi, akşam tepesi ↔ sıcaklık eğimi); Can'a UYARI 23:08 yazıldı, Can "dur" derse durur; 4–5 Can'da.
 Neden: Civan'ın bulut kredisi; iki iş birbirinden ve yerel oturumlardan bağımsız. Sunum rakamlarını değiştirmez (v1 / v3 kararı sende).
 Durum: bilgi
+
+## UYARI! 31 Eki (23:02 sonrası) — Can'dan — ROADMAP Faz 11'e yük haritasının "akşam" ayrıntıları işlenmemiş
+Ne: Faz 11 satırı ("ayrı tepe modeli, sıcaklık + müşteri karışımı, hava normalizasyonu…") doğru ama Can ile netleşen şu noktalar ROADMAP'te yok (bir kısmı yalnız ADR-0014'te ve 23:02 KARAR'da):
+1. **İki ayrı soru:** güneş sığma (bahar öğleni, en düşük yük, gerilim yükselmesi 259 V) ↔ tüketim doluluğu (yılın en yüksek yükü, trafo kVA ve akşam gerilim düşümü 207 V). Birbirinden bağımsız; panel akşam tepesini düşürmez (tepe gün batımından sonra, batarya yok).
+2. **Tepe anı her saatten bulunur, saati raporlanır:** konutta yaz akşamı (klima), çarşıda yaz öğleni (bizim şehirlerde de 11–14), otel / sulama tipe göre. Yöntem "akşam"a kilitlenmez; her trafoda yılın en yüksek saati alınır ve "ne zaman" ile birlikte yazılır.
+3. **Net yük akşama kayar:** panelli mahallede öğlen net yük düşer, akşam aynı kalır → panel arttıkça tepe akşamda sivrilir; tepe modeli brüt değil net yükle kurulmalı.
+4. **Eşzamanlılık** (N ev birlikte tepe ÷ N × tek ev tepesi; sıcak akşamlar ayrı) ROADMAP Faz 11'de yazmıyor (23:02 KARAR madde 2'de var).
+5. Can'ın önceki "3. yol"u (tepe = öğlen tahmini × tepe/öğlen oranı) yük haritası için **başlangıç bile olmamalı** [Yorum, Can]: öğlen en düşük yük akşam klima tepesini taşımıyor ve oran Nisan'dan; ADR-0014 m. 1 ("tepe güneş modelinin yan ürünü değil") ile çelişiyor. 21:39 KARAR madde 2 ve 23:02 madde 5 bunu "başlangıç" diyor; 20 Kıbrıs evi ve sıcaklık verisinden kurulan ayrı model önerim.
+6. ROADMAP başındaki MVP tanımı ("her trafo için öğlen doluluk…") yalnız güneş tarafını anlatıyor; yük haritası Faz 11'le ürünün ikinci çıktısı oluyorsa tanıma bir cümle.
+Dosya: ROADMAP.md (Faz 11 satırı, MVP tanımı), gerekirse ADR-0014'e not
+Neden: Can'ın oturumunda netleşti (yük haritası = tüketim doluluğu, akşam odaklı ama saat sabitlenmez). Bloklamıyor; Can verileri indirip eşzamanlılık / sıcaklık eğimiyle devam ediyor, tepe saatini her trafo için raporlayacak.
+Durum: bekliyor
