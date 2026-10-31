@@ -493,3 +493,22 @@ Ne: Karar masası 19:51'in istediği kilit grafik (docs/sunum/kilit_yanlis_yesil
 Dosya: docs/sunum/kilit_yanlis_yesil.png (Can)
 Neden: Aynı tohumla Mac ve Windows bir trafoda farklı sonuç veriyor; prova notundaki "sunum bilgisayarında yeniden üretilirse tek tük trafo farklı çıkar" uyarısının ölçülmüş hâli. Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 21:24 — BUILD'den — Sunum sonrası faz haritası: Muhittin'e giden sıradaki "üreticiyi gerçeğe çapala, sınav şehirlerini yeniden üret" adımı Faz 6–11'de yok
+Ne: Muhittin'e 20:52'de giden sıra dört adımdı: (1) trafo çıkış gerilimi; (2) her ölçülen trafoyla aralıkları yeniden ayarla; (3) deneme şehri üreticisini gerçek dağılımlara çapala ve sınav şehirlerini yeniden üret; (4) başvuru-anı kararını sına. Muhittin "sıra büyük ölçüde doğru" dedi, üç uyarı ekledi. ROADMAP "Sunum sonrası" Faz 6–11'de (1) Faz 9'da, (2) Faz 7'de, (4) Faz 8'de var. **(3) hiçbir fazda yok**; kalemleri yalnız ROADMAP Faz 3 "ikinci sürüm / üretici 1.3" listesinde duruyor, sıralı plana bağlı değil.
+Muhittin'in tekniği bu adımı zaten şart koşuyor ama faz satırında adı geçmiyor:
+- ADR-0013 madde 1: ayar payı "model + üretici"; doğrulama payı ve İspanya / İngiltere / pilot dokunulmaz. Sızıntı uyarısı tam bu adımla ilgili: aynı ölçüm hem modele hem üreticiye girerse sınav iyi görünür.
+- ADR-0013 madde 6: ayar hedefi plato, yani gerçek ile üretilen dağılım arasındaki mesafe düzleşene kadar.
+- ADR-0013 madde 4: hiyerarşik güncelleme (popülasyon dağılımı + ölçülen trafonun kendi değeri) ve periyodik, sürümlü yeniden-fit. Bu da hiçbir faz satırında adıyla yok.
+Öneri (BUILD):
+(a) Faz 7 ile 8 arasına bir satır: **"Üretici çapalama ve yeni sınav şehirleri (üretici 1.3)":**
+   - ayar payıyla OG öğlen değişimi, panellerin hat üstündeki yeri, ince uç kol, trafo boyutu (Malta çapası), trafo içi çeşitlilik gerçek dağılımlara çapalanır;
+   - hedef plato (ADR-0013 madde 6);
+   - yeni sınav şehirleri yeni tohumla üretilir; eski sınav şehirleri ayar için kullanılmaz;
+   - Faz 3 rakamları yeniden ölçülür, sürüm üçlüsüyle yazılır (madde 5).
+   - Bitti: mesafe platoda, iki kapı yeni sınav şehirlerinde tutuyor.
+(b) Faz 9 satırına "her partiden sonra hiyerarşik güncelleme ve sürümlü yeniden-fit (ADR-0013 madde 4)".
+Numara: araya girerse Faz 8–11 kayar; ya "Faz 7b" ya yeniden numara, sizin kararınız.
+Dosya: ROADMAP.md "Sunum sonrası" ve Faz 3 üretici 1.3 listesi (BUILD yazar); docs/istek/muhittin.md 20:52; docs/log/2026-10-31-muhittin-cevap-3-veri-dongusu.md
+Neden: Volkan "fazlarda Muhittin'in dediği teknikle yapacağız" diyor; faz satırları tekniği adıyla anmazsa görev kartları ona referans vermez. Bloklamıyor; bu gece iş yok, prova önde.
+Durum: bekliyor
