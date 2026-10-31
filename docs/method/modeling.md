@@ -36,6 +36,8 @@ Kural: model yalnız Kıb-Tek'in bileceğini girdi alır (`trafolar.csv`) ve yal
 
 ## 4. Kaç ev sığar (Faz 3)
 
+**Resmi hesap olasılıklı** ([ADR-0011](../decisions/adr-0011-faz3-olasilikli-hesap.md), `src/kac_ev_olasilik.py`): her trafonun ağı Kıb-Tek'in bildikleriyle kurulur, bilinmeyenler (bara gerilimi 244–252 V, öğlen OG değişimi −%0,4…+%0,8, abonenin hattı ve sırası, fazı, panellerin hangi evde olduğu ve üçte bir uca toplanması, altıda bir yüksüz panelli kol, hat boyu ×0,6–1,6, yük) gerçek veriye dayalı aralıktan 40 kez çekilir, ev ev benzetim (`solve`) koşar. Kaç ev = çekilişlerin P10 / ortanca / P90'ı; renk bölüm 5. Ölçüm: [olasılıklı deneme](../log/2026-10-31-volkan-faz3-olasilik.md), [İngiltere geri-testi](../log/2026-10-31-volkan-faz3-ukpn-geritest.md). Aşağıdaki tek denklem yedek yol ve pay sütunlarının (ısıl, gerilim payı, %40 kuralı) kaynağı.
+
 Kod: `src/kac_ev.py`. Girdi: `trafolar.csv` (kVA, hat sayısı ve en uzun hat boyu, kablo, abone ve panel sayıları) ve `tahmin.csv` (öğlen en düşük yükün P10 / P90'ı, güven). Ölçülü trafoda ölçülen yük.
 
 - Fizik, ev ev benzetimin (`src/trafo_bos_kapasite.py` `solve`) empedanslarıyla tek denklem: hat ucu gerilimi = trafo çıkışı × (1 + OG öğlen yükselmesi) + r_trafo × faz akımı + r_hat × akım × mesafe; akım = (panel kW × öğlen güneşi − yük) ÷ 250 V. Tek fazlı akım nötrden döner (r_faz + r_nötr), dengeli üç fazda nötr akımı yok. Her yeni ev (6,5 kW) gerilimi sabit bir miktar artırır; 259 V'a kalan pay ÷ ev başına artış = gerilimin izin verdiği ev.
@@ -59,7 +61,8 @@ Kod: `src/kac_ev.py`. Girdi: `trafolar.csv` (kVA, hat sayısı ve en uzun hat bo
   - **Fatura yoksa `yuksek` verilmez** (1.2): büyüklük mahalle farkı kadar (±%30) bilinmez; 12 ölçülünün bir-dışarıda hatası şans eseri küçük çıkan şehirde "yüksek" en çok yanılan oluyordu.
   - Beklenen hata = bölünmüş artıkların mutlak ortancası × trafonun birimi.
   - Eşikler [Yorum]; günlükte gerekçe.
-- **Renk (Faz 3, [ADR-0010](../decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md)):**
+- **Renk, resmi (Faz 3, [ADR-0011](../decisions/adr-0011-faz3-olasilikli-hesap.md), ADR-0010'un olasılıklı okuması):** **kırmızı** = bugün (yeni panelsiz) sınırı aşma olasılığı ≥ 0,5; **yeşil** = ilk iki başvurunun sığma olasılığı ≥ 0,98 (canlı bütçe %2; marj 1 ev) **ve** güven yüksek; diğerleri **sarı**. Eşikler ilkeden, sınav şehrine göre ayarlanmadı. Sınav 11–20: yanlış yeşil 0/87, yanlış kırmızı %27, sarı %62; İngiltere'nin 6 gerçek hattında gerilim tarafı 5/6 kapsandı (yeşil bütçesi gerçek veride doğrulanmış sayılmaz).
+- **Renk, yedek yol (tek denklem, `kac_ev.py`):**
   - **yeşil** = karamsar senaryo bekleyen evi marjla alıyor (marj = gerilim payının %10'u, en az 1 ev: karamsarda en az ~2 ev sığmalı) **ve** güven yüksek;
   - **kırmızı** = karamsar senaryoda bugün aşıyor (yeni panel olmadan hat ucu 259 V üstünde ya da ısıl pay eksi): "önce ölç ya da güçlendir"; **sarı** = sınırda (karamsar bugün aşmıyor ama bekleyen ev sığmıyor) ya da güven orta / düşük. Karar masası 17:26 bu okumayı seçti (`KIRMIZI_KURALI = karamsar_bugun`); kod öbür iki okumayı da tanır (`karamsar_yeni_ev`: bekleyen ev hattın ucunda sığmıyor; `beklenen_bugun`). Yanlış kırmızı ve sarı oranı ROADMAP hedeflerinin üstünde: sebep ±4 V bilinmeyen bara gerilimi, pilotun ilk ölçeceği şey ([Faz 3 günlüğü](../log/2026-10-31-volkan-faz3.md));
   - sarı → sınırlı onay ya da önce ölçüm (ölçüm cihazı sarılara).

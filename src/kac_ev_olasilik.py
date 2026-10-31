@@ -21,12 +21,14 @@ başvuru sığıyor mu. Renk (ADR-0010 olasılıkla):
   yüksek (marj = 1 ev);  diğerleri sarı.
 Sayılar: kac_ev_karamsar = çekilişlerin P10'u, kac_ev_iyimser = P90'ı, kac_ev_orta = ortanca.
 
+Faz 3'ün resmi hesabı (ADR-0011, karar masası 18:46).
 Okur: trafolar.csv, tahmin.csv. cevap_anahtari.csv'yi okumaz.
-Yazar: kac_ev_olasilik.csv (deneme; sözleşmede değil).
+Yazar: kac_ev.csv, sözleşme §6 (1.3): karamsar / iyimser / renk bu hesaptan; isil_pay_kw, gerilim_pay_kw_*,
+sinir_karamsar, kural40_ev tek denklemden (kac_ev.py); ek sütunlar p_bugun_asar, p_iki_ev_sigar, kac_ev_orta.
 
 Çalıştırma:
   python3 src/kac_ev_olasilik.py data/synthetic --sehir 3
-  python3 src/kac_ev_olasilik.py data/synthetic           # 20 şehir, ~birkaç dakika
+  python3 src/kac_ev_olasilik.py data/synthetic           # 20 şehir, ~1,5 dakika; her şehirde kac_ev.csv
 """
 import argparse
 import csv
@@ -200,6 +202,7 @@ def sehir_calistir(klasor):
         trafolar = list(csv.DictReader(fh))
     with open(klasor / 'tahmin.csv', encoding='utf-8', newline='') as fh:
         tahmin = {r['trafo_no']: r for r in csv.DictReader(fh)}
+    tek = {x['trafo_no']: x for x in ke.sehir_hesapla(klasor)}     # pay sütunları ve %40 kuralı tek denklemden
     satirlar = []
     for r in trafolar:
         tr = {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
@@ -216,15 +219,14 @@ def sehir_calistir(klasor):
             renk = 'yesil'
         else:
             renk = 'sari'
-        satirlar.append(dict(sehir=int(tr['sehir']), trafo_no=r['trafo_no'], p_bugun_asar=round(p_bugun, 3),
-                             p_iki_ev_sigar=round(p_iki, 3), kac_ev_karamsar=nicel(kac, 0.1),
-                             kac_ev_orta=nicel(kac, 0.5), kac_ev_iyimser=nicel(kac, 0.9), renk=renk))
-    sutunlar = list(satirlar[0])
-    with open(klasor / 'kac_ev_olasilik.csv', 'w', encoding='utf-8', newline='') as fh:
-        w = csv.DictWriter(fh, fieldnames=sutunlar, lineterminator='\n')
-        w.writeheader()
-        w.writerows(satirlar)
+        satirlar.append({**tek[r['trafo_no']], 'kac_ev_karamsar': nicel(kac, 0.1), 'kac_ev_iyimser': nicel(kac, 0.9),
+                         'renk': renk, 'p_bugun_asar': round(p_bugun, 3), 'p_iki_ev_sigar': round(p_iki, 3),
+                         'kac_ev_orta': nicel(kac, 0.5)})
+    ke.csv_yaz(klasor / 'kac_ev.csv', SUTUNLAR, satirlar)
     return satirlar
+
+
+SUTUNLAR = ke.SUTUNLAR + ['p_bugun_asar', 'p_iki_ev_sigar', 'kac_ev_orta']      # sözleşme §6, 1.3
 
 
 def main():

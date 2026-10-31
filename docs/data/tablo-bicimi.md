@@ -1,6 +1,6 @@
 # Tablo biçimi sözleşmesi
 
-Sürüm 1.2 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
+Sürüm 1.3 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
 
 Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun eksik ya da yanlış geliyorsa önce bu dosyaya bak; değişiklik gerekiyorsa [Volkan'ın kutusuna](../istek/volkan.md) yaz. Örnek değerler biçimi göstermek içindir; ölçüm ya da sonuç değildir.
 
@@ -151,13 +151,18 @@ Satır = bir trafo.
 | Sütun | Tür | Birim | Örnek | Açıklama |
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
-| `kac_ev_karamsar` | int | ev | `1` | P10 yük, tek faz, trafo çıkışı 250 V, bekleyen paneller hattın ucunda (karar masası 16:27); panelsiz konut abone sayısıyla sınırlı |
-| `kac_ev_iyimser` | int | ev | `6` | P90 yük, dengeli üç faz, 246 V, hat ortası; aynı sınır |
+| `kac_ev_karamsar` | int | ev | `1` | **1.3:** olasılıklı hesabın çekilişlerinin P10'u (ADR-0011): bekleyen panelsiz konutlar rastgele sırayla 6,5 kW alır, sığmayan atlanır. Panelsiz konut abone sayısıyla sınırlı. (Yedek yol `kac_ev.py`: P10 yük, tek faz, 250 V, paneller hat ucunda.) |
+| `kac_ev_iyimser` | int | ev | `6` | **1.3:** çekilişlerin P90'ı; aynı sınır. (Yedek: P90 yük, dengeli üç faz, 246 V, hat ortası.) |
 | `isil_pay_kw` | float | kW | `142.0` | trafonun ısınmadan alabileceği ek panel (karamsar: P10 yük) |
 | `gerilim_pay_kw_karamsar` | float | kW | `8.60` | |
 | `gerilim_pay_kw_iyimser` | float | kW | `41.30` | |
 | `sinir_karamsar` | str | — | `gerilim` | karamsar senaryoda bağlayan: `gerilim` / `isil` |
 | `renk` | str | — | `sari` | `yesil` / `sari` / `kirmizi` ([yöntem](../method/modeling.md) bölüm 5, ADR-0010) |
 | `kural40_ev` | int | ev | `9` | %40 kuralının dediği: ⌊max(0, 0,4 × `kva` − `panel_kw`) ÷ 6,5⌋ |
+| `p_bugun_asar` | float | oran | `0.125` | **1.3:** bugün (yeni panelsiz, öğlen güneşi, en düşük yük) 259 V ya da kVA'nın aşılma olasılığı; ≥ 0,5 → kırmızı |
+| `p_iki_ev_sigar` | float | oran | `0.975` | **1.3:** rastgele ilk iki başvurunun ikisinin de sığma olasılığı; ≥ 0,98 ve güven yüksek → yeşil |
+| `kac_ev_orta` | int | ev | `3` | **1.3:** çekilişlerin ortancası (haritada gösterilecek tek sayı) |
+
+`isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda.
 
 "Ölçülmedi" etiketi = `tahmin.csv`'de `olculdu` = 0. Harita `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`'yi (sehir, trafo_no) ile birleştirir.
