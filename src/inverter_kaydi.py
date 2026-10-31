@@ -9,6 +9,9 @@ Kullanım (ham kayıt depo dışında; yolu ver):
   python3 src/inverter_kaydi.py <kayıt.csv>                     # sütunları kendisi bulmaya çalışır
   python3 src/inverter_kaydi.py <kayıt.xlsx> --zaman "Time" --gerilim "Grid Voltage(V)"
   python3 src/inverter_kaydi.py <kayıt.csv> --gerilim "Vac1" --gerilim "Vac2" --gerilim "Vac3"   # üç faz
+Okunan biçimler: xlsx; CSV / metin UTF-8 (BOM'lu ya da değil), UTF-16 (BOM'lu; Excel "Unicode metin"), Türkçe Excel
+"CSV (noktalı virgül)" (cp1254, ondalık virgül); üstte bilgi satırları ("sep=;", cihaz adı, dışa aktarma zamanı) olabilir,
+ayraç ve başlık zaman + gerilim adayı içeren satırdan seçilir.
 
 Modelin aynı tip trafo için verdiği (üretici 1.3, geliştirme şehirleri 1–10, panelli şehir konutu trafosu, 134 trafo;
 cevap anahtarı) [Hesap]:
@@ -44,14 +47,39 @@ def satirlar(yol):
         rows = [[('' if c is None else c) for c in r] for r in ws.iter_rows(values_only=True)]
     else:
         ham = yol.read_bytes()
-        metin = next(ham.decode(e) for e in ('utf-8-sig', 'utf-16', 'cp1254', 'latin-1') if _cozulur(ham, e))
-        ayrac = max((',', ';', '\t'), key=metin.splitlines()[0].count)
-        rows = list(csv.reader(metin.splitlines(), delimiter=ayrac))
-    # başlık satırı: zaman adayı içeren ilk satır (bazı dışa aktarımlarda üstte başlık bilgisi olur)
+        metin = _coz(ham)
+        satir = metin.splitlines()
+        # ayraç başlık satırından (üstte "sep=;" ya da cihaz adı gibi bilgi satırları olabilir: SMA, karar masası 00:10)
+        ayrac = satir[0][4:5] if satir and satir[0].lower().startswith('sep=') else None
+        if not ayrac:
+            bi = _baslik_no([[x] for x in satir])
+            ayrac = max((',', ';', '\t'), key=satir[bi if bi is not None else 0].count)
+        rows = list(csv.reader(satir, delimiter=ayrac))
+    # başlık satırı: zaman adayı (tercihen gerilim adayı da) içeren ilk satır; üstte bilgi satırları olabilir
+    i = _baslik_no(rows)
+    if i is None:
+        sys.exit('Başlık satırı bulunamadı; --zaman ve --gerilim ile sütun adlarını verin.')
+    return [str(c).strip() for c in rows[i]], rows[i + 1:]
+
+
+def _baslik_no(rows):
+    """İlk 30 satırda zaman ve gerilim adayı içeren ilk satır; yoksa yalnız zaman adayı içeren ilk satır."""
+    ilk = None
     for i, r in enumerate(rows[:30]):
-        if any(any(a in str(c).lower() for a in ZAMAN_ADAY) for c in r):
-            return [str(c).strip() for c in rows[i]], rows[i + 1:]
-    sys.exit('Başlık satırı bulunamadı; --zaman ve --gerilim ile sütun adlarını verin.')
+        hucre = ' | '.join(str(c).lower() for c in r)
+        if any(a in hucre for a in ZAMAN_ADAY):
+            if any(g in hucre for g in GERILIM_ADAY):
+                return i
+            ilk = i if ilk is None else ilk
+    return ilk
+
+
+def _coz(ham):
+    """Kodlama: UTF-8 (BOM'lu ya da değil); UTF-16 yalnız BOM ya da çok NUL baytı varsa (yoksa çift bayt sayılı her
+    dosya UTF-16 diye hatasız ama anlamsız çözülür); sonra Türkçe Excel'in cp1254'ü; en son latin-1."""
+    utf16 = ham[:2] in (b'\xff\xfe', b'\xfe\xff') or ham.count(b'\x00') > len(ham) * 0.2
+    adaylar = ('utf-8-sig',) + (('utf-16',) if utf16 else ()) + ('cp1254', 'latin-1')
+    return next(ham.decode(e) for e in adaylar if _cozulur(ham, e))
 
 
 def _cozulur(ham, e):
