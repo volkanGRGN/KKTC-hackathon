@@ -22,8 +22,3 @@ Durum: işlendi (ROADMAP Faz 5 akışı)
 Ne: Ölçülen trafolar çok yerel; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Biz tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz. Sunumda söylenmeli.
 Kaynak: Muhittin'in cevabı (docs/log/2026-10-31-muhittin-danisma-ve-plan.md)
 Durum: işlendi (ROADMAP Faz 5 dürüstlük cümleleri)
-
-## 31 Eki — Civan — Denetmen geri bildirimi: fikir güzel, anlatım fazla teknik
-Ne: Hackathon denetmeni (31 Ekim öğleden sonra) "güzel fikir ama kötü anlattınız" dedi. Önerileri: (1) Ana sorunu "trafo" diye değil "şebeke" diye anlatın; Kıb-Tek'in sorununu çözüyorsunuz. Bizim önerdiğimiz cümle: "Kıb-Tek, evlerin bağlı olduğu mahalle şebekesini göremiyor." (2) Çözümü güneş paneline (ya da başka tek bir uygulamaya) bağlamayın; ana fikir "az noktayı ölç, şebekenin tamamını gör". Panel en acil örnek olarak kalır (2.670 bekleyen başvuru), tanım olarak değil. (3) Jüri "Kıb-Tek" ve "mahalle şebekesi"ni bilmeyebilir; ikisi de birer cümleyle tanıtılmalı (öneri benzetme: Kıb-Tek otoyolları izliyor, mahalle sokaklarını izlemiyor). (4) Gerekli olan: fikri en kısa yoldan veren 5 sayfalık vurucu sunum; teknik terimler (arketip, kVA, P10) sunum dilinden çıksın.
-Kaynak: denetmen, sözlü (yok)
-Durum: yeni
