@@ -44,4 +44,15 @@ Geliştirme 1–10 (kurulduğu şehirler) aynı yön: hemen evet %4,2 → %12,9 
 | 31 Eki ~23:41 | aynı | 21–30 | aynı | %3,8 → %10,5, yanlış evet %0,1; iki kat hatada %2,6 | eksi bulgu karar masasına |
 | 1 Kas ~00:10 | motor iki kat hata varsayar (karar masası 23:47) | 21–30 | iki kat kayıtta yanlış evet < %2 | %2,6 → %1,9 (14/722, 6 trafo); hemen evet %10,5 → %9,7 | [ayrı günlük](2026-11-01-volkan-panel-iki-kat-hata.md) |
 
+## Ek (1 Kasım ~00:10): motor iki kat kayıt hatası varsayarken (karar masası 23:47 / 00:10)
+Sınav 21–30 bir kez [Hesap; farazi, sahte kayıt, gösterim]; ayrıntı ve geliştirme sağlaması [ayrı günlükte](2026-11-01-volkan-panel-iki-kat-hata.md). Parantezde motor beklenen varsayarken.
+
+| Kayıtların gerçek hatası | Hemen evet | Yanlış evet (evetlerin) | Önce ölç |
+|---|---|---|---|
+| Yarı | %10,7 (%11,9) | %0,1 (1/766) | %70,7 (%69,2) |
+| Beklenen | %9,7 (%10,5) | %0,0 (0/694) | %70,0 (%67,5) |
+| İki kat | %10,1 (%10,7) | %1,9 (14/722; %2,6) — 6 trafoda, 95% aralık %1,2–3,2 | %70,8 (%68,8) |
+
+Yanlış yeşil her satırda 0. Kural iki kat kayıtta yanlış evet'i sınırın hemen altına çekiyor ama güvenle değil; bedel beklenen kayıtta 751 → 694 evet.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
