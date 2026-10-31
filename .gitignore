@@ -8,6 +8,7 @@ __pycache__/
 .DS_Store
 # Çalıştırma çıktıları
 *_sonuc.json
+*_sonuc*.csv
 cikti.json
 .venv/
 venv/

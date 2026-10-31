@@ -10,3 +10,15 @@ Site tablosu (rapor Tablo 3, s.17): site adı, bağlı PV kW, müşteri sayısı
 Kullanım: Faz 3 gerilim fiziği doğrulaması — bizim ev ev yük akışı (src/trafo_bos_kapasite.py solve) İngiltere'nin ölçülen hat ucu gerilim yükselmesini tutturuyor mu. Ülke farkı: 230 V nominal, 253 V yasal üst sınır, çoğu yeraltı Al kablo; taşınan şey fizik, rakam değil.
 Depoda yok (data/raw/*/* gitignore); bu KAYNAK.txt ve rapor notu depoda. İndirilen zip çalıştırılmaz, yalnız okunur; kendi klasöründe açılır.
 SHA-256 (PV_Data.zip, 821.564.466 bayt, 31 Ekim 2026): 790b78d40e2bbaa584a4e694b746576e1ca9f412d1d961962ba3b679aa83dde0
+
+Yapı notları (UKPN gerilim oturumu, 31 Ekim 2026; ayrıntı docs/log/2026-10-31-volkan-ukpn-gerilim.md, kod src/ukpn_test.py):
+  Açma: PV_Data.zip → acik/ (içteki "PV Data - csv files only.zip" → acik/csv/, 3,18 GB, 15 dosya). Hiçbir şey çalıştırılmadı; docx/xlsx yalnız okundu.
+  Klasörler: "2014-11-28 Cleansed and Processed/EXPORT OneMinData|TenMinData|HourlyData/". Her birinde 4 dosya: Customer Endpoints, Feeders, Network Endpoints, Substation Voltages.
+  OneMinData: ev ve fider cihazları 19 Haz – 6 Eyl 2014 arası günde 1.440 satır (18 Haz ve 7 Eyl yarım; öncesi/sonrası 10 dk). "Substation Voltages" dosyası bu klasörde de 10 dk; 1 dk bara gerilimi için Feeders dosyasındaki VA/VB/VC kullanıldı (fider cihazı trafo çıkışında; aynı trafonun fider cihazları ortancada 0,1–0,2 V içinde).
+  Zaman: GMT [Hesap: 6 evin ortalama üretimi 11:00 ve 12:00'de en yüksek, 10 ile 13 simetrik].
+  Birimler ve işaretler [Kaynaklı: Dataset Notes docx]: V volt, P kW, Q kvar. Ev: P_GEN üretim (+), P_IMPORT şebekeden çekiş (+) / veriş (−). Fider: PA/PB/PC + = trafodan hatta (yük), − = ters akış. 200 V altı gerilim süzülmüş (_Filtered sütunları).
+  Hat ucu ev ↔ fider, faz [Hesap: ev − bara farkının fider faz gücüyle en eksi korelasyonu]: Alverston Close → "Alverston Close" fideri, C; Bancroft Close → Webster Close, C; Forest Road → Forest Road East, A (Geranium Walk ile ayrım zayıf); Maple Drive East → The Willows Tee Blackthorns, C; Suffolk Road → S Way LB, A; YMCA → Melrose Close North, A (rapor Tablo 14: C).
+  Kablo [Kaynaklı: Dataset Notes "LV CableType"]: Alverston Close ve YMCA 185H Al, Maple Drive East 120H Al, Suffolk Road 0.2 Cu (in²). Bancroft Close ve Forest Road: BULAMADIM. Hat boyu: raporda, docx'te, cihaz listesinde yok, BULAMADIM.
+  Ev panel gücü (görünen / G83 kaydı) [Kaynaklı: cihaz listesi]: Alverston 3 / 3,29; Bancroft 3,5 / 1,89; Forest 3 / 3,29; Maple 4 / 3,83; Suffolk 0,5 / 1,52; YMCA 0,45 / 0,6 kW.
+  Eksik fider: Forest Road "Link Box 261" ve YMCA'nın iki "Unknown" fideri 1 dk veride yok (müşteri başına toplamlar bu sitelerde alt sınır).
+  Hava: Weather_Data_2014-11-30.xlsx, beş istasyon (Easthill Road, Elm Crescent, Forest Road, Maple Drive East, YMCA), 30 dk; SolarEnergy sütununda eksik kayıt '---'.
