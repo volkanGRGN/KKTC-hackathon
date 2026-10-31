@@ -16,7 +16,7 @@ from pathlib import Path
 
 TIPLER = ['sehir_konutu', 'koy', 'carsi', 'otel', 'sanayi', 'sulama', 'yurt']
 V_SINIR = 259.0                # planlama sınırı (en az bir trafo bunu aşmalı: yöntemin görecek şeyi var)
-V_ALT = 216.0                  # bunun altı = benzetim bozuk
+V_ALT = 207.0                  # EN 50160 alt sınırı (230 V −%10); bunun altı = benzetim bozuk (karar masası 13:55)
 TIP_SEHIR_MIN = 3              # her şehirde her tipten; bütün şehirlerde 3 x şehir sayısı (20 şehirde 60)
 ROADMAP_SEHIR = 20             # ROADMAP eşikleri bu şehir sayısı için yazıldı
 SURE_MAX_SN = 60.0             # şehirlerin üretildiği makinede (karar masası 31 Ekim)
@@ -89,7 +89,7 @@ def faz1(sehirler):
     bilgi.append(f'259 V üstü trafo olan şehir: {len(sehirler) - len(sifir)}/{len(sehirler)}'
                  + (f"; hiç aşmayan: {', '.join(sifir[:5])}" if sifir else ''))
 
-    # 4. Hiçbir trafoda 216 V altı yok.
+    # 4. Hiçbir trafoda V_ALT (207 V) altı yok.
     v_min = [(float(r['v_min_bugun_v']), s['ad'], r['trafo_no']) for s in sehirler for r in s['cevap']]
     en_dusuk = min(v_min)
     alti = [x for x in v_min if x[0] < V_ALT]
@@ -135,6 +135,7 @@ def faz1(sehirler):
 
 
 def main():
+    sys.stdout.reconfigure(encoding='utf-8')  # Windows'ta boruya yazarken cp1254 '≥' karakterinde çöküyordu
     if len(sys.argv) < 3 or sys.argv[1] != 'faz1':
         sys.exit('Kullanım: python3 src/sinav.py faz1 <şehir kökü, ör. data/synthetic>')
     sehirler, atlanan = sehirleri_oku(sys.argv[2])
