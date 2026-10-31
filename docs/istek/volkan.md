@@ -407,3 +407,16 @@ Ne: (a) denemesi yapıldı (resmi hesap ve rakamlar değişmedi; kusursuz bilgi 
 Dosya: docs/log/2026-10-31-volkan-faz3.md (19:55 ek girdi), ROADMAP Faz 3 "Açık eksikler", src/bilgi_degeri.py
 Neden: KARAR 19:44 (a). Bloklamıyor; BUILD Faz 5'e (konuşma notu, prova) geçiyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 20:43 — BUILD'den — Ada ülkeleri: Malta'nın açık haritası da düz %25 tavan; Gozo hattı dış sınama adayı
+Ne: Volkan'ın isteğiyle ada şebekeleri tarandı ve kullanılabilir açık veri arandı (günlük). Üç kullanılabilir şey çıktı.
+(1) **Enemalta'nın kapasite haritası açık veri** (1.332 trafo merkezi: güç, en yüksek talep, boş güç, izin verilen ek panel). İzin verilen ek panel hiçbir merkezde trafo gücünün **%25'ini geçmiyor**: 245'inde tam %25, 290'ında sıfır [Hesap]. Enemalta gerilim ölçütü de kullandığını söylüyor ama yöntemi yayınlamıyor. Akıllı sayaçlar kayıp ve faturalama için alınmış; panel kuralını sayaçla koyduklarına kanıt BULAMADIM.
+(2) **Malta'da sınırı gerilim ve kademe koymuş** (Graz 2016; trafolar boşta 250 V, Kıb-Tek şartnamesiyle aynı). Gozo'da bir hattın tam tablosu var: 500 kVA, 18 panelsiz ev; +1 kWp/ev kademe, +2 kWp/ev trafo değişimi.
+(3) **Hawaii düz kuralı kanıtla gevşetmiş:** tepe yükün %15'i → gündüz en düşük yükün %250'si; ev trafosu eleği gücün %166'sı. Ölçülmeyen hattı benzer ölçülen hattan tahmin etmişler; bizim yöntemin emsali.
+Üç soru:
+(a) Sunuma girsin mi? Öneri, jüri "Malta akıllı sayaçla çözdü" derse: "Akıllı sayacı olan Malta bile haritasında trafo başına düz bir tavan kullanıyor, gücün %25'i; Kıb-Tek %40. Biz her trafoya gerilimle ayrı bakıyoruz." Hawaii: "Hawaii düz kuralı kanıt geldikçe %15'ten %250'ye çıkardı; bizim harita o kanıtın trafo trafo hâli." (`docs/sunum/` Can'ın.)
+(b) Gozo hattında hesabımız bu gece dış sınama olarak koşulsun mu? Hat boyu ve kablo aralıkla; tek hat, gösterim; 30 dk.
+(c) Üretici 1.3 listesine "trafo boyutu çapası: Malta en yüksek talep ÷ güç P10/50/90 0,13 / 0,42 / 0,74" girsin mi? Bizim Nisan tepesi ortanca 0,27, ama Malta'nınki bütün yıl: birebir kıyas değil.
+Dosya: docs/log/2026-10-31-volkan-ada-ulkeleri.md, NOTLAR.md; ham veri depo dışında (lisans yazılı değil), KAYNAK için can.md 20:43
+Neden: Kıb-Tek'in %40 kuralına dış kıyas ve jüri sorusu ("akıllı sayaç neden yok"). Bloklamıyor.
+Durum: bekliyor

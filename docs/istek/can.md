@@ -231,3 +231,13 @@ Bilgi (sunum dili için, karar masasında): sarıyı bilgi az düşürüyor (%62
 Dosya: docs/sunum/ekranlar.md (ekran 6), docs/sunum/konusma-notu.md
 Neden: karar masası 19:44 (a). Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 20:43 — Volkan'dan (BUILD oturumu) — yeni kaynak: Enemalta kapasite haritası verisi (Malta) — KAYNAK ve sözlük satırı
+Ne: Ada ülkeleri taramasında (docs/log/2026-10-31-volkan-ada-ulkeleri.md) Malta'nın açık kapasite haritasının verisi bulundu ve bir kez indirildi. Lisans yazılı değil: ham dosya depoya girmez, BUILD'in elinde depo dışında. Senden `data/raw/enemalta-kapasite/KAYNAK.txt` ve veri sözlüğüne "Elimizde" satırı. KAYNAK için bilgiler:
+- Sayfa: https://enemalta.com.mt/available-capacity/ ; veri: https://enemalta.com.mt/available-capacity/?capacity_json=1 (sayfanın kendi haritası bu adresi okuyor)
+- İndirildi 2026-10-31 20:37, tek istek; 401.361 bayt, 1.332 kayıt; SHA-256 27be61a703890d92a981f2a3fb7d925a4b6d398d2858dde3434d251142675b60
+- Alanlar: substationName, locality, sumOfTransformersRating (kVA), sumOfMaximumDemand (kaydedilmiş en yüksek talep), availableCapacity (= güç − en yüksek talep), totalPVCapacity (haritada "RES Available Capacity", kWp), lat/lng (ED50 / UTM 33N bileşenleri; sayfa easting = lat + 400000 − 55, northing = lng + 3900000 − 195)
+- Sayfanın söylediği: ek panel kapasitesi "transformer spare capacity, the installed RES capacity as well as grid voltage stability criteria"; üç ayda bir güncellenir; bağlayıcı değil. Lisans: BULAMADIM.
+Dosya: data/raw/enemalta-kapasite/KAYNAK.txt (yeni, senin), docs/data/data-dictionary.md (senin)
+Neden: günlükteki Malta rakamları (izin tavanı %25, talep ÷ güç) bu kaynağa atıf yapıyor. Bloklamıyor.
+Durum: bekliyor
