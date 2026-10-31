@@ -109,7 +109,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | `kac_ev_sinir` | str | — | `gerilim` | ortanca sırada ilk reddin nedeni (bugün zaten aşıyorsa bugünkü aşımın): `gerilim` / `isil` / `yok` (hiç ret yok) |
 | `mahalle_carpani` | float | oran | `0.932` | **1.2.** Trafonun küçük abonelerine (konut, ticari I, sanayi I, su motoru) uygulanan mahalle tüketim çarpanı, log-normal ([ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md)) |
 | `saat_kaymasi_dk` | int | dk | `-15` | **1.2.** Trafonun bütün abonelerine eklenen saat kayması, ±30 dk (sınıf başına şehir kaymasının üstüne) |
-| `tepe_yil_kw` | float | kW | `88.23` | **1.4. Yük haritasının hedefi:** yılın net tepesi (trafodan geçen: tüketim − üretim), üç pencerenin (Nisan 14 gün, yazın en sıcak 7 günü, kışın en soğuk 7 günü) 5 dakikalık adımlarında en büyük |
+| `tepe_yil_kw` | float | kW | `88.23` | **1.4. Yük haritasının hedefi:** yılın net tepesi (trafodan geçen: tüketim − üretim), üç pencerenin (Nisan 14 gün, yazın ve kışın üreticinin konut yükünün en büyük olduğu 7 gün; `ayar.json` `pencere_secimi`) 5 dakikalık adımlarında en büyük. **Yılın tepesinin alt sınırı** (Civan): bütün yıl üretilmiyor, tepe pencere dışındaki bir günde olabilir; üreticinin gürültüsüz sınıf eğrisinde kalan pay sınıf başına ≤ %5 (BUILD 1, 1 Kasım; [günlük](../log/2026-11-01-volkan-yuk-pencere.md)). `tepe_ayi` bu yüzden çoğunlukla pencerenin ayı |
 | `tepe_yil_kva` | float | kVA | `102.20` | **1.4.** Aynı pencerelerde trafonun görünür gücü (yük akışından, kayıplar dahil), en büyük; `kva` ile kıyas: tüketim doluluğu |
 | `tepe_saati` | str | SS:DD | `19:55` | **1.4.** `tepe_yil_kw`'nin saati (adımın başı) |
 | `tepe_ayi` | int | ay | `8` | **1.4.** `tepe_yil_kw`'nin ayı (1–12) |

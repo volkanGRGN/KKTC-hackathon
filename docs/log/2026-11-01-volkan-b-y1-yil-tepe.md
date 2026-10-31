@@ -42,5 +42,6 @@
 |---|---|---|---|---|---|
 | 31 Eki ~23:20 | üretici 1.4, saatlik ΔT | 1–10 | yaz haftası konut tepesini akşama koyar | konut tepesi 17:00'ye kaydı (EAC gece tepesi kayboldu) | günlük ΔT'ye geç |
 | 31 Eki ~23:23 | üretici 1.4, günlük ΔT | 1–10 | aynı | konut 00:xx / 20:xx, çarşı ve otel öğlen; Nisan birebir | kabul; 21–30 bir kez üret |
+| 1 Kas 00:10 | üretici 1.4, pencere konut yük vekiliyle (BUILD 1) | 1–10 | en sıcak hafta yılın tepesini taşımıyor | 2024'te Haziran'a düşüyordu, konut yıl tepesi %33–35 eksik; düzeltmeyle sınıf başına ≤ %5 | [ayrı günlük](2026-11-01-volkan-yuk-pencere.md); yukarıdaki tepe ayı ve kış %29 satırları eski pencereyle |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

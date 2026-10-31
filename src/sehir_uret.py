@@ -42,8 +42,9 @@ Yeni rastgelelik ayrı akışlardan (`og13-`, `faz13-`, `ogle13-`); şehrin traf
 Sürüm 1.4 (B-Y1, Faz 11; karar masası 23:12, ADR-0014): yıl boyu tepe, yük haritasının cevap anahtarı. Ekleme
 yalnız: Nisan çıktıları (trafolar.csv, yuk_5dk.csv, cevap anahtarının 1.3 sütunları) 1.3 ile birebir; yeni rastgelelik
 ayrı akışlardan (`klima14-`, `yaz14-`, `kis14-`, `og14-`), şehrin ağı aynı.
-- Aynı şehir, aynı ağ, aynı hava yılı için iki pencere daha: yazın en sıcak 7 günü (Haziran–Eylül, günlük ortalama
-  sıcaklığın 7 günlük ortalaması en büyük) ve kışın en soğuk 7 günü (Ocak–Şubat, aynı ölçünün en küçüğü).
+- Aynı şehir, aynı ağ, aynı hava yılı için iki pencere daha: yazın (Haziran–Eylül) ve kışın (Ocak–Şubat) üreticinin
+  kendi konut yükünün en büyük olduğu 7 gün (gün skoru = EAC konut ay tepesi × sıcaklık çarpanı; `uc_hafta`). İlk
+  sürüm en sıcak / en soğuk haftayı alıyordu; 2024'te Haziran'a düştü, yıl tepesi üçte bir az çıktı (BUILD 1, 1 Kasım).
   Eğri o günün ayının EAC tipik günü; ışınım ve sıcaklık Open-Meteo'nun aynı dosyasından.
 - Sıcaklık terimi: EAC tipik günü o ayın ortalama havasını ve günün şeklini (Temmuz konutunda gece klima tepesi)
   taşır; şekil veriden kalır, seviye sıcaklıkla değişir. Günün ortalama sıcaklığı o ayın günlük ortalamasından ΔT
@@ -289,21 +290,31 @@ def gunun_sicakligi(sicaklik, tarih):
     return out
 
 
-def uc_hafta(sicaklik, yil, aylar, sicak):
-    """1.4: hava yılının verilen aylarında ardışık MEVSIM_GUN gün; sıcak = günlük ortalama sıcaklığın ortalaması en
-    büyük (sıcak geceler dahil; akşam klima tepesi gece sıcaklığını da görür [Yorum]), değilse en küçük. Eğri her günün
-    kendi ayından."""
+def uc_hafta(sicaklik, yil, aylar, mevsim, egriler):
+    """1.4: hava yılının verilen aylarında ardışık MEVSIM_GUN gün; üreticinin kendi konut yükünün en büyük olduğu hafta.
+    Gün skoru = EAC konut eğrisinin o ayki (iş günü / tatil) tepesi × sıcaklık çarpanı (yuk_serisi_mevsim'deki gibi,
+    β konut, klima 1); 7 günün ortalaması en büyük. Önce günlük ortalama sıcaklıkla seçiliyordu: tipik gün ayın havasını
+    taşıdığı için en sıcak hafta tepeyi kaçırabiliyor (2024'te 3–9 Haziran; EAC konut tepesi Haziran 1,37, Temmuz 1,89;
+    yıl tepesi konutta ~%35 az) [Hesap: BUILD 1, 1 Kasım]. Döner: günler, pencerenin günlük ortalama sıcaklığı."""
     gunler = sorted(d for d in sicaklik if d.year == yil and d.month in aylar and len(sicaklik[d]) == 24)
     deger = {d: statistics.fmean(sicaklik[d]) for d in gunler}
+    Tort = {a: ay_ortalamasi(sicaklik, yil, a) for a in {d.month for d in gunler}}
+    isaret = 1.0 if mevsim == 'yaz' else -1.0
+    beta = SICAKLIK_BETA[mevsim]['konut']
+
+    def skor(d):
+        tur = 'tatil' if d.weekday() >= 5 or d in MEVSIM_BAYRAMLARI else 'is'
+        return max(egriler[('konut', d.month, tur)]) * max(SICAKLIK_TABAN, 1 + isaret * beta * (deger[d] - Tort[d.month]))
+
     en, sec = None, None
     for i in range(len(gunler) - MEVSIM_GUN + 1):
         pen = gunler[i:i + MEVSIM_GUN]
         if (pen[-1] - pen[0]).days != MEVSIM_GUN - 1:
             continue
-        o = statistics.fmean(deger[d] for d in pen)
-        if en is None or (o > en if sicak else o < en):
+        o = statistics.fmean(skor(d) for d in pen)
+        if en is None or o > en:
             en, sec = o, pen
-    return sec, en
+    return sec, (statistics.fmean(deger[d] for d in sec) if sec else None)
 
 
 def ay_ortalamasi(sicaklik, yil, ay):
@@ -753,8 +764,10 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         sicaklik = sicaklik_oku([y for y in ISINIM_DOSYALARI if y.exists()])
         egriler_m = mevsim_egrileri(sorted({a for v in MEVSIM_AYLARI.values() for a in v}))
         for mev, aylar in MEVSIM_AYLARI.items():
-            gunler, uc = uc_hafta(sicaklik, yil, aylar, mev == 'yaz')
-            if egriler_m is None or not gunler or not all(d in saatlik for d in gunler):
+            if egriler_m is None:
+                continue
+            gunler, uc = uc_hafta(sicaklik, yil, aylar, mev, egriler_m)
+            if not gunler or not all(d in saatlik for d in gunler):
                 continue
             gt = ['tatil' if d.weekday() >= 5 or d in MEVSIM_BAYRAMLARI else 'isgunu' for d in gunler]
             gm = [x for d in gunler for x in gunun_isinimi(saatlik, d)]
@@ -772,7 +785,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                  else f'{yil} için {", ".join(eksik)} haftası bulunamadı')
         print(f'UYARI: sehir-{tohum:03d}: yaz / kış penceresi üretilemedi ({sebep}); cevap anahtarında yıl tepesi '
               'sütunları BOŞ, bu şehir yük haritası sınavına girmez.')
-    ayar.update(mevsim_pencereleri=sorted(mevsimler), sicaklik_beta=SICAKLIK_BETA,
+    ayar.update(mevsim_pencereleri=sorted(mevsimler), pencere_secimi='konut_yuk_vekili', sicaklik_beta=SICAKLIK_BETA,
                 klima_yayginlik=list(KLIMA_YAYGINLIK), sicaklik_taban=SICAKLIK_TABAN,
                 yil_tepe_kaynagi=None if eksik else 'nisan+yaz+kis')
     mevsim_satir = {mev: [] for mev in mevsimler}
