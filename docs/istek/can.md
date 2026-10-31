@@ -128,3 +128,9 @@ Ne: Volkan'ın sorusu üzerine araştırıldı; veri sözlüğü "Adaylar"a sat�
 Neden: İspanya gerilim vermiyor; gerilim fiziğini gerçek veride sınayabilecek tek açık set bu. Ama yalnız 20 trafo, İngiltere şebekesi (230 V nominal, çoğu yeraltı Al), bahar verisi saatlik; bizim ABC70/95 havai Kıbrıs hattına fizik taşınır, rakam taşınmaz.
 Senden beklenen: veri sözlüğü "Adaylar"a satır (yukarıdaki rakamlarla), KAYNAK yok (indirilmedi). Başka bir şey değil.
 Durum: bilgi
+
+## KARAR 16:50 — iş sırası (yeniden planlama; kartlar BUILD'den gelecek, beklemeden başla)
+Karar: Sıra: (1) PR #8'i GitHub'da onayla (sözleşme kısmı, 5 dk); (2) `sinav.py`: `V_ALT = 207.0` + Faz 2'ye "saf tahmin" satırı (ADR-0008) + aday = 0 ayrımı zaten yaptın; (3) `docs/sunum/` klasörünü aç: slayt listesi, kaynak slaydı, dürüstlük cümleleri, itiraz slaydı (ROADMAP Faz 5; rakamlar: farazi %8,6 üst sınır, İspanya %25 → fatura ile %10, İngiltere 6 hatta 4'ü ±%40, Kıbrıs pilot); (4) Faz 3 kartı gelince `sinav.py faz3` (yanlış yeşil / yanlış kırmızı / kaç ev hatası / sarı oranı; %40 kuralı yan yana) ve `grafikler.py` kilit grafiği; (5) `src/edp_kiyas.py` + günlük; (6) veri kontrol listesi. Gerçek `tahmin.csv` ve `kac_ev.csv` BUILD'den gelince sınavları koş, rakamları günlüğe.
+Neden: Sunum yarın; Faz 2 kapanışı, Faz 3 ölçüleri ve sunum iskeleti aynı akşama sığmalı; en kısa yolu olan işler önde.
+Senden beklenen: yukarıdaki sıra; takılırsan kutu.
+Durum: bekliyor

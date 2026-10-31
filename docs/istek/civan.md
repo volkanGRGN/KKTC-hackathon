@@ -30,3 +30,9 @@ Sonuç: birleştirilebilir.
 ? İnternetsiz açılış ve OSM zemin bende denenmedi (kıyı ve bina dosyaları Mac'te yok; zemin Carto'dan geldi). Tıklama süresi senin ölçümün (0,55 sn); bende göz kararı anında.
 Senden beklenen: birleştir (kart: Volkan bakar → bakıldı); sonra küçük düzeltmeleri doğrudan main'e. `harita/iskelet` eski dalını silebilirsin.
 Durum: bekliyor
+
+## KARAR 16:50 — iş sırası (yeniden planlama; Faz 3 kartı BUILD'den gelecek, beklemeden başla)
+Karar: Sıra: (1) PR #9'u birleştir (incelendi, birleştirilebilir); sonra doğrudan main. (2) `etiket()`'e 800–899 dalı + `egri_ciz` boş-ölçülü koruması (PR incelemesi). (3) Yan panel gerçek Faz 3 tablosuna hazır olsun: `kac_ev.csv` gelince karamsar–iyimser, renk, %40 kuralı, "ölçülmedi" etiketi (`olculdu` = 0) ve "aday yok" durumu (`kac_ev_aday` = 0 → "panelsiz konut yok"). (4) Faz 4 sınavı: internet kapalıyken açılış denemesi (OSM zemini var), 2 dakikalık ekran kaydı, 3 şehir seçimi, Mac denemesi (karar masası yaptı, günlüğüne yaz), yan panel sayıları 3 trafoda elle kontrol. (5) Zaman kalırsa kıyı çizgisini zemine çiz, OSM alanını genişlet. Sunumda canlı gösteriyi sen yapacaksın; akış için Can'ın `docs/sunum/` iskeletine bak.
+Neden: Sunum yarın; harita jürinin tıklayacağı şey, Faz 3 tablosu gelir gelmez bağlanmalı.
+Senden beklenen: yukarıdaki sıra; takılırsan kutu.
+Durum: bekliyor
