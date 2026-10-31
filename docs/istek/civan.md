@@ -50,3 +50,8 @@ Uygulama (ucuz, ≤ 1 saat, iş sırası 4–5'ten sonra): Streamlit'te bir ekra
 Neden: Tek görsel "birkaçını ölç, gerisini tahmin et" fikrini kelimesiz anlatıyor; Blender zaman yer ve veriye bağlı değil.
 Senden beklenen: önce 4–5 (yan panel, internetsiz, ekran kaydı), sonra bu ekran; Can'la 3. ve 5. ekran metnini eşle.
 Durum: bekliyor
+
+## EK 17:33 — "noktalar çoğalıyor" animasyonuna Volkan'ın notu: noktalar **pop** ile belirsin
+Ne: Her nokta sıfırdan büyüyüp hafif taşıp yerine otursun (pop/bounce), fade değil. Ölçülen trafo tek tek pop (ses yok, 0,3–0,4 sn), tahmin yayılırken noktalar küçük gruplar hâlinde art arda pop (kademeli, dalga gibi). Uygulama önerisi [Yorum]: pydeck'te `ScatterplotLayer` + `transitions={'getRadius': 350}` ile yarıçapı 0 → R, her karede birkaç nokta ekleyerek; ya da `st.components.v1.html` içinde CSS keyframes (scale 0 → 1,15 → 1) ile daha pürüzsüz. Hangisi 20 dakikada çalışıyorsa o.
+Senden beklenen: animasyon ekranında bu geçiş; öncelik sırası aynı (önce 4–5).
+Durum: bilgi
