@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 17:42 (BUILD oturumu)
+**Güncellendi:** 31 Ekim 2026, 18:54 (BUILD oturumu)
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0010).
@@ -13,7 +13,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
     - faturalı %3,9 / P90 %8,3;
     - faturasız %22 / %55, İspanya gerçek verisiyle aynı seviye.
   - Resmi ölçüm Can'ın `sinav.py faz2`'si ([PR #14](https://github.com/volkanGRGN/KKTC-hackathon/pull/14) birleşti 17:32; 11–20: %3,8 / %8,0, kapsama %84). Saf tahmin maddesi hâlâ eski Σ abone tanımıyla notlanıyor, düzeltme Can'da (can.md 17:32). Saf tahmin tanımı karar masası 17:26: tarife enerjisi / fatura; faturasız model ortancada geçmiyor (dürüstçe söylenir).
-- **Faz 3 başladı.**
+- **Faz 3: resmi hesap olasılıklı** (ADR-0011, karar masası 18:46). [PR #15](https://github.com/volkanGRGN/KKTC-hackathon/pull/15) `kac_ev.csv`'yi sözleşme 1.3 ile yazıyor; Can'ın `sinav.py faz3`'ü bu dosyalarla (sınav 11–20): yanlış yeşil 0/87 GEÇTİ, kaç ev GEÇTİ (karamsar 2), yanlış kırmızı %27 ve sarı %62 UYARI. Birleşme sırası #13 → #15.
   - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (artık main'e bağlı; Can'ın incelemesini bekliyor).
   - Sınav şehirleri 11–20: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
   - Kırmızı = karamsar senaryoda bugün aşıyor (karar masası 17:26): kırmızı %31, yanlış kırmızı %42, sarı %63. Hedef aşımının sebebi ±4 V bilinmeyen bara gerilimi; pilotun ilk ölçeceği şey.
@@ -35,7 +35,8 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Civan:** [Faz 3 kartı](docs/gorev/civan-faz3-yan-panel.md): yan panel `kac_ev.csv`; Faz 4 sınavı (internetsiz açılış, ekran kaydı, 3 şehir).
 
 ## Bekleyen istekler
-- Volkan'da: sunum biçimi (Civan'ın "haritanın içinde 7 ekran" önerisi; karar masasının önerisi dashboard + aynı metinden PDF yedeği, animasyon yok).
+- Sunum biçimi kararı verildi (17:32): dashboard içinde 7 ekran, pop animasyonu.
+- Volkan'da: PR #13 ve #15'i birleştirmek (BUILD'in birleştirme izni izin sisteminde duruyor; #13 Can onaylı, #15 sözleşme 1.3 için Can ya da Civan onayı bekliyor).
 - Kontrol: `grep -n "Durum: bekliyor" docs/istek/*.md`
 
 ## Bilinen sorunlar ve kararlar
