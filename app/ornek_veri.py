@@ -23,8 +23,10 @@ ARKETIP_SAYISI = 4
 # Referans: Girne merkez, data/raw/osm-kasaba alanının ortası (görev kartı).
 REF_ENLEM, REF_BOYLAM = 35.3375, 33.318
 YARICAP_M = 1500
-KUZEY_MAX_M = 400  # denize düşmesin [Yorum]
+KUZEY_MAX_M = 400  # denize düşmesin [Yorum]; kıyı dosyası yoksa tek önlem
 METRE_BASINA_DERECE = 1 / 111_320
+# OSM kıyı çizgisi (data/raw/osm-kasaba/KAYNAK.txt); varsa denizdeki nokta yeniden çekilir.
+KIYI_DOSYASI = KOK / "data" / "raw" / "osm-kasaba" / "girne_kiyi.json"
 
 DIREK_KVA = (25, 50, 100, 250, 400)
 YER_KVA = (630, 1000)
@@ -75,13 +77,37 @@ YUK_SUTUN = [
 ]
 
 
-def konum(rng):
-    """Referans çevresinde (x_m, y_m, enlem, boylam); kuzeye en çok KUZEY_MAX_M."""
-    x = rng.randint(-YARICAP_M, YARICAP_M)
-    y = rng.randint(-YARICAP_M, KUZEY_MAX_M)
-    enlem = REF_ENLEM + y * METRE_BASINA_DERECE
-    boylam = REF_BOYLAM + x * METRE_BASINA_DERECE / math.cos(math.radians(REF_ENLEM))
-    return x, y, round(enlem, 6), round(boylam, 6)
+def kiyi_segmentleri():
+    """OSM kıyı çizgisi parçaları [((boylam, enlem), (boylam, enlem))]; dosya yoksa None."""
+    if not KIYI_DOSYASI.exists():
+        return None
+    veri = json.loads(KIYI_DOSYASI.read_text(encoding="utf-8"))
+    segmentler = []
+    for yol in veri["elements"]:
+        noktalar = [(n["lon"], n["lat"]) for n in yol["geometry"]]
+        segmentler += list(zip(noktalar, noktalar[1:]))
+    return segmentler
+
+
+def karada(boylam, enlem, segmentler):
+    """Kuzeye ışın: kıyıyı tek sayıda kesiyorsa nokta karada (deniz kuzeyde)."""
+    kesisme = 0
+    for (x1, y1), (x2, y2) in segmentler:
+        if (x1 > boylam) != (x2 > boylam):
+            y = y1 + (boylam - x1) * (y2 - y1) / (x2 - x1)
+            kesisme += y > enlem
+    return kesisme % 2 == 1
+
+
+def konum(rng, segmentler):
+    """Referans çevresinde (x_m, y_m, enlem, boylam); kıyı varsa karada kalana dek çeker."""
+    while True:
+        x = rng.randint(-YARICAP_M, YARICAP_M)
+        y = rng.randint(-YARICAP_M, KUZEY_MAX_M)
+        enlem = REF_ENLEM + y * METRE_BASINA_DERECE
+        boylam = REF_BOYLAM + x * METRE_BASINA_DERECE / math.cos(math.radians(REF_ENLEM))
+        if segmentler is None or karada(boylam, enlem, segmentler):
+            return x, y, round(enlem, 6), round(boylam, 6)
 
 
 def aboneler(rng, bolge, kva):
@@ -108,11 +134,11 @@ def aboneler(rng, bolge, kva):
     return abone
 
 
-def trafo_satiri(rng, sehir, no, yayginlik):
+def trafo_satiri(rng, sehir, no, yayginlik, segmentler):
     bolge = rng.choice(BOLGELER)
     montaj = "yer" if rng.random() < 0.2 else "direk"
     kva = rng.choice(YER_KVA if montaj == "yer" else DIREK_KVA)
-    x, y, enlem, boylam = konum(rng)
+    x, y, enlem, boylam = konum(rng, segmentler)
     hat_sayisi = rng.randint(1, 4)
     hat_max = rng.randint(300, 700) if bolge == "kirsal" else rng.randint(120, 450)
     hat_toplam = max(hat_max, round(hat_max * hat_sayisi * rng.uniform(0.6, 0.9)))
@@ -240,11 +266,11 @@ def yuk_satirlari(trafo, tahmin, oranlar):
     return satirlar
 
 
-def ayar(sehir, yayginlik):
+def ayar(sehir, yayginlik, kiyi_kontrolu):
     return {
         "sehir": sehir, "tohum": sehir, "sozlesme_surumu": SOZLESME_SURUMU,
         "sahte": True, "referans_enlem": REF_ENLEM, "referans_boylam": REF_BOYLAM,
-        "panel_yayginligi": round(yayginlik, 3),
+        "panel_yayginligi": round(yayginlik, 3), "kiyi_kontrolu": kiyi_kontrolu,
     }
 
 
@@ -255,12 +281,13 @@ def csv_yaz(yol, sutunlar, satirlar):
         yazici.writerows(satirlar)
 
 
-def sehir_uret(sehir):
-    """Bir sahte şehrin tablolarını üretir; aynı tohum aynı tabloları verir."""
+def sehir_uret(sehir, segmentler):
+    """Bir sahte şehrin tablolarını üretir; aynı tohum (ve kıyı dosyası) aynı tabloları verir."""
     rng = random.Random(sehir)
     yayginlik = rng.uniform(*PANEL_YAYGINLIGI)
     trafolar = [
-        trafo_satiri(rng, sehir, no, yayginlik) for no in range(1, TRAFO_SAYISI + 1)
+        trafo_satiri(rng, sehir, no, yayginlik, segmentler)
+        for no in range(1, TRAFO_SAYISI + 1)
     ]
     olculu_sayi = rng.randint(OLCULU_MIN, OLCULU_MAX)
     olculu_nolar = set(rng.sample(range(TRAFO_SAYISI), olculu_sayi))
@@ -278,7 +305,7 @@ def sehir_uret(sehir):
     return {
         "trafolar": trafolar, "tahmin": tahminler, "kac_ev": kac_ev,
         "arketipler": arketip_satirlari(sehir, oranlar), "yuk_5dk": yuk,
-        "ayar": ayar(sehir, yayginlik),
+        "ayar": ayar(sehir, yayginlik, segmentler is not None),
     }
 
 
@@ -296,8 +323,12 @@ def sehir_yaz(sehir, tablolar):
 
 
 def main():
+    segmentler = kiyi_segmentleri()
+    if segmentler is None:
+        print(f"UYARI: {KIYI_DOSYASI.name} yok; yalnız 'kuzeye en çok "
+              f"{KUZEY_MAX_M} m' kuralı (bazı trafolar denize düşebilir).")
     for sehir in SEHIRLER:
-        tablolar = sehir_uret(sehir)
+        tablolar = sehir_uret(sehir, segmentler)
         sehir_yaz(sehir, tablolar)
         print(f"sehir-{sehir:03d}: {len(tablolar['trafolar'])} trafo")
 
