@@ -6,7 +6,8 @@ Haritanın olasılıklı hesabıyla aynı fizik ve aynı kapı (`kac_ev_olasilik
   - **durumlu:** o ana kadar onaylanmış ama kurulmamış başvurular (taahhüt) de ağa konur (ADR-0015 m. 1, ADR-0010 m. 2);
   - **kayda koşullu:** Kıb-Tek kaydı varsa (`sahte_kayit.kayit_oku`) bilinmeyenin çekilişi kayda koşullanır, kaydın
     kendi hata payıyla (kayıt öncülü daraltır, sıfırlamaz); kayıt yoksa bugünkü aralık:
-      bara      inverter kaydı varsa sakin an gerilimi ± inverter payı; yoksa kademe kaydı varsa kayıtlı kademenin
+      bara      inverter kaydı varsa sakin an gerilimi ± inverter payı (`inv_bara_hata` verilirse ölçülmüş geri çözüm
+                hatası dağılımından: `inverter_geri_cozum.py`); yoksa kademe kaydı varsa kayıtlı kademenin
                 ±3,125 V penceresi (OG payı [Yorum]) olasılık p_dogru ile, değilse 244–252 V; kayıt yoksa 244–252 V
       hatlar    hat boyu kaydı × e^U(±hat payı) (bugün: en uzun hat × e^U(±0,47), diğerleri rastgele)
       yer, faz  kaydı olan panelli ev, taahhüt ve başvuran kayıtlı hattına ve yerine (direk sırası ÷ hattaki ev);
@@ -100,7 +101,10 @@ def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
             v0 = rng.uniform(*ko.V0)
     elif inv_hat:
         b = statistics_mean([v['bara_v'] for v in kayit['inverter'].values()])
-        v0 = b + rng.uniform(-hp['inv_bara_v'], hp['inv_bara_v'])
+        if hp.get('inv_bara_hata'):                     # ölçülmüş geri çözüm hatası (tahmin − gerçek), 1–10'dan
+            v0 = b - rng.choice(hp['inv_bara_hata'])
+        else:
+            v0 = b + rng.uniform(-hp['inv_bara_v'], hp['inv_bara_v'])
     else:
         v0 = rng.uniform(*ko.V0)
     ag = dict(v0=v0, zt=complex(rt, 2 * rt), kva=kva, feeders=[])

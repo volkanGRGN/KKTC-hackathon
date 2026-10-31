@@ -135,8 +135,10 @@ def _faz_kaydi(ph, hp, rng):
     return FAZ_AD[ph]
 
 
-def kayit_uret(tr, hp, rng):
-    """Bir trafonun kayıtları (düzeyin kusurlarıyla). Dönüş sözlüğü kayit_oku ile aynı biçim."""
+def kayit_uret(tr, hp, rng, inv_bara=None):
+    """Bir trafonun kayıtları (düzeyin kusurlarıyla). Dönüş sözlüğü kayit_oku ile aynı biçim.
+    inv_bara: {ev id: V} inverter barası dışarıdan (`inverter_geri_cozum.py`'nin benzetimde geri çözdüğü sabah ilk
+    değer); verilirse gerçek + gürültü yerine o yazılır (rastgele akış aynı kalır)."""
     kad = min(KADEME_V, key=lambda v: abs(v - tr['v0']))
     u = rng.random()
     if u < hp['kademe_eksik']:
@@ -161,8 +163,9 @@ def kayit_uret(tr, hp, rng):
         if rng.random() < hp['inverter_pay']:
             f = tr['feeders'][j]
             e = hp['inv_empedans']
+            bara = tr['v0'] + (rng.uniform(-hp['inv_bara_v'], hp['inv_bara_v']) if hp['inv_bara_v'] else 0.0)
             inverter[h['id']] = dict(
-                bara_v=tr['v0'] + (rng.uniform(-hp['inv_bara_v'], hp['inv_bara_v']) if hp['inv_bara_v'] else 0.0),
+                bara_v=inv_bara[h['id']] if inv_bara and h['id'] in inv_bara else bara,
                 hat=j, esdeger_boy_m=f['boy'] * (math.exp(rng.uniform(math.log(1 - e), math.log(1 + e))) if e else 1.0))
     return dict(kademe_v=kademe, hat_boy_m=hat, panelli=panelli, inverter=inverter)
 

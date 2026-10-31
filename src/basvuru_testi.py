@@ -18,6 +18,8 @@ Etiket: sahte kayıtlarla, gösterim; gerçek kayıtlar Kıb-Tek'ten. Ayar yok: 
 
 Çalıştırma:
   python3 src/basvuru_testi.py <şehir kökü> --aralik 1-10 [--model-hata iki_kat|aynen] [--json cikti.json]
+  # inverter barası benzetimde geri çözülmüş (Muhittin 5B); motor hata dağılımını 1–10'un ölçümünden alır:
+  python3 src/basvuru_testi.py <kök> --aralik 1-10 --inverter-bara igc.json [--bara-hata igc_1-10.json]
 """
 import argparse
 import csv
@@ -46,7 +48,7 @@ def _csv(yol):
 
 
 def sehir_senaryo(is_):
-    klasor, senaryo, model_hata = Path(is_[0]), is_[1], is_[2]
+    klasor, senaryo, model_hata, inv_bara, bara_hata = Path(is_[0]), is_[1], is_[2], is_[3], is_[4]
     sehir = sk.gercek_sehir(klasor)
     tohum = sehir['tohum']
     trafolar = _csv(klasor / 'trafolar.csv')
@@ -54,6 +56,10 @@ def sehir_senaryo(is_):
     resmi = {r['trafo_no']: r for r in _csv(klasor / 'kac_ev.csv')}
     hp_veri = None if senaryo == 'kayitsiz' else sk.hata_payi(senaryo)
     hp_model = sk.hata_payi('kusursuz' if senaryo == 'kusursuz' else model_hata)
+    if senaryo == 'kusursuz':
+        inv_bara = None
+    elif bara_hata:
+        hp_model['inv_bara_hata'] = bara_hata
     out = []
     for r in trafolar:
         no = r['trafo_no']
@@ -61,7 +67,8 @@ def sehir_senaryo(is_):
         t = tahmin[no]
         gt = sk.gercek_trafo(sehir, no)
         gtr = gt['tr']
-        kayit = None if hp_veri is None else sk.kayit_uret(gtr, hp_veri, random.Random(f'kayit-{senaryo}-{tohum}-{no}'))
+        kayit = None if hp_veri is None else sk.kayit_uret(gtr, hp_veri, random.Random(f'kayit-{senaryo}-{tohum}-{no}'),
+                                                           (inv_bara or {}).get(no))
         if kayit is None:
             renk = resmi[no]['renk']
         else:
@@ -144,17 +151,32 @@ def main():
     ap.add_argument('--senaryo', help='virgülle; yoksa hepsi')
     ap.add_argument('--model-hata', default=bv.VARSAYILAN_HATA, choices=['aynen', 'iki_kat'],
                     help='motorun varsaydığı kayıt hatası düzeyi')
+    ap.add_argument('--inverter-bara', help='inverter_geri_cozum.py JSON: kayıttaki inverter barası geri çözümden')
+    ap.add_argument('--bara-hata', help='inverter_geri_cozum.py JSON (1–10): motor bara hatasını bu dağılımdan çeker')
     ap.add_argument('--json')
     a = ap.parse_args()
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
     senaryolar = a.senaryo.split(',') if a.senaryo else SENARYOLAR
+    inv = {}
+    if a.inverter_bara:
+        with open(a.inverter_bara, encoding='utf-8') as fh:
+            for s_ in json.load(fh)['sehirler']:
+                for x in s_['evler']:
+                    inv.setdefault(s_['sehir'], {}).setdefault(x['trafo_no'], {})[x['ev']] = x['b_sabah']
+    bara_hata = None
+    if a.bara_hata:
+        with open(a.bara_hata, encoding='utf-8') as fh:
+            bara_hata = [x['b_sabah'] - x['v0'] for s_ in json.load(fh)['sehirler'] for x in s_['evler']]
     with ProcessPoolExecutor() as ex:
         sonuc = {(k, s): o for k, s, o in ex.map(sehir_senaryo,
-                                                  [(str(k), s, a.model_hata) for s in senaryolar for k in klasorler])}
+                                                  [(str(k), s, a.model_hata, inv.get(int(k.name.split('-')[1])),
+                                                    bara_hata) for s in senaryolar for k in klasorler])}
     tablo = {s: ozet(klasorler, sonuc, s) for s in senaryolar}
     print(f'şehir {a.aralik} — sahte kayıtlarla, gösterim; {SIRA} sıra × en çok {EN_COK} başvuru; '
-          f'motor kayıt hatasını {a.model_hata} varsayar')
+          f'motor kayıt hatasını {a.model_hata} varsayar'
+          + ('; inverter barası benzetimde geri çözülmüş' if a.inverter_bara else '')
+          + (f'; motor bara hatasını ölçülmüş dağılımdan çeker (n {len(bara_hata)})' if bara_hata else ''))
     print('senaryo | başvuru | hemen evet | yanlış evet (evetlerin) | önce ölç | hayır (gerçekte sığan) | '
           '%40 kuralı yanlış evet | harita yanlış evet | renk y / s / k | yanlış yeşil | kırmızıda aşan')
     for s, o in tablo.items():

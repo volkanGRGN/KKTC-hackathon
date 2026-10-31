@@ -1,0 +1,70 @@
+# 2026-11-01 — İnverter geriliminden geri çözüm, benzetimde gerçekten (BUILD 2 — panel; Muhittin 4 madde 5B)
+
+**Amaç:** Muhittin'in dördüncü cevabı madde 5: kademe / çıkış gerilimini ölçmeden daraltma. (A) Kıb-Tek'ten trafo başına kademe ayarı ve devreye alma kaydı; (B) inverter geriliminden geri çözüm (sakin an → bara, öğlen salınımı → hat empedansı). Bugüne kadar (B) hep "gerçek değer + gürültü" diye taklit edildi: PR #20'de her panelli trafoda bir inverter, bara ±1 V, empedans ±%20; PR #22'nin sahte kayıtlarında inverter panelli evlerin %20'sinde, empedans yalnız inverterin hattında, iki kat düzeyde ±2 V / ±%40 (karar masası 23:03'ün iki düzeltmesi orada uygulanmış; PR #20 betiğinde değil). Soru: geri çözümü benzetimde gerçekten yaparsak hata ne kadar, ve motorun varsayımı bunu karşılıyor mu.
+
+**(A) durumu:** Kıb-Tek istek taslağında madde 4 "her trafonun kendi kademe ayarı: devreye alma kaydı ya da son ayar kaydı" zaten var (karar masası 00:14). Yeni iş yok; PR #20'nin bulgusu (standart değil trafonun kendi ayarı açıyor) taslağın notunda.
+
+## Yöntem
+- `src/inverter_geri_cozum.py`: her panelli evin inverterinin göreceği seri gerçek ağda üretilir (`sahte_kayit.gercek_trafo`; aynı yük, ışınım, OG; 14 gün × 5 dk). İnverter **yalnız gündüz** kayıt tutar (ışınım > STC'nin %2'si [Yorum]); gece uyur. Geri çözüm yalnız inverterin bildiğiyle: kendi ev gerilimi, kendi panel gücü, saat.
+  - **Bara:** sabah ilk değer = her gün ilk uyanık adımdaki gerilim, 14 günün ortancası. Ayrıca gündüz doğrusu V = a + s × P_kendi'nin kesişimi a.
+  - **Salınım:** s (V / kW kendi paneli), gündüz doğrusunun eğimi; günden güne oynaklığı.
+  - Gerçekle kıyas: hata = tahmin − `v0` (trafonun boşta gerilimi, modelin bilinmeyeni).
+- **Uçtan uca:** `sahte_kayit.kayit_uret(..., inv_bara=)`: kayıttaki inverter barası gerçek + gürültü yerine benzetimde geri çözülmüş sabah ilk değer (rastgele akış aynı; diğer kayıtlar değişmez). `basvuru.py`: `hp['inv_bara_hata']` varsa motor barayı `b − hata` diye ölçülmüş hata dağılımından çeker (yoksa eskisi gibi ±U). `basvuru_testi.py --inverter-bara <json> [--bara-hata <json>]`. Sağlama: bayraksız koşum 1–10'da önceki tabloyla birebir.
+  - **R0:** bugünkü sahte kayıt (bara = gerçek ± U), motor iki kat varsayar (±2 V) — PR #22'nin tablosu.
+  - **R1:** kayıttaki bara gerçek geri çözümden, motor değişmedi.
+  - **R2:** R1 + motor bara hatasını **geliştirme 1–10'da ölçülen** dağılımdan çeker (1.148 ev; yöntem değişikliği, ayar yalnız 1–10'dan).
+- Geliştirme 1–10'da kuruldu; **sınav 21–30 bir kez** (1 Kasım ~00:30). Hat empedansı kaydı R1 / R2'de de gerçek ± gürültü (aşağıda "Ne kaldı").
+- Platform: BUILD 2 klasörü, Mac, Python 3.12.13; üretici 1.3 şehirleri (K_YUK 1,47); taban PR #22 (858a999).
+
+## Sonuç 1: geri çözümün hatası [Hesap; farazi şehir, gösterim]
+| | Geliştirme 1–10 (1.148 ev, 276 trafo) | Sınav 21–30 (1.479 ev, 269 trafo) |
+|---|---|---|
+| Bara, sabah ilk değer: hata ortancası | **−0,79 V** | **−0,97 V** |
+| P10 … P90 | −2,15 … −0,28 V | −2,15 … −0,39 V |
+| \|hata\| ≤ 1 V / ≤ 2 V | %62 / %88 | %52 / %87 |
+| Kuyruk (1–10): P1 / P5 / en düşük; pozitif hata | −5,4 / −3,3 / −9,8 V; 18/1.148 | — |
+| Hat ucundaki evler (yer > 2/3): ortanca, ≤ 1 V | −0,85 V, %58 | −1,03 V, %48 |
+| Gündüz doğrusu kesişimi: ortanca, ≤ 1 V | −1,45 V, %27 | −1,61 V, %18 |
+| Salınım eğimi, günden güne oynaklık (std ÷ ort): ortanca / P90 | %23 / %100 | %21 / %106 |
+| PR #20'nin sakin anı (05:00–06:30) adımlarında inverter uyanık | %68 | %65 |
+
+- **Hata hep aynı yönde: geri çözülen bara gerçekten düşük.** Sabah ilk değerde ev zaten yük çekiyor (gerilim düşümü), güneş henüz zayıf. Modelin varsayımı ±1 V'ta ortalanmış düz bir hata; gerçekte ortanca ~1 V aşağıda ve uzun bir alt kuyruk var (evlerin ~%12'sinde 2 V'tan fazla).
+- **Bu güvensiz yön:** bara düşük sanılırsa model gerilim payını olduğundan büyük görür, fazla "evet" der.
+
+## Sonuç 2: motor uçtan uca, sınav 21–30 (bir kez) [Hesap; farazi, sahte kayıt, gösterim]
+Satır = kayıtların gerçek hata düzeyi (diğer kayıtlar için); motor iki kat varsayar. Yanlış evet: evetlerin gerçekte aşan payı; parantezde 95% aralık (Wilson, evetler bağımsız sayılarak; değiller) ve yanlış evetli trafo / evet veren trafo.
+
+| Kayıtlar | R0 bugünkü sahte kayıt | R1 gerçek geri çözüm, motor aynı | **R2 gerçek geri çözüm, motor ölçülmüş hatayla** |
+|---|---|---|---|
+| Yarı — hemen evet | %10,7 | %11,3 | %10,0 |
+| Yarı — yanlış evet | %0,1 (1/766) | %0,2 (2/810) | **%0,0 (0/720)** (%0–0,5) |
+| Beklenen — hemen evet | %9,7 | %10,4 | %9,5 |
+| Beklenen — yanlış evet | %0,0 (0/694) | %0,9 (7/749) | **%0,3 (2/680)** (%0,1–1,1; 2/82 trafo) |
+| İki kat — hemen evet | %10,1 | %10,8 | %9,6 |
+| İki kat — yanlış evet | %1,9 (14/722) | **%2,7 (21/772)** (%1,8–4,1; 11/102 trafo) | **%1,3 (9/692)** (%0,7–2,5; 5/93 trafo) |
+| Harita yanlış evet (yeşilse ilk iki) | ≤ %1,5 | ≤ %1,7 | ≤ %0,7 |
+| Yanlış yeşil | 0 | 0 | 0 |
+
+Geliştirme 1–10 aynı yön: iki kat kayıtta yanlış evet R0 %1,1 → R1 %1,7 (15/874) → R2 %0,4 (3/784); beklenen kayıtta %0,7 → %1,0 → %0,6; hemen evet R0 %11,3 → R2 %10,7.
+
+## Bulgular
+1. **Gerçek geri çözümle motorun bugünkü varsayımı yetmiyor:** kayıtlar iki kat hatalıyken yanlış evet %1,9 → %2,7 (sınır %2 aşılıyor, 11 trafoda), beklenen kayıtta 0 → %0,9. Sebep bara tahmininin sistematik olarak düşük çıkması. PR #22'nin "iki kat varsayım" kuralı bu kaymayı kapsamıyor (±2 V ortalanmış).
+2. **Motor ölçülmüş hata dağılımını kullanınca yanlış evet düşüyor:** aynı gerçekçi kayıtlarla iki kat düzeyde %2,7 → %1,3, beklenende %0,9 → %0,3, yarıda 0. Bedel: hemen evet %10,8 → %9,6 (iki kat), %10,4 → %9,5 (beklenen). Yanlış yeşil her yerde 0.
+3. **Hâlâ "güvenle %2 altında" değil:** iki kat satırında aralığın üst ucu %2,5 (5 trafo). Tüzük madde 6 ölçüsüyle (~150 bağımsız noktada 0 ihlal) kapı söylenemez [Yorum].
+4. **PR #20'nin sakin anı (05:00–06:30) inverter için kısmen yok:** adımların üçte birinde inverter uyuyor; PR #20'deki bara ±1 V varsayımı ve sakin an tanımı iyimser. Doğru kullanım sabah ilk değer + ölçülmüş kayma.
+5. **Salınım eğimi günden güne çok oynuyor** (ortanca %21–23, P90 ~%100): tek günlük kayıtla hat empedansı ±%20'yle çözülmez; 14 günlük doğru gerekir.
+
+## Ne kaldı
+- **Hat empedansının geri çözümü** (eğim → eşdeğer boy) yapılmadı: eğimi boya çevirmek için hattaki diğer panellerin yeri ve fazı gerekiyor (kayıtta %95'i var); R1 / R2'de empedans kaydı hâlâ gerçek ± %20 / %40. Bara kayması empedans tarafında da varsa sonuç daha kötü olabilir.
+- Ölçülmüş bara hatası farazi şehirden; gerçekte pilotta (Faz 10, P6 inverter kaydı + akıllı priz gece seviyesi aynı evde) ölçülmeli. Gece seviyesi bilinirse sabah kayması doğrudan ölçülür.
+- PR #20 betiği (`pv_acilma.py`) değiştirilmedi; gerçekçi sürüm bu betik ve PR #22 motoru.
+
+## Deney defteri
+| Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
+|---|---|---|---|---|---|
+| 1 Kas ~00:25 | geri çözüm v1 (sabah ilk değer, gündüz doğrusu) | 1 | bara ±1 V'ta çözülür | ortanca −0,82 V, ≤ 1 V %65 | 1–10 |
+| 1 Kas ~00:26 | aynı | 1–10 | aynı | ortanca −0,79 V, P10 −2,15, ≤ 1 V %62; hep aşağı | uçtan uca |
+| 1 Kas ~00:28 | motor v1.1 (iki kat) + R1 / R2 (bara hatası 1–10'dan) | 1–10 | R1 yanlış evet artar, R2 geri indirir | iki kat: %1,1 → %1,7 → %0,4 | 21–30 bir kez |
+| 1 Kas ~00:30 | aynı | 21–30 | aynı | geri çözüm −0,97 V; iki kat: R0 %1,9 → R1 %2,7 → R2 %1,3 (aralık %0,7–2,5); hemen evet %10,1 → %9,6; yanlış yeşil 0 | karar masasına (PR) |
+
+<!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
