@@ -11,6 +11,11 @@ Katmanlar:
 3. sinif_egrisi() / tip_egrisi(): sınıfın ya da 7 trafo tipinin günlük eğrisi.
 4. saglama(): ROADMAP Faz 1 "veri sağlaması" rakamları.
 
+GEÇİCİ: oku() ve bes_dakika() dışındaki fonksiyon imzaları ve TIPLER sözleşme değildir. İmza
+docs/data/tablo-bicimi.md ve Can'ın Faz 1 görev kartıyla gelecek; şehir üreticisi gelene kadar bunlara
+bağlanmasın. Açık soru: EAC değerleri her abonenin kendi kVA hakkına göre; sınıfları abone sayısıyla
+karıştırmak yanlış ağırlık verir (su pompası 1,0 pu köy eğrisini şişiriyor), kVA ile ağırlıklanmalı.
+
 Çalıştırma: python3 src/profiller.py [xlsx yolu]
 """
 import datetime as dt
