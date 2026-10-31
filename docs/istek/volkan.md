@@ -158,3 +158,32 @@ Ne: Sınav şehirleri 11–20 (bir kez, gösterim): faturalı model %3,9 / P90 %
 Dosya: docs/log/2026-10-31-volkan-uretici-1-2.md (PR #12)
 Neden: ADR-0008 madde 1 ölçütü Can'ın `sinav.py faz2`'sinde; tanım ona gidiyor. Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 17:11 — Civan'dan — sunum dashboard'un içinde olsun mu?
+Ne: Öneri: sunum ayrı slayt yerine harita uygulamasının içinde 7 kısa ekran
+olsun; her ekranda tek cümle, tek görsel, en fazla bir rakam. Sıfırdan
+gelen biri hiçbir terimi bilmeden anlayabilsin:
+(0) Açılış sorusu: "Bu sokakta kaç ev daha çatısına güneş paneli takabilir?
+    Kıb-Tek bilmiyor."
+(1) Kıb-Tek kim: "Kuzey Kıbrıs'ta elektriği üreten ve evlere dağıtan
+    devlet kurumu."
+(2) Mahalle şebekesi ne, neden önemli: "Her mahallenin köşesinde, direğin
+    üstünde gri bir kutu (trafo) ve ondan evlere giden kablolar var; elektriğin
+    evden önceki son durağı. Panel, klima, elektrikli araç: hepsi önce bu
+    kutuyu zorlar. Kıb-Tek büyük hatları izliyor, bu kutuları izlemiyor; dolu
+    mu boş mu bilmiyor. Bu yüzden temkinli davranıyor: 2.670 ev bekliyor."
+    Görsel: 3D direk, kutu ve evler.
+(3) Fikrimiz: "Her kutuya cihaz takmak çok pahalı. Birkaçını ölçüyoruz,
+    gerisini tahmin ediyoruz." Görsel: kısa animasyon (Blender, sahte veriyle).
+(4) Neden inanılır: güven merdiveni, dört basamak; manşet İspanya %25 → %10
+    (17:00 kararı).
+(5) Canlı harita: bir kutuya tıkla, kaç ev daha sığar, %40 kuralı ne diyor.
+(6) Pilot: Kıbrıs'ta ne kadar ölçüm, ne kadar maliyet, ne istiyoruz.
+Metin Can'ın sunum iskeletiyle ve 17:00 kararıyla uyumlu tutulur; rakamlar
+repodaki kaynaklardan (2.670: KTTO 2023). PDF yedeği yine olur.
+Dosya: app/ (Civan, ekranlar), docs/sunum/ (Can, metin)
+Neden: tek ekran, slayttan haritaya geçiş yok; rakamlar veriden gelir;
+teknik terimler (arketip, kVA, P10) sunum dilinde yok.
+Karar gereken: (a) sunum dashboard'da mı, slaytta mı;
+(b) animasyona zaman ayrılsın mı (iş sırası 4–5 öncelikli kalır).
+Durum: bekliyor
