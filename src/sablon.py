@@ -3,7 +3,7 @@
 yükünü bant ve güvenle tahmin eder.
 
 Yöntem: docs/method/modeling.md; gerekçe ADR-0001 (şekil + büyüklük, küçük ve yorumlanabilir model).
-Okur: trafolar.csv (hepsi; Kıb-Tek'in bildiği), yuk_5dk.csv (YALNIZ ölçülü seçilen trafoların satırları
+Okur: trafolar.csv (hepsi; Kıb-Tek'in bildiği; yillik_tuketim_mwh varsa büyüklük faturadan, ADR-0007), yuk_5dk.csv (YALNIZ ölçülü seçilen trafoların satırları
 modele girer). cevap_anahtari.csv'yi okumaz: model ya da harita onu okursa sınav anlamsızlaşır.
 Yazar (sözleşme §5): tahmin.csv, arketipler.csv, deney/tahmin_n<N>_t<T>.csv,
 deney/tahmin_capraz_s<AAA>.csv; bilgi için sablon_ozet.json.
@@ -21,6 +21,7 @@ Adımlar (ROADMAP Faz 2):
   python3 src/sablon.py data/synthetic                 # her şehir: ana çalıştırma + deneyler + şehirler arası
   python3 src/sablon.py data/synthetic --sehir 7 --yalniz-ana
   python3 src/sablon.py data/synthetic --onem          # 2d: sütun grubu çıkarınca bir-dışarıda hata (günlük için)
+  python3 src/sablon.py data/synthetic --faturasiz     # yillik_tuketim_mwh olsa da kullanma (sütunsuz kıyas)
 """
 import argparse
 import csv
@@ -57,6 +58,8 @@ MWH = {'abone_konut': 648494 / 175577, 'abone_ticari1': 210978 / 20950, 'abone_t
        'abone_turizm': 215147 / 171, 'abone_sanayi1': 22391 / 1227, 'abone_sanayi2': 95996 / 352,
        'abone_su_motoru': 51256 / 3250}
 BOLGELER = ['kentsel', 'kirsal', 'turistik', 'sanayi']
+FATURA_SUTUNU = 'yillik_tuketim_mwh'    # sözleşme 1.2, ADR-0007; gerçek veride (EDP) yok
+FATURA_KULLAN = True                    # --faturasiz: sütun olsa da abone sayılarıyla çalış (günlükte kıyas)
 
 # Güven eşikleri [Yorum; Faz 2 günlüğünde gerekçe]
 GUVEN_YUKSEK_P, GUVEN_DUSUK_P = 0.70, 0.50
@@ -67,11 +70,29 @@ GUVEN_YUKSEK_HATA, GUVEN_DUSUK_HATA = 0.10, 0.25    # beklenen hata: atandığı
 
 # ---------- 2a özellik tablosu ----------
 
+def fatura_var(tr):
+    return bool(FATURA_KULLAN and FATURA_SUTUNU in tr and tr[FATURA_SUTUNU].notna().all())
+
+
+def abone_matrisi(tr):
+    """Abone sayıları (trafo × 7 sınıf), modelin büyüklük girdisi. trafolar.csv'de yillik_tuketim_mwh varsa
+    (ADR-0007) her satır, tarife ortalamasıyla hesaplanan enerjisi faturaya eşit olacak şekilde ölçeklenir:
+    sınıf karışımı abone sayısından, büyüklük faturadan. Sütun yoksa, boşsa ya da --faturasiz: sayılar aynen."""
+    A = tr[ABONE].to_numpy(float)
+    if not FATURA_KULLAN or FATURA_SUTUNU not in tr:
+        return A
+    e = A @ np.array([MWH[c] for c in ABONE])
+    f = pd.to_numeric(tr[FATURA_SUTUNU], errors='coerce').to_numpy(float)
+    gecerli = np.isfinite(f) & (f > 0) & (e > 0)
+    s = np.divide(f, e, out=np.ones(len(A)), where=gecerli)
+    return A * s[:, None]
+
+
 def ozellikler(tr):
     """trafolar.csv satırları (DataFrame) -> (tam özellik matrisi, sütun grupları).
     Gerçek yük asla girdi değil; yalnız Kıb-Tek'in bileceği sütunlar."""
     a = tr[ABONE].to_numpy(float)
-    e = a * np.array([MWH[c] for c in ABONE])
+    e = abone_matrisi(tr) * np.array([MWH[c] for c in ABONE])     # faturalıysa e_top = fatura
     e_top = e.sum(1, keepdims=True)
     pay = np.divide(e, e_top, out=np.zeros_like(e), where=e_top > 0)
     gruplar = {
@@ -272,7 +293,14 @@ def bir_disarida(X_tam, A, olcum, secilen, trafo_no):
 
 
 BANT_YONTEMI = 'nicel'                  # 'nicel': artıkların P10–P90'ı; 'uyumlu': küçük örnek düzeltmeli sıra
-TABAN_HATA = 0.05                       # model hatası tabanı (çok aboneli trafoda bile) [Yorum]
+TABAN_HATA = 0.05                       # model hatası tabanının alt sınırı (çok aboneli trafoda bile) [Yorum]
+# Taban artıklardan seçilir (taban_sec). Sürüm 1.2 şehirlerinde mahalle farkı (ADR-0008) abone sayısıyla
+# sönmüyor: sabit 0,05 tabanla çok aboneli konut trafosu "yüksek güven" alıp en çok yanılan oluyordu.
+TABAN_ADAYLARI = (0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.4, 0.6, 1.0, 2.0, 5.0)
+# Fatura yoksa taban en az 0,3: büyüklüğü abone sayısından bilen model mahalle farkını göremez; gerçek veride
+# müşteri başına öğlen yükünün trafodan trafoya değişimi 0,46 (İspanya, karışık), konut hedefi 0,3–0,4 (ADR-0008).
+# 12 ölçülüyle taban seçimi bunu her şehirde yakalayamadı (şehir 1–10: "yüksek güven" en çok yanılan oldu).
+TABAN_FATURASIZ = 0.3
 
 
 def etkin_abone(A):
@@ -284,9 +312,21 @@ def etkin_abone(A):
     return np.divide(pay, payda, out=np.ones(len(A)), where=payda > 0)
 
 
-def olcek_birimi(A):
+def olcek_birimi(A, taban=TABAN_HATA):
     """Göreli belirsizliğin ölçeği: √(1/N_etkin + taban²)."""
-    return np.sqrt(1 / np.maximum(etkin_abone(A), 1) + TABAN_HATA ** 2)
+    return np.sqrt(1 / np.maximum(etkin_abone(A), 1) + taban ** 2)
+
+
+def taban_sec(r, A, en_az=TABAN_HATA):
+    """Model hatası tabanı (en az `en_az`), ölçülülerin bir-dışarıda log artıklarından: Var(r) ∝ 1/N_etkin + taban² varsayımıyla
+    profil olabilirlik, TABAN_ADAYLARI içinden. Küçük taban = hata abone sayısıyla söner (abone büyüklüğü farkı);
+    büyük taban = her trafoda aynı (mahalle farkı, ya da fatura büyüklüğü zaten verdiği için)."""
+    x = 1 / np.maximum(etkin_abone(A), 1)
+
+    def olabilirlik(c):
+        v = x + c * c
+        return -0.5 * np.log(v).sum() - len(r) / 2 * math.log(max(float(np.mean(r ** 2 / v)), 1e-12))
+    return max((c for c in TABAN_ADAYLARI if c >= en_az), key=olabilirlik)
 
 
 def bant_carpanlari(r):
@@ -305,14 +345,16 @@ def bant_carpanlari(r):
     return math.exp(s[alt - 1]), math.exp(s[ust - 1])
 
 
-def guven(p_max, uzak, gor, beklenen):
+def guven(p_max, uzak, gor, beklenen, faturali=True):
     """yuksek / orta / dusuk. beklenen = ölçülülerin bir-dışarıda hatası, trafonun etkin abone sayısına göre
     ölçeklenmiş (bkz. olcek_birimi). İlk sürümde yalnız olasılık + uzaklık vardı; hata sırasını tutturmuyordu
-    (Faz 2 günlüğü)."""
+    (Faz 2 günlüğü). Fatura yoksa "yuksek" verilmez: büyüklük mahalle farkı kadar (±%30, ADR-0008) bilinmez;
+    12 ölçülünün bir-dışarıda hatası şans eseri küçük çıkan şehirde "yuksek" en çok yanılan oluyordu (şehir 1–10)."""
     if (gor >= GUVEN_DUSUK_GORULMEMIS or uzak > GUVEN_DUSUK_UZAK or p_max < GUVEN_DUSUK_P
             or beklenen > GUVEN_DUSUK_HATA):
         return 'dusuk'
-    if p_max >= GUVEN_YUKSEK_P and uzak <= GUVEN_YUKSEK_UZAK and gor < 0.05 and beklenen <= GUVEN_YUKSEK_HATA:
+    if (faturali and p_max >= GUVEN_YUKSEK_P and uzak <= GUVEN_YUKSEK_UZAK and gor < 0.05
+            and beklenen <= GUVEN_YUKSEK_HATA):
         return 'yuksek'
     return 'orta'
 
@@ -328,14 +370,16 @@ def calistir(tr, X_tam, A, olcum_hepsi, secilen, hedef=None):
     loo, r = bir_disarida(X_tam, A, olcum, secilen, trafo_no)
     # Bant ve beklenen hata: artık, trafonun ölçek birimine bölünür (çok aboneli trafoda dar, tek büyük
     # müşterili trafoda geniş bant); P10–P90 bu bölünmüş artıklardan, sonra hedefin birimiyle çarpılır.
-    u = r / olcek_birimi(A[secilen])
+    faturali = fatura_var(tr)
+    taban = taban_sec(r, A[secilen], TABAN_HATA if faturali else TABAN_FATURASIZ)
+    u = r / olcek_birimi(A[secilen], taban)
     alt, ust = bant_carpanlari(u)
     u_ortanca = float(np.median(np.abs(u)))
-    m.update(loo_log_artik=r, bant=(alt, ust))
+    m.update(loo_log_artik=r, bant=(alt, ust), taban=taban)
     hedef_tr = tr if hedef is None else hedef[0]
     Xh, Ah = (X_tam, A) if hedef is None else (hedef[1], hedef[2])
     p, orta, uzak, gor = tahmin_et(m, Xh, Ah, list(range(len(hedef_tr))))
-    birim = olcek_birimi(Ah)
+    birim = olcek_birimi(Ah, taban)
     beklenen = u_ortanca * birim                                 # beklenen göreli hata (log ölçek, ortanca)
     alt_c, ust_c = np.exp(np.log(alt) * birim), np.exp(np.log(ust) * birim)
     olculu = {} if hedef is not None else {trafo_no[i]: (j, loo[j]) for j, i in enumerate(secilen)}
@@ -346,7 +390,7 @@ def calistir(tr, X_tam, A, olcum_hepsi, secilen, hedef=None):
             ark, pr, g, olc = int(m['etiket'][j]), 1.0, 'yuksek', round(olcum[t]['ogle_min'], 2)
         else:
             ark, pr, o = int(p[i].argmax()), float(p[i].max()), float(orta[i])
-            g, olc = guven(pr, float(uzak[i]), float(gor[i]), float(beklenen[i])), ''
+            g, olc = guven(pr, float(uzak[i]), float(gor[i]), float(beklenen[i]), faturali), ''
         satirlar.append(dict(sehir=int(hedef_tr['sehir'].iloc[i]), trafo_no=t, olculdu=int(t in olculu),
                              olculu_sayi=len(secilen), arketip=ark, arketip_olasilik=round(pr, 3),
                              ogle_min_kw=round(o, 2), ogle_min_kw_p10=round(o * alt_c[i], 2),
@@ -381,7 +425,7 @@ def sehir_oku(klasor):
     tr = pd.read_csv(klasor / 'trafolar.csv', encoding='utf-8')
     gruplar = ozellikler(tr)
     X = birlestir(gruplar, ATAMA_GRUPLARI)
-    A = tr[ABONE].to_numpy(float)
+    A = abone_matrisi(tr)
     return tr, gruplar, X, A
 
 
@@ -406,11 +450,11 @@ def sehir_calistir(klasor, yalniz_ana=False):
                 csv_yaz(klasor / 'deney' / f'tahmin_n{n}_t{t}.csv', TAHMIN_SUTUNLARI, calistir(tr, X, A, olcum, s)[0])
 
     loo_hata = np.abs(np.exp(-m['loo_log_artik']) - 1)          # |tahmin − ölçülen| ÷ ölçülen
-    ozet = dict(sehir=sehir, olculu=m['ids'], k=m['k'], siluet={str(k): round(v, 3) for k, v in m['siluet'].items()},
+    ozet = dict(sehir=sehir, fatura_kullanildi=fatura_var(tr), olculu=m['ids'], k=m['k'], siluet={str(k): round(v, 3) for k, v in m['siluet'].items()},
                 arketip_adlari=m['ad'], kume_uye_sayisi=[int((m['etiket'] == j).sum()) for j in range(m['k'])],
                 ortak_kw_abone={c: round(float(b), 3) for c, b in zip(ABONE, m['ortak'])},
                 kume_kw_abone=[{c: round(float(b), 3) for c, b in zip(ABONE, bk)} for bk in m['beta']],
-                bant_birim_log=[round(math.log(m['bant'][0]), 3), round(math.log(m['bant'][1]), 3)],
+                taban=m['taban'], bant_birim_log=[round(math.log(m['bant'][0]), 3), round(math.log(m['bant'][1]), 3)],
                 bant_p90_p10_ortanca=round(float(np.median([s['ogle_min_kw_p90'] / max(s['ogle_min_kw_p10'], 0.01)
                                                          for s in satirlar if s['olculdu'] == 0])), 2),
                 loo_hata_ortanca=round(float(np.median(loo_hata)), 3),
@@ -460,7 +504,10 @@ def main():
     ap.add_argument('--sehir', type=int, help='yalnız bu tohum')
     ap.add_argument('--yalniz-ana', action='store_true', help='deneyleri ve şehirler arasını atla')
     ap.add_argument('--onem', action='store_true', help='sütun grubu önemini yazdır, dosya yazma')
+    ap.add_argument('--faturasiz', action='store_true', help='yillik_tuketim_mwh olsa da kullanma (kıyas için)')
     a = ap.parse_args()
+    global FATURA_KULLAN
+    FATURA_KULLAN = not a.faturasiz
     klasorler = sorted(k for k in Path(a.kok).glob('sehir-*') if k.is_dir() and (k / 'trafolar.csv').exists()
                        and (k / 'yuk_5dk.csv').exists())
     if a.sehir is not None:
