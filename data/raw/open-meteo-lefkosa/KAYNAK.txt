@@ -10,3 +10,8 @@ Sütunlar: time (yerel saat, Europe/Nicosia, yaz saati dahil), shortwave_radiati
 Not: ışınım değerleri önceki saatin ortalaması (ör. 12:00 satırı = 11:00–12:00).
 
 Sağlama (Can, 31 Ekim): yatay yıllık 1.908 (2024) / 1.929 (2025) kWh/m²; 30° güney 2.099 / 2.127 kWh/m²; Nisan 11–14 ortalaması 787 / 769 W/m²; Haziran tepe saati 12.
+
+İkinci dosya (üretici 1.2, hava yılı 2023): lefkosa_saatlik_2023.csv — aynı adres, start_date=2023-01-01&end_date=2023-12-31:
+https://archive-api.open-meteo.com/v1/archive?latitude=35.1856&longitude=33.3823&start_date=2023-01-01&end_date=2023-12-31&hourly=shortwave_radiation,direct_normal_irradiance,diffuse_radiation,global_tilted_irradiance,temperature_2m,cloud_cover&tilt=30&azimuth=0&timezone=Europe%2FNicosia&format=csv
+İndirildi 31 Ekim 2026 16:30 (Volkan; ilk denemede sunucu zaman aşımı); Can aynı adresten ayrıca indirdi, birebir aynı. 386.495 bayt, SHA-256 8cd56dd0d088e9ee4bff138ddc19a91be8931a9701ace92667af3a48771f4889. Biçim yukarıdakiyle aynı (8.760 saat).
+Sağlama (Volkan, 31 Ekim) [Hesap]: yatay yıllık 1.903, 30° güney 2.102 kWh/m²; Nisan 11–14 eğik ortalama 754 W/m².
