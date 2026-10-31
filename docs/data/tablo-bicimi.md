@@ -87,7 +87,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | Sütun | Tür | Birim | Örnek | Açıklama |
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
-| `tip` | str | — | `sehir_konut` | `sehir_konut` / `koy` / `carsi` / `otel` / `sanayi` / `sulama` / `yurt` ([sözlük](../glossary.md) "Tip") |
+| `tip` | str | — | `sehir_konutu` | `sehir_konutu` / `koy` / `carsi` / `otel` / `sanayi` / `sulama` / `yurt` ([sözlük](../glossary.md) "Tip") |
 | `v0_v` | float | V | `247.6` | trafo çıkış faz gerilimi, boşta; 246–250 rastgele (kademe bilinmiyor) |
 | `faz_a_ev`, `faz_b_ev`, `faz_c_ev` | int | adet | `14` | tek fazlı aboneler hangi fazda |
 | `uc_faz_ev` | int | adet | `3` | üç fazlı abone |
