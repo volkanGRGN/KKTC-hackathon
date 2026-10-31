@@ -166,3 +166,20 @@ Satır = bir trafo.
 `isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda.
 
 "Ölçülmedi" etiketi = `tahmin.csv`'de `olculdu` = 0. Harita `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`'yi (sehir, trafo_no) ile birleştirir.
+
+## 7. `kayitlar.csv` — Kıb-Tek kayıtları (1.4 adayı, deneme; karar masası 23:02, 23:18)
+
+Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama gerçeğe yakın** üretilir (`src/sahte_kayit.py`, cevap anahtarından bozularak, kusurları dosyanın başında); gerçek kayıt gelince yalnız bu dosya değişir, model (`src/basvuru.py`) aynı kalır. Kişisel veri yok: abone yerine trafo içi sıra numarası. Satır = bir kayıt; `tur` ne kaydı olduğunu söyler. Okuyan: `src/basvuru.py`, `src/basvuru_testi.py`. **Harita ve resmi hesap bugün okumaz.**
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `trafo_no` | | | | anahtar |
+| `tur` | str | — | `panelli` | `kademe` / `hat` / `panelli` / `inverter` |
+| `abone_no` | int | — | `17` | `panelli` ve `inverter`: trafo içi anonim abone sırası |
+| `hat_no` | int | — | `0` | `hat`, `panelli`, `inverter`: alçak gerilim hattının trafodaki sırası (0'dan) |
+| `yer` | float | oran | `0.8125` | `panelli`: hattaki yeri, direk sırası ÷ hattaki direk sayısı (0–1; 1 = hat ucu) |
+| `faz` | str | — | `B` | `panelli`: `A` / `B` / `C` / `3` (üç faz); boş = kayıt yok |
+| `kw` | float | kWp | `5.00` | `panelli`: kurulu güç |
+| `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy) |
+
+Başvuru formu (başvuranın hattı, yeri, fazı) aynı alanlarla ayrı gelir; testte `sahte_kayit.basvuru_kaydi` üretir, dosyası henüz yok.
