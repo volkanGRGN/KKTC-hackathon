@@ -743,3 +743,8 @@ Durum: bekliyor
 ## BİLGİ 23:07 — karar masasından — PR #16, #18, #20 main'de (Can birleştirdi)
 Ne: Can PR #18'i (`uretici/1.3`, içinde PR #20 deneme) tabanına, sonra PR #16'yı main'e birleştirdi (996e40f, 31 Ekim 23:06). Böylece main'de: Faz 7 kalibrasyonu (K_YUK 1,27, İngiltere sapma çarpanı), Faz 8 üretici 1.3 ve yeni sınav şehirleri 21–30, PV açılma deneme betiği. Üçü de karar masasının Mac koşumlarıyla doğrulanmıştı. **Yeni şehirler üretilip model koşulunca resmi rakamlar artık v3** (gerçekçi şehirler); sunum metni hâlâ `sunum-v1` rakamlarında: hangi sürümün anlatılacağı Volkan'da. Açık PR: #19 (Faz 10 hazırlığı, Volkan'ın sözüyle birleşir).
 Durum: bilgi
+
+## BİLGİ 23:08 — Civan'dan — iki bulut oturumu (Claude Code bulut), ikisi de dalda + PR
+Ne: (1) `kontrol/harita-v3`: PR #16/#18/#20 sonrası v3 şehirlerinde (1–30) haritanın açıldığını ve yan paneldeki sayıların her trafoda `kac_ev.csv` ile birebir olduğunu otomatik denetler (ROADMAP Faz 4 "40 trafo" ve "20 şehir" kutuları); yalnız `app/` + Civan günlüğü. (2) `deneme/eszamanlilik`: Can'ın 23:02 kartındaki 1–3 (indirme, eşzamanlılık eğrisi, akşam tepesi ↔ sıcaklık eğimi); Can'a UYARI 23:08 yazıldı, Can "dur" derse durur; 4–5 Can'da.
+Neden: Civan'ın bulut kredisi; iki iş birbirinden ve yerel oturumlardan bağımsız. Sunum rakamlarını değiştirmez (v1 / v3 kararı sende).
+Durum: bilgi
