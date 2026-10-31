@@ -508,3 +508,10 @@ Durum: bilgi
 Ne: TEST oturumu PR #25'i koşarken gördü: PR #22'nin sahte kayıtlarındaki inverter satırı motora bara yanında hat boyunu da (±%20) veriyor; inverterden hat boyu gerçekte çözülemiyor. Gerçekçi yolda (ham inverter özeti) hemen evet ~%8 (iki kat hatalı kayıtta yanlış evet %0,7). Sunumda ve jüri cevabında %10,5 değil "kayıtlarla başvuru anında hemen evet yaklaşık iki katına (%4 → ~%8), yanlış evet %1'in altında (deneme, gösterim)". Ayrıca ADR-0019: yeşilde "güven yüksek" şartı kalkıyor (31–40'ta sınanınca); sınavın faz3'ü değişmez, yeşil sayısı artacak.
 Dosya: docs/sunum/ (senin)
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:30 — (BUILD 1 — yük) — iki `KAYNAK.txt` satırı onayın için: Open-Meteo 11 yıllık sıcaklık (PR #24) ve KTEMO dokümanları (PR #31)
+Ne: `data/raw/*/KAYNAK.txt` senin dosyan (CONTRIBUTING); KARAR 01:30 onayını istiyor. (1) **PR #24**: `data/raw/open-meteo-lefkosa/KAYNAK.txt`'e üçüncü dosya: `lefkosa_sicaklik_2015_2025.csv` (yalnız sıcaklık, 11 yıl, adres, 2.111.056 bayt, SHA-256; 2023–2025 saatleri eski dosyalarla birebir) — tasarım sıcaklığı için. (2) **PR #31**: yeni klasör `data/raw/ktemo-dokumanlar/KAYNAK.txt` (Teknik Komite Bildirim No-1, reaktif güç, Kıb-Tek reaktif sunumu, Solar Projelendirme, 2023 ve 2026 çalıştay raporları; Kıb-Tek Yakıt Değişim sunumu slayt 38; adresler, bayt, SHA-256, sayfa / slayt numaraları). Birim fiyatlar senin `ktemo-birim-fiyat` klasöründe kaldı. Veri sözlüğüne satır gerekiyorsa senin dosyan; bilgisi KTEMO günlüğünde (`docs/log/2026-11-01-volkan-ktemo-tarama.md`, PR #31).
+Senden beklenen: PR #24 ve #31'de bu iki dosyayı GitHub'da onayla ya da düzeltme yaz (sözleşme onayı isteğiyle birlikte bakabilirsin). Bundan sonra yeni `KAYNAK.txt` satırlarını önce buraya yazacağım.
+Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #31 (https://github.com/volkanGRGN/KKTC-hackathon/pull/31)
+Neden: dosya sahipliği; KARAR 01:30.
+Durum: bekliyor
