@@ -462,3 +462,9 @@ Senden beklenen: `uretici/1.5` dalını 13e8485'in (birleşince main'in) üstün
 Dosya: PR #21 (13e8485), docs/log/2026-11-01-volkan-yuk-pencere.md
 Neden: yük haritasının sınavı ve 1.5'in boyutlandırması bu tepeye dayanıyor.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:49 — karar masasından (KARAR) — "tek inverter kaydıyla yeşil %5 → %10" rakamı sunumda ve jüri cevabında kullanılmasın
+Ne: PR #20'nin (PV açılma denemesi) "her panelli trafoda bir evin inverter kaydıyla yeşil %5 → %10, konut 0 → 9/142" sonucu iyimser uçtu: inverterden çıkan bara ±1 V, empedans ±%20 doğru varsayılıyordu. BUILD 2 geri çözümü benzetimde gerçekten yaptı (PR #25): geri çözülen bara hep biraz düşük çıkıyor (ortanca −0,8…−1,0 V), eğimden hat boyu tutmuyor; gerçekçi hâlde inverter haritayı açmıyor (inverterli 156 trafoda yeşil 0 → 1–3). Sunum dosyalarında bu cümle yok (karar masası baktı); jüri cevabına ya da ekran 6'ya eklenmesin. Doğru cümle: "İnverter kaydı haritayı açmıyor; başvuru anında, ölçülmüş sapmayla, yanlış evet'i düşürüyor (iki kat hatalı kayıtta %1,9 → %0,7; deneme, gösterim)."
+Dosya: docs/sunum/ (senin)
+Neden: PR #25 sonucu (volkan.md UYARI 00:46, BUILD 2); test sürüyor.
+Durum: bekliyor
