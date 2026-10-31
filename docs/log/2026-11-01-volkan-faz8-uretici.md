@@ -93,4 +93,34 @@ python3 src/sinav.py faz1|faz2|faz3 <kök> --aralik 21-30
 python3 src/edp_kiyas.py <EDP GIS_data> <kök>                 # İspanya ↔ farazi mesafe (Can'ın)
 ```
 
+## Ek girdi — 31 Ekim 22:30: karar masası 22:2x ve ADR-0016 (ölçü tanımları)
+Karar: bedel kabul. Saf fatura kıyası bilgi satırı; yanlış kırmızı bir kalibrasyon ölçüsü (kırmızı kovasında gerçekte aşan ≥ %50, "≤ %20" kalkar); Faz 1 sağlaması 207 V altı ≤ %1 trafo ve en düşük ≥ 200 V; kVA boyutlandırması değişmez. Yeni koşum yok; aşağıdakiler 21–30'un tek koşusunun çıktısından ve İspanya'nın bir koşusundan.
+
+### Kırmızı olasılığı kovaları ↔ gerçekte bugün aşan (259 V)
+| Kova | Sınav 21–30: trafo / ortalama olasılık / gerçekte aşan | Geliştirme 1–10 |
+|---|---|---|
+| 0,0–0,1 | 167 / 0,01 / %1 | 175 / 0,01 / %0 |
+| 0,1–0,3 | 60 / 0,18 / %2 | 73 / 0,19 / %4 |
+| 0,3–0,5 | 61 / 0,39 / %15 | 53 / 0,38 / %28 |
+| 0,5–0,7 | 35 / 0,57 / %34 | 33 / 0,58 / %42 |
+| 0,7–0,9 | 25 / 0,78 / %68 | 19 / 0,77 / %74 |
+| 0,9–1,0 | 1 / 0,90 / %100 | 1 / 0,95 / %100 |
+| **Kırmızı (≥ 0,5)** | **61 / 0,66 / %49** | **53 / 0,65 / %55** |
+
+- "Gerçekte dolu" (kaç ev gerçek 0) her kovada "bugün aşan" ile aynı çıktı.
+- **Ölçü sınavda sınırda kalıyor (%49 < %50)**, geliştirmede geçiyor (%55). Olasılıklar karamsar: model %57 dediğinde gerçekte %34 aşıyor. Kaynağı Faz 7'nin temkini (gerilim sapma s, geniş yük bandı). Düzeltme, pilot verisiyle asimetrik yeniden kalibrasyon (Faz 10); bu turda ayar yok.
+
+### İspanya'da saf fatura kıyası (bir koşu; `edp_test.py`, girdi `saf_fatura` eklendi)
+| Ölçülü | Model (faturalı, c) ortanca / P90 | Saf fatura (Σ öğlen ÷ Σ fatura × fatura) | Müşteri sayısıyla kıyas |
+|---|---|---|---|
+| 5 | %13,0 / %33,8 | %13,0 / %33,8 | %23,8 / %56,5 |
+| 10 | %10,9 / %32,3 | %10,9 / %32,3 | %25,6 / %58,8 |
+| 15 | %10,3 / %33,1 | %10,3 / %33,1 | %25,2 / %54,5 |
+
+- Satır satır: model tahmini saf faturanın 0,9993–1,0001 katı. İspanya'da abone sınıfı yok, model tek bir fatura sütunuyla ve ortak orana çekili katsayıyla saf fatura kıyasına iniyor. **Faturalı model İspanya'da fatura üstüne hiçbir şey katmıyor**; farazi 1.3'te (abone sınıflı) %9 katıyor.
+- "%25 → %10" manşeti fatura toplamının değeri: doğru, ama modelin değil, faturanın. Sunumda ADR-0016'nın cümlesi: "Öğlen yükünü fatura söyler; biz ne kadar emin olduğumuzu ve panelin sığıp sığmadığını söyleriz."
+
+### Faz 1, yeni ölçütle
+Sınav 21–30: 207 V altı 1/400 (%0,25), en düşük 205,9 V → geçer. Geliştirme 1–10: 0/400, en düşük 212,3 V.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

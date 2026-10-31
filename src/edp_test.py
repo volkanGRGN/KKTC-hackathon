@@ -20,6 +20,7 @@ Girdi türleri (Kıb-Tek'in bildiği; ölçülmeyen trafo için de vardır):
      sayaca tip, eğrisiyle değil, faturası (dönem kWh), fazı ve paneli ile sınıflandırıcı üzerinden verilir
   c  a + trafonun fatura toplamı (aynı üç haftanın kWh'i): ÜST SINIR, çünkü hedefle aynı dönem
 Kıyas: ölçülülerde ortalama "öğlen en düşük ÷ müşteri" × müşteri sayısı.
+Saf fatura kıyası (ADR-0016): ölçülülerde Σ öğlen en düşük ÷ Σ fatura × trafonun faturası (girdi 'saf_fatura').
 
 Faz 7 (karar masası 21:32, 22:0x): %80 bant, `sablon.py`'deki K_YUK ile log ölçekte genişler (tek kaynak); böylece
 `--cikti` satırları modelin yayımladığı bandı taşır. `--kalibrasyonsuz` K_YUK'u kapatır ("önce" ve k'nin hesabı için:
@@ -281,6 +282,12 @@ def deney(tr, olcum, ozet, sekil, faz):
                 kiyas = y[sec].sum() / tr.musteri.to_numpy()[sec].sum() * tr.musteri.to_numpy()[hedef]
                 for j, h in enumerate(hedef):
                     sonuc.append(dict(n=n, yol=yol, tekrar=t, girdi='kiyas', ct=cts[h], y=y[h], tah=kiyas[j],
+                                      alt=np.nan, ust=np.nan, guven=''))
+                # ADR-0016 (karar masası 22:2x): saf fatura kıyası = Σ öğlen ÷ Σ fatura (ölçülüler) × trafonun faturası
+                fat = tr.fatura_kwh.to_numpy(float)
+                saf = y[sec].sum() / fat[sec].sum() * fat[hedef]
+                for j, h in enumerate(hedef):
+                    sonuc.append(dict(n=n, yol=yol, tekrar=t, girdi='saf_fatura', ct=cts[h], y=y[h], tah=saf[j],
                                       alt=np.nan, ust=np.nan, guven=''))
     s = pd.DataFrame(sonuc)
     s['hata'] = (s.tah - s.y).abs() / s.y
