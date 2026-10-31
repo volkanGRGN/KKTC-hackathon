@@ -210,6 +210,12 @@ def faz2_oku(s):
         if r['gun_turu'] == 'isgunu':
             s['arketip'].setdefault(int(r['arketip']), [0.0] * 288)[int(r['adim'])] = float(r['oran'])
     s['deney'] = {p.stem: _csv(p) for p in sorted((k / 'deney').glob('tahmin_*.csv'))}
+    ozet = k / 'sablon_ozet.json'
+    if ozet.exists():
+        with open(ozet, encoding='utf-8') as fh:
+            s['fatura_kullanildi'] = bool(json.load(fh).get('fatura_kullanildi'))
+    else:
+        s['fatura_kullanildi'] = False   # 1.2 öncesi model: fatura yok
     # Gerçek küme için iş günü ortalama tüketim eğrisi (yalnız ölçülmeyen trafolar).
     olcusuz = {r['trafo_no'] for r in s['tahmin'] if not int(r['olculdu'])}
     top = {t: [0.0] * 288 for t in olcusuz}
@@ -327,20 +333,49 @@ def faz2(sehirler):
     _madde(m, True, f'düşük güven oranı raporlandı (hedef ≤ %{100 * DUSUK_GUVEN_MAX:g})',
            ayr + ('' if o <= DUSUK_GUVEN_MAX else '; UYARI: hedefin üstünde, sebep BUILD günlüğünde'))
 
-    # 6. Saf tahmin (ADR-0008): Σ öğlen ÷ Σ abone × abone.
-    s_ort, s_p90 = {}, {}
-    for s in sehirler:
-        abone = {r['trafo_no']: _abone(r) for r in s['trafolar']}
-        saf = _saf(s, abone)
-        if saf:
-            h = _hatalar(saf, s['gercek'])[0]
-            s_ort[s['ad']], s_p90[s['ad']] = st.median(h), _p90(h)
+    # 6. Saf tahmin (ADR-0008, karar masası 17:26): model hangi bilgiyle koştuysa o saf tahminle karşılaştırılır.
+    #    faturasız: Σ öğlen ÷ Σ tarife enerjisi × tarife enerjisi; faturalı: Σ öğlen ÷ Σ fatura × fatura.
+    def _tarife(s):
+        return {r['trafo_no']: sum(int(r.get(a) or 0) * MWH_ABONE[a] for a in ABONE) for r in s['trafolar']}
+
+    def _fatura(s):
+        f = {r['trafo_no']: float(r['yillik_tuketim_mwh']) for r in s['trafolar'] if r.get('yillik_tuketim_mwh')}
+        return f if len(f) == len(s['trafolar']) else None
+
+    def _saf_ozet(olcu_fn):
+        d = {}
+        for s in sehirler:
+            olcu = olcu_fn(s)
+            saf = _saf(s, olcu) if olcu else None
+            if saf:
+                h = _hatalar(saf, s['gercek'])[0]
+                d[s['ad']] = (st.median(h), _p90(h))
+        if not d:
+            return None
+        return st.median(v[0] for v in d.values()), st.median(v[1] for v in d.values()), len(d)
+
     mo, mp = st.median(h_ort.values()), st.median(h_p90.values())
-    so, sp = st.median(s_ort.values()), st.median(s_p90.values())
-    _madde(m, mo <= (1 - SAF_FARK) * so and mp <= (1 - SAF_FARK) * sp,
-           f'model saf tahminden (Σ öğlen ÷ Σ abone × abone) ortanca ve P90\'da ≥ %{100 * SAF_FARK:g} düşük',
-           f'model {_yuzde(mo)} / {_yuzde(mp)}, saf {_yuzde(so)} / {_yuzde(sp)} '
-           f'(fark {_yuzde(1 - mo / so)} / {_yuzde(1 - mp / sp)})')
+    faturali = sum(bool(s['fatura_kullanildi']) for s in sehirler) > len(sehirler) / 2
+    saflar = {'fatura': ('Σ öğlen ÷ Σ yillik_tuketim_mwh × fatura', _saf_ozet(_fatura)),
+              'tarife': ('Σ öğlen ÷ Σ tarife enerjisi × tarife enerjisi', _saf_ozet(_tarife))}
+    for ad, (tanim, oz) in saflar.items():
+        kendi = (ad == 'fatura') == faturali
+        if oz is None:
+            if kendi:
+                _madde(m, False, f'saf tahmin ({ad})', 'veri yok (sözleşme 1.2 öncesi şehir)')
+            else:
+                bilgi.append(f'saf tahmin ({ad}): veri yok (sözleşme 1.2 öncesi şehir)')
+            continue
+        so, sp, n = oz
+        gecer = mo <= (1 - SAF_FARK) * so and mp <= (1 - SAF_FARK) * sp
+        ayr = (f'model {_yuzde(mo)} / {_yuzde(mp)}, saf {_yuzde(so)} / {_yuzde(sp)} '
+               f'(model {_yuzde(1 - mo / so)} / {_yuzde(1 - mp / sp)} düşük; {n} şehir)')
+        if kendi:
+            _madde(m, gecer, f'saf tahmin ({ad}: {tanim}): model ortanca ve P90\'da ≥ %{100 * SAF_FARK:g} düşük',
+                   ayr + f"; model {'faturalı' if faturali else 'faturasız'} koşmuş (sablon_ozet.json)")
+        else:
+            bilgi.append(f'saf tahmin ({ad}: {tanim}), modelin koşmadığı bilgi: {ayr} → ölçüt '
+                         + ('geçer' if gecer else 'geçmez'))
 
     # 7. Ölçülü / ölçülmeyen tip dağılımı (bilgi; ROADMAP: karşılaştırılmış, günlükte).
     olc, olcz = Counter(), Counter()
@@ -358,32 +393,6 @@ def faz2(sehirler):
            + ', '.join(f'{t} {olcz[t]}' for t in TIPLER)
            + f'; şehir başına fark (TV uzaklığı) ortanca {o:.2f}, en çok {k[0]:.2f} ({k[1]})')
 
-    # Bilgi (eşiksiz): saf tahminin iki başka tanımı (BUILD önerisi, volkan.md 17:03; karar gelene kadar madde
-    # ADR-0008 tanımıyla). Aynı ≥ %25 ölçütü yanında yazılır.
-    def _saf_bilgi(ad, olcu_fn):
-        d = {}
-        for s in sehirler:
-            olcu = olcu_fn(s)
-            saf = _saf(s, olcu) if olcu else None
-            if saf:
-                h = _hatalar(saf, s['gercek'])[0]
-                d[s['ad']] = (st.median(h), _p90(h))
-        if not d:
-            return f'saf tahmin {ad}: veri yok (sözleşme 1.2 öncesi şehir)'
-        fo, fp = st.median(v[0] for v in d.values()), st.median(v[1] for v in d.values())
-        gecer = mo <= (1 - SAF_FARK) * fo and mp <= (1 - SAF_FARK) * fp
-        return (f'saf tahmin {ad}: {_yuzde(fo)} / {_yuzde(fp)}; model bundan {_yuzde(1 - mo / fo)} / '
-                f'{_yuzde(1 - mp / fp)} düşük → ≥ %{100 * SAF_FARK:g} ölçütü {"geçer" if gecer else "geçmez"} ({len(d)} şehir)')
-
-    def _tarife(s):
-        return {r['trafo_no']: sum(int(r.get(a) or 0) * MWH_ABONE[a] for a in ABONE) for r in s['trafolar']}
-
-    def _fatura(s):
-        f = {r['trafo_no']: float(r['yillik_tuketim_mwh']) for r in s['trafolar'] if r.get('yillik_tuketim_mwh')}
-        return f if len(f) == len(s['trafolar']) else None
-
-    bilgi.append(_saf_bilgi('tarife enerjisiyle (Σ öğlen ÷ Σ abone × Kıb-Tek sınıf ortalaması)', _tarife))
-    bilgi.append(_saf_bilgi('faturayla (Σ öğlen ÷ Σ yillik_tuketim_mwh × fatura)', _fatura))
     bilgi.append(f'havuz (bütün ölçülmeyenler): ortanca {_yuzde(st.median(havuz))}, P90 {_yuzde(_p90(havuz))}, n = {len(havuz)}')
     guv = {}
     for s in sehirler:
