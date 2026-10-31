@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 17:24 (BUILD oturumu)
+**Güncellendi:** 31 Ekim 2026, 17:31 (BUILD oturumu)
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0010).
@@ -12,17 +12,17 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
   - Sınav şehirleri 11–20 (geliştirme ölçümü, gösterim):
     - faturalı %3,9 / P90 %8,3;
     - faturasız %22 / %55, İspanya gerçek verisiyle aynı seviye.
-  - Resmi ölçüm Can'ın `sinav.py faz2`'si.
+  - Resmi ölçüm Can'ın `sinav.py faz2`'si ([PR #14](https://github.com/volkanGRGN/KKTC-hackathon/pull/14); Can'ın sonucu 7/7 geçti: %3,8 / %8,0, kapsama %84). Saf tahmin tanımı karar masası 17:26: tarife enerjisi / fatura; faturasız model ortancada geçmiyor (dürüstçe söylenir).
 - **Faz 3 başladı.**
   - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (artık main'e bağlı; Can'ın incelemesini bekliyor).
   - Sınav şehirleri 11–20: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
-  - Kırmızı kuralının okuması karar masasında.
+  - Kırmızı = karamsar senaryoda bugün aşıyor (karar masası 17:26): kırmızı %31, yanlış kırmızı %42, sarı %63. Hedef aşımının sebebi ±4 V bilinmeyen bara gerilimi; pilotun ilk ölçeceği şey.
 - **Faz 5 başladı** (paralel). Hikâye "güven merdiveni", manşet İspanya %25 → %10 (ROADMAP Faz 5).
 
 ## Açık faz ve kim nerede
 - **Volkan + Claude (BUILD):**
   - #8, #12, #10, #11 birleşti (17:24, Volkan'ın onayıyla). #13 Can'ın incelemesini bekliyor.
-  - Konuşma notu taslağı hazır ([docs/konusma-notu-taslak.md](docs/konusma-notu-taslak.md)). Sırada: karar masası kırmızı kuralını seçince `KIRMIZI_KURALI`.
+  - Konuşma notu taslağı hazır ([docs/konusma-notu-taslak.md](docs/konusma-notu-taslak.md)). #14 (Can'ın Faz 2 sınavı) inceleniyor; temizse birleşir.
 - **Can:**
   - PR #13 incelemesi (Faz 3; sözleşme §6 notları);
   - `sinav.py faz2` (saf tahmin satırıyla);
@@ -31,10 +31,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Civan:** [Faz 3 kartı](docs/gorev/civan-faz3-yan-panel.md): yan panel `kac_ev.csv`; Faz 4 sınavı (internetsiz açılış, ekran kaydı, 3 şehir).
 
 ## Bekleyen istekler
-- Karar masasında (volkan.md):
-  - Faz 3 kırmızı kuralı okuması (17:17);
-  - saf tahmin tanımı, panelli evin faturası, üretici 1.3 (17:03);
-  - Civan'ın sunum-dashboard önerisi (17:11).
+- Volkan'da: sunum biçimi (Civan'ın "haritanın içinde 7 ekran" önerisi; karar masasının önerisi dashboard + aynı metinden PDF yedeği, animasyon yok).
 - Kontrol: `grep -n "Durum: bekliyor" docs/istek/*.md`
 
 ## Bilinen sorunlar ve kararlar
@@ -47,5 +44,5 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 
 ## Sıradaki üç adım
 1. Can #13'ü incelesin, birleşsin. Can `sinav.py faz2` ve `faz3`'ü koşsun; ROADMAP kutuları rakamla dolsun.
-2. Karar masası kırmızı kuralını seçsin. BUILD tek satırı değiştirir, `kac_ev.csv` yeniden üretilir.
+2. #14 birleşsin; ROADMAP Faz 2 kutuları Can'ın rakamıyla dolsun, Faz 3'te yanlış kırmızı ve sarı "KALDI, sebep günlükte".
 3. Faz 5: konuşma notu taslağı hazır (BUILD), slayt iskeleti Can'da (83b0f11), gece 2 prova.
