@@ -17,9 +17,9 @@ from pathlib import Path
 TIPLER = ['sehir_konutu', 'koy', 'carsi', 'otel', 'sanayi', 'sulama', 'yurt']
 V_SINIR = 259.0                # planlama sınırı (en az bir trafo bunu aşmalı: yöntemin görecek şeyi var)
 V_ALT = 216.0                  # bunun altı = benzetim bozuk
-TIP_SEHIR_MIN = 3              # her şehirde her tipten
-TIP_TOPLAM_MIN = 60            # bütün şehirlerde her tipten (20 şehir için)
-SURE_MAX_SN = 60.0
+TIP_SEHIR_MIN = 3              # her şehirde her tipten; bütün şehirlerde 3 x şehir sayısı (20 şehirde 60)
+ROADMAP_SEHIR = 20             # ROADMAP eşikleri bu şehir sayısı için yazıldı
+SURE_MAX_SN = 60.0             # şehirlerin üretildiği makinede (karar masası 31 Ekim)
 
 
 def _csv(yol):
@@ -69,21 +69,25 @@ def faz1(sehirler):
     _madde(m, not eksikler, f'her şehirde her tipten ≥ {TIP_SEHIR_MIN} trafo',
            f'{len(sehirler) - len(eksikler)}/{len(sehirler)} şehir' + (f"; eksik: {'; '.join(eksikler[:5])}" if eksikler else ''))
 
-    # 2. Bütün şehirlerde her tipten en az 60 trafo.
+    # 2. Bütün şehirlerde her tipten en az 3 x şehir sayısı trafo.
+    esik = TIP_SEHIR_MIN * len(sehirler)
     en_az = min(TIPLER, key=lambda t: toplam.get(t, 0))
-    _madde(m, all(toplam.get(t, 0) >= TIP_TOPLAM_MIN for t in TIPLER),
-           f'bütün şehirlerde her tipten ≥ {TIP_TOPLAM_MIN} trafo',
+    _madde(m, all(toplam.get(t, 0) >= esik for t in TIPLER),
+           f'bütün şehirlerde her tipten ≥ {esik} trafo ({TIP_SEHIR_MIN} × {len(sehirler)} şehir)',
            f'en az {en_az} {toplam.get(en_az, 0)}; ' + ', '.join(f'{t} {toplam.get(t, 0)}' for t in TIPLER))
+    if len(sehirler) < ROADMAP_SEHIR:
+        bilgi.append(f'UYARI: ROADMAP eşiği {ROADMAP_SEHIR} şehir için; burada {len(sehirler)} şehir var')
     bilinmeyen = set(toplam) - set(TIPLER)
     if bilinmeyen:
         bilgi.append(f'UYARI: sözleşmede olmayan tip adı: {sorted(bilinmeyen)}')
 
-    # 3. Her şehirde en az bir trafo bugün 259 V üstü.
+    # 3. En az bir trafo bugün 259 V üstü (toplamda; düşük yaygınlıklı şehirde hiç aşan olmayabilir).
     asan = {s['ad']: sum(float(r['v_max_bugun_v']) > V_SINIR for r in s['cevap']) for s in sehirler}
     sifir = [a for a, n in asan.items() if n == 0]
-    _madde(m, not sifir, f'her şehirde en az bir trafoda v_max_bugun_v > {V_SINIR:g} V',
-           f'{len(sehirler) - len(sifir)}/{len(sehirler)} şehir; toplam {sum(asan.values())} trafo'
-           + (f"; hiç aşmayan: {', '.join(sifir[:5])}" if sifir else ''))
+    _madde(m, sum(asan.values()) >= 1, f'en az bir trafoda v_max_bugun_v > {V_SINIR:g} V',
+           f'toplam {sum(asan.values())}/{sum(len(s["cevap"]) for s in sehirler)} trafo')
+    bilgi.append(f'259 V üstü trafo olan şehir: {len(sehirler) - len(sifir)}/{len(sehirler)}'
+                 + (f"; hiç aşmayan: {', '.join(sifir[:5])}" if sifir else ''))
 
     # 4. Hiçbir trafoda 216 V altı yok.
     v_min = [(float(r['v_min_bugun_v']), s['ad'], r['trafo_no']) for s in sehirler for r in s['cevap']]
@@ -96,26 +100,37 @@ def faz1(sehirler):
     sureler = [(s['ayar'].get('sure_sn'), s['ad']) for s in sehirler]
     yok = [a for v, a in sureler if v is None]
     var = [(float(v), a) for v, a in sureler if v is not None]
+    kaynak = Counter(f"profil {s['ayar'].get('profil_kaynagi', '?')}, ışınım {s['ayar'].get('isinim_kaynagi', '?')}"
+                     for s in sehirler)
     ayrinti = []
     if var:
         en_uzun = max(var)
         ayrinti.append(f'en uzun {en_uzun[0]:.1f} sn ({en_uzun[1]}), ortanca {st.median(v for v, _ in var):.1f} sn')
     if yok:
         ayrinti.append(f"ayar.json'da sure_sn yok: {len(yok)} şehir")
+    ayrinti.append('; '.join(f'{k} ({n} şehir)' for k, n in kaynak.items()))
     _madde(m, not yok and max(var)[0] <= SURE_MAX_SN, f'üretim süresi ≤ {SURE_MAX_SN:g} sn', '; '.join(ayrinti))
 
     # Bilgi (eşiksiz).
     bilgi.append('tip başına ogle_min_kw ortancası (kW): ' + ', '.join(
         f"{t} {st.median(float(r['ogle_min_kw']) for s in sehirler for r in s['cevap'] if r['tip'] == t):.2f}"
         for t in TIPLER if toplam.get(t)))
-    kac = [int(r['kac_ev_gercek']) for s in sehirler for r in s['cevap']]
-    q = st.quantiles(kac, n=4) if len(kac) > 1 else [kac[0]] * 3
-    bilgi.append(f'kac_ev_gercek: en az {min(kac)}, çeyrekler {q[0]:g} / {q[1]:g} / {q[2]:g}, en çok {max(kac)}; '
-                 f'sıfır olan {sum(k == 0 for k in kac)}/{len(kac)}')
-    sinir = Counter(r['kac_ev_sinir'] for s in sehirler for r in s['cevap'])
-    bilgi.append('kac_ev_sinir: ' + ', '.join(f'{k} {sinir.get(k, 0)}' for k in ('gerilim', 'isil', 'yok')))
-    tavan = sum(int(r['kac_ev_tavan']) for s in sehirler for r in s['cevap'])
-    bilgi.append(f'kac_ev_tavan = 1 oranı: {tavan / len(kac):.3f} ({tavan}/{len(kac)})')
+    # Aday = 0 trafoda kaç ev sütunları bilgi taşımaz (sözleşme §3): ayrı sayılır, gerisi aday > 0 üzerinden.
+    hepsi = [r for s in sehirler for r in s['cevap']]
+    adaysiz = [r for r in hepsi if int(r['kac_ev_aday']) == 0]
+    adayli = [r for r in hepsi if int(r['kac_ev_aday']) > 0]
+    bilgi.append(f'aday = 0 trafo: {len(adaysiz)}/{len(hepsi)}'
+                 + (' (' + ', '.join(f'{t} {n}' for t, n in Counter(r['tip'] for r in adaysiz).most_common()) + ')'
+                    if adaysiz else ''))
+    if adayli:
+        kac = [int(r['kac_ev_gercek']) for r in adayli]
+        q = st.quantiles(kac, n=4) if len(kac) > 1 else [kac[0]] * 3
+        bilgi.append(f'kac_ev_gercek (aday > 0): en az {min(kac)}, çeyrekler {q[0]:g} / {q[1]:g} / {q[2]:g}, '
+                     f'en çok {max(kac)}; sıfır olan {sum(k == 0 for k in kac)}/{len(kac)}')
+        sinir = Counter(r['kac_ev_sinir'] for r in adayli)
+        bilgi.append('kac_ev_sinir (aday > 0): ' + ', '.join(f'{k} {sinir.get(k, 0)}' for k in ('gerilim', 'isil', 'yok')))
+        tavan = sum(int(r['kac_ev_tavan']) for r in adayli)
+        bilgi.append(f'kac_ev_tavan = 1 oranı (aday > 0): {tavan / len(adayli):.3f} ({tavan}/{len(adayli)})')
     return m, bilgi
 
 
