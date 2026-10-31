@@ -355,3 +355,8 @@ Karar: Üretici 1.3 deneme şehirlerini gerçeğe çapaladı; yeni sınav şehir
 Konuşma notu: (a) dürüst cümle "Öğlen yükünü fatura söyler; biz ne kadar emin olduğumuzu ve panelin sığıp sığmadığını söyleriz"; (b) jüri "modeliniz faturadan fazlasını katıyor mu?": "Öğlen yükünde az; katkımız kalibre aralık, güven ve panel kararı: dolu trafoya 'yer var' diyen %40 kuralı 22/44, biz 0." Sunumda hangi sürümün (v2 / v3) anlatılacağı Volkan'da; o söyleyene kadar v1 metni.
 Senden beklenen: PR #16 onayı (hâlâ bekliyor) → sınav tanımları → 21–30 puanlama → PR #18 onayı; konuşma notu cümleleri.
 Durum: bekliyor
+
+## KARAR 22:21 — iki ek: kırmızı kovası ölçüsüne n toleransı; manşet cümlesi faturanın değeri olarak
+Karar: (1) `sinav.py faz3` kırmızı kovası ölçüsü (ADR-0016 madde 2): geçme eşiği **0,5 − 2·√(0,25 ÷ n)**, n = kırmızı trafo sayısı (21–30'da 61 → 0,37; BUILD %49 → GEÇTİ, "yön karamsar" bilgi). PIT ve %95 maddeleriyle aynı mantık. (2) **Manşet cümlesi:** İspanya'da faturalı model basit fatura oranıyla birebir aynı çıktı (abone sınıfı yok). Ekran 4 ve konuşma notunda: "Kıb-Tek'in zaten elindeki fatura toplamı girince gerçek trafolarda hata %25'ten %10'a iniyor; biz bunun üstüne ne kadar emin olduğumuzu (aralık, İspanya'da %79 tutuyor) ve panelin sığıp sığmadığını söylüyoruz." Rakam aynı, "modelimiz %25'ten %10'a indirdi" denmez. Jüri cevabı "model faturadan fazlasını katıyor mu": "Öğlen yükünde hayır, fatura yeter; katkımız kalibre aralık, güven ve panel kararı: dolu trafoya 'yer var' diyen %40 kuralı 22/44, biz 0." Volkan sunum sürümünü söyleyince rakamlar (v2 / v3) ona göre.
+Senden beklenen: (1) sinav.py; (2) ekran 4 + konuşma notu + jüri cevabı; PR #16 ve #18 onayları.
+Durum: bekliyor
