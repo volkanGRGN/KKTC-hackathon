@@ -11,27 +11,28 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:20)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:30)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
 | PR #22 başvuru anı motoru + sahte kayıt (deneme) | BUILD 2 | testi geçti, birleşmeye hazır (34c10ab) | GitHub onayı (Can / Civan) |
-| PR #26 Kıb-Tek tepe verisi girişi (Muhittin 4 m. 3; #24 üstünde, §9) | BUILD 1 | popülasyona aktarım kapalı (KARAR 00:57) | TEST'in Mac tekrarı; #24 |
-| Öğlen yük güveni (panelin darboğazı), tepe saati | BUILD 1 | sırada (KARAR 00:57) | — |
+| PR #26 Kıb-Tek tepe verisi girişi (Muhittin 4 m. 3; #24 üstünde, §9) | BUILD 1 | TEST'te tuttu (KARAR 01:30) | #24, sonra taban main; onay |
+| Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | testi geçti, birleşmeye hazır | GitHub onayı (Can / Civan) |
-| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | a5cfddd testi geçti (KARAR 01:12); inverter haritayı açmıyor | #22, sonra taban main; GitHub onayı |
+| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | TEST'te bir eksi: türetilmiş inverter satırı gerçek kayıtta engellenmiyor (KARAR 01:30) | düzeltme (BUILD 2); #22; onay |
 | PR #28 sarıda konum payı (ADR-0015 m. 4; #23 üstünde) | BUILD 2 | 9138806 testi geçti (KARAR 01:12); yalnız analiz, sözleşmeye dokunmuyor | #23, sonra taban main; GitHub onayı |
-| Faz 10 ölçüm sırası (pilotta ilk 20 trafo) | BUILD 2 | sırada (KARAR 01:01) | — |
-| PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) + öğlende net fatura seçeneği | BUILD 1 | 855a6c3: Velander + 2015–2025 serisi yapıldı, İspanya KALDI kalır (%15,4), `tepe.csv` §8 (KARAR 00:57) | TEST'in Mac tekrarı; onay (Civan / Can) |
+| PR #30 Faz 10 ölçüm sırası (#23 üstünde) | BUILD 2 | gece / kademe sonrası yalnız yeşil yönü (KARAR 01:30) | TEST |
+| ADR-0019 uygulaması: yeşil kapısında güven şartı kalkar, 31–40'ta bir kez | BUILD 2 | sırada | — |
+| PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) + öğlende net fatura seçeneği | BUILD 1 | TEST'te tuttu (KARAR 01:30); İspanya KALDI kabul | GitHub onayı (Can / Civan) |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
-| PR #27 üretici 1.5, sınav şehirleri 31–40 | Can | main ile birleşik ağaç Mac'te tuttu: hedefler, faz1–3 (KARAR 01:20) | GitHub onayı (Volkan / Civan) |
-| PR #29 akşam gerilimi (`v_min_tepe_v`, karar P10 ≥ 207 V; #26 üstünde) | BUILD 1 | TEST sırasında | TEST; onay (Can / Civan) |
+| Yük modelini üretici 1.5 şehirlerinde koşmak (1–10, 31–40 bir kez); sistem puantı sağlaması, güç katsayısı duyarlılığı, KTEMO günlüğü | BUILD 1 | sırada (KARAR 01:25, 01:30) | — |
+| PR #29 akşam gerilimi (`v_min_tepe_v`, karar P10 ≥ 207 V; #26 üstünde) | BUILD 1 | TEST'te tuttu (KARAR 01:30) | #26, sonra taban main; onay |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı, yük ikinci sayısı; Faz 4 kalanı | Civan | `pv_uc` sütunu gelince (civan.md 00:15) | BUILD 2 |
 | Sunum rakam sürümü (v2 / v3) | Volkan | bekliyor | — |
 
-Birleşenler (1 Kasım): #19 (07ea153), #21 (c53ab31). **Birleştirme kuralı:** izin sistemi GitHub onayı olmayan PR'ı birleştirmiyor; Volkan'ın açtığı PR'ları Can ya da Civan onaylar.
+Birleşenler (1 Kasım): #19 (07ea153), #21 (c53ab31), #27 (6013342, üretici 1.5). **Birleştirme kuralı:** izin sistemi GitHub onayı olmayan PR'ı birleştirmiyor; Volkan'ın açtığı PR'ları Can ya da Civan onaylar.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
