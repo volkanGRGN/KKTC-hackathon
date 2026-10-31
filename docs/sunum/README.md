@@ -4,6 +4,7 @@ Klasör Can'ın ([CONTRIBUTING](../../CONTRIBUTING.md) sahiplik tablosu); hikây
 
 | Dosya | Ne |
 |---|---|
+| [ekranlar.md](ekranlar.md) | **Sunumun kendisi** (Volkan 17:32): haritanın içinde 7 ekran, her biri tek cümle + tek görsel + en fazla bir rakam; PDF yedeği bu metinden |
 | [slaytlar.md](slaytlar.md) | Slayt listesi: her slaytta tek iddia, rakamlar ve etiketleri; itiraz ve kaynak slaydı dahil |
 | [konusma-notu.md](konusma-notu.md) | Konuşma notu: dürüstlük cümleleri (söylenmesi zorunlu), jüri soruları ve cevap iskeleti |
 

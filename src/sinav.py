@@ -524,7 +524,7 @@ def faz3(sehirler):
                          + f'; ortanca gerçek / karamsar / iyimser {st.median(x["gercek"] for x in xs):g} / '
                          f'{st.median(x["kar"] for x in xs):g} / {st.median(x["iyi"] for x in xs):g} ev')
     ic = sum(x['kar'] <= x['gercek'] <= x['iyi'] for x in kes)
-    bilgi.append(f'gerçek [karamsar, iyimser] aralığında (tavan = 0): {_oran(ic, len(kes))}; '
+    bilgi.append(f'aralık kapsaması (gerçek kac_ev_gercek [karamsar, iyimser] içinde; tavan = 0): {_oran(ic, len(kes))}; '
                  f'gerçek < karamsar {sum(x["gercek"] < x["kar"] for x in kes)}, gerçek > iyimser {sum(x["gercek"] > x["iyi"] for x in kes)}')
     sn = Counter(x['sinir'] for x in satir)
     bilgi.append('sinir_karamsar: ' + ', '.join(f'{k} {n}' for k, n in sn.most_common()))

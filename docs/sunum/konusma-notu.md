@@ -12,7 +12,8 @@ Anlatan: Volkan. Slayt numaraları [slaytlar.md](slaytlar.md) ile aynı. Rakamla
 1. **Kanıt sırası:** "%80 İngiltere'de, gerçek veride. Farazi şehir yalnız gösterim. Kıbrıs'taki doğruluğu pilot söyler."
 2. **Farazi şehir üst sınırdır** ([ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md) madde 3): "Farazi şehir isabeti gerçek isabetin üst sınırıdır. Gerçek veride, İspanya'da 29 trafoda sınadık: yalnız müşteri sayısıyla ~%25, fatura bilgisiyle ~%10 ortanca hata. Kıbrıs'taki doğruluğu pilot söyler."
 3. **Gerilim** (karar masası 17:00): "Gerilim fiziğini İngiltere'de 6 gerçek hatta sınadık: dördünde ±%40 içinde; ikisinde paneller hattın ucunda toplandığı için model yükselmeyi az gösterdi. Bu yüzden karamsar senaryomuz panelleri hattın ucuna koyar."
-4. **Temsil yanlılığı:** "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz."
+4. **Fatura** (karar masası 17:38): "Fatura olmadan model ortalama trafoda basit hesaptan pek iyi değil; fatura girince hata dörtte bire iniyor. İspanya'da da aynı: %25 → %10." [Hesap: farazi 11–20 faturasız %20,6, faturalı %3,8 (gösterim); İspanya PR #10]
+5. **Temsil yanlılığı:** "Ölçülen trafolar yereldir; her tipten örnek yoksa model görmediği tipte kendinden emin yanlış tahmin yapar. Tabakalı seçim, ölçülü/ölçülmeyen dağılım karşılaştırması ve düşük güven etiketiyle bunu sınırlıyoruz, tamamen kaldırmıyoruz."
 
 ## Jüri soruları ve cevap iskeleti (ROADMAP Faz 5: 8 soru, her birine ekipten en az iki kişi)
 Kaynak: [araştırma günlüğü](../log/2026-10-31-kapsamli-arastirma.md) bölüm 8, ADR-0005, ADR-0010. Cevaplar iskelet [Yorum]; provada kişi adı yazılır.
