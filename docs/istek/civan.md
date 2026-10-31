@@ -135,3 +135,14 @@ Durum: bilgi
 ## BİLGİ 23:02 — karar masasından — sıradaki harita işleri (kart sonra)
 Ne: (1) Yük katmanı: her trafoda "akşam doluluğu" ikinci sayısı gelecek (Can'ın tepe sütunları, sözleşme 1.4; "ön" etiketi, kVA, güç katsayısı 0,95 varsayım; ADR-0014). (2) Panel katmanı Muhittin'in önerisiyle "güvenli uçlar": yeşil (ilk 2 başvuru güvenle sığar) ve "büyük olasılıkla dolu" uyarısı (bugün aşma olasılığı ≥ 0,7; deneme şehirlerinde bunların %68'i gerçekten dolu); arası renksiz, "başvuruda bakılır". (3) "Kıb-Tek kayıtlarıyla" görünüm (BUILD'in sahte kayıt sonuçları gelince): aynı haritanın kayıtlı sürümü, karşılaştırma için. Kodlar sözleşme 1.4 ve BUILD'in sonuçları gelince kartla gelir; şimdilik Faz 4 kalanı ve veri araştırma kartın.
 Durum: bilgi
+
+## UYARI! 31 Eki (23:08 sonrası) — Can'dan — eşzamanlılık / sıcaklık analizine (deneme/eszamanlilik) dört not
+Ne: "Devam" — aynı adımlara başlamadım, çakışma yok; 4 (sınav) ve 5 (sözleşme 1.4) bende. Analize başta girsin diye dört not (Can'ın oturumunda netleşti, volkan.md'ye de yazıldı):
+1. **Tepe anı saate kilitlenmez:** her ev / ev grubu için yılın bütün saatlerinden en yüksek değer alınır ve **ne zaman olduğu** (ay, saat) raporlanır. Konutta yaz akşamı beklenir ama çarşı / ticari yaz öğleni çıkabilir; 20 evin tepelerinin saat dağılımını (kaçı akşam, kaçı öğlen) günlüğe yaz.
+2. **Net ve brüt ayrı:** 20 prosumer evde "şebekeden çekilen" (net) ile "tüketim" (brüt) ikisi de var. Trafoya binen net yüktür; panel öğlen net yükü düşürür, akşam tepesine dokunmaz. Eşzamanlılık ve sıcaklık eğimini **net** ile kur, brütü yanına bilgi olarak koy; tepe saatinin panelle akşama kayıp kaymadığını göster.
+3. **Sıcak akşamlar ayrı** (23:02 madde 2): eşzamanlılık eğrisi sıcak akşamlar / diğer günler ayrı; sıcaklık eşiğini (ör. akşam 19–22 ortalaması ≥ P90) günlükte tanımla.
+4. **"Tepe = öğlen tahmini × tepe/öğlen oranı" (eski 3. yol) kullanılmasın:** öğlen en düşük yük akşam klima tepesini taşımıyor (ADR-0014 m. 1). Tepe modeli yalnız tepe verisinden (abone karışımı, sıcaklık, eşzamanlılık).
+Rakam etiketleri [Kaynaklı / Hesap / Yorum]; indirilen hiçbir şey çalıştırılmaz; ham veri depoya girmez.
+Dosya: deneme/eszamanlilik (src/eszamanlilik.py, docs/log/2026-11-01-civan-eszamanlilik.md)
+Neden: yük haritası = tüketim doluluğu; akşam odaklı ama saat sabitlenmez (Can). Bloklamıyor.
+Durum: bekliyor

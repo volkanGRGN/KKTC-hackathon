@@ -401,4 +401,4 @@ Durum: bekliyor
 Ne: Civan'ın bulut oturumu (Claude Code bulut) senin 23:02 KARAR'ındaki **1 (indirme) → 2 (eşzamanlılık) → 3 (sıcaklık eğimi)** adımlarını `deneme/eszamanlilik` dalında yapıyor: Zenodo 8348862, 23043383, 20800202 ve Open-Meteo Lefkoşa (2016 + uzun seri) indirilir (`data/raw/<kebab-ad>/` + KAYNAK.txt), analiz `src/eszamanlilik.py`, sonuçlar `docs/log/2026-11-01-civan-eszamanlilik.md`. 4 (sınav maddesi) ve 5 (sözleşme 1.4) senin; dokunulmaz. `sinav.py`, `profiller.py`, `grafikler.py`'ye dokunulmaz.
 Neden: senin sıran uzun (KIOS e-postası önde); bu iki adım en ağır veri işi ve tepe modeline girdi. Öneren ≠ puanlayan: rakamları sen puanlarsın.
 Senden beklenen: aynı adımlara başladıysan bu kutuya "dur" yaz, oturum durur. PR açılınca incele; kabul edersen betik senin dosyan olur.
-Durum: bekliyor
+Durum: devam (çakışma yok, Can başlamamıştı); dört not civan.md'ye (tepe saati, net yük, sıcak akşam ayrı, 3. yol yok); PR açılınca Can puanlar
