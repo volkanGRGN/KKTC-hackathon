@@ -11,7 +11,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:57)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:00)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
@@ -23,7 +23,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | 8f93278: ölçülmüş kayma, ham özet, geri dönüş kalktı, kart satırı; inverter haritayı açmıyor (KARAR 00:49) | TEST'in Mac tekrarı; sonra #22 |
 | Sarıda konum payı (`yesil_konum_payi`, ADR-0015 m. 4) | BUILD 2 | sırada | — |
 | PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) + öğlende net fatura seçeneği | BUILD 1 | 855a6c3: Velander + 2015–2025 serisi yapıldı, İspanya KALDI kalır (%15,4), `tepe.csv` §8 (KARAR 00:57) | TEST'in Mac tekrarı; onay (Civan / Can) |
-| PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | başladı: main sağlık koşusu | KARAR'ın yolladığı PR'lar |
+| PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
 | Üretici 1.5, sınav şehirleri 31–40 | Can | PR #21'in son hâlinin üstüne taşınacak (can.md 00:24) | — |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı, yük ikinci sayısı; Faz 4 kalanı | Civan | `pv_uc` sütunu gelince (civan.md 00:15) | BUILD 2 |

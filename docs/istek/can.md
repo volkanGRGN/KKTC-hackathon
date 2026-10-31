@@ -468,3 +468,9 @@ Ne: PR #20'nin (PV açılma denemesi) "her panelli trafoda bir evin inverter kay
 Dosya: docs/sunum/ (senin)
 Neden: PR #25 sonucu (volkan.md UYARI 00:46, BUILD 2); test sürüyor.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:00 — karar masasından (KARAR) — küçük: `sinav.py faz2 --ispanya-tepe <olmayan dosya>` çöküyor
+Ne: TEST oturumunun main sağlık koşusunda (volkan.md KONTROL 01:00) bayrak verilip dosya bulunamayınca "ölçülmedi" yerine dosya bulunamadı hatasıyla duruyor; bayrak hiç verilmezse doğru. Öneri: dosya yoksa yüksek sesli UYARI + madde "ölçülmedi". Ayrıca bilgi: üretici 1.4 şehir başına ~22–25 sn; faz1 süre maddesi iki üretim aynı anda koşunca 58,1 / 60 sn'ye çıktı (tek başına geçiyor).
+Dosya: src/sinav.py (senin)
+Neden: TEST sağlık koşusu. Acil değil.
+Durum: bekliyor
