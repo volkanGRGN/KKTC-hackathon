@@ -271,3 +271,14 @@ Karar: (1) Dürüstlük cümlesi (ekran 4 ya da konuşma notu): "Aralıklarımı
 Neden: Muhittin'in sunum öncesi üç vurgusu: kalibrasyon gerçeğe karşı, yük tarafı "ön", güneşte güven ver.
 Senden beklenen: üç cümle konuşma notuna ve jüri sorularına (10 dk); başka iş yok.
 Durum: yapıldı — `docs/sunum/konusma-notu.md`: dürüstlük cümlesi 6 (kalibrasyon; %67–85 İspanya günlüğü tablosundan sağlandı), "Sıradaki katman" bölümü, jüri sorusu 12
+
+## KARAR 21:32 — Faz 7 (kalibrasyon gerçeğe karşı) şimdi başlıyor; senin kısmın: sınav ve gerçek veri tarafı (BUILD ile paralel)
+Karar: Volkan: Faz 7 sunumdan önce, paralel. BUILD k katsayısını ve model-sapma terimini üretir (`kalibrasyon.py`, `sablon.py`, `kac_ev_olasilik.py`, dalda + PR); **sen ölçersin** (modeli yazan sınavı yazmaz). Kart `docs/gorev/can-faz7-kalibrasyon-sinav.md` (BUILD yazıyor); içerik:
+- **C1 (60 dk) `sinav.py faz2`'ye kalibrasyon maddeleri:** (a) nominal–ampirik kapsama: 50 / 80 / 90 / 95 nominal bant için ampirik kapsama; madde: %80 bant %70–90 (var) + **%95 bant ≥ %90**; (b) **PIT düzlüğü:** gerçeğin tahmin dağılımındaki yüzdelik konumu (p10 / orta / p90'dan parçalı doğrusal yaklaşım), 10 kovada en büyük sapma ≤ 0,05 → GEÇTİ, yoksa UYARI "fazla emin / fazla geniş" yönüyle; (c) aynı ölçüler **İspanya'da** (`edp_kiyas.py` ya da `edp_test.py` çıktısından; gerçek veri = resmi kalibrasyon ölçüsü, farazi bilgi). Tanımlar `docs/method/validation.md`'ye (senin değil; BUILD'e bir satır yaz) — şimdilik kart ve günlük.
+- **C2 (30 dk) `grafikler.py`:** kapsama eğrisi (nominal ↔ ampirik, köşegenle) önce / sonra, İspanya ve farazi; `docs/sunum/kalibrasyon.png`; ekran 4 için tek cümle hazırla ama **PR birleşene kadar slayta koyma**: "Aralıklarımız İspanya'nın 29 gerçek trafosuna karşı kalibre edildi: %80 bant önce %x, sonra %y."
+- **C3 (20 dk) hold-out defteri:** `docs/log/holdout-defteri.md` (append-only): gerçek veriye her bakış bir satır (tarih, veri, amaç, kim, hangi metrik; ADR-0013 madde 1). İlk satırlar: bugüne kadarki İspanya ve İngiltere bakışları (PR #10, #11, geri-test, Faz 7).
+- **C4** BUILD'in PR'ı gelince: C1 maddeleri dalda koş, onayla; birleşince resmi `faz2` ve `faz3` bir kez, günlüğe; sonra slayt 5 / ekran 4 rakamları.
+Test: C1'i önce main'deki modelde koş (önce rakamları), sonra dalda (sonra); ikisi günlükte yan yana.
+Neden: Muhittin'in üç vurgusundan ikincisi; ADR-0013 madde 2–3 (kalibrasyon kapısı gerçeğe karşı).
+Senden beklenen: C1 → C2 → C3 bu gece; C4 PR gelince. Takılırsan kutu. Sunum metni v1 rakamlarıyla kalır, değiştirme.
+Durum: bekliyor

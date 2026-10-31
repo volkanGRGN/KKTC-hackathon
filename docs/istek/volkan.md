@@ -529,3 +529,17 @@ Ne ölçüldü: main'deki `app/` (ada78f3 sonrası), Windows 11, Python 3.14.5, 
 Dosya: app/harita.py, app/README.md
 Neden: KARAR 20:56 (4). Bloklamıyor.
 Durum: yeni
+
+## KARAR 21:32 — BUILD'e: Faz 7 (kalibrasyon gerçeğe karşı) ŞİMDİ başlıyor; Volkan + Can paralel; Faz 6 tüzük de bu gece
+Karar: Volkan (21:32): "sunuma daha var, Faz 7'ye başlayalım; Can ile benim aramda paylaştıralım, paralel yapıp test edelim." Sunum sonrası planı öne çekildi: **Faz 6 (belge) ve Faz 7 bu gece / yarın sabah**, Faz 8 sunum sonrası. Önce güvenlik: main'in bugünkü hâli `sunum-v1` etiketiyle işaretlenir (git tag, BUILD); Faz 7 kodu **dalda + PR** (model değişikliği, Can onayı); PR birleşmezse sunum v1 ile yapılır, hikâye değişmez.
+**BUILD (Volkan) — model tarafı, sırayla:**
+- B0 (30 dk) `docs/tuzuk.md`: ADR-0013'ün yedi maddesi + Muhittin'in şablonu (veri partisi görev kartı alanları; deney günlüğü append-only; öneren ≠ puanlayan; iki seviyeli bitti). Faz 7 kartları buna referans verir. `docs/gorev/` kartları: `volkan-faz7-kalibrasyon.md`, `can-faz7-kalibrasyon-sinav.md` (aşağıdaki içerikle).
+- B1 (45 dk) `src/kalibrasyon.py`: girdi (tahmin, p10, p90, gerçek) satırları; çıktı PIT değerleri, nominal–ampirik kapsama eğrisi (50 / 80 / 90 / 95), **şişirme katsayısı k** (bir-dışarıda artıklarla: |artık| ÷ yarı bant genişliğinin %80 yüzdeliği; k = 1 ise kalibre) ve isteğe bağlı model-sapma terimi (artık dağılımından ek yayılım). Saf Python; her sayı kaynağıyla.
+- B2 (60 dk) **Yük bandı İspanya'ya karşı:** `edp_test.py` faturalı (c) koşusunun bir-dışarıda artıklarından k_yük; `sablon.py`'de bant k_yük ile genişler (sözleşme değişmez; `sablon_ozet.json`'a `kalibrasyon: {kaynak: "EDP Oviedo 2018, 29 trafo, bir-dışarıda", k: …}`); İspanya'da kapsama önce / sonra (iç örnek, dürüstçe "ayarlandığı veride ölçüldü" etiketi), farazi 11–20'de kapsama ve kaç ev etkisi. **Ayar yalnız gerçek artıkla; farazi şehre bakarak k seçilmez.**
+- B3 (60 dk) **Gerilim tarafı İngiltere'ye karşı:** 6 hattın model ÷ ölçülen dağılımından (ukpn_olasilik) model-sapma çarpanı s (çekiliş başına, ör. log-normal; parametreleri 6 hattın artıklarından) `kac_ev_olasilik.py`'nin gerilim yükselmesine girer; hedef 6 hatta P98 kapsaması 6/6 ama 6 hat az: s'nin aralığı günlüğe, "6 hatla ayarlandı, pilotta yeniden" etiketi. Sınav 11–20 **bir kez** yeniden (yeşil, yanlış yeşil, sarı, kaç ev bandı); beklenen: yeşil azalır, yanlış yeşil 0 kalır. Rakamlar Can'ın resmi koşumuyla teyit.
+- B4 ROADMAP Faz 7 kutuları, Faz 7 günlüğü (`docs/log/2026-11-01-volkan-faz7-kalibrasyon.md`), DEVIR; PR açılır, Can onaylar, birleşince karar masası Mac'te koşar.
+**Can — sınav ve gerçek veri tarafı (paralel, aynı anda başlar; can.md'de):** C1 kalibrasyon sınav maddeleri; C2 kapsama eğrisi grafiği önce / sonra; C3 hold-out defteri; C4 resmi koşumlar. Modeli yazan sınavı yazmaz: k'yi BUILD üretir, Can ölçer.
+**Sınır:** Faz 7 sunumun hikâyesini değiştirmez, rakamları değiştirir; slayt 5 / ekran 4 rakamları ancak PR birleşip Can resmi koşunca güncellenir; o zamana kadar v1 rakamları. Civan'ın Faz 4 işleri önde kalır, Faz 7'de Civan'a iş yok.
+Neden: Muhittin: "kalibrasyon gerçeğe karşı; %80 → 57 düzeltilmeden bant yayınlanmaz"; elimizde iki gerçek artık kaynağı zaten var (İspanya, İngiltere); kod küçük, sunuma zaman var (Volkan).
+Senden beklenen (BUILD): `sunum-v1` etiketi → B0 → kartlar → B1–B3 dalda → PR. Takıldığında kutuya.
+Durum: bekliyor
