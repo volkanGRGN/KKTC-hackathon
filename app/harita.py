@@ -28,10 +28,10 @@ GRI = [150, 150, 150, 200]
 RENK_ADI = {"yesil": "yeşil", "sari": "sarı", "kirmizi": "kırmızı"}
 RENK_BUYUK = {"yesil": "YEŞİL", "sari": "SARI", "kirmizi": "KIRMIZI"}  # str.upper() "YEŞIL" yazar
 RENK_ST = {"yesil": "green", "sari": "orange", "kirmizi": "red"}  # Streamlit metin rengi
-RENK_CUMLE = {  # Faz 3 kartı, yan panel 1. madde
-    "yesil": "En kötü durumda bile yer var",
-    "sari": "Sınırda ya da emin değiliz, önce ölç",
-    "kirmizi": "En kötü durumda yer yok",
+RENK_CUMLE = {  # yan panel 1. madde; vaat renkte, sayıda değil (civan.md KARAR 19:13, 20:56)
+    "yesil": "İlk 2 başvuru güvenle sığar (≥ %98)",
+    "sari": "Önce ölç",
+    "kirmizi": "Ölç ya da güçlendir",
 }
 SINIR_ADI = {"gerilim": "gerilim", "isil": "ısıl (trafo gücü)"}
 
@@ -111,8 +111,9 @@ def sutun_verisi(tablo):
         rgba = tablo["renk"].map(lambda r: RENKLER.get(r, GRI))
     else:
         rgba = pd.Series([GRI] * len(tablo), index=tablo.index)
-    if "kac_ev_karamsar" in tablo:
-        ev = tablo["kac_ev_karamsar"].fillna(0)
+    if "kac_ev_orta" in tablo or "kac_ev_karamsar" in tablo:
+        sutun = "kac_ev_orta" if "kac_ev_orta" in tablo else "kac_ev_karamsar"
+        ev = tablo[sutun].fillna(0)
         yukseklik = ev.clip(lower=EN_KISA_SUTUN_EV) * METRE_BASINA_EV
     else:
         yukseklik = tablo["kva"] * METRE_BASINA_KVA
@@ -200,7 +201,8 @@ def renk_ozeti(veri):
         return "Renk yok (kaç ev tablosu henüz yok): sütunlar gri, boy kVA ile orantılı."
     sayilar = veri["renk"].value_counts()
     parcalar = [f"{RENK_ADI[r]} {sayilar.get(r, 0)}" for r in RENKLER]
-    return "Trafolar: " + " · ".join(parcalar) + " · sütun boyu: kaç ev (karamsar)"
+    boy = "yaklaşık kaç ev" if "kac_ev_orta" in veri else "kaç ev (aralığın alt ucu)"
+    return "Trafolar: " + " · ".join(parcalar) + f" · sütun boyu: {boy}"
 
 
 def olculu_yuk(yol, olculu_nolar):
@@ -278,6 +280,13 @@ def renk_basligi(satir):
     st.markdown(f"**{RENK_CUMLE[renk]}**")
 
 
+def kural_etiketi(kural, aday):
+    """%40 kuralının ev sayısı aday evle kesilir (civan.md KARAR 20:56)."""
+    if kural > aday:
+        return f"Bugünkü kural panelsiz {aday} evin hepsine izin veriyor ({kural} evlik yer)"
+    return f"Bugünkü kural (%40): {kural} ev"
+
+
 def kac_ev_metni(satir):
     """Kart 2. madde: bizim aralık ve %40 kuralı yan yana; farklıysa vurgulu."""
     # Aday: panelsiz konut abonesi; trafolar.csv'den (cevap anahtarı okunmaz).
@@ -285,22 +294,28 @@ def kac_ev_metni(satir):
     kural = int(satir["kural40_ev"])
     if aday <= 0:
         st.markdown(f"Kaç ev daha panel takabilir: **panelsiz konut yok**  \n"
-                    f"Bugünkü kural (%40): {kural} ev")
+                    f"Bugünkü kural (%40): {kural} evlik yer")
         return
     karamsar, iyimser = int(satir["kac_ev_karamsar"]), int(satir["kac_ev_iyimser"])
     aralik = f"{karamsar}" if karamsar == iyimser else f"{karamsar}–{iyimser}"
-    st.markdown(f"Kaç ev daha panel takabilir: **{aralik} ev**")
-    if kural > iyimser and iyimser == 0:
-        st.markdown(f":red[**Bugünkü kural (%40): {kural} ev** — kural, yer olmayan "
-                    "trafoya \"yer var\" diyor]")
-    elif kural > iyimser:
-        st.markdown(f":red[**Bugünkü kural (%40): {kural} ev** — en iyimser tahminimizden "
-                    "fazla; fazlası sınırı aşabilir]")
-    elif kural < karamsar:
-        st.markdown(f":blue[**Bugünkü kural (%40): {kural} ev** — en kötü durumdan "
-                    "bile az; kural bekletmeye gerek olmayan başvuruları bekletiyor]")
+    orta = satir.get("kac_ev_orta")
+    if pd.notna(orta):  # sözleşme 1.3; yoksa yalnız aralık (KARAR 19:13)
+        parantez = "" if karamsar == iyimser else f" ({aralik})"
+        st.markdown(f"Kaç ev daha panel takabilir: **yaklaşık {int(orta)} ev**{parantez}")
     else:
-        st.markdown(f"Bugünkü kural (%40): {kural} ev — aralığımızın içinde")
+        st.markdown(f"Kaç ev daha panel takabilir: **{aralik} ev**")
+    st.caption("%80 ihtimalle")
+    gosterilen = min(kural, aday)
+    metin = kural_etiketi(kural, aday)
+    if gosterilen > iyimser and iyimser == 0:
+        st.markdown(f":red[**{metin}** — kural, yer olmayan trafoya \"yer var\" diyor]")
+    elif gosterilen > iyimser:
+        st.markdown(f":red[**{metin}** — aralığımızın üstünde; fazlası sınırı aşabilir]")
+    elif gosterilen < karamsar:
+        st.markdown(f":blue[**{metin}** — aralığımızın altında; kural bekletmeye gerek "
+                    "olmayan başvuruları bekletiyor]")
+    else:
+        st.markdown(f"{metin} — aralığımızın içinde")
 
 
 def yan_panel(klasor, veri, satir):

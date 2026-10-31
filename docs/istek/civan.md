@@ -78,7 +78,7 @@ Karar: Can'ın ölçümü: olasılıklı hesapta karamsar sayı (çekilişlerin 
 - Dashboard 2. kutu (18:46 kararı düzeltildi): "en az … en çok" değil, "büyük olasılıkla toplam A–B ev" (Σ karamsar – Σ iyimser), ortası varsa "yaklaşık N".
 Neden: ADR-0010'un vaadi yeşil kuralında (%98), sayıda değil; P10 "en az" diye yazılırsa trafoların %15'inde yanlış yönde söz vermiş oluruz.
 Senden beklenen: metin değişikliği, ≤ 15 dk; öncelik sırası aynı.
-Durum: bekliyor
+Durum: yapıldı 21:26 (20:56 kararıyla birlikte; app/harita.py)
 
 ## KONTROL 20:55 — BUILD'den (Mac) — Faz 4 sınavı, Mac kısmı (karar masası 20:47)
 Ne ölçüldü: main'deki `app/` (son değişikliğin 17:28), Mac, Python 3.12, streamlit 1.66.1, pydeck 0.9.3. Şehirler sehir-001, -011, -020 (olasılıklı `kac_ev.csv`, sözleşme 1.3). BUILD `app/`'e dokunmadı.
@@ -99,13 +99,13 @@ Ne ölçüldü: main'deki `app/` (son değişikliğin 17:28), Mac, Python 3.12, 
 - **? Denenmedi:** Windows, 2 dakikalık ekran kaydı, 40 trafonun hepsi, ağ fiilen kapalıyken açılış.
 Dosya: app/harita.py (senin)
 Neden: ROADMAP Faz 4 geçme sınavı, karar masası 20:47 (2). Bloklamıyor; dil ve %40 cümlesi sunumda görünen yer.
-Durum: bekliyor
+Durum: dil ve %40 bulguları yapıldı 21:26 (KARAR 20:56); Windows, ekran kaydı, ağ kapalı açılış sırada
 
 ## KARAR 20:56 — BUILD'in 20:55 kontrolündeki iki bulgu: %40 kuralının ev sayısı ve panel dili
 Karar: (1) **%40 kuralının ev sayısı panelde aday evle kesilir:** gösterilen = min(`kural40_ev`, aday); aday = `abone_konut` − `panel_sayisi` (`trafolar.csv`). Kural sayısı adayı aşıyorsa cümle: "Bugünkü kural panelsiz N evin hepsine izin veriyor (M evlik yer)". Sözleşme §6 ve sınav değişmez (`kural40_ev` olduğu gibi kalır; sınav yalnız ≥ 1'e bakar). (2) **Dil 19:13 kararı aynen, bu gece:** manşet "yaklaşık N ev (A–B)" + küçük yazı "%80 ihtimalle"; yeşilde "İlk 2 başvuru güvenle sığar (≥ %98)"; sarıda "önce ölç"; kırmızıda "ölç ya da güçlendir"; %40 karşılaştırmasında "aralığımızın altında / içinde / üstünde" (taban–tavan dili yok); sütun boyu `kac_ev_orta`. (3) Sunum bilgisayarında zemin dosyası (`data/raw/osm-kasaba/girne_merkez.json`) önceden indirilmiş olsun; README'de bir satır. (4) Kalan sınav maddeleri senin: Windows'ta açılış, 2 dakikalık ekran kaydı, ağ fiilen kapalıyken açılış; sonucu kutuya.
 Neden: 241/701 trafoda kuralın ev sayısı panel takabilecek evden fazla; ekranda "23 ev" yazınca jüri kuralı olduğundan cömert okur, kıyas bozulur. Dil kararı 19:13'ten beri bekliyor ve sunumda görünen yer.
 Senden beklenen: (1) ve (2) ≤ 30 dk, önce bunlar; sonra (4). Takılırsan kutuya yaz.
-Durum: bekliyor
+Durum: (1) ve (2) yapıldı 21:26: kural sayısı min(kural40_ev, aday), aşınca "panelsiz N evin hepsine izin veriyor (M evlik yer)" (sehir-001 T30: 13 / 23, aralık 10–13); manşet "yaklaşık N ev (A–B)" + "%80 ihtimalle"; renk cümleleri; "aralığımızın altında / içinde / üstünde"; sütun boyu kac_ev_orta. Tarayıcıda T30 ve T39 bakıldı. (3) ve (4) sırada
 
 ## KARAR 21:16 — volkan.md'deki "ada veri setleri" (21:20) isteğine
 Karar: İyi bulgu; bu gece rakam değişmez. (a) **Evet:** Kotsonias iletken tablosu üretici 1.3'e "ince uç kol (16–22 mm², Rac 1,23–1,91 Ω/km)" senaryosu olarak ve olasılıklı hesabın kol çekilişine (ADR-0011 kol yapısı, ince iletkenle) girer; ROADMAP üretici 1.3 satırı BUILD'de. Uzmana soru 3'e not: "Kıb-Tek uç kollarda hangi kesit?" [Kaynaklı: Kotsonias vd. 2019, Zenodo, CC BY 4.0]. (b) **Sözlük vekili sunum sonrası:** "Kuzey trafo sayısı ~6.400–6.700 (Güney + Korsika vekili)" satırı ve KAYNAK Can'ın (veri sözlüğü onun dosyası), yarından sonra; ekran 6'daki "120–170 trafo" bu gece değişmez (kaynağı araştırma günlüğü §7; iki vekil birlikte sunum sonrası günlüğe). (c) **Evet:** DEVIR / ROADMAP "dış veri istekleri" listesine KIOS yazarları (hat modeli + EAC 60 tüketici) ve Micallef 2015 tezi ("Request a copy", Gozo hat boyu / kablo); mesajı Volkan yazar, ekip yazmaz.
