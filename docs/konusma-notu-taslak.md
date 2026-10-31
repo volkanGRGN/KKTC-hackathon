@@ -61,10 +61,10 @@ Her basamakta tek iddia, tek rakam; hepsi "hiç model kullanmadan yapılan saf t
 
 ## 5. Canlı harita (1 dk; Civan sürer)
 - Bir şehir açılır. Trafolar yeşil / sarı / kırmızı.
-- **Yeşil:** en kötü durumda bile bir sonraki ev sığıyor, model de emin. Ölçmeden "evet" denebilir.
+- **Yeşil:** sıradaki iki başvuru %98 olasılıkla sığıyor, model de emin. Ölçmeden "evet" denebilir.
 - **Sarı:** sınırda ya da emin değiliz. Ölçüm cihazı buraya gider.
 - **Kırmızı:** en kötü durumda yer yok. (Kural karar masasında; konuşmayı karara göre düzelt.)
-- Bir otel trafosuna tıkla: "2–7 ev sığar; %40 kuralı şunu diyor."
+- Bir otel trafosuna tıkla: "yaklaşık N ev daha sığar (A–B arası); %40 kuralı şunu diyor." Sayı haritadaki ortanca, aralık %80 bant; "en az" denmez, vaat renkte (karar masası 19:13).
 - **Kilit grafik** (farazi şehir, gösterim, sınav şehirleri):
 
   > "Dolu trafoya 'yer var' demek en pahalı hata. %40 kuralı dolu trafoların yarısından fazlasına 'yer var' diyor: 284 'evet'in 41'i yanlış. Bizim yeşillerimizin hiçbiri yanlış değil."
