@@ -241,3 +241,14 @@ Ne: Ada ülkeleri taramasında (docs/log/2026-10-31-volkan-ada-ulkeleri.md) Malt
 Dosya: data/raw/enemalta-kapasite/KAYNAK.txt (yeni, senin), docs/data/data-dictionary.md (senin)
 Neden: günlükteki Malta rakamları (izin tavanı %25, talep ÷ güç) bu kaynağa atıf yapıyor. Bloklamıyor.
 Durum: bekliyor
+
+## KARAR 20:47 — sunum: jüri cevapları (sarı, Malta, Hawaii), ekran 6 cümlesi, kaynak slaydı satırları
+Karar: Aşağıdaki cümleler konuşma notuna ve jüri sorularına; slayt metnine yalnız ekran 6 cümlesi. Düz dil; mecaz yok.
+1. **Jüri: "Sarı çok, eşiği gevşetsenize"** → "Eşiği gevşetsek dolu trafoya 'yer var' demeye başlarız. Ölçüm kırmızıdaki yanılmayı düzeltir: trafonun çıkış gerilimi bilinince yanlış kırmızı %27'den %19'a iner. Sarının çoğu ise 'bir sonraki başvuru hattın neresinden gelecek' sorusu; onu haritada değil başvuru anında, evin adresiyle tek tek hesaplarız." [Hesap: bilginin değeri denemesi, farazi 11–20, kusursuz bilgi üst sınırı; son cümle sınanmadı, ADR-0012]. Eski "sarıyı azaltan şey ölçüm" cümlesi kalkar.
+2. **Ekran 6** (slayt): "Harita için Kıb-Tek'ten yeni veri istemiyoruz: abone sayısı ve fatura toplamı zaten elinde. Pilotta ilk ölçeceğimiz şey trafonun çıkış gerilimi; o tek ölçüm 'dolu' dediğimiz trafolardaki yanılmayı %27'den %19'a indirir." Konuşma notuna: "Kıb-Tek'in kayıtlarında panelli abonenin adresi ve fazı da varsa %4'e."
+3. **Jüri: "Malta akıllı sayaçla çözdü, siz neden sayaçsız?"** → "Akıllı sayacı olan Malta bile kapasite haritasında trafo başına düz bir tavan gösteriyor: izin hiçbir merkezde gücün %25'ini geçmiyor; Kıb-Tek'in kuralı %40. Biz her trafoya gerilimle ayrı bakıyoruz." [Hesap: Enemalta kapasite haritası verisi, 1.332 merkez, 31 Ekim 2026; lisans belirsiz, ham veri depoda yok; Enemalta'nın yazdığı kural değil bizim çıkarımımız]. Devamı: "Malta'da da sınırı gerilim ve trafo kademesi koymuş; trafolar boşta 250 volt, Kıb-Tek'le aynı." [Kaynaklı: Micallef & Weissenbacher, Graz 2016].
+4. **Jüri: "Düz kural neden kötü?"** → "Hawaii düz kuralı kanıt geldikçe tepe yükün %15'inden gündüz en düşük yükün %250'sine çıkardı; ölçülmeyen hattı benzer ölçülen hattan tahmin ediyor, bizim yöntemin emsali." [Kaynaklı: HECO 2014; Sunrun, New York ITWG 2022].
+5. **Kaynak slaydına** iki satır: Enemalta kapasite haritası (adres günlükte, lisans belirsiz, veri depoda yok); HECO 2014 belgesi. Gozo hattı sunuma girmez.
+Neden: BUILD'in 19:59 ve 20:43 bulguları; hikâye aynı, yalnız jüri cevapları ve bir slayt cümlesi değişiyor.
+Senden beklenen: konuşma notu + jüri soruları + ekran 6 metni; kaynak slaydı. Başka iş yok; sonra prova.
+Durum: bekliyor
