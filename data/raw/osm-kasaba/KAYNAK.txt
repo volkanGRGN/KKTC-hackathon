@@ -1,0 +1,20 @@
+OpenStreetMap, Girne merkez mahallesi: bina ve yol geometrileri (Overpass API, JSON, "out geom").
+İndirildi: 31 Ekim 2026, 12:02 (Civan). OSM veri zaman damgası: 2026-10-31T10:02:06Z.
+Lisans: ODbL 1.0 (https://www.openstreetmap.org/copyright); haritada ve sunumda "© OpenStreetMap katkıcıları" atfı.
+
+Alan (güney, batı, kuzey, doğu): 35.333, 33.312, 35.342, 33.324 — yaklaşık 1,0 km × 1,1 km, Girne merkez / liman arkası.
+Sorgu (aynı sorgu farklı günde güncel OSM'yi indirir; birebir aynı dosya için zaman damgası gerekir):
+curl -A "KKTC-hackathon/0.1 (github.com/volkanGRGN/KKTC-hackathon)" -o girne_merkez.json https://overpass-api.de/api/interpreter --data-urlencode 'data=[out:json][timeout:120][bbox:35.333,33.312,35.342,33.324];(way["building"];relation["building"];way["highway"];);out geom;'
+Not: User-Agent başlığı olmadan sunucu 406 döndürüyor; yoğunlukta 502 dönerse 10 saniye bekleyip tekrar dene.
+
+Dosya adı: girne_merkez.json (~845 KB)
+Biçim: Overpass JSON; "elements" listesinde her öğe type (way/relation), id, tags, geometry (lat/lon noktaları).
+
+Sağlama (Civan, 31 Ekim) [Hesap]: 1.304 öğe; 974 bina (way 973, relation 1); 330 yol.
+- Bina türü: yes 870, house 68, apartments 17, university 11, diğer 8. Kat bilgisi (building:levels) olan: 278.
+- Yol türü: residential 118, service 98, footway 63, steps 19, tertiary 12, secondary 9, diğer 11. İsimli yol: 117.
+
+Bilinen eksikler:
+- OSM'de bu alanda trafo yok (power=transformer ve power=substation sayısı 0). Haritadaki trafo konumları farazi şehirden gelir, gerçek değil.
+- Bina türlerinin %89'u "yes" (türü belirtilmemiş); konut/dükkân ayrımı OSM'den çıkmaz.
+- Lapta adayı elendi: aynı büyüklükteki alanda yalnız 17 bina çizilmiş (Lapta merkez 35.330, 33.158, 35.339, 33.170).
