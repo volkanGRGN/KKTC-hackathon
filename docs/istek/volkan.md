@@ -543,7 +543,7 @@ Karar: Volkan (21:32): "sunuma daha var, Faz 7'ye başlayalım; Can ile benim ar
 Neden: Muhittin: "kalibrasyon gerçeğe karşı; %80 → 57 düzeltilmeden bant yayınlanmaz"; elimizde iki gerçek artık kaynağı zaten var (İspanya, İngiltere); kod küçük, sunuma zaman var (Volkan).
 Senden beklenen (BUILD): `sunum-v1` etiketi → B0 → kartlar → B1–B3 dalda → PR. Takıldığında kutuya.
 İlerleme 21:37 (karar masası): Volkan "görev kartlarını sen yap" dedi; aynı dakikada BUILD de yazmış (c90c98a): `docs/tuzuk.md`, `volkan-faz7-kalibrasyon.md`, `can-faz7-kalibrasyon-sinav.md` BUILD'in sürümüyle kaldı; karar masası `docs/gorev/civan-veri-arastirma.md` ekledi. `sunum-v1` etiketi BUILD'de (0db616e). BUILD B1'den devam eder. Civan: dashboard + sunum arkasında yeni veri arıyor, bulunca veri partisi olarak kutuya atar (kartı); modeli Volkan + Can iyileştirir.
-Durum: bekliyor
+Durum: yapıldı 21:46 (BUILD) — `sunum-v1` etiketi (0db616e); B0 tüzük ve iki kart (c90c98a, main); B1–B3 dalda, PR #16 (https://github.com/volkanGRGN/KKTC-hackathon/pull/16): k_yük 1,475, gerilim sapma s (μ 0,172, σ 0,414); sınav 11–20 bir kez. Dört eksi bulgu → UYARI 21:46 aşağıda, karar masası test eder; düzelmeden birleşmez.
 
 ## KARAR 21:39 — BUILD'e: "sunum sonrası" etiketi kalkıyor; Faz 6–12 ŞİMDİ başlayan plan; ertelenen Malta / Gozo / yük katmanı işleri fazlara geri alındı (Volkan)
 Karar: Volkan (21:39): "Malta vs. için 'bu gece sunum var, olmaz' demişsin; fazlarda düzelt; sunuma daha var, modeli iyileştirmemiz ve dediklerimizi (Muhittin'inkileri de) uygulamamız lazım." Buna göre:
@@ -553,7 +553,7 @@ Karar: Volkan (21:39): "Malta vs. için 'bu gece sunum var, olmaz' demişsin; fa
 4. **Değişmeyen:** tüzük kapıları (yanlış yeşil ≤ %2, kalibrasyon) her PR'da; ayar farazi şehre göre yapılmaz; Civan'ın Faz 4 işleri (ağ kapalı açılış, ekran kaydı) ve prova ekipten düşmez.
 Neden: Volkan'ın kararı; sunumun hikâyesi değişmiyor, yalnız rakamlar PR'larla güncelleniyor; ertelemeler karar masasının temkiniydi, Volkan kaldırdı.
 Senden beklenen (BUILD): ROADMAP başlık ve ibareler (10 dk), DEVIR "Faz 6–12 başladı"; B1–B3 devam; sonra Gozo ve Faz 8. Kıb-Tek istek metni taslağı `docs/istek/kibtek-veri-istegi-taslak.md` (Volkan gönderir).
-Durum: bekliyor
+Durum: kısmen 21:46 (BUILD) — (1) ROADMAP başlığı "Faz 6–12 — Modeli gerçek veriyle iyileştirme", ertelemeler kalktı, Kim satırı, sıra; Gozo Faz 7'ye (dış sınama listesinde), Faz 9'a istek metni, Faz 11'e Can'ın sözleşme 1.4 işi; DEVIR "Faz 6–12 başladı". (2) Gozo dış sınaması ve (3) Kıb-Tek istek taslağı sırada; Faz 8, PR #16'nın bulguları kapanınca.
 
 ## BAŞLA 21:41 — Volkan: herkes kendi fazına başlasın (BUILD)
 Ne: BUILD kartı [docs/gorev/volkan-faz7-kalibrasyon.md](../gorev/volkan-faz7-kalibrasyon.md): B1 `src/kalibrasyon.py` → B2 İspanya k_yük → B3 İngiltere model-sapma + sınav 11–20 bir kez → PR (Can onaylar). Sonra Gozo dış sınaması (30 dk), Faz 8 üretici çapalama ve yeni sınav şehirleri (dal + PR), Kıb-Tek veri istek taslağı. Önce ROADMAP başlık değişikliği (KARAR 21:4x, 10 dk). Can C1'den, Civan Faz 4'ün kalanından başlıyor; bildirim kutularda.
@@ -564,6 +564,7 @@ Karar: (1) ROADMAP Faz 4 "Windows ve Mac'te çalıştı" [x] (Civan KONTROL 21:2
 Senden beklenen (BUILD): ROADMAP Faz 4 iki kutu metni, tüzük notu (5 dk, B1'i bölme; B1 bitince); provada animasyon.
 Durum: bekliyor
 
+
 ## UYARI! 31 Eki 21:46 — Civan'dan (+ Claude) — Dış veri istek metinleri hazır, gönderen sensin (KARAR 21:39 madde 2)
 Ne: `docs/istek/dis-veri-istekleri-taslak.md`: (1) Micallef 2015 tezi, Malta Üniv. OAR "Request a copy" formu (Gozo hat boyu, kablo, Srug F1); (2) KIOS yazarlarına e-posta (makaledeki AG hattın modeli, düğüm gerilimleri; EAC ~60 tüketici verisi yalnız anonim / toplu / gizlilik sözleşmesiyle). İkisi İngilizce, gönderilmeye hazır; köşeli parantezde senin imzan. Ham veriyi yayımlamama ve atıf sözü var.
 Sorular: (a) Metinde "the northern part of Cyprus / Turkish Cypriot community" dili uygun mu? (b) KIOS'ta Kyriakides ve EAC'den Ioannou bilgi olarak eklensin mi?
@@ -571,3 +572,15 @@ Ayrıca: Korsika KAYNAK main'de (`data/raw/edf-sei-corse/KAYNAK.txt`); sözlük 
 Dosya: docs/istek/dis-veri-istekleri-taslak.md, data/raw/edf-sei-corse/KAYNAK.txt
 Neden: KARAR 21:39. Bloklamıyor.
 Durum: yeni
+
+## UYARI! 31 Eki 21:46 — BUILD'den — Faz 7 PR #16 hazır; dört eksi bulgu: test edin, düzelmeden birleşmez
+Ne: Faz 7 model tarafı dalda (`kalibrasyon/faz7`), PR #16. Gerçek veride: İspanya %80 bant %65,7 → %79,1 (bir-dışarıda), %95 bant %81,3 → %90,3; İngiltere P98 5/6 → 6/6 (bir-dışarıda 6/6). Sınav 11–20 bir kez: yanlış yeşil 0/87 → 0/48 (GEÇTİ), kaç ev orta 2 → 1, kaç ev P10 altı %15 → %7. Ayrıntı ve komutlar: docs/log/2026-11-01-volkan-faz7-kalibrasyon.md (dalda).
+Eksi bulgular (Volkan'ın kuralı: eksi bulgulu PR karar masasında test edilir; düzelmediyse beklenir, düzeldiyse birleşir):
+1. **Faz 2 farazi kapsama maddesi kalıyor:** %87,5 → %96,4. Farazi şehir gerçekten düzgün; İspanya'ya göre genişleyen bant farazide fazla geniş. Soru: tüzük madde 3'e göre madde bilgi satırına mı insin (resmi ölçü İspanya, Can C1), yoksa Faz 8 (üretici çapalama) bitene kadar PR beklesin mi?
+2. **Yeşil yarıya iniyor:** %25 → %14 (konut 1, köy 0). Yanlış kırmızı %27 → %33, sarı %62 → %69. Farazinin fiziği hesabınkiyle aynı, model hatası yok; gerçeğe göre eklenen sapma farazide yalnız temkin. Soru: bu bedel kabul mü?
+3. **İspanya'da PIT düz değil:** 0,100 → 0,086 (hedef ≤ 0,05). Tek k genişliği düzeltiyor, şekli değil. Soru: Faz 7'nin kapısı mı (o zaman konformal / model-sapma ek iş), yoksa bilgi mi?
+4. **Çift sayım olabilir:** `KOL_P` (1/6, Bancroft) ve s (Bancroft dahil) aynı 6 hattan. Soru: s varken `KOL_P` kalksın mı? Kalkarsa sınav 11–20 yeniden (bir kez).
+Test için (Mac): dalı çek; `python3 src/kalibrasyon.py --deneme`; İspanya ve İngiltere komutları günlükte (ham veri: edp-ham, ukpn açık klasörü); `python3 src/sablon.py data/synthetic`, `python3 src/kac_ev_olasilik.py data/synthetic`, `python3 src/sinav.py faz2|faz3 data/synthetic --aralik 11-20`. Beklenen rakamlar yukarıda.
+Dosya: PR #16 (src/kalibrasyon.py, src/sablon.py, src/kac_ev_olasilik.py, src/ukpn_olasilik.py, günlük, ROADMAP Faz 7, DEVIR, README)
+Neden: KARAR 21:32 (B1–B3); tüzük madde 2 (iki kapı), madde 3 (kalibrasyon gerçeğe karşı). Bloklamıyor: BUILD beklerken Gozo dış sınamasını ve Kıb-Tek istek taslağını yapar; Faz 8 PR #16'dan sonra.
+Durum: bekliyor

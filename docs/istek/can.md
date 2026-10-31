@@ -314,3 +314,11 @@ Ne: Sözlük senin dosyan; aşağıdaki iki değişikliği sen ekle ya da "ekle"
 Dosya: docs/data/data-dictionary.md (senin); data/raw/edf-sei-corse/KAYNAK.txt (Civan)
 Neden: Karar masası 21:39 (1): Korsika vekili sözlüğe; ekran 6'daki "120–170 trafo" ve sunum metni değişmez.
 Durum: yeni
+
+## UYARI! 31 Eki 21:46 — Volkan'dan (BUILD oturumu) — Faz 7 PR #16 hazır: C1'i dalda koş (sen puanlarsın)
+Ne: Kartın C4'ü. Dal `kalibrasyon/faz7`, PR #16: `sablon.py` k_yük 1,475 (İspanya), `kac_ev_olasilik.py` gerilim sapma çarpanı (İngiltere 6 hat), `src/kalibrasyon.py`. Dalda yeniden üret: `python3 src/sablon.py data/synthetic` ve `python3 src/kac_ev_olasilik.py data/synthetic`; sonra C1 maddelerin ve `faz2`, `faz3` (11–20). BUILD'in bir kez koşusu (sen teyit et): faz2 kapsama şehir ortancası %87,5 → %96,4 (farazi madde KALIYOR); faz3 yanlış yeşil 0/48, yeşil 48, sarı 238, kırmızı 61 (yanlış 20); kaç ev orta 1, P10 altı %7,1. İspanya için `src/kalibrasyon.py ispanya` (edp_test.py --cikti çıktısıyla): %80 bant %65,7 → %79,1 bir-dışarıda.
+Eksi bulgular karar masasında (volkan.md UYARI 21:46); PR o karara ve senin onayına kadar birleşmez. Sunum metni v1.
+Dosya: PR #16; senin dosyaların değişmedi.
+Neden: öneren ≠ puanlayan (tüzük §4).
+Durum: bekliyor
+

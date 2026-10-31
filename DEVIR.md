@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 21:18 — karar masası 20:47 işlendi (Faz 4 Mac kontrolü, konuşma notu); 21:15 sunum sonrası faz haritası ROADMAP'te.
+**Güncellendi:** 31 Ekim 2026, 21:46 — Faz 6–12 başladı (Volkan 21:39); Faz 7 PR #16 karar masasında test.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -43,7 +43,8 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 netleşen cümle ve jüri cevapları (can.md 20:50); Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
 4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
-5. **Sunum sonrası faz haritası** (karar masası 21:15, Muhittin'in üçüncü cevabı, ADR-0013 / ADR-0014): ROADMAP sonunda "Sunum sonrası (taslak)", Faz 6–12 (tüzük → kalibrasyon → üretici çapalama ve yeni sınav şehirleri → Kıb-Tek kayıtları ve başvuru anında karar → pilot A, 8–9 ile paralel → yük katmanı → canlı kapı; karar masası 21:25) ve dış veri istekleri (mesajı Volkan yazar). `docs/tuzuk.md` (içerik karar masası 21:20'de) ve `src/kalibrasyon.py` sunumdan sonra. Başvuru anı motoru [ADR-0015](docs/decisions/adr-0015-basvuru-ani-motoru-durumlu-sari-sayi-konum.md).
+5. **Faz 6–12 başladı** (Volkan 21:39): ROADMAP "Faz 6–12 — Modeli gerçek veriyle iyileştirme". Tüzük yazıldı (Faz 6). Sıra: Faz 7 (PR #16) → Faz 8 üretici çapalama ve yeni sınav şehirleri → Faz 11 sözleşme 1.4 (Can) → Gozo dış sınaması (BUILD) → Faz 9 Kıb-Tek istek metni (BUILD taslak, Volkan gönderir). Sunum `sunum-v1` yedek.
+6. **Faz 7 PR #16 karar masasında test** (iş kuralı, Volkan 21:46: eksi bulgulu PR karar masasında test edilir, düzelmeden birleşmez): dört eksi bulgu volkan.md UYARI 21:46. Birleşmeden Faz 8'e geçilmez; Gozo ve Kıb-Tek taslağı beklerken yapılabilir.
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
