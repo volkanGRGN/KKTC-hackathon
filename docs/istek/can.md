@@ -77,3 +77,27 @@ Ne: [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8) `src/sablon.py`
 Dosya: docs/data/tablo-bicimi.md, src/sablon.py
 Neden: CONTRIBUTING "Dallar" 1 ve 2 (sözleşme + yeni modül). Model ayarları yalnız şehir 1–10'da denendi; 11–20'yi sınav için ayrı raporlarsan iyi olur (Faz 2 günlüğü).
 Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — Faz 1 eşiği 216 V → 207 V (BUILD'in sorusuna karar)
+Karar: `src/sinav.py` `V_ALT = 207.0` (EN 50160 alt sınırı: 230 V −%10); madde adı "hiçbir trafoda v_min_bugun_v < 207 V". ROADMAP satırını BUILD değiştiriyor.
+Neden: Yeni şehirlerde (gerçek ışınım, %3–25) 3/800 trafo 211–215 V; benzetim bozuk değil, uzun kırsal hat ve büyük yüklü tek hat. Gerekçe volkan.md'deki KARAR'da.
+Senden beklenen: tek satır değişiklik, doğrudan main (kendi dosyan); günlüğe bir satır.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — volkan.md'deki "İspanya EDP kullanılabilir" isteğine
+Karar: Evet, çıkarma betiğini sen yaz (zaman kutusu 1 saat): `src/edp_oku.py` (yeni, senin). Çıktı `data/raw/edp-oviedo/turetilmis/` altına (gitignore'da, betikle yeniden üretilir): (1) `trafolar.csv` sözleşme §1 sütunlarıyla, `sehir` = 801 (gerçek veri 800–899 [Yorum]; sözleşmeye satırı BUILD ekler), `kva`, `hat_boyu_max_m` varsa, `abone_konut` = toplam müşteri (sınıf yok [Yorum]), kalan abone sütunları 0, `panel_sayisi`/`panel_kw` 0 (2018 İspanya AG'de çatı PV ihmal [Yorum]); (2) `yuk_saatlik.csv`: `sehir, trafo_no, gun, gun_turu, saat, net_kw` (21 gün × 24; 5 dakikaya açma yok, model tarafı karar verir; `tuketim_kw` = `net_kw` varsayımı [Yorum]); (3) `cevap_anahtari.csv` yalnız `ogle_min_kw` (11–14, 21 gün, saatlikten) ve `tepe_kw`; `tip` boş. TD009456 (tamamen sıfır) dışarıda, sayısı KAYNAK.txt'de.
+Neden: Veriyi sen tanıyorsun, BUILD `sablon.py`'de; eleme 4/5 doğru. EDP'nin görevi eğitmek değil benzetimin yanlılığını görmek (ADR-0003 kanıt sırası: İngiltere → İspanya gerçek → farazi). Sınıf yok diye modelin yalnız kVA + müşteri + hat boyuyla koşması da sonuç: "gerçek veri, sınıfsız" başlığıyla raporlanır, "gösterim" değil.
+Senden beklenen: betik + üç dosya + günlüğe satır (`docs/log/2026-10-31-can-faz2.md`); bitince volkan.md'ye "EDP türetilmiş dosyalar hazır" (BUILD koşar, 2i). NGED şimdi değil.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — volkan.md'deki "sözleşme §5: arketipler.csv oran brüt mü net mi?" isteğine
+Karar: **Brüt** (`tuketim_kw`). BUILD'in PR #8'indeki sözleşme 1.1 tam bunu yazıyor: "`oran` … brüt tüketimden: ölçülü trafoların `tuketim_kw` gün türü ortalaması, net değil". Kartındaki "gerçek küme" kuralı ve harita formülü buna uyuyor; `sinav.py faz2` böyle kalsın.
+Neden: ADR-0001 şekli tüketim eğrisinden kümeler; net eğri panel payıyla değişir, şekil ile PV karışır. Hedef `ogle_min_kw` de brüt (§3). Ölçülü trafoda brütün netten çıkarılabildiği varsayımı §2'de [Yorum].
+Senden beklenen: PR #8'in **sözleşme kısmını** (docs/data/tablo-bicimi.md, 12 satır: şehirler arası deney dosyası, `sablon_ozet.json`, JSON LF, `oran` brüt) GitHub'da gözden geçirip onayla; sözleşme değişikliği Can ya da Civan onayı istiyor, §5 senin sınavını ilgilendiriyor. `sablon.py` kodunu incelemen gerekmez. Onaydan sonra BUILD birleştirir.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — volkan.md'deki "bilgi: PR #6 okuma notları" isteğine
+Karar: Okundu; iki not da doğru, ikisi de şimdi yeniden üretim gerektirmiyor (Faz 2 bu şehirlerde koşuyor). (1) Bayramlar: sürüm 1'de "bayramlar iş günü sayıldı [Yorum]" notu; bir sonraki yeniden üretimde (sözleşme 1.2 ya da Faz 3 öncesi) KKTC resmi tatilleri `gun_turu = tatil` olsun: 2024 Ramazan Bayramı 10–12 Nisan, 23 Nisan; 2025'te 1 Nisan (bayramın son günü) ve 23 Nisan [Kaynaklı: resmi takvim; tarihler BUILD tarafından doğrulanır]. EAC'nin tatil tipik günü bayramı zaten kapsıyor, tutarlı. (2) 1000 kVA tavanı: Nisan tepesi ≤ %50 kVA, şimdilik etkisiz; üretici `ayar.json`'a `kva_tavan_sayisi` yazsın (bilgi; ek anahtar serbest). Yaz benzetilirse yer tipi listeye 1600/2500 (veri sözlüğü: yer tipi 50–2.500 kVA) — o zaman sözleşme değişikliği.
+Senden beklenen: hiçbir şey; teşekkürler.
+Senden beklenen (ana oturum): iki notu `sehir_uret.py` docstring'ine ve Faz 1 günlüğüne; bayram listesi ve `kva_tavan_sayisi` bir sonraki üretici sürümüne.
+Durum: bilgi — iş ana oturumda
