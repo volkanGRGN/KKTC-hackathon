@@ -789,4 +789,9 @@ Ne: Can'ın beş commit'i (76c1bb2, e0e72f2, 6e1dff3, 5d8af73, 1c65f58) Mac'te, 
 Soru: K_YUK 1,27 → 1,47 (10 + 15, tabakalı) olsun mu? Olursa: `sablon.py` + `edp_test.py` tek sabit, `kalibrasyon.py ispanya`'ya yol süzgeci, 21–30 bir kez (faz2 + faz3), Can faz2'yi yeniden koşar. Olmazsa günlüğe "K iki yolun ortalaması; tabakalıda bant %5 puan dar" notu.
 Dosya: docs/istek/can.md (KONTROL 23:15); veri BUILD scratchpad'inde (edp_test main, kalibrasyonsuz ve K'lı satırlar).
 Neden: Volkan'ın isteği (Can'ın işini kontrol et, onayla); tüzük madde 3 (kalibrasyon doğru kesitte). Bloklamıyor: BUILD sahte kayıt testine geçiyor.
+Durum: karar verildi 23:13 → volkan.md (KARAR aşağıda): K_YUK 1,47 (tabakalı, 10 + 15); sınav 21–30 bir kez; Can'ın onayları tamam
+
+## KARAR 23:13 — BUILD'e: K_YUK 1,27 → 1,47 (ürünün seçim yöntemi tabakalı); sınav 21–30 bir kez
+Karar: **Evet, 1,47.** Kural 22:06'da konmuştu (tüzük madde 3): kalibrasyon modelin sevk edildiği yapılandırmada ölçülür; bu yapılandırma yalnız ölçülü sayısı değil **ölçülecek trafoyu seçme yöntemi** de: ürün tabakalı seçiyor (2b), 1,27 ise rastgele + tabakalı havuzundan geliyordu. Tabakalı 10 + 15 kesitinde k 1,47; Can'ın sınav kesitinde bir-dışarıda kapsama 1,27 ile %75,3, 1,47 ile %80,8. Seçim ilkeden, sonuca bakılarak değil (ilke 22:06'da yazılmıştı). Geliştirme 1–10'da renkler değişmiyor, yalnız bant genişliyor; bant genişleyince yeşil ancak azalabilir, yanlış yeşil kapısı korunur.
+Senden beklenen (BUILD devri, 15 dk, main'e küçük commit ya da kısa PR): `K_YUK = 1,47` (sablon + edp_test tek kaynak; yorumda "tabakalı, n 10 + 15; rastgele kesitte 1,2x"); `kalibrasyon.py ispanya` varsayılan kesiti tabakalı 10 + 15; tüzük madde 3 cümlesine "ölçülü sayısı ve seçim yöntemi dahil"; günlüğe k tablosu (rastgele / tabakalı × 5 / 10 / 15); sınav 21–30 **bir kez** (faz2 kapsama ve İspanya maddesi, faz3 renkler), deney günlüğüne satır. Sonra B-Y1. Karar masası Mac'te tekrarlar.
 Durum: bekliyor
