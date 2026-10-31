@@ -442,3 +442,7 @@ Senden beklenen: PR #21'i incele; sözleşme 1.4 cevap anahtarı sütunlarını 
 Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), docs/log/2026-11-01-volkan-b-y1-yil-tepe.md (dalda)
 Neden: KARAR 23:12 / 23:18; iş iki kez yapılmasın.
 Durum: bekliyor
+
+## KARAR 23:35 — PR #21 (üretici 1.4) sende: bir düzeltme, sonra üretici 1.5 (yaz boyutlandırması, yeni sınav şehirleri 31–40)
+Karar: PR #21 Mac'te BUILD'in rakamlarıyla birebir (volkan.md 23:35). (1) **Düzeltme:** `lefkosa_saatlik_2024_2025.csv` yokken yaz / kış sessizce atlanıyor ve "yılın tepesi" Nisan çıkıyor → hata ya da yüksek sesli UYARI + `tepe_ayi` boş; `ayar.json`'a `yil_tepe_kaynagi`. BUILD yapmadıysa sen yap; Civan onaylar (sözleşme 1.4), birleşir. (2) **Üretici 1.5 (dal `uretici/1.5`, Volkan'ın dosyasına PR):** kVA yılın tepesi × 1,2–2,0'dan (yer tipine 1.600 / 2.500); akşam en düşük gerilimi 200 V altına inen hatta kesit bir üst ya da hat ikiye bölünür [Yorum]; çapalar: Malta (yıl tepesi ÷ güç ortanca 0,42, P90 0,74, aşan %1,5) ve ADR-0016 m. 3 (207 V altı ≤ %1, en düşük ≥ 200 V); ayar 1–10, **yeni sınav şehirleri 31–40** bir kez; günlüğe "1.4 ↔ 1.5 ↔ Malta" mesafe tablosu. (3) Sonra B-Y2 (tepe modeli) 1.5 şehirlerinde. Hava dosyası: `data/raw/open-meteo-lefkosa/lefkosa_saatlik_2024_2025.csv` (KAYNAK'ta var; yoksa indir).
+Durum: bekliyor
