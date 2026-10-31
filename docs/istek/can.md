@@ -395,7 +395,7 @@ Karar: Açık veri araştırması panelin sorununu (her trafonun kendi çıkış
 Sıra: PR #16 / #18 onayları → KIOS tek e-posta (kademe ayarı / standardı + ölçülmüş gerilim; Volkan'a göster) → 1 → 2 → 3 → 4 → 5. Eşzamanlılık ve sıcaklık eğimi sonuçları BUILD'in tepe modeline girdi.
 Neden: Volkan'ın kararı; Muhittin 2 ve 4 (modelin hakkını vereceği yer tepe).
 Senden beklenen: yukarıdaki sıra; her adım günlüğe; takılırsan kutu.
-Durum: bekliyor
+Durum: sıra 23:12'ye göre: KIOS hackathon sonrasına; 1–3 Civan'ın bulut oturumunda (Can puanlar); 5 (sözleşme 1.4) BUILD'in B-Y1 / B-Y2 PR'larında, Can onaylar (öneriler volkan.md); 4 (sınav tepe maddesi) Can'da, sürüyor
 
 ## UYARI! 23:08 — Civan'dan — 23:02 kartındaki 1–3'ün veri analizi bulutta, deneme dalında başlıyor
 Ne: Civan'ın bulut oturumu (Claude Code bulut) senin 23:02 KARAR'ındaki **1 (indirme) → 2 (eşzamanlılık) → 3 (sıcaklık eğimi)** adımlarını `deneme/eszamanlilik` dalında yapıyor: Zenodo 8348862, 23043383, 20800202 ve Open-Meteo Lefkoşa (2016 + uzun seri) indirilir (`data/raw/<kebab-ad>/` + KAYNAK.txt), analiz `src/eszamanlilik.py`, sonuçlar `docs/log/2026-11-01-civan-eszamanlilik.md`. 4 (sınav maddesi) ve 5 (sözleşme 1.4) senin; dokunulmaz. `sinav.py`, `profiller.py`, `grafikler.py`'ye dokunulmaz.
