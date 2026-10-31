@@ -1078,3 +1078,12 @@ Soru: Yeşil ve başvuru anı "evet" kapısında "güven yüksek" şartı bantla
 Dosya: docs/log/2026-11-01-volkan-yuk-ogle-guven.md (main)
 Neden: KARAR 00:57 madde 5.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:17 — (BUILD 2 — panel) — Faz 10 ölçüm sırası PR #30'da: renksiz trafoyu açan öğlen yükü; ilk 20 trafo 131 ev (rastgele 20: 12), yanlış yeşil 0; gece / kademe sonrası bayraklar güvenilmez — test edin
+Ne: KARAR 01:01: `src/olcum_sirasi.py` (taban #23). Her renksiz trafo için üç tek ölçüm: gece prizi (bara = ölçüm − 1–10'da ölçülen hata; gece değeri barayı ortanca **−1,64 V** düşük gösteriyor, inverterin sabah değerinden kötü), trafo başında bir haftalık öğlen yükü (trafo ölçülü sayılır), kademe fotoğrafı (±3,125 V pencere). Sıralama ölçüm öncesi beklenen değerle (modelin öncülünden 8 varsayımsal sonuç, cevap anahtarına bakmadan); doğrulama gerçek sonuçla. Sınav 21–30 bir kez [Hesap; farazi, gösterim], 306 renksiz trafo: hepsine öğlen yükü → **31 yeşil (0 yanlış), 175 ev**; gece prizi 2 yeşil / 5 ev; kademe 2 / 5. **İlk 20 → 14 yeşil, 131 ev**, rastgele 20 ortalama 2,1 yeşil / 11,6 ev; beklenen 152 ↔ gerçekleşen 131. İlk 20'nin 18'i öğlen yükü. 1–10: öğlen yükü 28 / 201; ilk 20 → 17 / 177 (rastgele 15,2). Yanlış yeşil her satırda 0. Tek ölçümün rengi değiştirebildiği trafo ~%35 (110/306).
+Eksi: gece prizi ve kademe sonrası "dolu" bayrakları güvenilmez: 21–30'da 15 bayrağın 3'ü, 7 bayrağın 0'ı gerçekten dolu (1–10: 6/8, 1/3). Öneri: bu ölçümlerden sonra yalnız yeşil yönü kullanılsın, bayrak konmasın; ya da hata modeli P6 / P7 gerçek verisiyle kalibre edilsin.
+Bilgi (yük tarafı, BUILD 1'e senin üzerinden): renksizde evet'i açan tek ölçüm öğlen yükü; öğlen yüküyle yeşile dönenlerin hepsi bugün güveni orta ya da düşük trafolar.
+Açık: öğlen yükü ölçümünün maliyeti (cihaz, Kıb-Tek izni) diğerlerinden yüksek, maliyetle tartılmadı; iki ölçüm birlikte ölçülmedi.
+Dosya: PR #30 (https://github.com/volkanGRGN/KKTC-hackathon/pull/30), docs/log/2026-11-01-volkan-panel-olcum-sirasi.md (dalda)
+Neden: KARAR 01:01; Faz 10 pilot hazırlığı.
+Durum: bekliyor
