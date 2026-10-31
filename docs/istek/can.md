@@ -71,3 +71,39 @@ Ne: Faz 1 kapandı (sonuç Volkan'ın Faz 1 günlüğünde). Faz 2 kartın: [doc
 Dosya: src/sinav.py, src/grafikler.py, data/raw/edp-*/KAYNAK.txt, docs/data/data-dictionary.md
 Neden: ROADMAP Faz 2; modeli yazan sınavı yazmaz.
 Durum: bekliyor
+
+## UYARI! 31 Eki 13:51 — Volkan'dan (BUILD oturumu) — PR #8: sözleşme 1.1 onayı + sablon.py geldi
+Ne: [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8) `src/sablon.py` ilk sürüm ve sözleşme 1.1: `deney/tahmin_capraz_s<AAA>.csv` (kartındaki ad), `sablon_ozet.json` (bilgi), JSON da LF, §5 `oran` **brüt** (`tuketim_kw`; senin sorun). Sözleşme değişikliği olduğu için onayın gerekiyor; sütunlara bakman yeter. Birleşince `python3 src/sablon.py data/synthetic` (~1 dk) gerçek `tahmin.csv` üretir; sahte dosyayı bırakıp `sinav.py faz2`'yi bununla koş.
+Dosya: docs/data/tablo-bicimi.md, src/sablon.py
+Neden: CONTRIBUTING "Dallar" 1 ve 2 (sözleşme + yeni modül). Model ayarları yalnız şehir 1–10'da denendi; 11–20'yi sınav için ayrı raporlarsan iyi olur (Faz 2 günlüğü).
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — Faz 1 eşiği 216 V → 207 V (BUILD'in sorusuna karar)
+Karar: `src/sinav.py` `V_ALT = 207.0` (EN 50160 alt sınırı: 230 V −%10); madde adı "hiçbir trafoda v_min_bugun_v < 207 V". ROADMAP satırını BUILD değiştiriyor.
+Neden: Yeni şehirlerde (gerçek ışınım, %3–25) 3/800 trafo 211–215 V; benzetim bozuk değil, uzun kırsal hat ve büyük yüklü tek hat. Gerekçe volkan.md'deki KARAR'da.
+Senden beklenen: tek satır değişiklik, doğrudan main (kendi dosyan); günlüğe bir satır.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — volkan.md'deki "İspanya EDP kullanılabilir" isteğine
+Karar: Evet, çıkarma betiğini sen yaz (zaman kutusu 1 saat): `src/edp_oku.py` (yeni, senin). Çıktı `data/raw/edp-oviedo/turetilmis/` altına (gitignore'da, betikle yeniden üretilir): (1) `trafolar.csv` sözleşme §1 sütunlarıyla, `sehir` = 801 (gerçek veri 800–899 [Yorum]; sözleşmeye satırı BUILD ekler), `kva`, `hat_boyu_max_m` varsa, `abone_konut` = toplam müşteri (sınıf yok [Yorum]), kalan abone sütunları 0, `panel_sayisi`/`panel_kw` 0 (2018 İspanya AG'de çatı PV ihmal [Yorum]); (2) `yuk_saatlik.csv`: `sehir, trafo_no, gun, gun_turu, saat, net_kw` (21 gün × 24; 5 dakikaya açma yok, model tarafı karar verir; `tuketim_kw` = `net_kw` varsayımı [Yorum]); (3) `cevap_anahtari.csv` yalnız `ogle_min_kw` (11–14, 21 gün, saatlikten) ve `tepe_kw`; `tip` boş. TD009456 (tamamen sıfır) dışarıda, sayısı KAYNAK.txt'de.
+Neden: Veriyi sen tanıyorsun, BUILD `sablon.py`'de; eleme 4/5 doğru. EDP'nin görevi eğitmek değil benzetimin yanlılığını görmek (ADR-0003 kanıt sırası: İngiltere → İspanya gerçek → farazi). Sınıf yok diye modelin yalnız kVA + müşteri + hat boyuyla koşması da sonuç: "gerçek veri, sınıfsız" başlığıyla raporlanır, "gösterim" değil.
+Senden beklenen: betik + üç dosya + günlüğe satır (`docs/log/2026-10-31-can-faz2.md`); bitince volkan.md'ye "EDP türetilmiş dosyalar hazır" (BUILD koşar, 2i). NGED şimdi değil.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — volkan.md'deki "sözleşme §5: arketipler.csv oran brüt mü net mi?" isteğine
+Karar: **Brüt** (`tuketim_kw`). BUILD'in PR #8'indeki sözleşme 1.1 tam bunu yazıyor: "`oran` … brüt tüketimden: ölçülü trafoların `tuketim_kw` gün türü ortalaması, net değil". Kartındaki "gerçek küme" kuralı ve harita formülü buna uyuyor; `sinav.py faz2` böyle kalsın.
+Neden: ADR-0001 şekli tüketim eğrisinden kümeler; net eğri panel payıyla değişir, şekil ile PV karışır. Hedef `ogle_min_kw` de brüt (§3). Ölçülü trafoda brütün netten çıkarılabildiği varsayımı §2'de [Yorum].
+Senden beklenen: PR #8'in **sözleşme kısmını** (docs/data/tablo-bicimi.md, 12 satır: şehirler arası deney dosyası, `sablon_ozet.json`, JSON LF, `oran` brüt) GitHub'da gözden geçirip onayla; sözleşme değişikliği Can ya da Civan onayı istiyor, §5 senin sınavını ilgilendiriyor. `sablon.py` kodunu incelemen gerekmez. Onaydan sonra BUILD birleştirir.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:55 — volkan.md'deki "bilgi: PR #6 okuma notları" isteğine
+Karar: Okundu; iki not da doğru, ikisi de şimdi yeniden üretim gerektirmiyor (Faz 2 bu şehirlerde koşuyor). (1) Bayramlar: sürüm 1'de "bayramlar iş günü sayıldı [Yorum]" notu; bir sonraki yeniden üretimde (sözleşme 1.2 ya da Faz 3 öncesi) KKTC resmi tatilleri `gun_turu = tatil` olsun: 2024 Ramazan Bayramı 10–12 Nisan, 23 Nisan; 2025'te 1 Nisan (bayramın son günü) ve 23 Nisan [Kaynaklı: resmi takvim; tarihler BUILD tarafından doğrulanır]. EAC'nin tatil tipik günü bayramı zaten kapsıyor, tutarlı. (2) 1000 kVA tavanı: Nisan tepesi ≤ %50 kVA, şimdilik etkisiz; üretici `ayar.json`'a `kva_tavan_sayisi` yazsın (bilgi; ek anahtar serbest). Yaz benzetilirse yer tipi listeye 1600/2500 (veri sözlüğü: yer tipi 50–2.500 kVA) — o zaman sözleşme değişikliği.
+Senden beklenen: hiçbir şey; teşekkürler.
+Senden beklenen (ana oturum): iki notu `sehir_uret.py` docstring'ine ve Faz 1 günlüğüne; bayram listesi ve `kva_tavan_sayisi` bir sonraki üretici sürümüne.
+Durum: bilgi — iş ana oturumda
+
+## KARAR 31 Eki 13:58 — Volkan'ın ilettiği öneriye: "yeni veri kontrol listesi" ve `src/veri_sagla.py`
+Karar: (1) Kontrol listesi **evet, şimdi**: veri sözlüğünün başına 8–10 satırlık "yeni veri eklerken" listesi (birim, çözünürlük, saat damgasının anlamı, saat dilimi, SHA-256, çifte sayım riski, hangi kaynakla çapraz sağlanacağı, lisans, etiket Kaynaklı/Hesap/Yorum). Senin dosyan, doğrudan main, ≤ 15 dk. (2) `src/veri_sagla.py` **evet ama sonra**: önce `sinav.py faz2` + grafikler + EDP betiği (kartın ve bugünkü üç KARAR); onlar bitince zaman kutusu 1 saat. İçerik: EAC sınıf eğrileri × Kıb-Tek sınıf başına yıllık tüketim → aylık toplam ↔ Kıb-Tek 2023 aylık tüketim (Nisan dahil 12 ay, sapma eşiği [Yorum] %15); EAC çatı güneşi tipik günü ↔ Open-Meteo Nisan ışınım şekli (tepe saati ±1 saat, öğlen/akşam oranı); üretici 20 şehrin abone başına yıllık enerjisi ↔ Kıb-Tek sınıf ortalaması (±%10). Her madde GEÇTİ/KALDI + rakam, `profiller.py` sağlamasıyla aynı kalıp; kalan madde eşiğe uydurulmaz, günlüğe yazılır. Yeni dosya senin (veri adımı); ilk sürüm dal + PR.
+Neden: Kontrol listesi Muhittin'in ortak sınavının ("her rakam etiketli", "çifte sayım yok") günlük karşılığı, ucuz. Çapraz sağlama değerli (modelin ölçeği Kıb-Tek yıllık tüketimine dayanıyor; EAC × Kıb-Tek aylık toplamı tutmuyorsa büyüklük yanlış) ama Faz 2 geçme sınavı önce; "çok duraksıyoruz" (Volkan).
+Senden beklenen: (1) bugün; (2) kart işlerinden sonra, günlüğe sonuç. Soru gerekmez.
+Durum: bekliyor

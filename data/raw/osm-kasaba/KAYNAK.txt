@@ -18,3 +18,13 @@ Bilinen eksikler:
 - OSM'de bu alanda trafo yok (power=transformer ve power=substation sayısı 0). Haritadaki trafo konumları farazi şehirden gelir, gerçek değil.
 - Bina türlerinin %89'u "yes" (türü belirtilmemiş); konut/dükkân ayrımı OSM'den çıkmaz.
 - Lapta adayı elendi: aynı büyüklükteki alanda yalnız 17 bina çizilmiş (Lapta merkez 35.330, 33.158, 35.339, 33.170).
+
+---
+İkinci dosya: girne_kiyi.json — Girne çevresi OSM kıyı çizgisi (natural=coastline), trafoları karada tutmak için.
+İndirildi: 31 Ekim 2026, 14:10 (Civan). OSM veri zaman damgası: 2026-10-31T12:02:01Z. Lisans: ODbL 1.0, aynı atıf.
+Alan (güney, batı, kuzey, doğu): 35.25, 33.20, 35.42, 33.45 — referanstan (35.3375, 33.318) her yöne en az ~8 km; şehir üreticisinin en uzak köy halkasını (7 km) kapsar.
+Sorgu:
+curl -A "KKTC-hackathon/0.1 (github.com/volkanGRGN/KKTC-hackathon)" -o girne_kiyi.json https://overpass-api.de/api/interpreter --data-urlencode 'data=[out:json][timeout:90];way["natural"="coastline"](35.25,33.20,35.42,33.45);out geom;'
+Dosya: ~139 KB; 25 kıyı yolu, 2.141 nokta. OSM kuralı: deniz yolun sağında.
+Kullanım: noktadan kuzeye ışın; kıyıyı tek sayıda kesiyorsa karada (app/ornek_veri.py `karada()`).
+Sağlama (Civan, 31 Ekim) [Hesap]: referans noktası karada. Şehir üreticisinin konum kuralıyla tip başına 2.000 örnek: otel %31 denizde, köy %4, sulama %4, yurt %3, şehir konutu %2, çarşı ve sanayi %0. sehir-001'de 40 trafonun 4'ü denizde (3 otel, 1 şehir konutu).
