@@ -1,6 +1,6 @@
 # Tablo biçimi sözleşmesi
 
-Sürüm 1 · 31 Ekim 2026 · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
+Sürüm 1.1 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
 
 Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun eksik ya da yanlış geliyorsa önce bu dosyaya bak; değişiklik gerekiyorsa [Volkan'ın kutusuna](../istek/volkan.md) yaz. Örnek değerler biçimi göstermek içindir; ölçüm ya da sonuç değildir.
 
@@ -8,7 +8,7 @@ Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun ek
 
 - **Klasör:** her şehir `data/synthetic/sehir-<NNN>/` (NNN = tohum, üç hane: `sehir-007`). Depoya girmez (`.gitignore`), tohumla yeniden üretilir.
 - **Sahte şehir** (Civan'ın `app/ornek_veri.py`'si): tohum 900–999, aynı klasör düzeni (`sehir-901/`). Harita bu şehirlerde "SAHTE VERİ" yazar.
-- **CSV:** UTF-8 (BOM yok), ayırıcı virgül, **ondalık nokta** (`12.5`; `12,5` değil), ilk satır başlık, satır sonu LF. Python'da `open(yol, 'w', encoding='utf-8', newline='')` + `csv`, ya da `pandas.to_csv(yol, index=False)`.
+- **CSV:** UTF-8 (BOM yok), ayırıcı virgül, **ondalık nokta** (`12.5`; `12,5` değil), ilk satır başlık, satır sonu LF. **JSON da** UTF-8 ve LF (`newline=''`). Python'da `open(yol, 'w', encoding='utf-8', newline='')` + `csv`, ya da `pandas.to_csv(yol, index=False)`.
 - **Adlar:** sütun adları ve kategorik değerler ASCII küçük harf ve alt çizgi; Türkçe harf yok (`koy`, `carsi`, `isgunu`). Doğru/yanlış = `1`/`0`. Boş hücre = değer yok.
 - **Anahtar:** her tabloda `sehir` (int) ve `trafo_no` (str, `T01`…`T40`). (sehir, trafo_no) bütün dosyalarda aynı trafodur. Satırlar `trafo_no` sırasında.
 - **Yuvarlama:** kW 2 hane, V 1 hane, metre tam sayı, derece 6 hane, oran 3 hane.
@@ -132,9 +132,13 @@ Satır = bir trafo (ölçülü ve ölçülmeyen hepsi).
 | `ogle_min_kw_olculen` | float | kW | | yalnız ölçülü trafoda, `yuk_5dk.csv`'den ölçülen değer; değilse boş |
 | `guven` | str | — | `orta` | `yuksek` / `orta` / `dusuk` |
 
-Deneyler (5 / 10 / 20 ölçülü, tekrarlar): `deney/tahmin_n<ölçülü>_t<tekrar>.csv`, aynı sütunlar.
+Deneyler, aynı sütunlar:
+- `deney/tahmin_n<ölçülü>_t<tekrar>.csv`: 5 / 10 / 20 ölçülü, 5 tekrar (öğretici küme farklı tohumla).
+- `deney/tahmin_capraz_s<AAA>.csv`: şehirler arası. Model AAA şehrinin 12 ölçülüsüyle kuruldu, bu şehrin bütün trafolarını tahmin etti; `olculdu` hepsinde 0, `olculu_sayi` = 12, `arketip` AAA'nın arketip numarasıdır (bu şehrin `arketipler.csv`'siyle karşılaştırılmaz).
 
-**`arketipler.csv`** (yan dosya; satır = arketip × gün türü × adım): `sehir`, `arketip` (int), `arketip_adi` (str, ör. `aksam_tepeli_konut`), `gun_turu`, `adim`, `oran` (0–1, tepeye bölünmüş eğri). Harita yan paneli tahmini eğriyi şöyle çizer: `oran` × (`ogle_min_kw` ÷ arketipin öğlen penceresindeki en düşük `oran`). Ölçekleme doğrulanmadı ([ADR-0001](../decisions/adr-0001-sekil-buyukluk-sablon.md)).
+**`sablon_ozet.json`** (bilgi, eşiksiz): ölçülü trafolar, küme sayısı ve siluetler, arketip adları, ortak ve küme başına abone katsayıları (kW/abone), bir-dışarıda hata, güven sayıları. Sınav okumaz; günlük ve sunum için.
+
+**`arketipler.csv`** (yan dosya; satır = arketip × gün türü × adım): `sehir`, `arketip` (int), `arketip_adi` (str, ör. `aksam_tepeli_konut`), `gun_turu`, `adim`, `oran` (0–1, tepeye bölünmüş eğri; **brüt tüketimden**: ölçülü trafoların `tuketim_kw` gün türü ortalaması, net değil). Harita yan paneli tahmini eğriyi şöyle çizer: `oran` × (`ogle_min_kw` ÷ arketipin öğlen penceresindeki en düşük `oran`). Ölçekleme doğrulanmadı ([ADR-0001](../decisions/adr-0001-sekil-buyukluk-sablon.md)).
 
 ## 6. `kac_ev.csv` — Faz 3 kaç ev tablosu
 
