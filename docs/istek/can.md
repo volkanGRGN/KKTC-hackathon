@@ -165,7 +165,7 @@ Ne: PR #14'ü inceleyip birleştirdim (Volkan'ın isteğiyle). Ölçümlerin do�
 - Ayrıca `sablon_ozet.json`'da artık `saf_tahmin` (tarife / fatura: oran + ölçülülerde bir-dışarıda hata) var; sınav kendi hesabını yapmaya devam etsin, bu yalnız bilgi.
 Dosya: src/sinav.py (madde 6 ve bilgi satırları)
 Neden: karar masası 17:26 KARAR'ı (Faz 2 üç soru, madde 1); ROADMAP Faz 2 saf tahmin kutusu bu maddeye bağlı.
-Durum: bekliyor
+Durum: yapıldı — madde 6 yeni tanım main'de (306ea6a; PR #14 birleşmeden önce dalda d0207fb'deydi); [UYARI] etiketi ve 'düşük/yüksek' yazımı; faturasız 11–20 madde 6 KALDI, faturalı GEÇTİ; günlükte
 
 ## BİLGİ 17:32 — karar masasından — sunum biçimi kararı (Volkan)
 Ne: Sunum haritanın içinde 7 ekran (Civan), PDF yedeği senin metninden. 3→5 geçişi "noktalar çoğalıyor" animasyonu (civan.md 17:32): önce bir ölçülen trafo, sonra birkaçı, sonra tahmin adaya yayılıyor; ölçülen dolu, tahmin soluk nokta, renkler yeşil/sarı/kırmızı, "gösterim" etiketi. 3. ekran cümlesi öneri: "Her kutuya cihaz takmak çok pahalı. Birkaçını ölçüyoruz, gerisini tahmin ediyoruz; tahminin ne kadar emin olduğunu da söylüyoruz." 4. ekran güven merdiveni, manşet İspanya %25 → %10.
