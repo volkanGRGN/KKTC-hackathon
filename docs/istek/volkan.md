@@ -728,4 +728,12 @@ Eksiler: (1) **İki değerli kademe politikası açmıyor**, biraz kötüleştir
 Soru: PR #20 deneme olarak birleşsin mi (model değişmiyor)? Kıb-Tek istek taslağına "trafo başına kademe ayarı" eklensin mi?
 Dosya: PR #20 (https://github.com/volkanGRGN/KKTC-hackathon/pull/20), docs/log/2026-11-01-volkan-pv-acilma.md
 Neden: Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir). Bloklamıyor.
+Durum: karar verildi 23:03 → volkan.md (KARAR aşağıda): deneme olarak birleşir (karar masası Mac koşumu tutunca, Volkan'ın sözüyle); Kıb-Tek isteğine 'trafo başına kademe ayarı'; sahte kayıt planına iki düzeltme
+
+## KARAR 23:03 — BUILD'e: PR #20 (PV açılma testi) — üç bulgu kabul; sahte kayıt planına iki düzeltme; pilot cümlesi
+Karar: (1) **Kademe:** iki değerli politika açmıyor (6,25 V adım, 8 V bant) → bulgu kabul; ADR-0015 / Muhittin 5A'nın "standart" yorumu yetmez, gereken **trafo başına kademe ayarı (devreye alma kaydı)**. Faz 9 Kıb-Tek istek taslağına bu kalem (BUILD). Sahte kayıt planında (KARAR 23:0x) kademe zaten trafo başına (%80 doğru), değişmez. (2) **Sarı %78 değişmiyor:** beklenen (Muhittin 4: sarı tabanı başvurunun yeri); çözüm başvuru anı (Faz 9, ADR-0012 / 0015); bilgi. (3) **İnverter iyimser:** sahte kayıt planına iki düzeltme: (a) inverter kaydı panelli evlerin **%20'sinde** (planda var) — PR #20'deki "her panelli trafoda bir inverter" en iyimser uç olarak kalır; (b) hat empedansı **yalnız inverterin olduğu hatta** bilinir, diğer hatlar aralık; gürültü ±1 V / ±%20 yanında ±2 V / ±%40 da koşulur.
+**Birleşme:** PR #20 deneme olarak birleşir (model kodu değişmez): karar masası Mac'te 21–30'u tekrar ediyor; tutarsa Volkan'ın sözüyle birleşir.
+**Pilot / sunum cümlesi (Can'a, ekran 6 konuşma notu; v3 seçilirse):** "Mahallede tek bir panelli evin inverter kaydı bile yeterse, gerçekçi şehirde yeşil iki katına çıkıyor (%5 → %10), konut trafolarında ilk yeşiller beliriyor, yanlış kırmızı yarıya iniyor; dolu trafoya 'evet' yine sıfır." [Hesap: PR #20, sınav 21–30, her panelli trafoda bir inverter (iyimser uç), gösterim]. %20 kapsama sonucu sahte kayıt testinden gelince yanına.
+Neden: tüzük madde 2 (yanlış yeşil kapısı 0 kaldı); Muhittin 5B doğrulandı (inverter açıyor), 5A yalnız trafo başına kayıtla.
+Senden beklenen (BUILD): Kıb-Tek taslağı kalemi; sahte kayıt testine (a) ve (b); Can'ın PR onaylarından sonra.
 Durum: bekliyor
