@@ -55,3 +55,18 @@ Durum: bekliyor
 Ne: Her nokta sıfırdan büyüyüp hafif taşıp yerine otursun (pop/bounce), fade değil. Ölçülen trafo tek tek pop (ses yok, 0,3–0,4 sn), tahmin yayılırken noktalar küçük gruplar hâlinde art arda pop (kademeli, dalga gibi). Uygulama önerisi [Yorum]: pydeck'te `ScatterplotLayer` + `transitions={'getRadius': 350}` ile yarıçapı 0 → R, her karede birkaç nokta ekleyerek; ya da `st.components.v1.html` içinde CSS keyframes (scale 0 → 1,15 → 1) ile daha pürüzsüz. Hangisi 20 dakikada çalışıyorsa o.
 Senden beklenen: animasyon ekranında bu geçiş; öncelik sırası aynı (önce 4–5).
 Durum: bilgi
+
+## KARAR 18:46 — volkan.md'deki "dashboard'da şebeke doluluğu nasıl hesaplansın?" isteğine
+Karar: Tek bir "şebeke doluluğu" sayısı yok; sayfa **üç kutu** gösterir, hepsi sözleşme sütunlarından, cevap anahtarı yok:
+1. **Trafo renk dağılımı:** yeşil / sarı / kırmızı adet ve yüzde (`kac_ev.csv` `renk`), yanında kaç trafonun ölçülü olduğu (`tahmin.csv` `olculdu`). Manşet bu.
+2. **Kaç ev daha sığar, şehir toplamı:** Σ `kac_ev_karamsar` – Σ `kac_ev_iyimser` aralığı ("en az … en çok … ev"); yanında bugünkü %40 kuralının toplamı Σ `kural40_ev` (ürünün kilit kıyası). Sözleşme 1.3 gelirse ortadaki sayı Σ `kac_ev_orta`.
+3. **Panel payının dolu kısmı** (asıl "doluluk", ADR-0002): pay = max(0, min(`isil_pay_kw`, `gerilim_pay_kw_karamsar`)) ve iyimseri; doluluk = Σ `panel_kw` ÷ Σ (`panel_kw` + pay); karamsar ve iyimser iki yüzde ("güneş payının %x'i dolu"). `panel_kw` `trafolar.csv`'den.
+(a) "öğlen yük ÷ kVA" doluluk **değil**: öğlen yükü düşük trafo panel için daha riskli, sayı "boş" gösterir; istersen küçük yazıyla "öğlen en düşük yük ÷ trafo gücü" diye ayrı, "doluluk" demeden. (c) kWh ile kW karışır, yok.
+Neden: Ürün triyaj (ADR-0005): soru "kaç ev daha" ve "hangi renk", kVA doluluğu değil; üç kutu kilit grafikle aynı dili konuşuyor; ek hesap yok.
+Senden beklenen: sayfa ≤ 45 dk, öncelik aynı (önce 4–5, sonra animasyon, sonra bu); rakam etiketi "gösterim — farazi şehir". Aynı soru can.md'de de vardı; Can'dan ayrıca cevap gelmeyecek.
+Durum: bekliyor
+
+## BİLGİ 18:46 — karar masasından — Faz 3 hesabı olasılıklıya geçiyor (ADR-0011); panelin değişmesi gerekmiyor
+Ne: `kac_ev.csv`'nin sütun adları ve yeri aynı kalıyor (karamsar / iyimser / renk), üç ek sütun geliyor: `p_bugun_asar` (bugün sınırı aşma olasılığı), `p_iki_ev_sigar`, `kac_ev_orta`. BUILD yazar; sözleşme 1.3 notu senin ya da Can'ın onayına gelir (PR). Yan panel olduğu gibi çalışır; zaman kalırsa "bugün aşma olasılığı %x" ve orta sayı yan panele. Yeşil artık konut trafolarında da çıkıyor (sınavda yeşil %25); animasyonda renk karışımı doğal olur.
+Senden beklenen: PR onayı gelince bak; başka iş yok.
+Durum: bilgi
