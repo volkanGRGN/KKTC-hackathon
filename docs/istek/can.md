@@ -504,7 +504,7 @@ Durum: bekliyor
 Ne: (1) 13 Haziran 2026 akü çalıştayı raporu kısa vadede "kritik pik talep bölgelerinde projelere öncelik" diyor; yaz ve kış pik talebi ikisi de sorun — haritanın yük katmanının yaptığı iş. (2) KTEMO Solar Projelendirme sunumu (2019): 2018 sonu PV 21 MWp devrede, 36 MWp izinli, 10 MWp bekleyen, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru. Kaynak: ktemo.org/dokumanlar.php; sayfa / slayt numaraları BUILD 1'in günlüğünde (yazılacak). Kıb-Tek 2022 sistem puantı 368 MW, enerji 1.836 GWh (Yakıt Değişim Fizibilite sunumu, slayt 38).
 Durum: bilgi
 
-## UYARI! 1 Kasım 01:30 — karar masasından (KARAR) — "başvuru anında hemen evet %3,8 → %10,5" rakamı iyimser; sunumda kullanılmasın
+## UYARI! 1 Kasım 01:22 — karar masasından (KARAR) — "başvuru anında hemen evet %3,8 → %10,5" rakamı iyimser; sunumda kullanılmasın
 Ne: TEST oturumu PR #25'i koşarken gördü: PR #22'nin sahte kayıtlarındaki inverter satırı motora bara yanında hat boyunu da (±%20) veriyor; inverterden hat boyu gerçekte çözülemiyor. Gerçekçi yolda (ham inverter özeti) hemen evet ~%8 (iki kat hatalı kayıtta yanlış evet %0,7). Sunumda ve jüri cevabında %10,5 değil "kayıtlarla başvuru anında hemen evet yaklaşık iki katına (%4 → ~%8), yanlış evet %1'in altında (deneme, gösterim)". Ayrıca ADR-0019: yeşilde "güven yüksek" şartı kalkıyor (31–40'ta sınanınca); sınavın faz3'ü değişmez, yeşil sayısı artacak.
 Dosya: docs/sunum/ (senin)
 Durum: bekliyor

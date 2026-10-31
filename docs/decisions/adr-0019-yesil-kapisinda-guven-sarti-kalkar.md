@@ -1,6 +1,6 @@
 # ADR-0019: Yeşil ve başvuru anı "evet" kapısında "yük güveni yüksek" şartı kalkar; kalibre yük bandı yeter, güven bilgi etiketi olarak kalır
 
-Tarih: 2026-11-01 · Durum: kabul (koşullu: madde 3'teki sınav tutarsa yürürlüğe girer) · ADR-0010, ADR-0011, ADR-0013, ADR-0015, ADR-0017 üstüne · kaynak: BUILD 1 ölçümü (volkan.md UYARI, main 5c88e24), BUILD 2 bulguları (PR #28, #30) · karar masası 1 Kasım 01:30
+Tarih: 2026-11-01 · Durum: kabul (koşullu: madde 3'teki sınav tutarsa yürürlüğe girer) · ADR-0010, ADR-0011, ADR-0013, ADR-0015, ADR-0017 üstüne · kaynak: BUILD 1 ölçümü (volkan.md UYARI, main 5c88e24), BUILD 2 bulguları (PR #28, #30) · karar masası 1 Kasım 01:22
 
 ## Bağlam
 Panel katmanında yeşil (ve başvuru anı motorunda "hemen evet") bugün iki şart ister: iki başvurunun bant çekilişleriyle %98 sığması **ve** öğlen yük tahmininin güveninin "yüksek" olması (ADR-0010). İki ayrı ölçüm aynı yeri gösterdi: evet'in darboğazı ağ kaydı değil bu güven şartı. Trafoların %57'sinde güven yüksek değil (PR #28); renksiz trafoyu yeşile çeviren tek ölçüm trafo başında öğlen yükü ve yeşile dönenlerin hepsi bugün güveni orta / düşük trafolar (PR #30).
