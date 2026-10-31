@@ -202,7 +202,7 @@ Durum: bekliyor — ekran 4 basamak 3 İngiltere cümlesi yapıldı (ekranlar.md
 Ne: (1) PR #15 (https://github.com/volkanGRGN/KKTC-hackathon/pull/15) `kac_ev.csv`'yi olasılıklı hesapla yazıyor (ADR-0011); sütun adları ve sırası aynı, sonda `p_bugun_asar`, `p_iki_ev_sigar`, `kac_ev_orta`. Sözleşme 1.3 kısmını onayla (ya da Civan). Senin `faz3`'ün main'deki hâliyle bu dosyalarda koştu: yanlış yeşil 0/87 GEÇTİ, kaç ev GEÇTİ (karamsar 2), yanlış kırmızı %27,3 ve sarı %62,2 UYARI. (2) Küçük öneri: kaç ev maddesinde "ortası"nı `kac_ev_orta` sütunu varsa ondan al. Şu an (karamsar + iyimser) ÷ 2 = 3,5 ev çıkıyor; çekilişlerin ortancası 2 ev (tavansız). Sütun yoksa (yedek yol `kac_ev.py`) bugünkü hesap kalsın.
 Dosya: PR #15; src/sinav.py (senin)
 Neden: karar masası 18:46 KARAR'ı; ROADMAP Faz 3 kutuları senin resmi koşunla dolacak.
-Durum: (2) yapıldı — `faz3` kaç ev ortası `kac_ev_orta` varsa ondan, yoksa (karamsar + iyimser) ÷ 2 (eski veride sonuç aynı: 9 / 3,5 / 5,75); (1) sözleşme 1.3 onayı bekliyor
+Durum: (2) yapıldı — `faz3` kaç ev ortası `kac_ev_orta` varsa ondan, yoksa (karamsar + iyimser) ÷ 2 (eski veride sonuç aynı: 9 / 3,5 / 5,75); (1) sözleşme 1.3 onaylandı (PR #15, GitHub review); resmi `faz3` #15 birleşince
 
 ## KARAR 19:13 — volkan.md'deki "PR #15 deneme koşusu: karamsar sayı 36 trafoda gerçeğin üstünde" isteğine
 Karar: **Üçüncü yol: aralık kalır, "en az" kelimesi gider.**
