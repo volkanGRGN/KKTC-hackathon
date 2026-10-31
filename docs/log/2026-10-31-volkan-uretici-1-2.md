@@ -26,6 +26,8 @@ Bütün rakamlar farazi şehirde: **gösterim**.
 - **Faz ağırlıkları.** Tek fazlı abonenin fazı 1 ± sapma ağırlıklı: kentsel %25, kırsal %50 [Kaynaklı: UKPN 2015 kapanış raporu]. Turistik ve sanayi kentsel sayıldı [Yorum]. Önceden ±%20 [Yorum].
 - **Hava yılı** 2023 / 2024 / 2025. Open-Meteo 2023 dosyası indirildi.
   - Sağlama: yatay 1.903, 30° güney 2.102 kWh/m². Nisan 11–14 ortalaması 754 W/m² (2024–25: 787 / 769).
+- **Trafo çıkış gerilimi 244–252 V** (0.2'de 246–250; karar masası 16:27, PR #11: UKPN 20 trafoda siteler arası bara yayılımı ss 3,3 V, bizimki 1,2 V; merkez 248 V aynı) [Yorum, ±4 V].
+- **Faz dengesizliği raporu** `ayar.json` `faz_dengesizlik_ortanca`: hat başına (en büyük faz − ortalama) ÷ ortalama, yıllık enerjiyle (UKPN tanımı akşam faz yükü). 20 şehrin ortancası %20,7 (şehir aralığı %16–29). UKPN kentsel fider ortancası %14, P84 %30 [Hesap, PR #11]: ±%25 / ±%50 çapasıyla üretici hâlâ biraz karamsar (güvenli yön).
 - **`ayar.json` yeni anahtarlar:** `mahalle_sigma`, `mahalle_kayma_dk`, `faz_sapma`, `kiyi_kontrolu`, `kva_tavan_sayisi`, `bayramlar`, `veri_turu`.
 - **Cevap anahtarı yeni sütunlar:** `mahalle_carpani`, `saat_kaymasi_dk`.
 
@@ -60,18 +62,18 @@ Bütün rakamlar farazi şehirde: **gösterim**.
 | Ölçü | 0.2 (öğlen) | 1.2 |
 |---|---|---|
 | Her tipten ≥ 3 / ≥ 60 | geçti, en az sanayi 73 | aynı |
-| 259 V üstü | 119/800 | 116/800 |
-| 207 V altı | 0 | 0 (en düşük 210,8 V; 216 V altı 7) |
-| 264 V üstü | 33/800 | 41/800 |
+| 259 V üstü | 119/800 | 123/800 |
+| 207 V altı | 0 | 0 (en düşük 210,6 V; 216 V altı 5) |
+| 264 V üstü | 33/800 | 46/800 |
 | Denizde trafo | sehir-001'de 4/40 (Civan) | 0/800 [Hesap: `karada()`] |
 | Nisan tepesi > kVA | — | 0/800 (> %80: 2) |
 | `kva_tavan_sayisi` (20 şehir toplamı) | — | 28 (otel / sanayi; Nisan'da etkisiz) |
-| En uzun üretim | 16,1 sn | 14,5 sn |
+| En uzun üretim | 16,1 sn | 14,7 sn |
 | Profil / ışınım | eac / open-meteo | eac / open-meteo, 20/20 |
 | Konut trafosu müşteri başına öğlen CV, şehir içi ortanca | 0,08 (karar masası) | 0,33 (şehir 1–20; 1–10'da da 0,33) |
 | Konut trafosu öğlen en düşük, abone başına ortanca | ~330 W | 318 W (UKPN Low Carbon London 200–400 W aralığında) |
 
-`sinav.py` hâlâ 216 V eşiğiyle "KALDI" yazıyor; `V_ALT = 207` Can'da (can.md KARAR 13:55).
+Main'deki `sinav.py faz1` (207 V) ile 5/5 madde geçti. Bara bandı 244–252 V olunca gerilim satırları değişti, tüketim serileri ve `trafolar.csv` değişmedi (aynı tohum, birebir), dolayısıyla Faz 2 sonuçları da aynı.
 
 ### Faz 2: sütunlu / sütunsuz, saf tahmin yan yana
 
@@ -142,7 +144,6 @@ Saf tahminlerdeki iki rakam: iki koşuda öğretici küme biraz farklı (fatura 
 ## Karar / sıradaki adım
 - PR: sözleşme 1.2 + üretici 1.2 + model; PR #8'in üstüne. Can ya da Civan onayı.
 - Can:
-  - `sinav.py` içinde `V_ALT = 207`;
   - `sinav.py faz2` resmi ölçüm (saf tahmin satırı);
   - CV bilgi satırı (ADR-0008 madde 2, 4).
   - Yeni şehirler: `python3 src/sehir_uret.py 1 20` sonra `python3 src/sablon.py data/synthetic`. Kıyı ve 2023 dosyası KAYNAK.txt komutlarıyla.

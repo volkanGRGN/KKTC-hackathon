@@ -24,6 +24,8 @@ Sürüm 1.2 (sözleşme 1.2; ADR-0007, ADR-0008, karar masası 31 Ekim):
   kiyi_segmentleri() ve karada() fonksiyonları, aynen); yoksa eski "kuzeye en çok 400 m" kuralı + uyarı.
 - Faz dağılımı: tek fazlı abonelerin faz ağırlıkları kentsel ±%25, kırsal ±%50 [Kaynaklı: UKPN 2015].
 - Hava yılı 2023 / 2024 / 2025 (tüketim ve abone sayıları 2023).
+- Trafo çıkış gerilimi 244–252 V (sürüm 0.2'de 246–250): İngiltere UKPN'de siteler arası bara gerilimi yayılımı
+  ss 3,3 V, bizimki 1,2 V'tu; merkez 248 V (UKPN tasarım varsayımı) aynı. ayar.json faz_dengesizlik_ortanca.
 - ayar.json: mahalle_sigma, kiyi_kontrolu, kva_tavan_sayisi (gereken güç 1000 kVA'yı aşıp tavana kesilen trafo;
   Nisan tepesi kVA'nın yarısının altında, şimdilik etkisiz; yaz benzetilirse yer tipi listeye 1600/2500 gerekir).
 
@@ -83,6 +85,9 @@ FATURA_SAPMA = (0.95, 1.05)              # tahmini okuma, farklı yıl (ADR-0007
 # [Kaynaklı: UKPN, "Validation of PV Connection Assessment Tool" kapanış raporu, Ofgem, Mart 2015]. Turistik ve
 # sanayi bölgesi kentsel sayıldı [Yorum].
 FAZ_SAPMA = {'kentsel': 0.25, 'turistik': 0.25, 'sanayi': 0.25, 'kirsal': 0.50}
+# Trafo çıkışı (boşta faz gerilimi): şartname 250 V, kademe ayarı bilinmiyor; Kıbrıs dağılımı BULAMADIM. Bant ±4 V
+# [Yorum; karar masası 16:27: UKPN 20 trafoda gece ortanca 245,0 V, +1 ss 248,2 V, siteler arası ss 3,3 V; PR #11].
+V0_BANT = (244.0, 252.0)
 
 # Abone sınıfı: (profiller.py sınıfı, trafolar.csv sütunu, yıllık MWh / abone, üç faz olasılığı).
 # Yıllık MWh / abone [Hesap]: Kıb-Tek 2023 tarife sınıfı tüketimi (stat_2023) ÷ abone sayısı (veri sözlüğü).
@@ -316,7 +321,7 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
         fw = [rng.uniform(1 - d, 1 + d) for _ in range(3)]
         tr = dict(no=f'T{ti + 1:02d}', tip=tip, bolge=a['bolge'], kva=kva, x=x, y=y,
                   montaj='direk' if kva <= 400 else 'yer', kablo=rng.choice(a['kablo']),
-                  v0=round(rng.uniform(246.0, 250.0), 1), mahalle=mahalle, kayma_dk=kayma,
+                  v0=round(rng.uniform(*V0_BANT), 1), mahalle=mahalle, kayma_dk=kayma,
                   fatura_sapma=rng.uniform(*FATURA_SAPMA), feeders=[], evler=[])
         zb = 240.0 ** 2 / (kva * 1000 / 3)
         rt = 0.04 * zb / math.sqrt(5)                 # uk %4, X/R = 2 (eski benzetim)
@@ -345,6 +350,22 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
             tr['feeders'].append(f)
         trafolar.append(tr)
     return trafolar, sayi, tavan
+
+
+def faz_dengesizligi(tr, ayar):
+    """Hat başına (en büyük faz − ortalama) ÷ ortalama, faz yükü = yıllık enerji (tek fazlı abone kendi fazına,
+    üç fazlı üçe eşit). UKPN'in tanımı (akşam faz yükü; PR #11 günlüğü); burada enerjiyle yaklaşık [Hesap]."""
+    out = []
+    for f in tr['feeders']:
+        faz = [0.0, 0.0, 0.0]
+        for h in f['houses']:
+            e = SINIFLAR[h['sinif']][2] * ayar['tuketim_carpani'][h['sinif']] * h['olcek']
+            for p in (range(3) if h['ph'] == 3 else (h['ph'],)):
+                faz[p] += e / 3 if h['ph'] == 3 else e
+        ort = sum(faz) / 3
+        if ort > 0:
+            out.append((max(faz) - ort) / ort)
+    return out
 
 
 def fatura_mwh(tr, ayar):
@@ -518,7 +539,9 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         print(f'UYARI: {KIYI_JSON.name} yok; yalnız "kuzeye en çok {KUZEY_SINIRI_M} m" kuralı '
               '(bazı trafolar denize düşebilir; indirme komutu data/raw/osm-kasaba/KAYNAK.txt).')
     trafolar, sayi, tavan = sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi)
-    ayar.update(tip_sayilari=sayi, kiyi_kontrolu=kiyi is not None, kva_tavan_sayisi=tavan)
+    ayar.update(tip_sayilari=sayi, kiyi_kontrolu=kiyi is not None, kva_tavan_sayisi=tavan, v0_bant_v=list(V0_BANT),
+                faz_dengesizlik_ortanca=round(statistics.median(d for tr in trafolar
+                                                                for d in faz_dengesizligi(tr, ayar)), 3))
 
     klasor = Path(cikti) / f'sehir-{tohum:03d}'
     klasor.mkdir(parents=True, exist_ok=True)

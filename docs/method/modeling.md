@@ -37,7 +37,7 @@ Kural: model yalnız Kıb-Tek'in bileceğini girdi alır (`trafolar.csv`) ve yal
 ## 4. Kaç ev sığar (Faz 3)
 
 - Isıl: trafo gücü + öğlen en düşük yük − mevcut panel. Yanına bugünkü %40 kuralı.
-- Gerilim: pay = 259 − trafo çıkış gerilimi − trafo yükselmesi; etkin mesafe hat boyunun yarısı; tek faz karamsar, dengeli üç faz iyimser. Trafo çıkışı: şartname boşta 250 V, kademe ayarı bilinmiyor → 246–250 V.
+- Gerilim: pay = 259 − trafo çıkış gerilimi − trafo yükselmesi; etkin mesafe hat boyunun yarısı; tek faz karamsar, dengeli üç faz iyimser. Trafo çıkışı: şartname boşta 250 V, kademe ayarı bilinmiyor → farazi şehirde 244–252 V (üretici 1.2; İngiltere UKPN'de siteler arası bara yayılımı ss 3,3 V).
 - Sonuç = küçüğü ÷ 6,5 kW. İki senaryo: karamsar (P10 yük, faz bilinmiyor) ve iyimser.
 - `v_max` 264 V üstü benzetim değerleri fiziksel değil (inverter kapanır; ADR-0006); Faz 3 259 V sınırını kullanır.
 

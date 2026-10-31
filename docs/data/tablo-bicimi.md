@@ -90,7 +90,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
 | `tip` | str | — | `sehir_konutu` | `sehir_konutu` / `koy` / `carsi` / `otel` / `sanayi` / `sulama` / `yurt` ([sözlük](../glossary.md) "Tip") |
-| `v0_v` | float | V | `247.6` | trafo çıkış faz gerilimi, boşta; 246–250 rastgele (kademe bilinmiyor) |
+| `v0_v` | float | V | `247.6` | trafo çıkış faz gerilimi, boşta; kademe bilinmiyor, rastgele: 246–250 (1.1'e kadar), **244–252 (1.2**; UKPN bara yayılımı, karar masası 16:27) |
 | `faz_a_ev`, `faz_b_ev`, `faz_c_ev` | int | adet | `14` | tek fazlı aboneler hangi fazda |
 | `uc_faz_ev` | int | adet | `3` | üç fazlı abone |
 | `ogle_min_kw` | float | kW | `9.84` | **Faz 2'nin hedefi:** öğlen penceresinde brüt tüketimin en düşüğü, 14 günün hepsinde |
@@ -113,7 +113,7 @@ Satır = bir trafo. **Model ve harita okumaz.**
 
 ## 4. `ayar.json` — şehrin ayarları (Faz 1)
 
-Zorunlu anahtarlar: `sehir`, `tohum`, `sozlesme_surumu` (bu dosyanın sürümü; 1.2'den metin, ör. `"1.2"`), `uretici_surumu`, `trafo_sayisi`, `tip_sayilari` ({tip: adet}), `ay`, `gun_turleri` (14 elemanlı liste), `profil_kaynagi` (`eac` ya da `yer_tutucu`), `isinim_kaynagi`, `tuketim_carpani` ({sınıf: oran}), `saat_kaymasi_dk` ({sınıf: dakika}), `panel_yayginligi`, `yeni_panel_kw`, `v_sinir_v`, `referans_enlem`, `referans_boylam`, `hava_yili` (yapay ışınımda boş), `sure_sn` (üretim süresi); gerçek veride (800–899) ayrıca `veri_turu` = `gercek` ve `veri_kaynagi`. Ek anahtar serbest. Sürüm 1.2 bilgi anahtarları (üretici yazar, kimse zorunlu okumaz): `veri_turu` (`farazi`), `tarihler`, `bayramlar` (14 gün içindeki resmi tatiller), `mahalle_sigma`, `mahalle_kayma_dk`, `faz_sapma` ({bölge: tek fazlı abone faz ağırlığı sapması}), `kiyi_kontrolu` (`true` = OSM kıyı çizgisiyle trafolar karada), `kva_tavan_sayisi` (gereken güç 1000 kVA'yı aşıp tavana kesilen trafo). Aynı tohum aynı şehri verir: CSV'ler birebir, `ayar.json`'da yalnız `sure_sn` farklı olabilir.
+Zorunlu anahtarlar: `sehir`, `tohum`, `sozlesme_surumu` (bu dosyanın sürümü; 1.2'den metin, ör. `"1.2"`), `uretici_surumu`, `trafo_sayisi`, `tip_sayilari` ({tip: adet}), `ay`, `gun_turleri` (14 elemanlı liste), `profil_kaynagi` (`eac` ya da `yer_tutucu`), `isinim_kaynagi`, `tuketim_carpani` ({sınıf: oran}), `saat_kaymasi_dk` ({sınıf: dakika}), `panel_yayginligi`, `yeni_panel_kw`, `v_sinir_v`, `referans_enlem`, `referans_boylam`, `hava_yili` (yapay ışınımda boş), `sure_sn` (üretim süresi); gerçek veride (800–899) ayrıca `veri_turu` = `gercek` ve `veri_kaynagi`. Ek anahtar serbest. Sürüm 1.2 bilgi anahtarları (üretici yazar, kimse zorunlu okumaz): `veri_turu` (`farazi`), `tarihler`, `bayramlar` (14 gün içindeki resmi tatiller), `mahalle_sigma`, `mahalle_kayma_dk`, `faz_sapma` ({bölge: tek fazlı abone faz ağırlığı sapması}), `kiyi_kontrolu` (`true` = OSM kıyı çizgisiyle trafolar karada), `kva_tavan_sayisi` (gereken güç 1000 kVA'yı aşıp tavana kesilen trafo), `v0_bant_v`, `faz_dengesizlik_ortanca` (hat başına (en büyük faz − ortalama) ÷ ortalama, yıllık enerjiyle; şehrin ortancası). Aynı tohum aynı şehri verir: CSV'ler birebir, `ayar.json`'da yalnız `sure_sn` farklı olabilir.
 
 `profil_kaynagi` = `yer_tutucu` olan şehir Faz 1 geçme sınavına girmez (Can'ın `profiller.py`'si gelmeden üretilmiştir).
 
