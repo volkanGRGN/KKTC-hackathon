@@ -44,6 +44,8 @@ Windows'ta `python3` yerine `python`. Sanal ortamı etkinleştirmeden çalışt�
 
 **İnternetsiz zemin (isteğe bağlı):** `data/raw/osm-kasaba/girne_merkez.json` varsa zemin bu dosyadaki Girne merkez binaları (kat sayısıyla 3D) ve yollarıdır; internetten hiçbir şey istenmez. Yoksa Streamlit'in internetten gelen zemin haritası kullanılır. İndirme komutu [KAYNAK.txt](../data/raw/osm-kasaba/KAYNAK.txt)'de.
 
+**Sunum bilgisayarı:** `girne_merkez.json` depoda yok (`data/raw/` git dışı). Sunumdan önce, internet varken indir; yoksa internetsiz açılışta zemin boş kalır.
+
 **Kıyı kontrolü (isteğe bağlı):** `data/raw/osm-kasaba/girne_kiyi.json` varsa sahte trafolar karada tutulur; yoksa uyarı çıkar ve trafoların bir kısmı denize düşebilir. İndirme komutu [KAYNAK.txt](../data/raw/osm-kasaba/KAYNAK.txt)'de.
 
 ## Ne gösterir

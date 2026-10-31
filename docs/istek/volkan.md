@@ -518,3 +518,14 @@ Karar: (a) **Evet, ayrı faz; yeniden numara 6–12.** Yeni **Faz 8 — Üretici
 Neden: Muhittin'in sızıntı uyarısı tam bu adım için; üretici gerçeğe göre düzelmeden ne kalibrasyon ne sınav rakamları güvenilir (S6 fazla eminlik). Faz 3'teki 1.3 listesi kalem listesi, plan değildi.
 Senden beklenen (BUILD): ROADMAP "Sunum sonrası" bölümünde yeniden numara ve iki satır (5 dk); DEVIR. Bu gece kod yok; prova önde.
 Durum: yapıldı 21:26 (BUILD) — ROADMAP "Sunum sonrası" 6–12: yeni Faz 8 üretici çapalama ve yeni sınav şehirleri; Faz 10 pilot satırına hiyerarşik güncelleme / sürümlü yeniden-fit / ayar payı modele + üreticiye cümlesi; "sarı kayıtla düzelir" satırı Faz 9; Faz 3 üretici 1.3 listesi Faz 8'e bağlandı; DEVIR. Not: ADR-0014 "Faz 10" (artık 11) ve ADR-0015 "Faz 8", "Faz 10" (artık 9 ve 11) eski numarayı anıyor; ADR'ler karar masasının, BUILD dokunmadı.
+
+## KONTROL 21:29 — Civan'dan (+ Claude) — Faz 4 sınavı, Windows kısmı ve panel dili (civan.md KARAR 20:56)
+Ne ölçüldü: main'deki `app/` (ada78f3 sonrası), Windows 11, Python 3.14.5, streamlit 1.66.1, pydeck 0.9.3.
+- **+ Panel dili ve %40 sayısı yapıldı** (ada78f3): manşet "yaklaşık N ev (A–B)" + "%80 ihtimalle"; renk cümleleri 19:13'e göre; kural sayısı min(`kural40_ev`, aday), aşınca "panelsiz N evin hepsine izin veriyor (M evlik yer)"; "aralığımızın altında / içinde / üstünde"; sütun boyu `kac_ev_orta`. sehir-001 T30: "yaklaşık 13 ev (10–13)", "panelsiz 13 evin hepsine izin veriyor (23 evlik yer) — aralığımızın içinde" (BUILD'in örneğiyle aynı). 20 şehrin bütün trafolarında mantık koşuldu, hata yok.
+- **+ Windows'ta 3 şehir:** renk sayıları Mac'le aynı (001: 13 / 22 / 5; 011: 15 / 25 / 0; 020: 13 / 27 / 0); 001 T30, T39 ve 011 T06'da yan panel açıldı.
+- **+ Dışarıya istek yok:** OSM zemin dosyası varken sayfa 98 isteğin 98'ini localhost'tan aldı (Mac'le aynı).
+- **+ README:** "Sunum bilgisayarı" satırı (zemin dosyası depoda yok, önceden indir).
+- **? Açık:** ağ fiilen kapalıyken açılış ve 2 dakikalık ekran kaydı; ikisini Civan elle yapacak. ROADMAP Faz 4 kutuları senin dosyan; Windows maddesi işaretlenebilir.
+Dosya: app/harita.py, app/README.md
+Neden: KARAR 20:56 (4). Bloklamıyor.
+Durum: yeni
