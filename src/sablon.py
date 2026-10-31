@@ -298,6 +298,18 @@ BANT_YONTEMI = 'nicel'                  # 'nicel': artıkların P10–P90'ı; 'u
 # %4 → düşük yükü kaçırmak = yanlış yeşil yönü). Artık ortancası ~0 (şehir 1–10: %0,1), yani kayma tahminde değil
 # bandın şeklinde. Şehir 1–10: P10 altı %14 → %11, P90 üstü %8 → %13; sınav 11–20: %11 → %6, %4 → %6 (Faz 2 günlüğü).
 BANT_SIMETRIK = True
+# Faz 7 (karar masası 21:32, 22:0x; ADR-0013 madde 3): bant GERÇEĞE karşı kalibre. Şehrin kendi bir-dışarıda artıkları
+# farazi dünyanın yayılımını görür; gerçek dünya daha dağınık. İspanya'da (EDP Oviedo 2018, 29 trafo, edp_test.py faturalı
+# (c) koşusu) %80 bant gerçeğin %71,4'ünü kapsadı ("fazla emin"). k_yük = |birim artık|'ın %80 yüzdeliği; bant log ölçekte
+# k ile genişler. Kalibrasyon modelin SEVK EDİLDİĞİ yapılandırmada ölçülür: her şehirde 12 ölçülü (OLCULU_ANA), bu yüzden
+# İspanya'nın 10 ve 15 ölçülü denemeleri (1.320 tahmin); 5 ölçülü denemeler başka bir modelin hatası, k'yi şişiriyordu
+# (5: 1,93; 10: 1,21; 15: 1,33; karışık 1,475). k ölçülü sayısına bağlı; ölçülü sayısı değişirse k yeniden, pilotta yeniden.
+# Farazi şehre bakılarak seçilmedi. Kaynak: src/kalibrasyon.py ispanya --n 10,15; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md.
+K_YUK = 1.27                            # [Hesap: İspanya n 10+15; bir-dışarıda k aralığı 1,20–1,29]
+KALIBRASYON = dict(kaynak='EDP Oviedo 2018, 29 trafo, 10 ve 15 ölçülü bir-dışarıda tahminler (src/edp_test.py girdi c)',
+                   k=K_YUK, olculu_sayisi=[10, 15], k_bir_disarida_aralik=[1.20, 1.29], kapsama80_once=0.714,
+                   kapsama80_sonra_bir_disarida=0.786,
+                   betik='src/kalibrasyon.py ispanya --n 10,15', not_='ayar yalnız gerçek artıkla; farazi şehre bakılarak seçilmedi; sevk yapılandırması 12 ölçülü')
 TABAN_HATA = 0.05                       # model hatası tabanının alt sınırı (çok aboneli trafoda bile) [Yorum]
 # Taban artıklardan seçilir (taban_sec). Sürüm 1.2 şehirlerinde mahalle farkı (ADR-0008) abone sayısıyla
 # sönmüyor: sabit 0,05 tabanla çok aboneli konut trafosu "yüksek güven" alıp en çok yanılan oluyordu.
@@ -382,6 +394,7 @@ def calistir(tr, X_tam, A, olcum_hepsi, secilen, hedef=None):
     if BANT_SIMETRIK:
         yari = (math.log(ust) - math.log(alt)) / 2
         alt, ust = math.exp(-yari), math.exp(yari)
+    alt, ust = math.exp(K_YUK * math.log(alt)), math.exp(K_YUK * math.log(ust))     # Faz 7: gerçeğe karşı
     u_ortanca = float(np.median(np.abs(u)))
     m.update(loo_log_artik=r, bant=(alt, ust), taban=taban)
     hedef_tr = tr if hedef is None else hedef[0]
@@ -472,6 +485,7 @@ def sehir_calistir(klasor, yalniz_ana=False):
                 gorulmemis_siniflar=[c for c, g in zip(ABONE, m['gorulmemis']) if g],
                 guven_sayilari={g: sum(1 for s in satirlar if s['olculdu'] == 0 and s['guven'] == g)
                                 for g in ('yuksek', 'orta', 'dusuk')},
+                kalibrasyon=KALIBRASYON,
                 sure_sn=round(time.time() - t0, 1))
     with open(klasor / 'sablon_ozet.json', 'w', encoding='utf-8', newline='') as fh:
         json.dump(ozet, fh, ensure_ascii=False, indent=1)

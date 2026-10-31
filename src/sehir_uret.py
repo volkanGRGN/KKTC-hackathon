@@ -29,6 +29,16 @@ Sürüm 1.2 (sözleşme 1.2; ADR-0007, ADR-0008, karar masası 31 Ekim):
 - ayar.json: mahalle_sigma, kiyi_kontrolu, kva_tavan_sayisi (gereken güç 1000 kVA'yı aşıp tavana kesilen trafo;
   Nisan tepesi kVA'nın yarısının altında, şimdilik etkisiz; yaz benzetilirse yer tipi listeye 1600/2500 gerekir).
 
+Sürüm 1.3 (Faz 8; karar masası 21:25, 21:51; tüzük madde 1, 6): üretici GERÇEĞE çapalanır, hedef plato.
+Yeni rastgelelik ayrı akışlardan (`og13-`, `faz13-`, `ogle13-`); şehrin trafo / abone / hat yapısı 1.2 ile aynı kalır.
+- Öğlen evde olma farkı: trafo (mahalle) ve abone başına öğlen çarpanı (log-normal), günlük enerji korunur. 1.2'de aynı
+  tarifedeki bütün abonelerin eğri şekli aynıydı: trafo eğrilerinin benzerliği 0,99 (İspanya 0,93), faturalı model
+  farazide %4 hata (İspanya %10). Parametreler şehir 1–10'da İspanya'ya göre (docs/log/2026-11-01-volkan-faz8-uretici.md).
+- Faz dengesi: tek fazlı abonelerin bir payı fazlara sırayla bağlanır (dağıtım işletmecisinin dengelemesi). 1.2'de faz
+  dengesizliği UKPN kent hatlarının ~2 katıydı (PR #11 günlüğü); pay UKPN'e göre.
+- Öğlen orta gerilim değişimi şehir başına −%0,4…+%0,8 (UKPN: öğlen bara geceden ~1 V düşük; karar masası 18:46).
+  1.2'de sabit +%0,8.
+
 Çalıştırma:
   python3 src/sehir_uret.py 7            # data/synthetic/sehir-007/
   python3 src/sehir_uret.py 1 20         # sehir-001 … sehir-020
@@ -59,7 +69,7 @@ KIYI_JSON = KOK / 'data' / 'raw' / 'osm-kasaba' / 'girne_kiyi.json'
 CIKTI = KOK / 'data' / 'synthetic'
 
 SOZLESME_SURUMU = '1.2'
-URETICI_SURUMU = '1.2'                   # 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
+URETICI_SURUMU = '1.3'                   # 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -83,6 +93,12 @@ BAYRAMLAR = {dt.date(2023, 4, 21), dt.date(2023, 4, 22), dt.date(2023, 4, 23),
              dt.date(2025, 4, 1), dt.date(2025, 4, 23)}
 MAHALLE_SIGMA = 0.35                     # ADR-0008 "≈ 0,3" [Yorum]; 0,30'da konut trafosu CV şehir içi ortanca 0,29 çıktı, hedef 0,3–0,4 (şehir 1–10)
 MAHALLE_KAYMA_DK = 30                    # trafo başına saat kayması ±30 dk (ADR-0008)
+# 1.3 (Faz 8): gerçeğe çapalama. Değerler günlükte; şehir 1–10'da ayarlandı, sınav şehirlerine bakılmadı.
+OGLE_EVDE_SIGMA_TRAFO = 0.20             # trafo (mahalle) başına öğlen çarpanı, log-sd [Hesap: 1–10'da faturalı hata %10,0 / P90 %31,9 ↔ İspanya %10–11 / %32–33]
+OGLE_EVDE_SIGMA_EV = 0.30                # abone başına öğlen çarpanı, log-sd [Yorum]
+OGLE_MERKEZ_SAAT, OGLE_GENISLIK_SAAT = 12.5, 3.0     # öğlen çan eğrisi (çarpanın etki penceresi) [Yorum]
+OG_OGLE_BANT = (-0.004, 0.008)           # öğlen OG değişimi, şehir başına düz [UKPN çapası; karar masası 18:46]
+FAZ_DENGELI_P = {'kentsel': 0.7, 'turistik': 0.7, 'sanayi': 0.7, 'kirsal': 0.0}   # sırayla bağlanan pay [Hesap: UKPN kent ortanca %14,4 → 1–10'da %13,6; kırsalda zaten dengeli]
 FATURA_SAPMA = (0.95, 1.05)              # tahmini okuma, farklı yıl (ADR-0007) [Yorum]
 # Tek fazlı abonelerin faz ağırlığı 1 ± bu oran: tek fazlı PV faz dengesizliği varsayımı kentsel %25, kırsal %50
 # [Kaynaklı: UKPN, "Validation of PV Connection Assessment Tool" kapanış raporu, Ofgem, Mart 2015]. Turistik ve
@@ -228,15 +244,16 @@ def yapay_isinim(rng):
     return g
 
 
-def og_carpani(g, rng):
-    """Orta gerilim ortak çarpanı; eski benzetimin mv_factor'ü, kendi rastgelemizle."""
+def og_carpani(g, rng, og_ogle=0.008):
+    """Orta gerilim ortak çarpanı; eski benzetimin mv_factor'ü, kendi rastgelemizle. og_ogle: öğlen değişimi (1.3'te
+    şehir başına OG_OGLE_BANT'tan; 1.2'de sabit 0,008)."""
     n, w = len(g), 12
     duz = [sum(g[max(0, i - w):min(n, i + w + 1)]) / (min(n, i + w + 1) - max(0, i - w)) for i in range(n)]
     m, ar = [], 0.0
     for i in range(n):
         h = (i % ADIM) * 5 / 60
         ar = 0.97 * ar + rng.gauss(0, 0.0006)
-        m.append(1 + 0.008 * duz[i] - 0.006 * math.exp(-((h - 20) / 1.8) ** 2) + ar)
+        m.append(1 + og_ogle * duz[i] - 0.006 * math.exp(-((h - 20) / 1.8) ** 2) + ar)
     return m
 
 
@@ -357,6 +374,29 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
     return trafolar, sayi, tavan
 
 
+def uretici13(trafolar, tohum):
+    """1.3 eklemeleri, ayrı rastgele akışlarla (yapı aynı kalır): faz dengesi ve öğlen evde olma çarpanları."""
+    for tr in trafolar:
+        frng = random.Random(f'faz13-{tohum}-{tr["no"]}')
+        p = FAZ_DENGELI_P.get(tr['bolge'], 0.0)
+        for f in tr['feeders']:
+            sira = frng.randrange(3)
+            for h in f['houses']:
+                if h['ph'] != 3 and frng.random() < p:
+                    h['ph'] = sira % 3
+                    sira += 1
+        drng = random.Random(f'ogle13-{tohum}-{tr["no"]}')
+        st_, se = OGLE_EVDE_SIGMA_TRAFO, OGLE_EVDE_SIGMA_EV
+        tr['ogle_evde'] = drng.lognormvariate(-st_ ** 2 / 2, st_) if st_ > 0 else 1.0
+        for h in tr['evler']:
+            h['ogle_evde'] = drng.lognormvariate(-se ** 2 / 2, se) if se > 0 else 1.0
+
+
+def ogle_agirlik(G):
+    """Öğlen çarpanı G'nin 288 adımlık ağırlığı: 1 + (G − 1)·çan(saat). Günlük enerji sonra korunur."""
+    return [1 + (G - 1) * math.exp(-(((i * 5 / 60) - OGLE_MERKEZ_SAAT) / OGLE_GENISLIK_SAAT) ** 2) for i in range(ADIM)]
+
+
 def faz_dengesizligi(tr, ayar):
     """Hat başına (en büyük faz − ortalama) ÷ ortalama, faz yükü = yıllık enerji (tek fazlı abone kendi fazına,
     üç fazlı üçe eşit). UKPN'in tanımı (akşam faz yükü; PR #11 günlüğü); burada enerjiyle yaklaşık [Hesap]."""
@@ -396,9 +436,20 @@ def yuk_serisi(tr, ayar, egriler, gun_turleri, rng):
     out = {}
     for h in tr['evler']:
         gurultu = 0.2 if h['sinif'] in ('konut', 'ticari1') else 0.05   # 5 dk dalgalanma [Yorum]
+        G = tr.get('ogle_evde', 1.0) * h.get('ogle_evde', 1.0)          # 1.3: öğlen evde olma; günlük enerji korunur
+        w = ogle_agirlik(G) if G != 1.0 else None
+        sekil = {}
+        for g in ('is', 'tatil'):
+            taban = gunluk[(h['sinif'], g)]
+            if w is None:
+                sekil[g] = taban
+            else:
+                q = [b * x for b, x in zip(taban, w)]
+                c = sum(taban) / sum(q)
+                sekil[g] = [x * c for x in q]
         seri = []
         for tur in gun_turleri:
-            for p in gunluk[(h['sinif'], 'is' if tur == 'isgunu' else 'tatil')]:
+            for p in sekil['is' if tur == 'isgunu' else 'tatil']:
                 seri.append(max(0.02, p * h['olcek'] * (1 + rng.gauss(0, gurultu))))
         out[h['id']] = seri
     return out
@@ -537,13 +588,17 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         ayar.update(isinim_kaynagi='yapay', hava_yili=None)
     ayar.update(gun_turleri=gun_turleri, tarihler=[t.isoformat() for t in tarihler],
                 bayramlar=[t.isoformat() for t in tarihler if t in BAYRAMLAR])
-    m = og_carpani(g, random.Random(f'og-{tohum}'))
+    og_ogle = random.Random(f'og13-{tohum}').uniform(*OG_OGLE_BANT)       # 1.3: şehir başına (ayrı akış)
+    ayar.update(og_ogle=round(og_ogle, 4), ogle_evde_sigma=[OGLE_EVDE_SIGMA_TRAFO, OGLE_EVDE_SIGMA_EV],
+                faz_dengeli_p=FAZ_DENGELI_P)
+    m = og_carpani(g, random.Random(f'og-{tohum}'), og_ogle)
 
     kiyi = kiyi_segmentleri()
     if kiyi is None:
         print(f'UYARI: {KIYI_JSON.name} yok; yalnız "kuzeye en çok {KUZEY_SINIRI_M} m" kuralı '
               '(bazı trafolar denize düşebilir; indirme komutu data/raw/osm-kasaba/KAYNAK.txt).')
     trafolar, sayi, tavan = sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi)
+    uretici13(trafolar, tohum)
     ayar.update(tip_sayilari=sayi, kiyi_kontrolu=kiyi is not None, kva_tavan_sayisi=tavan, v0_bant_v=list(V0_BANT),
                 faz_dengesizlik_ortanca=round(statistics.median(d for tr in trafolar
                                                                 for d in faz_dengesizligi(tr, ayar)), 3))
@@ -611,7 +666,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='Deneme şehri üreticisi (Faz 1, sürüm 1.2).')
+    ap = argparse.ArgumentParser(description='Deneme şehri üreticisi (Faz 1; sürüm 1.3, Faz 8).')
     ap.add_argument('ilk', type=int, help='tohum (şehir no)')
     ap.add_argument('son', type=int, nargs='?', help='verilirse ilk…son arası her tohum')
     ap.add_argument('--trafo', type=int, default=40, help='trafo sayısı (en az 21: 7 tip × 3)')

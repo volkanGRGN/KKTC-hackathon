@@ -46,6 +46,10 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 5. **Faz 6–12 başladı** (Volkan 21:39): ROADMAP "Faz 6–12 — Modeli gerçek veriyle iyileştirme". Tüzük yazıldı (Faz 6). Sıra: Faz 7 (PR #16) → Faz 8 üretici çapalama ve yeni sınav şehirleri → Faz 11 sözleşme 1.4 (Can) → Gozo dış sınaması (BUILD) → Faz 9 Kıb-Tek istek metni (BUILD taslak, Volkan gönderir). Sunum `sunum-v1` yedek.
 6. **Faz 7 PR #16 karar masasında test** (iş kuralı, Volkan 21:46: eksi bulgulu PR karar masasında test edilir, düzelmeden birleşmez): dört eksi bulgu volkan.md UYARI 21:46. Birleşmeden Faz 8'e geçilmez; Gozo ve Kıb-Tek taslağı beklerken yapılabilir.
 
+7. **Faz 7 (kalibrasyon gerçeğe karşı) dalda, sonuçlar** (Volkan 21:32, karar masası; `kalibrasyon/faz7`, PR): `src/kalibrasyon.py`, `sablon.py` k_yük 1,27 (İspanya, 12 ölçülüye en yakın 10 + 15; karar masası 22:0x), `kac_ev_olasilik.py` gerilim sapma çarpanı (İngiltere 6 hat). Sınav 11–20 bir kez: yanlış yeşil 0/49, yeşil %25 → %14, yanlış kırmızı %27 → %33, kaç ev P10 altı %15 → %7; Faz 2 farazi kapsama %93 (bilgi). [Günlük](docs/log/2026-11-01-volkan-faz7-kalibrasyon.md). Can C1 / C4 dalda koşar, onaylar; Volkan "birleştir" der. Sunum `sunum-v1` etiketiyle (main 0db616e), v1 rakamları.
+
+8. **Faz 8 (üretici 1.3) dalda** (`uretici/1.3`, PR, taban PR #16): farazi şehir gerçeğe çapalandı; yeni sınav 21–30'da yanlış yeşil 0/17 ama yeşil %5 (konut 0), yanlış kırmızı %51; Faz 1 ve Faz 2'de birer madde kalıyor. Eksi bulgular karar masasında; düzelmeden birleşmez. Yerel şehirler `data/synthetic/u13/` (sunum şehirleri `data/synthetic/` v1, dokunulmadı).
+
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
 - Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Üretici 1.2 iki yeni dosya ister: kıyı (`osm-kasaba`) ve Open-Meteo 2023 (README).

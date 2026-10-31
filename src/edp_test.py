@@ -20,10 +20,16 @@ Girdi türleri (Kıb-Tek'in bildiği; ölçülmeyen trafo için de vardır):
      sayaca tip, eğrisiyle değil, faturası (dönem kWh), fazı ve paneli ile sınıflandırıcı üzerinden verilir
   c  a + trafonun fatura toplamı (aynı üç haftanın kWh'i): ÜST SINIR, çünkü hedefle aynı dönem
 Kıyas: ölçülülerde ortalama "öğlen en düşük ÷ müşteri" × müşteri sayısı.
+Saf fatura kıyası (ADR-0016): ölçülülerde Σ öğlen en düşük ÷ Σ fatura × trafonun faturası (girdi 'saf_fatura').
+
+Faz 7 (karar masası 21:32, 22:0x): %80 bant, `sablon.py`'deki K_YUK ile log ölçekte genişler (tek kaynak); böylece
+`--cikti` satırları modelin yayımladığı bandı taşır. `--kalibrasyonsuz` K_YUK'u kapatır ("önce" ve k'nin hesabı için:
+`src/kalibrasyon.py ispanya` k'yi kalibrasyonsuz satırlardan hesaplar).
 
 Çalıştırma:
   python3 src/edp_test.py <GIS_data klasörü>                # bütün deneyler, özet ekrana ve JSON'a
   python3 src/edp_test.py <GIS_data klasörü> --hazirlik     # yalnız veri temizliği sayıları
+  python3 src/edp_test.py <GIS_data> --kalibrasyonsuz --cikti satirlar.csv   # K_YUK'suz bant (k'nin girdisi)
 """
 import argparse
 import json
@@ -39,6 +45,11 @@ from sklearn.cluster import AgglomerativeClustering, KMeans
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import silhouette_score
+
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from sablon import K_YUK  # noqa: E402  Faz 7: bant katsayısının tek kaynağı
+KALIBRE = True                          # --kalibrasyonsuz ile False
 
 warnings.filterwarnings('ignore', category=ConvergenceWarning)
 
@@ -224,6 +235,8 @@ def calistir(X, B, y, egri, sec, hedef):
         r.append(math.log(max(y[sec[i]], .01) / max(t, .01)))
     r = np.array(r)
     alt, ust = np.exp(np.quantile(r, BANT))
+    if KALIBRE:                                  # Faz 7: log ölçekte K_YUK ile genişlet (sablon.py ile aynı)
+        alt, ust = alt ** K_YUK, ust ** K_YUK
     beklenen = float(np.median(np.abs(np.exp(r) - 1)))
     orta, p, uzak = tahmin(m, X[hedef], B[hedef])
     return orta, orta * alt, orta * ust, [guven(p[j], uzak[j], beklenen) for j in range(len(hedef))]
@@ -270,6 +283,12 @@ def deney(tr, olcum, ozet, sekil, faz):
                 for j, h in enumerate(hedef):
                     sonuc.append(dict(n=n, yol=yol, tekrar=t, girdi='kiyas', ct=cts[h], y=y[h], tah=kiyas[j],
                                       alt=np.nan, ust=np.nan, guven=''))
+                # ADR-0016 (karar masası 22:2x): saf fatura kıyası = Σ öğlen ÷ Σ fatura (ölçülüler) × trafonun faturası
+                fat = tr.fatura_kwh.to_numpy(float)
+                saf = y[sec].sum() / fat[sec].sum() * fat[hedef]
+                for j, h in enumerate(hedef):
+                    sonuc.append(dict(n=n, yol=yol, tekrar=t, girdi='saf_fatura', ct=cts[h], y=y[h], tah=saf[j],
+                                      alt=np.nan, ust=np.nan, guven=''))
     s = pd.DataFrame(sonuc)
     s['hata'] = (s.tah - s.y).abs() / s.y
     s['kapsar'] = (s.y >= s.alt) & (s.y <= s.ust)
@@ -291,7 +310,10 @@ def main():
     ap.add_argument('gis')
     ap.add_argument('--hazirlik', action='store_true')
     ap.add_argument('--cikti', default=None)
+    ap.add_argument('--kalibrasyonsuz', action='store_true', help='K_YUK kapalı (önce; k hesabının girdisi)')
     a = ap.parse_args()
+    global KALIBRE
+    KALIBRE = not a.kalibrasyonsuz
     d, say = oku(a.gis)
     tr, olcum, sy = trafo_tablosu(a.gis, d)
     bos = [c for c in tr.index if c not in olcum or tr.loc[c, 'fatura_kwh'] == 0]
