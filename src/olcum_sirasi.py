@@ -12,7 +12,8 @@ olasılıkla dolu" bayrağına en çok taşır; pilot için ilk 20 trafo. `bilgi
   kademe  plaka / kademe fotoğrafı: trafonun kendi kademesi (5 pozisyon, ±2 × %2,5; boşta gerilime en yakın). Bara bu
           kademenin ±3,125 V penceresinde (başvuru motorunun kademe kaydı gibi; fotoğraf doğru sayılır) [Yorum].
 Renk kuralı resmi hesabınki (ADR-0010 / 0011 / 0017): yeşil = ilk iki başvuru ≥ %98 sığar ve güven yüksek; bayrak =
-bugün aşma olasılığı ≥ 0,7; açılan ev = yeşile dönen trafonun karamsar kaç evi (çekilişlerin P10'u).
+bugün aşma olasılığı ≥ 0,7, ama gece prizi ve kademe fotoğrafından sonra bayrak yok (yalnız yeşil yönü; karar masası
+01:22); açılan ev = yeşile dönen trafonun karamsar kaç evi (çekilişlerin P10'u).
 
 **Ölçüm öncesi** (sıralama; cevap anahtarına bakılmaz): her ölçüm için modelin kendi öncülünden K varsayımsal sonuç
 çekilir (bara U(244, 252) + gece hatası; öğlen yükü Faz 2 bandından; kademe baradan), her biriyle renk yeniden
@@ -113,9 +114,13 @@ def cek(tr, t, rng, vrng, v0=None, yuk=None):
     return (sum(b for b, _, _ in sonuc) / len(sonuc), sum(i for _, _, i in sonuc) / len(sonuc), ko.nicel(kac, 0.1))
 
 
-def uc(p_bugun, p_iki, guven):
+def uc(p_bugun, p_iki, guven, olcum=None):
+    """Ölçüm sonrası durum. Gece prizi ve kademe fotoğrafından sonra yalnız yeşil yönü, bayrak yok (karar masası
+    01:22: bu ölçümlerden sonraki bayraklar 21–30'da 3/15 ve 0/7 doğruydu)."""
     if p_iki >= ko.YESIL_P and guven == 'yuksek':
         return 'yesil'
+    if olcum in ('gece', 'kademe'):
+        return 'bos'
     return 'dolu_bayrak' if p_bugun >= getattr(ko, 'BAYRAK_P', 0.7) else 'bos'
 
 
@@ -191,12 +196,12 @@ def sehir_isle(is_):
                 d = varsayimsal(o, t, vr)
                 pb, pi, kar = cek(tr, t_o, random.Random(rng_ad), random.Random(f'bilgi-{o}-{k}-{r["sehir"]}-{no}'),
                                   **bilgi(o, d))
-                u_ = uc(pb, pi, t_o['guven'])
+                u_ = uc(pb, pi, t_o['guven'], o)
                 beklenen.append((u_, kar if u_ == 'yesil' else 0))
             g = gercek[no][o]
             pb, pi, kar = cek(tr, t_o, random.Random(rng_ad), random.Random(f'bilgi-{o}-g-{r["sehir"]}-{no}'),
                               **bilgi(o, g))
-            u_ = uc(pb, pi, t_o['guven'])
+            u_ = uc(pb, pi, t_o['guven'], o)
             satir['olcum'][o] = dict(
                 p_yesil=sum(x[0] == 'yesil' for x in beklenen) / K, p_bayrak=sum(x[0] == 'dolu_bayrak' for x in beklenen) / K,
                 beklenen_ev=sum(x[1] for x in beklenen) / K, deger=round(g, 2), uc=u_, ev=kar if u_ == 'yesil' else 0)

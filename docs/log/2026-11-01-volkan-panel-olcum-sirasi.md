@@ -40,11 +40,25 @@ Renksiz trafo (aday evi olan): 1–10'da 314, 21–30'da 306.
 - Öğlen yükü ölçümünün maliyeti (trafo başına bir haftalık kayıt cihazı, Kıb-Tek izni) diğer ikisinden yüksek; "ucuz" sırası maliyetle tartılmadı.
 - İki ölçümün birlikteliği (ör. öğlen yükü + kademe) ölçülmedi; kart yalnız "tek ölçüm" istedi.
 
+## Karar ve yeniden koşum (karar masası 01:22)
+Gece prizi ve kademe fotoğrafından sonra **yalnız yeşil yönü**, bayrak yok (`uc(..., olcum)`); öğlen yükünden sonra bayrak kuralı aynen. Yöntem değişikliği sayılarak 1–10 ve 21–30 bir kez daha koşuldu (~01:33 / ~01:53):
+
+| | 1–10 | 21–30 |
+|---|---|---|
+| Hepsine gece prizi: yeşil (yanlış) / ev / bayrak | 6 (0) / 49 / **0** | 2 (0) / 5 / **0** |
+| Hepsine öğlen yükü: yeşil (yanlış) / ev / bayrak (gerçekte dolu) | 28 (0) / 201 / 0 | 31 (0) / 175 / 4 (3) |
+| Hepsine kademe: yeşil (yanlış) / ev / bayrak | 5 (0) / 46 / **0** | 2 (0) / 5 / **0** |
+| Kendi en iyi ölçümü: yeşil / ev / bayrak (dolu) | 32 / 238 / 0 | 32 / 178 / 3 (2) |
+| İlk 20: yeşil (yanlış) / ev | 17 (0) / 177 | 14 (0) / 131 |
+
+Yeşil ve açılan ev değişmedi; bayrak artık yalnız öğlen yükünden sonra (21–30'da 4'ün 3'ü dolu). Tek ölçümün beklenen olarak renk değiştirdiği trafo 110 → 67 (21–30; bayrak olasılığı artık gece / kademede sayılmıyor), en iyi ölçüm öğlen yükü 58, gece 6, kademe 3.
+
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
 |---|---|---|---|---|---|
 | 1 Kas ~01:06 | ölçüm sırası v1, `--kalibrasyon` | 1–10 | gece prizi barayı az düşük gösterir | ortanca −1,64 V, P10 −4,31 V | dağılım modele |
 | 1 Kas ~01:09 | v1, K = 8 | 1–10 | ilk 20, rastgele 20'den çok ev açar; yanlış yeşil 0 | 177 ↔ 15,2 ev; yanlış yeşil 0; öğlen yükü baskın | 21–30 bir kez |
 | 1 Kas ~01:13 | aynı | 21–30 | aynı | 131 ↔ 11,6 ev; yanlış yeşil 0; gece / kademe bayrakları 3/15, 0/7 | karar masasına (PR) |
+| 1 Kas ~01:53 | v1.1: gece / kademe sonrası bayrak yok (karar masası 01:22) | 1–10, 21–30 | yeşil ve ev değişmez, yanlış bayrak kalkar | yeşil / ev aynı; gece / kademe bayrağı 0; öğlen yükü bayrağı 3/4 dolu | TEST'e |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
