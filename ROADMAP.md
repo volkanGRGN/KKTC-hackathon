@@ -6,7 +6,7 @@
 
 Her fazda iki liste: **Yapılacaklar** (iş tarifi) ve **Geçme sınavı** (ölçülebilir; her maddede eşik var, geçilmeden faz bitmez). Sıra ve kilit kararlar [docs/01-plan.md](docs/01-plan.md)'de; gerekçeler [docs/decisions/](docs/decisions/) altında. Tek kaynak kuralı: aynı şeyi iki yerde yazma, bağla.
 
-Taslak 31 Ekim; ekiple oturtuluyor. Süreler kaba: kısa < orta < uzun; saat yok, sıra var. **Adı geçen kod dosyaları (`src/sehir_uret.py`, `src/profiller.py`, `app/harita.py` vb.) henüz yok; her biri kendi fazında, kendi görev kartıyla yazılacak.**
+Taslak 31 Ekim; ekiple oturtuluyor. Süreler kaba: kısa < orta < uzun; saat yok, sıra var. Kod dosyaları kendi fazında, kendi görev kartıyla yazılır; main'de olanlar: `src/sehir_uret.py`, `src/profiller.py`, `src/sinav.py` (Faz 1).
 
 **Her fazda ortak sınav (Muhittin):** ilgili doküman güncel · sonuç `docs/log/` altında gerçek rakamla · karar değiştiyse yeni ADR · farazi sonuç "gösterim" etiketli · her rakam [Kaynaklı]/[Hesap]/[Yorum].
 
@@ -20,7 +20,7 @@ Taslak 31 Ekim; ekiple oturtuluyor. Süreler kaba: kısa < orta < uzun; saat yok
 
 [docs/02-faz-0-ogrenim.md](docs/02-faz-0-ogrenim.md). Sınavı orada: 8 soru, benzetim çalıştırıldı, EAC verisi indirildi, doğrudan main'e küçük commit gönderdi.
 
-## Faz 1 — Deneme şehirleri: cevap anahtarı bilinen farazi Kıbrıs şehirleri kurmak
+## Faz 1 — Deneme şehirleri: cevap anahtarı bilinen farazi Kıbrıs şehirleri kurmak (bitti 31 Ekim)
 
 **Amaç:** Cevap anahtarı bilinen, Kıbrıs'a benzeyen 20–30 şehir.
 **Girdi:** Aşağıdaki veri adımı + EAC profil sınıfları (elimizde) + Kıb-Tek 2023 tarife sınıfı abone oranları + mevcut benzetim.
@@ -47,14 +47,14 @@ Yapılacaklar — kod (Claude):
 - README'de komut; günlük.
 
 Geçme sınavı:
-- [ ] 40 trafolu şehir ≤ 60 saniyede üretiliyor; aynı tohum aynı şehri veriyor (iki çalıştırma birebir).
-- [ ] Veri sağlaması: konut öğlen/akşam oranı 0,6–0,8; çarşı tepesi 11–14 arasında; otel Temmuz/Ocak 3–5×; çarşı Nisan tatil öğleni / iş günü öğleni 0,6–0,9 (EAC'de pazar ayrı yok; karar masası 31 Ekim; ilk taslak "pazar günü yarısından az" idi).
-- [ ] 7 tipin 7'si en az 3 trafoda var; 20 şehirde her tipten ≥ 60 trafo.
-- [ ] En az bir trafo bugün 259 V üstü (yöntemin görecek bir şeyi var); hiçbir trafo 216 V altı değil (benzetim bozuk değil).
-- [ ] Windows'ta çalıştı ve çıktı UTF-8 (Can onayı).
-- [ ] Veri adımı: her aday için veri sözlüğünde satır ya da "elendi + neden"; indirilenlerin KAYNAK.txt'si eksiksiz.
+- [x] 40 trafolu şehir ≤ 60 saniyede üretiliyor; aynı tohum aynı şehri veriyor (iki çalıştırma birebir). En uzun 16,1 sn (Mac); tohum: [can-faz1](docs/log/2026-10-31-can-faz1.md); [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
+- [x] Veri sağlaması: konut öğlen/akşam oranı 0,6–0,8; çarşı tepesi 11–14 arasında; otel Temmuz/Ocak 3–5×; çarşı Nisan tatil öğleni / iş günü öğleni 0,6–0,9 (EAC'de pazar ayrı yok; karar masası 31 Ekim; ilk taslak "pazar günü yarısından az" idi). 5/5: [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
+- [x] 7 tipin 7'si en az 3 trafoda var; 20 şehirde her tipten ≥ 60 trafo. En az sanayi 73: [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
+- [~] En az bir trafo bugün 259 V üstü (yöntemin görecek bir şeyi var); hiçbir trafo 216 V altı değil (benzetim bozuk değil). 259 V üstü 119/800 geçti; 216 V altı 3 trafo (en düşük 211,4 V, otel / uzun köy hattı / sanayi) → eşik karar masasında, Faz 2'yi bloklamıyor: [docs/log/2026-10-31-volkan-faz1.md](docs/log/2026-10-31-volkan-faz1.md)
+- [x] Windows'ta çalıştı ve çıktı UTF-8 (Can onayı): [can-faz1](docs/log/2026-10-31-can-faz1.md)
+- [x] Veri adımı: her aday için veri sözlüğünde satır ya da "elendi + neden"; indirilenlerin KAYNAK.txt'si eksiksiz: [veri sözlüğü](docs/data/data-dictionary.md), [can-faz1-veri](docs/log/2026-10-31-can-faz1-veri.md)
 
-## Faz 2 — Modeli eğitme ve sınama: ölçülü trafolardan öğrenip ölçülmeyen trafonun öğlen yükünü tahmin etmek
+## Faz 2 — Modeli eğitme ve sınama: ölçülü trafolardan öğrenip ölçülmeyen trafonun öğlen yükünü tahmin etmek (sürüyor)
 
 **Amaç:** Ölçülmeyen trafonun bahar öğleni en düşük yükünü bant ve güvenle tahmin etmek (ADR-0001).
 **Girdi:** Faz 1 şehirleri. **Çıktı:** `src/sablon.py` ve şehir başına sonuç tablosu.
@@ -63,6 +63,7 @@ Geçme sınavı:
 - Volkan+Claude → `src/sablon.py` (2a–2g: model ve bant), `docs/method/`, `docs/log/…-volkan-faz2.md`.
 - Can → `src/sinav.py` (2h dahil): tahmin tablosu + cevap anahtarını alır, geçme sınavındaki her ölçüyü hesaplar (doğru arketip oranı, öğlen hata ortanca/P90, bant kapsama, şehirler arası fark, düşük güven oranı); `src/grafikler.py`: kalibrasyon ve "kaç trafo ölçmeli" grafikleri; + gerçek veri adayları (İspanya EDP, NGED) inceleme ve KAYNAK; `docs/log/…-can-faz2.md`. Modeli yazan sınavı yazmaz.
 - Civan → `app/harita.py` yan panel ve tıklama (sahte veriyle).
+- Kartlar: [Can](docs/gorev/can-faz2-sinav-grafikler.md); Civan Faz 1 kartının sonundaki Faz 2 notu.
 
 Yapılacaklar — veri (Can yapar, Volkan onaylar; gerçek doğrulama adayları, aynı eleme). İstisna: NGED kaydını Volkan açar (hesap onun):
 - İspanya EDP gerçek şebeke (Mendeley, CC BY): trafo başına toplam yük çıkıyor mu, çözünürlük, abone tipi.
