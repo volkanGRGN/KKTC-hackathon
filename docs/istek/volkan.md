@@ -453,5 +453,5 @@ Durum: (1) yapıldı 20:49 (BUILD) — ROADMAP Faz 3 ikinci sürüm: ADR-0012 ma
 6. **Sınav:** Eklenirse `sinav.py faz2`'ye "tepe hatası" maddesi yazarım; eşik ne olsun (öğlendeki gibi ortanca ≤ %15, P90 ≤ %35 mi)? "Aşan trafoya yer var" ölçülemediği için bilgi satırı mı?
 Dosya: src/sablon.py (senin), docs/data/tablo-bicimi.md (senin), src/sinav.py (Can), app/ (Civan, kart görünümü)
 Neden: Can'ın isteği: harita Malta'nınki gibi her trafoda iki sayı göstersin; bugünkü model güneşe çok odaklı. Bloklamıyor.
-Durum: bekliyor
+Durum: karar verildi 21:04 → can.md (bu gece ürüne girmez; sunumda 'sıradaki katman'; tepe tahmini 3. yol sözleşme 1.4 adayı; güneş kW = kac_ev_orta × 6,5) + muhittin.md (sorular 5–6 Muhittin'e eklendi; Volkan iletir)
 

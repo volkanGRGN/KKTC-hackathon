@@ -252,3 +252,16 @@ Karar: Aşağıdaki cümleler konuşma notuna ve jüri sorularına; slayt metnin
 Neden: BUILD'in 19:59 ve 20:43 bulguları; hikâye aynı, yalnız jüri cevapları ve bir slayt cümlesi değişiyor.
 Senden beklenen: konuşma notu + jüri soruları + ekran 6 metni; kaynak slaydı. Başka iş yok; sonra prova.
 Durum: bekliyor
+
+## KARAR 21:04 — volkan.md'deki "Malta gibi iki sayılı kart" isteğine
+Karar: Fikir iyi ve ölçümün (3. yol: tepe hatası %4 / %10) kullanılabilir; ama **bu gece ürüne girmez**: kapsam ADR-0001 / 00-overview ("yalnız panel katmanı"), Faz 4 ve prova önde, Civan'da beş iş bekliyor. Cevaplar:
+1. **Kapsam:** sunumda "aynı harita, sıradaki katman: yük" cümlesi zaten var (konuşma notu); kart gösterilmez, vaat edilmez. Yeni ADR sunum sonrası (ADR-0013 adayı), Muhittin'in cevabıyla; sorularını Muhittin'e giden metne ekledim (muhittin.md, Volkan iletir).
+2. **Sütun:** `tepe_kw` + P10/P90 sözleşme 1.4 adayı; `sablon.py`'ye Volkan/BUILD ekler, sunum sonrası. Yöntem adayı 3. yol (öğlen tahmini × ölçülülerin tepe/öğlen oranı, arketip başına); bant öğlen bandı gibi bir-dışarıda artıklardan. Saf kıyas: 2. yol (fatura × oran).
+3. **Yaz:** "Nisan tepesi" etiketi kalır; yıl tepesine çevirme sınanmadan yok (üretici 1.3 çapasıyla birlikte, Muhittin'e soruldu).
+4. **Güneş sayısı kW:** gösterilirse `kac_ev_orta` × 6,5 (bant karamsar–iyimser × 6,5), renkle tutarlı; pay sütunları (`isil_pay_kw`, `gerilim_pay_kw_*`) 1.4'te olasılıklı hesaba geçer, o zamana kadar yan yana gösterilmez (çelişir, senin ölçümün: %81 ↔ %75).
+5. **Birim:** kW; cos φ için kaynak yok (BULAMADIM, uzmana soru 9 adayı: "Kıb-Tek trafo yüklenmesini kVA mı kW mı izliyor, güç katsayısı varsayımı ne?").
+6. **Sınav:** sunum sonrası `faz2`'ye "tepe hatası" maddesi; geçici eşik öğlendeki gibi ortanca ≤ %15, P90 ≤ %35 [Yorum]; "aşan trafoya yer var" farazide ölçülemiyor (0/280) → bilgi satırı, gerçek veride (İspanya tepe var) ölçülür.
+Yan bulgun (§5 eğrisinin tepesi ~%16 basık) Faz 2 günlüğüne; yan paneldeki eğri zaten "doğrulanmadı" etiketli, bu gece değişmez.
+Neden: ADR-0001 kapsam; sunum yarın; Malta kıyası jüri cevabında zaten var. Tepe tahmini gerçek ihtiyaç (klima, araç katmanı), doğru yeri sunum sonrası planı.
+Senden beklenen: **şimdi ekran 5 rakamları** (19:50 KARAR, hâlâ BEKLİYOR) ve jüri cevapları (20:47); bu konu için bu gece iş yok. Scratchpad betiğini sunum sonrası `src/` altına PR ile.
+Durum: bekliyor

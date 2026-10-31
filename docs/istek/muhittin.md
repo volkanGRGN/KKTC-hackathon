@@ -35,7 +35,7 @@ Gönderilecek metin (Volkan iletir):
 > Teşekkürler.
 
 ## 20:52 — karar masası (Volkan adına) — Sunumdan sonra: modeli gerçek veriyle nasıl iyileştiririz; çalışma belgeleri ve talimatlar nasıl olmalı
-Ne denedik: Faz 3 bitti (olasılıklı hesap, ADR-0011); bilginin değeri denemesi (Faz 3 günlüğü 19:55): trafo çıkış gerilimi bilinince yanlış kırmızı %27 → %19, adres ve fazla %4; sarı %62 → %57, tam ağda %41. İngiltere geri-testi 6 hattın 5'i. Başvuru-anı kararı ADR-0012 (sınanmadı). Veri edinme yolları DEVIR'de (inverter kaydı, akıllı priz, plaka, Kıb-Tek kayıtları, pilot).
+Ne denedik: (21:04: Can'ın "Malta gibi iki sayılı kart" sorusu eklendi, volkan.md 20:58 sonrası) Faz 3 bitti (olasılıklı hesap, ADR-0011); bilginin değeri denemesi (Faz 3 günlüğü 19:55): trafo çıkış gerilimi bilinince yanlış kırmızı %27 → %19, adres ve fazla %4; sarı %62 → %57, tam ağda %41. İngiltere geri-testi 6 hattın 5'i. Başvuru-anı kararı ADR-0012 (sınanmadı). Veri edinme yolları DEVIR'de (inverter kaydı, akıllı priz, plaka, Kıb-Tek kayıtları, pilot).
 Karar noktası: Volkan (20:52): "bundan sonra iş modeli verilerle iyileştirmek; bunu nasıl yapacağımızı, doğru talimatların ve belgelerin nasıl olması gerektiğini Muhittin'e soralım; veri işe yarar deniyor ama düzeltme önerilmiyor." Cevap ROADMAP "sunum sonrası / pilot" planına, üretici 1.3'e ve görev kartı kalıbına girer.
 Seçenekler: Aşağıdaki metinde bizim önerdiğimiz sıra var; Muhittin düzeltir ya da onaylar. Cevapsız kalırsa önerilen sırayla devam.
 Durum: bekliyor
@@ -55,5 +55,9 @@ Gönderilecek metin (Volkan iletir):
 > 2) Ölçülen trafo modeli nasıl güncellemeli: ölçüm geldikçe aralıkları daraltmak mı, belli sayıda ölçümden sonra baştan eğitmek mi? Aralıkların "fazla emin" çıkmasını (kusursuz bilgide bant kapsaması %80'den %57'ye düştü) nasıl yakalarız?
 > 3) Bu döngüyü ekibin ve yapay zekâ ajanlarının belge düzeniyle yürütüyoruz; şablonu sizden almıştık (karar kayıtları, günlük, görev kartı, veri sözleşmesi, devir notu). "Veri geldi → modeli güncelle → sına → raporla" döngüsü için bu belgeler ve ajan talimatları nasıl olmalı: bir veri partisi için görev kartında ne yazmalı, hangi kurallar sabit kalmalı (sınav setine ayar yok, geri-test bütçesi, her rakama kaynak), deney günlüğü nasıl tutulmalı, "bitti" ne zaman denir?
 > 4) Sarı trafoda kararı başvuru anında başvuranın adresiyle vermek size mantıklı geliyor mu, yoksa sarıyı azaltmanın daha doğru bir yolu var mı?
+>
+> Bir de ekipten Can'ın sorusu. Malta'nın açık kapasite haritasında her trafo merkezine tıklayınca iki sayı çıkıyor: tüketim için kalan yer (kVA) ve güneş için kalan yer (kWp). Bizim harita bugün yalnız güneşe bakıyor. Aynı iki sayıyı, tahmin ve aralık olarak, Kıbrıs'ta göstermek istiyoruz. Güneş tarafı hazır. Yük tarafı için en yüksek yükü tahmin etmek gerekiyor; modelimiz onu hedeflemedi. Can üç yol denedi: eğri şeklini öğlen değeriyle ölçeklemek (tepe hatası ortanca %16, en kötü onda birde %33), faturadan düz oran (%4 / %17), ve öğlen tahminini ölçülü trafoların tepe-öğlen oranıyla çarpmak (%4 / %10). Ama elimizdeki tepe Nisan'ın tepesi; Kıbrıs'ın gerçek tepesi Temmuz akşamı klima yükü.
+> 5) Yük için boş kapasiteyi bu yolla vermek doğru mu, yoksa tepe yükü ayrı bir model mi ister? Nisan tepesini yıl tepesine çevirmek için ne yapılmalı (sınıf profillerinden mevsim oranı yeterli mi)? Güç katsayısı bilinmezken kW mı yazmalı, kVA mı?
+> 6) Sizce harita iki sayılı bu kartla mı anlatılmalı (yük ve güneş yan yana), yoksa güneş katmanı tek başına daha mı dürüst?
 >
 > Teşekkürler.
