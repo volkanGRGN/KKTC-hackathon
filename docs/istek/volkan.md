@@ -542,4 +542,5 @@ Karar: Volkan (21:32): "sunuma daha var, Faz 7'ye başlayalım; Can ile benim ar
 **Sınır:** Faz 7 sunumun hikâyesini değiştirmez, rakamları değiştirir; slayt 5 / ekran 4 rakamları ancak PR birleşip Can resmi koşunca güncellenir; o zamana kadar v1 rakamları. Civan'ın Faz 4 işleri önde kalır, Faz 7'de Civan'a iş yok.
 Neden: Muhittin: "kalibrasyon gerçeğe karşı; %80 → 57 düzeltilmeden bant yayınlanmaz"; elimizde iki gerçek artık kaynağı zaten var (İspanya, İngiltere); kod küçük, sunuma zaman var (Volkan).
 Senden beklenen (BUILD): `sunum-v1` etiketi → B0 → kartlar → B1–B3 dalda → PR. Takıldığında kutuya.
+İlerleme 21:37 (karar masası): Volkan "görev kartlarını sen yap" dedi; aynı dakikada BUILD de yazmış (c90c98a): `docs/tuzuk.md`, `volkan-faz7-kalibrasyon.md`, `can-faz7-kalibrasyon-sinav.md` BUILD'in sürümüyle kaldı; karar masası `docs/gorev/civan-veri-arastirma.md` ekledi. `sunum-v1` etiketi BUILD'de (0db616e). BUILD B1'den devam eder. Civan: dashboard + sunum arkasında yeni veri arıyor, bulunca veri partisi olarak kutuya atar (kartı); modeli Volkan + Can iyileştirir.
 Durum: bekliyor
