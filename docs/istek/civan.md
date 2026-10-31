@@ -198,3 +198,15 @@ Senden beklenen: PR #24 ve #26'da `docs/data/tablo-bicimi.md` §8 / §9 farkın�
 Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #26 (https://github.com/volkanGRGN/KKTC-hackathon/pull/26)
 Neden: sözleşme kuralı; KARAR 00:57 madde 1.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:20 — karar masasından (KARAR) — BLOKLUYOR — testi geçen PR'lar GitHub onayı bekliyor; ikinizden biri onaylasın
+Ne: Karar masası Mac'te test etti, hepsi tuttu; birleştirme izin sisteminde ancak GitHub'da bir onay varsa geçiyor. Volkan'ın açtığı PR'ları Volkan kendisi onaylayamıyor. Onay sırası (her biri için GitHub'da "Approve" yeter; rakamlar volkan.md KARAR 01:12 / 01:20):
+1. **#22** başvuru anı motoru + sahte kayıt (deneme; Civan'ın iki §7 notu işlendi; harita okumuyor).
+2. **#23** güvenli uçlar: `kac_ev.csv` sonuna `pv_uc` (§6; ADR-0017; Civan'ın haritası bu sütunu okuyacak).
+3. **#25** inverter geri çözümü (#22'nin üstünde; §7'ye `inverter_ham` türü).
+4. **#28** konum payı (#23'ün üstünde; sözleşmeye dokunmuyor, yalnız analiz).
+5. **#27** üretici 1.5 (Can'ın; Civan ya da Volkan onaylar).
+Sırada (TEST oturumu koşuyor): #24 yılın tepesi (`tepe.csv` §8), #26 Kıb-Tek tepe verisi (§9), #29 akşam gerilimi.
+Dosya: GitHub PR'ları
+Neden: Volkan: "hepsini bitirmemiz gerek"; sözleşme değişikliği Can ya da Civan onayı ister (CONTRIBUTING).
+Durum: bekliyor
