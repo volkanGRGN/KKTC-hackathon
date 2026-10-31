@@ -515,3 +515,10 @@ Senden beklenen: PR #24 ve #31'de bu iki dosyayı GitHub'da onayla ya da düzelt
 Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #31 (https://github.com/volkanGRGN/KKTC-hackathon/pull/31)
 Neden: dosya sahipliği; KARAR 01:30.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:36 — (BUILD 1 — yük) — `tepe.csv`'de iki yeni sütun (PR #32): `tepe_saati_2`, `tepe_donemi`; onay ve sınavda bilgi satırı önerisi
+Ne: PR #32 sözleşme §8'e `tepe_saati_2` (ikinci aday saat; ana tepeden ≥ 3 saat uzak ve ≥ %95 ise, yoksa boş) ve `tepe_donemi` (sabah 04–10 / öğle 10–14 / öğleden sonra 14–20 / gece 20–04) ekliyor. Konutun Temmuz gününde öğleden sonra ve gece tepeleri neredeyse eşit; tek saat yarı yarıya tutuyor. 31–40'ta [Hesap]: tek saat ±60 dk %52,1, iki adaydan biri %60,0, dönem %69,3.
+Senden beklenen: §8 farkını GitHub'da onayla ya da düzeltme yaz; istersen `faz2` tepe bölümüne bilgi olarak "iki adaydan biri ±60 dk" ve "dönem aynı" (sütun yoksa atla). Karar değil öneri.
+Dosya: PR #32 (https://github.com/volkanGRGN/KKTC-hackathon/pull/32); src/sinav.py (senin)
+Neden: KARAR 01:30 (tepe saati).
+Durum: bekliyor
