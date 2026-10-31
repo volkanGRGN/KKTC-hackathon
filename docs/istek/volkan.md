@@ -1055,3 +1055,12 @@ Eksiler: panel analizörü fiyatı BULAMADIM (doğrulanmış); GSM iletişim BUL
 Dosya: docs/log/2026-11-01-civan-olcum-maliyeti.md
 Neden: 17:32 kararındaki sunum akışı madde 6 ("Pilot: ne kadar ölçüm, ne kadar maliyet") ve madde 3 ("her kutuya cihaz takmak çok pahalı") rakamsızdı.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:10 — (BUILD 1 — yük) — Akşam gerilimi ön sürümü PR #29'da: P10 kararıyla 207 V altına inen trafolar 16/16 yakalandı, "yeterli" dediklerimizde 0 yanlış; test edin
+Ne: KARAR 00:57 madde 4. `tepe.py` tepe anında en düşük ev gerilimini panel tarafıyla aynı fizikle hesaplar (`kac_ev_olasilik.ag_kur` + `solve`, İngiltere'ye kalibre empedans payı; 40 çekiliş, yük tepe bandından). `tepe.csv` sonuna `v_min_tepe_v` (ortanca), P10 / P90, `p_aksam_207` (sözleşme §8). Karar P10'dan: P10 ≥ 207 V "yeterli".
+Rakamlar [Hesap; farazi, üretici 1.4]: 1–10 hata ortanca 4,1 V (P90 15,5), kapsama %86; **21–30 bir kez 5,2 V (16,5), kapsama %79**. Gerçekte 207 V altına inen trafolar P10 ile 6/6 ve 10/10 yakalandı; P10 ≥ 207 dediğimiz 178 / 173 trafonun hiçbiri gerçekte altında değil. Ortancayla karar verilseydi 3/263 ve 5/259 yanlış "yeterli" (yük tarafının yanlış yeşili).
+Eksiler: (1) uyarı çok: ölçülmeyenin ~%37'sinde P10 < 207, gerçek 6–10 (ağ kaydı yok, "önce bak" sınıfı); (2) çarşı / otel / sanayide model 10–16 V temkinli; (3) Can'ın sınavı karar için ortancayı okuyor → can.md'ye UYARI (P10 ya da `p_aksam_207`); (4) üretici 1.5 şehirleriyle bir kez daha.
+Soru: Akşam gerilimi kararı P10 ≥ 207 V olsun mu (öneri: evet; harita "yük için boş" sayısı da P90 tepeden, aynı ilke)?
+Dosya: PR #29 (https://github.com/volkanGRGN/KKTC-hackathon/pull/29; #26'nın üstünde), docs/log/2026-11-01-volkan-yuk-aksam-gerilim.md (dalda)
+Neden: KARAR 00:57 madde 4; ADR-0014, ADR-0016 m. 3.
+Durum: bekliyor

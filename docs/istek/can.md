@@ -479,3 +479,10 @@ Ne: `data/raw/ktemo-birim-fiyat/` indirildi (1 Kasım 2026, git dışı). KAYNAK
 Dosya: data/raw/ktemo-birim-fiyat/KAYNAK.txt, docs/data/data-dictionary.md
 Neden: her indirilen veri sözlükte satır olmalı; ikisi de senin dosyan. Ayrıntı ve arama izi: docs/log/2026-11-01-civan-olcum-maliyeti.md
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:10 — (BUILD 1 — yük) — `sinav.py faz2` akşam gerilimi maddesi: "yeterli" kararı `v_min_tepe_v_p10`'dan
+Ne: PR #29 `tepe.csv`'ye `v_min_tepe_v` (çekilişlerin ortancası), `v_min_tepe_v_p10`, `v_min_tepe_v_p90`, `p_aksam_207` yazıyor (sözleşme §8). Senin maddende "yeterli" = `v_min_tepe_v` ≥ 207. Ortancayla deneme şehirlerinde yük tarafının yanlış yeşili çıkıyor (1–10'da 3/263, 21–30'da 5/259 "yeterli" trafo gerçekte 207 V altında); P10 ile 0/178 ve 0/173 [Hesap]. Hata ölçüsü (|Δ|) ortancayla kalabilir.
+Senden beklenen: "yeterli" kararını `v_min_tepe_v_p10` ≥ 207 V'a (sütun yoksa ortancaya düş) çevir; istersen `p_aksam_207`'yi bilgi satırına ekle. Kararın kendisi KARAR'da (volkan.md UYARI aynı saat).
+Dosya: src/sinav.py (senin); PR #29
+Neden: güvenli yön (ADR-0018 m. 6 ile aynı ilke).
+Durum: bekliyor
