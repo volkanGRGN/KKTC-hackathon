@@ -43,4 +43,7 @@ Geliştirme 1–10 aynı yön: beklenen kayıtta hemen evet %12,9 → %11,6, yan
 | 1 Kas ~00:08 | motor v1.1, `VARSAYILAN_HATA` iki kat | 1–10 | iki kat kayıt hatasında yanlış evet < %2, bedel küçük | yanlış evet %1,5 → %1,1; hemen evet %12,9 → %11,6 | 21–30 bir kez |
 | 1 Kas ~00:10 | aynı | 21–30 | aynı | yanlış evet %2,6 → %1,9 (14/722, 6 trafo, aralık %1,2–3,2); hemen evet %10,5 → %9,7; yanlış yeşil 0 | sınırda; karar masasına |
 
+## Karar (karar masası 00:27)
+Pilot şartı da gelir: motor iki kat hata varsayar **ve** gerçek Kıb-Tek kayıtlarıyla canlıda kayda koşullu "hemen evet" ancak kayıt kalitesi sahada ölçüldükten sonra (pilotta 20–30 kayıt: kademe, direk sırası, faz) verilir; o zamana kadar bu evetler "önce ölç (kayıt teyidi)". Haritanın kayıtsız yeşili ve deneme şehirlerindeki ölçüm (gösterim) değişmez. Karar masasının Mac tekrarı yukarıdaki tabloyla birebir (00:26).
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

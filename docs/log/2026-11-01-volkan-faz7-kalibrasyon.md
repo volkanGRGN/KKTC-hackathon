@@ -170,7 +170,7 @@ python3 src/edp_test.py <GIS_data> --cikti edp_sonra.csv && python3 src/kalibras
 
 Geliştirme 1–10: Faz 2 farazi kapsama %87,5 (GEÇTİ); Faz 3 v2 ile aynı (yeşil 44, yanlış yeşil 0/44). Faz 3 değişmiyor, çünkü k yalnız yük bandını genişletiyor; yeşil ve kırmızıyı belirleyen gerilim tarafı (s).
 
-## Ek 3 (31 Ekim 23:45, BUILD; karar masası 23:13): K_YUK 1,27 → 1,47, ürünün seçim yöntemi tabakalı
+## Ek 3 (31 Ekim 23:40, BUILD; karar masası 23:13): K_YUK 1,27 → 1,47, ürünün seçim yöntemi tabakalı
 
 **Neden:** Can'ın sınav işlerinin kontrolünde (can.md KONTROL 23:15) bulundu: sınav ürünün seçimini ölçüyor (faturalı, 10 ölçülü, **tabakalı**), K_YUK ise rastgele + tabakalı seçimin havuzundan geliyordu. İki yolun hatası ters yönde. Kural 22:06'daki ilke (sevk yapılandırması), sonuca bakılarak değil: ürün ölçülecek trafoyu tabakalı seçer (`sablon.py` `ogretici_sec`).
 
