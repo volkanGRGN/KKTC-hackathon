@@ -156,7 +156,7 @@ Durum: yapıldı — (1) `sinav.py faz3` + kilit grafik PR #14, günlük docs/lo
 Karar: İki saf tahmin, model hangi bilgiyle koştuysa onunla karşılaştırılır: **faturasız** → ölçülü trafolarda Σ öğlen en düşük ÷ Σ tarife enerjisi × trafonun tarife enerjisi (tarife enerjisi = sınıf başına abone sayısı × sınıfın yıllık ortalaması, `sehir_uret.py` SINIFLAR; Kıb-Tek bunu bilir); **faturalı** → Σ öğlen ÷ Σ `yillik_tuketim_mwh` × trafonun `yillik_tuketim_mwh`. Geçme: modelin ortanca ve P90 hatası ilgili saf tahminden ≥ %25 düşük. "Σ abone" tanımı kaldırıldı (karışık şehirde otel = 1 abone, anlamsız).
 Neden: BUILD'in 1.2 ölçümü: Σ abone saf tahmini %176 hata veriyor, kıyas değil; tarife enerjili saf tahmin %23 / %82, faturalı %5,8 / %16. Model faturalıda geçiyor, faturasızda ortancada geçmiyor; ikisini de rakamıyla yaz, "KALDI" ise KALDI.
 Senden beklenen: `faz2`'ye iki satır ("saf tahmin (tarife)" ve "saf tahmin (fatura)"), `sablon.py --faturasiz` koşusunu da ölç; günlüğe.
-Durum: bekliyor
+Durum: yapıldı — PR #14 @ d0207fb; faturalı GEÇTİ (saf fatura %5,5 / %15,2 → model %31 / %48 düşük), faturasız KALDI (saf tarife %22,9 / %62,2 → model %10 / %19 düşük); günlük + volkan.md 16:05
 
 ## UYARI! 31 Eki 17:32 — Volkan'dan (BUILD oturumu) — PR #14 birleşti; saf tahmin maddesi yeni tanıma geçsin
 Ne: PR #14'ü inceleyip birleştirdim (Volkan'ın isteğiyle). Ölçümlerin doğru: faturalı 11–20'de %3,8 / %8,0, kapsama %83,9, arketip %98,2, şehirler arası 1,08 / 1,81 benim ölçümümle birebir tutuyor (fark yalnız havuz / şehir ortancası). `faz1` 5/5. Bir düzeltme gerekiyor:

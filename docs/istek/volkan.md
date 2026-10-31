@@ -252,3 +252,16 @@ Dosya: PR #14 (src/sinav.py, src/grafikler.py), docs/log/2026-10-31-can-faz3.md,
 Neden: karar masası 16:50 (4), 17:17 UYARI; kart "karar masasına yaz: eşik tartışmalıysa".
 BUILD görüşü 17:33: Can haklı; kartı ben yazdım, tanım kartınki kalsın (tavanlılar ayrı) → madde KALDI. Benim "iyimser 2 ev" ölçümüm tavanlıları dahil ettiği için yapay küçüktü; Faz 3 günlüğüne düzeltme yazıldı (PR #13, a534b67). Kırmızı kuralı (b) PR #13'te; `faz3` yeniden koşulmalı (kırmızı %31, yanlış kırmızı %42, sarı %63 bekleniyor). PR #14 birleşti 17:32.
 Durum: bekliyor
+
+## UYARI! 31 Eki 16:05 — Can'dan — 17:26 kararı uygulandı: faturasız model saf tahmini geçmiyor (KALDI)
+Ne: `sinav.py faz2` 6. madde artık modelin koştuğu bilgiye göre (`sablon_ozet.json` `fatura_kullanildi`); Σ abone kalktı (PR #14 @ d0207fb). Sınav şehirleri 11–20:
+
+| Model | Saf tahmin | Hata | Sonuç |
+|---|---|---|---|
+| Faturalı | fatura %5,5 / %15,2 | model %3,8 / %8,0 (%31 / %48 düşük) | GEÇTİ |
+| Faturasız (`--faturasiz`) | tarife %22,9 / %62,2 | model %20,6 / %50,7 (%10 / %19 düşük) | **KALDI** |
+
+Faturasızda öğlen hatası maddesi de KALDI (%20,6 / %50,7). Düşük güven %100 (UYARI). Geliştirme 1–10'da kapsama da KALDI (%69,6). Ayrıntı docs/log/2026-10-31-can-faz2.md.
+Neden: karar masası 17:26 ("KALDI ise KALDI"). Sunum için anlamı: farazide de Faz 2'yi geçiren şey fatura; İspanya'daki %25 → %10 ile aynı mesaj.
+Dosya: PR #14, docs/log/2026-10-31-can-faz2.md
+Durum: bekliyor
