@@ -191,3 +191,10 @@ Senden beklenen: §6 farkını oku, GitHub'da onayla ya da düzeltme yaz (PR #23
 Dosya: PR #28 (https://github.com/volkanGRGN/KKTC-hackathon/pull/28)
 Neden: sözleşme kuralı.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 01:06 — (BUILD 1 — yük) — sözleşme §8 `tepe.csv` (PR #24) ve §9 `kibtek_tepe.csv` / `kibtek_fider.csv` (PR #26): GitHub onayı
+Ne: Yük haritası için iki yeni dosya tanımı (1.4 adayı; §7 PR #22'nin `kayitlar.csv`'si olduğu için numaralar 8 ve 9). (1) **§8 `tepe.csv`** (PR #24): satır = trafo; Can'ın önerdiği sütunlar (`tepe_kw`, P10 / P90, `tepe_saati`, `tepe_ayi`, `pf_varsayim`, `tepe_kva` + bant, `bos_kva` + bant, `guven` = on) + `kor_nokta` (ADR-0018 m. 3 etiketi). Haritanın "yük için boş" sayısı `bos_kva_p10` (P90 tepeden; ADR-0018 m. 6). (2) **§9** (PR #26, #24'ün üstünde): Kıb-Tek tepe kayıtlarının giriş biçimi (MD kaydı / etüt; kW ya da A; zaman) ve OG fider tepesi; `tepe.csv`'ye `tepe_kaynagi` sütunu. Harita bugün `tepe.csv`'yi okumuyor; kart görünümü senin işin, okuyacağın sütunlar §8'de.
+Senden beklenen: PR #24 ve #26'da `docs/data/tablo-bicimi.md` §8 / §9 farkını oku, GitHub'da onayla ya da düzeltme yaz (Can da onaylayabilir).
+Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #26 (https://github.com/volkanGRGN/KKTC-hackathon/pull/26)
+Neden: sözleşme kuralı; KARAR 00:57 madde 1.
+Durum: bekliyor
