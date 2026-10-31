@@ -157,3 +157,12 @@ Karar: İki saf tahmin, model hangi bilgiyle koştuysa onunla karşılaştırıl
 Neden: BUILD'in 1.2 ölçümü: Σ abone saf tahmini %176 hata veriyor, kıyas değil; tarife enerjili saf tahmin %23 / %82, faturalı %5,8 / %16. Model faturalıda geçiyor, faturasızda ortancada geçmiyor; ikisini de rakamıyla yaz, "KALDI" ise KALDI.
 Senden beklenen: `faz2`'ye iki satır ("saf tahmin (tarife)" ve "saf tahmin (fatura)"), `sablon.py --faturasiz` koşusunu da ölç; günlüğe.
 Durum: bekliyor
+
+## UYARI! 31 Eki 17:32 — Volkan'dan (BUILD oturumu) — PR #14 birleşti; saf tahmin maddesi yeni tanıma geçsin
+Ne: PR #14'ü inceleyip birleştirdim (Volkan'ın isteğiyle). Ölçümlerin doğru: faturalı 11–20'de %3,8 / %8,0, kapsama %83,9, arketip %98,2, şehirler arası 1,08 / 1,81 benim ölçümümle birebir tutuyor (fark yalnız havuz / şehir ortancası). `faz1` 5/5. Bir düzeltme gerekiyor:
+- **Madde 6 eski tanımla notlanıyor.** `src/sinav.py` (madde 6, "Σ öğlen ÷ Σ abone × abone") karar masasının 17:26 KARAR'ından önce yazılmış. Bu tanımla saf tahmin %172 hata veriyor, madde her zaman geçiyor. Yeni tanım: faturasız koşuda "Σ öğlen ÷ Σ tarife enerjisi × tarife enerjisi", faturalı koşuda "Σ öğlen ÷ Σ fatura × fatura"; model hangi bilgiyle koştuysa o (`sablon_ozet.json` `fatura_kullanildi`). Σ abone satırı çıkabilir ya da bilgi satırına iner. Somut örnek: `sablon.py --faturasiz` ile koşulan 11–20'de madde 6 şu an `[GEÇTİ]` yazıyor; doğru kıyasla model %20,6 / %50,7, saf tarife %22,9 / %62,2 → yalnız %10 / %19 iyi, **KALDI** olmalı. Faturalı koşuda model saf faturadan %30,6 / %47,5 iyi → GEÇTİ.
+- Küçükler: bilgi satırındaki "tarife enerjisiyle (Σ öğlen ÷ Σ abone × …)" etiketi "Σ tarife enerjisi" olmalı; düşük güven %100 olsa da `[GEÇTİ]` yazıyor (`[UYARI]` daha doğru); geçemeyen kıyasta "düşük" yüzdesi eksi çıkıyor (ör. "%-226.9"); `faz1` artık `veri_turu = gercek` şehirleri atlıyor (doğru, günlüğüne bir satır). `outputs/`'u `.gitignore`'a ekledim.
+- Ayrıca `sablon_ozet.json`'da artık `saf_tahmin` (tarife / fatura: oran + ölçülülerde bir-dışarıda hata) var; sınav kendi hesabını yapmaya devam etsin, bu yalnız bilgi.
+Dosya: src/sinav.py (madde 6 ve bilgi satırları)
+Neden: karar masası 17:26 KARAR'ı (Faz 2 üç soru, madde 1); ROADMAP Faz 2 saf tahmin kutusu bu maddeye bağlı.
+Durum: bekliyor

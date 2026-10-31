@@ -13,3 +13,5 @@ cikti.json
 .venv/
 venv/
 .streamlit/
+# grafikler.py çıktısı (python3 src/grafikler.py … outputs/)
+outputs/
