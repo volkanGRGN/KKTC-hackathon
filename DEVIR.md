@@ -11,7 +11,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:22)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:30)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
@@ -26,7 +26,8 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | ADR-0019 uygulaması: yeşil kapısında güven şartı kalkar, 31–40'ta bir kez | BUILD 2 | sırada | — |
 | PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) + öğlende net fatura seçeneği | BUILD 1 | TEST'te tuttu (KARAR 01:22); İspanya KALDI kabul | GitHub onayı (Can / Civan) |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
-| Yük modelini üretici 1.5 şehirlerinde koşmak (1–10, 31–40 bir kez); sistem puantı sağlaması, güç katsayısı duyarlılığı, KTEMO günlüğü | BUILD 1 | sırada (KARAR 01:25, 01:22) | — |
+| PR #31 yük modeli üretici 1.5 şehirlerinde, KTEMO günlüğü, pf notu (#29 üstünde) | BUILD 1 | sistem oranına çapalama yok (KARAR 01:30) | TEST; #29; onay |
+| Tepe saati (konutta iki tepe) | BUILD 1 | sırada | — |
 | PR #29 akşam gerilimi (`v_min_tepe_v`, karar P10 ≥ 207 V; #26 üstünde) | BUILD 1 | TEST'te tuttu (KARAR 01:22) | #26, sonra taban main; onay |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı, yük ikinci sayısı; Faz 4 kalanı | Civan | `pv_uc` sütunu gelince (civan.md 00:15) | BUILD 2 |

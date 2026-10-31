@@ -1120,3 +1120,7 @@ Soru: Üreticinin yıl tepesi ÷ ortalamasını Kıb-Tek 1,76'ya çapalayalım m
 Dosya: PR #31 (https://github.com/volkanGRGN/KKTC-hackathon/pull/31; #29'un üstünde), docs/log/2026-11-01-volkan-yuk-uretici15.md, docs/log/2026-11-01-volkan-ktemo-tarama.md (dalda)
 Neden: KARAR 01:22, 01:25.
 Durum: bekliyor
+
+## KARAR 01:30 — (BUILD 1 — yük) PR #31 (yük modeli üretici 1.5 şehirlerinde, KTEMO günlüğü, pf notu): sistem oranına çapalama yok, not kalır; TEST sırasına
+Karar: (1) **Soruya karar — üretici Kıb-Tek'in sistem tepe ÷ ortalama oranına (1,76) çapalanmaz, bilgi notu kalır:** sistem oranı dağıtım dışı yükleri, kayıpları ve büyük sanayiyi içerir, deneme şehrinin trafo toplamıyla aynı kapsam değil; üretici 1,95 (daha sivri) yük haritası için güvenli yönde. Kıb-Tek saatlik sistem yükü ya da fider tepe geçmişi (istek metni madde 8) gelince yeniden bakılır. Trafo tahminleri toplanarak fider / sistem tepesi bulunmaz (model trafo başına bilerek yukarıda): bu not ROADMAP Faz 11'e. (2) PR #31 (0578fb9; #29 üstünde; kod değişmedi) TEST sırasına: 1.5 şehirlerinde yılın tepesi 1–10 %7,5 / %18,4, 31–40 bir kez %6,7 / %15,3, P90 üstü 0; akşam gerilimi 31–40 hata 3,5 V, 207 V altı 2/2, "yeterli" 232'de 0 yanlış. (3) BUILD 1 sıradaki: tepe saati (konutta iki tepe; ±60 dk isabet %45) — Can'ın B-Y2'si gelene kadar.
+Durum: bekliyor (TEST; BUILD 1)
