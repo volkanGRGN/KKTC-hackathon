@@ -5,13 +5,13 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 **Güncellendi:** 1 Kasım 2026, 00:30 (KARAR) — PR #19, #21 birleşti; iş tahtası; üç oturum düzeni, ADR-0017 / 0018. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
 
 ## Kim nerede (1 Kasım 00:15; Volkan'ın üç oturumu, CONTRIBUTING "Volkan'ın üç oturumu")
-- **KARAR:** Volkan adına karar, istek kutusu (`docs/istek/volkan.md`), PR testi (resmi rakam Mac koşusu) ve birleştirme, ADR.
+- **KARAR:** Volkan adına karar, istek kutusu (`docs/istek/volkan.md`), PR birleştirme, ADR. PR'ların Mac testini 1 Kasım 00:50'den beri **TEST** oturumu (Opus) koşar ve KARAR'a yazar (öneren ≠ puanlayan; resmi rakam Mac koşusu).
 - **BUILD 1 — yük haritası** (dal `yuk/`, PR "[Yük]"): Muhittin 4 madde 1–4 — yük temel katman, akşam tepesi ön sürümü ([ADR-0018](docs/decisions/adr-0018-aksam-tepesi-on-surum.md), `src/tepe.py`), Kıb-Tek tepe verisinin girişi, öğlen yükü; Can'ın yük PR'larını inceler.
 - **BUILD 2 — panel gerilimi** (dal `panel/`, PR "[Panel]"): PR #19 ve #22'yi bitirir; Muhittin 4 madde 1'in panel kısmı (güvenli uçlar, [ADR-0017](docs/decisions/adr-0017-pv-katmani-guvenli-uclar.md)) ve madde 5 (kademe, inverter geri çözümü).
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:39)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:50)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
@@ -20,7 +20,8 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | Öğlen yükü kontrolü, Kıb-Tek tepe verisi girişi (Muhittin 4 m. 3–4) | BUILD 1 | sırada | — |
 | PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | Mac'te tuttu (KARAR 00:32) | §6 onayı (Civan / Can) |
 | PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | Mac'te birebir; R1 kapanır, R2 + pilot şartı (KARAR 00:39) | iki düzeltme (BUILD 2), sonra #22 |
-| PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) | BUILD 1 | test sırada (karar masası) | Mac testi |
+| PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) | BUILD 1 | Mac'te birebir; İspanya kıl payı KALDI (%15,4); iki ADR uyum düzeltmesi (KARAR 00:50) | Velander + uzun seri (BUILD 1), §7/§8 numarası, onay (Civan / Can) |
+| PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | başladı: main sağlık koşusu | KARAR'ın yolladığı PR'lar |
 | Üretici 1.5, sınav şehirleri 31–40 | Can | PR #21'in son hâlinin üstüne taşınacak (can.md 00:24) | — |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı, yük ikinci sayısı; Faz 4 kalanı | Civan | `pv_uc` sütunu gelince (civan.md 00:15) | BUILD 2 |
