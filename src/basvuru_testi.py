@@ -7,7 +7,8 @@ EN_COK başvuru; tanım cevap anahtarındaki "gerçek kaç ev" gibi: 6,5 kW, sı
 (`sahte_kayit.gercek_trafo`), bu başvuru öncekilerle birlikte 259 V ya da kVA'yı aşıyor mu.
 
 Senaryolar: kayıtsız (bugün) / sahte kayıt, hatalar yarı / beklenen / iki kat / kusursuz bilgi. Model kayıt hatasını
-hep beklenen düzeyde varsayar; kusursuzda sıfır.
+`--model-hata` düzeyinde varsayar (varsayılan motorunki, iki kat: karar masası 23:47; `aynen` = ilk koşum, 31 Ekim
+23:46); kusursuzda sıfır.
 Aynı akışta iki kıyas politikası: %40 kuralı (onaylanan sayısı `kural40_ev`'e kadar evet) ve harita (trafo yeşilse ilk
 iki başvuru evet; o senaryonun haritasıyla).
 Ölçüler: başvuru anında **yanlış evet** (kapı: evet alanların < %2'si), hemen evet alan pay, önce ölç, hayır;
@@ -16,7 +17,7 @@ haritanın renkleri ve yanlış yeşili kayıtlarla.
 Etiket: sahte kayıtlarla, gösterim; gerçek kayıtlar Kıb-Tek'ten. Ayar yok: eşikler resmi hesabınki.
 
 Çalıştırma:
-  python3 src/basvuru_testi.py <şehir kökü> --aralik 1-10 [--json cikti.json]
+  python3 src/basvuru_testi.py <şehir kökü> --aralik 1-10 [--model-hata iki_kat|aynen] [--json cikti.json]
 """
 import argparse
 import csv
@@ -45,14 +46,14 @@ def _csv(yol):
 
 
 def sehir_senaryo(is_):
-    klasor, senaryo = Path(is_[0]), is_[1]
+    klasor, senaryo, model_hata = Path(is_[0]), is_[1], is_[2]
     sehir = sk.gercek_sehir(klasor)
     tohum = sehir['tohum']
     trafolar = _csv(klasor / 'trafolar.csv')
     tahmin = {r['trafo_no']: r for r in _csv(klasor / 'tahmin.csv')}
     resmi = {r['trafo_no']: r for r in _csv(klasor / 'kac_ev.csv')}
     hp_veri = None if senaryo == 'kayitsiz' else sk.hata_payi(senaryo)
-    hp_model = sk.hata_payi('kusursuz' if senaryo == 'kusursuz' else 'aynen')
+    hp_model = sk.hata_payi('kusursuz' if senaryo == 'kusursuz' else model_hata)
     out = []
     for r in trafolar:
         no = r['trafo_no']
@@ -141,15 +142,19 @@ def main():
     ap.add_argument('kok')
     ap.add_argument('--aralik', default='1-10')
     ap.add_argument('--senaryo', help='virgülle; yoksa hepsi')
+    ap.add_argument('--model-hata', default=bv.VARSAYILAN_HATA, choices=['aynen', 'iki_kat'],
+                    help='motorun varsaydığı kayıt hatası düzeyi')
     ap.add_argument('--json')
     a = ap.parse_args()
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
     senaryolar = a.senaryo.split(',') if a.senaryo else SENARYOLAR
     with ProcessPoolExecutor() as ex:
-        sonuc = {(k, s): o for k, s, o in ex.map(sehir_senaryo, [(str(k), s) for s in senaryolar for k in klasorler])}
+        sonuc = {(k, s): o for k, s, o in ex.map(sehir_senaryo,
+                                                  [(str(k), s, a.model_hata) for s in senaryolar for k in klasorler])}
     tablo = {s: ozet(klasorler, sonuc, s) for s in senaryolar}
-    print(f'şehir {a.aralik} — sahte kayıtlarla, gösterim; {SIRA} sıra × en çok {EN_COK} başvuru')
+    print(f'şehir {a.aralik} — sahte kayıtlarla, gösterim; {SIRA} sıra × en çok {EN_COK} başvuru; '
+          f'motor kayıt hatasını {a.model_hata} varsayar')
     print('senaryo | başvuru | hemen evet | yanlış evet (evetlerin) | önce ölç | hayır (gerçekte sığan) | '
           '%40 kuralı yanlış evet | harita yanlış evet | renk y / s / k | yanlış yeşil | kırmızıda aşan')
     for s, o in tablo.items():
@@ -165,7 +170,7 @@ def main():
         print(f"{AD[s]} | " + ', '.join(f"{t} {o['tip_evet'].get(t, 0)}/{o['tip_n'][t]}" for t in sorted(o['tip_n'])))
     if a.json:
         with open(a.json, 'w', encoding='utf-8') as fh:
-            json.dump(dict(aralik=a.aralik, sira=SIRA, en_cok=EN_COK, tablo=tablo,
+            json.dump(dict(aralik=a.aralik, sira=SIRA, en_cok=EN_COK, model_hata=a.model_hata, tablo=tablo,
                            trafo={f'{Path(k).name}|{s}': o for (k, s), o in sonuc.items()}), fh, ensure_ascii=False)
 
 

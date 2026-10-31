@@ -42,5 +42,6 @@ Geliştirme 1–10 (kurulduğu şehirler) aynı yön: hemen evet %4,2 → %12,9 
 |---|---|---|---|---|---|
 | 31 Eki ~23:38 | motor v1, sahte kayıt NOMINAL | 1–10 | kayıtlar başvuru anında evet payını artırır, yanlış evet < %2 | %4,2 → %12,9; yanlış evet ≤ %1,5 | 21–30 bir kez |
 | 31 Eki ~23:41 | aynı | 21–30 | aynı | %3,8 → %10,5, yanlış evet %0,1; iki kat hatada %2,6 | eksi bulgu karar masasına |
+| 1 Kas ~00:10 | motor iki kat hata varsayar (karar masası 23:47) | 21–30 | iki kat kayıtta yanlış evet < %2 | %2,6 → %1,9 (14/722, 6 trafo); hemen evet %10,5 → %9,7 | [ayrı günlük](2026-11-01-volkan-panel-iki-kat-hata.md) |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

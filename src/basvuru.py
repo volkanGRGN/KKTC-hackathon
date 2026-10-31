@@ -15,7 +15,9 @@ Haritanın olasılıklı hesabıyla aynı fizik ve aynı kapı (`kac_ev_olasilik
                 hatlarda model-sapma s (Faz 7, İngiltere)
   - **karar:** P(başvuru + taahhütler + bugünkü paneller sığar) ≥ 0,98 ve güven yüksek → `evet`;
     P(aşar) ≥ 0,5 → `hayir` (güçlendir / önce ölç değil, bugünkü durum bile taşımıyor); arası `once_olc`.
-Model kayıt hatalarını hep nominal düzeyde varsayar (`sahte_kayit.NOMINAL`); testte veri daha iyi ya da daha kötü olabilir.
+Model kayıt hatalarını **iki kat** varsayar (`VARSAYILAN_HATA`; karar masası 23:47, tüzük madde 2): Kıb-Tek kayıtlarının
+doğruluğu sahada bir örnekle ölçülene kadar; ölçülünce varsayım ölçülen orana iner. Testte veri daha iyi ya da daha kötü
+olabilir.
 
 Saf Python; `kac_ev_olasilik` ile aynı benzetim (`trafo_bos_kapasite.solve`).
 """
@@ -31,6 +33,7 @@ sys.argv = _argv
 
 CEKILIS = ko.CEKILIS
 KADEME_PENCERE_V = sk.KADEME_ADIM_V / 2           # ±3,125 V: kademe bilinince kalan OG payı [Yorum]
+VARSAYILAN_HATA = 'iki_kat'                       # kayıt kalitesi ölçülene kadar en kötü kayıt hatası (23:47)
 
 
 def _faz_cek(kayitli, hp, rng, uc_p, fw):
@@ -148,7 +151,7 @@ def statistics_mean(x):
 def karar(tr, t, kayit, basvuran, taahhut, rng, hp=None):
     """basvuran: başvuru formu kaydı (None = konumu bilinmiyor); taahhut: [form kaydı ya da None] (her biri 6,5 kW).
     Dönüş: (karar, P(sığar))."""
-    hp = hp or sk.hata_payi('aynen')
+    hp = hp or sk.hata_payi(VARSAYILAN_HATA)
     p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
     konumlu = [('taahhut', k, ke.YENI_PANEL_KW) for k in taahhut] + [('basvuran', basvuran, ke.YENI_PANEL_KW)]
@@ -184,7 +187,7 @@ def karar(tr, t, kayit, basvuran, taahhut, rng, hp=None):
 
 def harita_rengi(tr, t, kayit, rng, hp=None):
     """Haritanın rengi kayıtlarla (ADR-0011 kuralı): bugün aşma olasılığı ve konumu bilinmeyen ilk iki başvuru."""
-    hp = hp or sk.hata_payi('aynen')
+    hp = hp or sk.hata_payi(VARSAYILAN_HATA)
     p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
     srng = random.Random(f'sapma-{tr["sehir"]}-{tr["trafo_no"]}')

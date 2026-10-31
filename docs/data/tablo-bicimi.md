@@ -1,6 +1,6 @@
 # Tablo biçimi sözleşmesi
 
-Sürüm 1.3 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
+Sürüm 1.3 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011; 1.4 adayı, deneme: §7 `kayitlar.csv`, PR #22) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
 
 Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun eksik ya da yanlış geliyorsa önce bu dosyaya bak; değişiklik gerekiyorsa [Volkan'ın kutusuna](../istek/volkan.md) yaz. Örnek değerler biçimi göstermek içindir; ölçüm ya da sonuç değildir.
 
@@ -26,6 +26,7 @@ Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun ek
 | `ayar.json` | `src/sehir_uret.py` | herkes (bilgi) | 1 |
 | `tahmin.csv`, `arketipler.csv` | `src/sablon.py` (Volkan) | `kac_ev.py`, `sinav.py`, harita | 2 |
 | `kac_ev.csv` | `src/kac_ev.py` (Volkan) | `sinav.py`, `grafikler.py`, harita | 3 |
+| `kayitlar.csv` (§7, 1.4 adayı, deneme) | `src/sahte_kayit.py` (Volkan; gerçekte Kıb-Tek) | `basvuru.py`, `basvuru_testi.py`; **harita ve resmi hesap okumaz** | 9 |
 
 **Ayrım kuralı:** `trafolar.csv` yalnız Kıb-Tek'in gerçekte bilebileceğini taşır (modelin girdisi). Benzetimin bilip Kıb-Tek'in bilmediği her şey (tip, faz dağılımı, trafo çıkış gerilimi, gerçek yük, gerçek kaç ev) `cevap_anahtari.csv`'dedir. Model ya da harita cevap anahtarını okursa sınav anlamsızlaşır.
 
@@ -180,6 +181,6 @@ Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama 
 | `yer` | float | oran | `0.8125` | `panelli`: hattaki yeri, direk sırası ÷ hattaki direk sayısı (0–1; 1 = hat ucu) |
 | `faz` | str | — | `B` | `panelli`: `A` / `B` / `C` / `3` (üç faz); boş = kayıt yok |
 | `kw` | float | kWp | `5.00` | `panelli`: kurulu güç |
-| `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy) |
+| `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy). **Türetilmiş değer, ham kayıt değil:** inverterin ham gerilim / güç serisi bu dosyaya girmez, geri çözümün sonucu girer (Civan, 23:56) |
 
 Başvuru formu (başvuranın hattı, yeri, fazı) aynı alanlarla ayrı gelir; testte `sahte_kayit.basvuru_kaydi` üretir, dosyası henüz yok.
