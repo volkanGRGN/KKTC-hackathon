@@ -6,9 +6,9 @@ Haritanın olasılıklı hesabıyla aynı fizik ve aynı kapı (`kac_ev_olasilik
   - **durumlu:** o ana kadar onaylanmış ama kurulmamış başvurular (taahhüt) de ağa konur (ADR-0015 m. 1, ADR-0010 m. 2);
   - **kayda koşullu:** Kıb-Tek kaydı varsa (`sahte_kayit.kayit_oku`) bilinmeyenin çekilişi kayda koşullanır, kaydın
     kendi hata payıyla (kayıt öncülü daraltır, sıfırlamaz); kayıt yoksa bugünkü aralık:
-      bara      inverter kaydı varsa yalnız ölçülmüş kaymayla (karar masası 00:39): ham özet (`inverter_ham`) ise bara
-                ölçümü − 1–10'da ölçülen kayma (`INV_BARA_HATA_Q`); türetilmiş (`inverter`) ise `inv_bara_hata` verilirse;
-                kayma dağılımı yoksa inverter bara için kullanılmaz; yoksa kademe kaydı varsa kayıtlı kademenin
+      bara      gerçek inverter kaydı (`inverter_ham`, ham özet) yalnız ölçülmüş kaymayla: bara ölçümü − 1–10'da ölçülen
+                kayma (`INV_BARA_HATA_Q`; yoksa kullanılmaz, karar masası 00:39); türetilmiş `inverter` satırı yalnız sahte
+                kayıt için (gerçek ± gürültü, ± inverter payı ya da `inv_bara_hata`; 00:49); yoksa kademe kaydı varsa kayıtlı kademenin
                 ±3,125 V penceresi (OG payı [Yorum]) olasılık p_dogru ile, değilse 244–252 V; kayıt yoksa 244–252 V
       hatlar    hat boyu kaydı × e^U(±hat payı) (bugün: en uzun hat × e^U(±0,47), diğerleri rastgele)
       yer, faz  kaydı olan panelli ev, taahhüt ve başvuran kayıtlı hattına ve yerine (direk sırası ÷ hattaki ev);
@@ -141,13 +141,20 @@ def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
         i = max(0, min(len(hat_ev[j]), round(k['yer'] * (len(hat_ev[j]) + 1)) - 1))
         hat_ev[j].insert(i, dict(sinif='abone_konut', yerli=(rol, k, kw)))
     zc, znc = ko.tb.CABLES[tr['kablo']]
-    # inverter barası yalnız ölçülmüş kayma dağılımıyla (karar masası 00:39); dağılım yoksa inverter bara için
-    # kullanılmaz, kademe kaydına ya da 244–252 V'a düşülür
     inv_v0 = None
-    if inv_hat and INV_BARA_HATA_Q and all('bara_olcum_v' in v for v in kayit['inverter'].values()):   # ham özet
-        inv_v0 = statistics_mean([v['bara_olcum_v'] for v in kayit['inverter'].values()]) - _nicelden(INV_BARA_HATA_Q, rng)
-    elif inv_hat and hp.get('inv_bara_hata') and all('bara_v' in v for v in kayit['inverter'].values()):
-        inv_v0 = statistics_mean([v['bara_v'] for v in kayit['inverter'].values()]) - rng.choice(hp['inv_bara_hata'])
+    if inv_hat and all('bara_olcum_v' in v for v in kayit['inverter'].values()):
+        # gerçek kayıt yolu (ham özet, `inverter_ham`): bara yalnız ölçülmüş kayma dağılımıyla (karar masası 00:39);
+        # dağılım yoksa inverter bara için kullanılmaz, kademe kaydına ya da 244–252 V'a düşülür
+        if INV_BARA_HATA_Q:
+            inv_v0 = statistics_mean([v['bara_olcum_v'] for v in kayit['inverter'].values()]) - _nicelden(INV_BARA_HATA_Q, rng)
+    elif inv_hat:
+        # türetilmiş satır (`inverter`) yalnız sahte kayıt içindir: değeri gerçek ± düz gürültü, ±inv_bara_v o gürültünün
+        # kendisi (karar masası 00:49); gerçek Kıb-Tek / inverter kaydı bu yoldan değil `inverter_ham` yolundan gider
+        b = statistics_mean([v['bara_v'] for v in kayit['inverter'].values()])
+        if hp.get('inv_bara_hata'):                     # ölçülmüş geri çözüm hatası (deneme R2)
+            inv_v0 = b - rng.choice(hp['inv_bara_hata'])
+        else:
+            inv_v0 = b + rng.uniform(-hp['inv_bara_v'], hp['inv_bara_v'])
     if inv_v0 is not None:
         v0 = inv_v0
     elif kayit.get('kademe_v') is not None:
