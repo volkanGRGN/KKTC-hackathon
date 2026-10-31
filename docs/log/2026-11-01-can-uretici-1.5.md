@@ -27,3 +27,25 @@ Deneme 2'de kalan: 200 V altı iki köy trafosu (775 m ve 886 m hat, ABC95); tas
 Son tur (1–10): tipe göre yıl tepesi ÷ güç ortancası çarşı 0,47, köy 0,41, otel 0,56, sanayi 0,49, şehir konutu 0,34, sulama 0,45, yurt 0,46. Güç dağılımı 25:17, 50:49, 100:103, 250:111, 400:38, 630:29, 1000:31, 1600:20, 2500:2. Şehir konutunda tepe saati 00:xx 31, 20:xx 21, 17:xx 19, 23:xx 17 (gece yarısı tepesi 1.4'te de var; EAC konut eğrisinden, sebebi ayrıca bakılacak [Yorum]). P10 0,22 Malta'nın 0,13'ünden yüksek: farazide az yüklü (boş yazlık, yeni yerleşim) trafo yok [Yorum]; ayarlanmadı.
 
 **Üretim süresi:** son turda 40–140 sn; sebep makine yükü (aynı anda başka oturumlar, işlemci %43): sehir-007 tek başına 1.5 ile 73,4 sn, **1.4 ile 70,6 sn** (aynı anda ölçüldü); önceki turda (makine daha boşken) aynı şehir 37,0 sn. 1.5 süreyi değiştirmiyor; Faz 1'in 60 sn sınırı boş makinede ölçülmeli.
+
+## Sınav şehirleri 31–40 (bir kez üretildi; ayar 1–10'da bitti, 31–40'a bakılarak değiştirilmedi)
+
+| Ölçü | 1–10 (ayar) | **31–40 (sınav)** | Hedef |
+|---|---|---|---|
+| Yıl tepesi ÷ güç P10 / 50 / 90 | 0,22 / 0,44 / 0,72 | **0,24 / 0,43 / 0,67** | Malta 0,13 / 0,42 / 0,74 |
+| Gücünü aşan | 3 (%0,8) | **3 (%0,8)**: sulama 2, otel 1 | Malta %1,5 |
+| 207 V altı (yıl pencereleri) | 1 (%0,2) | **2 (%0,5)** | ≤ %1 |
+| En düşük gerilim | 203,6 V | **202,8 V** | ≥ 200 V |
+| Hat tasarımı ilk / kesit / bölme | 333 / 10 / 57 | 325 / 14 / 61 | |
+
+Şehir konutu tepe saati (31–40): 23:xx 44, 00:xx 20, 17:xx 17, 22:xx 16, 01:xx 15. Güç dağılımı 25:20, 50:24, 100:104, 250:116, 400:48, 630:32, 1000:29, 1600:24, 2500:3.
+
+Sınavlar (main'deki `sinav.py` 672ce1a; şablon ve kaç ev bu dalın kodu, K_YUK dalın tabanındaki gibi; İspanya satırı K_YUK 1,27'li `edp_test.py` çıktısı):
+- **`faz1` 31–40:** 5 maddenin 4'ü GEÇTİ: tipler, v_max > 259 V 45/400, Nisan v_min 207 V altı 0/400 (en düşük 222,3 V). **Üretim süresi KALDI** (en uzun 112,2 sn, ortanca 85,5): makine yükü (yukarıda; 1.4 aynı anda aynı yavaşlıkta). Boş makinede yeniden ölçülmeli (karar masası, Mac).
+- **`faz2` 31–40:** bütün maddeler GEÇTİ; yük hatası %11,3 / P90 %28,1; İspanya %80 bant %76,8, PIT 0,071; şehirler arası 1,01; düşük güven %5,4; farazi kapsama %82,1 (bilgi); saf fatura farkı %10,9 / %4,9 (bilgi). **Doğru arketip ortancası %75,0, tam eşikte** (en kötü sehir-033 %42,9); 1.3'te 21–30 %89,3. Büyük abonenin ayrı hatta alınması ölçülü trafo eğrisini değiştirmez; düşüşün sebebi bilinmiyor [Yorum], karar masasına.
+- **`faz3` 31–40:** yanlış yeşil **0/28** GEÇTİ; %40 kuralı dolu 46 trafonun 24'üne "yer var", biz 0; kırmızı kovası %44,6 ≥ 0,38 GEÇTİ; kaç ev orta 2 GEÇTİ; yeşil / sarı / kırmızı 28 / 254 / 65 (%8 / %73 / %19).
+- Yük haritası sınavı: tepe modeli (B-Y2) olmadığı için "ölçülmedi"; cevap anahtarının yıl tepesi sütunları dolu.
+
+## Sıradaki
+- PR (taban `uretici/1.4-tepe`, PR #21); karar masası Mac koşumu ve süre ölçümü; Civan / BUILD onayı.
+- B-Y2 tepe modeli 1.5 şehirlerinde (Civan'ın eşzamanlılık / sıcaklık analizi gelince).
