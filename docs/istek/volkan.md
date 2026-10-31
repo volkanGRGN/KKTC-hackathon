@@ -702,7 +702,7 @@ Karar: Volkan (22:56): "panelde gerilimi tamamen salmadan, eldeki verilerle deva
 - Etiket: "gösterim; inverter verisi her panelli evden gelmez, pilotta ev sahibi izniyle".
 Neden: Muhittin 5B'ye göre PV'yi dondurmak erken olabilir; kanıtı bu test verir. Ucuz (bilgi_degeri.py var).
 Senden beklenen (BUILD): dal + günlük tablosu (S0 / S-kademe / S-inverter / S-ikisi × tüm trafolar / panelli evi olanlar), 60–90 dk; kutuya UYARI; karar masası Mac'te tekrarlar.
-Durum: bekliyor
+Durum: yapıldı 23:02 (BUILD) — PR #20 (deneme/pv-acilma, taban PR #18); UYARI 23:02 aşağıda.
 
 ## KARAR 23:02 — BUILD'e: panel katmanı bırakılmıyor; "Kıb-Tek kayıtları geldiğinde" sürümü sahte (mock) ama gerçeğe yakın kayıtlarla şimdi kurulur (Volkan)
 Karar: Volkan (23:02): "Kıbrıs'taki trafolardan veri alacağız ama şimdi değil; mock veriyle, gerçeğe yakın çalışmalıyız; kusursuz gerçek yapamıyoruz." Buna göre panel katmanı dondurulmaz; **Kıb-Tek'in vereceği kayıtlar deneme şehrinde kusurlarıyla taklit edilir**, model onları okur, gerçek kayıt gelince yalnız dosya değişir.
@@ -713,4 +713,19 @@ Karar: Volkan (23:02): "Kıbrıs'taki trafolardan veri alacağız ama şimdi de�
 5. **Paralel, değişmez:** yük ve akşam tepesi Can'da (can.md 23:02); tepe modeli (öğlen + tepe hedefi, Temmuz şehirleri, sıcaklık terimi) bu işten sonra BUILD'de.
 Neden: Volkan'ın kararı; Muhittin 5 (kademe ayrık öncül, inverter geri çözümü, PV erken açılabilir); veri geldiğinde boru hattı hazır olsun; kusursuz bilgi (S4–S6) gerçekçi değil, kusurlu kayıt gerçekçi.
 Senden beklenen (BUILD): 1–4; ilk sonuç kutuya UYARI; karar masası Mac'te tekrarlar. Kayıt hata oranlarının gerçek değerleri uzmana / Kıb-Tek'e soru listesine (Faz 9 istek taslağına) eklenir.
+Durum: bekliyor
+
+## UYARI! 31 Eki 23:02 — BUILD'den — PV açılma testi (PR #20): inverter kaydı açıyor, iki değerli kademe açmıyor, sarı değişmiyor — test edin
+Ne: KARAR 22:56. `src/pv_acilma.py` (gerçekçi bilgi_degeri; resmi hesap değişmez; S0 resmi tabloyla birebir). Sınav 21–30 bir kez:
+| | Yeşil | Yanlış yeşil | Kırmızı (yanlış) | Kırmızıda gerçekte aşan | Konutta yeşil |
+|---|---|---|---|---|---|
+| S0 | 17 (%5) | 0 | 61 (31) | %49 | 0/142 |
+| S-kademe | 15 (%4) | 0 | 65 (36) | %45 | 0/142 |
+| S-inverter | 36 (%10) | 0 | 41 (15) | %61 | 9/142 |
+| S-ikisi | 34 (%10) | 0 | 41 (15) | %61 | 9/142 |
+Panelli evi olan trafolarda yeşil 4 → 23. Geliştirme 1–10 aynı yön (yeşil 20 → 44, yanlış kırmızı 24 → 8).
+Eksiler: (1) **İki değerli kademe politikası açmıyor**, biraz kötüleştiriyor: kademe adımı 6,25 V, 8 V'luk banttan dar değil; açan, trafo başına kademe ayarı (tek değer) → Kıb-Tek istek listesine "standart" değil "trafo başına kademe ayarı / devreye alma kaydı". (2) **Sarı değişmiyor (%78)**: kaynak başvurunun yeri; çözüm başvuru anında karar. (3) İnverter gürültüsü ±1 V / ±%20 varsayım; empedansın bütün hatlara uygulanması iyimser; Faz 10 P6 ölçecek.
+Soru: PR #20 deneme olarak birleşsin mi (model değişmiyor)? Kıb-Tek istek taslağına "trafo başına kademe ayarı" eklensin mi?
+Dosya: PR #20 (https://github.com/volkanGRGN/KKTC-hackathon/pull/20), docs/log/2026-11-01-volkan-pv-acilma.md
+Neden: Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir). Bloklamıyor.
 Durum: bekliyor
