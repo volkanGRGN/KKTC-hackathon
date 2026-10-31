@@ -71,3 +71,9 @@ Ne: Faz 1 kapandı (sonuç Volkan'ın Faz 1 günlüğünde). Faz 2 kartın: [doc
 Dosya: src/sinav.py, src/grafikler.py, data/raw/edp-*/KAYNAK.txt, docs/data/data-dictionary.md
 Neden: ROADMAP Faz 2; modeli yazan sınavı yazmaz.
 Durum: bekliyor
+
+## UYARI! 31 Eki 13:51 — Volkan'dan (BUILD oturumu) — PR #8: sözleşme 1.1 onayı + sablon.py geldi
+Ne: [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8) `src/sablon.py` ilk sürüm ve sözleşme 1.1: `deney/tahmin_capraz_s<AAA>.csv` (kartındaki ad), `sablon_ozet.json` (bilgi), JSON da LF, §5 `oran` **brüt** (`tuketim_kw`; senin sorun). Sözleşme değişikliği olduğu için onayın gerekiyor; sütunlara bakman yeter. Birleşince `python3 src/sablon.py data/synthetic` (~1 dk) gerçek `tahmin.csv` üretir; sahte dosyayı bırakıp `sinav.py faz2`'yi bununla koş.
+Dosya: docs/data/tablo-bicimi.md, src/sablon.py
+Neden: CONTRIBUTING "Dallar" 1 ve 2 (sözleşme + yeni modül). Model ayarları yalnız şehir 1–10'da denendi; 11–20'yi sınav için ayrı raporlarsan iyi olur (Faz 2 günlüğü).
+Durum: bekliyor

@@ -2,29 +2,51 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, öğleden sonra
+**Güncellendi:** 31 Ekim 2026, öğleden sonra (BUILD oturumu)
 
 ## Durum
-- Fikir seçildi: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/).
-- **Faz 1 sürüyor.** Tablo biçimi sözleşmesi yazıldı, onay bekliyor ([PR #4](https://github.com/volkanGRGN/KKTC-hackathon/pull/4)). Faz 1 kartları main'de: [Can](docs/gorev/can-faz1-profiller-sinav.md), [Civan](docs/gorev/civan-faz1-ornek-veri-harita.md).
-- Şehir üreticisi `src/sehir_uret.py` ilk sürüm `sehir/ilk-surum` dalında ([PR #6](https://github.com/volkanGRGN/KKTC-hackathon/pull/6)). 20 şehirde (yapay ışınımla) süre, tohum, tip sayıları ve gerilim maddeleri geçti; ama konut trafolarının %55'i bugünden 259 V üstü. Ayrıntı günlükte (`docs/log/2026-10-31-volkan-faz1.md`, PR #6 dalında).
-- Veri adımı (Can): Lefkoşa ışınımı, EAC injection, SimBench ölçüleri alındı; Kıb-Tek şartnamesi BULAMADIM (varsayım etiketli). OSM Girne merkez (Civan).
+- Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/).
+- **Faz 1 bitti.**
+  - 20 deneme şehri gerçek girdilerle üretildi: EAC eğrileri, Lefkoşa ışınımı, panel yaygınlığı %3–25 ([ADR-0006](docs/decisions/adr-0006-panel-yayginligi-bugunun-kibrisi.md)).
+  - Geçme sınavının beş maddesi geçti. Altıncı madde açık: 3 trafo 216 V altında (karar masasında, bloklamıyor).
+  - Konut ve köy trafolarının %27'si bugünden 259 V üstünde.
+  - Ayrıntı: [Faz 1 günlüğü](docs/log/2026-10-31-volkan-faz1.md), ek girdi.
+- **Faz 2 sürüyor.**
+  - Şablon modeli `src/sablon.py` [PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8)'de; sözleşme 1.1 aynı PR'da, Can ya da Civan onayı bekliyor.
+  - Ön bakış, şehir 11–20 (ayar yapılmadan bir kez ölçüldü):
+    - doğru arketip %93;
+    - öğlen hatası ortanca %8,6, P90 %32,6 (eşik %30);
+    - bant kapsama %82;
+    - düşük güven %18.
+  - Ayrıntı: [Faz 2 günlüğü](docs/log/2026-10-31-volkan-faz2.md) (PR dalında).
 
 ## Açık faz ve kim nerede
-- Volkan + Claude: PR #4 ve şehir üreticisi PR'ının birleşmesi; ardından Faz 2 (`src/sablon.py`).
-- Can: `profiller.py` PR #5 (Volkan'ın bakışını bekliyor), sonra `src/sinav.py` Faz 1 bölümü ve Windows denemesi.
-- Civan: `app/ornek_veri.py` + `app/harita.py` iskeleti, sahte şehirlerle (tohum 900–999).
+- **Volkan + Claude:**
+  - PR #8 birleşsin.
+  - 2i: İspanya EDP gerçek verisinde model (Can veriyi hazırladı; tarife sınıfı yok, girdi toplam müşteri + kVA).
+  - Sonra Faz 3 (`src/kac_ev.py`). Faz 3 kartına not: 264 V üstü benzetim değeri fiziksel değil, inverter kapanır.
+- **Can:** [Faz 2 kartı](docs/gorev/can-faz2-sinav-grafikler.md).
+  - `sinav.py faz2` resmi ölçüm.
+  - `grafikler.py` (kalibrasyon, kaç trafo ölçmeli).
+  - EDP incelendi, kullanılabilir.
+- **Civan:** harita iskeleti (`harita/iskelet` dalı). Yan panel `tahmin.csv` / `arketipler.csv`'yi sahte veriyle gösterir ([kartının sonu](docs/gorev/civan-faz1-ornek-veri-harita.md)).
 
 ## Bekleyen istekler
-- Volkan'ın kutusunda (karar masası): Can'ın "pazar günü çarşı öğleni" eşiği; Claude'un Faz 1 parametre sorusu (panel yaygınlığı / trafo çıkış gerilimi aralığı). Can'ın kVA etiketi isteği yapıldı.
+- Karar masasında (volkan.md):
+  - 216 V eşiği;
+  - Kıb-Tek'in trafo başına yıllık fatura tüketimi (büyük müşterili trafolarda kalan hatayı kapatır);
+  - Can'ın EDP bildirimi ve PR #6 notları (bayram günleri, 1000 kVA tavanı).
+- Can'ın "arketip oranı brüt mü" sorusu: brüt; PR #8'de sözleşmeye yazıldı.
 - Kontrol: `grep -n "Durum: bekliyor" docs/istek/*.md`
 
 ## Bilinen sorunlar ve kararlar
-- Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Şehir üreticisi EAC Excel'i ve `profiller.py` yoksa yer tutucu eğriye, Lefkoşa ışınım dosyası yoksa yapay ışınıma düşer ve bunu `ayar.json`'a yazar.
+- Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir.
+- **Sanal ortam şart** (`pip install -r requirements.txt`). `openpyxl` yoksa üretici sessizce yer tutucu eğriye düşer; `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak.
 - Trafo çıkışı 246–250 V rastgele (şartname 250, belgesi yok).
+- Model ayarları yalnız şehir 1–10'da denendi. 11–20 sınav için ayrı tutuluyor; yeni deneme yaparken 11–20'ye bakarak ayar değiştirme.
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
 ## Sıradaki üç adım
-1. PR #4'ü (sözleşme) Can ya da Civan onaylasın, birleşsin; ardından PR #5 (profiller, Volkan bakar) ve PR #6 (şehir üreticisi).
-2. Karar masasının parametre kararından sonra Lefkoşa ışınım dosyasıyla 20 şehri yeniden üret (dosya Can'da; Volkan'ın Mac'inde yok); Can'ın `sinav.py faz1`'iyle geçme sınavı.
-3. Faz 2 kartları ve `src/sablon.py`.
+1. PR #8'i Can onaylasın, birleşsin. Can `sinav.py faz2`'yi gerçek `tahmin.csv` ile koşsun, ROADMAP Faz 2 kutuları rakamla dolsun.
+2. Karar masası fatura tüketimi önerisine karar versin. Evetse üreticiye ve sözleşmeye sütun eklenir, model yeniden ölçülür.
+3. Faz 3 kartları ve `src/kac_ev.py`: kaç ev daha sığar, yeşil/sarı/kırmızı, %40 kuralıyla yan yana.
