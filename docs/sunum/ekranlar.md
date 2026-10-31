@@ -23,7 +23,7 @@ Hepsi "hiç model kullanmadan yapılan basit hesaba göre ne kadar iyi" diye anl
 1. **Farazi Kıbrıs şehri** (cevabını bildiğimiz deney; gösterim, üst sınır).
    - Faturayla %3,8, yalnız abone sayısıyla %20,6 ortanca hata [Hesap: sınav şehirleri 11–20, `sinav.py faz2`].
    - Cümle: "Fatura olmadan model ortalama trafoda basit hesaptan pek iyi değil; fatura girince hata dörtte bire iniyor."
-2. **İspanya** (manşet): %25 → %10, gerçek veri.
+2. **İspanya** (manşet): %25 → %10, gerçek veri. Cümle (karar masası 22:21): "Kıb-Tek'in zaten elindeki fatura toplamı girince gerçek trafolarda hata %25'ten %10'a iniyor; biz bunun üstüne ne kadar emin olduğumuzu ve panelin sığıp sığmadığını söylüyoruz." "Modelimiz indirdi" denmez (%10 faturanın değeri). "(aralık, İspanya'da %79 tutuyor)" PR #16 birleşince eklenir.
 3. **İngiltere** (gerilim): "6 gerçek hattın 5'inde ölçülen yükselme hesabın güvenli sınırının altında; birinde küçük gördük → canlıda yeşil önce pilotla sınanır" [Hesap: PR #11 + docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md; UKPN, CC BY] (karar masası 18:46, ADR-0011).
 4. **Kıbrıs pilotu**: doğruluğu pilot söyler.
 
