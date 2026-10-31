@@ -775,7 +775,7 @@ Karar: Volkan (23:12): "Güneş paneli güzel bir yere gelmeden anlatılmayacak;
 - **Sıra:** (1) Can kontrolü (sürüyor) → (2) **B-Y1** → (3) **B-Y2** (Can'ın sonucu geldikçe) → (4) sahte Kıb-Tek kayıtları testi (panel; sunumda anlatılmayacağı için arkaya) → (5) ROADMAP Faz 6–12. Volkan isterse 2–3 ile 4 yer değiştirir.
 Neden: sunumda anlatılacak olan yük haritası; tepe modeli BUILD'in dosyalarında (üretici, model); Can'ın veri ve sınav tarafıyla birleşir.
 Senden beklenen (BUILD devri): ROADMAP Faz 11 + MVP cümlesi (10 dk); B-Y1 dalda + PR (sözleşme 1.4 cevap anahtarı sütunları: Can ya da Civan onayı); B-Y2 iskelet. Karar masası Mac'te doğrular.
-Durum: bekliyor
+Durum: kısmen yapıldı 23:35 (BUILD) — ROADMAP Faz 11 + MVP cümlesi (9d5d345); B-Y1 PR #21 (üretici 1.4, Nisan birebir) 23:18 kararından önce bitti, Can'a devredildi (can.md UYARI 23:35); B-Y2 Can'da (23:18)
 
 ## UYARI! 31 Eki (23:08 sonrası) — Can'dan — KIOS e-postası hackathon sonrasına
 Ne: 22:56 / 23:02 KARAR'daki KIOS e-postasını (kademe ayarı / EAC standardı + ölçülmüş düğüm gerilimi) şimdi yazmıyorum: cevap hackathon bitmeden gelmez, sunuma ve bu geceki işlere katkısı yok. Pilot dönemine (Faz 9–10) bırakıyorum; Civan'ın taslağı (`docs/istek/dis-veri-istekleri-taslak.md` madde 2) duruyor, gerekirse o zaman 23:02'deki iki istekle kısaltılır. Code Ocean'daki Kıbrıs hat modelinin indirilmesi Civan'ın bulut oturumunun listesinde (23:08).
@@ -794,7 +794,7 @@ Durum: karar verildi 23:13 → volkan.md (KARAR aşağıda): K_YUK 1,47 (tabakal
 ## KARAR 23:13 — BUILD'e: K_YUK 1,27 → 1,47 (ürünün seçim yöntemi tabakalı); sınav 21–30 bir kez
 Karar: **Evet, 1,47.** Kural 22:06'da konmuştu (tüzük madde 3): kalibrasyon modelin sevk edildiği yapılandırmada ölçülür; bu yapılandırma yalnız ölçülü sayısı değil **ölçülecek trafoyu seçme yöntemi** de: ürün tabakalı seçiyor (2b), 1,27 ise rastgele + tabakalı havuzundan geliyordu. Tabakalı 10 + 15 kesitinde k 1,47; Can'ın sınav kesitinde bir-dışarıda kapsama 1,27 ile %75,3, 1,47 ile %80,8. Seçim ilkeden, sonuca bakılarak değil (ilke 22:06'da yazılmıştı). Geliştirme 1–10'da renkler değişmiyor, yalnız bant genişliyor; bant genişleyince yeşil ancak azalabilir, yanlış yeşil kapısı korunur.
 Senden beklenen (BUILD devri, 15 dk, main'e küçük commit ya da kısa PR): `K_YUK = 1,47` (sablon + edp_test tek kaynak; yorumda "tabakalı, n 10 + 15; rastgele kesitte 1,2x"); `kalibrasyon.py ispanya` varsayılan kesiti tabakalı 10 + 15; tüzük madde 3 cümlesine "ölçülü sayısı ve seçim yöntemi dahil"; günlüğe k tablosu (rastgele / tabakalı × 5 / 10 / 15); sınav 21–30 **bir kez** (faz2 kapsama ve İspanya maddesi, faz3 renkler), deney günlüğüne satır. Sonra B-Y1. Karar masası Mac'te tekrarlar.
-Durum: bekliyor
+Durum: yapıldı 23:45 (BUILD) — main 0f736cc: K_YUK 1,47 (tabakalı 10 + 15; rastgele 1,07, havuz 1,27), `kalibrasyon.py --yol tabakali` varsayılan, tüzük madde 3 "ölçülü sayısı ve seçim yöntemi dahil", Faz 7 günlüğü Ek 3 (k tablosu 2 yol × 5 / 10 / 15). Sınav 21–30 bir kez: İspanya %80 bant %76,8 → %82,1 (%95 %92,6, PIT 0,066 fazla geniş), farazi %89,3 (bilgi); renkler aynı: yanlış yeşil 0/17, yeşil 17, kırmızı 61 (aşan %49), sarı %77,7, kaç ev orta 2. 1–10 aynı. Mac'te tekrar sizde.
 
 ## UYARI! 31 Eki (23:12 sonrası) — Can'dan — sözleşme 1.4'ü tek elden BUILD yazsın; yük tarafı için dört öneri + sınavın beklediği
 Ne: 23:12 KARAR'a göre 1.4 sütunlarını BUILD B-Y1 / B-Y2 PR'larında yazıyor; ayrı taslak açmıyorum (aynı dosyada iki yazar olmasın), PR'ları ben onaylarım. Öneriler:
@@ -805,7 +805,7 @@ Ne: 23:12 KARAR'a göre 1.4 sütunlarını BUILD B-Y1 / B-Y2 PR'larında yazıyo
 Sınav (benim, şimdi): `sinav.py faz2`'ye tepe bölümü: `tepe.csv` ve `tepe_yil_kw` varsa farazi tepe hatası ortanca / P90 ve %80 bant kapsaması (bilgi), tepe saati isabeti (±1 saat, bilgi); `--ispanya-tepe` varsa gerçek veride hata ≤ %15 / %35 ve kapsama %70–90 (madde, 23:02 madde 4); yoksa "ölçülmedi". Adlar yukarıdaki öneriyle; BUILD başka ad seçerse sınavı uyarlarım.
 Dosya: docs/data/tablo-bicimi.md (BUILD PR'ı), src/sinav.py (Can)
 Neden: 23:12 KARAR; tek yazar kuralı; yük haritası sunumun öne çıkan katmanı. Bloklamıyor.
-Durum: bekliyor
+Durum: kısmen yapıldı 23:35 (BUILD) — PR #21'de cevap anahtarı sütunları senin adlarınla (`tepe_yil_kw` net, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`, ek `tepe_yil_brut_kw`); `tepe.csv` ve İspanya tepe satırları B-Y2'de (23:18'le sende)
 
 ## KARAR 23:18 — BUILD'e: Muhittin'in önerisi şimdi — başvuru anında karar motoru, eksik bilgiler sahte Kıb-Tek kayıtlarıyla; BUILD panelde, yük kodu Can'a
 Karar: Volkan (23:18): "Bunu zaten simüle ediyoruz, kesin oran bulmanın anlamı yok; verileri Kıb-Tek'ten alacağız. Muhittin'in önerdiğini yapabilir miyiz? Eksik yerlerde sahte verilerle çalışacağız." → **Evet.** ADR-0012 ve ADR-0015 uygulanır; sahte kayıt testi (KARAR 23:02, 23:1x düzeltmeleri) bu motorun girdisi olur, ayrı test değil.
