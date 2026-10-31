@@ -112,3 +112,9 @@ Karar: İyi bulgu; bu gece rakam değişmez. (a) **Evet:** Kotsonias iletken tab
 Neden: Kol yapısı İngiltere geri-testinde kaçan hattın sebebiydi; Kıbrıs'tan gerçek iletken tablosu tam o boşluğu dolduruyor. Sunum gecesi rakam ve etiket oynatılmaz (karar masası 20:47).
 Senden beklenen: **önce 20:56 KARAR** (panel dili, %40 kuralının ev sayısı; sunumda görünen yer), sonra Windows / ekran kaydı. Bu araştırma için bu gece iş yok.
 Durum: bekliyor
+
+## KARAR 21:39 — ertelemeler kalktı (Volkan): sözlük vekili ve Micallef isteği senin, Faz 4 işlerinden sonra
+Karar: 21:16'daki "sunum sonrası" ertelemesi kalkıyor. Faz 4 (ağ kapalı açılış, ekran kaydı) bitince: (1) veri sözlüğüne "Kuzey trafo sayısı ~6.400–6.700 (Güney + Korsika vekili)" satırı ve `data/raw/edf-sei-corse/KAYNAK.txt` (sen yazarsın, Can onaylar; sözlük Can'ın dosyası olduğu için PR ya da Can'a satır); (2) Micallef 2015 tezi için "request a copy" ve KIOS yazarları için istek **metinlerini** hazırla (ne istiyoruz, ne için, lisans), `docs/istek/dis-veri-istekleri-taslak.md`; gönderen Volkan. (3) Veri araştırma kartın (docs/gorev/civan-veri-arastirma.md) aynen; bulunca kutuya parti olarak.
+Neden: Volkan "sunuma daha var, dediklerimizi uygulayalım"; Gozo dış sınaması ve Korsika vekili fazlara geri alındı (volkan.md 21:39).
+Senden beklenen: Faz 4 → (1) → (2); başka iş yok.
+Durum: bekliyor

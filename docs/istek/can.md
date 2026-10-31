@@ -282,3 +282,9 @@ Test: C1'i önce main'deki modelde koş (önce rakamları), sonra dalda (sonra);
 Neden: Muhittin'in üç vurgusundan ikincisi; ADR-0013 madde 2–3 (kalibrasyon kapısı gerçeğe karşı).
 Senden beklenen: C1 → C2 → C3 bu gece; C4 PR gelince. Takılırsan kutu. Sunum metni v1 rakamlarıyla kalır, değiştirme.
 Durum: bekliyor
+
+## KARAR 21:39 — "iki sayılı kart" ertelemesi kalktı (Volkan): Faz 11 senin, Faz 7 kartından sonra; sözleşme 1.4 PR'ı
+Karar: Volkan "sunuma daha var, dediklerimizi uygulayalım" dedi; 21:03'teki "bu gece ürüne girmez" ertelemesi kalkıyor. Sıra: önce Faz 7 kartın (C1–C3), sonra **Faz 11 yük katmanı**: (1) sözleşme 1.4 PR'ı (dal `sozlesme/1.4`): `tahmin.csv`'ye `tepe_kva`, `tepe_kva_p10`, `tepe_kva_p90`, `pf_varsayim` (0,95 [varsayım], ADR-0014), hepsi "ön" etiketli; (2) `tepe` hesabı senin 3. yolun (öğlen tahmini × ölçülülerin tepe/öğlen oranı, arketip başına) **başlangıç** olarak ayrı `src/tepe.py` (sözleşme 1.4 ile; `sablon.py`'ye dokunma), bant öğlen bandı gibi bir-dışarıda; (3) `sinav.py faz2`'ye tepe maddesi (geçici eşik ortanca ≤ %15 / P90 ≤ %35, bilgi: "aşan trafoya yük için yer var" farazide ölçülemiyor); (4) kart görünümü Civan'a (Faz 4 bitince): güneş kWp sıkı bant + güven rozeti, yük kVA geniş bant + "ön, yaz verisiyle güncellenecek", "toplanmaz" ibaresi. Sıcaklık normalizasyonu (ADR-0014 madde 2) yaz verisi gelince; şimdi "Nisan tepesi, ön". PR'ı karar masası inceler, BUILD birleştirir; sunum metnine ancak birleşince.
+Neden: Volkan'ın kararı; ADR-0014; Muhittin 5–6.
+Senden beklenen: C1–C3 → sonra bu; takılırsan kutu.
+Durum: bekliyor
