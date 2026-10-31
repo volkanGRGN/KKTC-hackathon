@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 1 Kasım 2026, 01:45 (KARAR) — faz haritası ROADMAP'te; #27 birleşti; 10 PR testi geçti, onay bekliyor; ADR-0017 / 0018 / 0019. Önceki 00:30: PR #19, #21 birleşti; iş tahtası; üç oturum düzeni. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
+**Güncellendi:** 1 Kasım 2026, 01:53 (KARAR) — faz haritası ROADMAP'te; #27 birleşti; 10 PR testi geçti, onay bekliyor; ADR-0017 / 0018 / 0019. Önceki 00:30: PR #19, #21 birleşti; iş tahtası; üç oturum düzeni. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
 
 ## Kim nerede (1 Kasım 00:15; Volkan'ın üç oturumu, CONTRIBUTING "Volkan'ın üç oturumu")
 - **KARAR:** Volkan adına karar, istek kutusu (`docs/istek/volkan.md`), PR birleştirme, ADR. PR'ların Mac testini 1 Kasım 00:42'den beri **TEST** oturumu (Opus) koşar ve KARAR'a yazar (öneren ≠ puanlayan; resmi rakam Mac koşusu).
@@ -97,7 +97,7 @@ Birleşenler (1 Kasım): #19 (07ea153), #21 (c53ab31), #27 (6013342, üretici 1.
 - Farazi isabet gerçeğin üst sınırı (ADR-0008); farazi faturalı iyimser.
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
-## Sıradaki üç adım (1 Kasım 01:45)
+## Sıradaki üç adım (1 Kasım 01:53)
 1. GitHub onayları (Can / Civan): #22, #23, #24; sonra KARAR zinciri sırayla birleştirir ve tabanları main'e çevirir. Faz haritası ROADMAP "Faz 6–12" başında.
 2. BUILD 2: #25 düzeltmesi (türetilmiş inverter satırı yalnız sahte kayıtta), ADR-0019 uygulaması ve 31–40 sınavı; BUILD 1: Can'ın B-Y2'sini inceler. TEST: #30, #31, #32.
 3. Civan: güvenli uçlar kartı, yük ikinci sayısı, iki aday saat. Volkan: sunum rakam sürümü, Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.
