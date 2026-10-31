@@ -26,6 +26,14 @@ RENKLER = {
 }
 GRI = [150, 150, 150, 200]
 RENK_ADI = {"yesil": "yeşil", "sari": "sarı", "kirmizi": "kırmızı"}
+RENK_BUYUK = {"yesil": "YEŞİL", "sari": "SARI", "kirmizi": "KIRMIZI"}  # str.upper() "YEŞIL" yazar
+RENK_ST = {"yesil": "green", "sari": "orange", "kirmizi": "red"}  # Streamlit metin rengi
+RENK_CUMLE = {  # Faz 3 kartı, yan panel 1. madde
+    "yesil": "En kötü durumda bile yer var",
+    "sari": "Sınırda ya da emin değiliz, önce ölç",
+    "kirmizi": "En kötü durumda yer yok",
+}
+SINIR_ADI = {"gerilim": "gerilim", "isil": "ısıl (trafo gücü)"}
 
 METRE_BASINA_EV = 25  # sütun boyu çarpanı [Yorum]
 EN_KISA_SUTUN_EV = 0.5  # 0 ev yine de görünsün
@@ -263,34 +271,55 @@ def egri_ciz(klasor, veri, satir):
     st.line_chart(tablo, height=220)
 
 
+def renk_basligi(satir):
+    """Kart 1. madde: renk ve tek cümle, panelin en üstünde."""
+    renk = satir["renk"]
+    st.markdown(f"### :{RENK_ST[renk]}[● {RENK_BUYUK[renk]}]")
+    st.markdown(f"**{RENK_CUMLE[renk]}**")
+
+
+def kac_ev_metni(satir):
+    """Kart 2. madde: bizim aralık ve %40 kuralı yan yana; farklıysa vurgulu."""
+    # Aday: panelsiz konut abonesi; trafolar.csv'den (cevap anahtarı okunmaz).
+    aday = int(satir["abone_konut"] - satir["panel_sayisi"])
+    kural = int(satir["kural40_ev"])
+    if aday <= 0:
+        st.markdown(f"Kaç ev daha panel takabilir: **panelsiz konut yok**  \n"
+                    f"Bugünkü kural (%40): {kural} ev")
+        return
+    karamsar, iyimser = int(satir["kac_ev_karamsar"]), int(satir["kac_ev_iyimser"])
+    aralik = f"{karamsar}" if karamsar == iyimser else f"{karamsar}–{iyimser}"
+    st.markdown(f"Kaç ev daha panel takabilir: **{aralik} ev**")
+    if kural > iyimser and iyimser == 0:
+        st.markdown(f":red[**Bugünkü kural (%40): {kural} ev** — kural, yer olmayan "
+                    "trafoya \"yer var\" diyor]")
+    elif kural > iyimser:
+        st.markdown(f":red[**Bugünkü kural (%40): {kural} ev** — en iyimser tahminimizden "
+                    "fazla; fazlası sınırı aşabilir]")
+    elif kural < karamsar:
+        st.markdown(f":blue[**Bugünkü kural (%40): {kural} ev** — en kötü durumdan "
+                    "bile az; kural bekletmeye gerek olmayan başvuruları bekletiyor]")
+    else:
+        st.markdown(f"Bugünkü kural (%40): {kural} ev — tahminimizle uyumlu")
+
+
 def yan_panel(klasor, veri, satir):
-    abone = int(satir.filter(like="abone_").sum())
     st.subheader(f"Trafo {satir['trafo_no']}")
-    st.markdown(
-        f"{int(satir['kva'])} kVA · {satir['bolge']} · {satir['montaj']}  \n"
-        f"{abone} abone · {int(satir['panel_sayisi'])} panel, {satir['panel_kw']:.1f} kW"
-    )
+    if "renk" in veri:
+        renk_basligi(satir)
+        kac_ev_metni(satir)
     if "olculdu" in veri:
         olcum = "ölçüldü" if satir["olculdu"] == 1 else "**ölçülmedi**"
-        st.markdown(
-            f"Öğlen en düşük yük: **{satir['ogle_min_kw']:.1f} kW** "
-            f"(%80 bant {satir['ogle_min_kw_p10']:.1f}–{satir['ogle_min_kw_p90']:.1f})  \n"
-            f"Güven: {GUVEN_ADI.get(satir['guven'], satir['guven'])} · {olcum}"
-        )
-    if "renk" in veri:
-        # Aday: panelsiz konut abonesi; trafolar.csv'den (cevap anahtarı okunmaz).
-        aday = int(satir["abone_konut"] - satir["panel_sayisi"])
-        if aday <= 0:
-            kac_ev = "**panelsiz konut yok**"
-        else:
-            kac_ev = (
-                f"**{int(satir['kac_ev_karamsar'])}–{int(satir['kac_ev_iyimser'])}** "
-                "(karamsar–iyimser)"
-            )
-        st.markdown(
-            f"Kaç ev daha panel: {kac_ev} · {RENK_ADI[satir['renk']]}  \n"
-            f"%40 kuralı: {int(satir['kural40_ev'])} ev"
-        )
+        st.markdown(f"{olcum} · güven {GUVEN_ADI.get(satir['guven'], satir['guven'])}")
+    abone = int(satir.filter(like="abone_").sum())
+    ayrinti = (f"{int(satir['kva'])} kVA · {satir['bolge']} · {satir['montaj']} · "
+               f"{abone} abone · {int(satir['panel_sayisi'])} panel, {satir['panel_kw']:.1f} kW")
+    if "sinir_karamsar" in veri:
+        ayrinti += f" · sınırı belirleyen: {SINIR_ADI.get(satir['sinir_karamsar'], satir['sinir_karamsar'])}"
+    if "olculdu" in veri:
+        ayrinti += (f" · öğlen en düşük yük {satir['ogle_min_kw']:.1f} kW "
+                    f"(%80 bant {satir['ogle_min_kw_p10']:.1f}–{satir['ogle_min_kw_p90']:.1f})")
+    st.caption(ayrinti)
     egri_ciz(klasor, veri, satir)
 
 
