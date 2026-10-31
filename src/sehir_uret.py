@@ -39,6 +39,21 @@ Yeni rastgelelik ayrı akışlardan (`og13-`, `faz13-`, `ogle13-`); şehrin traf
 - Öğlen orta gerilim değişimi şehir başına −%0,4…+%0,8 (UKPN: öğlen bara geceden ~1 V düşük; karar masası 18:46).
   1.2'de sabit +%0,8.
 
+Sürüm 1.4 (B-Y1, Faz 11; karar masası 23:12, ADR-0014): yıl boyu tepe, yük haritasının cevap anahtarı. Ekleme
+yalnız: Nisan çıktıları (trafolar.csv, yuk_5dk.csv, cevap anahtarının 1.3 sütunları) 1.3 ile birebir; yeni rastgelelik
+ayrı akışlardan (`klima14-`, `yaz14-`, `kis14-`, `og14-`), şehrin ağı aynı.
+- Aynı şehir, aynı ağ, aynı hava yılı için iki pencere daha: yazın en sıcak 7 günü (Haziran–Eylül, günlük ortalama
+  sıcaklığın 7 günlük ortalaması en büyük) ve kışın en soğuk 7 günü (Ocak–Şubat, aynı ölçünün en küçüğü).
+  Eğri o günün ayının EAC tipik günü; ışınım ve sıcaklık Open-Meteo'nun aynı dosyasından.
+- Sıcaklık terimi: EAC tipik günü o ayın ortalama havasını ve günün şeklini (Temmuz konutunda gece klima tepesi)
+  taşır; şekil veriden kalır, seviye sıcaklıkla değişir. Günün ortalama sıcaklığı o ayın günlük ortalamasından ΔT
+  farklıysa günün yükü × (1 + β·ΔT) (yaz) ya da × (1 − β·ΔT) (kış), en az ×0,6. β sınıf başına [Yorum] × trafo başına
+  klima / ısıtma yaygınlığı U(0,5; 1,5) (gizli; mahalle gibi). Bütün evler aynı havayı görür: klima tepesi eşzamanlı.
+  β'lar Can'ın 20 Kıbrıs evi + sıcaklık analizine çapalanacak (Faz 11).
+- Cevap anahtarına sonda: yılın net tepesi (`tepe_yil_kw`, kVA'sı, saati, ayı), yaz ve kış tepeleri, yıl pencerelerinde
+  en düşük ev gerilimi (`v_min_tepe_v`, 207 V), `kva_tavan` (gereken güç 1000 kVA'yı aştı, listeye kesildi; Nisan
+  donuk olduğu için 1.600 / 2.500 kVA eklenmedi). Yeni dosyalar `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv`.
+
 Çalıştırma:
   python3 src/sehir_uret.py 7            # data/synthetic/sehir-007/
   python3 src/sehir_uret.py 1 20         # sehir-001 … sehir-020
@@ -69,7 +84,7 @@ KIYI_JSON = KOK / 'data' / 'raw' / 'osm-kasaba' / 'girne_kiyi.json'
 CIKTI = KOK / 'data' / 'synthetic'
 
 SOZLESME_SURUMU = '1.2'
-URETICI_SURUMU = '1.3'                   # 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
+URETICI_SURUMU = '1.4'                   # 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -109,6 +124,26 @@ FAZ_SAPMA = {'kentsel': 0.25, 'turistik': 0.25, 'sanayi': 0.25, 'kirsal': 0.50}
 # adım sayısı ve yüzdesi katalogda yok, BULAMADIM (uzmana soru 8). Bandın sebebi bu sahadaki elle ayar.
 # [Yorum; karar masası 16:27: UKPN 20 trafoda gece ortanca 245,0 V, +1 ss 248,2 V, siteler arası ss 3,3 V; PR #11].
 V0_BANT = (244.0, 252.0)
+# 1.4 (B-Y1): yaz ve kış pencereleri. Aylar: pencerenin arandığı aylar (hava yılı). Gün sayısı bir hafta [Yorum].
+MEVSIM_AYLARI = {'yaz': (6, 7, 8, 9), 'kis': (1, 2)}
+MEVSIM_GUN = 7
+# Sıcaklık duyarlılığı β: °C başına göreli yük değişimi, tipik günün o saatine göre [Yorum, hepsi varsayım: Kıbrıs'a
+# özgü sınıf eğimi BULAMADIM; Can'ın 20 ev + sıcaklık analiziyle çapalanacak]. Konut ve küçük ticaret klimalı;
+# sanayi ve büyük sanayi az; su motoru yazın sıcakla sulama artar, kışın değişmez.
+SICAKLIK_BETA = {
+    'yaz': {'konut': 0.045, 'ticari1': 0.03, 'dukkan': 0.03, 'otel': 0.02, 'sanayi1': 0.01, 'sanayi2': 0.005,
+            'su_motoru': 0.02, 'yurt': 0.045},
+    'kis': {'konut': 0.03, 'ticari1': 0.02, 'dukkan': 0.015, 'otel': 0.015, 'sanayi1': 0.005, 'sanayi2': 0.0,
+            'su_motoru': 0.0, 'yurt': 0.03},
+}
+KLIMA_YAYGINLIK = (0.5, 1.5)             # trafo başına β çarpanı, gizli [Yorum]
+SICAKLIK_TABAN = 0.6                     # sıcaklık çarpanı en az [Yorum]
+# Yaz ve kış tatilleri: hafta sonu + KKTC resmi tatilleri [Kaynaklı: 1 Ocak ve 20 Temmuz KKTC resmi tatil; Kurban
+# Bayramı tarihleri Diyanet takvimi, Nisan bayramlarıyla aynı kaynak; KKTC Resmi Gazete listesi BULAMADIM].
+MEVSIM_BAYRAMLARI = {dt.date(y, 1, 1) for y in HAVA_YILLARI} | {dt.date(y, 7, 20) for y in HAVA_YILLARI} | {
+    dt.date(2023, 6, 28), dt.date(2023, 6, 29), dt.date(2023, 6, 30), dt.date(2023, 7, 1),
+    dt.date(2024, 6, 16), dt.date(2024, 6, 17), dt.date(2024, 6, 18), dt.date(2024, 6, 19),
+    dt.date(2025, 6, 6), dt.date(2025, 6, 7), dt.date(2025, 6, 8), dt.date(2025, 6, 9)}
 
 # Abone sınıfı: (profiller.py sınıfı, trafolar.csv sütunu, yıllık MWh / abone, üç faz olasılığı).
 # Yıllık MWh / abone [Hesap]: Kıb-Tek 2023 tarife sınıfı tüketimi (stat_2023) ÷ abone sayısı (veri sözlüğü).
@@ -173,6 +208,19 @@ def egrileri_yukle():
                 {s: max(eg) for s in SINIFLAR}, 'yer_tutucu')
 
 
+def mevsim_egrileri(aylar):
+    """1.4: {(sınıf, ay, gün türü): 288 değer} istenen aylar için, egrileri_yukle() ile aynı birim (yıllık ortalama = 1).
+    EAC yoksa None (yer tutucu şehirde yaz / kış penceresi üretilmez)."""
+    try:
+        import profiller
+        veri = profiller.oku(EAC_XLSX)
+    except (ImportError, OSError):
+        return None
+    ort = {s: yillik_ortalama(veri, SINIFLAR[s][0]) for s in SINIFLAR}
+    return {(s, ay, g): [x / ort[s] for x in profiller.sinif_egrisi(veri, SINIFLAR[s][0], ay, g)]
+            for s in SINIFLAR for ay in aylar for g in ('is', 'tatil')}
+
+
 def yillik_ortalama(veri, sinif):
     """24 tipik günün 2022 takvimine göre ağırlıklı ortalaması (pu) [Hesap: cumartesi ve pazar
     tatil, bayramlar yok sayıldı]."""
@@ -209,6 +257,58 @@ def _isinim_dosyasi(yol):
         an = dt.datetime.fromisoformat(p[0]) - dt.timedelta(hours=1)   # saatin başı
         saatlik.setdefault(an.date(), [0.0] * 24)[an.hour] = float(p[sut]) / 1000
     return saatlik
+
+
+def sicaklik_oku(yollar):
+    """1.4: Open-Meteo saatlik CSV'leri -> {tarih: 24 değer}, temperature_2m (°C), saatin kendisinde (anlık)."""
+    out = {}
+    for yol in yollar:
+        with open(yol, encoding='utf-8') as fh:
+            satirlar = fh.read().splitlines()
+        bas = next(i for i, s in enumerate(satirlar) if s.startswith('time,'))
+        sut = next(i for i, b in enumerate(satirlar[bas].split(',')) if b.startswith('temperature_2m'))
+        for s in satirlar[bas + 1:]:
+            p = s.split(',')
+            if len(p) <= sut or not p[sut]:
+                continue
+            an = dt.datetime.fromisoformat(p[0])
+            out.setdefault(an.date(), [float('nan')] * 24)[an.hour] = float(p[sut])
+    return out
+
+
+def gunun_sicakligi(sicaklik, tarih):
+    """24 saatlik anlık değer -> 288 beş dakika, doğrusal (gün sonunda ertesi günün 00:00'ı, yoksa son saat)."""
+    h = sicaklik[tarih]
+    ert = sicaklik.get(tarih + dt.timedelta(days=1), [h[23]])[0]
+    out = []
+    for s in range(ADIM):
+        x = s * 5 / 60
+        i, w = int(x), x - int(x)
+        a, b = h[i], (h[i + 1] if i < 23 else ert)
+        out.append(a * (1 - w) + b * w)
+    return out
+
+
+def uc_hafta(sicaklik, yil, aylar, sicak):
+    """1.4: hava yılının verilen aylarında ardışık MEVSIM_GUN gün; sıcak = günlük ortalama sıcaklığın ortalaması en
+    büyük (sıcak geceler dahil; akşam klima tepesi gece sıcaklığını da görür [Yorum]), değilse en küçük. Eğri her günün
+    kendi ayından."""
+    gunler = sorted(d for d in sicaklik if d.year == yil and d.month in aylar and len(sicaklik[d]) == 24)
+    deger = {d: statistics.fmean(sicaklik[d]) for d in gunler}
+    en, sec = None, None
+    for i in range(len(gunler) - MEVSIM_GUN + 1):
+        pen = gunler[i:i + MEVSIM_GUN]
+        if (pen[-1] - pen[0]).days != MEVSIM_GUN - 1:
+            continue
+        o = statistics.fmean(deger[d] for d in pen)
+        if en is None or (o > en if sicak else o < en):
+            en, sec = o, pen
+    return sec, en
+
+
+def ay_ortalamasi(sicaklik, yil, ay):
+    """Ayın günlük ortalama sıcaklıklarının ortalaması: EAC tipik günü bu havayı taşır [Yorum]."""
+    return statistics.fmean(statistics.fmean(sicaklik[d]) for d in sicaklik if d.year == yil and d.month == ay)
 
 
 def gunun_isinimi(saatlik, tarih):
@@ -341,7 +441,7 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
         x, y = konum(rng, a['konum'], kiyi)
         d = FAZ_SAPMA[a['bolge']]
         fw = [rng.uniform(1 - d, 1 + d) for _ in range(3)]
-        tr = dict(no=f'T{ti + 1:02d}', tip=tip, bolge=a['bolge'], kva=kva, x=x, y=y,
+        tr = dict(no=f'T{ti + 1:02d}', tip=tip, bolge=a['bolge'], kva=kva, x=x, y=y, kva_tavan=int(gerek > KVA_LISTESI[-1]),
                   montaj='direk' if kva <= 400 else 'yer', kablo=rng.choice(a['kablo']),
                   v0=round(rng.uniform(*V0_BANT), 1), mahalle=mahalle, kayma_dk=kayma,
                   fatura_sapma=rng.uniform(*FATURA_SAPMA), feeders=[], evler=[])
@@ -455,6 +555,50 @@ def yuk_serisi(tr, ayar, egriler, gun_turleri, rng):
     return out
 
 
+def yuk_serisi_mevsim(tr, ayar, egriler, tarihler, gun_turleri, T, Tort, mevsim, klima, rng):
+    """1.4: yaz / kış penceresi, abone başına kW (brüt). yuk_serisi ile aynı adımlar; eğri günün ayından, üstüne
+    günlük sıcaklık çarpanı max(SICAKLIK_TABAN, 1 ± β·klima·ΔT), ΔT = günün ortalama sıcaklığı − ayın günlük
+    ortalaması (Tort[ay])."""
+    isaret = 1.0 if mevsim == 'yaz' else -1.0
+    out = {}
+    kw = {s: SINIFLAR[s][2] * 1000 / 8760 * ayar['tuketim_carpani'][s] for s in SINIFLAR}
+    kay = {s: (ayar['saat_kaymasi_dk'][s] + tr['kayma_dk']) // 5 for s in SINIFLAR}
+    for h in tr['evler']:
+        s = h['sinif']
+        gurultu = 0.2 if s in ('konut', 'ticari1') else 0.05
+        G = tr.get('ogle_evde', 1.0) * h.get('ogle_evde', 1.0)
+        w = ogle_agirlik(G) if G != 1.0 else None
+        beta = SICAKLIK_BETA[mevsim][s] * klima
+        seri = []
+        for d, (tarih, tur) in enumerate(zip(tarihler, gun_turleri)):
+            eg = egriler[(s, tarih.month, 'is' if tur == 'isgunu' else 'tatil')]
+            taban = [kw[s] * eg[(i - kay[s]) % ADIM] for i in range(ADIM)]
+            if w is not None:
+                q = [b * x for b, x in zip(taban, w)]
+                c = sum(taban) / sum(q)
+                taban = [x * c for x in q]
+            dT = statistics.fmean(T[d * ADIM:(d + 1) * ADIM]) - Tort[tarih.month]
+            f = max(SICAKLIK_TABAN, 1 + isaret * beta * dT)
+            for p in taban:
+                seri.append(max(0.02, p * h['olcek'] * f * (1 + rng.gauss(0, gurultu))))
+        out[h['id']] = seri
+    return out
+
+
+def mevsim_benzet(tr, g, m, yuk):
+    """1.4: pencere boyunca ev ev yük akışı; tüketim, üretim, ev gerilimi uçları, trafo görünür gücü (kVA)."""
+    n = len(g)
+    seri = dict(tuketim=[0.0] * n, uretim=[0.0] * n, vmax=[0.0] * n, vmin=[0.0] * n, s_kva=[0.0] * n)
+    warm = None
+    for i in range(n):
+        V, seri['s_kva'][i] = tb.solve(tr, net_guc(tr, i, g, yuk), m[i], warm, iters=3 if warm else 6)
+        warm = V
+        seri['vmax'][i], seri['vmin'][i] = gerilim_uclari(tr, V)
+        seri['tuketim'][i] = sum(yuk[h['id']][i] for h in tr['evler'])
+        seri['uretim'][i] = sum(h['pv'] for h in tr['evler']) * g[i] * tb.PV_DERATE
+    return seri
+
+
 def net_guc(tr, i, g, yuk, ek=None):
     net = {}
     for h in tr['evler']:
@@ -491,10 +635,10 @@ def asim(tr, g, m, yuk, kritik, ek, taban):
 
 def trafo_benzet(tr, g, m, yuk, gun_turleri, rng):
     n = len(g)
-    seri = dict(tuketim=[0.0] * n, uretim=[0.0] * n, vmax=[0.0] * n, vmin=[0.0] * n)
+    seri = dict(tuketim=[0.0] * n, uretim=[0.0] * n, vmax=[0.0] * n, vmin=[0.0] * n, s_kva=[0.0] * n)
     warm = None
     for i in range(n):
-        V, _ = tb.solve(tr, net_guc(tr, i, g, yuk), m[i], warm, iters=3 if warm else 6)
+        V, seri['s_kva'][i] = tb.solve(tr, net_guc(tr, i, g, yuk), m[i], warm, iters=3 if warm else 6)
         warm = V
         seri['vmax'][i], seri['vmin'][i] = gerilim_uclari(tr, V)
         seri['tuketim'][i] = sum(yuk[h['id']][i] for h in tr['evler'])
@@ -603,6 +747,27 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                 faz_dengesizlik_ortanca=round(statistics.median(d for tr in trafolar
                                                                 for d in faz_dengesizligi(tr, ayar)), 3))
 
+    # 1.4: yaz ve kış pencereleri, aynı hava yılı; ayrı akışlar (Nisan değişmez). EAC ve hava dosyası yoksa yok.
+    mevsimler, egriler_m = {}, None
+    if ayar['isinim_kaynagi'] == 'open-meteo-lefkosa' and profil_kaynagi == 'eac':
+        sicaklik = sicaklik_oku([y for y in ISINIM_DOSYALARI if y.exists()])
+        egriler_m = mevsim_egrileri(sorted({a for v in MEVSIM_AYLARI.values() for a in v}))
+        for mev, aylar in MEVSIM_AYLARI.items():
+            gunler, uc = uc_hafta(sicaklik, yil, aylar, mev == 'yaz')
+            if egriler_m is None or not gunler or not all(d in saatlik for d in gunler):
+                continue
+            gt = ['tatil' if d.weekday() >= 5 or d in MEVSIM_BAYRAMLARI else 'isgunu' for d in gunler]
+            gm = [x for d in gunler for x in gunun_isinimi(saatlik, d)]
+            mevsimler[mev] = dict(tarihler=gunler, gun_turleri=gt, g=gm,
+                                  T=[x for d in gunler for x in gunun_sicakligi(sicaklik, d)],
+                                  Tort={a: ay_ortalamasi(sicaklik, yil, a) for a in {d.month for d in gunler}},
+                                  m=og_carpani(gm, random.Random(f'og14-{mev}-{tohum}'), og_ogle))
+            ayar[f'{mev}_penceresi'] = {'tarihler': [d.isoformat() for d in gunler], 'gun_turleri': gt,
+                                        'gunluk_ortalama_c': round(uc, 1)}
+    ayar.update(mevsim_pencereleri=sorted(mevsimler), sicaklik_beta=SICAKLIK_BETA,
+                klima_yayginlik=list(KLIMA_YAYGINLIK), sicaklik_taban=SICAKLIK_TABAN)
+    mevsim_satir = {mev: [] for mev in mevsimler}
+
     klasor = Path(cikti) / f'sehir-{tohum:03d}'
     klasor.mkdir(parents=True, exist_ok=True)
     trafo_satir, cevap_satir, yuk_satir = [], [], []
@@ -610,6 +775,34 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
         trng = random.Random(f'yuk-{tohum}-{tr["no"]}')
         yuk = yuk_serisi(tr, ayar, egriler, gun_turleri, trng)
         seri, cevap = trafo_benzet(tr, g, m, yuk, gun_turleri, trng)
+
+        # 1.4: yaz ve kış; yılın net tepesi (net = tüketim − üretim, trafodan geçen)
+        klima = random.Random(f'klima14-{tohum}-{tr["no"]}').uniform(*KLIMA_YAYGINLIK)
+        pencere = [('nisan', seri, tarihler)]
+        for mev, M in mevsimler.items():
+            yk = yuk_serisi_mevsim(tr, ayar, egriler_m, M['tarihler'], M['gun_turleri'], M['T'], M['Tort'], mev,
+                                   klima, random.Random(f'{mev}14-{tohum}-{tr["no"]}'))
+            ms = mevsim_benzet(tr, M['g'], M['m'], yk)
+            pencere.append((mev, ms, M['tarihler']))
+            for i in range(len(M['g'])):
+                d, s = divmod(i, ADIM)
+                tk, ur = ms['tuketim'][i], ms['uretim'][i]
+                mevsim_satir[mev].append([tohum, tr['no'], d, M['tarihler'][d].isoformat(), M['gun_turleri'][d], s,
+                                          f'{s * 5 // 60:02d}:{s * 5 % 60:02d}', round(M['T'][i], 1), round(tk, 2),
+                                          round(ur, 2), round(tk - ur, 2), round(ms['vmax'][i], 1),
+                                          round(ms['vmin'][i], 1), round(ms['s_kva'][i], 1)])
+        tepe, mev_tepe = None, {}
+        for ad, ps, tar in pencere:
+            for i in range(len(ps['tuketim'])):
+                net = ps['tuketim'][i] - ps['uretim'][i]
+                mev_tepe[ad] = max(mev_tepe.get(ad, net), net)
+                if tepe is None or net > tepe[0]:
+                    d, s = divmod(i, ADIM)
+                    tepe = (net, tar[d].month, f'{s * 5 // 60:02d}:{s * 5 % 60:02d}')
+        cevap.update(tepe_yil_kw=tepe[0], tepe_ayi=tepe[1], tepe_saati=tepe[2],
+                     tepe_yil_kva=max(max(ps['s_kva']) for _, ps, _ in pencere),
+                     v_min_tepe_v=min(min(ps['vmin']) for _, ps, _ in pencere),
+                     tepe_yaz_kw=mev_tepe.get('yaz'), tepe_kis_kw=mev_tepe.get('kis'), klima=klima)
 
         abone = {c: 0 for c in ABONE_SUTUNLARI}
         for h in tr['evler']:
@@ -629,7 +822,12 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
                             round(cevap['tepe_kw'], 2), round(cevap['v_max_bugun_v'], 1),
                             round(cevap['v_min_bugun_v'], 1), cevap['kac_ev_aday'], cevap['kac_ev_gercek'],
                             cevap['kac_ev_gercek_min'], cevap['kac_ev_gercek_max'],
-                            cevap['kac_ev_tavan'], cevap['kac_ev_sinir'], round(tr['mahalle'], 3), tr['kayma_dk']])
+                            cevap['kac_ev_tavan'], cevap['kac_ev_sinir'], round(tr['mahalle'], 3), tr['kayma_dk'],
+                            round(cevap['tepe_yil_kw'], 2), round(cevap['tepe_yil_kva'], 2), cevap['tepe_saati'],
+                            cevap['tepe_ayi'], round(cevap['v_min_tepe_v'], 1),
+                            '' if cevap['tepe_yaz_kw'] is None else round(cevap['tepe_yaz_kw'], 2),
+                            '' if cevap['tepe_kis_kw'] is None else round(cevap['tepe_kis_kw'], 2),
+                            tr['kva_tavan'], round(cevap['klima'], 3)])
 
         for i in range(len(g)):
             d, s = divmod(i, ADIM)
@@ -650,8 +848,14 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
             ['sehir', 'trafo_no', 'tip', 'v0_v', 'faz_a_ev', 'faz_b_ev', 'faz_c_ev', 'uc_faz_ev',
              'ogle_min_kw', 'ogle_min_kw_isgunu', 'ogle_min_kw_tatil', 'ogle_min_net_kw', 'tepe_kw',
              'v_max_bugun_v', 'v_min_bugun_v', 'kac_ev_aday', 'kac_ev_gercek', 'kac_ev_gercek_min',
-             'kac_ev_gercek_max', 'kac_ev_tavan', 'kac_ev_sinir', 'mahalle_carpani', 'saat_kaymasi_dk'],
+             'kac_ev_gercek_max', 'kac_ev_tavan', 'kac_ev_sinir', 'mahalle_carpani', 'saat_kaymasi_dk',
+             'tepe_yil_kw', 'tepe_yil_kva', 'tepe_saati', 'tepe_ayi', 'v_min_tepe_v', 'tepe_yaz_kw', 'tepe_kis_kw',
+             'kva_tavan', 'klima_carpani'],
             cevap_satir)
+    for mev, satir in mevsim_satir.items():          # 1.4
+        csv_yaz(klasor / f'yuk_5dk_{mev}.csv',
+                ['sehir', 'trafo_no', 'gun', 'tarih', 'gun_turu', 'adim', 'saat', 'sicaklik_c', 'tuketim_kw',
+                 'uretim_kw', 'net_kw', 'v_max_v', 'v_min_v', 'trafo_kva'], satir)
     ayar['sure_sn'] = round(time.time() - t0, 1)
     with open(klasor / 'ayar.json', 'w', encoding='utf-8', newline='') as fh:   # LF (karar masası 13:00)
         json.dump(ayar, fh, ensure_ascii=False, indent=1)
@@ -666,7 +870,7 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='Deneme şehri üreticisi (Faz 1; sürüm 1.3, Faz 8).')
+    ap = argparse.ArgumentParser(description='Deneme şehri üreticisi (Faz 1; sürüm 1.4, Faz 11 yıl boyu tepe).')
     ap.add_argument('ilk', type=int, help='tohum (şehir no)')
     ap.add_argument('son', type=int, nargs='?', help='verilirse ilk…son arası her tohum')
     ap.add_argument('--trafo', type=int, default=40, help='trafo sayısı (en az 21: 7 tip × 3)')
