@@ -131,3 +131,7 @@ Durum: bekliyor
 ## BİLGİ 22:56 — karar masasından — KIOS isteğini Can üstleniyor (Volkan); senin taslağın temel
 Ne: Volkan KIOS e-postasını ve açık veri indirmelerini Can'a verdi. Senin taslağın (madde 2) temel; Can üç istek ekliyor: hat modeli, kademe ayarı / standardı, ölçülmüş düğüm gerilimleri. Micallef (Gozo tezi) isteği sende kalıyor, Volkan onaylayınca. Muhittin'in dördüncü cevabından harita için not (karar sırada, ADR gelecek): PV katmanı "boş yer haritası" değil "güvenli uçlar" olarak gösterilecek (kesin dolu uyarısı + kesin yeşil; belirsizler renksiz, "başvuruda bakılır"); şimdilik kod değişikliği yok, karar gelince kartın gelir.
 Durum: bilgi
+
+## BİLGİ 23:02 — karar masasından — sıradaki harita işleri (kart sonra)
+Ne: (1) Yük katmanı: her trafoda "akşam doluluğu" ikinci sayısı gelecek (Can'ın tepe sütunları, sözleşme 1.4; "ön" etiketi, kVA, güç katsayısı 0,95 varsayım; ADR-0014). (2) Panel katmanı Muhittin'in önerisiyle "güvenli uçlar": yeşil (ilk 2 başvuru güvenle sığar) ve "büyük olasılıkla dolu" uyarısı (bugün aşma olasılığı ≥ 0,7; deneme şehirlerinde bunların %68'i gerçekten dolu); arası renksiz, "başvuruda bakılır". (3) "Kıb-Tek kayıtlarıyla" görünüm (BUILD'in sahte kayıt sonuçları gelince): aynı haritanın kayıtlı sürümü, karşılaştırma için. Kodlar sözleşme 1.4 ve BUILD'in sonuçları gelince kartla gelir; şimdilik Faz 4 kalanı ve veri araştırma kartın.
+Durum: bilgi

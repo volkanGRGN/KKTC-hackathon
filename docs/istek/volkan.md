@@ -703,3 +703,14 @@ Karar: Volkan (22:56): "panelde gerilimi tamamen salmadan, eldeki verilerle deva
 Neden: Muhittin 5B'ye göre PV'yi dondurmak erken olabilir; kanıtı bu test verir. Ucuz (bilgi_degeri.py var).
 Senden beklenen (BUILD): dal + günlük tablosu (S0 / S-kademe / S-inverter / S-ikisi × tüm trafolar / panelli evi olanlar), 60–90 dk; kutuya UYARI; karar masası Mac'te tekrarlar.
 Durum: bekliyor
+
+## KARAR 23:02 — BUILD'e: panel katmanı bırakılmıyor; "Kıb-Tek kayıtları geldiğinde" sürümü sahte (mock) ama gerçeğe yakın kayıtlarla şimdi kurulur (Volkan)
+Karar: Volkan (23:02): "Kıbrıs'taki trafolardan veri alacağız ama şimdi değil; mock veriyle, gerçeğe yakın çalışmalıyız; kusursuz gerçek yapamıyoruz." Buna göre panel katmanı dondurulmaz; **Kıb-Tek'in vereceği kayıtlar deneme şehrinde kusurlarıyla taklit edilir**, model onları okur, gerçek kayıt gelince yalnız dosya değişir.
+1. **Sahte kayıt dosyası** (sözleşme 1.4 adayı, `kayitlar.csv`, satır = trafo / abone; üretici yazar, cevap anahtarından **bozularak**): (a) trafo kademe pozisyonu (5 kademe, ±2 × %2,5); (b) abone → trafo → hat → direk sırası (panelli abonenin hattı ve yeri); (c) tek fazlı abonenin fazı; (d) hat boyu ve kesit (GIS). **Kusurlar parametreli** [Yorum, gerçek oranlar Kıb-Tek'ten sorulacak]: kademe kaydı %80 doğru, %20 yanlış / eksik; abone–trafo eşleşmesi %95 doğru; direk sırası ±2 direk; faz kaydı %70 dolu, dolu olanların %90'ı doğru; hat boyu ±%15; inverter kaydı panelli evlerin %20'sinde (izinle). Üç düzey koşulur: iyimser / beklenen / kötümser (hataları yarıya / aynen / iki katına).
+2. **Model kayıtları okur:** olasılıklı hesapta (ADR-0011) kayıt varsa o bilinmeyenin çekilişi kayda **koşullanır** (kayıt hata payıyla; Muhittin: hiyerarşik, kayıt öncülü daraltır, sıfırlamaz); kayıt yoksa bugünkü aralık. Kademe öncülü ayrık (Muhittin 5A); inverter varsa bara ve hat empedansı geri çözümü (5B; zaten koşan test bunun parçası).
+3. **Ölçü:** üç düzeyde renk dağılımı, yanlış yeşil (kapı), kırmızı kovası, kaç ev bandı; yan yana: bugün (kayıtsız) / sahte kayıtlarla / kusursuz bilgi (bilginin değeri). Geliştirme şehirleri 1–10'da kur, sınav 21–30 bir kez (üretici 1.3). Etiket: "Kıb-Tek kayıtları gelirse (sahte, gerçeğe yakın hatalarla) — gösterim".
+4. **Akan iş:** koşan inverter / kademe testi bu işin ilk parçası; ayrı bitirme, buna genişlet. Dal + PR (sözleşme 1.4 eklentisi: Can ya da Civan onayı).
+5. **Paralel, değişmez:** yük ve akşam tepesi Can'da (can.md 23:02); tepe modeli (öğlen + tepe hedefi, Temmuz şehirleri, sıcaklık terimi) bu işten sonra BUILD'de.
+Neden: Volkan'ın kararı; Muhittin 5 (kademe ayrık öncül, inverter geri çözümü, PV erken açılabilir); veri geldiğinde boru hattı hazır olsun; kusursuz bilgi (S4–S6) gerçekçi değil, kusurlu kayıt gerçekçi.
+Senden beklenen (BUILD): 1–4; ilk sonuç kutuya UYARI; karar masası Mac'te tekrarlar. Kayıt hata oranlarının gerçek değerleri uzmana / Kıb-Tek'e soru listesine (Faz 9 istek taslağına) eklenir.
+Durum: bekliyor

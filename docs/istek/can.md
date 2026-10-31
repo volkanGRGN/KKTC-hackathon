@@ -384,3 +384,15 @@ Karar: Volkan bir kaynak tablosu getirdi (yapay zekâ araştırması gibi; her i
 Neden: Faz 10–11'in verisi (tepe sıcaklık eğimi, eşzamanlılık, Kıbrıs hattı modeli); tablo yapay zekâ çıktısı olabilir, her rakam kaynağa iner (CLAUDE.md).
 Senden beklenen: PR #16 / #18 onaylarından sonra 1 → 4 bu gece, 5 → 9 sıra geldikçe; Code Ocean'da bulduğunu ve KIOS metnini kutuya.
 Durum: bekliyor
+
+## KARAR 23:02 — iş bölümü netleşti (Volkan): sen yük ve akşam tepesindesin; panel tarafına araştırma yok
+Karar: Açık veri araştırması panelin sorununu (her trafonun kendi çıkış gerilimi, panel yeri, fazı) çözemez; o bilgiler Kıb-Tek'ten gelecek, şimdilik BUILD onları deneme şehrinde **sahte ama gerçeğe yakın kayıtlarla** taklit ediyor (volkan.md 23:02). **Senin işin yük ve akşam tepesi** (Faz 11, ADR-0014 + Muhittin'in dördüncü cevabı madde 2):
+1. **Veri (doğrulanmış liste, 22:5x KARAR):** Lefkoşa prosumer evi (30 sn, Zenodo 8348862), Kıbrıs 20 prosumer 2016 (23043383), Kıbrıs PV + sıcaklık 30 sn (20800202), Lefkoşa saatlik sıcaklık (Open-Meteo, **2016 dahil**: 20 evle aynı yıl), Slovenya trafo yükleri (20927130). Code Ocean Kıbrıs hattını yalnız indir ve kutuya yaz (panelde ileride doğrulama için), FeederBW / DEPsys indirme.
+2. **Eşzamanlılık:** 20 evin bir yılından N = 1…20 ev için "N evin birlikte tepesi ÷ (N × tek ev tepesi)" eğrisi; **sıcak akşamlar (klima) ve diğer günler ayrı** (Muhittin: klima tepesinde çeşitlilik düşük); Velander biçimine (tepe ≈ N·a + b·√(N·a)) fit; iki bileşen (klima ~doğrusal + taban √N) ayrımı sıcaklığa göre.
+3. **Sıcaklık eğimi:** aynı 20 evin (ve Lefkoşa evinin) akşam tepesi ↔ o akşamın sıcaklığı; °C başına artış ve belirsizliği; tasarım sıcaklığı (Lefkoşa'da 10 yılda bir sıcak akşam, Open-Meteo uzun seri) önerisi.
+4. **Sınav maddesi:** `faz2`'ye tepe hatası (İspanya Mayıs tepesi gerçek veri, bir-dışarıda; farazi bilgi) ve tepe bandı kapsaması; geçici eşik ortanca ≤ %15 / P90 ≤ %35 [Yorum].
+5. **Sözleşme 1.4 tepe sütunları** (`tepe_kva`, P10 / P90, `pf_varsayim`): taslak PR, BUILD'in kayıt dosyasıyla aynı 1.4'e.
+Sıra: PR #16 / #18 onayları → KIOS tek e-posta (kademe ayarı / standardı + ölçülmüş gerilim; Volkan'a göster) → 1 → 2 → 3 → 4 → 5. Eşzamanlılık ve sıcaklık eğimi sonuçları BUILD'in tepe modeline girdi.
+Neden: Volkan'ın kararı; Muhittin 2 ve 4 (modelin hakkını vereceği yer tepe).
+Senden beklenen: yukarıdaki sıra; her adım günlüğe; takılırsan kutu.
+Durum: bekliyor
