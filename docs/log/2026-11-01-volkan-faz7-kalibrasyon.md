@@ -116,4 +116,12 @@ python3 src/sablon.py data/synthetic && python3 src/kac_ev_olasilik.py data/synt
 python3 src/sinav.py faz2 data/synthetic --aralik 11-20; python3 src/sinav.py faz3 data/synthetic --aralik 11-20
 ```
 
+## Ek girdi — 31 Ekim 21:51: karar masası dört eksi bulguya karar verdi (kod değişmedi, yeniden koşum yok)
+1. **Faz 2 farazi kapsama maddesi bilgi satırına indi; kapı İspanya** (%79, bir-dışarıda). Farazi 11–20'de %96 beklenen: üretici fazla düzgün; Faz 8'de gerçeğe çapalanınca yeniden. PR Faz 8'i beklemez.
+2. **Bedel kabul:** yeşil %25 → %14, yanlış kırmızı %27 → %33, sarı %62 → %69. Önce iki kapı (yanlış yeşil 0/48, İspanya %79, İngiltere 6/6), işletme ölçüleri sonra (tüzük madde 2). **σ notu:** σ = 0,41 altı hattan moment tahmini; aralık 0,12–0,41. 0,41 en temkinli uç değil, tahmin. Pilot hatlarıyla yeniden (Faz 10).
+3. **PIT toleransı örnek büyüklüğüne bağlı:** max(0,05; 2·√(0,09 ÷ n)); İspanya n = 29 → 0,11; 0,086 geçer. Formül tüzük madde 2'de; Can'ın C1 (b) maddesi aynı. Şekil düzeltmesi (konformal / yük tarafı model-sapma) Faz 10'da.
+4. **`KOL_P` kalır.** s, `KOL_P`'li modelin İngiltere artıklarından tahmin edildi; `KOL_P`'yi kaldırıp s'yi yeniden fit etmek aynı 6 hattın bilgisini s'ye taşır, kazanç yok. **Çift sayım riski temkin yönünde; Faz 10'da pilot hatlarıyla ayrıştırılır.**
+
+Birleşme koşulu (karar masası): karar masasının Mac koşumu BUILD rakamlarıyla tutar **ve** Can C1'i dalda koşup onaylar; sonra karar masası birleştirir, Can resmi `faz2` / `faz3`, sunum rakamları v2.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
