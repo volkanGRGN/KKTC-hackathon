@@ -288,3 +288,9 @@ Ne: Volkan'ın isteğiyle (modelin yanlış bulduğu yerlerin çözümü) Faz 3 
 Dosya: src/kac_ev_olasilik.py, docs/log/2026-10-31-volkan-faz3-olasilik.md (PR #15, PR #13'ün üstünde)
 Neden: Faz 3 yanlış kırmızı ve kaç ev maddeleri KALDI; varsayım envanteri (17:49) çözümün ayar değil yapı olduğunu gösterdi.
 Durum: bekliyor
+
+## UYARI! 31 Eki 18:09 — BUILD'den — Olasılıklı hesabın İngiltere geri-testi: 6 hattın 5'i kapsandı, biri kaçtı
+Ne: Volkan'ın isteğiyle olasılıklı hesabın gerilim tarafı İngiltere UKPN'in 6 gerçek hattında sınandı (ADR-0010 madde 3). Soru: ölçülen panel kaynaklı yükselme, hesabın "%98 güvenli" sınırının (P98) altında mı? Faz bilinmezken (Kıb-Tek'in durumu) ve hat boyu ×0,6–1,6 belirsizken 5/6 evet; **Bancroft'ta hayır** (ölçülen, P98'in 1,3 katı; ev yüksüz ama panelli bir kolda, tek hatlı model kol yapısını görmüyor). Hat boyu kesin sayılınca 4/6. Eski düz model 2/6'da yarıdan az gösteriyordu. Sonuç: yeşil kuralının %2 bütçesi gerçek veride doğrulanmış sayılmaz; olasılıklı hesaba hat boyu belirsizliği ve kol yapısı eklenmeli (farazi şehirde yeşil azalır, ölçülecek); canlıdan önce pilotta sarı uçlarında ölçüm. Sunum cümlesi önerisi günlükte.
+Dosya: docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md, src/ukpn_olasilik.py
+Neden: PR #15'in resmi hesap olup olmayacağı kararı (17:57 UYARI) bu geri-teste bağlı. Bloklamıyor.
+Durum: bekliyor
