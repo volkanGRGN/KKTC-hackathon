@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 21:46 — Faz 6–12 başladı (Volkan 21:39); Faz 7 PR #16 karar masasında test.
+**Güncellendi:** 31 Ekim 2026, 22:25 — Gozo PR #17 birleşti (olumsuz sonuç); PR #16 Can'ın onayında, PR #18 karar masası Mac koşumunda.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
