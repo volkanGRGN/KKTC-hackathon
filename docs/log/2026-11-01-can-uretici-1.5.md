@@ -49,3 +49,10 @@ Sınavlar (main'deki `sinav.py` 672ce1a; şablon ve kaç ev bu dalın kodu, K_YU
 ## Sıradaki
 - PR (taban `uretici/1.4-tepe`, PR #21); karar masası Mac koşumu ve süre ölçümü; Civan / BUILD onayı.
 - B-Y2 tepe modeli 1.5 şehirlerinde (Civan'ın eşzamanlılık / sıcaklık analizi gelince).
+
+## Ek — birleşik ağaç (main + 1.5), karar masası Mac koşumu (KARAR 01:20)
+Dal PR #21'in yaz penceresi düzeltmesinden (13e8485) önceki hâlin üstünde; yukarıdaki tablolar düzeltme öncesi pencereyle. main'e çakışmasız birleşiyor; karar masası birleşik ağacı Mac'te sıfırdan koştu [Hesap: karar masası 01:18]:
+- 1–10: yıl tepesi ÷ güç P50 / P90 0,47 / 0,73, aşan %0,8, 207 V altı %0,5, en düşük 201,1 V.
+- **31–40: 0,44 / 0,68, aşan %0,5, 207 V altı %0,5, en düşük 201,1 V**; tepe ayı Temmuz. Hedeflerin hepsi tutuyor; yeniden ayar gerekmedi (KARAR 00:24'ün istediği).
+- faz1 20 şehir 5/5, **üretim süresi 55,6 sn GEÇTİ** (Windows'taki KALDI makine yüküydü); faz2 31–40 GEÇTİ (arketip ortancası %75,0, eşikte — açık); faz3 31–40 yanlış yeşil 0/28, %40 kuralı 24/46, kırmızı kovası %45,3, sarı %73,5.
+Resmi rakamlar bunlar (birleşik ağaç, Mac); puanlayan karar masası.
