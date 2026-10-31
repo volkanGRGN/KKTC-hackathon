@@ -298,6 +298,16 @@ BANT_YONTEMI = 'nicel'                  # 'nicel': artıkların P10–P90'ı; 'u
 # %4 → düşük yükü kaçırmak = yanlış yeşil yönü). Artık ortancası ~0 (şehir 1–10: %0,1), yani kayma tahminde değil
 # bandın şeklinde. Şehir 1–10: P10 altı %14 → %11, P90 üstü %8 → %13; sınav 11–20: %11 → %6, %4 → %6 (Faz 2 günlüğü).
 BANT_SIMETRIK = True
+# Faz 7 (karar masası 21:32; ADR-0013 madde 3): bant GERÇEĞE karşı kalibre. Şehrin kendi bir-dışarıda artıkları
+# farazi dünyanın yayılımını görür; gerçek dünya daha dağınık. İspanya'da (EDP Oviedo 2018, 29 trafo, edp_test.py
+# faturalı (c) koşusunun 2.280 bir-dışarıda tahmini) %80 bant gerçeğin %65,7'sini kapsadı ("fazla emin").
+# k_yük = |birim artık|'ın %80 yüzdeliği; bant log ölçekte k ile genişler. Farazi şehre bakılarak seçilmedi.
+# Kaynak: src/kalibrasyon.py ispanya; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md.
+K_YUK = 1.475                           # [Hesap: İspanya; bir-dışarıda k aralığı 1,38–1,50]
+KALIBRASYON = dict(kaynak='EDP Oviedo 2018, 29 trafo, bir-dışarıda tahminler (src/edp_test.py girdi c)',
+                   k=K_YUK, k_bir_disarida_aralik=[1.379, 1.504], kapsama80_once=0.657,
+                   kapsama80_sonra_ic_ornek=0.8, kapsama80_sonra_bir_disarida=0.791,
+                   betik='src/kalibrasyon.py ispanya', not_='ayar yalnız gerçek artıkla; farazi şehre bakılarak seçilmedi')
 TABAN_HATA = 0.05                       # model hatası tabanının alt sınırı (çok aboneli trafoda bile) [Yorum]
 # Taban artıklardan seçilir (taban_sec). Sürüm 1.2 şehirlerinde mahalle farkı (ADR-0008) abone sayısıyla
 # sönmüyor: sabit 0,05 tabanla çok aboneli konut trafosu "yüksek güven" alıp en çok yanılan oluyordu.
@@ -382,6 +392,7 @@ def calistir(tr, X_tam, A, olcum_hepsi, secilen, hedef=None):
     if BANT_SIMETRIK:
         yari = (math.log(ust) - math.log(alt)) / 2
         alt, ust = math.exp(-yari), math.exp(yari)
+    alt, ust = math.exp(K_YUK * math.log(alt)), math.exp(K_YUK * math.log(ust))     # Faz 7: gerçeğe karşı
     u_ortanca = float(np.median(np.abs(u)))
     m.update(loo_log_artik=r, bant=(alt, ust), taban=taban)
     hedef_tr = tr if hedef is None else hedef[0]
@@ -472,6 +483,7 @@ def sehir_calistir(klasor, yalniz_ana=False):
                 gorulmemis_siniflar=[c for c, g in zip(ABONE, m['gorulmemis']) if g],
                 guven_sayilari={g: sum(1 for s in satirlar if s['olculdu'] == 0 and s['guven'] == g)
                                 for g in ('yuksek', 'orta', 'dusuk')},
+                kalibrasyon=KALIBRASYON,
                 sure_sn=round(time.time() - t0, 1))
     with open(klasor / 'sablon_ozet.json', 'w', encoding='utf-8', newline='') as fh:
         json.dump(ozet, fh, ensure_ascii=False, indent=1)

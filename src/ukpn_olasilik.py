@@ -14,6 +14,9 @@ eğiminden. Veriyi yalnız okur, dosya yazmaz.
 
 Çalıştırma (sanal ortam; ~35 sn):
   BOY=0.47 python3 src/ukpn_olasilik.py data/raw/ukpn-pv-dogrulama
+  BOY=0.47 CEKILIS_JSON=cekilis.json python3 src/ukpn_olasilik.py data/raw/ukpn-pv-dogrulama   # Faz 7: çekilişler
+CEKILIS_JSON verilirse her sitenin (model eğimi ÷ ölçülen eğim) çekilişleri o dosyaya yazılır (src/kalibrasyon.py
+ingiltere girdisi); verilmezse dosya yazılmaz.
 """
 import sys, random
 from pathlib import Path
@@ -70,7 +73,7 @@ def agirliklar(rng, uc):
     return a
 
 mus = ut.oku_musteri(veri); fid = ut.oku_fider(veri)
-satir = []
+satir, cekilis = [], {}
 for site, a in ut.SITELER.items():
     rng = random.Random(f'ukpn-{site}')
     ev = mus[mus.Substation == site].drop(columns='Substation').groupby('datetime').mean()
@@ -106,6 +109,7 @@ for site, a in ut.SITELER.items():
         Ld = L * math.exp(rng.uniform(-BOY_BELIRSIZ, BOY_BELIRSIZ))
         e2 = model_egim(kur(Ld, r_orta, p), ornek, p, b, agirliklar(rng, uc), pu, dengeli_faz=(yp, vp))
         oran_bilinmeyen.append(e2 / e_olc)
+    cekilis[site] = {'faz bilinen': oran_bilinen, 'faz bilinmeyen': oran_bilinmeyen, 'olculen_V_pu': e_olc}
     for ad, o in (('faz bilinen', oran_bilinen), ('faz bilinmeyen', oran_bilinmeyen)):
         o = np.array(o)
         satir.append(dict(site=site, durum=ad, olculen_V_pu=round(e_olc, 2), duz_oran=round(duz / e_olc, 2),
@@ -114,3 +118,7 @@ for site, a in ut.SITELER.items():
                           olculenin_sirasi=round(float(np.mean(o < 1.0)), 2)))
     print(site, 'bitti', flush=True)
 D = pd.DataFrame(satir); pd.set_option('display.width', 220); print(D.to_string(index=False))
+if os.environ.get('CEKILIS_JSON'):
+    import json
+    with open(os.environ['CEKILIS_JSON'], 'w', encoding='utf-8') as fh:
+        json.dump(dict(boy_belirsiz=BOY_BELIRSIZ, cekilis=CEKILIS, siteler=cekilis), fh, ensure_ascii=False)

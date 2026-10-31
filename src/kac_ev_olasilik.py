@@ -70,6 +70,15 @@ BUYUK = {'abone_ticari2', 'abone_turizm', 'abone_sanayi2'}
 BOY_BELIRSIZ = 0.47                     # hat boyu × e^U(−0,47, 0,47) ≈ ×0,6–1,6 [Yorum; kayıt BULAMADIM]
 KOL_P = 1 / 6                           # panelli evler yüksüz bir kolda [Hesap: UKPN 6 hattın 1'i]
 BIREY_SIGMA = 0.3                       # abone yükünün ortalamadan farkı, log-normal [Yorum]
+# Faz 7 (karar masası 21:32; ADR-0013 madde 3): gerilim tarafı GERÇEĞE karşı. Model-sapma çarpanı s = exp(N(μ, σ)),
+# çekiliş başına, hat empedanslarını (zs, zn) çarpar; trafo empedansına dokunmaz (UKPN ölçümü baradan eve yükselme).
+# Parametreler İngiltere'nin 6 hattından (src/ukpn_olasilik.py, faz bilinmeyen, hat boyu ±0,47, 60 çekiliş;
+# src/kalibrasyon.py ingiltere): her hatta δ = −ortalama ln(model ÷ ölçülen); μ = ortalama δ, σ² = var(δ) − ortalama
+# iç varyans (moment tahmini). Sonuç: 6 hatta P98 kapsaması 5/6 → 6/6, bir-dışarıda da 6/6. 6/6 için en küçük σ 0,12
+# (μ sabit); aralık σ 0,12–0,41, burada moment tahmini. "6 hatla ayarlandı, pilotta yeniden." Farazi şehre bakılarak
+# seçilmedi. Not: KOL_P aynı 6 hattan (Bancroft); s de Bancroft'u içeriyor, ikisi birlikte temkinli yönde çift sayar.
+SAPMA_MU = 0.172                        # [Hesap: UKPN 2014, 6 hat]
+SAPMA_SIGMA = 0.414                     # [Hesap: UKPN 2014, 6 hat; aralık 0,12–0,41]
 Q_ORAN = 0.33                           # yükün reaktif gücü (benzetimle aynı)
 
 
@@ -157,8 +166,12 @@ def trafo_cek(tr, t, rng):
     p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
     sonuc = []
+    srng = random.Random(f'sapma-{tr["sehir"]}-{tr["trafo_no"]}')   # ayrı akış: diğer çekilişler v1 ile aynı kalır
     for _ in range(CEKILIS):
         ag, evler = ag_kur(tr, rng)
+        sapma = math.exp(srng.gauss(SAPMA_MU, SAPMA_SIGMA)) if (SAPMA_MU or SAPMA_SIGMA) else 1.0
+        for f in ag['feeders']:
+            f['zs'], f['zn'] = f['zs'] * sapma, f['zn'] * sapma
         if not evler:
             sonuc.append((False, 0, True))
             continue

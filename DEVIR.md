@@ -45,6 +45,8 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 
 5. **Sunum sonrası faz haritası** (karar masası 21:15, Muhittin'in üçüncü cevabı, ADR-0013 / ADR-0014): ROADMAP sonunda "Sunum sonrası (taslak)", Faz 6–12 (tüzük → kalibrasyon → üretici çapalama ve yeni sınav şehirleri → Kıb-Tek kayıtları ve başvuru anında karar → pilot A, 8–9 ile paralel → yük katmanı → canlı kapı; karar masası 21:25) ve dış veri istekleri (mesajı Volkan yazar). `docs/tuzuk.md` (içerik karar masası 21:20'de) ve `src/kalibrasyon.py` sunumdan sonra. Başvuru anı motoru [ADR-0015](docs/decisions/adr-0015-basvuru-ani-motoru-durumlu-sari-sayi-konum.md).
 
+6. **Faz 7 (kalibrasyon gerçeğe karşı) dalda** (Volkan 21:32, karar masası; `kalibrasyon/faz7`, PR): `src/kalibrasyon.py`, `sablon.py` k_yük 1,475 (İspanya), `kac_ev_olasilik.py` gerilim sapma çarpanı (İngiltere 6 hat). Sınav 11–20 bir kez: yanlış yeşil 0/48, yeşil %25 → %14, yanlış kırmızı %27 → %33, kaç ev P10 altı %15 → %7; Faz 2 farazi kapsama %96 (kalıyor). [Günlük](docs/log/2026-11-01-volkan-faz7-kalibrasyon.md). Can C1 / C4 dalda koşar, onaylar; Volkan "birleştir" der. Sunum `sunum-v1` etiketiyle (main 0db616e), v1 rakamları.
+
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
 - Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Üretici 1.2 iki yeni dosya ister: kıyı (`osm-kasaba`) ve Open-Meteo 2023 (README).
