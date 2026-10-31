@@ -186,6 +186,9 @@ Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe b�
 | `guven` | str | — | `on` | Ön sürümde hep `on` (yaz ölçümü yok) |
 | `kor_nokta` | str | — | `mayis_temmuz;klima_kuyrugu` | Her sayının yanındaki etiket (ADR-0018 m. 3): gerçek veri bahar; sıcak dalga kuyruğu ölçülmedi |
 | `tepe_kaynagi` | str | — | `model` | Sayının kaynağı: `model` (ölçülmedi), `olcum_nisan` (ölçülü, Nisan), `kayit_md` / `kayit_etut` (Kıb-Tek tepe kaydı, §9). `olculdu` = 1 hepsinde `model` dışında |
+| `v_min_tepe_v` | float | V | `231.4` | Tepe anında en düşük ev gerilimi (faz–nötr; üç fazlı evde üç faz da), çekilişlerin ortancası. Panel tarafıyla aynı fizik (`kac_ev_olasilik.ag_kur` + `trafo_bos_kapasite.solve`); "ön" |
+| `v_min_tepe_v_p10`, `v_min_tepe_v_p90` | float | V | `219.8`, `238.1` | %80 bant. **"Akşam gerilimi yeterli" kararı P10'dan** (P10 ≥ 207 V); ortanca karar için kullanılmaz (güvenli yön) |
+| `p_aksam_207` | float | oran | `0.075` | Çekilişlerde 207 V altına inme payı |
 
 Bilgi dosyası `tepe_ozet.json`: ölçülü trafolar, Nisan oranları (R), sınıf eğimleri, ay sıcaklık sapmaları, bant.
 
