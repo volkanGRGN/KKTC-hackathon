@@ -18,4 +18,7 @@ Sayfada ~60 belge var. Okunanlar: Teknik Komite bildirimleri 1–4, reaktif gü�
 - 2. Ulusal Enerji Verimliliği Çalıştayı (25 Ağustos 2023), s. 14: konut GES kurulumlarını 3 kW ile sınırlama önerisi.
 - Birim Fiyat PİD Ekim 2024, J1: fotovoltaik sistem kW başına asgari 800 € (sunumda maliyet cümlesi).
 
+## Sistem puantıyla karşılaştırma (sonuç)
+Deneme şehirlerinde (üretici 1.5, 1–10) toplam yükün tepe ÷ ortalaması: üretici 1,95, model (trafo tahminlerinin eşzamanlı toplamı) 2,30; Kıb-Tek 1,76. Ayrıntı ve çekinceler [günlükte](2026-11-01-volkan-yuk-uretici15.md).
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
