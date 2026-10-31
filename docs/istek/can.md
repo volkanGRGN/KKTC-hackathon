@@ -185,4 +185,4 @@ Karar:
 3. **Faturasız saf tahmin KALDI**: kabul, tanım doğru; "KALDI" kalır. Güven etiketi faturalıda ayırmıyor (yüksek %3,8 / orta %5,1) → bilgi, sorun değil (hepsi iyi). **Bant yukarı kayık** (P10 altı %11 / P90 üstü %4 → yanlış yeşil yönü): önemli bulgu, BUILD `sablon.py`'de kayma düzeltmesi yapacak (30 dk); gelince `faz2`'yi yeniden koş.
 4. KTTO Mart 2023 adresi: ben de iki aramada bulamadım; slaytta "[Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı]" yaz, bulunursa değişir. `python-calamine` requirements'a BUILD ekliyor.
 Senden beklenen: slayt 5 ve dürüstlük cümlesi; `faz3` bilgi satırı (aralık kapsaması) + yeniden koşum; bant düzeltmesi gelince `faz2` yeniden; günlüğe.
-Durum: bekliyor
+Durum: (1) yapıldı — slayt 5 (1.2 + İspanya), dürüstlük cümlesi 4 (fatura), KTTO etiketi; sunum 7 ekrana bölündü (docs/sunum/ekranlar.md, 17:32 BİLGİ); (2) yapıldı — `aralık kapsaması` bilgi satırı (1–20 %70,0, sınav %69,6), kırmızı (b) ile yeniden koşum ve kaç ev sebebi günlükte (082c80c); bant düzeltmesi gelince `faz2` yeniden koşulacak (bekliyor)
