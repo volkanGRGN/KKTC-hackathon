@@ -29,6 +29,10 @@ Yöntem (ADR-0018 m. 1–4, 6; BUILD 1):
     trafoda); kayıtlardan popülasyon R'si ve bant önerisi `tepe_ozet.json`'a, sürümlü yeniden-fit (tüzük m. 4) KARAR'da.
     OG fider tepesi: aşağıdan yukarı toplamla mutabakat (fider başına kayıt ÷ tahmin; kontrol). `--fider-duzelt` ölçülmeyenleri
     fider oranına ölçekler (yukarıdan aşağı); 1–10'da kötüleştirdi, varsayılan kapalı.
+  6 Akşam gerilimi (KARAR 00:57 m. 4; ADR-0014, 207 V): tepe anında en düşük ev gerilimi, panel tarafıyla aynı fizik
+    (`kac_ev_olasilik.ag_kur`: Kıb-Tek'in bildiğiyle ağ, bilinmeyenler aralıktan; İngiltere'ye kalibre empedans payı;
+    `trafo_bos_kapasite.solve`). Çekiliş başına: ağ, tepe bandından toplam yük, sınıfların tepe anındaki payı × kişisel fark,
+    OG değişimi. Çıktı ortanca, P10 / P90 ve 207 V altına inme olasılığı.
 
 Farazi sınav uyarısı: üretici de yazı EAC ay tipik günleriyle kuruyor; model aynı açık veriyi kullandığı için farazi tepe
 sınavı iyimser (ADR-0008), eğim hatasını ve "Kuzey ≠ Güney Kıbrıs"ı görmez. Gerçek ölçü İspanya Mayıs (sinav.py faz2).
@@ -47,6 +51,7 @@ import csv
 import datetime as dt
 import json
 import math
+import random
 import statistics
 import sys
 from pathlib import Path
@@ -104,9 +109,15 @@ KAYIT_BANT_LOG = (-0.10, 0.36)
 KAYIT_MIN = 3
 FIDER_KAYIP = 0.03
 FIDER_ORAN_SINIR = (0.7, 1.5)
+# Akşam gerilimi (madde 6) [Yorum]: çekiliş sayısı; tepe anında OG değişimi (sistem tepesinde bara biraz düşer; Kıb-Tek
+# ölçümü BULAMADIM); 207 V sınırı (EN 50160, ADR-0016 m. 3).
+CEKILIS_V = 40
+OG_AKSAM = (-0.01, 0.0)
+V_ALT = 207.0
 TEPE_SUTUNLARI = ['sehir', 'trafo_no', 'olculdu', 'tepe_kw', 'tepe_kw_p10', 'tepe_kw_p90', 'tepe_saati', 'tepe_ayi',
                   'pf_varsayim', 'tepe_kva', 'tepe_kva_p10', 'tepe_kva_p90', 'bos_kva', 'bos_kva_p10', 'bos_kva_p90',
-                  'guven', 'kor_nokta', 'tepe_kaynagi']
+                  'guven', 'kor_nokta', 'tepe_kaynagi', 'v_min_tepe_v', 'v_min_tepe_v_p10', 'v_min_tepe_v_p90',
+                  'p_aksam_207']
 
 
 # ---------- açık veri: EAC eğrileri, hava ----------
@@ -288,6 +299,69 @@ def kibtek_oku(klasor):
     return tepe, fider
 
 
+# ---------- akşam gerilimi ----------
+
+def en_dusuk_gerilim(ag, V):
+    """Evlerin en düşük faz gerilimi (üç fazlı evde üç faz da)."""
+    lo = math.inf
+    for fi, f in enumerate(ag['feeders']):
+        for k, h in enumerate(f['houses']):
+            v = V[fi][k]
+            for p in (range(3) if h['ph'] == 3 else (h['ph'],)):
+                lo = min(lo, abs(v[p] - v[3]))
+    return lo
+
+
+def tepe_payi(kw, eac, egim, kosul, ay, adim, abone_sayisi):
+    """Tepe anında abone başına yük ağırlığı (sınıf sütunu → kW / abone) ve o andaki güneş çarpanı (kW / kWp).
+    Gün türü o adımda toplamı büyük olan."""
+    mev = None if ay == NISAN else ('yaz' if ay in YAZ else 'kis')
+    en = None
+    for g in ('is', 'tatil'):
+        pay = {}
+        for j, a in enumerate(ABONE):
+            if kw[j] <= 0 or abone_sayisi[j] <= 0:
+                continue
+            c = SINIF[a]
+            f = 1.0 if mev is None else max(SICAKLIK_TABAN, 1 + egim[c][mev] * kosul[ay]['dT'])
+            pay[a] = kw[j] * float(eac[(c, ay, g)][adim]) * f / abone_sayisi[j]
+        top = sum(pay[a] * abone_sayisi[ABONE.index(a)] for a in pay)
+        if en is None or top > en[0]:
+            en = (top, pay)
+    return en[1], float(kosul[ay]['ghi'][adim]) / 1000 * PR_GUNES
+
+
+def aksam_gerilimi(trs, pay, gunes, tepe, p10, p90, rng, srng):
+    """CEKILIS_V çekilişte tepe anının en düşük ev gerilimi (V). trs: trafolar.csv satırı (sözlük)."""
+    _argv, sys.argv = sys.argv, sys.argv[:1]
+    import kac_ev_olasilik as kv            # panel tarafının ağ kurucusu (BUILD 2'nin dosyası; yalnız okunur)
+    import trafo_bos_kapasite as tb
+    sys.argv = _argv
+    s_lo = math.log(max(tepe, 1e-6) / max(p10, 1e-6)) / 1.2816
+    s_hi = math.log(max(p90, 1e-6) / max(tepe, 1e-6)) / 1.2816
+    out = []
+    for _ in range(CEKILIS_V):
+        ag, evler = kv.ag_kur(trs, rng)
+        s = math.exp(srng.gauss(kv.SAPMA_MU, kv.SAPMA_SIGMA))
+        for f in ag['feeders']:
+            f['zs'], f['zn'] = f['zs'] * s, f['zn'] * s
+        if not evler:
+            out.append(ag['v0'])
+            continue
+        z = rng.gauss(0, 1)
+        net_top = tepe * math.exp(z * (s_hi if z > 0 else s_lo))
+        brut_top = net_top + sum(h['pv'] for h in evler) * gunes          # brüt = net + o anki üretim
+        w = [pay.get(h['sinif'], 0.0) * rng.lognormvariate(-kv.BIREY_SIGMA ** 2 / 2, kv.BIREY_SIGMA) for h in evler]
+        sw = sum(w) or 1.0
+        net = {}
+        for h, x in zip(evler, w):
+            p = brut_top * x / sw
+            net[h['id']] = ((p - h['pv'] * gunes) * 1000, p * kv.Q_ORAN * 1000)
+        V, _ = tb.solve(ag, net, 1 + rng.uniform(*OG_AKSAM), None, iters=6)
+        out.append(en_dusuk_gerilim(ag, V))
+    return out
+
+
 # ---------- şehir ----------
 
 def eszamanlilik(n, c):
@@ -426,12 +500,19 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
         p10 = tepe * math.exp(-math.sqrt(a ** 2 + min(s_lo, 0.0) ** 2 + e_lo ** 2))
         p90 = tepe * math.exp(math.sqrt(b ** 2 + max(s_hi, 0.0) ** 2 + e_hi ** 2))
         kva = float(tr['kva'].iloc[i])
+        abone_sayisi = tr[ABONE].iloc[i].fillna(0).to_numpy(float)
+        pay, gunes = tepe_payi(KW[i], eac, egim, kosul, ay, adim, abone_sayisi)
+        vs = sorted(aksam_gerilimi(tr.iloc[i].to_dict(), pay, gunes, tepe, p10, p90,
+                                   random.Random(f'aksam-{sehir}-{t}'), random.Random(f'aksam-sapma-{sehir}-{t}')))
         satirlar.append(dict(
             sehir=sehir, trafo_no=t, olculdu=int(kaynak[t] != 'model'), tepe_kw=round(tepe, 2), tepe_kw_p10=round(p10, 2),
             tepe_kw_p90=round(p90, 2), tepe_saati=f'{adim * 5 // 60:02d}:{adim * 5 % 60:02d}', tepe_ayi=ay,
             pf_varsayim=PF, tepe_kva=round(tepe / PF, 2), tepe_kva_p10=round(p10 / PF, 2), tepe_kva_p90=round(p90 / PF, 2),
             bos_kva=round(kva - tepe / PF, 2), bos_kva_p10=round(kva - p90 / PF, 2), bos_kva_p90=round(kva - p10 / PF, 2),
-            guven='on', kor_nokta=KOR_NOKTA, tepe_kaynagi=kaynak[t] + ('+fider' if t in fider_carpan else '')))
+            guven='on', kor_nokta=KOR_NOKTA, tepe_kaynagi=kaynak[t] + ('+fider' if t in fider_carpan else ''),
+            v_min_tepe_v=round(float(np.median(vs)), 1), v_min_tepe_v_p10=round(float(np.quantile(vs, 0.1)), 1),
+            v_min_tepe_v_p90=round(float(np.quantile(vs, 0.9)), 1),
+            p_aksam_207=round(sum(v < V_ALT for v in vs) / len(vs), 3)))
     with open(klasor / 'tepe.csv', 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=TEPE_SUTUNLARI, lineterminator='\n')
         w.writeheader()
