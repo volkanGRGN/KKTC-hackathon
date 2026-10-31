@@ -72,16 +72,22 @@ Durum: karar verildi 13:55 → can.md (okundu; notlar ana oturuma)
 Ne: Şablon modelinde ([PR #8](https://github.com/volkanGRGN/KKTC-hackathon/pull/8)) öğlen hatası ortanca %8,6 ama P90 %32,6 (eşik %30). Kalan hatanın çoğu tek büyük müşterili trafolarda: şehir konutu %4,5, köy %6,7, ama otel %21,5, yurt %22, çarşı %25, sanayi %22 (geliştirme şehirleri). Deneme şehrinde her büyük abonenin büyüklüğü rastgele (σ = 0,3); abone sayısı bunu göstermiyor. Öneri: `trafolar.csv`'ye `yillik_tuketim_mwh` (trafodaki abonelerin fatura toplamı) sütunu, üreticide abone başına yıllık enerji (+ Nisan ile yıl arasında küçük bir sapma, [Yorum]), model ölçeği bu sütunla. Değer değiştirilmedi, sütun eklenmedi.
 Dosya: docs/data/tablo-bicimi.md (sözleşme sütunu), src/sehir_uret.py, src/sablon.py
 Neden: Model zaten "hangi abone hangi trafoda"yı bildiğini varsayıyor (abone sayıları; uzmana soru 2); bunu bilen Kıb-Tek o abonelerin faturasını da bilir [Yorum]. İngiltere'nin şablon ölçeklemesi de müşteri sayısının yanında yıllık tüketimi kullanıyordu [Yorum: hatırladığım kadarıyla; doğrulanmadı]. Volkan: "doğruluk önemli". Bloklamıyor; Faz 3 mevcut modelle başlayabilir.
-Durum: bekliyor
+Durum: karar verildi 13:58 → volkan.md (KARAR aşağıda), ADR-0007
 
 ## UYARI! 31 Eki 13:51 — BUILD'den — Faz 1 kapandı, Faz 2 kartları yazıldı
 Ne: Faz 1'in beş maddesi geçti; 216 V maddesi yukarıda karar bekliyor. ROADMAP kutuları ve günlük ek girdisi main'de. Faz 2: Can'ın kartı (docs/gorev/can-faz2-sinav-grafikler.md) ve Civan notu main'de; `src/sablon.py` PR #8'de (sözleşme 1.1, Can/Civan onayı). Ön bakış şehir 11–20: arketip %93, hata %8,6 / P90 %32,6, kapsama %82, düşük güven %18. Can'ın "arketip oranı brüt mü" sorusu: brüt, PR #8 sözleşmesine yazıldı. ADR-0006 KARAR'ı "yapıldı". DEVIR tazelendi.
 Dosya: ROADMAP.md, DEVIR.md, docs/log/2026-10-31-volkan-faz1.md, docs/log/2026-10-31-volkan-faz2.md (PR #8), docs/gorev/can-faz2-sinav-grafikler.md
 Neden: karar masasının Faz 1 kapanış / Faz 2 iş bölümü isteği; Volkan'a iletilsin.
-Durum: bekliyor
+Durum: Volkan'a iletildi 13:58 (karar masası)
 
 ## KARAR 31 Eki 13:55 — volkan.md'deki "Faz 1 eşiği: 216 V altı 3 trafo" isteğine (BUILD)
 Karar: Eşik **207 V** olur (EN 50160: nominal 230 V −%10; haftalık 10 dakikalık ortalamaların %95'i için alt sınır [Kaynaklı: EN 50160]); üretici değişmez (eşiğe uydurmak için hat kısaltma yok). Üç trafo (211,4 / 214,9 / 215,4 V) standardın içinde kalır, bulgu olarak günlükte durur.
 Neden: Maddenin amacı "benzetim bozuk değil"; 216 V ilk taslakta [Yorum] bir tahmindi, 207 V standardın alt sınırı. Üç trafo bozuk değil: uzun ince kırsal hat (794 m ABC70) ve büyük yüklü tek hat, akşam tepesinde. Ayrıca [Yorum]: yer tipi 630/1000 kVA trafolar (otel, sanayi, çarşı) kodda havai ABC95 ile besleniyor; gerçekte yeraltı kablo (SimBench NAYY 150/240, r 0,21/0,13 Ω/km, veri sözlüğü) → bu trafolarda düşüm ve yükselme 2–3 kat abartılı. Sözleşme `kablo` yalnız ABC70/ABC95; sürüm 1.2 adayı, şimdi değil (Faz 2'yi etkilemez, kümeleme şekle bakar).
 Senden beklenen (ana oturum): ROADMAP Faz 1 satırı "216 V" → "207 V (EN 50160 alt sınır; karar masası 31 Ekim; ilk taslak 216)", [~] → [x], günlük bağlantısı; günlüğe üç trafo + yer tipi/ABC95 notu. `sinav.py` `V_ALT` Can'da (can.md'ye yazdım). Faz 1 böylece kapanır.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:58 — volkan.md'deki "Faz 2: Kıb-Tek trafo başına yıllık fatura tüketimini biliyor mu?" isteğine (BUILD)
+Karar: Evet, ekle: `trafolar.csv`'ye `yillik_tuketim_mwh`; üretici abone başına yıllık enerjilerin toplamı × 0,95–1,05 fatura sapması [Yorum]; model sütun **varsa** kullanır, yoksa abone sayılarıyla (EDP'de yok); günlükte sütunlu/sütunsuz yan yana. Gerekçe [ADR-0007](../decisions/adr-0007-yillik-fatura-tuketimi-girdi.md). Soru: faturayı Kıb-Tek bilir; abone–trafo eşleşmesi BULAMADIM (uzmana soru 2), ama model o varsayımı zaten yapıyor, yeni varsayım yok.
+Neden: Hata tek büyük müşterili trafolarda (%21–25), abone sayısı büyüklüğü göstermiyor; İngiltere de müşteri sayısının yanında yıllık tüketimle ölçekliyor [Yorum]. Ayrım kuralı korunuyor: fatura Kıb-Tek'in bildiği şey.
+Senden beklenen (ana oturum): PR #8 olduğu gibi birleşsin (Can onayı; can.md'ye yazdım). Sonra ayrı küçük PR: sözleşme 1.2 (`yillik_tuketim_mwh` + gerçek veri `sehir` 800–899 satırı) + `sehir_uret.py` (sütun, bayram listesi, `kva_tavan_sayisi`; can.md 13:55 KARAR) + `sablon.py` (varsa kullan); 20 şehir yeniden; Faz 2 ölçümünü iki koşuyla günlüğe. Can/Civan onayı.
 Durum: bekliyor
