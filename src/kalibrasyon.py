@@ -21,7 +21,9 @@ Saf Python (statistics), bağımlılık yok.
 
 Çalıştırma:
   python3 src/kalibrasyon.py --deneme                                 # bilinen dağılım: k ≈ 1 ve ≈ 1,5
-  python3 src/kalibrasyon.py ispanya edp_satirlar.csv [--girdi c]     # src/edp_test.py --cikti çıktısı
+  python3 src/kalibrasyon.py ispanya edp_satirlar.csv [--girdi c] [--n 10,15]   # src/edp_test.py --kalibrasyonsuz --cikti çıktısı;
+                                                                     # --n: sevk yapılandırmasına (12 ölçülü) en yakın denemeler
+                                                                     # (K_YUK'lu satırlarla k ≈ 1 çıkmalı: sağlama)
   python3 src/kalibrasyon.py ingiltere ukpn_cekilis.json [--durum "faz bilinmeyen"]   # ukpn_olasilik CEKILIS_JSON
   ... --cikti ozet.json                                               # özet JSON'a da
 """
@@ -132,9 +134,10 @@ def en_kucuk_sigma(siteler, mu, adim=0.01, ust=1.5, tohum=1):
 
 # ---------- veri kaynakları ----------
 
-def ispanya(yol, girdi='c'):
+def ispanya(yol, girdi='c', olculu=('10', '15')):
+    """olculu: hangi ölçülü sayısı denemeleri (sevk yapılandırması 12 ölçülü → 10 ve 15; karar masası 22:0x)."""
     with open(yol, encoding='utf-8', newline='') as fh:
-        rows = [r for r in csv.DictReader(fh) if r['girdi'] == girdi]
+        rows = [r for r in csv.DictReader(fh) if r['girdi'] == girdi and (not olculu or r['n'] in olculu)]
     gruplu = {}
     for r in rows:
         u = birim_artik(float(r['tah']), float(r['alt']), float(r['ust']), float(r['y']))
@@ -146,7 +149,7 @@ def ispanya(yol, girdi='c'):
     p_once, sap_once = pit_kovalari(pit(u))
     p_sonra, sap_sonra = pit_kovalari(pit(u, k))
     return dict(
-        kaynak=f'EDP Oviedo 2018, {len(gruplu)} trafo, bir-dışarıda tahminler (src/edp_test.py girdi {girdi})',
+        kaynak=f'EDP Oviedo 2018, {len(gruplu)} trafo, bir-dışarıda tahminler (src/edp_test.py girdi {girdi}, ölçülü {"+".join(olculu) if olculu else "hepsi"})',
         satir=len(u), trafo=len(gruplu), k=round(k, 3),
         kapsama_once={str(q): round(v, 3) for q, v in kapsama(u).items()},
         kapsama_sonra_ic_ornek={str(q): round(v, 3) for q, v in kapsama(u, k).items()},
@@ -206,6 +209,7 @@ def main():
     ap.add_argument('kaynak', nargs='?', choices=['ispanya', 'ingiltere'])
     ap.add_argument('dosya', nargs='?')
     ap.add_argument('--girdi', default='c')
+    ap.add_argument('--n', default='10,15', help='ölçülü sayısı kesiti (sevk 12 ölçülü); "hepsi" = süzme yok')
     ap.add_argument('--durum', default='faz bilinmeyen')
     ap.add_argument('--deneme', action='store_true')
     ap.add_argument('--cikti')
@@ -213,7 +217,7 @@ def main():
     if a.deneme:
         ozet = deneme()
     elif a.kaynak == 'ispanya':
-        ozet = ispanya(a.dosya, a.girdi)
+        ozet = ispanya(a.dosya, a.girdi, None if a.n == 'hepsi' else tuple(a.n.split(',')))
     elif a.kaynak == 'ingiltere':
         ozet = ingiltere(a.dosya, a.durum)
     else:
