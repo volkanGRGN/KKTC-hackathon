@@ -92,22 +92,20 @@ Geçme sınavı (20–30 şehirde, [doğrulama protokolüyle](docs/method/valida
 - [x] 5 / 10 / 20 ölçülü trafo eğrisi çizildi, "gösterim" etiketli. 5 / 10 / 12 / 20 ölçülü → hata %4,6 / %3,8 / %4,1 / %3,5: faturalı modelde ölçülü sayısı hatayı az değiştiriyor (İspanya'yla aynı yön): `outputs/faz2_kac_trafo.png`, [can-faz2](docs/log/2026-10-31-can-faz2.md)
 - **Bilgi (karar masası 17:38):** fatura olmadan model, saf tahmini ortancada geçmiyor. Sınav 11–20 faturasız %20,6 / %50,7; tarife saf tahmini %22,9 / %62,2; model yalnız %10 / %19 iyi. Kazanç kötü uçta (P90). Faz 2 faturayla geçti (ADR-0007 faturayı girdi yaptı); Kıb-Tek'ten fatura toplamı istemenin kanıtı.
 
-## Faz 3 — İlk uygulama katmanı, güneş paneli: her trafo için kaç ev daha, aralık ve yeşil/sarı/kırmızı karar (başladı 31 Ekim akşam)
+## Faz 3 — İlk uygulama katmanı, güneş paneli: her trafo için kaç ev daha, aralık ve yeşil/sarı/kırmızı karar (bitti 31 Ekim, gösterim; açık eksikler pilotta)
 
 **Amaç:** Her trafo için kaç ev daha, karamsar/iyimser aralık, triyaj rengi (ADR-0002, ADR-0005).
-**Girdi:** Faz 2 tahminleri ve bantları; trafo kVA, hat boyu, iletken, mevcut panel. **Çıktı:** `src/kac_ev.py`; trafo tablosu + karşılaştırma raporu.
+**Girdi:** Faz 2 tahminleri ve bantları; trafo kVA, hat boyu, iletken, mevcut panel. **Çıktı:** `src/kac_ev_olasilik.py` (resmi, ADR-0011; `src/kac_ev.py` yedek); trafo tablosu + karşılaştırma raporu.
 **Kim / süre:** üçü paralel · orta.
 **Paralel işler ve dosyalar:**
 - Volkan+Claude → `src/kac_ev.py`, `docs/log/…-volkan-faz3.md`.
 - Can → `src/sinav.py`'ye Faz 3 ölçüleri (yanlış yeşil, yanlış kırmızı, kaç ev hatası, sarı oranı) ve %40 kuralı karşılaştırması; `src/grafikler.py`'ye kilit grafik (biz vs %40 kuralı); `docs/log/…-can-faz3.md`.
 - Civan → `app/harita.py`'yi gerçek Faz 3 tablosuna bağlar.
 - Kartlar: [Can](docs/gorev/can-faz3-sinav-grafik.md), [Civan](docs/gorev/civan-faz3-yan-panel.md).
-- **Durum (31 Ekim 17:15, BUILD).**
-  - `src/kac_ev.py` [PR #13](https://github.com/volkanGRGN/KKTC-hackathon/pull/13)'te (taban main; Can'ın onayını bekliyor).
-  - Sınav şehirleri 11–20, geliştirme ölçümü: yanlış yeşil 0/21; %40 kuralı 41/284 (%14).
-  - Kırmızı = karamsar senaryoda bugün aşıyor (karar masası 17:26): kırmızı %31, yanlış kırmızı %42, sarı %63. Hedef aşımının sebebi ±4 V bilinmeyen bara gerilimi.
-  - Kaç ev hatası (tavanlılar ayrı): iyimser 3,5, karamsar 9 ev → KALDI (Can'ın sınavı; günlük düzeltildi).
-  - Ayrıntı: [Faz 3 günlüğü](docs/log/2026-10-31-volkan-faz3.md) (PR #13).
+- **Durum (31 Ekim 19:51, Faz 3 kapandı; Volkan).**
+  - Resmi hesap olasılıklı ([ADR-0011](docs/decisions/adr-0011-faz3-olasilikli-hesap.md)): `src/kac_ev_olasilik.py`, `kac_ev.csv` sözleşme 1.3. Tek denklem `src/kac_ev.py` yedek.
+  - Resmi ölçüm: karar masası koşumu (Mac, 31 Ekim 19:35–19:50; main fe7426b + `sinav.py` c3fb046; 20 şehir sıfırdan). Can'ın #15 deneme koşusuyla birebir. Çıktılar [Faz 3 günlüğünde](docs/log/2026-10-31-volkan-faz3.md).
+  - Ayrıntı: [olasılıklı hesap](docs/log/2026-10-31-volkan-faz3-olasilik.md), [varsayım envanteri](docs/log/2026-10-31-volkan-faz3-varsayimlar.md), [İngiltere geri-testi](docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md).
 
 Yapılacaklar:
 - Isıl sınır ve gerilim sınırı, küçüğü; yanında %40 kuralının sonucu.
@@ -128,11 +126,23 @@ Yapılacaklar:
     - abone başına eğri farkı: aynı tarifede öğlen ÷ yıllık oranı abone abone dağılsın (ADR-0009 trafo içi çeşitlilik). Bugün farazi faturalı %3,9 üst sınır, İspanya'da faturayla %10.
 
 Geçme sınavı (20–30 şehirde):
-- [ ] **Yanlış yeşil oranı ≤ %5** (dolu trafoya "yer var"); en kötü şehirde ≤ %10.
-- [ ] %40 kuralının yanlış yeşil oranı aynı şehirlerde hesaplanmış ve yan yana (sunumun kilit grafiği).
-- [ ] Yanlış kırmızı oranı raporlandı (hedef ≤ %20).
-- [ ] Kaç ev hatası ortanca ≤ 2 ev.
-- [ ] Sarı oranı raporlandı (hedef ≤ %30; aşarsa sebep günlükte).
+Rakamlar sınav şehirleri 11–20 (347 trafo, 73 dolu), karar masası koşumu; 1–20 bilgi satırları günlükte.
+- [x] **Yanlış yeşil oranı ≤ %5** (dolu trafoya "yer var"); en kötü şehirde ≤ %10. — **0/87**, en kötü şehir 0/12; dolu trafoya yeşil 0/73.
+- [x] %40 kuralının yanlış yeşil oranı aynı şehirlerde hesaplanmış ve yan yana (sunumun kilit grafiği). — %40 kuralı 41/284 (%14,4); dolu trafoya "yer var": %40 kuralı 41/73, biz 0/73.
+- [x] Yanlış kırmızı oranı raporlandı (hedef ≤ %20). — %27,3 (12/44), **hedef üstü**; sebep bilgi eksikliği (aşağıda "Açık eksikler" 1).
+- [x] Kaç ev hatası ortanca ≤ 2 ev. — orta 2 ev (karamsar 2, iyimser 4; n 239, tavanlı 108 ayrı).
+- [x] Sarı oranı raporlandı (hedef ≤ %30; aşarsa sebep günlükte). — %62,2 (216/347), **hedef üstü**; sebep aşağıda "Açık eksikler" 2.
+
+**Açık eksikler** (karar masası 19:44; bu gece kapanmaz, pilotta). Rakamlar sınav 11–20.
+
+| # | Eksik | Bu gece | Pilot / sunum sonrası |
+|---|---|---|---|
+| 1 | Yanlış kırmızı %27 (hedef ≤ %20) | Bilginin değeri denemesi ([günlük](docs/log/2026-10-31-volkan-faz3.md), üst sınır, farazi şehir): bara gerilimi bilinirse %19; bara + panelli evin yeri + faz bilinirse %4, dolu trafoyu kırmızı görme 32 → 43 (BUILD şehirlerinde 74 dolu). Madde "raporlandı" | Bara gerilimi (akıllı priz gece seviyesi, trafo plakası kademe); Kıb-Tek'ten panelli abonenin adresi ve fazı (uzmana soru 2, 4, 8) |
+| 2 | Sarı %62 (hedef ≤ %30) | Yeşil eşiği 0,98 kalır (eşiğin bedeli tablosu günlükte: 0,80'de bile sarı %42, dolu trafoya "yer var" 3). Deneme: bilgi sarıyı az düşürür (üç bilgiyle %57, ağın tamamı ve yükle %41); kalan sarı "sıradaki başvuru kimden gelecek" belirsizliği | Ölçüm cihazı sarılara (asıl pilot); 1'deki bilgiler. Sınanmamış öneri: sarı trafoda karar başvuru anında adresle (karar masasına soruldu) |
+| 3 | Yeşil bütçesi (%2) gerçek veride doğrulanmadı (İngiltere 6 hattın 5'i, Bancroft kaçtı) | İş yok; ekran 4 cümlesi hazır (Can) | Panelli evlerin inverter uygulamasındaki 5 dk gerilim kaydı (izinle) + sarıların hat ucunda öğlen gerilimi; her ölçülen hat geri-teste; kol yapısı (soru 3) |
+| 4 | Olasılık düşük uçta iyimser (%10–30 diyene ~%43 aşıyor) | İş yok: sınav şehirleri donuk, gece yeniden üretim bütün rakamları değiştirir (ADR-0009). Deneme aynı kökü gösterdi: kusursuz bilgide aralık kapsaması %57 | Üretici 1.3: OG aralığı, panellerin uca kayma dağılımı; sonra kalibrasyon yeniden |
+| 5 | Kaç ev aralığı taban değil (P10 altı %15) | Çözüldü: dil 19:13 ("yaklaşık N ev (A–B)", "en az" yok), Can'ın bilgi satırı (c3fb046) | Üretici 1.3 ile yeniden ölç |
+| 6 | Faturasız model basit tahmini geçmiyor (Faz 2) | İş yok | Kıb-Tek'ten trafo başına fatura toplamı = pilotun veri isteği (soru 7) |
 
 ## Faz 4 — Ürün, trafo görünürlük haritası: Kıb-Tek'in göremediği trafoları tıklanır bir haritada göstermek
 
