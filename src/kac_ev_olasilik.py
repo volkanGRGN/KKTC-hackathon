@@ -11,7 +11,8 @@ eski benzetimin `solve()`'u koşar:
 Aralıklar ölçümden ya da envanterdeki gerçek veri karşılaştırmasından; şehir üreticisinin kendi değerlerinden
 değil (ADR-0009). Bu yüzden üreticiyle bilerek aynı değil: paneller çekilişlerin üçte birinde hattın ucuna
 toplanır (UKPN: 6 hattın 2'si), yoksa düz; büyük aboneler yarı yarıya trafoya yakın ya da rastgele (veri yok);
-OG değişimi UKPN ile eski benzetim arası.
+OG değişimi UKPN ile eski benzetim arası. İngiltere geri-testinden sonra: hat boyu ×0,6–1,6 belirsiz, çekilişlerin
+altıda birinde panelli evler yüksüz ayrı bir kolda.
 
 Çıktı her çekilişte: bugün (yeni panelsiz, öğlen güneşi + en düşük yük) sınır aşılıyor mu; bekleyen panelsiz
 konutlar rastgele sırayla 6,5 kW alırsa kaçı sığar (sığmayan atlanır, cevap anahtarıyla aynı tanım); ilk iki
@@ -61,6 +62,11 @@ UC_FAZ = {'abone_konut': (0.0, 0.2), 'abone_ticari1': (0.0, 0.4)}   # üç fazl�
 PANEL_UCTA_P = 2 / 6                    # paneller hattın ucuna toplanmış [Hesap: UKPN 6 hat ucu evden 2'si, PR #11]
 BUYUK_BASTA_P = 0.5                     # büyük aboneler trafoya yakın [Yorum: veri yok, iki durum eşit]
 BUYUK = {'abone_ticari2', 'abone_turizm', 'abone_sanayi2'}
+# Gerçek veri geri-testinden (İngiltere 6 hat, docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md): hat boyu kesin
+# sayılınca ölçülen yükselme 6'nın 4'ünde kapsandı, boy belirsiz sayılınca 5'inde; kaçan Bancroft'ta ev, yüksüz ama
+# panelli bir koldaydı. İkisi de aralığa girer. KOL_P aynı 6 hattan (1/6), o hatlarda sınanamaz.
+BOY_BELIRSIZ = 0.47                     # hat boyu × e^U(−0,47, 0,47) ≈ ×0,6–1,6 [Yorum; kayıt BULAMADIM]
+KOL_P = 1 / 6                           # panelli evler yüksüz bir kolda [Hesap: UKPN 6 hattın 1'i]
 BIREY_SIGMA = 0.3                       # abone yükünün ortalamadan farkı, log-normal [Yorum]
 Q_ORAN = 0.33                           # yükün reaktif gücü (benzetimle aynı)
 
@@ -71,8 +77,9 @@ def ag_kur(tr, rng):
     zb = 240.0 ** 2 / (kva * 1000 / 3)
     rt = 0.04 * zb / math.sqrt(5)
     n_hat = max(1, int(tr['hat_sayisi']))
-    lmax = tr['hat_boyu_max_m']
-    kalan = max(0.0, tr['hat_boyu_toplam_m'] - lmax)
+    carpan = math.exp(rng.uniform(-BOY_BELIRSIZ, BOY_BELIRSIZ))
+    lmax = tr['hat_boyu_max_m'] * carpan
+    kalan = max(0.0, tr['hat_boyu_toplam_m'] * carpan - lmax)
     boylar = [lmax]
     if n_hat > 1:
         w = [rng.random() + 0.1 for _ in range(n_hat - 1)]
@@ -95,7 +102,7 @@ def ag_kur(tr, rng):
         if not hat:
             continue
         seg = boy / 1000 / len(hat)
-        f = dict(zs=zc * seg, zn=znc * seg, houses=[])
+        f = dict(zs=zc * seg, zn=znc * seg, houses=[], boy=boy)
         for k, c in enumerate(hat):
             uc_faz = rng.random() < uc.get(c, 1.0)
             h = dict(id=len(evler), sinif=c, ph=3 if uc_faz else rng.choices([0, 1, 2], weights=fw)[0], pv=0.0,
@@ -116,6 +123,15 @@ def ag_kur(tr, rng):
             secilen = rng.sample(konut, n_panel)
         for h in secilen:
             h['pv'] = tr['panel_kw'] / n_panel
+        if rng.random() < KOL_P:                 # panelli evler yüksüz bir kolda: trafodan en uzun hat boyunda ayrı kol
+            for f in ag['feeders']:
+                f['houses'] = [h for h in f['houses'] if h['pv'] == 0]
+            rng.shuffle(secilen)
+            ag['feeders'].append(dict(houses=secilen, boy=lmax))
+            ag['feeders'] = [f for f in ag['feeders'] if f['houses']]
+            for f in ag['feeders']:
+                seg = f['boy'] / 1000 / len(f['houses'])
+                f['zs'], f['zn'] = zc * seg, znc * seg
     return ag, evler
 
 

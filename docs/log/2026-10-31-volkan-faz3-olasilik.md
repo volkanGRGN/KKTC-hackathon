@@ -96,4 +96,31 @@ Bütün rakamlar farazi şehirde: **gösterim**.
   - Civan'ın paneli ve Can'ın sınavı buna göre değişir.
 - Kırmızı eşiği 0,5 ilkeden ("aşma olasılığı daha yüksek"). Değiştirmek karar masasının işi; yukarıdaki tablo bedelini gösteriyor.
 
+## Ek girdi — 31 Ekim 18:43: hat boyu belirsizliği ve kol yapısı (İngiltere geri-testinden, Volkan)
+
+**Neden.** Gerçek veri geri-testinde ([günlük](2026-10-31-volkan-faz3-ukpn-geritest.md)) iki şey çıktı:
+- Hat boyu kesin sayılınca İngiltere'nin 6 hattından 4'ünde ölçülen yükselme hesabın %98 sınırının altındaydı; boy belirsiz sayılınca 5'inde.
+- Kaçan hatta (Bancroft) ev, yüksüz ama panelli bir koldaydı.
+
+**Eklenen iki aralık:**
+- Hat boyu × e^U(−0,47; 0,47) ≈ ×0,6–1,6 [Yorum; Kıb-Tek kaydı BULAMADIM].
+- Çekilişlerin altıda birinde panelli evler, trafodan en uzun hat boyunda, yüksüz ayrı bir kolda [Hesap: UKPN 6 hattın 1'i].
+  - Bu oran aynı 6 hattan geldiği için o hatlarda sınanamaz.
+
+| | Önce (11–20) | Sonra (11–20, bir kez) | Sonra (1–10) |
+|---|---|---|---|
+| Yeşil | %28 | %25 | %23 |
+| Yanlış yeşil | 0/97 | **0/87** (her şehirde 0) | 0/83 |
+| Kırmızı | %9 | %13 | %9 |
+| Yanlış kırmızı | %23 | %27 | %28 |
+| Dolu trafonun kırmızı denen payı | 23/74 | **32/74** | 23/56 |
+| Sarı | %63 | %62 | %68 |
+| Kaç ev hatası (orta, tavansız) | 2 | 2 | 1 |
+| Gerçek, P10–P90 aralığında | %83 | %86 | %86 |
+| Bugün aşma olasılığının sıra uyumu | 0,75 | 0,79 | 0,75 |
+
+- Olasılıklar daha iyi tutuyor (sınav, kova → gerçekte aşan): 0,3–0,5 → %53, 0,5–0,7 → %62, 0,7–0,9 → %91. Düşük uçta (%10–30 → %43) hâlâ iyimser.
+- Yeşil bedeli küçük: %28 → %25. Kazanç: dolu trafoyu kırmızı görme 23 → 32.
+- Yeşiller (sınav): otel %83, çarşı %65, yurt %47, şehir konutu %4, köy %2.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
