@@ -61,3 +61,30 @@ Gönderilecek metin (Volkan iletir):
 > 6) Sizce harita iki sayılı bu kartla mı anlatılmalı (yük ve güneş yan yana), yoksa güneş katmanı tek başına daha mı dürüst?
 >
 > Teşekkürler.
+
+## 22:45 — karar masası (Volkan adına) — Gerçekçi şehirde panel kararı zayıf; odağı yük ve akşam tepesine çevirme; tepe modeli nasıl kurulmalı
+Ne denedik: Muhittin'in üçüncü cevabı uygulandı (tüzük, kalibrasyon gerçeğe karşı: Faz 7; üretici gerçeğe çapalandı ve yeni sınav şehirleri: Faz 8). Gerçekçi sınav şehirlerinde (21–30, karar masası Mac koşumu) yük hatası %12 / %27, panel kararında yeşil %5, sarı %78, kırmızıların %51'inde yer var; 400 trafonun 400'ünde bağlayan sınır gerilim. Model fatura üstüne az ekliyor (farazi %9, İspanya'da sıfır).
+Karar noktası: Volkan (22:45): "akşam yükü için modeli eğitmek lazım, modelin çıktıları kötü oldu, Muhittin'e soralım." Odak: yük katmanı (öğlen + akşam tepesi) temel, panel katmanı donuk. Cevap Faz 11'in (yük katmanı) yöntemini ve ürünün sunumunu belirler.
+Seçenekler: aşağıdaki metinde planımız; Muhittin düzeltir ya da onaylar.
+Durum: bekliyor
+
+Gönderilecek metin (Volkan iletir):
+
+> Merhaba Muhittin hocam, son önerilerinizi uyguladık; sonuç beklediğimizden sert çıktı, yönümüzü sizinle kontrol etmek istiyorum.
+>
+> Ne yaptık: Değişmez kuralları tek bir tüzük dosyasına koyduk (gerçek veriye her bakış deftere, ayar ve doğrulama ayrı, önce yanlış yeşil ve kalibrasyon kapıları). Aralıkları gerçeğe karşı kalibre ettik: İspanya'nın 29 gerçek trafosunda %80'lik bant önce gerçeğin %66'sını kapsıyordu, şimdi %79; İngiltere'nin 6 hattında gerilim tahmini önce 5'ini kapsıyordu, şimdi 6'sını. Sonra deneme şehrinin üreticisini gerçek dağılımlara çapaladık (öğlen evde olma farkı, faz dengesizliği, şehir başına orta gerilim) ve yeni tohumla yeni sınav şehirleri ürettik; ayarı yalnız geliştirme şehirlerinde yaptık.
+>
+> Gerçekçi şehirde çıkan tablo:
+> • Yük: öğlen en düşük yükte ortanca hata %12, en kötü onda birde %27; İspanya'nın gerçek trafolarıyla aynı seviye (%10 / %32). Ama model, "fatura toplamı × ölçülülerden basit oran" hesabından yalnız %9 iyi; İspanya'da (abone sınıfı yok) bu basit hesapla birebir aynı.
+> • Panel: dolu 45 trafonun hiçbirine "yer var" demedik (bugünkü %40 kuralı 23'üne diyor). Ama yeşil %5 (konut ve köyde sıfır), trafoların %78'i "önce ölç", kırmızı dediklerimizin yarısında aslında yer var. 400 trafonun 400'ünde bağlayan sınır gerilim; trafo ısınmadan ortanca 41 ev sığarken gerilim karamsar senaryoda 0 ev diyor. Daha önce ölçtüğümüz gibi trafo çıkış gerilimi, panelin hattaki yeri ve fazı bilinince yanlış kırmızı %27'den %4'e iniyor; sarı ise ağın tamamı bilinse bile %41'in altına inmiyor (başvuranın yerini sorunun kendisi açık bırakıyor; başvuru anında karar önerinizi bu yüzden plana aldık).
+>
+> Bundan çıkardığımız karar: Kıb-Tek'in elindeki veriyle iyi yaptığımız şey yük. Haritanın temel katmanını yük yapmak istiyoruz: her trafo için öğlen en düşük yük ve akşam tepesi, tepe tarafı kVA olarak ve "ön" etiketiyle. Panel katmanını bugünkü güvenlikle (dolu trafoya asla evet yok) dondurup Kıb-Tek'in ağ kayıtları ve başvuru anında karar gelince açmak istiyoruz. Akşam tepesi için planımız: aynı şablon yöntemi (İngiltere gibi eğri şekli kümeleri + ölçekleme, hedef tepe), deneme şehirlerini Güney Kıbrıs 2022 sayaç sınıflarının Temmuz eğrileriyle (klima dahil) yeniden üretmek, İspanya'nın Mayıs tepesiyle gerçeğe karşı sınamak, Kıbrıs yaz ölçümü gelene kadar "ön" demek.
+>
+> Sorularım:
+> 1) Bu odak değişikliği doğru mu? Panel katmanı bu hâliyle (yeşil %5) üründe gösterilmeli mi, yoksa yalnız "dolu trafoya uyarı" olarak mı kalmalı?
+> 2) Akşam tepesi için yukarıdaki plan "ön" sürüm olarak yeterli mi, yoksa baştan sıcaklıkla sürülen ayrı bir model mi kurmalıyız? Eşzamanlılığı (abone başına en yüksek talep) abone sayısıyla nasıl ölçeklemeliyiz?
+> 3) Tepe için gerçek veri: dağıtım şirketlerinde mahalle trafolarında en yüksek talep göstergesi ya da yıllık okuma bulunur mu? Kıb-Tek'ten tepe için ne istemeliyiz?
+> 4) Öğlen yükünde model faturaya çok az şey katıyor. Katkıyı artıracak bir bilgi var mı, yoksa "yük = fatura × oran + kalibre aralık" deyip değeri belirsizlikte ve kararda mı aramalıyız?
+> 5) Panelde en büyük bilinmeyen trafonun çıkış gerilimi (kademe ayarı). Ölçmeden bunu daraltmanın bir yolu var mı, örneğin akşam düşümünden ya da şebekenin kademe ayarlama alışkanlığından?
+>
+> Teşekkürler.
