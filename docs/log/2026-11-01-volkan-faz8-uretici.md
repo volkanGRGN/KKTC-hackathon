@@ -123,4 +123,9 @@ Karar: bedel kabul. Saf fatura kıyası bilgi satırı; yanlış kırmızı bir 
 ### Faz 1, yeni ölçütle
 Sınav 21–30: 207 V altı 1/400 (%0,25), en düşük 205,9 V → geçer. Geliştirme 1–10: 0/400, en düşük 212,3 V.
 
+## Ek girdi — 31 Ekim 22:35: kırmızı ölçüsüne örnek toleransı (karar masası 22:3x)
+- Ölçü: kırmızı kovasında gerçekte bugün aşan pay ≥ 0,5 − 2·√(0,25 ÷ n), n = kırmızı trafo sayısı. Sınav 21–30: n = 61 → sınır %37; %49 **geçer**. Geliştirme 1–10: n = 53 → sınır %36; %55 geçer.
+- Olasılık kovalarının yönü (karamsar: 0,5–0,7 → %34, 0,7–0,9 → %68) bilgi; Faz 10'da pilot verisiyle yeniden kalibre (ROADMAP Faz 10 satırı).
+- İspanya'da model = saf fatura bulgusu ADR-0016'nın bağlamına bir satır olarak eklendi. Manşet cümlesi Can'a (karar masası): "fatura toplamı girince %25 → %10; biz üstüne aralık, güven ve panel kararı".
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
