@@ -1,0 +1,24 @@
+KTMMOB Elektrik Mühendisleri Odası (KTEMO) — asgari birim fiyat listeleri ve laboratuvar deney kapsamı (ölçüm maliyeti hesabı için).
+Sayfa: https://www.ktemo.org/dokumanlar.php (ve laboratuvar.php); KTMMOB odalar sayfasından (ktmmob.org/odalar) bulundu.
+İndirildi: 1 Kasım 2026, ilk kez Civan (+ Claude, Mac); Can aynı adreslerden bir kez yeniden indirdi (Windows), her dosya tek istek. Bayt ve SHA-256 Can'ın indirmesinden (Civan'ın SHA'sı günlükte yok; karşılaştırılamadı).
+  EKIM2024.pdf — 685.879 bayt, SHA-256 850c097a8c363e22d6fc091a92544a60b6ea16e40d42914f6b58ad223cbcec93, PDF 1.5, 22 sayfa
+    PİD Elektrik Tesisatları Asgari Birim Fiyat Listesi, Ekim 2024 — https://www.ktemo.org/files/teknikbilgiler/EKIM2024.pdf
+  1780990679_Proje_Haz__rlama_ve_Kontroll__k_Asgari_Birim_Fiyat_Rev.13.xls — 327.680 bayt, SHA-256 224d1d4a1d2d03bb13be8d25ac729236daf8a982a0db5260746e1f99158b10df, eski Excel (OLE)
+    Proje Hazırlama ve Kontrollük Asgari Birim Fiyat Rev.13 (son kayıt Mayıs 2026) — https://www.ktemo.org/files/uploads/1780990679_Proje_Haz__rlama_ve_Kontroll__k_Asgari_Birim_Fiyat_Rev.13.xls
+  1780990699_Proje_Haz__rlama_ve_Kontroll__k_Asgari_Birim_Fiyat_Rev.13-kontrolluk.pdf — 406.540 bayt, SHA-256 82183e1bd3b09d277ce33e436a8d85d2ed76cd7ef16c805095c2136cddc8a508, PDF 1.7, 1 sayfa
+    aynı Rev.13, kontrollük sayfası — https://www.ktemo.org/files/uploads/1780990699_Proje_Haz__rlama_ve_Kontroll__k_Asgari_Birim_Fiyat_Rev.13-kontrolluk.pdf
+  yeni-proje-vize-ucretleri.pdf — 124.906 bayt, SHA-256 781614b6f6b8079c54d1579dd2b2c046a8782c0627f532ae20fbc0b8e1caecde, PDF 1.7, 1 sayfa
+    Yeni Proje Vize ve Tadilat Ücretleri, Eylül 2023 — https://www.ktemo.org/files/teknikbilgiler/YEN%C4%B0%20PROJE%20V%C4%B0ZE%20%C3%9CCRETLER%C4%B0.pdf (yerel ad Türkçe harfsiz)
+  DeneyKapsami.pdf — 157.646 bayt, SHA-256 4498567a6500f8008f78c2a3c0b587d4deb5eaf506bec82a3b59a12d5739c62a, PDF 1.7, 2 sayfa
+    EMO laboratuvarı deney kapsamı — https://www.ktemo.org/files/DeneyKapsami.pdf
+  İndirme: curl -L -o <ad> "<adres>"
+Lisans: belirtilmemiş (kamuya açık indirme) → kaynak gösterilir. Ham dosyalar depoya girmez.
+Dosyalar yalnız okundu (pdftotext -table; Excel okuyucu); çalıştırılmadı. Excel'in makro içerip içermediğine bakılmadı; açılırken makrolar kapalı tutulmalı.
+
+Kullanılan değerler [Kaynaklı: bu belgeler; Civan'ın günlüğü docs/log/2026-11-01-civan-olcum-maliyeti.md]:
+  Ölçü akım trafosu 100–500/5 A, sınıf 0,5–1, temin + montaj: 3.286 TL/adet (PİD Ekim 2024, C3.1)
+  Ölçü akım trafosu 501–2000/5 A: 8.474 TL/adet (PİD Ekim 2024, C3.2)
+  Galvaniz pano 70×50×30 (üç faz 63 A tek sayaç): 8.376 TL (PİD Ekim 2024, A1 madde 4)
+  Mühendis ek kontrollük saat ücreti: asgari ücretin %5'i / saat (Rev.13 kontrollük, "Hesaplama yöntemi")
+  EMO laboratuvarında trafo yük ölçümü hizmeti yok (deney kapsamı).
+Yanlılık: PİD fiyatları Ekim 2024, enflasyonla güncel değil; "asgari" fiyat, piyasa fiyatı değil; belge brüt / net asgari ücret demiyor.

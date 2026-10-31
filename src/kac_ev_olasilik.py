@@ -19,12 +19,18 @@ konutlar rastgele sırayla 6,5 kW alırsa kaçı sığar (sığmayan atlanır, c
 başvuru sığıyor mu. Renk (ADR-0010 olasılıkla):
   kırmızı = bugün aşma olasılığı ≥ KIRMIZI_P;  yeşil = ilk iki başvurunun sığma olasılığı ≥ YESIL_P ve güven
   yüksek (marj = 1 ev);  diğerleri sarı.
+Panel katmanı "güvenli uçlar" (ADR-0017, Muhittin 4 madde 1; `pv_uc`): yeşil = yukarıdaki yeşil; `dolu_bayrak` = bugün
+  aşma olasılığı ≥ BAYRAK_P ("büyük olasılıkla dolu", ret değil); arası `bos` (renksiz, "başvuruda bakılır").
+Konum payı (ADR-0015 m. 4; yalnız analiz, `kac_ev.csv`'ye yazılmaz — karar masası 01:01; `guvenli_uc.py --konum`):
+  tek başvurunun (6,5 kW) hattı ve hattaki yeri biliniyor, gerisi aynı çekilişlerle; bütün hatlarda o yerdeki ev için
+  sığma olasılığı ≥ YESIL_P ve güven yüksekse o yer "büyük olasılıkla evet". Renksiz trafoda neredeyse hep 0 çıktı.
 Sayılar: kac_ev_karamsar = çekilişlerin P10'u, kac_ev_iyimser = P90'ı, kac_ev_orta = ortanca.
 
 Faz 3'ün resmi hesabı (ADR-0011, karar masası 18:46).
 Okur: trafolar.csv, tahmin.csv. cevap_anahtari.csv'yi okumaz.
 Yazar: kac_ev.csv, sözleşme §6 (1.3): karamsar / iyimser / renk bu hesaptan; isil_pay_kw, gerilim_pay_kw_*,
-sinir_karamsar, kural40_ev tek denklemden (kac_ev.py); ek sütunlar p_bugun_asar, p_iki_ev_sigar, kac_ev_orta.
+sinir_karamsar, kural40_ev tek denklemden (kac_ev.py); ek sütunlar p_bugun_asar, p_iki_ev_sigar, kac_ev_orta;
+1.4 adayı: sonda pv_uc (ADR-0017).
 
 Çalıştırma:
   python3 src/kac_ev_olasilik.py data/synthetic --sehir 3
@@ -46,6 +52,7 @@ KOK = Path(__file__).resolve().parent.parent
 CEKILIS = 40
 KIRMIZI_P = 0.5                         # bugün aşma olasılığı bunun üstündeyse kırmızı [Yorum]
 YESIL_P = 0.98                          # ilk iki başvurunun sığma olasılığı (canlı bütçe %2, ADR-0010)
+BAYRAK_P = 0.7                          # "büyük olasılıkla dolu" bayrağı (ADR-0017; ilkeden, sınava bakılmadan)
 
 ABONE = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm', 'abone_sanayi1', 'abone_sanayi2',
          'abone_su_motoru']
@@ -205,6 +212,55 @@ def trafo_cek(tr, t, rng):
     return sonuc
 
 
+KONUM_Y = [k / 10 for k in range(1, 11)]      # başvuranın hattaki yeri, hat boyunun payı
+
+
+def konum_payi(tr, t, rng):
+    """Hattın ilk x'i (ADR-0015 m. 4): x'e kadar her yerdeki evden tek başvuru, bütün hatlarda ve bütün çekilişlerde
+    sığıyor (P ≥ YESIL_P) ve güven yüksek; haritanın bugün aşma olasılığı da ≤ 1 − YESIL_P olmalı (çağıran bakar). Yer = (hattaki sıra + 1) ÷ hattaki ev; y için o hattın y'yi geçen ilk evi
+    (temkinli). Yalnız panelli evlerden oluşan kol (çekilişlerin bir kısmı) atlanır: başvuran panelsiz."""
+    if t['guven'] != 'yuksek':
+        return 0.0
+    p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
+    olculen = ke.sayi(t['ogle_min_kw_olculen'])
+    srng = random.Random(f'konum-sapma-{tr["sehir"]}-{tr["trafo_no"]}')
+    x = 1.0
+    for _ in range(CEKILIS):
+        ag, evler = ag_kur(tr, rng)
+        sapma = math.exp(srng.gauss(SAPMA_MU, SAPMA_SIGMA)) if (SAPMA_MU or SAPMA_SIGMA) else 1.0
+        for f in ag['feeders']:
+            f['zs'], f['zn'] = f['zs'] * sapma, f['zn'] * sapma
+        if not evler:
+            continue
+        if t['olculdu'] == '1' and not math.isnan(olculen):
+            toplam = olculen
+        else:
+            mu = (math.log(max(p10, 0.01)) + math.log(max(p90, 0.01))) / 2
+            sd = max(1e-6, (math.log(max(p90, 0.01)) - math.log(max(p10, 0.01))) / (2 * 1.2816))
+            toplam = math.exp(rng.gauss(mu, sd))
+        yuk = yuk_dagit(evler, toplam, rng)
+        m = 1 + rng.uniform(*OG)
+        V, vmax, s_tr = durum(ag, evler, yuk, {}, m)
+        if vmax > ke.V_SINIR or s_tr > ag['kva']:
+            return 0.0
+        for f in ag['feeders']:
+            n = len(f['houses'])
+            if all(h['pv'] > 0 for h in f['houses']):
+                continue
+            for y in KONUM_Y:
+                if y > x + 1e-9:
+                    break
+                h = f['houses'][min(n - 1, max(0, math.ceil(y * n - 1e-9) - 1))]
+                _, v2, s2 = durum(ag, evler, yuk, {h['id']: ke.YENI_PANEL_KW}, m,
+                                  [[list(v) for v in hat] for hat in V], iters=4)
+                if v2 > ke.V_SINIR or s2 > ag['kva']:
+                    x = round(y - 0.1, 1)
+                    break
+            if x <= 0:
+                return 0.0
+    return x
+
+
 def nicel(x, q):
     x = sorted(x)
     return x[min(len(x) - 1, max(0, int(round(q * (len(x) - 1)))))]
@@ -234,12 +290,19 @@ def sehir_calistir(klasor):
             renk = 'sari'
         satirlar.append({**tek[r['trafo_no']], 'kac_ev_karamsar': nicel(kac, 0.1), 'kac_ev_iyimser': nicel(kac, 0.9),
                          'renk': renk, 'p_bugun_asar': round(p_bugun, 3), 'p_iki_ev_sigar': round(p_iki, 3),
-                         'kac_ev_orta': nicel(kac, 0.5)})
+                         'kac_ev_orta': nicel(kac, 0.5), 'pv_uc': pv_uc(renk, p_bugun)})
     ke.csv_yaz(klasor / 'kac_ev.csv', SUTUNLAR, satirlar)
     return satirlar
 
 
-SUTUNLAR = ke.SUTUNLAR + ['p_bugun_asar', 'p_iki_ev_sigar', 'kac_ev_orta']      # sözleşme §6, 1.3
+def pv_uc(renk, p_bugun):
+    """Panel katmanının üç durumu (ADR-0017): yeşil / büyük olasılıkla dolu bayrağı / renksiz."""
+    if renk == 'yesil':
+        return 'yesil'
+    return 'dolu_bayrak' if p_bugun >= BAYRAK_P else 'bos'
+
+
+SUTUNLAR = ke.SUTUNLAR + ['p_bugun_asar', 'p_iki_ev_sigar', 'kac_ev_orta', 'pv_uc']   # sözleşme §6, 1.3; pv_uc 1.4 adayı
 
 
 def main():
@@ -254,7 +317,8 @@ def main():
     for k in klasorler:
         s = sehir_calistir(k)
         renkler = {c: sum(1 for x in s if x['renk'] == c) for c in ('yesil', 'sari', 'kirmizi')}
-        print(f'{k.name}: {renkler}')
+        uclar = {c: sum(1 for x in s if x['pv_uc'] == c) for c in ('yesil', 'dolu_bayrak', 'bos')}
+        print(f'{k.name}: {renkler}; panel katmanı {uclar}')
 
 
 if __name__ == '__main__':
