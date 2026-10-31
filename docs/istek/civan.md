@@ -146,3 +146,34 @@ Rakam etiketleri [Kaynaklı / Hesap / Yorum]; indirilen hiçbir şey çalıştı
 Dosya: deneme/eszamanlilik (src/eszamanlilik.py, docs/log/2026-11-01-civan-eszamanlilik.md)
 Neden: yük haritası = tüketim doluluğu; akşam odaklı ama saat sabitlenmez (Can). Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 23:46 — BUILD'den — sözleşme 1.4 onayı: iki PR (#21 cevap anahtarı yıl tepesi, #22 kayitlar.csv)
+Ne: Sözleşme değişikliği Can ya da Civan onayı ister; karar masası 23:35'e göre PR #21'i sen onaylıyorsun (Can yük modelini yazacağı için). İkisi de yalnız ekleme, var olan sütunların adı ve sırası değişmiyor; harita bugün ikisini de okumuyor:
+- **PR #21** (`uretici/1.4-tepe`): `cevap_anahtari.csv` sonunda on sütun (`tepe_yil_kw`, `tepe_yil_kva`, `tepe_saati`, `tepe_ayi`, `v_min_tepe_v`, `tepe_yaz_kw`, `tepe_kis_kw`, `kva_tavan`, `klima_carpani`, `tepe_yil_brut_kw`) ve `yuk_5dk_yaz.csv` / `yuk_5dk_kis.csv` (§3, §3b). Nisan dosyaları 1.3 ile bayt bayt aynı (karar masası Mac'te doğruladı).
+- **PR #22** (`deneme/sahte-kayit`): §7 `kayitlar.csv` (Kıb-Tek kayıtlarının biçimi: kademe, hat boyu, panelli abonenin hattı / yeri / fazı / kWp, inverter).
+Senden beklenen: `docs/data/tablo-bicimi.md` farkını oku, GitHub'da onayla ya da düzeltme yaz. Birleştirme Volkan'ın sözüyle; PR #22 ayrıca karar masasının testinde (iki eksi bulgu).
+Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
+Neden: CONTRIBUTING sözleşme kuralı; karar masası 23:35.
+Durum: yapıldı (Civan): PR #21 onaylandı (not: tepe_yil_kw üç pencerenin tepesi, açıklamaya eklenmeli; bloklamaz); PR #22'ye iki not (inverter `deger` türetilmiş, ham kayıt değil; sürüm satırı ve dosyalar tablosunda §7 eksik). Haritaya ikisinin de etkisi yok.
+
+
+## UYARI! 1 Kasım 00:15 — karar masasından (KARAR) — panel katmanı "güvenli uçlar" kararı yazıldı (ADR-0017); kart sütun gelince
+Ne: [ADR-0017](../decisions/adr-0017-pv-katmani-guvenli-uclar.md) kabul. Panel katmanında üç durum: **yeşil** (bugünkü yeşil; "ilk 2 başvuru güvenle sığar"), **"büyük olasılıkla dolu" bayrağı** (`p_bugun_asar` ≥ 0,7; kırmızı dolgu değil uyarı işareti; "başvuruda ölçüm ya da güçlendirme gerekir"), **renksiz** ("başvuruda bakılır"). Eşiği harita hesaplamaz: BUILD 2 `kac_ev.csv`'ye `pv_uc` sütununu (`yesil` / `dolu_bayrak` / `bos`) ekleyecek (sözleşme 1.4 adayı, onay sende ya da Can'da). Sütun gelince harita kartı bundan; şimdilik kod değişikliği yok. Yük katmanının ikinci sayısı ("akşam doluluğu") [ADR-0018](../decisions/adr-0018-aksam-tepesi-on-surum.md)'e göre P90 tepeden (`bos_kva_p10`), "ön" etiketi ve iki kör nokta etiketiyle.
+Ayrıca: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç oturumu"); PR'lar "[Yük]" ya da "[Panel]" başlıklı gelir.
+Dosya: app/ (senin), docs/data/tablo-bicimi.md (onay)
+Neden: Muhittin 4 madde 1.
+Durum: bekliyor
+
+## UYARI! 1 Kasım 00:18 — (BUILD 2 — panel) — PR #22 sözleşme §7: iki notun işlendi, GitHub onayı
+Ne: Senin iki notun `docs/data/tablo-bicimi.md`'ye işlendi (PR #22, 858a999): (1) sürüm satırına "1.4 adayı, deneme: §7 `kayitlar.csv`" ve dosyalar tablosuna `kayitlar.csv` satırı (yazan `src/sahte_kayit.py`, gerçekte Kıb-Tek; okuyan `basvuru.py`, `basvuru_testi.py`; harita ve resmi hesap okumaz; Faz 9); (2) `inverter` satırının `deger`i için "türetilmiş değer, ham kayıt değil; gerçek kayıtta önce geri çözüm adımı gerekir" notu ve 1.4 kesinleşirken iki ayrı sütun önerisi (`bara_v`, `esdeger_boy_m`). Sütun adları ve sırası değişmedi; harita bugün bu dosyayı okumuyor.
+Senden beklenen: farkı oku, GitHub'da onayla ya da düzeltme yaz. Sürüm satırı PR #21'le aynı satır: PR #21 önce birleşir, sonra PR #22 dalı güncellenir (iki ibare birlikte).
+Dosya: PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
+Neden: CONTRIBUTING sözleşme kuralı; karar masası 00:10 madde 3 ve 5.
+Durum: bekliyor
+
+## UYARI! 1 Kasım 00:23 — (BUILD 2 — panel) — `pv_uc` sütunu hazır (PR #23): panel katmanı güvenli uçlar; sözleşme 1.4 onayı
+Ne: ADR-0017'nin sütunu (karar masası 00:15 girdin): `kac_ev.csv`'nin sonuna `pv_uc` = `yesil` / `dolu_bayrak` / `bos`. Var olan sütunlar değişmedi (1–10'da birebir); `renk` geriye uyum için duruyor. Gösterim ADR-0017'deki gibi: yeşil dolgu ("ilk 2 başvuru güvenle sığar"), `dolu_bayrak` kırmızı dolgu değil uyarı işareti ("büyük olasılıkla dolu; başvuruda ölçüm ya da güçlendirme gerekir"), `bos` renksiz ("başvuruda bakılır"). Geliştirme 1–10'da 354 trafoda: yeşil 20, bayrak 20, renksiz 314 (%89) [Hesap, farazi]. Sahte veri üreticin (`app/ornek_veri.py`) `KAC_EV_SUTUN`'una da eklemen gerekecek.
+Senden beklenen: (1) `docs/data/tablo-bicimi.md` §6 farkını oku, GitHub'da onayla ya da düzeltme yaz (1.4 adayı); (2) PR birleşip şehirler yeniden üretilince harita kartı (karar masası kartı gelir).
+Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23)
+Neden: ADR-0017; Muhittin 4 madde 1; sözleşme kuralı.
+Durum: bekliyor

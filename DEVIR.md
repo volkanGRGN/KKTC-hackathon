@@ -2,7 +2,30 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 23:20 — BUILD yeni oturumda (önceki bağlam doldu). PR #16 / #17 / #18 / #20 main'de, resmi rakamlar v3; Can'ın sınav işleri kontrol edildi ve onaylandı; sıra değişti: yük haritası (Faz 11) öne, panel sunumda anlatılmayacak.
+**Güncellendi:** 1 Kasım 2026, 00:30 (KARAR) — PR #19, #21 birleşti; iş tahtası; üç oturum düzeni, ADR-0017 / 0018. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
+
+## Kim nerede (1 Kasım 00:15; Volkan'ın üç oturumu, CONTRIBUTING "Volkan'ın üç oturumu")
+- **KARAR:** Volkan adına karar, istek kutusu (`docs/istek/volkan.md`), PR testi (resmi rakam Mac koşusu) ve birleştirme, ADR.
+- **BUILD 1 — yük haritası** (dal `yuk/`, PR "[Yük]"): Muhittin 4 madde 1–4 — yük temel katman, akşam tepesi ön sürümü ([ADR-0018](docs/decisions/adr-0018-aksam-tepesi-on-surum.md), `src/tepe.py`), Kıb-Tek tepe verisinin girişi, öğlen yükü; Can'ın yük PR'larını inceler.
+- **BUILD 2 — panel gerilimi** (dal `panel/`, PR "[Panel]"): PR #19 ve #22'yi bitirir; Muhittin 4 madde 1'in panel kısmı (güvenli uçlar, [ADR-0017](docs/decisions/adr-0017-pv-katmani-guvenli-uclar.md)) ve madde 5 (kademe, inverter geri çözümü).
+- **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
+- BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
+
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 00:32)
+Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
+
+| İş | Kimde | Durum | Bekleyen |
+|---|---|---|---|
+| PR #22 başvuru anı motoru + sahte kayıt (deneme) | BUILD 2 | Mac tekrarı birebir (KARAR 00:27); kayda koşullu evet için pilot şartı | dal main'e göre güncellenir (BUILD 2), §7 onayı (Civan) |
+| `tepe.py` ön sürümü, öğlen yükü kontrolü, Kıb-Tek tepe verisi girişi (Muhittin 4 m. 1–4, ADR-0018) | BUILD 1 | başladı (BAŞLA 00:16) | — |
+| PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | Mac'te tuttu (KARAR 00:32) | §6 onayı (Civan / Can) |
+| Kademe ve inverter geri çözümü (Muhittin 4 m. 5), dal `panel/inverter-geri-cozum` | BUILD 2 | başladı | — |
+| Üretici 1.5, sınav şehirleri 31–40 | Can | PR #21'in son hâlinin üstüne taşınacak (can.md 00:24) | — |
+| B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
+| Harita: güvenli uçlar kartı, yük ikinci sayısı; Faz 4 kalanı | Civan | `pv_uc` sütunu gelince (civan.md 00:15) | BUILD 2 |
+| Sunum rakam sürümü (v2 / v3) | Volkan | bekliyor | — |
+
+Birleşenler (1 Kasım): #19 (07ea153), #21 (c53ab31).
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -43,10 +66,12 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 netleşen cümle ve jüri cevapları (can.md 20:50); Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
 4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
-5. **Faz 6–12** (ROADMAP "Faz 6–12", 23:15 güncel): Faz 7 kalibrasyonu (PR #16), Faz 8 üretici 1.3 ve sınav şehirleri 21–30 (PR #18), PV açılma denemesi (PR #20), Gozo (PR #17) main'de. Can'ın 21–30 puanlaması BUILD'le ve karar masasının Mac koşumuyla birebir (can.md KONTROL 23:15). Açık PR #19 (Faz 10 hazırlığı), Volkan'ın sözüyle birleşir. Sunum sürümü (v1 / v3) Volkan'da. BUILD'in yerel 1.3 şehirleri `data/synthetic/u13/` (sunum şehirleri `data/synthetic/` v1, dokunulmadı).
-6. **K_YUK 1,47** (karar masası 23:13; ürünün tabakalı seçimi): sınav 21–30 bir kez, renkler aynı, İspanya %82,1 (Faz 7 günlüğü Ek 3). B-Y1 PR #21 Can'a devredildi (yük haritası kodu Can'da, karar masası 23:18).
-7. **BUILD sırası (karar masası 23:18; Volkan panelde):** sahte Kıb-Tek kayıtları + başvuru anı motoru (ADR-0012 / 0015; dal `deneme/sahte-kayit`) → ROADMAP Faz 6–12. Yük haritası kodu (B-Y1 / B-Y2) Can'da, BUILD onaylar.
-8. **Can:** sözleşme 1.4 tepe sütunları → `faz2` tepe maddesi → eşzamanlılık / sıcaklık eğimi (Civan'ın bulut oturumu `deneme/eszamanlilik` yardımcı). KIOS e-postası hackathon sonrasına.
+5. **Faz 6–12 durumu** (ROADMAP "Faz 6–12" güncel): Faz 7 kalibrasyonu (K_YUK 1,47, karar masası 23:13; ürünün tabakalı seçimi), Faz 8 üretici 1.3 ve sınav şehirleri 21–30, PV açılma denemesi, Gozo main'de. Resmi rakamlar v3 (gerçekçi şehirler), Mac doğrulamalı.
+6. **Açık işler (öncelik sırasıyla):**
+   - **Açık PR'lar ve kimin işi:** yukarıdaki "İş tahtası" (KARAR günceller).
+   - **Can (yük haritası, Faz 11):** üretici 1.5 (yaz boyutlandırması: kVA yılın tepesine göre, 1.600 / 2.500 kVA, uzun hatta kesit; yeni sınav şehirleri 31–40; çapa Malta ortanca 0,42, aşan %1,5; 207 V altı ≤ %1, en düşük ≥ 200 V), `src/tepe.py` iki bileşenli tepe modeli (eşzamanlılık ve sıcaklık eğimi 20 Kıbrıs evinden), sözleşme `tepe.csv`. Volkan'ın dosyalarına PR ile, BUILD onaylar; tepe sınavını Civan ya da BUILD puanlar.
+   - **Volkan'da:** sunum rakam sürümü (v1 / v3; karar masası önerisi v3); panel sunumda anlatılmayacak (yük haritası öne).
+7. **BUILD'in yerel durumu** (git dışı): üretici 1.3 şehirleri `trafo-sablonu-build/data/synthetic/u13/` (1–10, 21–30; K_YUK 1,47 ile `tahmin.csv` / `kac_ev.csv`; her şehirde sahte `kayitlar.csv`); Open-Meteo 2024–2025 dosyası yalnız bu klasörde (`data/raw/open-meteo-lefkosa/`); İspanya ham verisi `hackaton/edp-ham/Sim_files_190128_OK_V0/GIS_data`. Başvuru testi: `python3 src/basvuru_testi.py data/synthetic/u13 --aralik 21-30 --json x.json` (~1 dk).
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
@@ -64,6 +89,6 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
 ## Sıradaki üç adım
-1. Faz 4 Mac kontrolü (yukarıda 1), sonuç civan.md ve ROADMAP Faz 4.
-2. Konuşma notu ↔ `docs/sunum/` birleştirme (Can'la, kutudan); 2 prova.
-3. Yeni araştırma yok (karar masası 20:47).
+1. PR #22: iki kat hata varsayan motor koşumu + tüzük madde 2 cümlesi (BUILD); Mac tekrarı (karar masası); §7 onayı (Can / Civan).
+2. PR #21 Civan onayı, PR #19 ve #21 için Volkan'ın "birleştir" sözü.
+3. Can'ın üretici 1.5 + tepe modeli PR'ları geldikçe BUILD onayı; sunum sürümü kararı (Volkan).

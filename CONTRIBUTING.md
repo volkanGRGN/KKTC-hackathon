@@ -25,6 +25,21 @@ Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı 
 
 Dosyalar arasındaki sözleşme (hangi dosya hangi biçimde ne üretir) `docs/data/tablo-bicimi.md`'de; önce o yazılır, sonra herkes kendi dosyasına çekilir. **Planlama Volkan'da (+ Claude): görevler [docs/gorev/](docs/gorev/README.md) kartlarıyla verilir; Can ve Civan kartı uygular, soruyu istek kutusuna yazar.** Sınav kodunu (`sinav.py`) modeli yazan değil Can yazar: ölçü bağımsız olsun.
 
+### Volkan'ın üç oturumu (1 Kasım 2026)
+Volkan tarafının işi üç ayrı Claude oturumunda yürür; mesajlar ve PR'lar karışmasın diye her konu tek yere gider.
+
+| Oturum | İşi | Yazdığı yerler | Dal öneki, PR başlığı |
+|---|---|---|---|
+| **KARAR** | Volkan adına karar, istek kutusu, PR testi ve birleştirme, ADR | `docs/istek/`, `docs/decisions/`, kök belgelerde iş bölümü satırları | `karar-masasi` |
+| **BUILD 1 — yük haritası** | yük katmanı: öğlen yükü, akşam / yılın tepesi (Faz 11), Can'ın yük PR'larının incelemesi | `src/sablon.py`, `src/tepe.py`, yük tarafı sınav girdileri | `yuk/`, "[Yük] …" |
+| **BUILD 2 — panel gerilimi** | panel katmanı: olasılıklı kaç ev, başvuru anı motoru, sahte Kıb-Tek kayıtları, inverter / kademe (Faz 9–10) | `src/kac_ev_olasilik.py`, `src/kac_ev.py`, `src/pv_acilma.py`, `src/bilgi_degeri.py`, `src/inverter_kaydi.py`, `src/basvuru.py`, `src/basvuru_testi.py`, `src/sahte_kayit.py` | `panel/`, "[Panel] …" |
+
+- **BUILD'ler yalnız KARAR'a yazar**, birbirine yazmaz. Öbür tarafı ilgilendiren iş KARAR üzerinden gider. Kutuya yazılan girdinin başlığında hangi oturum için olduğu yazar: "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
+- **Ortak dosyalar** (`src/sehir_uret.py`, `docs/data/tablo-bicimi.md`, ROADMAP, DEVIR): her oturum yalnız kendi faz bölümünü düzenler; push'tan önce `git pull --rebase`. Üretici ve sözleşme değişiklikleri dal + PR ile, KARAR'dan sırayla geçer.
+- **Can'ın yük işi** (veri, eşzamanlılık ve sıcaklık eğimi analizi, üretici 1.5, tepe modelinin B-Y2 kısmı, tepe sınav kodu) Can'da kalır; Volkan'ın dosyalarına dokunan kısmı PR ile gelir, BUILD 1 inceler. Öneren ≠ puanlayan: Can'ın yazdığı modeli Civan ya da BUILD 1 puanlar; resmi rakam KARAR'ın Mac koşusu.
+- **Birleştirme:** PR'ı KARAR Mac'te main'le birleşik hâliyle koşar; eksi bulgu varsa sahibine (yük → BUILD 1, panel → BUILD 2) döner, düzelmeden birleşmez. Birleştirme Volkan'ın açık sözüyle; merge commit, dal silinmez.
+- Oturumlarla yapılan konuşma ve yapıştırılan metin depoya alıntılanmaz; karar kendi cümlemizle kutuya ya da ADR'ye yazılır.
+
 - **İstek kutusuna yazmak için izin istenmez**; yaz, gönder, sıradaki işe geç. Kim neye karar verir: [docs/istek/README.md](docs/istek/README.md#kim-neye-karar-verir).
 - Başkasının dosyasına ekleme gerekiyorsa o dosyaya dokunma; **o kişinin istek kutusuna** yaz ([docs/istek/](docs/istek/README.md), başlık `UYARI!`), o kişi yapar ve durumu "yapıldı" yapar. Bekleyenler: `grep -n "Durum: bekliyor" docs/istek/*.md`.
 - Günlük dosya adı `YYYY-AA-GG-<kişi>-<konu>.md`; böylece günlükler de çakışmaz. (31 Ekim'den önceki iki günlük bu kalıptan önce yazıldı, istisna.)
