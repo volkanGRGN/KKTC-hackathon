@@ -11,7 +11,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:00)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:01)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
@@ -21,7 +21,8 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | Akşam gerilimi tahmini (`v_min_tepe_v`), sonra tepe saati | BUILD 1 | sırada (KARAR 00:57) | — |
 | PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | Mac'te tuttu (KARAR 00:32) | §6 onayı (Civan / Can) |
 | PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | 8f93278: ölçülmüş kayma, ham özet, geri dönüş kalktı, kart satırı; inverter haritayı açmıyor (KARAR 00:49) | TEST'in Mac tekrarı; sonra #22 |
-| Sarıda konum payı (`yesil_konum_payi`, ADR-0015 m. 4) | BUILD 2 | sırada | — |
+| PR #28 sarıda konum payı (ADR-0015 m. 4; #23 üstünde) | BUILD 2 | renksizde bilgi vermiyor; harita kartı ve sözleşme sütunu yok, analiz seçeneği (KARAR 01:01) | sütunu çıkarma (BUILD 2); TEST |
+| Faz 10 ölçüm sırası (pilotta ilk 20 trafo) | BUILD 2 | sırada (KARAR 01:01) | — |
 | PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) + öğlende net fatura seçeneği | BUILD 1 | 855a6c3: Velander + 2015–2025 serisi yapıldı, İspanya KALDI kalır (%15,4), `tepe.csv` §8 (KARAR 00:57) | TEST'in Mac tekrarı; onay (Civan / Can) |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
 | Üretici 1.5, sınav şehirleri 31–40 | Can | PR #21'in son hâlinin üstüne taşınacak (can.md 00:24) | — |
