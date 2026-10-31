@@ -30,6 +30,8 @@ python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
 
 **Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Model, kaç ev ve harita geldikçe buraya eklenecek.
 
+**Gerilim doğrulaması** (gerçek veri, İngiltere UKPN; sanal ortam ister): `python3 src/ukpn_test.py data/raw/ukpn-pv-dogrulama ukpn_sonuc.csv` — ~30 saniye; veri `data/raw/ukpn-pv-dogrulama/KAYNAK.txt`'ten indirilip `acik/` altına açılır. Sonuç [günlükte](docs/log/2026-10-31-volkan-ukpn-gerilim.md).
+
 ## Repo haritası
 
 - [DEVIR.md](DEVIR.md) — **şu an nerede kaldık**: açık faz, kim nerede, bekleyen istekler, sıradaki adım
