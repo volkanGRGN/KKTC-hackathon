@@ -455,3 +455,17 @@ Dosya: src/sablon.py (senin), docs/data/tablo-bicimi.md (senin), src/sinav.py (C
 Neden: Can'ın isteği: harita Malta'nınki gibi her trafoda iki sayı göstersin; bugünkü model güneşe çok odaklı. Bloklamıyor.
 Durum: karar verildi 21:04 → can.md (bu gece ürüne girmez; sunumda 'sıradaki katman'; tepe tahmini 3. yol sözleşme 1.4 adayı; güneş kW = kac_ev_orta × 6,5) + muhittin.md (sorular 5–6 Muhittin'e eklendi; Volkan iletir)
 
+
+## UYARI! 31 Eki 21:20 — Civan'dan (+ Claude) — Eksik verilerimize uyan ada veri setleri: Kıbrıs AG iletken tablosu ve Korsika sağlaması
+Ne: Veri sözlüğündeki BULAMADIM'lar için ada / Akdeniz açık verisi tarandı ([günlük](../log/2026-10-31-civan-ada-veri-setleri.md)). Bu geceki rakamları değiştirmez (karar masası 20:47 "yeni araştırma yok"); pilot ve üretici 1.3 için.
+1. **Kıbrıs'ta gerçek AG hattı** [Kaynaklı: Kotsonias vd. (KIOS + EAC), ISGT-Europe 2019, Zenodo 10.5281/zenodo.3561929, CC BY 4.0]: havai iletken Rac 100 mm² 0,2702 / 50 mm² 0,5419 / 22 mm² 1,2271 / 16 mm² 1,9102 Ω/km; 49 bağlantı noktası, 61 tüketici, çoğu tek faz; nötr yalnız trafoda topraklı, nötr gerilimi tepede ~23 V. [Yorum] Ana hatta bizim ABC95 0,36 varsayımı karamsar; ama uç kollarda 16–22 mm² var, bizde yok → hat ucunu iyimser gösteriyor olabiliriz. EAC'nin, Kıb-Tek'in değil.
+2. **Korsika** [Kaynaklı: EDF SEI Corse açık veri, Licence Ouverte 2.0]: 8.144 trafo, 5.930 km AG, 267.925 teslim noktası (2024). [Hesap] trafo başına 0,73 km ve 32,9 abone (Güney 1,02 / 34,4); Kuzey trafo sayısı vekili Korsika oranıyla ~6.690 → aralık **~6.400–6.700** (bugünkü vekil yalnız Güney'den).
+3. Tek ev yüksek çözünürlük: Plegma (Yunanistan, 13 ev, 10 sn, klima dahil); bulut geçişi: NREL Oahu 1 sn ışınım (CC BY). İkisi de indirilmedi.
+4. Ada AG gerilim ölçüsü açık değil: BULAMADIM (Gozo tezleri kısıtlı, KIOS–EAC izleme verisi yayımlanmamış; arama izi günlükte).
+Sorular:
+(a) Kotsonias tablosu üretici 1.3'e "ince uç kol (16–22 mm²)" senaryosu olarak girsin mi, yoksa yalnız uzmana soru 3'e not mu?
+(b) Kuzey trafo sayısı vekili sözlükte "~6.400–6.700 (Güney + Korsika)" diye güncellensin mi; KAYNAK ve sözlük satırı kimde (Can mı)?
+(c) Pilot veri isteği listesine iki kişi eklensin mi: KIOS yazarları (hat modeli + EAC 60 tüketici verisi) ve Micallef 2015 tezi "Request a copy" (Gozo dış sınamasının eksik hat boyu / kablosu)?
+Dosya: docs/log/2026-10-31-civan-ada-veri-setleri.md; ham dosyalar depo dışında
+Neden: Civan'ın isteği: eksik veriler için adalardan uyarlanabilir veri. Bloklamıyor.
+Durum: yeni
