@@ -29,3 +29,39 @@ Sonuç: sağlama eşiği düzeltilince birleştirilebilir (yukarıdaki ilk KARAR
 ? Windows'ta çıktı ve Türkçe karakter: sen çalıştırdın, bende ölçülmedi. 14 "tamamen sıfır" sınıf-günün hepsi `isi_depolama` (kullanmadığımız sınıf) [Hesap]; sorun değil, günlüğe bir kelime yeter.
 Senden beklenen: iki düzeltmeyi dala gönder, sonra kartın dediği gibi sen birleştir (Volkan'ın bakması = bu inceleme).
 Durum: düzeltmeler dalda 14:35 (f76edda); birleştirme Can'ın onayını bekliyor
+
+## KARAR 31 Eki 13:00 — volkan.md'deki "Faz 1 sınavı: üretim süresi 60 sn'yi aşıyor" isteğine
+Karar: Eşik 60 sn kalır ("her şehir", yani en uzun; senin uyguladığın gibi) ve **şehirlerin üretildiği makinede** ölçülür (bugün Volkan'ın Mac'i). Windows süresi günlüğe bilgi olarak girer; Windows maddesi "çalıştı + çıktı UTF-8" olarak kalır. Hızlandırma mı eşik mi: önce hızlandırma, eşik en son; ama şimdi değil, ADR-0006 aralığıyla yeniden üretince ölçüme göre.
+Neden: Aynı üreticiyle (sehir/ilk-surum @ 7195227 + PR #5 f76edda, EAC eğrileri, yapay ışınım, eski %10–50 aralığı) Mac'te üç şehir 8,8 / 8,8 / 10,3 sn [Hesap, karar masası 12:55]; Volkan'ın 20 şehri ortanca 11,0, en uzun 14,2 sn. Senin Windows'un 5–6 kat yavaş; fark algoritmadan çok makine/ortam ve girdi: kodda kaç ev döngüsü yalnız "bugün aşmayan" trafoda çalışıyor (`trafo_benzet`, `if bugun is None`), gerçek Lefkoşa ışınımıyla bugünden aşan trafo azalınca döngü her trafoda koşuyor (senin uzun şehirlerinde kaç ev ortancası 6,5–8,5, benimkilerde 0). ADR-0006 ile aşan trafo daha da azalacak → süre iki makinede de artacak; o zaman bakılır. Eşiğin amacı 20–30 şehrin pratikte üretilebilmesi; Mac'te 20 şehir ~4 dk, amaç sağlanıyor.
+Senden beklenen: `sinav.py` süre maddesinin ayrıntısına `ayar.json`'dan `isinim_kaynagi` ve `profil_kaynagi` ekle (hangi girdiyle ölçüldüğü görünsün); Windows ölçümünü günlükte "bilgi: Windows 11, i7-13700H, Python 3.13" diye tut. Resmi Faz 1 süre sonucu: Volkan Mac'te üretir + `sinav.py faz1` koşar, kendi günlüğüne yazar.
+Senden beklenen (ana oturum): ADR-0006 aralığıyla 20 şehri yeniden üretince süreyi günlüğe; en uzun > 60 sn olursa kaç ev döngüsünü hızlandır (adaylar: `SIRA_SAYISI` 7 → 5; `asim()` içinde solve `iters` 5 → 3; sıralar arası taban çözümü paylaşımı), eşiği oynatma.
+Durum: bekliyor
+
+## KARAR 31 Eki 13:00 — volkan.md'deki "cevap anahtarı: kac_ev_sinir ile kac_ev_tavan çelişiyor" isteğine
+Karar: Çelişki yok; sözleşmenin güncel hali (PR #4 @ 2a02a81, §3) tam bu durumu tanımlıyor: `kac_ev_aday` = 0 ise `kac_ev_tavan` = 1 ("kaç ev sütunları bilgi taşımaz"), `kac_ev_sinir` = bugün aşıyorsa bugünkü aşımın nedeni (`gerilim`), aşmıyorsa `yok` ("hiç ret yok"). Eski taslaktaki "yok (tavan)" ifadesi değişmişti; o yüzden tavan sayısı ≠ `yok` sayısı, fark tam olarak "aday yok + bugün aşıyor" trafolar (sende 3).
+Neden: Üretici de böyle yazıyor: Mac'te 3 şehir / 120 trafoda 15 trafo aday = 0 (sanayi, sulama, otel; konut abonesi yok), biri (sehir-002 T03 sulama, v_max 259,9 V) tavan 1 + sınır `gerilim` [Hesap, karar masası 12:55]. Aday yoksa "kaç ev" sorusu o trafoda anlamsız; tavan 1 bunu söylüyor, sınır ise bugünün durumunu (Faz 3 "ölçülmedi/aday yok" etiketi için işe yarar).
+Senden beklenen: `sinav.py` bilgi satırlarına "aday = 0 trafo: N (tip dağılımı)" ekle; tavan oranını ve sınır sayımını aday > 0 olan trafolar üzerinden ver, aday = 0'ları ayrı say. Sözleşmeyi PR #4'ün son halinden oku (2a02a81).
+Durum: bekliyor
+
+## KARAR 31 Eki 13:00 — volkan.md'deki "bilgi: 105/800 trafoda v_max > 264 V; ayar.json CRLF" isteğine
+Karar: Okundu. (1) 264 V: ADR-0006'da var: `v_max` 264 V üstü değerler fiziksel değil, "gösterim" etiketli; Faz 3 zaten 259 V sınırını kullanır, inverter kapanması şimdi modellenmez. (2) `ayar.json` da LF olsun; sözleşmenin satır sonu kuralı CSV ve JSON'u kapsayacak.
+Neden: Tohum sınavı ("iki çalıştırma birebir") makineler arası da anlamlı olsun; `json.dump` için `open(..., 'w', encoding='utf-8', newline='')` yeter (Mac'te zaten LF çıkıyor).
+Senden beklenen: Hiçbir şey; bilgi için teşekkürler, rakamlar günlüğünde kalsın.
+Senden beklenen (ana oturum): `src/sehir_uret.py` satır 478 `open(klasor / 'ayar.json', 'w', encoding='utf-8', newline='')` (PR #6); sözleşme "Genel kurallar" CSV satırına "JSON da LF" (PR #4); Faz 3 kartına "264 V üstü gerçekte görülmez, üretim kesilir" notu.
+Durum: bilgi — iş ana oturumda
+
+## PR İNCELEME 31 Eki 13:00 — PR #5 @ f76edda (güncelleme) "veri: profiller.py ilk sürüm"
+Sonuç: birleştirilebilir.
++ Tek düzeltme istendiği gibi: sağlama 5 adı ve aralığı (0.6, 0.9), açıklama satırı doğru; günlükte eski satır duruyor, yeni satır eklendi; Mac'te 5/5 GEÇTİ, çıkış kodu 0 [karar masası 12:53].
+Senden beklenen: birleştir (kart: Volkan bakar, sen birleştirirsin; bakıldı). Önce #5, sonra #7.
+Durum: bekliyor
+
+## PR İNCELEME 31 Eki 13:00 — PR #7 "sinav: Faz 1 geçme sınavı ölçüleri"
+Sonuç: iki küçük düzeltmeyle birleştirilebilir.
++ Kartın 4. adımındaki her madde var; sütun ve anahtar adları sözleşmeyle birebir (§1, §3, §4); yer tutuculu ve eksik dosyalı şehir atlanıp uyarı yazılıyor; her `open()` utf-8 + `newline=''`, yollar pathlib; ek bağımlılık yok; yalnız kendi dosyan; main'le çakışma yok. Mac'te gerçek üreticiyle 3 şehir / 120 trafoda çalıştı, çıktı doğru, < 1 sn [karar masası 12:55].
+− Madde 3 (259 V üstü) ROADMAP'te toplamda "en az bir trafo"; sen şehir başına ölçüyorsun. ADR-0006 ile %3 yaygınlıklı bir şehirde hiç aşan olmayabilir, o şehir bozuk değildir → geçme ölçütü toplam ≥ 1, şehir başına sayı bilgi satırına (karar: karar masası, bu girdi).
+− Madde 2 eşiği şehir sayısına bağlansın: 3 × şehir sayısı (20 şehirde 60); 3 şehirlik denememde "KALDI: sanayi 10" dedi, oysa 10 ≥ 9. 20'den az şehirde ayrıca "UYARI: ROADMAP eşiği 20 şehir için" yaz.
+− Yukarıdaki iki KARAR'ın sinav.py kalemleri: süre ayrıntısına `isinim_kaynagi` / `profil_kaynagi`; aday = 0 trafo sayısı ve aday > 0 üzerinden tavan/sınır.
+? Windows'ta ve kusurlu şehir senaryonla bende ölçülmedi (sahte şehirlerin bende yok); senin kanıtın geçerli.
+Senden beklenen: düzeltmeleri dala gönder, sonra sen birleştir (#5'ten sonra).
+Durum: bekliyor
