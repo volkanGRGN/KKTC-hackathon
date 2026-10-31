@@ -641,4 +641,11 @@ Ne: Faz 8 ayarında farazi kapsama hiç inmedi; sebebi aranırken bulundu. İspa
 Soru: K_YUK 1,27'ye insin mi, yoksa PR #16 1,475'le birleşip düzeltme Faz 8'de mi gelsin?
 Dosya: PR #16 (src/sablon.py K_YUK); veri `edp_test.py --kalibrasyonsuz --cikti` (BUILD scratchpad); komut günlükte.
 Neden: tüzük madde 3; Volkan'ın kuralı (eksi bulgu karar masasında). Bloklamıyor: BUILD Faz 8'e devam ediyor; PR #16'ya kendisi dokunmadı.
+Durum: karar verildi 22:06 → volkan.md (KARAR aşağıda): K_YUK = 1,27, PR #16'da (Faz 8'e bırakılmaz); sınav 11–20 bir kez; karar masası Mac'te yeniden; Can C1 yeni dalda
+
+## KARAR 22:06 — BUILD'e: K_YUK 1,475 → 1,27, PR #16'da; kalibrasyon işletme noktasında (12 ölçülü) ölçülür
+Karar: **Evet, 1,27; PR #16'da, Faz 8'e kalmaz.** Gerekçe ilke, farazi kapsama değil: model her şehirde 12 ölçülü trafoyla çalışıyor (OLCULU_ANA); kalibrasyon katsayısı aynı işletme noktasındaki gerçek artıklardan gelmeli. 5 ölçülülü denemeler (k 1,93) başka bir modelin (az veriyle) hatasını ölçüyor; karışıma katmak katsayıyı şişirir. n = 10 ve 15'in birleşimi (k 1,27; dürüst kapsama %78,6) 12'ye en yakın kesit. Tüzük madde 3 "gerçeğe karşı" sağlanıyor, madde 5 için günlüğe k(n) tablosu (5 / 10 / 15 / 10+15 / hepsi) ve "k ölçülü sayısına bağlı; pilotta ölçülü sayısı değişirse yeniden" notu. `sablon.py` ve `edp_test.py` aynı sabit (tek kaynak). ADR-0013'e ek değil, günlük + tüzük madde 3'e bir cümle: "kalibrasyon, modelin sevk edildiği yapılandırmada (ölçülü sayısı, girdi seti) ölçülür".
+Sıra: (1) dalda K_YUK = 1,27 + günlük tablosu + tüzük cümlesi; `kalibrasyon.py ispanya` ile n = 10 + 15 satırlarında k ≈ 1 ve bir-dışarıda kapsama; İngiltere değişmez; (2) sınav 11–20 **bir kez** (yeşil / yanlış yeşil / sarı / kaç ev bandı), günlüğe v2 → v2b satırı; (3) kutuya "hazır"; karar masası Mac'te yeniden koşar (farazi + İspanya); Can C1'i yeni dalda koşar, onaylar; birleşir.
+Neden: Tüzük madde 3 ve 6 (hedef plato, doğru kesit); yanlış katsayıyı main'e sokup Faz 8'de düzeltmek iki kez rakam değiştirir.
+Senden beklenen (BUILD): (1)–(3), 30 dk; Faz 8'i sonra sürdür.
 Durum: bekliyor

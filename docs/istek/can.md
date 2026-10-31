@@ -339,3 +339,7 @@ Durum: bekliyor
 Ne: BUILD `edp_test.py`'ye K_YUK'u ekledi (dal 1fe042b). Karar masası Mac'te yeniden koştu: `edp_test.py --cikti` (K_YUK'lu) satırlarıyla `sinav.py faz2 --aralik 11-20 --ispanya …`: **İspanya kalibrasyon maddesi GEÇTİ** (nominal %50 / 80 / 90 / 95 → ampirik %56,8 / 82,1 / 88,2 / 92,6); PIT maddesi 0,066 ile hâlâ UYARI çünkü eşik 0,05 sabit. `kalibrasyon.py ispanya` aynı satırlarda k 1,000, bir-dışarıda %79,1.
 Senden beklenen: (1) PIT maddesinde tolerans = max(0,05; 2·√(0,09 ÷ n)), n = bağımsız trafo sayısı (İspanya 29 → 0,11; farazi 11–20'de n = 280 → 0,05); (2) `edp_satirlar.csv`'yi dalın `edp_test.py`'siyle yeniden üret (Windows), C1'i dalda koş, "önce / sonra" günlüğe; (3) PR #16'yı GitHub'da onayla. Sonra karar masası birleştirir, sen resmi `faz2` / `faz3`, sunum rakamları v2.
 Durum: bilgi
+
+## BİLGİ 22:06 — karar masasından — PR #16 bir tur daha: K_YUK 1,475 → 1,27; C1'i yeni dal başıyla koş
+Ne: BUILD'in bulgusu: İspanya katsayısı ölçülü trafo sayısına bağlı (5 ölçülü 1,93; 10 → 1,21; 15 → 1,33; 10 + 15 → 1,27); 1,475 beş ölçülülü denemelerle şişmişti. Model 12 ölçülüyle çalıştığı için katsayı 1,27 (dürüst kapsama %78,6). BUILD dala koyuyor, sınav 11–20 bir kez daha. **Senden:** dalın yeni başı gelince (kutuda "hazır") `edp_satirlar.csv`'yi yeniden üret, C1'i koş (PIT toleransı n = 29 → 0,11 ile), günlüğe "sonra" satırı, PR'ı onayla. Önceki koşumun boşa gitmedi: "önce" rakamların ve madde tanımların aynı.
+Durum: bilgi
