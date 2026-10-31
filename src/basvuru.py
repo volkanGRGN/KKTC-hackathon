@@ -103,6 +103,9 @@ def ag_kur_kayitli(tr, kayit, konumlu, hp, rng):
     rt = 0.04 * zb / math.sqrt(5)
     boylar = [b * math.exp(rng.uniform(math.log(1 - hp['hat']), math.log(1 + hp['hat']))) for b in kayit['hat_boy_m']]
     n_hat = len(boylar)
+    if kayit.get('kaynak') != 'sahte' and any('bara_olcum_v' not in v for v in kayit['inverter'].values()):
+        raise ValueError('türetilmiş `inverter` satırı (gerçek ± gürültü) yalnız sahte kayıtta kullanılır; gerçek '
+                         'inverter kaydı `inverter_ham` olmalı (sözleşme §7, karar masası 01:22)')
     inv_hat, cozuldu = {}, set()
     for hid, v in kayit['inverter'].items():             # aynı hatta birden çok inverter: ilki yeter
         inv_hat.setdefault(v['hat'], (hid, v))

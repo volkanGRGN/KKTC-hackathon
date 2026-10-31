@@ -189,7 +189,7 @@ Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama 
 | Sütun | Tür | Birim | Örnek | Açıklama |
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
-| `tur` | str | — | `panelli` | `kademe` / `hat` / `panelli` / `inverter_ham` (önerilen) / `inverter` (türetilmiş, eski deneme) |
+| `tur` | str | — | `panelli` | `kademe` / `hat` / `panelli` / `inverter_ham` (gerçek inverter kaydı) / `inverter` (türetilmiş: **yalnız deneme**, sahte kayıt; gerçek kayıtta okuyucu satırı atlar ve uyarır, motor reddeder — karar masası 01:22) |
 | `abone_no` | int | — | `17` | `panelli` ve `inverter`: trafo içi anonim abone sırası |
 | `hat_no` | int | — | `0` | `hat`, `panelli`, `inverter`: alçak gerilim hattının trafodaki sırası (0'dan) |
 | `yer` | float | oran | `0.8125` | `panelli`: hattaki yeri, direk sırası ÷ hattaki direk sayısı (0–1; 1 = hat ucu) |

@@ -174,7 +174,7 @@ def kayit_uret(tr, hp, rng, inv_bara=None, inv_ham=None):
             else:
                 inverter[h['id']] = dict(bara_v=inv_bara[h['id']] if inv_bara and h['id'] in inv_bara else bara,
                                          hat=j, esdeger_boy_m=boy)
-    return dict(kademe_v=kademe, hat_boy_m=hat, panelli=panelli, inverter=inverter)
+    return dict(kademe_v=kademe, hat_boy_m=hat, panelli=panelli, inverter=inverter, kaynak='sahte')
 
 
 def basvuru_kaydi(tr, hid, hp, rng):
@@ -214,12 +214,17 @@ def kayit_yaz(yol, sehir, kayitlar):
         w.writerows(satir)
 
 
-def kayit_oku(yol):
-    """kayitlar.csv -> {trafo_no: kayıt sözlüğü}. Gerçek Kıb-Tek kaydı aynı biçimde gelirse model değişmez."""
-    out = {}
+def kayit_oku(yol, kaynak='gercek'):
+    """kayitlar.csv -> {trafo_no: kayıt sözlüğü}. Gerçek Kıb-Tek kaydı aynı biçimde gelirse model değişmez.
+    kaynak: 'gercek' (varsayılan) ya da 'sahte' (bu dosyanın kendi deneme kayıtları). Türetilmiş `inverter` satırı
+    (gerçek ± gürültü) yalnız sahte kayıtta okunur; gerçek kayıtta atlanır ve UYARI basılır (karar masası 01:22)."""
+    out, atlanan = {}, 0
     with open(yol, encoding='utf-8', newline='') as fh:
         for r in csv.DictReader(fh):
-            k = out.setdefault(r['trafo_no'], dict(kademe_v=None, hat_boy_m=[], panelli={}, inverter={}))
+            k = out.setdefault(r['trafo_no'], dict(kademe_v=None, hat_boy_m=[], panelli={}, inverter={}, kaynak=kaynak))
+            if r['tur'] == 'inverter' and kaynak != 'sahte':
+                atlanan += 1
+                continue
             if r['tur'] == 'kademe':
                 k['kademe_v'] = float(r['deger']) if r['deger'] else None
             elif r['tur'] == 'hat':
@@ -236,6 +241,9 @@ def kayit_oku(yol):
                 b, e = r['deger'].split(';')
                 k['inverter'][int(r['abone_no'])] = dict(hat=int(r['hat_no']), bara_olcum_v=float(b),
                                                          egim_v_kw=float(e) if e else None)
+    if atlanan:
+        print(f'UYARI: {yol}: {atlanan} türetilmiş `inverter` satırı atlandı — bu tür yalnız sahte kayıt içindir; gerçek '
+              'inverter kaydı `inverter_ham` (ham özet) olarak gelmeli (sözleşme §7).', file=sys.stderr)
     return out
 
 
