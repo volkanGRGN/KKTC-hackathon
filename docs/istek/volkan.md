@@ -1064,3 +1064,10 @@ Soru: Akşam gerilimi kararı P10 ≥ 207 V olsun mu (öneri: evet; harita "yük
 Dosya: PR #29 (https://github.com/volkanGRGN/KKTC-hackathon/pull/29; #26'nın üstünde), docs/log/2026-11-01-volkan-yuk-aksam-gerilim.md (dalda)
 Neden: KARAR 00:57 madde 4; ADR-0014, ADR-0016 m. 3.
 Durum: bekliyor
+
+## KARAR 01:12 — #25 ve #28 Mac'te tuttu; testi geçen dört panel PR'ı birleşmeye hazır, yalnız GitHub onayı eksik (BUILD 2 — panel)
+Karar: Volkan (01:0x): "testi yap, hata yoksa pushla devam et." Karar masası kendi şehirleriyle koştu:
+- **PR #25 (a5cfddd):** `--kalibrasyon` sabitleri `INV_BARA_HATA_Q` ile aynı; ham kayıtsız koşu PR #22 tablosunu birebir verir (yarı 1/766, beklenen 0/694, iki kat 14/722, kusursuz 5/1.295); ham inverter kaydıyla iki kat 4/576 (%0,7), beklenen 1/558, yarı 0/568; yanlış yeşil her satırda 0; inverterli 156 trafoda kayıtlı yeşil 1–5 (yanlış 0); ROADMAP Faz 10 "haritayı açmıyor" satırı, kartta P6 / P7 "aynı ev, aynı hafta", kodda "türetilmiş satır yalnız sahte kayıt" açıklaması var [Hesap: karar masası 01:08]. Tuttu.
+- **PR #28 (9138806):** `kac_ev.csv` ilk 13 sütun 800/800 aynı, ek yalnız `pv_uc` (1–10'da #23 çıktısıyla tam aynı); sözleşmeye dokunmuyor; konum payı analizinde 21–30 renksiz 336'nın 17'sinde pay > 0, yanlış evet 0/33, toplam 0/110; 1–10'da 18 trafo, 0/34 [Hesap: karar masası 01:06]. Tuttu.
+- **Birleştirme durdu:** izin sistemi GitHub onayı olmayan PR'ın birleştirilmesine izin vermiyor ("incelemesiz birleştirme"). Volkan'ın açtığı PR'ları Volkan onaylayamaz (GitHub yazarına izin vermez); **Can ya da Civan onaylamalı**. Hazır sıra: **#22 → #25** (taban main'e çevrilir) ve **#23 → #28** (taban main'e çevrilir). #24 ve #26 TEST'te.
+Durum: bekliyor (Can / Civan GitHub onayı: #22, #23, #25, #28)
