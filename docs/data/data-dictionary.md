@@ -81,6 +81,12 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Yanlılık: İngiltere şebekesi (230 V nominal, çoğu yeraltı Al); bizim havai ABC 70/95 hatta **fizik taşınır, rakam taşınmaz**; yalnız 20 trafo.
 - Kullanım: Faz 3 gerilim fiziği doğrulaması (PR #11). [Hesap, PR #11] `solve()` 6 hat ucu evin 4'ünde ölçülen yükselmenin 0,84–1,39 katı; paneller uca toplanan 2 sitede az gösterdi → karamsar senaryo panelleri hat ucuna koyar (karar masası 16:27).
 
+**ASTOR trafo kataloğu (Elparts) — üretici açıklaması** — `data/raw/astor-katalog/`
+- ASTOR A.Ş. genel ürün kataloğu, 2020 (PDF, 35 sayfa). Elparts (Lefkoşa, Kıb-Tek'e AG/OG malzeme veren firma) sitesinden; Kıb-Tek'in trafo tipi sitede yok. İndirildi 31 Ekim 2026 (Volkan, Can sağladı); SHA-256 KAYNAK.txt'de.
+- Lisans belirtilmemiş (tanıtım kataloğu) → kaynak gösterilir. Ölçü değil, **üretici beyanı**; birim kVA / kV.
+- [Kaynaklı: katalog s. 9, 29–30] (1) yağlı dağıtım trafosu 50–5000 kVA (listemizdeki 25 kVA bunun altında, kaynaksız); (2) dağıtım trafoları boşta ya da yük altında kademe değiştiricili → bara gerilimi bandının sebebi; adımı BULAMADIM; (3) kompakt trafo merkezi 1000 ve 1600 kVA. Kısa devre gerilimi (uk): BULAMADIM.
+- Yanlılık: Türkiye üreticisinin genel yelpazesi; Kıb-Tek'in hangi güç ve tipte trafo aldığını söylemez. Kullanım: üretici kVA aralığı açıklaması (ROADMAP üretici 1.3), sözleşme kVA notu, uzmana soru 8 (main 56dfdb7, PR #15).
+
 ## Adaylar (henüz indirilmedi)
 - **NGED LV Load Monitor Data** (İngiltere): 301 CSV, gerçek trafo ölçümü; kayıt istiyor (kaydı Volkan yapmalı).
 

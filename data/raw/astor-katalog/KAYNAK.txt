@@ -1,0 +1,16 @@
+ASTOR A.Ş. genel ürün kataloğu (Türkçe/İngilizce), 2020 — transformatörler, OG anahtarlama, kompakt trafo merkezleri.
+Bulunduğu yer: Elparts (Lefkoşa; Kıb-Tek'e AG/OG malzeme veren firma) sitesi, ASTOR marka sayfası. Kıb-Tek'in kullandığı trafo tipi sitede yok.
+İndirme adresi: https://elparts.co/assets/files/66a9f6edac701-66a9f6edac702-66a9f6edac703.pdf
+İndirildi: 31 Ekim 2026, ilk kez Volkan (BUILD oturumu, 19:22, Volkan onayıyla); Can aynı adresten yeniden indirip sağladı.
+  astor.pdf — 9.660.235 bayt, SHA-256 1a9660e04e6df89b5c45ebaea113ec3494919d2c0f98cdd700eb2c2f21374acf (iki indirmede aynı), PDF 1.6, 35 sayfa, JavaScript yok.
+  İndirme: curl -L -o astor.pdf "<yukarıdaki adres>"
+Lisans: belirtilmemiş (üretici tanıtım kataloğu) → kaynak gösterilir. Dosya depoya girmez.
+Dosya yalnız metin olarak okundu (pypdf); çalıştırılmadı. PDF sayfa 22'nin metni çıkarılamadı (pypdf token sınırı).
+
+Kullanılan üç bilgi [Kaynaklı: bu katalog; sayfa numaraları PDF sırası] — Can metinden sağladı:
+1. Yağlı dağıtım transformatörü 50–5000 kVA, 36 kV'a kadar (s. 9; s. 3'te "50 kVA – 5 MVA"). Bizim listedeki 25 kVA direk trafosu bu aralığın altında, kaynaksız.
+2. Dağıtım transformatörleri "Boşta Kademe Değiştiricili veya Yük Altında Otomatik Kademe Değiştiricili" (s. 9) → bara gerilimi bandının (kademe ayarı bilinmiyor) sebebi. Kademe adımı (% / kademe sayısı) katalogda yok: BULAMADIM.
+3. Kompakt trafo merkezi (ABK-A / ABK-B) 1000 ve 1600 kVA; "maksimum anma gücü 1000 ; 1600 kVA" (s. 29–30).
+Kısa devre gerilimi (uk) katalogda bulunamadı: BULAMADIM.
+
+Kıb-Tek'e özel değer yok: katalog Türkiye üreticisinin genel ürün yelpazesi; Kıb-Tek'in hangi tip ve güçte trafo aldığını söylemez.
