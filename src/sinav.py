@@ -531,6 +531,15 @@ def faz3(sehirler):
     ic = sum(x['kar'] <= x['gercek'] <= x['iyi'] for x in kes)
     bilgi.append(f'aralık kapsaması (gerçek kac_ev_gercek [karamsar, iyimser] içinde; tavan = 0): {_oran(ic, len(kes))}; '
                  f'gerçek < karamsar {sum(x["gercek"] < x["kar"] for x in kes)}, gerçek > iyimser {sum(x["gercek"] > x["iyi"] for x in kes)}')
+    # Kaç ev bandı kalibrasyonu (karar masası 19:13): karamsar/iyimser %80 bandın uçlarıdır, taban değil; Faz 2 bandıyla aynı ölçü.
+    alti = [x for x in kes if x['gercek'] < x['kar']]
+    ustu = [x for x in kes if x['gercek'] > x['iyi']]
+    alti_tip = Counter(x['tip'] for x in alti)
+    bilgi.append(f'kaç ev bandı (tavan = 0; beklenen ~%10 / ~%10): P10 altı {_oran(len(alti), len(kes))}, '
+                 f'P90 üstü {_oran(len(ustu), len(kes))}; P10 altı tipe göre: '
+                 + (', '.join(f'{t} {n} (fark ortanca {st.median(x["kar"] - x["gercek"] for x in alti if x["tip"] == t):g} ev)'
+                              for t, n in alti_tip.most_common()) or '—')
+                 + f'; P10 altı yeşil {sum(x["renk"] == "yesil" for x in alti)}, bunlardan dolu {sum(x["renk"] == "yesil" and x["gercek"] == 0 for x in alti)}')
     sn = Counter(x['sinir'] for x in satir)
     bilgi.append('sinir_karamsar: ' + ', '.join(f'{k} {n}' for k, n in sn.most_common()))
     return m, bilgi
