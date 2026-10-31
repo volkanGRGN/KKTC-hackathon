@@ -625,3 +625,19 @@ Bilgi (PR'ı bloklamaz, günlükte): (1) **Tek k ortalamayı düzeltiyor, koşul
 Dosya: PR #16 (onay), docs/log/2026-10-31-can-faz7.md, docs/log/holdout-defteri.md
 Neden: KARAR 21:51 birleşme koşulu (b). Bloklamıyor.
 Durum: bekliyor
+
+## UYARI! 31 Eki 22:05 — BUILD'den — PR #16'da yeni eksi bulgu: k_yük ölçülü trafo sayısına bağlı; model n = 12, k 1,475 değil ~1,27
+Ne: Faz 8 ayarında farazi kapsama hiç inmedi; sebebi aranırken bulundu. İspanya k'si `edp_test.py`'nin 5, 10 ve 15 ölçülü trafolu denemelerinin karışımından hesaplanmıştı. Ölçülü sayısına göre ayrı hesap (kalibrasyonsuz satırlar, `kalibrasyon.py`):
+| Ölçülü | k | %80 bant önce | Bir-dışarıda kapsama, sonra |
+|---|---|---|---|
+| 5 | 1,93 | %58 | %79 |
+| 10 | 1,21 | %73 | %78 |
+| 15 | 1,33 | %69 | %78 |
+| **10 + 15** | **1,27** | %71 | %79 |
+| hepsi (PR #16) | 1,475 | %66 | %79 |
+`sablon.py` her şehirde **12** ölçülü trafo kullanıyor (OLCULU_ANA). 5 ölçülüyle yüzdelikler kaba kestirilir ve bant dar çıkar; o satırlar k'yi şişiriyor. Farazide %96'lık kapsamanın bir kısmı buradan.
+Öneri (BUILD): K_YUK = 1,27 (n 10 + 15, üretimdeki 12'ye en yakın; dürüst kapsama %78,6); günlüğe "k ölçülü sayısına bağlı; ölçülü sayısı değişirse k yeniden". Değişirse: `sablon.py` ve `edp_test.py` aynı sabitle (tek kaynak); sınav 11–20 bir kez daha (yeşil biraz artar, yanlış yeşil kapısı yeniden bakılır). İsterseniz ileride k(n) eğrisi.
+Soru: K_YUK 1,27'ye insin mi, yoksa PR #16 1,475'le birleşip düzeltme Faz 8'de mi gelsin?
+Dosya: PR #16 (src/sablon.py K_YUK); veri `edp_test.py --kalibrasyonsuz --cikti` (BUILD scratchpad); komut günlükte.
+Neden: tüzük madde 3; Volkan'ın kuralı (eksi bulgu karar masasında). Bloklamıyor: BUILD Faz 8'e devam ediyor; PR #16'ya kendisi dokunmadı.
+Durum: bekliyor
