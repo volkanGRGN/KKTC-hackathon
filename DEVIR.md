@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 31 Ekim 2026, 20:45 — Faz 3 kapandı (Volkan 19:51); bilginin değeri denemesi; ada ülkeleri taraması.
+**Güncellendi:** 31 Ekim 2026, 20:55 — karar masası 20:47 (ADR-0012, ada ülkeleri) işlendi; sırada Faz 4 Mac kontrolü.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -24,7 +24,9 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
     - kaç ev orta 2 GEÇTİ;
     - yanlış kırmızı %27,3 ve sarı %62,2 hedef üstü, raporlandı.
   - ROADMAP Faz 3'te kutular [x] ve **"Açık eksikler"** tablosu (bu gece / pilot).
-  - **Bilginin değeri** (üst sınır, farazi şehir): bara gerilimi bilinirse yanlış kırmızı %19; bara + panelli evin yeri + faz %4. Sarı ancak %57, ağın tamamıyla %41: sarı bilgi değil yeşilin sorusu ("sıradaki başvuru kimden"). Karar masasına UYARI 19:59.
+  - **Bilginin değeri** (üst sınır, farazi şehir): bara gerilimi bilinirse yanlış kırmızı %19; bara + panelli evin yeri + faz %4. Sarı ancak %57, ağın tamamıyla %41: sarı bilgi değil yeşilin sorusu ("sıradaki başvuru kimden").
+  - **Sarı trafoda karar başvuru anında** ([ADR-0012](docs/decisions/adr-0012-sari-trafoda-karar-basvuru-aninda.md), karar masası 20:47; kabul, sınanmadı, bu gece kod yok). Sunumda yalnız jüri cevabı, "sınanmadı" etiketiyle.
+  - Ada ülkeleri ([günlük](docs/log/2026-10-31-volkan-ada-ulkeleri.md)): Malta'nın açık haritasında izin hiçbir merkezde trafo gücünün %25'ini geçmiyor; jüri cevabı ve kaynak slaydına girer, ana ekran değil. Gozo hattı koşulmadı (bilgi eksik), dış sınama adayı.
   - Yeşil eşiği 0,98 kalır (karar masası 19:44, eşiğin bedeli tablosu günlükte).
   - Dil (karar masası 19:13): karamsar–iyimser %80 bant, "en az" değil; manşet "yaklaşık N ev (A–B)"; vaat renkte.
   - Günlükler:
@@ -36,17 +38,10 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Faz 5** (paralel): `docs/sunum/` (Can) ve [konuşma notu taslağı](docs/konusma-notu-taslak.md) (BUILD). Hikâye "güven merdiveni"; dashboard içinde 7 ekran (Volkan 17:32). Ekran 5 rakamları karar masası koşumundan (can.md 19:51); ekran 6 cümlesi Can'da (can.md 19:59). 2 prova yapılmadı.
 
 ## Açık işler (BUILD)
-1. **Karar masasının cevabı bekleniyor** (volkan.md UYARI 19:59, bilginin değeri):
-   - jüri cevabı "sarıyı azaltan şey ölçüm" deneme ile tam tutmuyor, yeni cümle önerildi;
-   - ürün önerisi: sarı trafoda karar başvuru anında, evin adresi ve fazıyla (sınanmadı);
-   - ekran 6 "Kıb-Tek'ten yeni veri istemiyoruz" ↔ %4 için panelli abonenin adresi ve fazı gerekiyor.
-2. **Karar masasının cevabı bekleniyor** (volkan.md UYARI 20:43, [ada ülkeleri günlüğü](docs/log/2026-10-31-volkan-ada-ulkeleri.md)):
-   - sunum / jüri cümlesi: Malta'nın açık haritası da düz %25 tavan (Kıb-Tek %40), Hawaii %15 → %250;
-   - Gozo hattında dış sınama (30 dk);
-   - üretici 1.3 trafo boyutu çapası (Malta talep ÷ güç).
-3. **Faz 5:** konuşma notu taslağını Can'ın `docs/sunum/`'u ile birleştirmek; gece 2 prova.
-4. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 cümlesinin ilk yarısı; Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
-5. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
+1. **Faz 4 sınavının Mac kısmı** (karar masası 20:47): Civan'ın uygulamasını Mac'te çalıştır; internetsiz açılış, 3 şehir seçimi, yan paneldeki sayılar `kac_ev.csv` ile 3 trafoda birebir, tıklama süresi. Sonuç civan.md "## KONTROL" ve ROADMAP Faz 4 kutuları (ölçülen kadarı). `app/`'e dokunma; düzeltme Civan'ın.
+2. **Faz 5:** konuşma notu taslağını Can'ın `docs/sunum/`'u ile birleştirmek; gece 2 prova. Konuşma notuna "%4" cümlesi: "Kıb-Tek'in kendi kayıtlarında panelli abonenin adresi ve fazı varsa %4'e" (karar masası 20:47).
+3. **Can:** ekran 5 ve kilit grafik PNG karar masası rakamlarıyla (0/87); ekran 6 netleşen cümle ve jüri cevapları (can.md 20:50); Enemalta KAYNAK ve sözlük satırı (can.md 20:43).
+4. Uzmana sorulacaklar güncel: [plan](docs/01-plan.md) soru 2–8 (abone–trafo eşleşmesi, hat kaydı, faz, yük analizörü, panelli abone, çekilen/verilen kaydı, trafo plakası ve kademe).
 
 ## Bilinen sorunlar ve kararlar
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
@@ -64,6 +59,6 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
 ## Sıradaki üç adım
-1. Karar masasının 19:59 cevabını uygula (jüri cevabı, ekran 6 cümlesi; başvuru anında hesap pilot listesine girerse ROADMAP).
-2. Faz 5: konuşma notu ↔ `docs/sunum/` birleştirme (Can'la, kutudan); 2 prova.
-3. Faz 4 kontrol: Civan'ın yan paneli sözleşme 1.3 sütunlarıyla (kutudan, `app/`'e yazmadan).
+1. Faz 4 Mac kontrolü (yukarıda 1), sonuç civan.md ve ROADMAP Faz 4.
+2. Konuşma notu ↔ `docs/sunum/` birleştirme (Can'la, kutudan); 2 prova.
+3. Yeni araştırma yok (karar masası 20:47).

@@ -115,7 +115,9 @@ Yapılacaklar:
 
 - **Faz 3 ikinci sürüm (sunum sonrası / pilot öncesi; karar masası 17:00, ADR-0009, ADR-0010):**
   - kümülatif onay düşümü (`kac_ev.csv`'ye `onaylanan_kw`, `kalan_ev`; sözleşme 1.3);
+  - **başvuru anında karar** ([ADR-0012](docs/decisions/adr-0012-sari-trafoda-karar-basvuru-aninda.md), kabul, sınanmadı): sarı trafoda onay, aynı hesap başvuranın hattaki yerine ve fazına konarak o ev için bir kez daha koşar (evet / önce ölç / hayır); her onay paydan düşülür (kümülatif düşümün yeri). Farazi şehirde ölçü: başvuru anı kararında yanlış evet oranı. Pilotta başvuru formuna hat / direk bilgisi (uzmana soru 2–4);
   - yeşil kuralının İspanya / İngiltere geri-testi ve canlı bütçe (yanlış yeşil < %2);
+  - **dış sınama adayları** (karar masası 20:47): İngiltere UKPN 6 hat (yapıldı, 5/6); Malta Gozo tek hat (Srug F1: 500 kVA, 11 kV / 433 V, 18 panelsiz ev, +1 kWp/ev kademe, +2 kWp/ev trafo değişimi; hat boyu, kablo ve ev sayısı bilinmiyor, bu yüzden bu gece koşulmadı; [ada ülkeleri günlüğü](docs/log/2026-10-31-volkan-ada-ulkeleri.md));
   - üretici 1.3 çapaları: korelasyon matrisi, P90/P95 kuyruk, hat üstünde PV konum dağılımı ve fazı, trafo içi çeşitlilik (Can'ın `edp_kiyas.py`'si);
   - "farazi − İspanya" fark ölçeri her sürümde.
   - Fatura dağılım sütunları (yüksek tüketen abone oranı, mevsimsellik; ADR-0009 madde 1a): sözleşme 1.3 adayı. Sözleşme 1.2'deki `yillik_tuketim_mwh` kalır.
@@ -123,6 +125,7 @@ Yapılacaklar:
     - trafo güç listesi: ASTOR kataloğu (2020; Elparts'ın sattığı marka) yağlı dağıtım trafosunu 50–5000 kVA, kompakt trafo merkezini 1000 / 1600 kVA veriyor. Listedeki 25 kVA kaynaksız: kaynak bulunmazsa liste 50'den başlar; yaz benzetilirse yer tipine 1600. Kademe değiştirici var, adımı BULAMADIM (uzmana soru 8);
     - öğlen orta gerilim değişimi şehir başına −%0,4…+%0,8 aralığından (bugün sabit +%0,8; UKPN'de öğlen bara geceden ~1 V düşük; karar masası 18:46, varsayım envanteri K2). Sınav şehirleri bu gece donuk;
     - panelli evde `yillik_tuketim_mwh` net yazılır (mahsuplaşma), model `panel_kw` × yıllık üretimle (≈ 1.600 kWh/kWp [Yorum]) düzeltir; uzmana soru 7;
+    - trafo boyutu çapası (karar masası 20:47): Malta en yüksek talep ÷ güç P10/50/90 0,13 / 0,42 / 0,74 (yılın tepesi, 1.331 trafo merkezi [Hesap: Enemalta kapasite haritası verisi, 31 Ekim; ham veri depoda yok]); bizim Nisan tepesi ÷ kVA 0,16 / 0,27 / 0,47. Kıyas için Nisan / yıl tepe oranı EAC profillerinden türetilir; bugünkü "gerek × 1,2–2,0" [Yorum] buna göre;
     - abone başına eğri farkı: aynı tarifede öğlen ÷ yıllık oranı abone abone dağılsın (ADR-0009 trafo içi çeşitlilik). Bugün farazi faturalı %3,9 üst sınır, İspanya'da faturayla %10.
 
 Geçme sınavı (20–30 şehirde):
@@ -138,9 +141,9 @@ Rakamlar sınav şehirleri 11–20 (347 trafo, 73 dolu), karar masası koşumu; 
 | # | Eksik | Bu gece | Pilot / sunum sonrası |
 |---|---|---|---|
 | 1 | Yanlış kırmızı %27 (hedef ≤ %20) | Bilginin değeri denemesi ([günlük](docs/log/2026-10-31-volkan-faz3.md), üst sınır, farazi şehir): bara gerilimi bilinirse %19; bara + panelli evin yeri + faz bilinirse %4, dolu trafoyu kırmızı görme 32 → 43 (BUILD şehirlerinde 74 dolu). Madde "raporlandı" | Bara gerilimi (akıllı priz gece seviyesi, trafo plakası kademe); Kıb-Tek'ten panelli abonenin adresi ve fazı (uzmana soru 2, 4, 8) |
-| 2 | Sarı %62 (hedef ≤ %30) | Yeşil eşiği 0,98 kalır (eşiğin bedeli tablosu günlükte: 0,80'de bile sarı %42, dolu trafoya "yer var" 3). Deneme: bilgi sarıyı az düşürür (üç bilgiyle %57, ağın tamamı ve yükle %41); kalan sarı "sıradaki başvuru kimden gelecek" belirsizliği | Ölçüm cihazı sarılara (asıl pilot); 1'deki bilgiler. Sınanmamış öneri: sarı trafoda karar başvuru anında adresle (karar masasına soruldu) |
+| 2 | Sarı %62 (hedef ≤ %30) | Yeşil eşiği 0,98 kalır (eşiğin bedeli tablosu günlükte: 0,80'de bile sarı %42, dolu trafoya "yer var" 3). Deneme: bilgi sarıyı az düşürür (üç bilgiyle %57, ağın tamamı ve yükle %41); kalan sarı "sıradaki başvuru kimden gelecek" belirsizliği | Ölçüm cihazı sarılara (asıl pilot); 1'deki bilgiler. Sarı trafoda karar başvuru anında, başvuranın adresi ve fazıyla: [ADR-0012](docs/decisions/adr-0012-sari-trafoda-karar-basvuru-aninda.md) (kabul, sınanmadı) |
 | 3 | Yeşil bütçesi (%2) gerçek veride doğrulanmadı (İngiltere 6 hattın 5'i, Bancroft kaçtı) | İş yok; ekran 4 cümlesi hazır (Can) | Panelli evlerin inverter uygulamasındaki 5 dk gerilim kaydı (izinle) + sarıların hat ucunda öğlen gerilimi; her ölçülen hat geri-teste; kol yapısı (soru 3) |
-| 4 | Olasılık düşük uçta iyimser (%10–30 diyene ~%43 aşıyor) | İş yok: sınav şehirleri donuk, gece yeniden üretim bütün rakamları değiştirir (ADR-0009). Deneme aynı kökü gösterdi: kusursuz bilgide aralık kapsaması %57 | Üretici 1.3: OG aralığı, panellerin uca kayma dağılımı; sonra kalibrasyon yeniden |
+| 4 | Olasılık düşük uçta iyimser (%10–30 diyene ~%43 aşıyor) | İş yok: sınav şehirleri donuk, gece yeniden üretim bütün rakamları değiştirir (ADR-0009). Not (bilginin değeri, S6): kusursuz bilgide bile hesap kendinden fazla emin: aralık kapsaması %80 → %57, ilk yanlış yeşil (1/166); kalan aralıklar (öğlen OG, tek an) üreticiden farklı | Üretici 1.3: OG aralığı, panellerin uca kayma dağılımı; sonra kalibrasyon yeniden; pilotta aralıklar ölçümle yeniden ayarlanır (ADR-0011 madde 5) |
 | 5 | Kaç ev aralığı taban değil (P10 altı %15) | Çözüldü: dil 19:13 ("yaklaşık N ev (A–B)", "en az" yok), Can'ın bilgi satırı (c3fb046) | Üretici 1.3 ile yeniden ölç |
 | 6 | Faturasız model basit tahmini geçmiyor (Faz 2) | İş yok | Kıb-Tek'ten trafo başına fatura toplamı = pilotun veri isteği (soru 7) |
 
