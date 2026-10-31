@@ -154,10 +154,11 @@ def saglama(veri):
     en_uzak = max(oranlar, key=lambda o: abs(o - 1))
     sonuc.append((f'5 dk açma enerji oranı, {len(oranlar)} gün içinde en uzak', en_uzak, 0.99, 1.01))
 
-    # ROADMAP "pazar"; EAC'de pazar ayrı yok, tatil tipik günü kullanılır.
+    # EAC'de pazar ayrı yok; tatil tipik günü = cumartesi + pazar + bayram. Eşik karar masasında
+    # 0,6–0,9 (31 Ekim): üst sınır tatilde düşüşü, alt sınır yanlış sütun okumayı yakalar.
     tatil = _ort(tip_egrisi(veri, 'carsi', 4, 'tatil'), 11, 14)
     is_gunu = _ort(carsi, 11, 14)
-    sonuc.append(('çarşı Nisan tatil öğleni / iş günü öğleni (11–14)', tatil / is_gunu, 0.0, 0.5))
+    sonuc.append(('çarşı Nisan tatil öğleni / iş günü öğleni (11–14)', tatil / is_gunu, 0.6, 0.9))
     return sonuc
 
 
