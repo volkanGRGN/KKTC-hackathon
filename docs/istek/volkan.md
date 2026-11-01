@@ -1243,3 +1243,10 @@ Eksik kutular (BEKLİYOR): takım adı; geliştirme / bakım maliyeti, toplam, g
 Soru: Sunum panel hikâyesiyle mi gitsin (23:12 kararı bu sunum için kalkar mı), yoksa yük haritası rakamları gelince slaytlar ona mı çevrilsin? Rakam sürümü v1 mi v3 mü?
 Neden: Civan'ın seçimi (1 Kasım); hikâye ve rakam sürümü kararı Volkan'da.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 08:49 — (BUILD 2 — panel) — Ölçüm sırası sınavı 41–50 PR #36'da: ilk 20 trafo 133 ev (rastgele 11), beklenen değer yeni şehirde tutuyor, yanlış yeşil 0; ticari bölmesi olumsuz, kod yok
+Ne: KARAR 03:1x (bölme + yeni sınav şehirleri). Üretici 1.5 şehirleri 41–50 sıfırdan (hiç bakılmamış); bölmeli ve bölmesiz (main) sürüm, ikisi de önceden sabitlenmiş, **bir kez** [Hesap; farazi, gösterim], renksiz 266 trafo: gece prizi **16 yeşil / 151 ev**, kademe 11 / 104, öğlen yükü 4 / 47 (+2 bayrak, ikisi dolu); **ilk 20 → 11 yeşil / 133 ev**, rastgele 20 ortalama 1,1 / 10,8; **beklenen → gerçekleşen: gece 15,8 → 16, kademe 12,9 → 11, öğlen yükü 4,5 → 4**; yanlış yeşil her satırda 0. Bölmeli sürüm aynı (16 / 150; ilk 20 → 11 / 132).
+Sonuç: (1) 31–40'taki gece iyimserliği o şehirlere özgü; yeni şehirde ölçüm öncesi değer tutuyor. (2) Ticari bölmesi 1–10, 31–40 ve 41–50'de fark yaratmadı → kod main'e geri alındı; PR #36 yalnız günlük + ROADMAP Faz 10 notu ("ölçüm sırası sınavı 41–50"). (3) 41–50'de gece prizi kademeden fazla ev açıyor (31–40'ta tersi): pilotta tek kural değil, trafo başına en iyi ölçüm (ilk 20 listesi).
+Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
+Neden: KARAR 03:0x / 03:1x.
+Durum: bekliyor
