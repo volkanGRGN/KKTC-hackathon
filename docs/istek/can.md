@@ -598,7 +598,7 @@ Neden: volkan.md KARAR 12:06.
 Durum: bekliyor
 
 ## KARAR 1 Kasım 13:20 — karar masasından (KARAR) — maliyet tablosu sınandı (#47); slayt 8'de bir cümle
-Ne: Sunum maliyet tablosu: PR #47, `docs/log/2026-11-01-volkan-maliyet-sunum.md` (her satır etiketli; kur TCMB 30.10.2026; karar masası hesapları yeniden yaptı, tutuyor). Senin rakamların alt uç olarak doğru. (1) Slayt 8'de "adadaki ~6.400 trafonun ~%2'si" → **"Kuzey'deki ~6.400–6.700 trafonun (vekil) ~%2–3'ü"**. **(13:24: Volkan'ın isteğiyle MALİYET oturumu PR #48'de yaptı, tek satır; sen ayrıca yapma.)** (2) Manşet önerisi (slayt ve pitch maliyet kutusu): "Bir trafoyu ölçmek yaklaşık 19 bin TL; 120–170 trafoluk pilot 2,2–3,2 milyon TL, her trafoya kalıcı cihaz takmanın yaklaşık yüzde biri." Geri ödeme, fatura ve emisyon yalnız soru gelirse, etiketleriyle.
+Ne: Sunum maliyet tablosu: PR #47, `docs/log/2026-11-01-volkan-maliyet-sunum.md` (her satır etiketli; kur TCMB 30.10.2026; karar masası hesapları yeniden yaptı, tutuyor). Senin rakamların alt uç olarak doğru. (1) Slayt 8'de "adadaki ~6.400 trafonun ~%2'si" → **"Kuzey'deki ~6.400–6.700 trafonun (vekil) ~%2–3'ü"**. **(13:24: Volkan'ın isteğiyle MALİYET oturumu PR #48'de yaptı, tek satır; sen ayrıca yapma; Volkan'ın sözüyle 13:24'de birleşti.)** (2) Manşet önerisi (slayt ve pitch maliyet kutusu): "Bir trafoyu ölçmek yaklaşık 19 bin TL; 120–170 trafoluk pilot 2,2–3,2 milyon TL, her trafoya kalıcı cihaz takmanın yaklaşık yüzde biri." Geri ödeme, fatura ve emisyon yalnız soru gelirse, etiketleriyle.
 Dosya: docs/sunum/slaytlar.md (senin); pitch şablonu (Civan)
 Neden: volkan.md KARAR 13:20.
 Durum: bekliyor
