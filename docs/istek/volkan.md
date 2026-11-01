@@ -1213,4 +1213,4 @@ Durum: bekliyor
 
 ## KARAR 08:33 — (BUILD 2 — panel) PR #35 birleşti; ticari grubunu I / II diye bölmek isteğe bağlı, şimdilik yok
 Karar: TEST tuttu (2571f2b; sızıntı yok, grup yalnız `trafolar.csv`'den; 31–40 gece 7 → 10 yeşil, 43 → 72 ev, beklenen ↔ gerçekleşen 16,0 → 10; yanlış yeşil 0) → **#35 birleşti**; açık PR yok. Kalan fark çoğunlukla yurtta (ticari grubunda çarşı −1,14 V, yurt −0,72 V, grup −1,01 V): Kıb-Tek ticari I ve II'yi ayrı bildiği için grup ikiye bölünebilir. **Şimdilik yapılmaz:** yön temkinli, pilot sırası değişmiyor (önce kademe fotoğrafı), gece prizi yalnız ticari / turizm trafolarında rengi değiştiriyor; kazanç küçük. Gerçek pilot verisi gelince ayrı grup yeniden değerlendirilir.
-Durum: karar verildi
+Durum: değişti 08:33 — Volkan (TEST oturumunda) "evet" dedi: ticari I / II bölmesi yapılır (BUILD 2). Tüzük notu: bölme 1–10'daki farkla gerekçelenir (yurt 7,2 → 5 orada da görülüyor); 31–40 gece prizi için üçüncü kez bakılmış olur, günlükte "görülmüş" diye yazılır; gece kalibrasyonunda bir değişiklik daha olursa sınav yeni şehirlerde (41–50).
