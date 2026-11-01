@@ -1399,7 +1399,7 @@ Durum: bilgi
 
 ## KARAR 10:26 — PR #41 (dashboard: canlı tahmin, Civan'ın haritası, model sürümleri): TEST'e; cevap anahtarı yalnız puanlamada; Civan'ın onayı şart
 Karar: (1) **TEST koşar:** bütün sayfalar hata 0; canlı tahmin resmi 12 ölçümle main'deki `tahmin.csv` / `kac_ev.csv` / `tepe.csv` ile birebir mi (B-Y2 artık varsayılan, #39 birleşti; PR o hâliyle güncellenmeli); model sürümü seçiminin (git archive + ayrı süreç) depoyu kirletmediği. (2) **"Gerçekle kıyas" cevap anahtarını okuyabilir:** yalnız deneme şehrinde ve yalnız puanlama için; modele giden hiçbir yola girmediği kodda gösterilir (TEST kontrol eder); sayfada açık etiket: "gerçekle kıyas — yalnız deneme şehrinde, model görmez". Sözleşmenin "harita okumaz" kuralının amacı sızıntıyı önlemek; gösterim için okumak serbest. (3) **`app/harita.py` / `app/ui-brief.md` main'e Civan'ın onayıyla** (civan.md UYARI 10:26, BLOKLUYOR): Civan'ın kendi commit'i (b2fcba2), değiştirilmemiş; ama `app/` onun ve dal yarım olabilir. Onay gelmezse PR haritasız (harita sayfası sonraya) birleşebilir.
-Durum: bekliyor (TEST; Civan)
+Durum: yapıldı 11:06 — haritasız birleşti (KARAR 11:06)
 
 ## KARAR 10:34 — PR #41 (dashboard canlı tahmin) TEST'te tuttu, bir eksi; düzeltme ve Civan'ın onayından sonra birleşir
 Karar: TEST (aab9d6c, main ile birleşik, üretici 1.5 şehirleri 31–40): 17 AppTest adımı hata 0; canlı motor önerilen 12 ölçümle 10 şehrin hepsinde main'in bugünkü `tahmin.csv` (bayt bayt), `kac_ev.csv` ve `tepe.csv` ile birebir (#39 sonrası da); cevap anahtarını yalnız `sinav_kiyasi()` okuyor, modele yol yok, etiket var; git status temiz; `app/` dosyaları b2fcba2 ile birebir. **Eksi:** eski sürüm önbelleği geçici klasörde bütün kopyalar için ortak ve data bağlantısı ilk kuran klasöre kalıcı işaret ediyor; o klasör değişirse eski sürümler uyarısız başka veriyle koşar. Düzeltme dashboard oturumunda (her çağrıda bağlantı yenilenir); TEST o noktayı yeniden koşar. Sınav görünümü deneme şehrinde varsayılan açık kalır. **Civan'ın `app/` onayı** hâlâ bekleniyor (civan.md, BLOKLUYOR).
@@ -1428,11 +1428,11 @@ Durum: karar verildi 10:52 — TEST'e (#41, #42'den sonra); birleşme sunumdan s
 
 ## KARAR 10:52 — (BUILD 1 — yük) PR #43 (üretici 1.6, yaz eğimi 0,060): TEST'e; sunuma girmez, birleşme sunumdan sonra
 Karar: Üretici eğimi Kıbrıs evlerine çapalanınca (0,045 → 0,060) modelin farazi sapması +%11,9 → +%7,7 (1–10), yeni sınav 51–60'ta tepe %7,9 / %17,0, sapma +%5,0, dolu 8/8, akşam 230'da 0 yanlış [Hesap: BUILD 1; TEST tekrarlayacak]. **Sunuma girmez:** sunum rakamları üretici 1.5 şehirleri 41–50'ye kilitli (dashboard, Civan'ın video şehirleri main'den üretiliyor); main'in üreticisi şimdi değişirse Civan'ın şehirleri dashboard'la tutmaz. PR açık kalır, sunumdan sonra TEST sonucuyla birleşir; dashboard ve ROADMAP o zaman 51–60'a geçer. **Eksi:** Faz 1 "en düşük ≥ 200 V" kıl payı KALDI (199,8 / 199,0 V; gizlenmedi, ADR-0016 m. 3); 1.5'in hat tasarım kuralının neden devreye girmediği BUILD 1'de. Açık: konutta kalan +%8–10 sapma eğimle açıklanmıyor (sanayide de var); sebebi 1–10'da ayrılır.
-Durum: bekliyor (TEST; BUILD 1)
+Durum: yapıldı 11:11 — TEST tuttu; birleşme sunumdan sonra, Can (KARAR 11:43)
 
 ## KARAR 11:03 — (BUILD 1 — yük) PR #43 (1d49c85): hat tasarımı düzeltmesi kabul; 199,0 V kıl payı KALDI olarak kalır; +%8'in sebebi Nisan → yaz taşıma, düzeltme sunumdan sonra
 Karar: (1) Hat tasarımı trafo gücüyle aynı tasarım yüküne bağlandı (gizli mahalle yükü hatta da sayılır; çelişki 1.5'ten beriydi): 1–10 en düşük 199,8 → 200,9 V, 207 V altı 2 → 1, model rakamları aynı. 51–60'ta 199,0 V kaldı (1/400, sehir-055 T36 köy hattı; kuralın kaba düşüm tahmini ~16 V az görüyor), 207 V altı %0,8. **Faz 1 "en düşük ≥ 200 V" kıl payı KALDI, raporlanır; kural sıkılaştırılmaz** (ADR-0016 m. 3). Sunumdan sonra 1.7 adayı: benzetilmiş akşam düşümüyle kapalı döngü hat tasarımı. (2) Modelin kalan +%8 sapması (1–10): tasarım sıcaklığı ve Velander değil; **Nisan → yaz taşıma** (Nisan oranı 14 günün en yükseği 1,103 ↔ yaz 1,042; tek günle 1,053), havuzlama +%1,8; büyük trafoda +%7–11, küçükte ~0 [Hesap: BUILD 1]. Düzeltme sunumdan sonra: `tepe.py`'de R günlük tepelerin ortancasından, 1–10'da kur, sınav 61–70 bir kez. #43 TEST'te; birleşme sunumdan sonra.
-Durum: bekliyor (TEST; sunumdan sonra)
+Durum: yapıldı 11:11 — TEST tuttu; birleşme sunumdan sonra, Can (KARAR 11:43)
 
 ## KARAR 11:06 — PR #41 (dashboard canlı tahmin) haritasız birleşti; Civan'ın haritası onayıyla ayrı PR'la gelir
 Karar: Volkan (11:06): "Haritasız birleştir." Karar masası dalda Civan'ın harita birleştirmesini (af78806) geri aldı (a647750): `app/` main ile aynı, harita sayfası menüden kalkıyor, canlı sayfa yerel katmanla çiziyor; AppTest (özet ve canlı sayfa) hata yok. **#41 birleşti (7ef24b2):** canlı tahmin (trafoya tıkla → ölçülmüş say, ≥ 3 ölçümle model kurulur), "önerilen 12", "sırayla oynat", eski model sürümleri (f51e434 dahil beş sürüm), "gerçekle kıyas — yalnız deneme şehrinde, model görmez". Civan'ın haritası (`harita/ui`, b2fcba2) Civan onaylayınca ayrı PR'la (civan.md). Açık PR: yalnız #43 (sunumdan sonra).
@@ -1456,7 +1456,7 @@ Ne: 30 dk zaman kutusu, Bulamadım akışı (günlük `docs/log/2026-11-01-can-t
 Soru (karar masası): Kıb-Tek uzman listesine iki soru eklensin mi — "mahsuplaşmada fazla üretim nasıl sayılıyor?", "bir dağıtım trafosunu büyütmek ne tutar?" Dashboard maliyet tablosuna tarife / emisyon girsin mi (Volkan'ın dosyası)?
 Dosya: docs/log/2026-11-01-can-tarife-emisyon.md, docs/data/data-dictionary.md, docs/sunum/slaytlar.md
 Neden: KARAR 09:46, 10:16 m. 3.
-Durum: bekliyor
+Durum: karar verildi 11:43 → can.md
 
 ## UYARI! 1 Kasım 12:1x — Can'dan — pitch maliyet kutusu: geliştirme maliyetine kaynaklı ücretten tahmin yazılsın mı? (KARAR 09:46 (2) değişir)
 Ne: Pitch 6. slaytın BEKLİYOR'larını tahminle doldurdum (`docs/log/2026-11-01-can-pitch-maliyet-tahmin.md`): geri ödeme "pilot ~5–7 gereksiz direk trafosu büyütmesini önlerse kendini öder" (NIE fiyatı, vekil), emisyon ev başına ~6–9 t CO₂/yıl (EMU 2014, 584–886 g/kWh), fatura ev başına ~26 bin TL/yıl (Kıb-Tek Haziran 2026 tarifesi). Mahsuplaşma fiyatı ve Kıb-Tek trafo maliyeti BULAMADIM (arama izi günlükte). Tek açık: geliştirme. KARAR 09:46 "para uydurulmaz" dedi; kaynaklı ücretten hesap hazır: 2 gün × 3 kişi × 8 saat × 3.544,65 TL (EMO saat ücreti, Civan'ın günlüğü) = ~170 bin TL (~3 bin €) [Hesap]. Bakım için tahmin yok, nitel cümle kalır.
@@ -1464,11 +1464,22 @@ Soru: Geliştirme satırına "~170 bin TL [Hesap: hackathon emeği, EMO saat üc
 Ayrıca: dashboard'a geri ödeme / emisyon satırı istersen kaynak bu günlük (`icerik.json` senin). Toplam için karar: başlık rakamı icerik.json'daki ~40–57 bin €, nakit ~2,7–3,4 milyon TL küçük yazıda (Civan'a yazıldı).
 Dosya: pitch şablonu (Civan); `dashboard/icerik.json` (senin, istersen)
 Neden: Can, 1 Kasım: "kesin rakam şart değil, tahmini değer yeterli".
-Durum: bekliyor
+Durum: karar verildi 11:43 → can.md
 
 ## KONTROL 1 Kasım 12:2x — Can'dan — `sinav.py` iki eksik kapandı (KARAR 11:12); faz1 artık 41–50'de KALDI: sehir-047 T23 yılın tepesinde 175,0 V
 Ne: (1) faz1 en düşük gerilim maddesi trafo başına Nisan ile `v_min_tepe_v`'nin küçüğüne bakıyor (eşikler aynı). 31–40 (1.5, Windows): en düşük **201,1 V** (sehir-036 T03, yıl tepesi) — karar masasının 1.5 rakamıyla aynı, GEÇTİ. **41–50 (1.5, Windows): KALDI, en düşük 175,0 V** (sehir-047 T23: köy, 100 kVA, 760 m ABC95, 24 abone, fatura 300 MWh, yıl tepesi 71,1 kW; Nisan'da 216,9 V; ölçülü trafo, yük kartlarının ölçülmeyen 280'inde değil); 207 V altı 3/400 (%0,8). Yalnız Nisan'a bakan eski madde bunu görmüyordu. Mekanizma 1.6'nın hat düzeltmesindekiyle aynı görünüyor (gizli mahalle yükü, hat güçlendirilmemiş) [Yorum]. (2) faz2 şehirler arası oranı yalnız modeli kuran şehir de `--aralik` kümesindeyse sayıyor; bilgi satırı çiftleri ("041→042, …") ve kümenin dışından sayılmayanları yazıyor (geçici 040–043 kökünde sınandı: 41–43 → 0,95, 40 → 41 sayılmadı). Öbür satırlar bayt bayt aynı.
 Soru (karar masası): 41–50'nin 175 V'u Mac'te teyit edilsin mi? Sunumun yük kartları 41–50'den (ölçülmeyen 280; T23 dahil değil), etkisi yok; ama "üretici gerilim sağlaması" 41–50'de tutmuyor. 1.6 + hat düzeltmesiyle 41–50 yeniden üretilirse kalkıyor mu (BUILD 1)?
 Dosya: src/sinav.py (Can), docs/log/2026-11-01-can-sinav-eksikler.md
 Neden: KARAR 11:12 (TEST'in #43 koşusu).
-Durum: bekliyor
+Durum: karar verildi 11:43 → can.md
+
+## KARAR 11:43 — PR yolları: #43 ve #44'ün son testi ve birleştirmesi Can'da; #45 (harita animasyonu) Can dener, Volkan'ın sözüyle birleşir
+Karar: Volkan (TEST oturumuna): test PR'ları bundan sonra Can'a; "Can birleştirip test yapacak" (can.md UYARI 11:23). TEST oturumu yeni PR almıyor.
+- **#44** (sunum bilgisayarı): TEST'in Mac koşusu b3594f2'de tuttu (ham veri yokken sayfa düşmüyor, sehir-031 main ile birebir, bağlantı yedeği, AppTest hata 0); uç 039fbb8'in farkı yalnız README. Can son ucu main ile birleşik dener ve birleştirir. Windows yolu (klasör bağlantısı) hiç denenmedi: sunum bilgisayarı Windows'sa Can'ın Windows'unda README "Sunum bilgisayarında" baştan bir kez.
+- **#43** (üretici 1.6): değişmedi, sunumdan sonra. Uç 374710c yalnız main'i aldı; `src/` 1d49c85 ile aynı (karar masası baktı), yeniden test gerekmez.
+- **#45** (dashboard/harita-animasyon, 789ea17; yalnız `dashboard/`): Can tarayıcıda dener (Oynat, duraklat, baştan, Girne'ye dön; internet kapalıyken harita açılıyor mu; Girne'nin 12. adımı `tepe.csv` ile aynı mı). Birleşme Volkan'ın sözüyle ve #44'ten sonra: `canli_sayfa.py`'de tek satır çakışır, #44'ün satırı alınır; #44 README madde 6 (internet) #45'le geçersiz. Çakışmayı harita animasyonu oturumu çözer.
+Durum: karar verildi → can.md
+
+## KARAR 11:43 — Can'ın üç sorusu (12:0x tarife, 12:1x pitch maliyeti, 12:2x 175 V)
+Karar: (1) **Kıb-Tek uzman listesine iki soru eklenir** (mahsuplaşmada fazla üretimin bedeli; bir dağıtım trafosunu büyütmenin maliyeti); liste `docs/01-plan.md`, ekleyen Can. Dashboard maliyet tablosuna tarife ve emisyon girmez: sunum rakamları kilitli, ikisi de yük ya da panel rakamı değil; slaytta bağlam olarak kalır. (2) **Pitch geliştirme satırı:** "~170 bin TL" yazılabilir ama adı "prototip emeği (2 gün × 3 kişi, EMO saat ücreti) [Hesap]"; "geliştirme maliyeti" denmez, çünkü pilotun geliştirmesi bu değil. Pilot geliştirme ve bakım nitel cümle kalır (KARAR 09:46 korunur). (3) **41–50'de 175,0 V (sehir-047 T23):** sunuma etkisi yok (yük kartları ölçülmeyen 280 trafodan; T23 ölçülü). Faz1'in 41–50'de KALDI demesi saklanmaz; jüri sorarsa: "deneme şehri üreticisinin bir köy hattında hat zayıf kalmış; sınav bunu yakaladı" [Yorum: mekanizma doğrulanmadı]. Mac teyidi ve 1.6 + hat düzeltmesiyle kalkıp kalkmadığı sunumdan sonra BUILD 1'in 1.7 listesine (e) olarak girer.
+Durum: karar verildi → can.md
