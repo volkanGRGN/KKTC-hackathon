@@ -64,3 +64,23 @@ akşamında 20 evin akşam tepesi eşik altının ~1,88 katı.
 ## Sonraki
 `tepe.py`: konut yaz eğimi veriden, eşzamanlılık c'si veriden (sıcak / diğer), iki bileşen; 31–40 önce / sonra; PR.
 Üretici (sehir_uret.py) β çapası da bu sayılardan yapılabilir (BUILD 1 notu, PR #21) — Volkan'ın dosyası, ayrı iş.
+
+## B-Y2: `tepe.py`'ye bağlama (dal `yuk/b-y2`, PR) — sınav şehirleri 31–40, Windows, üretici main (1.5) [Hesap; gösterim]
+Üç sürüm denendi; ölçü `cevap_anahtari.csv` `tepe_yil_kw`, ölçülmeyen 280 trafo (`sinav.py faz2` ve ayrıştırma betiği).
+
+| Sürüm | hata ortanca | P90 | işaretli ortanca (+ fazla) | %80 bant | konut | çarşı | otel | sanayi |
+|---|---|---|---|---|---|---|---|---|
+| on (eski; eğim EAC, c ölçülülerden = 0) | %5,8 | %15,1 | +%0,2 | %99,6 | −%0,7 | +%9,8 | +%4,2 | +%2,1 |
+| **b-y2 (konut yaz eğimi 0,065)** | %10,1 | %19,9 | +%8,4 | %98,9 | +%10,7 | +%11,3 | +%4,4 | +%2,1 |
+| b-y2, eğim P10 0,056 / P90 0,075 | %8,1 / %11,8 | %17,5 / %23,2 | +%6,7 / +%10,5 | %99,3 / %97,5 | +%7,8 / +%14,1 | | | |
+| b-y2-esz (+ c bütün enerjiye) | %13,6 | %33,3 | −%9,1 | %92,5 | −%2,8 | −%22,8 | −%27,7 | −%24,0 |
+| b-y2-esz (+ c yalnız konut payına) | %18,3 | %35,2 | +%2,2 | %85,0 | +%17,5 | −%17,7 | −%24,3 | −%25,8 |
+
+Okuma [Yorum]:
+- **Eğim**: konut tepesi farazide %11 fazla çıkıyor → üreticinin konut klima eğimi (β sınıf × U(0,5; 1,5)) 20 gerçek evden düşük; güvenli yön, hata eşiğin içinde. Varsayılan bu.
+- **c (ev çeşitliliği)**: Nisan R0'ı konut ağırlıklı ölçülülerden 1 + c/√n ile bölününce düşüyor; konut dışı trafo (çarşı, otel, sanayi) %18–28 **az** → yük tarafının yanlış "yer var"ı (güvensiz). Üretici küçük-N fazlasını kurmuyor; 20 evden 100 evlik trafoya taşıma da veri dışı (Velander uzatması). `--model b-y2-esz` deneme olarak kodda, kapalı; pilot (Faz 10) trafo ölçümüyle sınanır.
+- Akşam gerilimi (b-y2): gerçekte 207 V altı 2/280, ikisi de yakalandı; "yeterli" dediğimiz 223 trafoda 0 yanlış (on: 233'te 0).
+- Tepe saati ±60 dk %52,1 (aynı), iki adaydan biri %61,1 (on %60,0), dönem %70,0 (on %69,3).
+- Geliştirme şehirleri 1–10 bu makinede eski üreticiyle; koşulmadı (Mac koşumu TEST / BUILD 1).
+
+Öneri (karar masası / BUILD 1): (1) varsayılan b-y2 birleşsin; (2) üretici β'sı (sehir_uret.py) konutta bu eğime çapalansın — yoksa farazi tepe sınavı modelin doğru yöne gidişini "hata" sayıyor (Volkan'ın dosyası); (3) c pilotla.
