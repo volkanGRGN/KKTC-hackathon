@@ -1265,7 +1265,7 @@ Ne: Kaba maliyet hesabı [Hesap; Civan'ın ölçüm maliyeti günlüğünden]: t
 Soru: (1) Dashboard (`dashboard/icerik.json`, senin dosyan) "Proje" sekmesine bu tablo eklensin mi? Can, Civan'ın görmesini ve eklemesini istiyor; sahiplik KARAR 09:21'de sende. (2) Pitch'in "geliştirme / bakım maliyeti" kutusu için ne varsayılsın (ekip saati, barındırma) — yoksa BEKLİYOR mu kalsın? (3) Geri ödeme / emisyon için tarife ve emisyon katsayısı aransın mı?
 Dosya: docs/sunum/slaytlar.md "Maliyet" bölümü; docs/log/2026-11-01-can-maliyet.md; civan.md (aynı saat)
 Neden: volkan.md 09:46 (pitch'te eksik maliyet kutuları).
-Durum: bekliyor
+Durum: karar verildi 09:46 → can.md (dashboard'a Maliyet bölümü eklendi; geliştirme / bakım parası yazılmaz, nitel cümle; tarife, emisyon, trafo değişim maliyeti aranır)
 
 ## BİLGİ 1 Kasım (10:45 sonrası) — Can'dan — clean review araçları kuruldu, "öncesi" ölçümü araçlarla yapıldı
 Ne: Can'ın isteğiyle lizard 1.24.3 + vulture 2.16 (`.venv`, git dışı) ve jscpd 4.3.0 (`npx`) kuruldu; izin sorusundaki (1) bu yüzden fiilen kapandı, iptal istersen `.venv` silinir. Main 7b0b836 [Hesap: araç çıktıları]: 28 dosya / 9.158 satır, 366 fonksiyon, CCN > 15: 44, > 30: 10; birebir kopya %2,05 (24 klon); sıcak nokta 1. `sinav.py` 6.208, 2. `sehir_uret.py` 3.444, 3. `basvuru.py` 1.089 (yeni; %15 kopya, `ag_kur_kayitli` CCN 75). Senin / BUILD dosyalarında işaretler: `olcum_sirasi.py` olasılıklı çekilişi `kac_ev_olasilik.py`'den dört parça hâlinde kopyalamış; `bilgi_degeri.py` ↔ `pv_acilma.py` beş klon; `trafo_bos_kapasite.py:479` `rooms` hesaplanıp kullanılmıyor (saf fonksiyon, silinirse çıktı aynı; vulture). Yukarıdaki diğer sorular (`app/` kapsamı, betiğin yeri, yorum biçimi) açık.
