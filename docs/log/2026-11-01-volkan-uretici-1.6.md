@@ -71,4 +71,28 @@ python3 src/kac_ev_olasilik.py <kök> --sehir 51      # her şehir
 python3 src/sinav.py faz1|faz2|faz3 <kök> --aralik 51-60
 ```
 
+## Ek — 11:01: KARAR'ın iki sorusu (hat tasarımı düzeltmesi; kalan fazla tahminin kaynağı)
+
+KARAR: 1.6 sunuma girmez, birleşme sunumdan sonra; PR açık ve güncel kalır.
+
+### 1. "En düşük ≥ 200 V" neden tutmadı
+- Tahmin edilen sebep (hat tasarımı eski eğimle) değil: hat tasarımı zaten 0,060'lı tasarım tepesini kullanıyor (`plan` = `tepe` × olcek).
+- **Asıl sebep:** trafo gücü gizli mahalle yükünü hesaba katıyor (`gerek = max(Σ plan × marj, Σ tepe × olcek)`, 1.4 kuralı), hat tasarımı katmıyordu (yalnız `plan × marj`); koddaki "hat tasarımı trafoyla aynı tasarım yüküne bakar" notuyla çelişki, 1.5'ten beri. sehir-001 T22: mahalle çarpanı 2,6, trafo büyütülmüş, hat güçlendirilmemiş.
+- **Düzeltme:** `hat_dusumu` / `hat_tasarla` aynı kuralı alır: hattın tasarım yükü = max(Σ plan × marj, Σ gizli mahalle yükü).
+- 1–10 (1.6 ↔ 1.6 + hat): 6/10 şehir bayt bayt aynı; trafo gücü değişen 0; `kac_ev_gercek` / `v_max_bugun_v` değişen 4 / 4; hat tasarımı ilk / kesit / bölme 330 / 8 / 62 → 327 / 9 / 64; **en düşük 199,8 → 200,9 V**, 207 V altı 2 → 1 (%0,2); yük modeli rakamları aynı.
+- **51–60 bir kez daha (KARAR'ın izniyle):** 4/10 şehir değişti, `kac_ev_gercek` 1; **en düşük 199,0 V kaldı**: sehir-055 T36 (köy, 100 kVA, 861 m ABC95, hat iki kez bölünmüş, mahalle 1,09, klima 0,91; tepe ÷ güç 0,59). Hat kuralının kaba düşüm tahmini (düzgün dağılmış yük, I × |z| ÷ 2, en yüklü faz 1,5) bu hatta gerçek düşümü ~16 V az görüyor [Hesap: 246 − 199 = 47 V ↔ 24 V tasarım + ~5 V trafo]. 207 V altı %0,8 (≤ %1). Eşik oynatılmadı, kural sıkılaştırılmadı (ADR-0016 m. 3); karar KARAR'da.
+- `sinav.py` 51–60 (düzeltmeli): faz2 ve faz3 önceki koşuyla aynı, bütün maddeler GEÇTİ; faz1 üretim süresi en uzun 80,9 sn, ortanca 29,7 sn (makine yükü). Yük modeli 51–60 rakamları aynı (%7,9 / %17,0, +%5,0, P90 üstü 0, dolu 8/8, akşam 230'da 0 yanlış).
+
+### 2. Kalan fazla tahminin kaynağı (1–10, 1.6 + hat, ölçülmeyen 280, işaretli +%7,7) [Hesap: BUILD 1]
+| Aday | Sınama | Sonuç |
+|---|---|---|
+| Tasarım sıcaklığı (10 yılda bir) ↔ üreticinin hava yılı | model kipi ve ΔT | **Değil:** model `yil` kipinde, ΔT üreticinin aynı hava yılından (ör. sehir-001 Temmuz 2,6 °C = üreticinin penceresi) |
+| Üreticinin √N çeşitliliği ↔ modelin Velander c'si | şehir başına c | **Değil:** 10 şehrin 8'inde c = 0; c = 0 şehirlerde +%7,9, c > 0'da +%6,8 |
+| Nisan → yaz taşıma (ölçülü oran R) | ölçülü trafolar kendi R'siyle | **Asıl pay:** ölçülüde bile +%5,9. Nisan oranı (14 günün en yükseği ÷ tipik gün) ortanca 1,103; yaz oranı (gerçek yaz tepesi ÷ önsel yaz tepesi) 1,042 (r 0,86) |
+| Havuzlama (ölçülmeyen ortalama R alır) | ölçülmeyen ↔ ölçülü | +%1,8 daha |
+
+- Gün sayısı mı: Nisan oranı 7 günle 1,095–1,096, tek günün tepesiyle (günlerin ortancası) **1,053** ≈ yaz 1,042. Fark gün sayısından değil, "havası eşit 14 günün en iyisi" payından; yazın tepe en sıcak tek güne düşüyor [Hesap; mekanizma Yorum].
+- Büyüklüğe göre (ölçülmeyen, konut eşdeğeri): 10–25 −%0,2; 25–50 +%7,3; 50–100 +%10,7; > 100 +%8,8.
+- Öneri (sunumdan sonra, `tepe.py`): R'yi 14 günün en yükseği yerine günlük tepelerin ortancasından almak; farazide beklenen etki ~5 puan [Yorum]; 1–10'da kurulur, yeni sınav şehirlerinde (61–70) bir kez. İspanya Mayıs testi R kullanmıyor, değişmez.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

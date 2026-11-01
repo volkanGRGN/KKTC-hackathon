@@ -58,7 +58,9 @@ ayrı akışlardan (`klima14-`, `yaz14-`, `kis14-`, `og14-`), şehrin ağı ayn�
 Sürüm 1.6 (BUILD 1, 1 Kasım; Volkan): konut ve yurt yaz eğimi (SICAKLIK_BETA yaz) 20 Kıbrıs evinin ölçülen eğimine çapalı
 (0,045 → 0,060; SICAKLIK_BETA'nın üstündeki not). 1.5'te üretici eğimi gerçek evlerden düşüktü; model (tepe.py B-Y2) gerçek
 eğimi kullanınca farazi sınav doğru yöne gidişi "hata" sayıyordu. Eğim trafo boyutuna da girer (1 + β_yaz · ΔT_tasarım), bu yüzden
-bazı konut / yurt trafolarının gücü, dolayısıyla Nisan dosyaları da değişir. Yeni sınav şehirleri 51–60. Rastgele akış aynı.
+bazı konut / yurt trafolarının gücü, dolayısıyla Nisan dosyaları da değişir. Hat tasarımı da trafo gücüyle aynı kurala
+bağlandı: gizli mahalle yükü tasarım yükünü aşıyorsa hat ona göre güçlendirilir (1.5'te yalnız trafo büyüyordu; KARAR).
+Yeni sınav şehirleri 51–60. Rastgele akış aynı.
 
 Çalıştırma:
   python3 src/sehir_uret.py 7            # data/synthetic/sehir-007/
@@ -508,7 +510,9 @@ def sehir_kur(rng, n_trafo, ayar, tepe_orani, kiyi):
         rt = 0.04 * zb / math.sqrt(5)                 # uk %4, X/R = 2 (eski benzetim)
         tr['zt'] = complex(rt, 2 * rt)
         tr['marj'] = marj                             # hat tasarımı trafoyla aynı tasarım yüküne bakar
-        hat_tasarla(tr, plan)
+        # 1.6: trafodaki gibi gizli mahalle yükü de (Kıb-Tek aşırı düşen hattı da güçlendirir [Yorum]); 1.5'te hat yalnız
+        # plan × marj'a bakıyordu, mahalle çarpanı 2,6 olan köy hattı akşam 199,8 V'a iniyordu (sehir-001 T22, BUILD 1).
+        hat_tasarla(tr, plan, {h['id']: tepe[h['sinif']] * h['olcek'] for h in tr['evler']})
         trafolar.append(tr)
     return trafolar, sayi, tavan
 
@@ -533,16 +537,19 @@ def buyuk_ayir(tr, plan):
     tr['feeders'] = [f for f in tr['feeders'] if f['houses']] + yeni
 
 
-def hat_dusumu(tr, f, plan):
+def hat_dusumu(tr, f, plan, gercek=None):
     """Tasarım tepesinde hat sonu faz düşümü, V (kaba): yük hatta düzgün dağılmış → I × |z_hat| ÷ 2, en yüklü faz;
     z_hat = (faz + nötr parça empedansı) × parça sayısı (`zs`, `zn` evler arası tek parçanın empedansı). Tasarım yükü
-    trafo seçimindekiyle aynı (plan × büyütme payı); en yüklü faz 1 + FAZ_SAPMA (kentsel 1,25, kırsal 1,5; UKPN)."""
+    trafo seçimindekiyle aynı (plan × büyütme payı; 1.6: gizli mahalle yükü bunu aşıyorsa o, trafodaki kural gibi); en
+    yüklü faz 1 + FAZ_SAPMA (kentsel 1,25, kırsal 1,5; UKPN)."""
     p_kw = sum(plan[h['id']] for h in f['houses']) * tr['marj']
+    if gercek is not None:
+        p_kw = max(p_kw, sum(gercek[h['id']] for h in f['houses']))
     i_a = p_kw * 1000 / (3 * 230.0) * (1 + FAZ_SAPMA[tr['bolge']])
     return i_a * abs((f['zs'] + f['zn']) * len(f['houses'])) / 2
 
 
-def hat_tasarla(tr, plan):
+def hat_tasarla(tr, plan, gercek=None):
     """1.5: tasarım düşümü sınırı aşan trafoda önce kesit ABC95 (bütün trafo; trafolar.csv tek kablo sütunu), sonra
     aşan hat ikiye bölünür (evler sırayla iki hatta, aynı boy; akım yarıya iner) [Yorum: Kıb-Tek'in güçlendirme pratiği
     BULAMADIM]. Yeni kablo türü eklenmez (direnci kaynaksız olurdu)."""
@@ -554,14 +561,14 @@ def hat_tasarla(tr, plan):
             seg = f['boy'] / 1000 / max(len(f['houses']), 1)
             f['zs'], f['zn'] = zc * seg, znc * seg
     tr['hat_tasarim'] = 'ilk'
-    if all(hat_dusumu(tr, f, plan) <= HAT_DUSUM_TASARIM_V for f in tr['feeders'] if 'paralel' not in f):
+    if all(hat_dusumu(tr, f, plan, gercek) <= HAT_DUSUM_TASARIM_V for f in tr['feeders'] if 'paralel' not in f):
         return
     if tr['kablo'] != 'ABC95':       # (büyük abonenin kendi bağlantısı zaten ABC95)
         tr['kablo'] = 'ABC95'
         tazele()
         tr['hat_tasarim'] = 'kesit'
     for _ in range(3):
-        asan = [f for f in tr['feeders'] if hat_dusumu(tr, f, plan) > HAT_DUSUM_TASARIM_V and len(f['houses']) >= 2
+        asan = [f for f in tr['feeders'] if hat_dusumu(tr, f, plan, gercek) > HAT_DUSUM_TASARIM_V and len(f['houses']) >= 2
                 and 'paralel' not in f]
         if not asan:
             break
