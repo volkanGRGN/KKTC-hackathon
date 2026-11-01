@@ -222,6 +222,8 @@ Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe b�
 | `v_min_tepe_v` | float | V | `231.4` | Tepe anında en düşük ev gerilimi (faz–nötr; üç fazlı evde üç faz da), çekilişlerin ortancası. Panel tarafıyla aynı fizik (`kac_ev_olasilik.ag_kur` + `trafo_bos_kapasite.solve`); "ön" |
 | `v_min_tepe_v_p10`, `v_min_tepe_v_p90` | float | V | `219.8`, `238.1` | %80 bant. **"Akşam gerilimi yeterli" kararı P10'dan** (P10 ≥ 207 V); ortanca karar için kullanılmaz (güvenli yön) |
 | `p_aksam_207` | float | oran | `0.075` | Çekilişlerde 207 V altına inme payı |
+| `tepe_saati_2` | str | SS:DD | `16:05` | İkinci aday tepe saati: ana tepeden en az 3 saat uzakta ve ana tepenin %95'i kadar yüksekse; yoksa boş (konutta öğleden sonra ↔ gece) |
+| `tepe_donemi` | str | — | `gece` | Ana tepenin dönemi: `sabah` (04–10), `ogle` (10–14), `ogleden_sonra` (14–20), `gece` (20–04) |
 
 Bilgi dosyası `tepe_ozet.json`: ölçülü trafolar, Nisan oranları (R), sınıf eğimleri, ay sıcaklık sapmaları, bant.
 
