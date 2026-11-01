@@ -46,6 +46,8 @@ python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da 
 
 **Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
 
+**Dashboard** (haritadan ayrı sayfa; proje kimliği, bütün tablolar, resmi rakamlar): `streamlit run dashboard/dashboard.py`. Ayrıntı [dashboard/README.md](dashboard/README.md).
+
 **Gerilim doğrulaması** (gerçek veri, İngiltere UKPN; sanal ortam ister): `python3 src/ukpn_test.py data/raw/ukpn-pv-dogrulama ukpn_sonuc.csv` — ~30 saniye; veri `data/raw/ukpn-pv-dogrulama/KAYNAK.txt`'ten indirilip `acik/` altına açılır. Sonuç [günlükte](docs/log/2026-10-31-volkan-ukpn-gerilim.md).
 
 ## Repo haritası
@@ -63,6 +65,7 @@ python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da 
 - [docs/decisions/](docs/decisions/) — karar kayıtları (ADR)
 - [docs/log/](docs/log/) — iş ve deney günlüğü (yalnız ekleme)
 - [data/raw/](data/raw/) — indirilen ham veri, her klasörde KAYNAK.txt
+- [dashboard/](dashboard/README.md) — proje kimliği, şehir özetleri, trafo kartları, resmi rakamlar (haritadan ayrı sayfa)
 - [docs/gorev/](docs/gorev/README.md) — görev kartları (Can ve Civan buradan iş alır)
 - [docs/istek/](docs/istek/README.md) — istek kutuları: başkasının dosyasında değişiklik istemek için
 - [CONTRIBUTING.md](CONTRIBUTING.md) — nasıl çalışıyoruz · [CLAUDE.md](CLAUDE.md) — aynı kurallar ajan için
