@@ -1424,4 +1424,8 @@ Eksi / bilinmeyen: (1) "en düşük ≥ 200 V" kıl payı: 1–10'da 199,8, 51�
 Soru: 1.6 benimsenirse yük ve panel sınavları 51–60'ta yeniden koşulur, pano ve sunum rakamları değişir. Sunuma girsin mi? (Volkan "rakamlar hazır olunca sen karar ver" dedi; karar Volkan'ın.)
 Dosya: PR #43 (https://github.com/volkanGRGN/KKTC-hackathon/pull/43), docs/log/2026-11-01-volkan-uretici-1.6.md (dalda)
 Neden: Volkan'ın isteği; KARAR 10:26 (üretici β çapası sunumdan sonraydı, Volkan öne aldı).
-Durum: bekliyor
+Durum: karar verildi 10:52 — TEST'e (#41, #42'den sonra); birleşme sunumdan sonra (sunum rakamları üretici 1.5 / 41–50'ye kilitli); 200 V kıl payı ve konut +%8–10 sorusu BUILD 1'e
+
+## KARAR 10:52 — (BUILD 1 — yük) PR #43 (üretici 1.6, yaz eğimi 0,060): TEST'e; sunuma girmez, birleşme sunumdan sonra
+Karar: Üretici eğimi Kıbrıs evlerine çapalanınca (0,045 → 0,060) modelin farazi sapması +%11,9 → +%7,7 (1–10), yeni sınav 51–60'ta tepe %7,9 / %17,0, sapma +%5,0, dolu 8/8, akşam 230'da 0 yanlış [Hesap: BUILD 1; TEST tekrarlayacak]. **Sunuma girmez:** sunum rakamları üretici 1.5 şehirleri 41–50'ye kilitli (dashboard, Civan'ın video şehirleri main'den üretiliyor); main'in üreticisi şimdi değişirse Civan'ın şehirleri dashboard'la tutmaz. PR açık kalır, sunumdan sonra TEST sonucuyla birleşir; dashboard ve ROADMAP o zaman 51–60'a geçer. **Eksi:** Faz 1 "en düşük ≥ 200 V" kıl payı KALDI (199,8 / 199,0 V; gizlenmedi, ADR-0016 m. 3); 1.5'in hat tasarım kuralının neden devreye girmediği BUILD 1'de. Açık: konutta kalan +%8–10 sapma eğimle açıklanmıyor (sanayide de var); sebebi 1–10'da ayrılır.
+Durum: bekliyor (TEST; BUILD 1)

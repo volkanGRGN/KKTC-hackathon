@@ -11,11 +11,14 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 09:43) — açık PR yok
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 10:52)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
+| PR #43 üretici 1.6 (yaz eğimi Kıbrıs evlerine; sınav 51–60) | BUILD 1 | TEST'te; 200 V kıl payı sorusu (KARAR 10:52) | sunumdan sonra birleşir |
+| PR #41 dashboard canlı tahmin + Civan'ın haritası | dashboard oturumu | önbellek düzeltildi (3c8e38d), TEST yeniden | Civan'ın app/ onayı → KARAR |
+| PR #42 panel kod temizliği | BUILD 2 | TEST sırasında | TEST → KARAR |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
