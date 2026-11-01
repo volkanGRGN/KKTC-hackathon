@@ -1,0 +1,20 @@
+KTMMOB Elektrik Mühendisleri Odası (KTEMO) dokümanları — yük haritası için taranan belgeler (BUILD 1, Volkan'ın isteği, 1 Kasım 2026).
+Sayfa: https://www.ktemo.org/dokumanlar.php. Birim fiyat listeleri ayrı klasörde (data/raw/ktemo-birim-fiyat, Civan / Can).
+İndirildi: 1 Kasım 2026 (BUILD 1, Mac), her dosya tek istek: curl -sS -o <ad> "<adres>". Dosyalar yalnız okundu (pdftotext; pptx'in slayt XML'i); çalıştırılmadı.
+Lisans: belirtilmemiş (kamuya açık indirme) → kaynak gösterilir. Ham dosyalar depoya girmez.
+
+  teknik-komite-bildirim-no-1.pdf — 435.795 bayt, SHA-256 6f561946b6b0c6bfb5ce2cdb244fe5e3bb10ce90646ddcfbf018fba3bf2ce6b2, 1 sayfa
+    Teknik Komite Düzeltme Bildirim No-1 (8.06.2018), "Tesisatın öngörülen puant gücü tablosu" — https://www.ktemo.org/files/teknikbilgiler/TEKN%C4%B0K%20KOM%C4%B0TE%20B%C4%B0LD%C4%B0R%C4%B0M%20NO-1.pdf
+  reaktif-guc-kompanzasyonu.pdf — 584.507 bayt, SHA-256 8197d5453e8aaa22b53f7a52d5c202abb27f5807efa5eaf55f39e4fdf648b5c6, 6 sayfa
+    "Güç katsayısının düzeltilmesi" (Bakanlar Kurulu Önerge 2227/2010 özeti s. 3–4; KTEMO önerisi cos φ 0,95 s. 5) — https://www.ktemo.org/files/teknikbilgiler/REAKT%C4%B0F%20G%C3%9C%C3%87%20KOMPANZASYONU.pdf
+  kibtek-reaktif-bilgilendirme.pdf — 754.852 bayt, SHA-256 c236987813b965b5aae53e0141bbebc6fd67531b3985acf8d815b1f38f0464e1, 33 sayfa
+    Kıb-Tek reaktif bilgilendirme toplantısı (OG kompanzasyonu s. 15; trafo merkezleri ve kapasitörler s. 16–18) — https://www.ktemo.org/files/teknikbilgiler/KIBTEK%20REAKT%C4%B0F%20B%C4%B0LG%C4%B0LEND%C4%B0RME%20TOPLANTISI.pdf
+  solar-enerji-projelendirme.pdf — 10.953.072 bayt, SHA-256 6bbedf0cacf34082325caa08034b076d39e2af995cf3df1fae92e3efb4d5141d, 70 sayfa
+    Yrd. Doç. Dr. Mehmet Şenol, "Solar enerji sistemlerinde projelendirme ve ürün seçimi" (KKTC PV 2018 sonu s. 3; kurulu güç 405 MW s. 5) — https://www.ktemo.org/files/semineregitim/Solar%20Enerji%20Projelendirme,%20%C3%9Cr%C3%BCn%20Se%C3%A7imi%20ve%20Saha%20Kontrol.pdf
+  enerji-verimliligi-calistayi-2023.pdf — 761.224 bayt, SHA-256 9a9c27755b0473bfb9028a4f29768e82dac8e7937373f9fe439c2ab9085da953, 35 sayfa
+    2. Ulusal Enerji Verimliliği Çalıştayı sonuç raporu, 25 Ağustos 2023 (konut GES 3 kW önerisi s. 14) — https://www.ktemo.org/files/semineregitim/calistay1.pdf
+  enerjide-akuye-bakis-2026.pdf — 6.833.252 bayt, SHA-256 9040d792633a8b33087809e2f03701c5139bb4b14de291c5b31b45f2923ab474, 20 sayfa (taranmış görüntü)
+    Enerjide Aküye Bakış çalıştay ve panel sonuç raporu, 13 Haziran 2026 (yaz ve kış pik talebi s. 3; "kritik pik talep bölgelerine öncelik" s. 10) — https://www.ktemo.org/files/uploads/1789041509_enerjide_ak__ye_bak_____260908_133516.pdf
+  Kıb-Tek Yakıt Değişim Fizibilite Çalışmaları Sunumu.pptx (RAR içinde; depoya ve bu klasöre alınmadı, 346 MB)
+    RAR: 340.315.642 bayt, SHA-256 598449e02a35c11c977f347ea05630ed1236caa3adaca7c012cf54c4659cfc50; pptx 346.029.006 bayt, SHA-256 ed86d8cf44fe98e0db810237af8a3a1e657e973172d8d2489026441f792a3795
+    Slayt 38: yıl, puant güç (MW), enerji (GWh) tablosu, 2022–2035 (2022 368 MW / 1.836 GWh) — https://www.ktemo.org/files/semineregitim/K%C4%B1b-Tek%20Yak%C4%B1t%20De%C4%9Fi%C5%9Fim%20Fizibilite%20%C3%87al%C4%B1%C5%9Fmalar%C4%B1%20Sunumu.rar
