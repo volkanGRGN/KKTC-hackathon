@@ -1235,7 +1235,7 @@ Durum: bekliyor
 
 ## KARAR 08:41 — (BUILD 2 — panel) PR #36 (ticari I / II bölmesi): olumsuz sonuç; kod birleşmez, günlük main'e
 Karar: "Baskın sınıf" ayırmıyor (ticari II çarşıda da yurtta da baskın); küçük dükkân sayısıyla bölme (eşik 12; kalibrasyon 1–10: dükkân −1,06, büyük −0,93 V) sonucu değiştirmedi: gece prizi 1–10 15 / 182, 31–40 10 / 72 (#35 ile aynı), beklenen → gerçekleşen 16,1 → 10, yanlış yeşil 0. Yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep ölçüm öncesi bara öncülü U(244, 252) [Yorum]. **Kod birleşmez**, PR kapanır (dal kalır); olumsuz sonuç günlüğü ve ROADMAP Faz 10 satırı main'e ayrı girer (BUILD 2). 31–40 bu betik için üçüncü kez bakıldı, görülmüş; 41–50 bu iş için gerekmedi.
-Durum: bekliyor (BUILD 2 günlük; sonra karar masası #36'yı kapatır)
+Durum: yapıldı 09:22 — #36 kapatıldı (dal kalır), günlük ve ROADMAP Faz 10 satırı main'de (40fc148); 41–50'de ölçüm sırası ilk 20 → 11 / 133 ev, yanlış yeşil 0
 
 ## UYARI! 1 Kasım 09:46 — Civan'dan (+ Claude) — Pitch şablonu panel hikâyesiyle dolduruluyor; KARAR 23:12 ("panel sunumda anlatılmayacak") ile çelişiyor
 Ne: Organizatörün 7 slaytlık pitch şablonu (5 dk) için Gemini'ye brif hazırlandı (`docs/istek/brif-gemini-pitch.md`, Civan'ın yerelinde, commit edilmedi). Civan hikâyeyi **panel (mevcut metin)** seçti: içerik `docs/sunum/` sunum-v1 rakamları (2.670 başvuru, İspanya %25 → %10, dolu trafoya "yer var" 41/73 ↔ 0, pilot ~20 bin €). Yük haritası rakamları henüz yok (PR #24 bekliyor).
