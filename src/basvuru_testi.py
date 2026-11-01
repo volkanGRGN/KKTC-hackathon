@@ -53,6 +53,8 @@ def _csv(yol):
 def sehir_senaryo(is_):
     klasor, senaryo, model_hata, inv_bara, bara_hata, inv_ham = (Path(is_[0]), is_[1], is_[2], is_[3], is_[4],
                                                                   is_[5])
+    if len(is_) > 6:                                    # ADR-0019 kıyası: eski kural (güven şartı) bu işçide
+        bv.ko.YESIL_GUVEN_SARTI = is_[6]
     sehir = sk.gercek_sehir(klasor)
     tohum = sehir['tohum']
     trafolar = _csv(klasor / 'trafolar.csv')
@@ -170,6 +172,7 @@ def main():
     ap.add_argument('--inverter-bara', help='inverter_geri_cozum.py JSON: kayıttaki inverter barası geri çözümden')
     ap.add_argument('--bara-hata', help='inverter_geri_cozum.py JSON (1–10): motor bara hatasını bu dağılımdan çeker')
     ap.add_argument('--inverter-ham', help='inverter_geri_cozum.py JSON: inverter kaydı ham özet, çözüm motorda')
+    ap.add_argument('--guven-sarti', action='store_true', help='ADR-0019 öncesi kural: hemen evet ayrıca güven yüksek ister')
     ap.add_argument('--json')
     ap.add_argument('--surum-zorla', action='store_true',
                     help='şehrin üretici sürümü farklıysa da yeniden kur (yalnız uyar; sonuç güvenilmez)')
@@ -198,14 +201,16 @@ def main():
         sonuc = {(k, s): o for k, s, o in ex.map(sehir_senaryo,
                                                   [(str(k), s, a.model_hata, inv.get(int(k.name.split('-')[1])),
                                                     bara_hata,
-                                                    ham.get(int(k.name.split('-')[1]), {}) if a.inverter_ham else None)
+                                                    ham.get(int(k.name.split('-')[1]), {}) if a.inverter_ham else None,
+                                                    a.guven_sarti)
                                                    for s in senaryolar for k in klasorler])}
     tablo = {s: ozet(klasorler, sonuc, s) for s in senaryolar}
     print(f'şehir {a.aralik} — sahte kayıtlarla, gösterim; {SIRA} sıra × en çok {EN_COK} başvuru; '
           f'motor kayıt hatasını {a.model_hata} varsayar'
           + ('; inverter barası benzetimde geri çözülmüş' if a.inverter_bara else '')
           + ('; inverter kaydı ham özet, çözüm motorda' if a.inverter_ham else '')
-          + (f'; motor bara hatasını ölçülmüş dağılımdan çeker (n {len(bara_hata)})' if bara_hata else ''))
+          + (f'; motor bara hatasını ölçülmüş dağılımdan çeker (n {len(bara_hata)})' if bara_hata else '')
+          + ('; ESKİ KURAL: hemen evet güven yüksek ister' if a.guven_sarti else '; güven şartı yok (ADR-0019)'))
     print('senaryo | başvuru | hemen evet | yanlış evet (evetlerin) | önce ölç | hayır (gerçekte sığan) | '
           '%40 kuralı yanlış evet | harita yanlış evet | renk y / s / k | yanlış yeşil | kırmızıda aşan')
     for s, o in tablo.items():

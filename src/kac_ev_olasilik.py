@@ -17,8 +17,8 @@ altıda birinde panelli evler yüksüz ayrı bir kolda.
 Çıktı her çekilişte: bugün (yeni panelsiz, öğlen güneşi + en düşük yük) sınır aşılıyor mu; bekleyen panelsiz
 konutlar rastgele sırayla 6,5 kW alırsa kaçı sığar (sığmayan atlanır, cevap anahtarıyla aynı tanım); ilk iki
 başvuru sığıyor mu. Renk (ADR-0010 olasılıkla):
-  kırmızı = bugün aşma olasılığı ≥ KIRMIZI_P;  yeşil = ilk iki başvurunun sığma olasılığı ≥ YESIL_P ve güven
-  yüksek (marj = 1 ev);  diğerleri sarı.
+  kırmızı = bugün aşma olasılığı ≥ KIRMIZI_P;  yeşil = ilk iki başvurunun sığma olasılığı ≥ YESIL_P (marj = 1 ev;
+  ADR-0019: "güven yüksek" şartı kalktı, kalibre yük bandı yeter; YESIL_GUVEN_SARTI ile geri açılır);  diğerleri sarı.
 Panel katmanı "güvenli uçlar" (ADR-0017, Muhittin 4 madde 1; `pv_uc`): yeşil = yukarıdaki yeşil; `dolu_bayrak` = bugün
   aşma olasılığı ≥ BAYRAK_P ("büyük olasılıkla dolu", ret değil); arası `bos` (renksiz, "başvuruda bakılır").
 Konum payı (ADR-0015 m. 4; yalnız analiz, `kac_ev.csv`'ye yazılmaz — karar masası 01:01; `guvenli_uc.py --konum`):
@@ -53,6 +53,8 @@ CEKILIS = 40
 KIRMIZI_P = 0.5                         # bugün aşma olasılığı bunun üstündeyse kırmızı [Yorum]
 YESIL_P = 0.98                          # ilk iki başvurunun sığma olasılığı (canlı bütçe %2, ADR-0010)
 BAYRAK_P = 0.7                          # "büyük olasılıkla dolu" bayrağı (ADR-0017; ilkeden, sınava bakılmadan)
+YESIL_GUVEN_SARTI = False               # ADR-0019: yeşil / hemen evet için yük güveni yüksek şartı kalktı; bant
+                                        # kalibrasyonu bozulursa (gerçek < P10 nominal %10 + tolerans dışı) True
 
 ABONE = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm', 'abone_sanayi1', 'abone_sanayi2',
          'abone_su_motoru']
@@ -284,7 +286,7 @@ def sehir_calistir(klasor):
         kac = [min(k, aday) for _, k, _ in s]
         if p_bugun >= KIRMIZI_P:
             renk = 'kirmizi'
-        elif p_iki >= YESIL_P and t['guven'] == 'yuksek':
+        elif p_iki >= YESIL_P and (not YESIL_GUVEN_SARTI or t['guven'] == 'yuksek'):
             renk = 'yesil'
         else:
             renk = 'sari'
