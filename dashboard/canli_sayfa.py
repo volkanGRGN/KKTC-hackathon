@@ -440,7 +440,8 @@ def sayfa():
     sol, sag = st.columns([3, 2])
     with sol:
         if katman == "yuk" and yuk_yok:
-            st.info("Bu model sürümünde yük haritası yoktu (ilk kez 1 Kasım 01:58); panel katmanı gösteriliyor.")
+            st.info((sonuc["model"].get("yuk_eksigi") or "Bu model sürümünde yük haritası yok.")
+                    + " Panel katmanı gösteriliyor.")
         zemin = harita_ciz(harita_verisi(h, sonuc, olculu, gosterilen, gercek), a["harita"])
         lejant(gosterilen, sonuc, zemin)
     with sag:

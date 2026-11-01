@@ -60,14 +60,32 @@ def kullanilabilir(s):
         return False, "bu bilgisayarda git ya da o commit yok"
 
 
+def _bag_mi(yol):
+    """Sembolik bağlantı ya da Windows klasör bağlantısı (junction)."""
+    junction = getattr(os.path, "isjunction", None)  # Python 3.12+
+    return yol.is_symlink() or bool(junction and junction(yol))
+
+
 def _veri_bagla(hedef):
-    """hedef/data bu depo kopyasının data klasörünü göstersin; göstermiyorsa yenilenir (TEST, KARAR 10:34)."""
+    """hedef/data bu depo kopyasının data klasörünü göstersin; göstermiyorsa yenilenir (TEST, KARAR 10:34).
+    Windows'ta sembolik bağlantı geliştirici modu ister; olmazsa klasör bağlantısı (junction, yönetici istemez)."""
     bag, dogru = hedef / "data", (KOK / "data").resolve()
-    if bag.is_symlink() and bag.resolve() == dogru:
+    if _bag_mi(bag) and bag.resolve() == dogru:
         return
-    if bag.is_symlink() or bag.exists():
-        bag.unlink()
-    bag.symlink_to(dogru, target_is_directory=True)
+    if _bag_mi(bag):
+        try:
+            bag.unlink()
+        except OSError:  # Windows junction
+            os.rmdir(bag)
+    elif bag.exists():
+        raise RuntimeError(f"{bag} bağlantı değil, gerçek klasör; elle silin")
+    try:
+        bag.symlink_to(dogru, target_is_directory=True)
+    except OSError:
+        if os.name != "nt":
+            raise
+        import _winapi
+        _winapi.CreateJunction(str(dogru), str(bag))
 
 
 def klasor(s):
@@ -81,7 +99,10 @@ def klasor(s):
             gecici = ONBELLEK / f".{tam[:12]}-{kopya}-{os.getpid()}"
             gecici.mkdir(parents=True, exist_ok=True)
             with tarfile.open(fileobj=io.BytesIO(_git("archive", tam, "src")), mode="r:") as arsiv:
-                arsiv.extractall(gecici, filter="data")
+                try:
+                    arsiv.extractall(gecici, filter="data")
+                except TypeError:  # filter parametresi olmayan eski Python
+                    arsiv.extractall(gecici)
             if not (hedef / "src" / "sablon.py").exists():
                 gecici.rename(hedef)
             else:  # başka bir süreç önce çıkardı
