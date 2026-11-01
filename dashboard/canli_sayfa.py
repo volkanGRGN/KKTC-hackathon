@@ -1,46 +1,25 @@
 """Canlı tahmin sayfası: harita kapalı açılır; bir trafoya tıkla, "ölçüldü" sayılır; model o an kurulur, gerisini tahmin eder.
 
 Hesap dashboard/canli.py'de (ürünün kendi kodu: sablon.py, kac_ev_olasilik.py, tepe.py); eski model sürümleri
-dashboard/surumler.py ile depo tarihçesinden. Harita Civan'ın (app/harita.py): sütun boyu trafo gücü, ölçülü trafoda
-beyaz uç, Girne zemini. Gerçekle kıyas (sınav görünümü) yalnız farazi şehirde ve ölçülmeyen trafolarda; model gerçeği
-görmez.
+dashboard/surumler.py ile depo tarihçesinden. Harita kendi çizimimiz (dashboard/canli_harita.py, internetsiz): ölçülen
+trafo dolu nokta, tahmin soluk halka; "Oynat" Girne'de mahalle mahalle 12 ölçümü, sonra adayı oynatır (Volkan, 1 Kasım).
+Gerçekle kıyas (sınav görünümü) yalnız farazi şehirde ve ölçülmeyen trafolarda; model gerçeği görmez.
 """
 
 import random
-import sys
-import time
-from pathlib import Path
 
 import altair as alt
 import pandas as pd
-import pydeck as pdk
 import streamlit as st
 
 import canli
+import canli_harita
 import surumler
+from canli_harita import DOLULUK_SINIF, doluluk_sinifi
 from ortak import *  # noqa: F401,F403 — sabitler, renkler, biçim ve veri okuma (ortak.py)
 
-if str(KOK / "app") not in sys.path:
-    sys.path.insert(0, str(KOK / "app"))
-try:  # Civan'ın haritası (app/harita.py, harita/ui düzeni): varsa onun katmanları, yoksa aynı görünümde yerel katmanlar
-    import harita as civan  # noqa: E402
-except Exception:  # pragma: no cover — harita dosyası yoksa ya da açılmıyorsa
-    civan = None
-CIVAN_KATMANLARI = civan is not None and all(
-    hasattr(civan, a) for a in ("trafo_katmanlari", "acilis_gorunumu", "zemin_katmanlari", "osm_zemin", "KIYI_DOSYASI"))
-METRE_BASINA_KVA = 0.25  # Civan'ın kararı: sütun boyu = trafo gücü, 1000 kVA = 250 m
-SUTUN_YARICAP_M = 35
-
 ONERI_SAYISI = 12  # ürünün tasarımı: 40 trafodan 12'si ölçülür (sablon.py OLCULU_ANA)
-OYNAT_ARALIK_SN = 1.0
 HARITA_YUKSEKLIK = 600
-OLCULDU_RGBA = [42, 120, 214, 235]  # model kurulmadan önce ölçülen trafo
-KAPALI_RGBA = [110, 110, 110, 200]  # henüz tahmin yok
-DOLULUK_SINIF = [  # yük haritası haritada: temkinli uç (aralığın üstü); eşikler Özet'teki %80 ve %100 ile aynı
-    (1.0, "kirmizi", "%100 üstü, gücü aşabilir"),
-    (0.8, "sari", "%80–100, önce bak"),
-    (0.0, "yesil", "%80 altı"),
-]
 KATMAN_ADI = {"yuk": "Yük haritası · yılın tepesi", "panel": "Panel · öğlen gerilimi (259 V)"}
 
 
@@ -87,31 +66,45 @@ def kiyas(klasor, olculu, surum):
 
 def anahtarlar(klasor):
     k = kisa_yol(klasor)
-    return dict(olculu=f"olculu::{k}", son=f"son-secim::{k}", gecmis=f"gecmis::{k}", oynat=f"oynat::{k}",
-                bekleyen=f"bekleyen::{k}", harita=f"canli-harita::{k}")
+    return dict(olculu=f"olculu::{k}", gecmis=f"gecmis::{k}", oynat=f"oynat::{k}", oynat_no=f"oynat-no::{k}",
+                harita=f"canli-harita::{k}")
 
 
 def olculu_ayarla(a, nolar, olculu):
     st.session_state[a["olculu"]] = [t for t in nolar if t in set(olculu)]
 
 
-def tiklamayi_isle(a, nolar):
-    """Haritada yeni seçilen trafo ölçülüyse çıkar, değilse ekle. Harita aynı anahtarla yerinde güncellenir (yakınlık
-    korunur); seçim değişmedikçe bir şey yapılmaz. Aynı trafoya ikinci tıklama seçimi kaldırır, üçüncüsü yine sayılır."""
-    durum = st.session_state.get(a["harita"])
-    nesneler = (((durum or {}).get("selection") or {}).get("objects") or {}).get("trafolar") or []
-    secim = nesneler[0].get("trafo_no") if nesneler else None
-    if secim == st.session_state.get(a["son"]):
-        return
-    st.session_state[a["son"]] = secim
-    if secim is None or secim not in nolar:
+def _olay(a, ad):
+    """Haritanın gönderdiği olayın değeri (st.components.v2 tetik değeri; bir tur sonra None)."""
+    durum = st.session_state.get(a["harita"]) or {}
+    return durum.get(ad) if hasattr(durum, "get") else None
+
+
+def _tiklama(a, nolar):
+    """Haritada tıklanan trafo ölçülüyse çıkar, değilse ekle (oynarken tıklama gelmez)."""
+    secim = (_olay(a, "tiklama") or {}).get("no")
+    if secim not in nolar or st.session_state[a["oynat"]]:
         return
     olculu = list(st.session_state.get(a["olculu"], []))
     olculu.remove(secim) if secim in olculu else olculu.append(secim)
     olculu_ayarla(a, nolar, olculu)
 
 
+def _bitti(a, nolar, klasor, sira, surum, sinav):
+    """Animasyon bitti: Girne'nin 12 ölçümü sayfaya geçer; sınav açıksa ölçtükçe hata grafiği her adımla dolar."""
+    if not st.session_state[a["oynat"]]:
+        return
+    olculu_ayarla(a, nolar, sira)
+    if sinav:
+        gecmis = st.session_state[a["gecmis"]].setdefault(surum, {})
+        for k in range(canli.EN_AZ_OLCULU, len(sira) + 1):
+            ozet, _ = kiyas(klasor, [t for t in nolar if t in set(sira[:k])], surum)
+            if ozet is not None:
+                gecmis[k] = (ozet.get("ogle_hata"), ozet.get("tepe_hata"))
+
+
 def _oneri_ekle(a, nolar, oneri, hepsi):
+    st.session_state[a["oynat"]] = False  # elle ölçüm: animasyondan haritaya dön
     olculu = list(st.session_state.get(a["olculu"], []))
     if hepsi:
         olculu = list(oneri)
@@ -138,22 +131,17 @@ def _sifirla(a):
 
 
 def _oynat(a):
+    """Haritayı kapatır ve animasyonu baştan başlatır (sayaç değişince harita yeniden oynar)."""
     _sifirla(a)
     st.session_state[a["oynat"]] = True
+    st.session_state[a["oynat_no"]] = st.session_state.get(a["oynat_no"], 0) + 1
 
 
 def _durdur(a):
     st.session_state[a["oynat"]] = False
 
 
-# ---------- harita (Civan'ın katmanları) ----------
-
-def doluluk_sinifi(d):
-    for esik, renk, ad in DOLULUK_SINIF:
-        if d >= esik:
-            return renk, ad
-    return DOLULUK_SINIF[-1][1], DOLULUK_SINIF[-1][2]
-
+# ---------- harita (kendi çizimimiz: canli_harita.py) ----------
 
 def ipucu_satirlari(r, gercek):
     """Haritada üstüne gelince: iki katmanın tahmini, sınav açıksa gerçeği."""
@@ -187,79 +175,60 @@ def ipucu_satirlari(r, gercek):
 
 
 def harita_verisi(h, sonuc, olculu, katman, gercek):
-    olculu_k = set(olculu)
+    """Etkileşim görünümü, trafo sırası h["nolar"]: yer (km), sınıf (renk; model yoksa None), ölçüldü mü, ipucu."""
     if sonuc is None:
-        v = h["tr"][["trafo_no", "enlem", "boylam", "kva"]].copy()
-        v["olculdu"] = v["trafo_no"].isin(olculu_k).astype(int)
-        v["rgba"] = [OLCULDU_RGBA if o else KAPALI_RGBA for o in v["olculdu"]]
-        v["baslik"] = [f"{t} · " + ("ölçüldü" if o else "henüz tahmin yok") for t, o in zip(v["trafo_no"], v["olculdu"])]
-        v["metin"] = f"Model için en az {canli.EN_AZ_OLCULU} ölçülü trafo gerekir."
+        v = h["tr"][["trafo_no", "enlem", "boylam"]].copy()
+        v["olculdu"] = v["trafo_no"].isin(set(olculu)).astype(int)
+        v["sinif"] = None
+        v["durum"] = ["ölçüldü" if o else "henüz tahmin yok" for o in v["olculdu"]]
+        v["metin"] = e(f"Model için en az {canli.EN_AZ_OLCULU} ölçülü trafo gerekir.")
     else:
-        v = sonuc["tablo"].copy()
-        if katman == "yuk":
-            renkler = [doluluk_sinifi(d)[0] for d in v["doluluk_temkinli"]]
+        v = sonuc["tablo"].set_index("trafo_no").loc[h["nolar"]].reset_index()
+        if katman == "yuk":  # doluluk yoksa renk yok (yeşil sanılmasın)
+            v["sinif"] = [doluluk_sinifi(d)[0] if pd.notna(d) else None for d in v["doluluk_temkinli"]]
         else:
-            renkler = list(v["renk"])
-        v["rgba"] = [RENK_RGBA[r] for r in renkler]
-        v["baslik"] = [f"{t} · " + ("ölçüldü" if o else "model tahmini") for t, o in zip(v["trafo_no"], v["olculdu"])]
+            v["sinif"] = [r if isinstance(r, str) else None for r in v["renk"]]
+        v["durum"] = ["ölçüldü" if o else "model tahmini" for o in v["olculdu"]]
         g = None if gercek is None else gercek.set_index("trafo_no").to_dict("index")
         v["metin"] = [ipucu_satirlari(r, g) for r in v.to_dict("records")]
-    v["yukseklik"] = v["kva"] * METRE_BASINA_KVA  # Civan: sütun boyu = trafo gücü
-    return v[["trafo_no", "enlem", "boylam", "kva", "olculdu", "rgba", "yukseklik", "baslik", "metin"]]
+    n = []
+    for r in v.to_dict("records"):
+        x, y = canli_harita.xy(r["enlem"], r["boylam"])
+        n.append(dict(no=r["trafo_no"], x=x, y=y, sinif=r["sinif"], o=int(r["olculdu"]),
+                      baslik=e(f"{r['trafo_no']} · {r['durum']}"), metin=r["metin"]))
+    return n
 
 
-def yerel_katmanlar(v):
-    """Civan'ın yeni haritası yokken aynı görünüm: sütun (boy = trafo gücü), tıklanır taban, ölçülüye beyaz uç."""
-    sutunlar = pdk.Layer("ColumnLayer", id="sutunlar", data=v, get_position=["boylam", "enlem"],
-                         get_elevation="yukseklik", get_fill_color="rgba", radius=SUTUN_YARICAP_M, pickable=False)
-    taban = pdk.Layer("ScatterplotLayer", id="trafolar", data=v, get_position=["boylam", "enlem"],
-                      get_fill_color="rgba", get_radius=SUTUN_YARICAP_M * 1.4, radius_min_pixels=10, stroked=True,
-                      get_line_color=[14, 17, 23, 255], line_width_min_pixels=1, pickable=True, auto_highlight=True,
-                      highlight_color=[255, 255, 255, 90])
-    olculu = v.loc[v["olculdu"] == 1, ["boylam", "enlem", "yukseklik"]].assign(uc=lambda t: t["yukseklik"] + 30)
-    uc = pdk.Layer("ColumnLayer", id="olculu", data=olculu, get_position=["boylam", "enlem"], get_elevation="uc",
-                   get_fill_color=[245, 247, 250, 255], radius=13, pickable=False)
-    return [sutunlar, taban, uc]
+def harita_basligi(h, sonuc, olculu):
+    if sonuc is not None:
+        return f"{len(olculu)} trafo ölçüldü · {len(h['nolar']) - len(olculu)} trafo tahmin"
+    if olculu:
+        return f"{len(olculu)} trafo ölçüldü · model için en az {canli.EN_AZ_OLCULU}"
+    return "Harita kapalı · bir trafoya tıkla, ölçülmüş sayılır"
 
 
-def harita_ciz(v, anahtar):
-    ipucu = {"html": "<b>{baslik}</b><br/>{metin}"}
-    zemin = None
-    if CIVAN_KATMANLARI:  # Civan'ın katmanları ve Girne zemini (internetsiz)
-        zemin = civan.osm_zemin(str(civan.OSM_DOSYASI), str(civan.KIYI_DOSYASI))
-        katmanlar = civan.trafo_katmanlari(v)
-        gorunum = civan.acilis_gorunumu(v, genislik_px=760, yukseklik_px=HARITA_YUKSEKLIK)
-    else:
-        katmanlar = yerel_katmanlar(v)
-        gorunum = pdk.ViewState(latitude=(v["enlem"].max() + v["enlem"].min()) / 2,
-                                longitude=(v["boylam"].max() + v["boylam"].min()) / 2,
-                                zoom=harita_yakinligi(v["enlem"], v["boylam"], HARITA_YUKSEKLIK) - 0.3, pitch=45)
-    if zemin is None:
-        deck = pdk.Deck(layers=katmanlar, initial_view_state=gorunum, map_style=None, tooltip=ipucu)
-    else:
-        deck = pdk.Deck(layers=civan.zemin_katmanlari(zemin) + katmanlar, initial_view_state=gorunum,
-                        map_provider=None, tooltip=ipucu)
-    st.pydeck_chart(deck, on_select="rerun", selection_mode="single-object", key=anahtar, height=HARITA_YUKSEKLIK,
-                    alt="Canlı tahmin haritası: sütun bir trafo, boy trafo gücü, beyaz uç ölçüldü")
-    return zemin
+def lejant_parcalari(katman, model_var):
+    if not model_var:
+        return [("ölçüldü", MAVI_HEX), ("henüz tahmin yok", GRI_HEX)]
+    if katman == "yuk":
+        return [(ad, RENK_HEX[r]) for _, r, ad in reversed(DOLULUK_SINIF)]
+    return [(RENK_ADI[r], RENK_HEX[r]) for r in RENK_SIRA]
 
 
-def lejant(katman, sonuc, zemin):
-    if sonuc is None:
-        parca = [("ölçüldü", "#2a78d6"), ("henüz tahmin yok", "#6e6e6e")]
-    elif katman == "yuk":
-        parca = [(ad, RENK_HEX[r]) for _, r, ad in reversed(DOLULUK_SINIF)]
-    else:
-        parca = [(RENK_ADI[r], RENK_HEX[r]) for r in RENK_SIRA]
-    renkli = " ".join(f"<span class='nokta' style='color:{h}'>●</span> {e(ad)}" for ad, h in parca)
-    st.markdown(f"<div class='lejant'>{renkli}</div>", unsafe_allow_html=True)
-    not_ = "Sütun boyu = trafo gücü · beyaz uç = ölçüldü · üstüne gelince sayılar."
+def animasyon_verisi(h, klasor, klasorler, oneri, surum):
+    """Girne'de ölçülme sırası ve her adımda o anki ölçülerle kurulan modelin renkleri; öbür şehirler kasabalara."""
+    sira = canli_harita.girne_sirasi(h["tr"], oneri)
+    adimlar = [canli_harita.siniflar(hesap(klasor, [t for t in h["nolar"] if t in set(sira[:k])], surum), h["nolar"])
+               for k in range(1, len(sira) + 1)]
+    return sira, canli_harita.animasyon(h, sira, adimlar, klasorler, klasor)
+
+
+def lejant(katman, sonuc):
+    """Renklerin lejantı haritanın içinde (sunumda tam ekranda da görünsün); burada yalnız açıklama."""
+    not_ = ("Dolu nokta = ölçüldü · halka = model tahmini · gri = henüz tahmin yok · üstüne gelince sayılar. "
+            "Oynat: Girne'de mahalle mahalle 12 ölçüm, sonra ada (yarım dakika).")
     if katman == "yuk" and sonuc is not None:
         not_ += " Renk en kötü duruma göre; eşikler gösterim için (Özet'teki %80 ve %100)."
-    if zemin is not None:
-        not_ += f" {civan.OSM_ATIF}"
-    if not CIVAN_KATMANLARI:
-        not_ += " (Civan'ın yeni haritası bu dalda yok: aynı görünüm yerel katmanlarla.)"
     st.caption(not_)
 
 
@@ -397,9 +366,6 @@ def sayfa():
     st.session_state.setdefault(a["olculu"], [])
     st.session_state.setdefault(a["gecmis"], {})
     st.session_state.setdefault(a["oynat"], False)
-    if a["bekleyen"] in st.session_state:  # oynatın bir önceki turda seçtiği trafo (liste kutusu çizilmeden önce)
-        olculu_ayarla(a, h["nolar"], st.session_state.pop(a["bekleyen"]))
-    tiklamayi_isle(a, h["nolar"])
     oneri = canli.oneri(h, ONERI_SAYISI)
     ayar = json_oku(klasor / "ayar.json") or {}
     sinav_var = (klasor / "cevap_anahtari.csv").exists() and sehir_no(klasor) < 800
@@ -407,7 +373,8 @@ def sayfa():
     st.markdown("## Canlı tahmin")
     st.caption("Harita kapalı açılır. Bir trafoya tıkla: o trafo ölçülmüş sayılır. Model o an yalnız ölçülenlerden "
                f"kurulur ve ölçülmeyen bütün trafoları tahmin eder. En az {canli.EN_AZ_OLCULU} ölçüm gerekir; "
-               f"ürünün tasarımı 40 trafodan {ONERI_SAYISI}'si.")
+               f"ürünün tasarımı 40 trafodan {ONERI_SAYISI}'si. Oynat: Girne'de bir mahalleden başlar, önerilen "
+               f"{ONERI_SAYISI} trafo mahalle mahalle ölçülür, sonra görünüm adaya açılır (yarım dakika).")
     st.warning(f"{etiket(sehir_no(klasor), ayar)} · {klasor.name} · {len(h['nolar'])} trafo · trafo yerleri gerçek "
                f"değil · model: {surumler.surum(surum)['ad']}")
 
@@ -417,11 +384,14 @@ def sayfa():
     ust[1].button(f"Önerilen {ONERI_SAYISI}'yi ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, True),
                   width="stretch", help="Ürünün tabakalı seçimi: benzer trafolar değil, boşluklar ölçülür.")
     ust[2].button("Önerilenden 1 ekle", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, False), width="stretch")
-    if st.session_state[a["oynat"]]:
-        ust[3].button("Durdur", on_click=_durdur, args=(a,), width="stretch", type="primary")
+    oynat = st.session_state[a["oynat"]]
+    if oynat:
+        ust[3].button("Haritaya dön", on_click=_durdur, args=(a,), width="stretch", type="primary",
+                      help="Animasyonu kapatır; Girne haritası ve o ana kadarki ölçümler kalır.")
     else:
-        ust[3].button("Sırayla oynat", on_click=_oynat, args=(a,), width="stretch",
-                      help=f"Haritayı kapatır, önerilen {ONERI_SAYISI} trafoyu birer birer ölçer.")
+        ust[3].button("Oynat", on_click=_oynat, args=(a,), width="stretch",
+                      help=f"Haritayı kapatır; Girne'de bir mahalleden başlayıp önerilen {ONERI_SAYISI} trafoyu "
+                           "mahalle mahalle ölçer, sonra adaya açılır (yarım dakika).")
     ust[4].button("Sıfırla", on_click=_sifirla, args=(a,), width="stretch", help="Haritayı kapatır.")
     sinav = st.toggle("Gerçekle kıyas — yalnız deneme şehrinde, model görmez", value=sinav_var, disabled=not sinav_var,
                       key="canli_sinav", help="Benzetimin bildiği gerçekle (cevap anahtarı) yalnız puanlar; tahmine giden "
@@ -437,12 +407,25 @@ def sayfa():
     yuk_yok = sonuc is not None and not sonuc["model"].get("yuk_var", True)
     gosterilen = "panel" if (katman == "yuk" and yuk_yok) else katman
 
-    sol, sag = st.columns([3, 2])
+    sira = anim = None
+    if oynat:
+        with st.spinner("Animasyon hazırlanıyor: Girne'de her ölçüm adımında model kuruluyor (ilk seferde ~15 sn)…"):
+            sira, anim = animasyon_verisi(h, klasor, klasorler, oneri, surum)
+    veri = dict(zemin=canli_harita.zemin(), anim=anim, katman=gosterilen, yukseklik=HARITA_YUKSEKLIK, hiz=1.0,
+                sehir=dict(n=harita_verisi(h, sonuc, olculu, gosterilen, gercek), baslik=harita_basligi(h, sonuc, olculu)),
+                lejant=lejant_parcalari(gosterilen, oynat or sonuc is not None),
+                oynat=oynat, oynat_no=st.session_state.get(a["oynat_no"], 0))
+
+    sol, sag = (st.container(), st.container()) if oynat else st.columns([3, 2])  # oynarken harita tam genişlik
     with sol:
         if katman == "yuk" and yuk_yok:
             st.info("Bu model sürümünde yük haritası yoktu (ilk kez 1 Kasım 01:58); panel katmanı gösteriliyor.")
-        zemin = harita_ciz(harita_verisi(h, sonuc, olculu, gosterilen, gercek), a["harita"])
-        lejant(gosterilen, sonuc, zemin)
+        canli_harita.ciz(a["harita"], veri,
+                         on_tiklama_change=lambda: _tiklama(a, h["nolar"]),
+                         on_bitti_change=lambda: _bitti(a, h["nolar"], klasor, sira or oneri, surum, sinav),
+                         on_bastan_change=lambda: _oynat(a),
+                         on_don_change=lambda: _durdur(a))
+        lejant(gosterilen, sonuc)
     with sag:
         kutu_izgarasi([
             sunum("olculen", f"{len(olculu)} / {len(h['nolar'])}"),
@@ -450,7 +433,7 @@ def sayfa():
         ])
         if sonuc is None:
             kalan = canli.EN_AZ_OLCULU - len(olculu)
-            st.info(f"Harita kapalı. Model için {kalan} trafo daha ölç: haritada bir sütuna tıkla ya da "
+            st.info(f"Harita kapalı. Model için {kalan} trafo daha ölç: haritada bir trafoya tıkla ya da "
                     "\"Önerilenden 1 ekle\".")
         else:
             if len(olculu) < canli.GUVENILIR_OLCULU:
@@ -465,12 +448,3 @@ def sayfa():
     if sonuc is not None:
         with st.expander("Bütün tahminler (tablo)"):
             tahmin_tablosu(sonuc, gercek)
-
-    if st.session_state[a["oynat"]]:  # sırayla oynat: her turda önerilenden bir trafo
-        kalan = [t for t in oneri if t not in olculu]
-        if kalan:
-            time.sleep(OYNAT_ARALIK_SN)
-            st.session_state[a["bekleyen"]] = olculu + kalan[:1]
-            st.rerun()
-        else:
-            st.session_state[a["oynat"]] = False
