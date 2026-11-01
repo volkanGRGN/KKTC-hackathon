@@ -11,7 +11,8 @@ olasılıkla dolu" bayrağına en çok taşır; pilot için ilk 20 trafo. `bilgi
           (`sablon.py`'nin kuralı: öğlen yükü = ölçülen, güven yüksek).
   kademe  plaka / kademe fotoğrafı: trafonun kendi kademesi (5 pozisyon, ±2 × %2,5; boşta gerilime en yakın). Bara bu
           kademenin ±3,125 V penceresinde (başvuru motorunun kademe kaydı gibi; fotoğraf doğru sayılır) [Yorum].
-Renk kuralı resmi hesabınki (ADR-0010 / 0011 / 0017): yeşil = ilk iki başvuru ≥ %98 sığar ve güven yüksek; bayrak =
+Renk kuralı resmi hesabınki (ADR-0010 / 0011 / 0017 / 0019): yeşil = ilk iki başvuru ≥ %98 sığar (ADR-0019'dan beri güven
+şartı yok; `kac_ev_olasilik.YESIL_GUVEN_SARTI`); bayrak =
 bugün aşma olasılığı ≥ 0,7, ama gece prizi ve kademe fotoğrafından sonra bayrak yok (yalnız yeşil yönü; karar masası
 01:22); açılan ev = yeşile dönen trafonun karamsar kaç evi (çekilişlerin P10'u).
 
@@ -48,8 +49,9 @@ KADEME_PENCERE_V = 3.125
 GECE = range(0, 60)                              # 00:00–04:55
 OGLE = range(132, 168)                           # 11:00–13:55
 # Gece prizi ölçümü − gerçek boşta gerilim (V), %0, %5, …, %100; geliştirme 1–10'dan (`--kalibrasyon`) [Hesap]
-GECE_HATA_Q = [-11.0, -5.73, -4.31, -3.53, -2.99, -2.68, -2.41, -2.18, -1.94, -1.83, -1.64, -1.47, -1.32, -1.23, -1.13,
-               -1.02, -0.9, -0.78, -0.64, -0.53, -0.21]       # 400 trafo; hep aşağı, ortanca −1,64 V
+GECE_HATA_Q = [-8.03, -3.92, -2.79, -2.39, -2.06, -1.84, -1.66, -1.54, -1.39, -1.26, -1.16, -1.09, -1.02, -0.93, -0.82,
+               -0.77, -0.69, -0.63, -0.53, -0.41, -0.03]      # üretici 1.5, 400 trafo; hep aşağı, ortanca −1,16 V
+# (üretici 1.3 kalibrasyonu ortanca −1,64 V idi)
 
 
 def _csv(yol):
@@ -117,7 +119,7 @@ def cek(tr, t, rng, vrng, v0=None, yuk=None):
 def uc(p_bugun, p_iki, guven, olcum=None):
     """Ölçüm sonrası durum. Gece prizi ve kademe fotoğrafından sonra yalnız yeşil yönü, bayrak yok (karar masası
     01:22: bu ölçümlerden sonraki bayraklar 21–30'da 3/15 ve 0/7 doğruydu)."""
-    if p_iki >= ko.YESIL_P and guven == 'yuksek':
+    if p_iki >= ko.YESIL_P and (not ko.YESIL_GUVEN_SARTI or guven == 'yuksek'):      # ADR-0019
         return 'yesil'
     if olcum in ('gece', 'kademe'):
         return 'bos'
