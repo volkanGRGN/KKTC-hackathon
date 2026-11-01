@@ -21,8 +21,11 @@ ONBELLEK = Path(tempfile.gettempdir()) / "trafo-model-surumleri"
 # Ana daldaki birleşmelerden (git log --first-parent -- src/sablon.py src/kac_ev_olasilik.py src/tepe.py).
 SURUMLER = [
     dict(anahtar="guncel", ad="Güncel", commit=None,
-         aciklama="Yeşilde güven şartı yok (ADR-0019), güvenli uçlar; yük haritası: yılın tepesi, akşam gerilimi, "
-                  "tepe saati."),
+         aciklama="Yük haritası B-Y2: konut yaz eğimi 20 Kıbrıs evinden (PR #39). Panelde yeşilde güven şartı yok "
+                  "(ADR-0019), güvenli uçlar."),
+    dict(anahtar="by2-oncesi", ad="1 Kasım 10:22 · B-Y2 öncesi", commit="f51e434",
+         aciklama="Yük haritası ön sürüm: konut yaz eğimi EAC eğrilerinden; tepe saati ve akşam gerilimi var. Panel "
+                  "güncelle aynı."),
     dict(anahtar="yuk-ilk", ad="1 Kasım 01:59 · yük haritası ilk sürüm", commit="ff8836f",
          aciklama="Yük haritası ilk kez: yılın tepesi ve akşam gerilimi (PR #24, #26, #29). Panelde yeşil için "
                   "güven şartı var (ADR-0019 öncesi)."),

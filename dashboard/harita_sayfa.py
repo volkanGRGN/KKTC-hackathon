@@ -15,7 +15,15 @@ from ortak import KOK, veri_seti_sec
 if str(KOK / "app") not in sys.path:
     sys.path.insert(0, str(KOK / "app"))
 
-import harita as civan  # noqa: E402  (app/harita.py, Civan)
+try:
+    import harita as civan  # noqa: E402  (app/harita.py, Civan)
+except Exception:  # pragma: no cover
+    civan = None
+
+# Sayfa Civan'ın harita/ui düzenine dayanır; main'deki eski harita.py'de bu fonksiyonlar yok → menüde gösterilmez.
+GEREKEN = ("sutun_verisi", "birlesik_tablo", "etiket", "etiket_rengi", "ayar_oku", "osm_zemin", "KIYI_DOSYASI",
+           "sehir_ozeti", "harita", "HARITA_YUKSEKLIK_PX", "lejant", "secili_satir", "bos_panel", "yan_panel", "alt_serit")
+KULLANILABILIR = civan is not None and all(hasattr(civan, a) for a in GEREKEN)
 
 
 def sayfa():

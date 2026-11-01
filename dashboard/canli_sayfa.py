@@ -22,7 +22,14 @@ from ortak import *  # noqa: F401,F403 — sabitler, renkler, biçim ve veri oku
 
 if str(KOK / "app") not in sys.path:
     sys.path.insert(0, str(KOK / "app"))
-import harita as civan  # noqa: E402  (app/harita.py, Civan)
+try:  # Civan'ın haritası (app/harita.py, harita/ui düzeni): varsa onun katmanları, yoksa aynı görünümde yerel katmanlar
+    import harita as civan  # noqa: E402
+except Exception:  # pragma: no cover — harita dosyası yoksa ya da açılmıyorsa
+    civan = None
+CIVAN_KATMANLARI = civan is not None and all(
+    hasattr(civan, a) for a in ("trafo_katmanlari", "acilis_gorunumu", "zemin_katmanlari", "osm_zemin", "KIYI_DOSYASI"))
+METRE_BASINA_KVA = 0.25  # Civan'ın kararı: sütun boyu = trafo gücü, 1000 kVA = 250 m
+SUTUN_YARICAP_M = 35
 
 ONERI_SAYISI = 12  # ürünün tasarımı: 40 trafodan 12'si ölçülür (sablon.py OLCULU_ANA)
 OYNAT_ARALIK_SN = 1.0
@@ -193,22 +200,43 @@ def harita_verisi(h, sonuc, olculu, katman, gercek):
             renkler = [doluluk_sinifi(d)[0] for d in v["doluluk_temkinli"]]
         else:
             renkler = list(v["renk"])
-        v["rgba"] = [civan.RENKLER[r] for r in renkler]
+        v["rgba"] = [RENK_RGBA[r] for r in renkler]
         v["baslik"] = [f"{t} · " + ("ölçüldü" if o else "model tahmini") for t, o in zip(v["trafo_no"], v["olculdu"])]
         g = None if gercek is None else gercek.set_index("trafo_no").to_dict("index")
         v["metin"] = [ipucu_satirlari(r, g) for r in v.to_dict("records")]
-    v["yukseklik"] = v["kva"] * civan.METRE_BASINA_KVA  # Civan: sütun boyu = trafo gücü
+    v["yukseklik"] = v["kva"] * METRE_BASINA_KVA  # Civan: sütun boyu = trafo gücü
     return v[["trafo_no", "enlem", "boylam", "kva", "olculdu", "rgba", "yukseklik", "baslik", "metin"]]
 
 
+def yerel_katmanlar(v):
+    """Civan'ın yeni haritası yokken aynı görünüm: sütun (boy = trafo gücü), tıklanır taban, ölçülüye beyaz uç."""
+    sutunlar = pdk.Layer("ColumnLayer", id="sutunlar", data=v, get_position=["boylam", "enlem"],
+                         get_elevation="yukseklik", get_fill_color="rgba", radius=SUTUN_YARICAP_M, pickable=False)
+    taban = pdk.Layer("ScatterplotLayer", id="trafolar", data=v, get_position=["boylam", "enlem"],
+                      get_fill_color="rgba", get_radius=SUTUN_YARICAP_M * 1.4, radius_min_pixels=10, stroked=True,
+                      get_line_color=[14, 17, 23, 255], line_width_min_pixels=1, pickable=True, auto_highlight=True,
+                      highlight_color=[255, 255, 255, 90])
+    olculu = v.loc[v["olculdu"] == 1, ["boylam", "enlem", "yukseklik"]].assign(uc=lambda t: t["yukseklik"] + 30)
+    uc = pdk.Layer("ColumnLayer", id="olculu", data=olculu, get_position=["boylam", "enlem"], get_elevation="uc",
+                   get_fill_color=[245, 247, 250, 255], radius=13, pickable=False)
+    return [sutunlar, taban, uc]
+
+
 def harita_ciz(v, anahtar):
-    zemin = civan.osm_zemin(str(civan.OSM_DOSYASI), str(civan.KIYI_DOSYASI))
-    katmanlar = civan.trafo_katmanlari(v)  # sütun, tıklanır taban ("trafolar"), ölçülüye beyaz uç
-    gorunum = civan.acilis_gorunumu(v, genislik_px=760, yukseklik_px=HARITA_YUKSEKLIK)
     ipucu = {"html": "<b>{baslik}</b><br/>{metin}"}
+    zemin = None
+    if CIVAN_KATMANLARI:  # Civan'ın katmanları ve Girne zemini (internetsiz)
+        zemin = civan.osm_zemin(str(civan.OSM_DOSYASI), str(civan.KIYI_DOSYASI))
+        katmanlar = civan.trafo_katmanlari(v)
+        gorunum = civan.acilis_gorunumu(v, genislik_px=760, yukseklik_px=HARITA_YUKSEKLIK)
+    else:
+        katmanlar = yerel_katmanlar(v)
+        gorunum = pdk.ViewState(latitude=(v["enlem"].max() + v["enlem"].min()) / 2,
+                                longitude=(v["boylam"].max() + v["boylam"].min()) / 2,
+                                zoom=harita_yakinligi(v["enlem"], v["boylam"], HARITA_YUKSEKLIK) - 0.3, pitch=45)
     if zemin is None:
         deck = pdk.Deck(layers=katmanlar, initial_view_state=gorunum, map_style=None, tooltip=ipucu)
-    else:  # internetsiz: zemin OSM dosyasından (Civan)
+    else:
         deck = pdk.Deck(layers=civan.zemin_katmanlari(zemin) + katmanlar, initial_view_state=gorunum,
                         map_provider=None, tooltip=ipucu)
     st.pydeck_chart(deck, on_select="rerun", selection_mode="single-object", key=anahtar, height=HARITA_YUKSEKLIK,
@@ -230,6 +258,8 @@ def lejant(katman, sonuc, zemin):
         not_ += " Renk temkinli uca göre; eşikler gösterim için (Özet'teki %80 ve %100)."
     if zemin is not None:
         not_ += f" {civan.OSM_ATIF}"
+    if not CIVAN_KATMANLARI:
+        not_ += " (Civan'ın yeni haritası bu dalda yok: aynı görünüm yerel katmanlarla.)"
     st.caption(not_)
 
 
@@ -262,7 +292,7 @@ def ozet_kutulari(sonuc, katman):
 
 
 def sinav_paneli(ozet, katman, gecmis):
-    st.markdown(f"**Gerçekle kıyas** · ölçülmeyen {ozet['olculmeyen']} trafo")
+    st.markdown(f"**Gerçekle kıyas — yalnız deneme şehrinde, model görmez** · ölçülmeyen {ozet['olculmeyen']} trafo")
     if katman == "yuk" and "tepe_hata" in ozet:
         kutular = [
             ("Tepe hatası", yuzde(ozet.get("tepe_hata")),
@@ -401,8 +431,9 @@ def sayfa():
         ust[3].button("Sırayla oynat", on_click=_oynat, args=(a,), width="stretch",
                       help=f"Haritayı kapatır, önerilen {ONERI_SAYISI} trafoyu birer birer ölçer.")
     ust[4].button("Sıfırla", on_click=_sifirla, args=(a,), width="stretch", help="Haritayı kapatır.")
-    sinav = st.toggle("Gerçekle kıyasla (sınav görünümü)", value=sinav_var, disabled=not sinav_var, key="canli_sinav",
-                      help="Yalnız farazi şehirde: benzetimin bildiği gerçekle karşılaştırır. Model gerçeği görmez.")
+    sinav = st.toggle("Gerçekle kıyas — yalnız deneme şehrinde, model görmez", value=sinav_var, disabled=not sinav_var,
+                      key="canli_sinav", help="Benzetimin bildiği gerçekle (cevap anahtarı) yalnız puanlar; tahmine giden "
+                                              "hiçbir yola girmez (KARAR, 1 Kasım).")
 
     olculu = st.session_state[a["olculu"]]
     with st.spinner("Model kuruluyor…" if surum == "guncel" else "Eski sürüm hazırlanıyor (ilk seferde birkaç saniye)…"):
