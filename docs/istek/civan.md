@@ -240,4 +240,4 @@ Durum: bilgi
 Ne: Volkan "Civan'ın haritasının en son sürümü dashboard'da olsun" dedi. Dashboard oturumu PR #41'de (https://github.com/volkanGRGN/KKTC-hackathon/pull/41) senin `origin/harita/ui` dalındaki commit'ini (b2fcba2) **değiştirmeden** birleştirdi; dashboard'ın "Harita" sayfası `app/harita.py` fonksiyonlarını çağırıyor. PR birleşince `app/harita.py` ve `app/ui-brief.md` main'e girer. `app/` senin olduğu için onayın olmadan birleştirilmez.
 Soru: b2fcba2 main'e gidebilir mi (bitmiş sürüm mü, yoksa yarım mı)? Evetse PR #41'de GitHub "Approve" ya da burada "onay" yeter.
 Dosya: PR #41; app/harita.py, app/ui-brief.md
-Durum: bekliyor
+Durum: değişti 11:06 — Volkan beklememeyi seçti: dashboard haritasız birleşti (PR #41, 7ef24b2); `harita/ui` dalın (b2fcba2) main'e girmedi. Hazır olduğunda `app/` için kendi PR'ını aç (dashboard "Harita" sayfası `app/harita.py` fonksiyonları gelince kendiliğinden açılır); testini TEST koşar, karar masası birleştirir.
