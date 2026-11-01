@@ -22,6 +22,7 @@ Adımlar (ROADMAP Faz 2):
   python3 src/sablon.py data/synthetic --sehir 7 --yalniz-ana
   python3 src/sablon.py data/synthetic --onem          # 2d: sütun grubu çıkarınca bir-dışarıda hata (günlük için)
   python3 src/sablon.py data/synthetic --faturasiz     # yillik_tuketim_mwh olsa da kullanma (sütunsuz kıyas)
+  python3 src/sablon.py data/synthetic --fatura-net    # fatura net (mahsuplaşma): panel üretimi geri eklenir
 """
 import argparse
 import csv
@@ -60,6 +61,14 @@ MWH = {'abone_konut': 648494 / 175577, 'abone_ticari1': 210978 / 20950, 'abone_t
 BOLGELER = ['kentsel', 'kirsal', 'turistik', 'sanayi']
 FATURA_SUTUNU = 'yillik_tuketim_mwh'    # sözleşme 1.2, ADR-0007; gerçek veride (EDP) yok
 FATURA_KULLAN = True                    # --faturasiz: sütun olsa da abone sayılarıyla çalış (günlükte kıyas)
+# Muhittin 4 madde 4, ADR-0018 m. 7 (BUILD 1): model faturayı BRÜT tüketim sayar; panel üretimi öğlende kac_ev fiziğinde
+# düşülür. Kıb-Tek'in mahsuplaşmalı (panelli) abone faturası net ise (çekilen − verilen) üretim iki kez düşülür: deneme
+# şehirlerinde paneli tüketiminin %30'undan fazlasını karşılayan trafolarda öğlen yükü %24 eksik, kapsama %67 [Hesap,
+# 1–10; docs/log/2026-11-01-volkan-yuk-ogle-fatura.md]. --fatura-net: faturaya panel kW × yıllık verim geri eklenir.
+# Kıb-Tek'in faturası net mi, çekilen / verilen ayrı mı: BULAMADIM (istek metni madde 3; uzmana soru).
+FATURA_NET = False
+PV_VERIM_MWH_KWP = 1.69                 # yıllık üretim, MWh/kWp [Hesap: Open-Meteo Lefkoşa 2023–2025, 30° güneye eğik
+                                        # ışınım 2.099–2.127 kWh/m² × PR 0,8 (Yorum)]
 
 # Güven eşikleri [Yorum; Faz 2 günlüğünde gerekçe]
 GUVEN_YUKSEK_P, GUVEN_DUSUK_P = 0.70, 0.50
@@ -74,6 +83,15 @@ def fatura_var(tr):
     return bool(FATURA_KULLAN and FATURA_SUTUNU in tr and tr[FATURA_SUTUNU].notna().all())
 
 
+def fatura_mwh(tr):
+    """Trafonun yıllık brüt tüketimi (MWh) faturadan. FATURA_NET ise mahsuplaşmalı abonelerin üretimi geri eklenir
+    (fatura = tüketim − üretim; brüt = fatura + panel kW × PV_VERIM_MWH_KWP)."""
+    f = pd.to_numeric(tr[FATURA_SUTUNU], errors='coerce').to_numpy(float)
+    if FATURA_NET:
+        f = f + tr['panel_kw'].fillna(0).to_numpy(float) * PV_VERIM_MWH_KWP
+    return f
+
+
 def abone_matrisi(tr):
     """Abone sayıları (trafo × 7 sınıf), modelin büyüklük girdisi. trafolar.csv'de yillik_tuketim_mwh varsa
     (ADR-0007) her satır, tarife ortalamasıyla hesaplanan enerjisi faturaya eşit olacak şekilde ölçeklenir:
@@ -82,7 +100,7 @@ def abone_matrisi(tr):
     if not FATURA_KULLAN or FATURA_SUTUNU not in tr:
         return A
     e = A @ np.array([MWH[c] for c in ABONE])
-    f = pd.to_numeric(tr[FATURA_SUTUNU], errors='coerce').to_numpy(float)
+    f = fatura_mwh(tr)
     gecerli = np.isfinite(f) & (f > 0) & (e > 0)
     s = np.divide(f, e, out=np.ones(len(A)), where=gecerli)
     return A * s[:, None]
@@ -502,7 +520,7 @@ def saf_tahmin(tr, olcum, m):
     y = np.array([olcum[t]['ogle_min'] for t in m['ids']])
     enerji = {'tarife': tr[ABONE].to_numpy(float) @ np.array([MWH[c] for c in ABONE])}
     if fatura_var(tr):
-        enerji['fatura'] = tr[FATURA_SUTUNU].to_numpy(float)
+        enerji['fatura'] = fatura_mwh(tr)
     out = {}
     for ad, e in enerji.items():
         es = e[m['secilen']]
@@ -550,9 +568,12 @@ def main():
     ap.add_argument('--yalniz-ana', action='store_true', help='deneyleri ve şehirler arasını atla')
     ap.add_argument('--onem', action='store_true', help='sütun grubu önemini yazdır, dosya yazma')
     ap.add_argument('--faturasiz', action='store_true', help='yillik_tuketim_mwh olsa da kullanma (kıyas için)')
+    ap.add_argument('--fatura-net', action='store_true',
+                    help='yillik_tuketim_mwh mahsuplaşmalı abonelerde net: panel üretimini geri ekle (ADR-0018 m. 7)')
     a = ap.parse_args()
-    global FATURA_KULLAN
+    global FATURA_KULLAN, FATURA_NET
     FATURA_KULLAN = not a.faturasiz
+    FATURA_NET = a.fatura_net
     klasorler = sorted(k for k in Path(a.kok).glob('sehir-*') if k.is_dir() and (k / 'trafolar.csv').exists()
                        and (k / 'yuk_5dk.csv').exists())
     if a.sehir is not None:

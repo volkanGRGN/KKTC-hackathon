@@ -457,6 +457,9 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
                 tepe_sat.append(dict(t=float(r['tepe_kw']), lo=float(r['tepe_kw_p10']), hi=float(r['tepe_kw_p90']),
                                      g=float(g['tepe_yil_kw']), ts=r.get('tepe_saati'), gs=g.get('tepe_saati'),
                                      vt=float(r['v_min_tepe_v']) if r.get('v_min_tepe_v') else None,
+                                     # "yeterli" kararı karamsar uçtan (BUILD 1, 01:10; ADR-0018 m. 6); yoksa ortanca
+                                     vk=float(r.get('v_min_tepe_v_p10') or r.get('v_min_tepe_v') or 0) or None,
+                                     pa=float(r['p_aksam_207']) if r.get('p_aksam_207') else None,
                                      vg=float(g['v_min_tepe_v']) if g.get('v_min_tepe_v') else None))
     if tepe_bos:
         bilgi.append(f'yük haritası: yıl tepesi boş, sayılmadı: {", ".join(tepe_bos)} (yaz / kış penceresi üretilemedi)')
@@ -474,13 +477,18 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
         v = [x for x in tepe_sat if x['vt'] is not None and x['vg'] is not None]
         if v:
             dusuk = [x for x in v if x['vg'] < V_AKSAM_MIN]
-            yeter = [x for x in v if x['vt'] >= V_AKSAM_MIN]
-            bilgi.append(f'akşam en düşük gerilim ≥ {V_AKSAM_MIN:g} V (farazi, gösterim): gerçekte altında {_oran(len(dusuk), len(v))}, '
-                         f'yakalanan {sum(x["vt"] < V_AKSAM_MIN for x in dusuk)}/{len(dusuk)}; "yeterli" dediğimiz {len(yeter)} '
-                         f'trafodan gerçekte altında {sum(x["vg"] < V_AKSAM_MIN for x in yeter)}; hata ortanca '
-                         f'{st.median(abs(x["vt"] - x["vg"]) for x in v):.1f} V')
+            yeter = [x for x in v if x['vk'] >= V_AKSAM_MIN]
+            pa = [x['pa'] for x in dusuk if x['pa'] is not None]
+            bilgi.append(f'akşam en düşük gerilim ≥ {V_AKSAM_MIN:g} V (farazi, gösterim; "yeterli" = P10 ≥ {V_AKSAM_MIN:g} V): '
+                         f'gerçekte altında {_oran(len(dusuk), len(v))}, yakalanan {sum(x["vk"] < V_AKSAM_MIN for x in dusuk)}/{len(dusuk)}; '
+                         f'"yeterli" dediğimiz {len(yeter)} trafodan gerçekte altında {sum(x["vg"] < V_AKSAM_MIN for x in yeter)}; '
+                         f'hata ortanca (orta) {st.median(abs(x["vt"] - x["vg"]) for x in v):.1f} V'
+                         + (f'; gerçekte altında olanlarda p_aksam_207 ortanca {_yuzde(st.median(pa))}' if pa else ''))
     else:
         bilgi.append('yük haritası (tepe), farazi: ölçülmedi (tepe.csv ya da cevap anahtarında tepe_yil_kw yok; sözleşme 1.4)')
+    if ispanya_tepe and not Path(ispanya_tepe).exists():
+        print(f'UYARI: --ispanya-tepe {ispanya_tepe} bulunamadı; yük haritası gerçek veri maddesi ölçülmedi.')
+        ispanya_tepe = None
     if ispanya_tepe:
         rows = [r for r in _csv(Path(ispanya_tepe))
                 if r.get('girdi', ISPANYA_GIRDI) == ISPANYA_GIRDI and r.get('n', ISPANYA_N) == ISPANYA_N
@@ -601,6 +609,7 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
 YANLIS_YESIL_MAX, YANLIS_YESIL_SEHIR_MAX = 0.05, 0.10
 CANLI_BUTCE = 0.02              # ADR-0010: canlıya geçiş bütçesi (bilgi)
 KIRMIZI_ASAN_MIN = 0.50         # ADR-0016 m. 2: kırmızı kovasında gerçekte aşan pay ≥ %50 (eski "yanlış kırmızı ≤ %20" kalktı)
+BAYRAK_P = 0.7                  # ADR-0017: "büyük olasılıkla dolu" bayrağı p_bugun_asar ≥ 0,7 (kırmızı dolgu değil)
 P_KOVA = (0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0001)   # p_bugun_asar kovaları; kırmızı 0,5 üstü (ADR-0011)
 KAC_EV_HATA_MAX = 2.0
 SARI_HEDEF = 0.30
@@ -634,7 +643,8 @@ def faz3(sehirler):
             satir.append(dict(sehir=s['ad'], tip=r['tip'], gercek=int(r['kac_ev_gercek']),
                               tavan=int(r['kac_ev_tavan']), renk=k['renk'], kar=kar, iyi=iyi, orta=orta,
                               k40=int(k['kural40_ev']), sinir=k['sinir_karamsar'],
-                              p=float(k['p_bugun_asar']) if k.get('p_bugun_asar') not in (None, '') else None))
+                              p=float(k['p_bugun_asar']) if k.get('p_bugun_asar') not in (None, '') else None,
+                              pv_uc=k.get('pv_uc')))
     dolu = [x for x in satir if x['gercek'] == 0]
     orta_ad = 'ortası (kac_ev_orta)' if any(k.get('kac_ev_orta') not in (None, '')
                                             for s in sehirler for k in s['kac_ev'].values()) else 'ortası'
@@ -680,12 +690,29 @@ def faz3(sehirler):
             ort = st.mean(ps)
             yon = (f'; ortalama olasılık {_yuzde(ort)} → '
                    + ('olasılık karamsar (aşan, söylenenden az)' if asan / len(kir) < ort else 'olasılık iyimser'))
-        _madde(m, asan / len(kir) >= esik, 'kırmızı kovası: gerçekte aşan (dolu) pay ≥ 0,5 − 2·√(0,25 ÷ n)',
-               f'{_oran(asan, len(kir))}, eşik {esik:.2f} (n = {len(kir)} kırmızı); yanlış kırmızı (bilgi) '
-               f'{_oran(len(kir) - asan, len(kir))}; kırmızı payı {_oran(len(kir), len(satir))}; dolu yakalanan (kırmızı) '
-               f'{asan}/{len(dolu)}' + yon)
+        bilgi.append('kırmızı kovası (ADR-0017: bilgi; madde bayrak isabeti): gerçekte dolu '
+                     f'{_oran(asan, len(kir))}, eski eşik {esik:.2f} → ' + ('geçer' if asan / len(kir) >= esik else 'geçmez')
+                     + f'; yanlış kırmızı {_oran(len(kir) - asan, len(kir))}; kırmızı payı {_oran(len(kir), len(satir))}' + yon)
+
+    # 3b. Bayrak isabeti (ADR-0017 m. 3): p_bugun_asar ≥ 0,7 ("büyük olasılıkla dolu") olanların gerçekte dolu payı
+    #     ≥ ortalama olasılık − 2·√(p̄(1 − p̄) ÷ n) (kırmızı kovasının bayrak sürümü). `pv_uc` varsa ondan, yoksa eşikten.
+    def _uc(x):
+        if x.get('pv_uc'):
+            return x['pv_uc']
+        return 'dolu_bayrak' if x['p'] is not None and x['p'] >= BAYRAK_P else ('yesil' if x['renk'] == 'yesil' else 'bos')
+    bay = [x for x in satir if _uc(x) == 'dolu_bayrak']
+    if bay and all(x['p'] is not None for x in bay):
+        pbar = st.mean(x['p'] for x in bay)
+        esik_b = pbar - 2 * math.sqrt(pbar * (1 - pbar) / len(bay))
+        db = sum(x['gercek'] == 0 for x in bay)
+        _madde(m, db / len(bay) >= esik_b, 'bayrak isabeti (p ≥ 0,7): gerçekte dolu pay ≥ p̄ − 2·√(p̄(1 − p̄) ÷ n)',
+               f'{_oran(db, len(bay))}, ortalama olasılık {_yuzde(pbar)}, eşik {esik_b:.2f} (n = {len(bay)} bayrak)')
     else:
-        _madde(m, UYARI, 'kırmızı kovası: gerçekte aşan (dolu) pay ≥ 0,5 − 2·√(0,25 ÷ n)', 'kırmızı trafo yok')
+        _madde(m, UYARI, 'bayrak isabeti (p ≥ 0,7)', 'bayraklı trafo yok' if not bay else 'p_bugun_asar yok (sözleşme 1.3 öncesi)')
+    renksiz = [x for x in satir if _uc(x) == 'bos']
+    bilgi.append(f'güvenli uçlar (ADR-0017): yeşil {sum(_uc(x) == "yesil" for x in satir)}, bayrak {len(bay)}, renksiz '
+                 f'{_oran(len(renksiz), len(satir))}; bayrağın yakaladığı dolu {_oran(sum(x["gercek"] == 0 for x in bay), len(dolu))}, '
+                 f'renksizde kalan dolu {_oran(sum(x["gercek"] == 0 for x in renksiz), len(dolu))}')
     if any(x['p'] is not None for x in satir):
         kova = []
         for a, b in zip(P_KOVA, P_KOVA[1:]):

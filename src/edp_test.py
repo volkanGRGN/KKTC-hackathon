@@ -26,10 +26,15 @@ Faz 7 (karar masası 21:32, 22:0x): %80 bant, `sablon.py`'deki K_YUK ile log öl
 `--cikti` satırları modelin yayımladığı bandı taşır. `--kalibrasyonsuz` K_YUK'u kapatır ("önce" ve k'nin hesabı için:
 `src/kalibrasyon.py ispanya` k'yi kalibrasyonsuz satırlardan hesaplar).
 
+Faz 11 (ADR-0018 m. 2, BUILD 1): `--hedef tepe` aynı yöntemi trafonun 1–20 Mayıs'taki en yüksek saatlik yüküne uygular
+(gerçek tepe; Kıbrıs'ın yaz akşamı değil: "Mayıs ≠ Temmuz"). Satırlar `sinav.py faz2 --ispanya-tepe`'nin girdisi; bir-dışarıda
+artıkları `src/tepe.py`'nin bandının tabanı. Tepede bant K_TEPE ile genişler (`tepe.py`; K_YUK öğlenin katsayısı).
+
 Çalıştırma:
   python3 src/edp_test.py <GIS_data klasörü>                # bütün deneyler, özet ekrana ve JSON'a
   python3 src/edp_test.py <GIS_data klasörü> --hazirlik     # yalnız veri temizliği sayıları
   python3 src/edp_test.py <GIS_data> --kalibrasyonsuz --cikti satirlar.csv   # K_YUK'suz bant (k'nin girdisi)
+  python3 src/edp_test.py <GIS_data> --hedef tepe --cikti tepe_satirlar.csv    # Mayıs tepesi (Faz 11)
 """
 import argparse
 import json
@@ -49,7 +54,9 @@ from sklearn.metrics import silhouette_score
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from sablon import K_YUK  # noqa: E402  Faz 7: bant katsayısının tek kaynağı
+from tepe import K_TEPE  # noqa: E402  Faz 11: tepe bandının katsayısı
 KALIBRE = True                          # --kalibrasyonsuz ile False
+HEDEF = 'ogle_min'                      # --hedef tepe: 'tepe' (Mayıs en yüksek saatlik yük)
 
 warnings.filterwarnings('ignore', category=ConvergenceWarning)
 
@@ -126,7 +133,8 @@ def trafo_tablosu(G, d):
     for ct in yk.columns:
         x = yk[ct]
         egri = x[isg].groupby(x[isg].index.hour).mean().reindex(range(24)).interpolate().to_numpy()
-        olcum[ct] = dict(ogle_min=float(x[ogle].min()), isgunu=egri, verilen=float(yk_s[ct].max()))
+        olcum[ct] = dict(ogle_min=float(x[ogle].min()), tepe=float(x.max()), tepe_saat=int(x.idxmax().hour),
+                         isgunu=egri, verilen=float(yk_s[ct].max()))
     return tr, olcum, sy
 
 
@@ -235,11 +243,26 @@ def calistir(X, B, y, egri, sec, hedef):
         r.append(math.log(max(y[sec[i]], .01) / max(t, .01)))
     r = np.array(r)
     alt, ust = np.exp(np.quantile(r, BANT))
-    if KALIBRE:                                  # Faz 7: log ölçekte K_YUK ile genişlet (sablon.py ile aynı)
-        alt, ust = alt ** K_YUK, ust ** K_YUK
+    if KALIBRE:                                  # Faz 7: log ölçekte K_YUK ile genişlet (sablon.py ile aynı); tepede K_TEPE
+        k = K_YUK if HEDEF == 'ogle_min' else K_TEPE
+        alt, ust = alt ** k, ust ** k
     beklenen = float(np.median(np.abs(np.exp(r) - 1)))
     orta, p, uzak = tahmin(m, X[hedef], B[hedef])
     return orta, orta * alt, orta * ust, [guven(p[j], uzak[j], beklenen) for j in range(len(hedef))]
+
+
+def velander_B(X, B, y, egri, sec, n, izgara=np.arange(0.0, 3.0 + 1e-9, 0.25)):
+    """Tepe için fatura sütunu × (1 + c ÷ √müşteri) (ADR-0018 m. 5; tepe.py'deki Velander biçimi). c YALNIZ ölçülülerde
+    seçilir: modelin ölçülülerdeki log artıklarının kareler toplamı en küçük olan."""
+    en = None
+    for c in izgara:
+        Bc = B * (1 + c / np.sqrt(n))[:, None]
+        m = kur(X[sec], Bc[sec], y[sec], egri[sec])
+        t = tahmin(m, X[sec], Bc[sec])[0]
+        sse = float((np.log(y[sec] / np.maximum(t, .01)) ** 2).sum())
+        if en is None or sse < en[0]:
+            en = (sse, Bc)
+    return en[1]
 
 
 # ---------- seçim ----------
@@ -254,7 +277,7 @@ def sec_tabakali(X, n, rng):
 
 def deney(tr, olcum, ozet, sekil, faz):
     cts = list(tr.index)
-    y = np.array([olcum[c]['ogle_min'] for c in cts])
+    y = np.array([olcum[c][HEDEF] for c in cts])
     egri = np.array([olcum[c]['isgunu'] / olcum[c]['isgunu'].max() for c in cts])
     temel = np.column_stack([np.log(tr.musteri), np.log(tr.kva), tr.panelli / tr.musteri,
                              np.log(tr.hat_m), tr.havai_pay, tr.uc_faz_pay])
@@ -274,6 +297,9 @@ def deney(tr, olcum, ozet, sekil, faz):
                     'c': (np.column_stack([temel, np.log1p(tr.fatura_kwh / tr.musteri)]),
                           tr[['fatura_kwh']].to_numpy(float)),
                 }
+                if HEDEF == 'tepe':                  # ADR-0018 m. 5: Velander biçimi, tepe.py ile aynı (c ölçülülerden)
+                    Xc, Bc = girdi['c']
+                    girdi['c'] = (Xc, velander_B(Xc, Bc, y, egri, sec, tr.musteri.to_numpy(float)))
                 for ad, (X, B) in girdi.items():
                     orta, alt, ust, gv = calistir(X, B, y, egri, sec, hedef)
                     for j, h in enumerate(hedef):
@@ -310,10 +336,12 @@ def main():
     ap.add_argument('gis')
     ap.add_argument('--hazirlik', action='store_true')
     ap.add_argument('--cikti', default=None)
-    ap.add_argument('--kalibrasyonsuz', action='store_true', help='K_YUK kapalı (önce; k hesabının girdisi)')
+    ap.add_argument('--kalibrasyonsuz', action='store_true', help='K_YUK / K_TEPE kapalı (önce; k hesabının girdisi)')
+    ap.add_argument('--hedef', choices=['ogle', 'tepe'], default='ogle', help='öğlen en düşük (Faz 2) ya da Mayıs tepesi (Faz 11)')
     a = ap.parse_args()
-    global KALIBRE
+    global KALIBRE, HEDEF
     KALIBRE = not a.kalibrasyonsuz
+    HEDEF = 'ogle_min' if a.hedef == 'ogle' else 'tepe'
     d, say = oku(a.gis)
     tr, olcum, sy = trafo_tablosu(a.gis, d)
     bos = [c for c in tr.index if c not in olcum or tr.loc[c, 'fatura_kwh'] == 0]
@@ -323,6 +351,9 @@ def main():
     say['ogle_min_kw'] = [round(min(olcum[c]['ogle_min'] for c in tr.index), 1),
                           round(max(olcum[c]['ogle_min'] for c in tr.index), 1)]
     say['verilen_en_cok_kw'] = round(max(olcum[c]['verilen'] for c in tr.index), 2)
+    say['tepe_kw'] = [round(min(olcum[c]['tepe'] for c in tr.index), 1), round(max(olcum[c]['tepe'] for c in tr.index), 1)]
+    say['tepe_saati'] = {h: sum(olcum[c]['tepe_saat'] == h for c in tr.index)
+                         for h in sorted({olcum[c]['tepe_saat'] for c in tr.index})}
     say['panelli_sayac'] = int(tr.panelli.sum())
     print(json.dumps(say, ensure_ascii=False, indent=1, default=str))
     print(tr.round(2).to_string())

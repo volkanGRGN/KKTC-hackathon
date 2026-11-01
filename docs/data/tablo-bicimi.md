@@ -177,8 +177,9 @@ Satır = bir trafo.
 | `p_bugun_asar` | float | oran | `0.125` | **1.3:** bugün (yeni panelsiz, öğlen güneşi, en düşük yük) 259 V ya da kVA'nın aşılma olasılığı; ≥ 0,5 → kırmızı |
 | `p_iki_ev_sigar` | float | oran | `0.975` | **1.3:** rastgele ilk iki başvurunun ikisinin de sığma olasılığı; ≥ 0,98 ve güven yüksek → yeşil |
 | `kac_ev_orta` | int | ev | `3` | **1.3:** çekilişlerin ortancası (haritada gösterilecek tek sayı: "yaklaşık N ev (karamsar–iyimser)"). Vaat sayıda değil renkte: yeşil = ilk iki başvuru ≥ %98 sığar |
+| `pv_uc` | str | — | `bos` | **1.4 adayı (ADR-0017, Muhittin 4 madde 1):** panel katmanının üç durumu: `yesil` (= `renk` yeşil; "ilk 2 başvuru güvenle sığar"), `dolu_bayrak` (`p_bugun_asar` ≥ 0,7; "büyük olasılıkla dolu; başvuruda ölçüm ya da güçlendirme gerekir", ret değil), `bos` (renksiz, "başvuruda bakılır"). Harita eşiği kendisi hesaplamaz, bu sütunu okur; `renk` geriye uyum için kalır |
 
-`isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda.
+`isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda. **1.4 adayı:** sonda `pv_uc` (ADR-0017; `kac_ev_olasilik.py` yazar, harita okur); var olanlar değişmedi.
 
 "Ölçülmedi" etiketi = `tahmin.csv`'de `olculdu` = 0. Harita `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`'yi (sehir, trafo_no) ile birleştirir.
 
@@ -198,3 +199,50 @@ Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama 
 | `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy). **Türetilmiş değer, ham kayıt değil:** inverterin ham gerilim / güç serisi bu dosyaya girmez, geri çözümün sonucu girer; gerçek kayıtta önce geri çözüm adımı gerekir (ham seriden, `src/inverter_kaydi.py` gibi). 1.4 kesinleşirken iki değerin ayrı sütun olması önerilir (`bara_v`, `esdeger_boy_m`) (Civan, 23:56; karar masası 00:10) · `inverter_ham` (karar masası 00:27, Muhittin 4 madde 5B): `bara_olcum_V;egim_V_kW` = inverterin kendi kaydının ham özeti, model varsayımı yok (`inverter_kaydi.geri_coz`: bara ölçümü = her günün ilk geçerli değerinin ortancası, inverter gece uyur; eğim = gündüz gerilim ↔ kendi panel gücü doğrusu, V/kW; güç sütunu yoksa boş). Bara ve hat boyu motorda çözülür (`basvuru.py`; sabah değerinin barayı düşük göstermesi 1–10'da ölçüldü). Ham seri depoya girmez (kişisel veri) |
 
 Başvuru formu (başvuranın hattı, yeri, fazı) aynı alanlarla ayrı gelir; testte `sahte_kayit.basvuru_kaydi` üretir, dosyası henüz yok.
+
+## 8. `tepe.csv` — Faz 11 yılın tepesi, ön sürüm (1.4 adayı; Can ya da Civan onayı; §7 PR #22'nin `kayitlar.csv`'si)
+Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe bölümü) ve harita (yük kartı). Satır = trafo; harita `(sehir, trafo_no)` ile birleştirir. Sütun adları Can'ın önerisiyle (volkan.md 23:12 sonrası). Model `cevap_anahtari.csv`'yi okumaz; `ayar.json`'dan yalnız `hava_yili`. Dosyalar tablosuna satır PR #21 (sözleşme 1.4) birleşince eklenir (iki PR aynı satırlara dokunmasın).
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `trafo_no` | int, str | — | `1`, `T01` | |
+| `olculdu` | int | 0/1 | `0` | `tahmin.csv` ile aynı ölçülü küme (Nisan ölçümü); sınav yalnız 0'ları sayar |
+| `tepe_kw` | float | kW | `88.23` | Yılın net tepesi (trafodan geçen), şehrin hava yılında; orta tahmin |
+| `tepe_kw_p10`, `tepe_kw_p90` | float | kW | `70.1`, `135.0` | Geniş bant: İspanya Mayıs tepesi artıkları (sağa çarpık) ⊕ eğim belirsizliği (ADR-0018 m. 2, 4) |
+| `tepe_saati` | str | SS:DD | `23:30` | Tepenin saati (ayın tipik günü) |
+| `tepe_ayi` | int | ay | `7` | Tepenin ayı (6–9, 1–2 ya da 4) |
+| `pf_varsayim` | float | — | `0.95` | Güç katsayısı varsayımı (ADR-0014) |
+| `tepe_kva`, `tepe_kva_p10`, `tepe_kva_p90` | float | kVA | `92.9` | `tepe_kw*` ÷ `pf_varsayim` |
+| `bos_kva` | float | kVA | `157.1` | `kva` − `tepe_kva` (yan panel) |
+| `bos_kva_p10` | float | kVA | `107.9` | `kva` − `tepe_kva_p90`: **haritanın "yük için boş" sayısı** (güvenli yön; ADR-0018 m. 6) |
+| `bos_kva_p90` | float | kVA | `176.2` | `kva` − `tepe_kva_p10` |
+| `guven` | str | — | `on` | Ön sürümde hep `on` (yaz ölçümü yok) |
+| `kor_nokta` | str | — | `mayis_temmuz;klima_kuyrugu` | Her sayının yanındaki etiket (ADR-0018 m. 3): gerçek veri bahar; sıcak dalga kuyruğu ölçülmedi |
+| `tepe_kaynagi` | str | — | `model` | Sayının kaynağı: `model` (ölçülmedi), `olcum_nisan` (ölçülü, Nisan), `kayit_md` / `kayit_etut` (Kıb-Tek tepe kaydı, §9). `olculdu` = 1 hepsinde `model` dışında |
+| `v_min_tepe_v` | float | V | `231.4` | Tepe anında en düşük ev gerilimi (faz–nötr; üç fazlı evde üç faz da), çekilişlerin ortancası. Panel tarafıyla aynı fizik (`kac_ev_olasilik.ag_kur` + `trafo_bos_kapasite.solve`); "ön" |
+| `v_min_tepe_v_p10`, `v_min_tepe_v_p90` | float | V | `219.8`, `238.1` | %80 bant. **"Akşam gerilimi yeterli" kararı P10'dan** (P10 ≥ 207 V); ortanca karar için kullanılmaz (güvenli yön) |
+| `p_aksam_207` | float | oran | `0.075` | Çekilişlerde 207 V altına inme payı |
+
+Bilgi dosyası `tepe_ozet.json`: ölçülü trafolar, Nisan oranları (R), sınıf eğimleri, ay sıcaklık sapmaları, bant.
+
+## 9. `kibtek_tepe.csv`, `kibtek_fider.csv` — Kıb-Tek tepe verisi (Faz 9 / 11 adayı; Can ya da Civan onayı)
+Gerçek veri gelince Kıb-Tek'in kayıtları bu biçime çevrilir; deneme şehrinde sahtesini `src/sahte_tepe_kaydi.py` yazar (kusurlarıyla). Okuyan `src/tepe.py` (dosya varsa kendiliğinden; `--kibtek-yok` ile kapanır). [Görev kartı](../gorev/volkan-faz9-kibtek-tepe.md).
+
+`kibtek_tepe.csv` (satır = kayıt; bir trafoda bir kayıt):
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `trafo_no` | int, str | — | `1`, `T16` | |
+| `kaynak` | str | — | `md_kaydi` | `md_kaydi` (maksimum talep göstergesi / sayaç yazmacı: sezonun en yükseği), `etut` (yaz yük etüdü, tek okuma), `akilli_sayac` (aylık MD yazmacı; `md_kaydi` gibi okunur) |
+| `tepe_kw` | float | kW | `291.56` | Kaydın değeri. Boşsa `tepe_a`'dan: 3 × 230 V × A × 0,95 ÷ 1000 (en yüklü faz; dengesizlikte fazla gösterir) |
+| `tepe_a` | float | A | `430` | İsteğe bağlı: en yüklü fazın akımı (MD ibresi çoğunlukla akım okur) |
+| `zaman` | str | ISO yerel | `2024-07-22T20:30` | Okumanın anı; MD'de boş (zamanı bilinmez, sezon tepesi sayılır) |
+
+`kibtek_fider.csv` (satır = OG fider; aşağıdan yukarı mutabakat, kontrol):
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `fider_no` | int, str | — | `1`, `F3` | |
+| `trafolar` | str | — | `T03;T08;T10` | Fiderin beslediği trafolar (`;` ile) |
+| `tepe_kw` | float | kW | `2451.71` | Fider tepesi (SCADA), trafo ve OG kayıpları dahil |
+| `zaman` | str | ISO yerel | `2024-07-19T16:20` | Tepenin anı |
