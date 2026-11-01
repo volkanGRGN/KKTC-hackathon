@@ -1271,3 +1271,20 @@ Durum: karar verildi 09:46 → can.md (dashboard'a Maliyet bölümü eklendi; ge
 Ne: Can'ın isteğiyle lizard 1.24.3 + vulture 2.16 (`.venv`, git dışı) ve jscpd 4.3.0 (`npx`) kuruldu; izin sorusundaki (1) bu yüzden fiilen kapandı, iptal istersen `.venv` silinir. Main 7b0b836 [Hesap: araç çıktıları]: 28 dosya / 9.158 satır, 366 fonksiyon, CCN > 15: 44, > 30: 10; birebir kopya %2,05 (24 klon); sıcak nokta 1. `sinav.py` 6.208, 2. `sehir_uret.py` 3.444, 3. `basvuru.py` 1.089 (yeni; %15 kopya, `ag_kur_kayitli` CCN 75). Senin / BUILD dosyalarında işaretler: `olcum_sirasi.py` olasılıklı çekilişi `kac_ev_olasilik.py`'den dört parça hâlinde kopyalamış; `bilgi_degeri.py` ↔ `pv_acilma.py` beş klon; `trafo_bos_kapasite.py:479` `rooms` hesaplanıp kullanılmıyor (saf fonksiyon, silinirse çıktı aynı; vulture). Yukarıdaki diğer sorular (`app/` kapsamı, betiğin yeri, yorum biçimi) açık.
 Dosya: docs/log/2026-11-01-can-kod-envanteri-araclarla.md
 Durum: bilgi
+
+## UYARI! 1 Kasım (11:00 sonrası) — Can'dan — Clean review bulguları: dosya sahibine göre liste; senin dosyalarında 7 iş, `sinav.py` temizliğine başlama zamanı
+Ne: Ölçüm (main 7b0b836, lizard / jscpd / vulture) ve `sinav.py` deneme incelemesi (12 bulgu, ikinci gözle teyitli) bitti; kod değişmedi. Bulgular sahibine göre (ayrıntı, kanıt ve "neden var" günlüklerde):
+**Senin / BUILD dosyaların (karar ve iş sende):**
+1. `src/trafo_bos_kapasite.py:479` — `rooms = [group_room(…) …]` hesaplanıyor, hiç kullanılmıyor; `group_room` (304) saf, satır silinirse çıktı aynı, süre kısalır (vulture; ilk commit e05c9fa'dan, projede kullanılmayan inverter haritası bölümü). Ölü kod.
+2. `src/olcum_sirasi.py` ↔ `src/kac_ev_olasilik.py` — olasılıklı çekiliş dört parça hâlinde kopyalanmış (181–193 ↔ 122–134, 205–214 ↔ 148–157, 199–205 ↔ 142–148, 237–247 ↔ 127+; jscpd). Çekiliş değişirse ölçüm sırası eskisiyle koşar; tek kaynak (`kac_ev_olasilik`'ten import) önerilir. Rastgele akış değişmesin: önce aynı tohumla çıktı karşılaştırması.
+3. `src/bilgi_degeri.py` ↔ `src/pv_acilma.py` — beş klon (%17 / %26 kopya), ikisi de `sinav.py faz3` tanımlarını ("dolu = kac_ev_gercek = 0", yanlış yeşil, kaç ev hatası) yeniden yazıyor (`bilgi_degeri.py:218-249`, `pv_acilma.py:126-170`). `grafikler.py` aynı işi `import sinav` ile yapıyor; ortak ölçü fonksiyonu önerilir (sınav tanımı tek yerde).
+4. `src/basvuru.py` — 3. sıcak nokta (9 commit), %15 kopya, dosya içi iki klon (271–281 ↔ 236–246, 265–271 ↔ 230–236), `ag_kur_kayitli` (95–213) CCN 75.
+5. `src/sehir_uret.py` 681–690 ↔ 728–738 dosya içi klon; `sehir_uret` (793–973) CCN 76. Dokunulursa aynı tohumla bayt bayt karşılaştırma şart (plan §3 m. 7).
+6. Abone başına MWh sözlüğü beş dosyada (`sinav.py:175`, `sablon.py:58`, `kac_ev_olasilik.py:60`, `tepe.py:79`, `app/ornek_veri.py:41`; ayrıca `sehir_uret.py:161-170` `SINIFLAR`), değerler bugün aynı. Birleştirme değil (sınav bilerek kendi kopyasını tutar), eşitlik denetimi önerilir; `kac_ev_olasilik.py:59`'da etiket yok ([Hesap] olmalı).
+7. `src/sahte_kayit.py:252` `kayit_oku` — vulture "kullanılmıyor" diyor; gerçek Kıb-Tek kaydının okuyucusu olarak yazılmış, **bırak** (bilgi).
+**Civan'ın:** `app/ornek_veri.py` 93–111 ↔ `src/sehir_uret.py` 402–420 (iki klon) — `app/` kapsam sorusu açık (02:30 girdisi).
+**Can'ın (`sinav.py`, S-01…S-12):** en büyükleri `faz2` (337–606, CCN 126, dokuz bölüm tek fonksiyonda) ve `faz3` (CCN 94) — yalnız taşıma; `next(hata)` eşlemesi `_hatalar`'ın filtresine gizli bağlı (S-03); "dolu" tanımı 10 yerde satır içi (S-11); docstring `kac_ev.csv`'nin yazarını `kac_ev.py` diyor (S-06); `[Kaynaklı]` etiketi yanlış, [Hesap] (S-05). Sıra: karakterizasyon dosyaları (aynı şehirlerde faz1/2/3 çıktısı) → küçükler → taşıma; her adım ayrı commit, çıktı aynı.
+Soru: (1) Açık PR kalmadı (a200f94); plan §6 adım 5'in şartı ("dallar main'de") sağlandıysa `sinav.py` temizliğine başlayayım mı? (2) 1–6 için sıra / kim (BUILD 1, BUILD 2, sen)?
+Dosya: docs/log/2026-11-01-can-kod-envanteri.md (`sinav.py` bulguları), docs/log/2026-11-01-can-kod-envanteri-araclarla.md (araç ölçümü)
+Neden: Clean review planı §6 adım 4 (rapor; dosya sahibi ve karar masası önceliği seçer).
+Durum: bekliyor
