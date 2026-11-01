@@ -16,6 +16,7 @@ import io
 import math
 import os
 import random
+import shutil
 import sys
 import tempfile
 import threading
@@ -129,7 +130,7 @@ def isit():
             havuz.submit(_isinma)
     except Exception:
         pass
-    if tepe_var():
+    if yuk_eksigi() is None:
         threading.Thread(target=_tepe_hazir, daemon=True).start()
 
 
@@ -154,6 +155,36 @@ def tepe_var():
     return (SRC / "tepe.py").exists()
 
 
+HAM_VERI = [  # tepe.py'nin çalışırken okuduğu ham veri (depoda yok; KAYNAK.txt adreslerinden indirilir)
+    KOK / "data" / "raw" / "eac-profil-siniflari" / "Offtake_Profile_Classes.xlsx",
+    KOK / "data" / "raw" / "open-meteo-lefkosa" / "lefkosa_saatlik_2023.csv",
+    KOK / "data" / "raw" / "open-meteo-lefkosa" / "lefkosa_saatlik_2024_2025.csv",
+]
+
+
+def yuk_eksigi():
+    """Yük haritası bu bilgisayarda hesaplanabilir mi? -> None ya da neden (sayfada gösterilir)."""
+    if not tepe_var():
+        return "Bu model sürümünde yük haritası yoktu (ilk kez 1 Kasım 01:58)."
+    eksik = [str(y.relative_to(KOK)) for y in HAM_VERI if not y.exists()]
+    if eksik:
+        return ("Yük haritası için ham veri bu bilgisayarda yok: " + ", ".join(eksik)
+                + ". Aynı klasördeki KAYNAK.txt adresinden indirin.")
+    return None
+
+
+def _dosya_bagla(kaynak, hedef):
+    """Geçici klasöre dosya: önce sembolik bağlantı, olmazsa katı bağlantı, o da olmazsa kopya.
+    Windows'ta geliştirici modu kapalıyken sembolik bağlantı izin hatası verir."""
+    try:
+        os.symlink(kaynak, hedef)
+    except OSError:
+        try:
+            os.link(kaynak, hedef)
+        except OSError:
+            shutil.copyfile(kaynak, hedef)
+
+
 def _tepe_hazir():
     global _tepe_girdi
     if _tepe_girdi is None:
@@ -174,7 +205,7 @@ def tepe_tahmini(h, olculu_nolar, tahmin, model):
     with tempfile.TemporaryDirectory(prefix="canli-tepe-") as gecici, _kilit:
         g = Path(gecici)
         for ad in ("trafolar.csv", "ayar.json", "yuk_5dk.csv"):
-            os.symlink(h["klasor"] / ad, g / ad)
+            _dosya_bagla(h["klasor"] / ad, g / ad)
         sablon.csv_yaz(g / "tahmin.csv", sablon.TAHMIN_SUTUNLARI, tahmin.to_dict("records"))
         sablon.csv_yaz(g / "arketipler.csv", ["sehir", "arketip", "arketip_adi", "gun_turu", "adim", "oran"],
                        model["arketip_satirlari"])
@@ -201,13 +232,19 @@ def tahmin_et(h, olculu_nolar):
     tablo = (h["tr"][["sehir", "trafo_no", "enlem", "boylam", "kva", "bolge", "montaj", "panel_kw", "abone_konut"]]
              .merge(tahmin.drop(columns=["sehir"]), on="trafo_no")
              .merge(renk, on="trafo_no"))
-    if tepe_var():
-        tepe_df = tepe_tahmini(h, olculu_nolar, tahmin, model)
+    eksik = yuk_eksigi()
+    if eksik is None:
+        try:
+            tepe_df = tepe_tahmini(h, olculu_nolar, tahmin, model)
+        except (SystemExit, Exception) as hata:  # tepe.py eksik hava yılında SystemExit verir; sayfa düşmesin
+            eksik = f"Yük haritası bu bilgisayarda hesaplanamadı ({hata})."
+    if eksik is None:
         tablo = tablo.merge(tepe_df.drop(columns=["sehir", "olculdu", "guven"]), on="trafo_no")
         tablo["doluluk"] = tablo["tepe_kva"] / tablo["kva"]
         tablo["doluluk_temkinli"] = tablo["tepe_kva_p90"] / tablo["kva"]
     model = {k: v for k, v in model.items() if k != "arketip_satirlari"}
-    model["yuk_var"] = tepe_var()
+    model["yuk_var"] = eksik is None
+    model["yuk_eksigi"] = eksik
     return dict(tablo=tablo, model=model, olculu=olculu_nolar)
 
 
