@@ -1381,7 +1381,7 @@ Ne: KARAR 09:5x (can.md). `main()` içindeki `rooms = [group_room(…)]` kaldır
 Süre: benzetim betiği eski / yeni sırayla 3'er koşu 3,54–4,19 ↔ 3,73–4,23 sn, fark gürültü içinde; 20 şehir üretiminde 995 → 1.150 sn makine yükü (satır üretimde çalışmıyor).
 Dosya: PR #40 (https://github.com/volkanGRGN/KKTC-hackathon/pull/40)
 Neden: KARAR 09:5x, clean review madde 1.
-Durum: bekliyor
+Durum: yapıldı 10:28 — TEST tuttu (100/100 bayt bayt), PR #40 birleşti
 
 ## UYARI! 1 Kasım 10:22 — (BUILD 2 — panel) — Temizlik PR #42'de: kopya çekiliş ve faz3 satırları tek yerde; çıktılar önce / sonra bayt bayt aynı — test edin
 Ne: KARAR 09:5x (Can'ın kod incelemesi): (1) `olcum_sirasi.py`'nin kopya çekilişi kalktı, `kac_ev_olasilik.py`'deki ortak yardımcılarla (`trafo_satiri`, `yuk_bandi`, `cekilis_ozeti`, `renk_ver`; `trafo_cek`'e isteğe bağlı `v0` / `vrng` / `yuk` kancaları); (2) `bilgi_degeri.py` ↔ `pv_acilma.py` ortak okuma (`sinav._csv`), renk, faz3 satırları ve S0 sınaması tek yerde, kırmızı sınırı `sinav.KIRMIZI_ASAN_MIN`; (3) MWH sabitine [Hesap]. Sınama (önce 26a829e ↔ sonra, aynı veri): `kac_ev.csv` üretici 1.5 şehirleri 1–10, 31–40, 41–50 **30/30 bayt bayt aynı**; `olcum_sirasi` 1–10 / 31–40 / 41–50 metin + json **6/6 aynı**; `bilgi_degeri` ve `pv_acilma` 1–10 metin + json aynı. Ana dalda bu dosyalara dokunan değişiklik yok; açık PR'larla dosya çakışması yok.
