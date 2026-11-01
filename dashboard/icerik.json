@@ -256,9 +256,9 @@
       "katman": "maliyet",
       "deger": "~%1",
       "baslik": "pilotun maliyeti, her trafoya kalıcı cihaza göre",
-      "aciklama": "Her trafoya kalıcı ölçüm cihazı ~5,4–7,5 milyon € tutar (~6.400–6.700 trafo); pilot bunun yüzde biri. Geri ödeme ve emisyon henüz hesaplanmadı.",
+      "aciklama": "Her trafoya kalıcı ölçüm cihazı ~5,4–7,5 milyon € tutar (~6.400–6.700 trafo); pilot bunun yüzde biri. Geri ödeme hesaplanmadı: Kıb-Tek'in trafo büyütme maliyeti ve mahsuplaşma bedeli bulunamadı.",
       "veri": "hesap",
-      "kapsam": "Kuzey'in trafo sayısı vekili; Kıb-Tek tarifesi, emisyon katsayısı ve trafo değişim maliyeti aranıyor",
+      "kapsam": "Kuzey'in trafo sayısı vekili",
       "durum": "bilgi",
       "kaynak": "docs/log/2026-11-01-civan-olcum-maliyeti.md"
     }
