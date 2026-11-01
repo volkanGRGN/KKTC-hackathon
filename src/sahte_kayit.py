@@ -31,6 +31,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import random
 import sys
 from pathlib import Path
@@ -59,12 +60,38 @@ def hata_payi(duzey):
 
 # ---------- gerçek ağ ----------
 
+class YenidenKurmaHatasi(RuntimeError):
+    """Şehir başka üretici sürümüyle yapılmış ya da yeniden kurulan ağ dosyayla uyuşmuyor (karar masası 02:1x)."""
+
+
+ZORLA_ORTAM = 'SAHTE_KAYIT_SURUM_ZORLA'          # '1' = sürüm ve sağlama uyuşmazlığında durma, yalnız uyar (--surum-zorla)
+
+
+def surum_zorla(evet):
+    """Komut satırının --surum-zorla bayrağı: alt süreçler ortamdan okur."""
+    if evet:
+        os.environ[ZORLA_ORTAM] = '1'
+
+
+def _uyusmazlik(mesaj):
+    if os.environ.get(ZORLA_ORTAM) == '1':
+        print(f'UYARI (--surum-zorla): {mesaj}', file=sys.stderr)
+    else:
+        raise YenidenKurmaHatasi(mesaj + ' Aynı sürümün sehir_uret.py\'siyle koşun ya da bilerek --surum-zorla.')
+
+
 def gercek_sehir(klasor):
-    """Şehrin gerçek ağı ve 14 günlük benzetim girdileri, üreticinin aynı tohum ve çağrı sırasıyla."""
+    """Şehrin gerçek ağı ve 14 günlük benzetim girdileri, üreticinin aynı tohum ve çağrı sırasıyla. Şehrin üretici
+    sürümü (`ayar.json`) bu `sehir_uret.py`'ninkiyle aynı olmalı ve yeniden kurulan ağ `trafolar.csv` ile (kVA, hat
+    sayısı, panel sayısı) uyuşmalı; yoksa durur (sessizce başka bir "gerçek" ağ kurulmasın)."""
     klasor = Path(klasor)
     tohum = int(klasor.name.split('-')[1])
     with open(klasor / 'ayar.json', encoding='utf-8') as fh:
         ayar_dosya = json.load(fh)
+    surum = ayar_dosya.get('uretici_surumu')
+    if surum != su.URETICI_SURUMU:
+        _uyusmazlik(f'{klasor.name} üretici {surum} ile yapıldı; yeniden kurma üretici {su.URETICI_SURUMU} ile tutmaz '
+                    '(gerçek ağ sessizce değişir).')
     rng = random.Random(f'yapi-{tohum}')
     egriler, tepe_orani, _ = su.egrileri_yukle()
     siniflar = list(su.SINIFLAR)
@@ -76,6 +103,14 @@ def gercek_sehir(klasor):
     rng.randint(1, 30 - su.GUN_SAYISI + 1)
     trafolar, _, _ = su.sehir_kur(rng, 40, ayar, tepe_orani, su.kiyi_segmentleri())
     su.uretici13(trafolar, tohum)
+    dosya = {r['trafo_no']: r for r in csv.DictReader(open(klasor / 'trafolar.csv', encoding='utf-8', newline=''))}
+    fark = [tr['no'] for tr in trafolar if tr['no'] not in dosya
+            or int(float(dosya[tr['no']]['kva'])) != int(tr['kva'])
+            or int(dosya[tr['no']]['hat_sayisi']) != len(tr['feeders'])
+            or int(dosya[tr['no']]['panel_sayisi']) != sum(1 for h in tr['evler'] if h['pv'] > 0)]
+    if fark:
+        _uyusmazlik(f'{klasor.name}: yeniden kurulan ağ trafolar.csv ile {len(fark)}/{len(trafolar)} trafoda uyuşmuyor '
+                    f'(kVA, hat ya da panel sayısı; ilk: {", ".join(fark[:5])}).')
     tarihler = [__import__('datetime').date.fromisoformat(d) for d in ayar_dosya['tarihler']]
     saatlik = su.isinim_oku([y for y in su.ISINIM_DOSYALARI if y.exists()])
     g = [x for t in tarihler for x in su.gunun_isinimi(saatlik, t)]
@@ -288,7 +323,9 @@ def main():
     ap.add_argument('--aralik', default='1-10')
     ap.add_argument('--duzey', default='aynen', choices=list(DUZEY_CARPANI))
     ap.add_argument('--sinama', action='store_true')
+    ap.add_argument('--surum-zorla', action='store_true', help='üretici sürümü / sağlama uyuşmazlığında durma (yalnız uyar)')
     a = ap.parse_args()
+    surum_zorla(a.surum_zorla)
     bas, son = (int(x) for x in a.aralik.split('-'))
     for t in range(bas, son + 1):
         k = Path(a.kok) / f'sehir-{t:03d}'

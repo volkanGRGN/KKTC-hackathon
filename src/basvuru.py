@@ -39,9 +39,10 @@ VARSAYILAN_HATA = 'iki_kat'                       # kayıt kalitesi ölçülene 
 # İnverter ham özetinden bara ve hat boyu (Muhittin 4 madde 5B; karar masası 00:27: girdi ham kayıt, çözüm motorda).
 # Kalibrasyon yalnız geliştirme 1–10'dan (`inverter_geri_cozum.py --aralik 1-10 --kalibrasyon`) [Hesap]; nicelikler
 # %0, %5, …, %100. Bara: sabah ilk değer − gerçek boşta gerilim (V). Boy: ln(INV_BOY_C × ham boy ÷ gerçek hat boyu).
-INV_BARA_HATA_Q = [-9.75, -3.27, -2.15, -1.78, -1.54, -1.36, -1.23, -1.08, -0.98, -0.88, -0.79, -0.73, -0.67, -0.6,
-                   -0.54, -0.46, -0.41, -0.34, -0.28, -0.16, 0.96]     # 1.148 ev; hep aşağı, ortanca −0,79 V
-# Boy çevirici 1–10'da tutmadı: gerçek ÷ ham ortanca 0,292, düzeltilmiş hata P10–P90 ×0,30 … ×2,63 (±%20 içinde %19),
+INV_BARA_HATA_Q = [-7.25, -2.08, -1.47, -1.25, -1.12, -0.98, -0.86, -0.79, -0.74, -0.69, -0.62, -0.58, -0.53, -0.47,
+                   -0.42, -0.36, -0.3, -0.22, -0.15, -0.06, 0.67]   # üretici 1.5, 1–10, 1.148 ev; hep aşağı, ortanca −0,62 V
+# (üretici 1.3 kalibrasyonu ortanca −0,79 V idi; şehirler 1.5'e geçince yeniden, karar masası 02:1x)
+# Boy çevirici 1–10'da tutmadı: gerçek ÷ ham ortanca 0,29 (1.5'te 0,27), düzeltilmiş hata P10–P90 ×0,30 … ×2,63 (±%20 içinde %19),
 # hat boyu kaydının ±%15'inden kötü. Kapalı (None): inverterli hatta da hat boyu kaydı ve model-sapma kalır.
 INV_BOY_C = None
 INV_BOY_HATA_Q = None

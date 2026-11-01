@@ -168,7 +168,12 @@ def main():
     ap.add_argument('--aralik', default='1-10')
     ap.add_argument('--kayitli', help='virgülle: yari, aynen, iki_kat, kusursuz (PR #22 kodu gerekir)')
     ap.add_argument('--konum', action='store_true', help='konum payı doğrulaması (PR #22 kodu gerekir)')
+    ap.add_argument('--surum-zorla', action='store_true',
+                    help='şehrin üretici sürümü farklıysa da yeniden kur (yalnız uyar; sonuç güvenilmez)')
     a = ap.parse_args()
+    if a.surum_zorla:
+        import sahte_kayit as sk
+        sk.surum_zorla(True)
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
     print(f'şehir {a.aralik} — panel katmanı güvenli uçlar (ADR-0017), aday evi olan trafolar; farazi, gösterim')

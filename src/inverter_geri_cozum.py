@@ -118,7 +118,10 @@ def main():
     ap.add_argument('--aralik', default='1-10')
     ap.add_argument('--json')
     ap.add_argument('--kalibrasyon', action='store_true', help='motor sabitlerini yaz (yalnız 1–10)')
+    ap.add_argument('--surum-zorla', action='store_true',
+                    help='şehrin üretici sürümü farklıysa da yeniden kur (yalnız uyar; sonuç güvenilmez)')
     a = ap.parse_args()
+    sk.surum_zorla(a.surum_zorla)
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [str(Path(a.kok) / f'sehir-{t:03d}') for t in range(bas, son + 1)]
     with ProcessPoolExecutor() as ex:
