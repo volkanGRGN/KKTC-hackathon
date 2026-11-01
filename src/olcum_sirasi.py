@@ -8,8 +8,7 @@ olasılıkla dolu" bayrağına en çok taşır; pilot için ilk 20 trafo. `bilgi
           evi hattın neresinde bilinmez) [Yorum]. Model: bara = ölçüm − hata, hata 1–10'da ölçülen nicelik
           dağılımından, **tarife grubuna göre** (`GECE_HATA_Q`, `--kalibrasyon`; karar masası 02:5x, TEST'in bulgusu:
           gece hatası trafonun abone karışımına göre çok farklı). Grup yalnız Kıb-Tek'in bildiğinden (`trafolar.csv`):
-          tahmini enerjisi en büyük tarife (su motoru, sanayi, turizm, ticari, konut), ticaride küçük dükkân (ticari I)
-          abone sayısı ≥ TICARI1_ESIK (çok dükkânlı) ya da değil (az sayıda büyük ticari abone), konutta en uzun hat
+          tahmini enerjisi en büyük tarife (su motoru, sanayi, turizm, ticari, konut) ve konutta en uzun hat
           ≥ KONUT_HAT_M (kırsal) ya da değil. Cevap anahtarının trafo tipi kullanılmaz (sınav sızar).
   yuk     trafo başında bir haftalık öğlen yükü: ilk 7 günün 11:00–14:00 tüketiminin en düşüğü. Trafo ölçülü sayılır
           (`sablon.py`'nin kuralı: öğlen yükü = ölçülen, güven yüksek).
@@ -58,12 +57,9 @@ GECE_HATA_Q = [-8.03, -3.92, -2.79, -2.39, -2.06, -1.84, -1.66, -1.54, -1.39, -1
                -0.77, -0.69, -0.63, -0.53, -0.41, -0.03]      # üretici 1.5, 400 trafo; hep aşağı, ortanca −1,16 V
 # (üretici 1.3 kalibrasyonu ortanca −1,64 V idi)
 KONUT_HAT_M = 400.0                      # konutta kırsal / kısa hat ayrımı (1–10'da seçildi) [Yorum]
-TICARI1_ESIK = 12                        # ticaride çok dükkânlı / büyük abone ayrımı: 1–10'da çok dükkânlılarda ≥ 15,
-                                         # büyük abonelilerde ≤ 8 küçük dükkân; ortası (karar masası 03:0x) [Yorum]
 KUCUK_GRUP = 30                          # bundan az trafolu grupta havuz dağılımı grubun ortancasına kaydırılır
 # {tarife grubu: 21 nicelik}; üretici 1.5, 1–10, `--kalibrasyon` [Hesap]. Ortancalar: sulama −3,75, sanayi −2,06,
-# turizm −1,31, konut kırsal −1,16, ticari dükkân −1,06, ticari büyük −0,93, konut kısa −0,83 V (n 37 / 34 / 42 / 104 /
-# 41 / 48 / 94); ticari ikiye bölündü (karar masası 03:0x; ortak ticari −1,01 V idi)
+# turizm −1,31, konut kırsal −1,16, ticari −1,01, konut kısa −0,83 V (n 37 / 34 / 42 / 104 / 89 / 94)
 GECE_HATA_GRUP = {
     'konut_kirsal': [-5.07, -3.55, -2.65, -2.38, -2.07, -1.88, -1.75, -1.59, -1.43, -1.27, -1.12, -1.01, -0.91, -0.8,
                      -0.78, -0.71, -0.65, -0.6, -0.41, -0.31, -0.03],
@@ -73,10 +69,8 @@ GECE_HATA_GRUP = {
                -1.6, -1.58, -1.55, -1.39, -1.29, -0.87],
     'sulama': [-8.03, -6.78, -6.13, -6.01, -5.01, -4.74, -4.33, -4.17, -4.06, -3.92, -3.75, -3.28, -3.0, -2.96, -2.79,
                -2.68, -2.34, -2.24, -2.19, -2.05, -1.39],
-    'ticari_buyuk': [-1.99, -1.53, -1.44, -1.25, -1.23, -1.18, -1.16, -1.12, -1.06, -0.99, -0.93, -0.9, -0.87, -0.81,
-                     -0.74, -0.72, -0.66, -0.63, -0.59, -0.44, -0.12],
-    'ticari_dukkan': [-2.32, -1.72, -1.63, -1.43, -1.33, -1.23, -1.15, -1.13, -1.1, -1.09, -1.06, -1.04, -1.0, -0.9,
-                      -0.83, -0.77, -0.75, -0.7, -0.63, -0.53, -0.41],
+    'ticari': [-2.32, -1.7, -1.47, -1.41, -1.24, -1.18, -1.16, -1.12, -1.1, -1.06, -1.01, -0.94, -0.9, -0.83, -0.8,
+               -0.74, -0.71, -0.64, -0.59, -0.5, -0.12],
     'turizm': [-2.35, -1.82, -1.78, -1.73, -1.56, -1.54, -1.45, -1.4, -1.39, -1.36, -1.32, -1.26, -1.1, -1.05, -1.03,
                -1.02, -1.0, -0.88, -0.82, -0.69, -0.67],
 }
@@ -84,9 +78,7 @@ GECE_HATA_GRUP = {
 
 def tarife_grubu(tr):
     """Trafonun tarife grubu, yalnız Kıb-Tek'in bildiğinden: tahmini enerjisi en büyük abone sınıfı (abone sayısı ×
-    sınıfın ortalama yıllık MWh'i, `kac_ev_olasilik.MWH`); ticaride küçük dükkân sayısı TICARI1_ESIK ve üstüyse çok
-    dükkânlı (ticari II'nin abone başına tüketimi büyük olduğu için baskın sınıf iki türde de ticari II çıkar; ayırıcı
-    dükkân sayısı); konutta en uzun hat KONUT_HAT_M'den uzunsa kırsal."""
+    sınıfın ortalama yıllık MWh'i, `kac_ev_olasilik.MWH`); konutta en uzun hat KONUT_HAT_M'den uzunsa kırsal."""
     en = {c: float(tr[c]) * ko.MWH[c] for c in ko.ABONE}
     b = max(en, key=en.get)
     if b == 'abone_su_motoru':
@@ -96,7 +88,7 @@ def tarife_grubu(tr):
     if b == 'abone_turizm':
         return 'turizm'
     if b in ('abone_ticari1', 'abone_ticari2'):
-        return 'ticari_dukkan' if float(tr['abone_ticari1']) >= TICARI1_ESIK else 'ticari_buyuk'
+        return 'ticari'
     return 'konut_kirsal' if float(tr['hat_boyu_max_m']) >= KONUT_HAT_M else 'konut_kisa'
 
 
