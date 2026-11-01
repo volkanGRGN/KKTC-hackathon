@@ -14,8 +14,12 @@ Sınav maddesi Can'ın (`sinav.py faz3`, 3b); bu betik BUILD 2'nin geliştirme �
 `basvuru.harita_rengi`'den, `basvuru_testi.py`'nin tohumlarıyla (renkler o tablonun aynısı). PR #22 kodu
 (`basvuru.py`, `sahte_kayit.py`) gerekir. Etiket: farazi şehir, gösterim.
 
+`--guven-kiyas` (ADR-0019): aynı `kac_ev.csv`'den iki görünüm: güven şartlı (eski kural: yeşil ayrıca güven yüksek
+ister; kırmızı ve bayrak aynı) ve şartsız (yeni); şehir başına en kötü yanlış yeşil oranı (ADR-0019 m. 3: ≤ %10).
+
 Çalıştırma:
   python3 src/guvenli_uc.py data/synthetic/u13 --aralik 1-10
+  python3 src/guvenli_uc.py data/synthetic/u15 --aralik 1-10 --guven-kiyas
   python3 src/guvenli_uc.py data/synthetic/u13 --aralik 1-10 --kayitli aynen,iki_kat
 """
 import argparse
@@ -40,6 +44,34 @@ def _csv(yol):
 def resmi(klasor):
     """Resmi hesabın üç durumu: [(trafo_no, pv_uc, p_bugun_asar, renk)]."""
     return [(r['trafo_no'], r['pv_uc'], float(r['p_bugun_asar']), r['renk']) for r in _csv(klasor / 'kac_ev.csv')]
+
+
+def resmi_guven_sartli(klasor):
+    """Aynı çıktının ADR-0019 öncesi görünümü: yeşil ayrıca güven yüksek ister (p_iki değişmez; kırmızı aynı)."""
+    guven = {r['trafo_no']: r['guven'] for r in _csv(klasor / 'tahmin.csv')}
+    out = []
+    for no, uc, p, renk in resmi(klasor):
+        if renk == 'yesil' and guven[no] != 'yuksek':
+            renk = 'sari'
+            uc = 'dolu_bayrak' if p >= getattr(ko, 'BAYRAK_P', 0.7) else 'bos'
+        out.append((no, uc, p, renk))
+    return out
+
+
+def sehir_yanlis_yesil(klasorler, durumlar):
+    """Şehir başına yanlış yeşil / yeşil (aday evi olan); en kötü oran."""
+    en = (0.0, '', 0, 0)
+    for k in klasorler:
+        cevap = {r['trafo_no']: r for r in _csv(k / 'cevap_anahtari.csv')}
+        y = yy = 0
+        for no, uc, _, _ in durumlar[k.name]:
+            c = cevap[no]
+            if int(c['kac_ev_aday']) > 0 and uc == 'yesil':
+                y += 1
+                yy += int(c['kac_ev_gercek']) == 0
+        if y and yy / y > en[0]:
+            en = (yy / y, k.name, yy, y)
+    return en
 
 
 def kayitli(is_):
@@ -115,6 +147,7 @@ def main():
     ap.add_argument('kok')
     ap.add_argument('--aralik', default='1-10')
     ap.add_argument('--kayitli', help='virgülle: yari, aynen, iki_kat, kusursuz (PR #22 kodu gerekir)')
+    ap.add_argument('--guven-kiyas', action='store_true', help='ADR-0019: güven şartlı / şartsız görünüm')
     a = ap.parse_args()
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
@@ -122,6 +155,12 @@ def main():
     print('görünüm | trafo | dolu | yeşil | yanlış yeşil | bayrak | bayrak isabeti (gerçekte dolu) | ölçü | '
           'bayrak bugün aşan | bayrağın yakaladığı dolu | renksiz | (eski kırmızı: gerçekte dolu)')
     yaz('resmi (kayıtsız)', olc(klasorler, {k.name: resmi(k) for k in klasorler}))
+    if a.guven_kiyas:
+        once = {k.name: resmi_guven_sartli(k) for k in klasorler}
+        yaz('güven şartlı (ADR-0019 öncesi)', olc(klasorler, once))
+        for ad, d in (('şartsız (yeni)', {k.name: resmi(k) for k in klasorler}), ('güven şartlı', once)):
+            o, sh, yy, y = sehir_yanlis_yesil(klasorler, d)
+            print(f'en kötü şehirde yanlış yeşil, {ad}: %{100 * o:.1f}' + (f' ({sh}: {yy}/{y})' if y else ' (hiç yok)'))
     if a.kayitli:
         duzeyler = a.kayitli.split(',')
         with ProcessPoolExecutor() as ex:

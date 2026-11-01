@@ -15,7 +15,8 @@ Haritanın olasılıklı hesabıyla aynı fizik ve aynı kapı (`kac_ev_olasilik
                 faz kaydı p_dogru ile, değilse diğer iki fazdan biri; kaydı olmayanlar bugünkü gibi rastgele
       empedans  inverterin olduğu hatta kaydın eşdeğer boyu × e^U(±inverter payı), model-sapma çarpanı yok; diğer
                 hatlarda model-sapma s (Faz 7, İngiltere)
-  - **karar:** P(başvuru + taahhütler + bugünkü paneller sığar) ≥ 0,98 ve güven yüksek → `evet`;
+  - **karar:** P(başvuru + taahhütler + bugünkü paneller sığar) ≥ 0,98 → `evet` (ADR-0019: "güven yüksek" şartı kalktı,
+    `kac_ev_olasilik.YESIL_GUVEN_SARTI`);
     P(aşar) ≥ 0,5 → `hayir` (güçlendir / önce ölç değil, bugünkü durum bile taşımıyor); arası `once_olc`.
 Model kayıt hatalarını **iki kat** varsayar (`VARSAYILAN_HATA`; karar masası 23:47, tüzük madde 2): Kıb-Tek kayıtlarının
 doğruluğu sahada bir örnekle ölçülene kadar; ölçülünce varsayım ölçülen orana iner. Testte veri daha iyi ya da daha kötü
@@ -245,7 +246,7 @@ def karar(tr, t, kayit, basvuran, taahhut, rng, hp=None):
         _, vmax, s_tr = ko.durum(ag, evler, yuk, ek, m)
         sigar += not (vmax > ke.V_SINIR or s_tr > ag['kva'])
     p = sigar / CEKILIS
-    if p >= ko.YESIL_P and t['guven'] == 'yuksek':
+    if p >= ko.YESIL_P and (not ko.YESIL_GUVEN_SARTI or t['guven'] == 'yuksek'):
         return 'evet', p
     if 1 - p >= ko.KIRMIZI_P:
         return 'hayir', p
@@ -286,6 +287,6 @@ def harita_rengi(tr, t, kayit, rng, hp=None):
     p_bugun, p_iki = bugun_n / CEKILIS, iki_n / CEKILIS
     if p_bugun >= ko.KIRMIZI_P:
         return 'kirmizi', p_bugun, p_iki
-    if p_iki >= ko.YESIL_P and t['guven'] == 'yuksek':
+    if p_iki >= ko.YESIL_P and (not ko.YESIL_GUVEN_SARTI or t['guven'] == 'yuksek'):
         return 'yesil', p_bugun, p_iki
     return 'sari', p_bugun, p_iki
