@@ -1311,3 +1311,39 @@ Durum: bekliyor
 ## BİLGİ 10:04 — karar masasından — PR #38 birleşti; dashboard bütünüyle üretici 1.5 rakamlarında; doluluk ölçümüme düzeltme
 Ne: PR #38 (BUILD 1; yük kartları 1.5'e) karar masasının koşusuyla birebir tuttu ve birleşti (f7b1089). İki panel kartı da 1.5 / 31–40'a çevrildi (09fba3f): öğlen hatası %11,3 / %28 (önce 21–30'un %12,2 / %27'si), %40 kuralı 24/46 ↔ 0 (önce 22/44). **Düzeltme (KARAR 02:12):** oradaki doluluk ölçümü tepe saati PR'ından (#32) önceki koddandı; bugünkü kodla %80 dolu 16/16 yakalanır, uyarı 92 değil **87**; gücü aşan 2/2, uyarı 37 değil **34** (BUILD 1 buldu, karar masası doğruladı).
 Durum: bilgi
+
+## UYARI! 1 Kasım (11:30 sonrası) — Can'dan — sunum rakamlarının yedek listesi (unutulmasın diye): kullanılacaklar, kullanılmayacaklar, açıklar
+Ne: Sunumda kullanılabilecek bütün rakamlar tek yerde, etiket ve kaynağıyla; ana kaynak `dashboard/icerik.json` (10:03, üretici 1.5, sınav 31–40) ve KARAR 09:43 / 10:04. Farazi şehir rakamı her yerde "gösterim". Yeni rakam yok, yalnız derleme.
+**A. Sorun ve bağlam (kaynaklı):**
+- ~2.670 bekleyen çatı güneşi başvurusu; alçak / orta gerilimde izleme sistemi yok [Kaynaklı: KTTO, Mart 2023 — **adres doğrulanmadı**].
+- Güney Kıbrıs 2025'te dağıtıma bağlı güneşin %47,44'ünü kıstı, Ocak–Mayıs 2026 %65 [Kaynaklı: pv magazine 13.01.2026, 15.06.2026].
+- İngiltere 824 trafoyu (%2,6) ölçüp gerisini ~%80 doğrulukla tahmin etti [Kaynaklı: Ofgem, WPD LV Templates 2013 / 2015].
+- Kıb-Tek PV üretimi 2023: 110.371 MWh, toplamın %5,81'i [Kaynaklı: Kıb-Tek 2023 istatistik; ADR-0006].
+- Kıb-Tek 2022 sistem puantı 368 MW, enerji 1.836 GWh [Kaynaklı: KTEMO, Yakıt Değişim Fizibilite sunumu slayt 38].
+- KTEMO akü çalıştayı (13.06.2026): "kritik pik talep bölgelerinde projelere öncelik" — yük haritasının işi [Kaynaklı].
+- KTEMO solar sunumu: 2018 sonu 21 MWp devrede, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru [Kaynaklı].
+- Jüri: Malta'da izin hiçbir merkezde gücün %25'ini geçmiyor, Kıb-Tek kuralı %40 [Hesap: Enemalta haritası, 1.332 merkez]; Hawaii düz kuralı %15 → %250 [Kaynaklı: HECO 2014].
+**B. Yük haritası (ana katman, KARAR 09:43):**
+- Yılın tepesi hatası, gerçek İspanya: %15,4 / %36,1 (eşik %15 / %35, kıl payı üstü, kabul) [gerçek veri].
+- Aynı, deneme şehri: %5,8 / %15,1 (iyimser) [farazi, gösterim]; gerçek veride hata ~3 kat.
+- %80'den dolu trafo 16/16 yakalanır, **87** uyarı (her 5–6 uyarıdan 1'i gerçek); gücü aşan 2/2, **34** uyarı.
+- Akşam 207 V altı 2/2 yakalanır; "yeterli" dediğimiz 233 trafonun 0'ı altına iner; 47 uyarı.
+- Tepe saati ±1 saat %52; iki aday saatten biri %60.
+- Kıb-Tek tepe kaydı olan trafoda hata %3,7 [sahte kayıt, şehir 1–10, 83 trafo].
+- Cümle: "Hangi trafonun dolu olduğunu kaçırmadan, ölçüm cihazını nereye takacağınızı söylüyoruz."
+**C. Panel (ikinci katman):**
+- Öğlen yükü, gerçek İspanya 29 trafo: %25 → %10 (abone sayısı → fatura) [gerçek veri; manşet].
+- %80 aralık gerçekte %82,1 tuttu (hedef %70–90) [gerçek veri, İspanya 28 trafo].
+- Öğlen hatası deneme şehri %11,3 / %28; yanlış yeşil **0/60**; %40 kuralı dolu trafoya "yer var" **24/46 ↔ biz 0**; "büyük olasılıkla dolu" isabeti 15/22 (%68); renksiz %76 [farazi, gösterim].
+- Kıb-Tek kayıtlarıyla başvuru anında hemen evet %3,8 → ~%8, yanlış evet < %1 [sahte kayıt, gösterim].
+- Pilotta ilk 20 ölçüm 8–11 trafoyu yeşile çeviriyor, 64–133 ev açıyor [farazi, 31–40 ve 41–50].
+- Ekran 6: çıkış gerilimi bilinince "dolu" yanılması %27 → %19 (konuşmada: adres + faz → %4) [Hesap: bilginin değeri, **eski şehirler 11–20**; 1.5'te yeniden ölçülmedi — kullanılacaksa etiketi bu].
+- KARAR 02:05 jüri cümlesi "yeşil %5 → %13; yanlış yeşil hâlâ 0" — dashboard'da yok; kullanılacaksa hangi kümenin payı olduğu teyit edilsin.
+**D. Maliyet [Hesap, kaba]:** bir trafoyu bir hafta ölçmek ~333 € (18.589 TL); ilk 20 trafo ~6.700 €; pilot 120–170 trafo ~40–57 bin € (işçilik dahil), başlangıçta 3 cihaz ~18.500 €; pilot, her trafoya kalıcı cihazın ~%1'i (~5,4–7,5 milyon €); panel 800 €/kW [Kaynaklı: KTEMO PİD Ekim 2024]. Geliştirme / bakım: para yok, nitel cümle (KARAR 09:46).
+**E. Kullanılmayacaklar:** "inverterle yeşil %5 → %10" (00:49); "hemen evet %10,5" (01:22); eski şehirlerin 41/73, 0/87, 0/21 ↔ 41/284 ve 21–30'un 22/44, %12,2 / %27 (→ 24/46, %11,3 / %28); "her 6 uyarıdan 1" (→ 5–6); doluluk uyarısı 92 / 37 (→ 87 / 34); İspanya aralığı "%79" (→ %82,1); eski "~20 bin € + pens" (yalnız donanım).
+**F. Açıklar:** geri ödeme ve emisyon yok (tarife, emisyon katsayısı, Kıb-Tek trafo değişim maliyeti aranıyor); KTTO 2.670 kaynağının adresi; "çoğu 5–8 kW" ve ev başına 6,5 kW kaynaksız; %27 → %19 eski şehirlerden.
+**G. Can'ın sunum dosyalarında hâlâ eski rakam (Can düzeltiyor):** `docs/sunum/ekranlar.md:37` (0/87 ↔ 41/284, 41/73), `:43` (%27, 12/44); `docs/sunum/konusma-notu.md:21` (%79), `:25` (41/73, 87 yeşil, yeşil %25 / sarı %62), `:52` (22/44 / 41/73); slaytlar ve konuşma notu henüz "yük haritası öne" sırasında değil.
+Soru: Eksik ya da yanlış satır var mı? %27 → %19 ve "%5 → %13" kalsın mı?
+Dosya: dashboard/icerik.json; docs/sunum/; docs/log/2026-11-01-can-maliyet.md
+Neden: Can'ın isteği (yedek liste, unutulmasın); KARAR 09:43, 10:04.
+Durum: bekliyor
