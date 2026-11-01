@@ -20,6 +20,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
 | PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
 | PR #46 dashboard sade dil (#45'in üstünde) | Can (test); harita animasyonu oturumu | açık | Can'ın testi, #45 |
+| PR #48 slayt 8 trafo sayısı cümlesi (`docs/sunum/slaytlar.md` tek satır) | MALİYET oturumu | açık (13bd7b0), Can'ın dosyası | Volkan'ın "birleştir" sözü |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri | Can (Volkan, 1 Kasım 11:2x: TEST oturumu yeni PR almıyor) | — | KARAR'ın kutu girdisi |
