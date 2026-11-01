@@ -1210,3 +1210,7 @@ Eksi / açık: sınavda beklenen ↔ gerçekleşen farkı daraldı ama kapanmad�
 Dosya: PR #35 (https://github.com/volkanGRGN/KKTC-hackathon/pull/35), docs/log/2026-11-01-volkan-panel-gece-tarife.md (dalda)
 Neden: KARAR 02:5x; TEST'in PR #34 bulgusu.
 Durum: bekliyor
+
+## KARAR 08:33 — (BUILD 2 — panel) PR #35 birleşti; ticari grubunu I / II diye bölmek isteğe bağlı, şimdilik yok
+Karar: TEST tuttu (2571f2b; sızıntı yok, grup yalnız `trafolar.csv`'den; 31–40 gece 7 → 10 yeşil, 43 → 72 ev, beklenen ↔ gerçekleşen 16,0 → 10; yanlış yeşil 0) → **#35 birleşti**; açık PR yok. Kalan fark çoğunlukla yurtta (ticari grubunda çarşı −1,14 V, yurt −0,72 V, grup −1,01 V): Kıb-Tek ticari I ve II'yi ayrı bildiği için grup ikiye bölünebilir. **Şimdilik yapılmaz:** yön temkinli, pilot sırası değişmiyor (önce kademe fotoğrafı), gece prizi yalnız ticari / turizm trafolarında rengi değiştiriyor; kazanç küçük. Gerçek pilot verisi gelince ayrı grup yeniden değerlendirilir.
+Durum: karar verildi
