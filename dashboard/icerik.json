@@ -1,6 +1,6 @@
 {
   "aciklama": "Dashboard'un kod dışı içeriği: proje kimliği, resmi rakamlar, sözlük. Yeni sonuç gelince yalnız bu dosya değişir, app/dashboard.py değişmez. Her rakamın katmanı (panel / yuk / sorun), veri türü ve kaynağı yazılı; kaynak depodaki dosyanın yolu.",
-  "guncellendi": "1 Kasım 2026, 09:56",
+  "guncellendi": "1 Kasım 2026, 10:03",
   "kimlik": {
     "ad": "Trafo Görünürlük Haritası",
     "calisma_adi": "Trafo Şablonu",
@@ -95,13 +95,13 @@
     },
     {
       "katman": "panel",
-      "deger": "%12,2",
+      "deger": "%11,3",
       "baslik": "öğlen yükü hatası, gerçekçi deneme şehirlerinde",
-      "aciklama": "Ortanca %12,2, en kötü onda birlik dilimde %27. İspanya'daki gerçek hatayla aynı seviyede.",
+      "aciklama": "Ortanca %11,3, en kötü onda birlik dilimde %28. İspanya'daki gerçek hatayla aynı seviyede.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 21–30, üretici 1.3",
+      "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
       "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-faz8-uretici.md"
+      "kaynak": "docs/istek/volkan.md (KARAR 01:20, karar masası Mac koşusu)"
     },
     {
       "katman": "panel",
@@ -115,13 +115,13 @@
     },
     {
       "katman": "panel",
-      "deger": "22 / 44 ↔ 0",
+      "deger": "24 / 46 ↔ 0",
       "baslik": "dolu trafoya \"yer var\": bugünkü kural ↔ biz",
-      "aciklama": "Gerçekte dolu 44 trafonun 22'sine bugünkü %40 kuralı \"yer var\" diyor, biz hiçbirine.",
+      "aciklama": "Gerçekte dolu 46 trafonun 24'üne bugünkü %40 kuralı \"yer var\" diyor, biz hiçbirine.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 21–30, üretici 1.3",
+      "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
       "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-faz8-uretici.md"
+      "kaynak": "docs/istek/volkan.md (KARAR 01:20, karar masası Mac koşusu)"
     },
     {
       "katman": "panel",
