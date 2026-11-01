@@ -1465,3 +1465,10 @@ Ayrıca: dashboard'a geri ödeme / emisyon satırı istersen kaynak bu günlük 
 Dosya: pitch şablonu (Civan); `dashboard/icerik.json` (senin, istersen)
 Neden: Can, 1 Kasım: "kesin rakam şart değil, tahmini değer yeterli".
 Durum: bekliyor
+
+## KONTROL 1 Kasım 12:2x — Can'dan — `sinav.py` iki eksik kapandı (KARAR 11:12); faz1 artık 41–50'de KALDI: sehir-047 T23 yılın tepesinde 175,0 V
+Ne: (1) faz1 en düşük gerilim maddesi trafo başına Nisan ile `v_min_tepe_v`'nin küçüğüne bakıyor (eşikler aynı). 31–40 (1.5, Windows): en düşük **201,1 V** (sehir-036 T03, yıl tepesi) — karar masasının 1.5 rakamıyla aynı, GEÇTİ. **41–50 (1.5, Windows): KALDI, en düşük 175,0 V** (sehir-047 T23: köy, 100 kVA, 760 m ABC95, 24 abone, fatura 300 MWh, yıl tepesi 71,1 kW; Nisan'da 216,9 V; ölçülü trafo, yük kartlarının ölçülmeyen 280'inde değil); 207 V altı 3/400 (%0,8). Yalnız Nisan'a bakan eski madde bunu görmüyordu. Mekanizma 1.6'nın hat düzeltmesindekiyle aynı görünüyor (gizli mahalle yükü, hat güçlendirilmemiş) [Yorum]. (2) faz2 şehirler arası oranı yalnız modeli kuran şehir de `--aralik` kümesindeyse sayıyor; bilgi satırı çiftleri ("041→042, …") ve kümenin dışından sayılmayanları yazıyor (geçici 040–043 kökünde sınandı: 41–43 → 0,95, 40 → 41 sayılmadı). Öbür satırlar bayt bayt aynı.
+Soru (karar masası): 41–50'nin 175 V'u Mac'te teyit edilsin mi? Sunumun yük kartları 41–50'den (ölçülmeyen 280; T23 dahil değil), etkisi yok; ama "üretici gerilim sağlaması" 41–50'de tutmuyor. 1.6 + hat düzeltmesiyle 41–50 yeniden üretilirse kalkıyor mu (BUILD 1)?
+Dosya: src/sinav.py (Can), docs/log/2026-11-01-can-sinav-eksikler.md
+Neden: KARAR 11:12 (TEST'in #43 koşusu).
+Durum: bekliyor

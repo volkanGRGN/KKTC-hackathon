@@ -107,14 +107,24 @@ def faz1(sehirler):
     bilgi.append(f'259 V üstü trafo olan şehir: {len(sehirler) - len(sifir)}/{len(sehirler)}'
                  + (f"; hiç aşmayan: {', '.join(sifir[:5])}" if sifir else ''))
 
-    # 4. Gerilim alt sınırı (ADR-0016 m. 3): V_ALT (207 V) altı trafo payı ≤ %1 ve en düşük ≥ 200 V.
-    v_min = [(float(r['v_min_bugun_v']), s['ad'], r['trafo_no']) for s in sehirler for r in s['cevap']]
+    # 4. Gerilim alt sınırı (ADR-0016 m. 3): V_ALT (207 V) altı trafo payı ≤ %1 ve en düşük ≥ 200 V. Trafonun en düşüğü
+    # Nisan ile yılın tepe penceresinin küçüğü (`v_min_tepe_v`, üretici 1.4+; yoksa yalnız Nisan): 1.6'da 199,0 V yılın
+    # tepesindeydi, yalnız Nisan'a bakan madde onu görmüyordu (KARAR 11:12, #43).
+    v_min, tepesiz = [], 0
+    for s in sehirler:
+        for r in s['cevap']:
+            vb = float(r['v_min_bugun_v'])
+            vt = float(r['v_min_tepe_v']) if r.get('v_min_tepe_v') else None
+            tepesiz += vt is None
+            v_min.append((vb if vt is None else min(vb, vt), s['ad'], r['trafo_no'], 'Nisan' if vt is None or vb <= vt else 'yıl tepesi'))
     en_dusuk = min(v_min)
     alti = [x for x in v_min if x[0] < V_ALT]
     _madde(m, len(alti) / len(v_min) <= V_ALT_PAY and en_dusuk[0] >= V_EN_DUSUK,
-           f'v_min_bugun_v < {V_ALT:g} V olan trafo ≤ %{100 * V_ALT_PAY:g} ve en düşük ≥ {V_EN_DUSUK:g} V',
-           f'en düşük {en_dusuk[0]:.1f} V ({en_dusuk[1]} {en_dusuk[2]}); {V_ALT:g} V altında {_oran(len(alti), len(v_min))}'
-           + (': ' + ', '.join(f'{a} {b} {v:.1f} V' for v, a, b in sorted(alti)[:5]) if alti else ''))
+           f'en düşük gerilim (Nisan ve yılın tepesi) < {V_ALT:g} V olan trafo ≤ %{100 * V_ALT_PAY:g} ve en düşük ≥ {V_EN_DUSUK:g} V',
+           f'en düşük {en_dusuk[0]:.1f} V ({en_dusuk[1]} {en_dusuk[2]}, {en_dusuk[3]}); {V_ALT:g} V altında {_oran(len(alti), len(v_min))}'
+           + (': ' + ', '.join(f'{a} {b} {v:.1f} V ({p})' for v, a, b, p in sorted(alti)[:5]) if alti else '')
+           + (f'; v_min_tepe_v yok: {tepesiz} trafo (yalnız Nisan)' if tepesiz else ''))
+    bilgi.append(f"yalnız Nisan (v_min_bugun_v) en düşük: {min(float(r['v_min_bugun_v']) for s in sehirler for r in s['cevap']):.1f} V")
 
     # 5. Üretim süresi.
     sureler = [(s['ayar'].get('sure_sn'), s['ad']) for s in sehirler]
@@ -517,21 +527,34 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
         _madde(m, UYARI, 'yük haritası, gerçek veri — İspanya Mayıs tepesi',
                'ölçülmedi: --ispanya-tepe <tepe satırları> verilmedi (B-Y2 çıktısı bekleniyor)')
 
-    # 4. Şehirler arası: capraz hata ortancası ÷ şehir içi hata ortancası.
-    oran = {}
+    # 4. Şehirler arası: capraz hata ortancası ÷ şehir içi hata ortancası. Yalnız kaynak şehri (modeli kuran A) de bu
+    # kümede olan dosyalar: `sablon.py` A'yı kökteki sıradan seçer, kök değişince oran değişiyordu (KARAR 11:12, #43).
+    kume = {s['ad'] for s in sehirler}
+    oran, ciftler, disari = {}, [], []
     for s in sehirler:
         h = []
         for ad, d in s['deney'].items():
-            if ad.startswith('tahmin_capraz_'):
+            if ad.startswith('tahmin_capraz_s'):
+                kaynak = 'sehir-' + ad[len('tahmin_capraz_s'):]
+                if kaynak not in kume:
+                    disari.append(f"{kaynak} → {s['ad']}")
+                    continue
+                ciftler.append(f"{kaynak[6:]}→{s['ad'][6:]}")
                 h += _hatalar(d, s['gercek'])[0]
         if h and h_ort[s['ad']]:
             oran[s['ad']] = st.median(h) / h_ort[s['ad']]
     if oran:
         o, k = _ozet(oran)
         _madde(m, o <= CAPRAZ_MAX, f'şehirler arası hata ÷ şehir içi hata ≤ {CAPRAZ_MAX:g}',
-               f'ortanca {o:.2f}, en kötü {k[0]:.2f} ({k[1]}); {CAPRAZ_MAX:g} üstü {sum(v > CAPRAZ_MAX for v in oran.values())} şehir')
+               f'ortanca {o:.2f}, en kötü {k[0]:.2f} ({k[1]}); {CAPRAZ_MAX:g} üstü {sum(v > CAPRAZ_MAX for v in oran.values())} '
+               f'şehir; n = {len(oran)} şehir')
     else:
-        _madde(m, False, f'şehirler arası hata ÷ şehir içi hata ≤ {CAPRAZ_MAX:g}', 'deney/tahmin_capraz_*.csv yok')
+        _madde(m, False, f'şehirler arası hata ÷ şehir içi hata ≤ {CAPRAZ_MAX:g}',
+               'kaynağı bu kümede olan deney/tahmin_capraz_*.csv yok' + (f' (kümenin dışından {len(disari)})' if disari else ''))
+    if ciftler or disari:
+        bilgi.append('şehirler arası çiftler (modeli kuran → tahmin edilen): ' + (', '.join(ciftler) or '—')
+                     + (f"; kümenin dışından gelen, sayılmadı: {', '.join(disari)} (sablon.py'yi yalnız bu şehirlerin "
+                        'kökünde koş)' if disari else ''))
 
     # 5. Düşük güven oranı (aşarsa UYARI, KALDI değil; kart).
     dg = {s['ad']: sum(r['guven'] == 'dusuk' for r in s['tahmin'] if not int(r['olculdu']))

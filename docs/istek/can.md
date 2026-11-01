@@ -557,7 +557,7 @@ Karar: **Sıra: 1 → 2 → 3 (sunuma kadar), 4–7 sunumdan sonra.**
 4–7 sunumdan sonra (sinav.py temizliği, MWh sözlüğü denetimi, sicak_nokta.py, app/ bulguları).
 **Yedek listeye cevaplar:** (a) **"%27 → %19" kalkar** — eski "yanlış kırmızı" ölçüsü; ADR-0017'den beri kırmızı yok, yerine "büyük olasılıkla dolu uyarısının 22'sinde 15'i gerçekten dolu". (b) **"%5 → %13" yerine sayı:** ADR-0019 ile yeşil 28 → 60 trafo (aday evli 347 trafonun %8'i → %17'si; 21–30'daki %5 → %13 eski şehirler), yanlış yeşil 0/60 — dashboard'la aynı. Listenin kalanı doğru; G'deki eski rakamları düzeltmen yeterli.
 PR #39 ve 41–50 öğlen bulgusu: karar masası Mac'te koşuyor, sonuç ayrı girdi.
-Durum: karar verildi
+Durum: (1) yapıldı (db4926b): akış yük haritası öne, 8 ekran / 10 slayt, yük rakamları B-Y2 / 41–50, '%27 → %19' ve '%4' kalktı (yerine 15/22), '%5 → %13' sunum dosyalarında yoktu; (2) yapıldı: kilit grafik 31–40 (0/60, 24/46 — dashboard'la aynı); (3) yapıldı (7424eb0): tarife bulundu, emisyon 2014 tezi, mahsuplaşma ve Kıb-Tek trafo maliyeti BULAMADIM (volkan.md); 4: UYARI 11:12 yapıldı; sinav.py temizliği, MWh denetimi, sicak_nokta.py, app/ bulguları sunumdan sonra
 
 ## KARAR 10:26 — PR #39 birleşti; sunumun yük rakamları değişti (B-Y2, 41–50)
 Karar: B-Y2'n karar masasının Mac koşusunda birebir tuttu, birleşti (5948496); varsayılan model artık senin yaz eğimin. Sunumda yük rakamları **dashboard'daki yeni kartlar** (626ea6b): yılın tepesi hiç bakılmamış 41–50'de %11,4 / %23,9, tahmin ortanca %11 yukarıda (güvenli yön; "yaz eğimi Kıbrıs evlerinden"); %80 dolu 12/12 yakalanır, her 10 uyarıdan 1'i gerçek; akşam 207 V 2/2, "yeterli" 211'de 0 yanlış. Önceki %5,8 ve 16/16 / 87 uyarı rakamları artık kullanılmaz. İspanya Mayıs %15,4 / %36,1 aynı. 41–50 öğlen bulgun (P90 %30,1 KALDI) Mac'te doğrulandı; dashboard öğlen kartı 31–40 rakamı olarak kalır.
@@ -565,13 +565,13 @@ Durum: bilgi
 
 ## KARAR 10:43 — sunumun yük rakamları yeni model (B-Y2); iki modelin farkı sunumda bir cümleyle
 Karar: Volkan'ın ölçütü sapmanın yönü: yeni model tepeyi deneme şehrinde ortanca %11 yukarıda tahmin ediyor (güvenli yön), eski model sıfır sapmalı ama gerçek Kıbrıs evlerinin sıcaklık duyarlılığını yarım alıyor. **Sunum rakamları dashboard'daki 41–50 / B-Y2 kartları.** Konuşma notuna cümle: "Tepe modelimiz Kıbrıs evlerinin gerçek sıcaklık duyarlılığını kullanır; deneme şehirlerinde bu yüzden yaklaşık %11 fazla tahmin eder, yani güvenli tarafta; gerçek bahar verisinde hata %15." Jüri cevabı: eski ↔ yeni tablosu (volkan.md KARAR 10:43); dashboard'da "model sürümü" seçimiyle canlı gösterilebilir. "%5,8" artık kullanılmaz.
-Durum: bilgi
+Durum: bilgi — konuşma notuna cümle ve jüri 14 (eski ↔ yeni) eklendi (db4926b)
 
 ## UYARI! 1 Kasım 11:12 — karar masasından (KARAR) — `sinav.py` için iki eksik (TEST'in #43 koşusundan)
 Ne: (1) **faz1 "en düşük ≥ 200 V ve 207 V altı ≤ %1" maddesi yalnız Nisan'a bakıyor** (`v_min_bugun_v`). Üretici 1.4'ten beri cevap anahtarında yılın tepesi var (`v_min_tepe_v`); #43'te raporlanan 199,0 V (sehir-055 T36, faz dengesizliği) yılın tepesinde ve faz1'de görünmüyor — karar masası onu "kıl payı KALDI" diye raporluyor, sınav GEÇTİ diyor. Maddeye yılın tepesi de eklensin (ya da ayrı "akşam / yıl tepesi gerilimi" maddesi; ADR-0016 m. 3 aynı ölçüt). (2) **faz2 "şehirler arası hata ÷ şehir içi" oranı kökteki şehir kümesine bağlı** (#43'te BUILD 1 0,75, TEST 0,79; ikisi de aynı `--aralik` ile): `sablon.py`'nin şehirler arası deneyi kökteki bütün şehirleri kullanıyor. Sınav ya kendi aralığındaki şehirlerle hesaplasın ya da raporda kullanılan şehir listesini yazsın. Bilgi: clean review'daki S-05 eki (`tepe.py:94` `KONUT_MWH`) ve commit sayısı notu KARAR 09:33'te yazılı; dört sorunun cevabı orada (araç izni evet, `app/` salt okur kapsamda, `src/sicak_nokta.py` senin, yorum biçimi plan §5b).
 Dosya: src/sinav.py (senin)
 Neden: TEST oturumu, PR #43 (Volkan: "eksik kalanları Can'a ilet"). Sunuma engel değil; sıra sende (sunum işlerinden sonra).
-Durum: bekliyor
+Durum: yapıldı — (1) faz1 madde 4 Nisan + yılın tepesi (v_min_tepe_v): 31–40 201,1 V (karar masasıyla aynı), 41–50 KALDI 175,0 V (sehir-047 T23, yeni bulgu, volkan.md); (2) faz2 şehirler arası yalnız modeli kuran şehir de kümedeyse sayılır, çiftler bilgi satırında; günlük docs/log/2026-11-01-can-sinav-eksikler.md
 
 ## UYARI! 1 Kasım 11:23 — TEST oturumundan (Volkan'ın isteğiyle) — açık PR #43 ve #44: birleştirme ve son test sende
 Ne: Volkan: "Can birleştirip test yapacak." TEST'in Mac koşuları (resmi rakam Mac):
