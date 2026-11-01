@@ -476,7 +476,6 @@ def main():
     # bulutlu günlerin gündüzü: kW başına volt buradan
     mask = [kinds[i // STEPS_PER_DAY] == 'parçalı' and 9 <= (i % STEPS_PER_DAY) * 5 / 60 <= 16
             for i in range(n)]
-    rooms = [group_room(c, rec_v, rec_p, mask) for c in groups]
     # başvuru sahibinin inverteri yok: en yakın panelli komşunun grubuna say
     results = []
     for t, tr in enumerate(trafos):
