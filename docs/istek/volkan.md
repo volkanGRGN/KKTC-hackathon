@@ -1388,7 +1388,7 @@ Ne: KARAR 09:5x (Can'ın kod incelemesi): (1) `olcum_sirasi.py`'nin kopya çekil
 Not: (a) `sinav.py`'de faz3 tanımları ayrı fonksiyon değil (`faz3()` içinde); alınabilen yalnız sabitler ve okuyucu. (b) `bilgi_degeri` / `pv_acilma` rengi ADR-0019 öncesi güven şartlı kuralla veriyor (çıktılar birebir kalsın diye korundu); içlerindeki S0 sınaması bu yüzden tutmuyor (1–10'da 53 trafo; öncekinde de aynı). Yeni kurala çevirmek ayrı küçük iş, çıktıları değiştirir.
 Dosya: PR #42 (https://github.com/volkanGRGN/KKTC-hackathon/pull/42)
 Neden: KARAR 09:5x.
-Durum: bekliyor
+Durum: TEST'e gitti 10:27 (karar masası); birleştirme merge commit'le (squash yok, dal kalır); (b) bilgi_degeri / pv_acilma'yı ADR-0019 kuralına çevirmek sunumdan sonra
 
 ## KARAR 10:26 — PR #39 (B-Y2, Can) birleşti; tepe modeli varsayılanı Kıbrıs evlerinin yaz eğimi; dashboard yük kartları 41–50'ye; 41–50 öğlen maddesi kıl payı KALDI
 Karar: Volkan: "Can'ın dediğini test et." Karar masası Mac koşusu (main ile birleşik; üretici 1.5 şehirleri 41–50 sıfırdan üretildi): **hiç bakılmamış 41–50'de tepe hatası %11,4 / P90 %23,9, %80 bant %95,0, işaretli sapma +%11,1 (konut +%13,6; güvenli yön), gerçek P90 üstü 0/280; %80 dolu 12/12 yakalanır (124 uyarı, her 10'da 1 gerçek); akşam gerilimi "yeterli" 211'de 0 yanlış, 207 V altı 2/2 (69 uyarı)**; 31–40 (bilgi) %10,1 / %19,9; İspanya Mayıs tepesi değişmedi (%15,4 / %36,1) [Hesap: karar masası 10:26]. Can'ın rakamlarıyla birebir → **#39 birleşti** (5948496).
