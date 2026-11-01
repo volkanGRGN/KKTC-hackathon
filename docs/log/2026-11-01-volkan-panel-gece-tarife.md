@@ -30,7 +30,7 @@
 
 ## Bulgular
 1. **Ayrım işe yarıyor:** gece prizi sınavda 7 → 10 trafoyu, 43 → 72 evi yeşile çeviriyor; ilk 20 trafo 64 → 76 ev. Yanlış yeşil her satırda 0.
-2. **Beklenen ↔ gerçekleşen farkı daraldı ama kapanmadı:** 31–40'ta 15,6 → 7 iken 16,0 → 10; geliştirmede artık tutuyor (15,4 → 15). Kalan fark en çok ticari trafolarda (13,0 → 9). Örnek küçük (beklenen 13'e karşı 9, yaklaşık 1,5 standart sapma) [Yorum]; ticari grubun içinde çarşı / yurt farkı (TEST: −1,06 / −0,93 V) da olabilir. Yön güvenli (yanlış yeşil yok).
+2. **Beklenen ↔ gerçekleşen farkı daraldı ama kapanmadı:** 31–40'ta 15,6 → 7 iken 16,0 → 10; geliştirmede artık tutuyor (15,4 → 15). Kalan fark en çok ticari trafolarda (13,0 → 9; 1,6 standart sapma). Bütün renksizde 16,0 → 10, 2,3 standart sapma [Hesap: Σp(1 − p)]: rastlantı sayılamayacak kadar büyük, ölçüm öncesi değer sınavda hâlâ iyimser. Olası sebep ticari grubun içindeki çarşı / yurt farkı (TEST: −1,06 / −0,93 V) [Yorum]. Yön güvenli (yanlış yeşil yok).
 3. Gecenin yeşil yapabildiği trafolar neredeyse hep ticari ve turizm (31–40: 10 yeşilin 10'u); konut ve sulamada gece prizi rengi değiştirmiyor. Pilotta priz, ticari / turizm trafolarında anlamlı [Yorum].
 4. Pilot sırası değişmez: kademe fotoğrafı tutarlı ve en çok ev açan (13 / 100); priz ikinci, ticari / turizm trafolarında.
 
