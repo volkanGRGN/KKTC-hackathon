@@ -32,7 +32,6 @@ Ayar yok: eşikler (kırmızı 0,5, yeşil 0,98) ve aralıklar resmi hesabınki.
   python3 src/bilgi_degeri.py data/synthetic --aralik 11-20     # sınav: her yöntem değişikliğinden sonra bir kez
 """
 import argparse
-import csv
 import json
 import random
 import statistics as st
@@ -44,6 +43,7 @@ _argv, sys.argv = sys.argv, sys.argv[:1]
 import kac_ev_olasilik as ko  # noqa: E402
 import kac_ev as ke  # noqa: E402
 import sehir_uret as su  # noqa: E402
+import sinav  # noqa: E402  (Can'ın; yalnız okunur: faz3 tanımları ve okuyucu)
 sys.argv = _argv
 
 KOK = Path(__file__).resolve().parent.parent
@@ -57,6 +57,40 @@ SENARYOLAR = {
     'S6': ('ag', 'yuk'),
 }
 SINIF_SUTUN = {s: v[1] for s, v in su.SINIFLAR.items()}      # üretici sınıfı -> Kıb-Tek tarife sütunu
+
+
+def sehir_dosyalari(klasor):
+    """(trafolar, tahmin {trafo: satır}, cevap {trafo: satır}); `sinav.py`'nin okuyucusuyla."""
+    return (sinav._csv(klasor / 'trafolar.csv'), {r['trafo_no']: r for r in sinav._csv(klasor / 'tahmin.csv')},
+            {r['trafo_no']: r for r in sinav._csv(klasor / 'cevap_anahtari.csv')})
+
+
+def renk_sayilar(tr, t, rng):
+    """Resmi çekilişle (`kac_ev_olasilik`) renk ve kaç ev. Bu iki eski deneme (bilginin değeri, PV açılma) rengi
+    ADR-0019 öncesi güven şartlı kuralla verir (çıktıları kayıttakiyle birebir kalsın); bu yüzden S0 bugünkü resmi
+    `kac_ev.csv` ile (güven şartsız) birebir değildir."""
+    p_bugun, p_iki, kac = ko.cekilis_ozeti(tr, ko.trafo_cek(tr, t, rng))
+    return dict(renk=ko.renk_ver(p_bugun, p_iki, t['guven'], guven_sarti=True), kar=ko.nicel(kac, 0.1),
+                orta=ko.nicel(kac, 0.5), iyi=ko.nicel(kac, 0.9), p_bugun=p_bugun, p_iki=p_iki)
+
+
+def faz3_satirlari(klasorler, sonuclar, ad):
+    """`sinav.py` faz3 kümesi (kac_ev_aday > 0); her trafoya gerçek kaç ev (dolu = 0), tavan, en az, bugün aşar mı, tip."""
+    satir = []
+    for k in klasorler:
+        for c in sinav._csv(k / 'cevap_anahtari.csv'):
+            if int(c['kac_ev_aday']) == 0:
+                continue
+            satir.append(dict(sonuclar[(str(k), ad)][c['trafo_no']], sehir=k.name, gercek=int(c['kac_ev_gercek']),
+                              tavan=int(c['kac_ev_tavan']), gercek_min=int(c['kac_ev_gercek_min']),
+                              asar=float(c['v_max_bugun_v']) > ke.V_SINIR, tip=c['tip']))
+    return satir
+
+
+def s0_farki(klasorler, sonuclar):
+    """S0 doğruluk sınaması: resmi kac_ev.csv ile renk farkı olan trafo sayısı."""
+    return sum(sonuclar[(str(k), 'S0')][r['trafo_no']]['renk'] != r['renk']
+               for k in klasorler for r in sinav._csv(k / 'kac_ev.csv'))
 
 
 def gercek_ag(tohum):
@@ -161,12 +195,7 @@ def sehir_senaryo(is_):
     klasor, ad = Path(is_[0]), is_[1]
     bilgi = SENARYOLAR[ad]
     tohum = int(klasor.name.split('-')[1])
-    with open(klasor / 'trafolar.csv', encoding='utf-8', newline='') as fh:
-        trafolar = list(csv.DictReader(fh))
-    with open(klasor / 'tahmin.csv', encoding='utf-8', newline='') as fh:
-        tahmin = {r['trafo_no']: r for r in csv.DictReader(fh)}
-    with open(klasor / 'cevap_anahtari.csv', encoding='utf-8', newline='') as fh:
-        cevap = {r['trafo_no']: r for r in csv.DictReader(fh)}
+    trafolar, tahmin, cevap = sehir_dosyalari(klasor)
     gercek = gercek_ag(tohum) if {'yer', 'faz', 'ag'} & set(bilgi) else {}
     asil_ag_kur, asil_kol = ko.ag_kur, ko.KOL_P
     if 'yer' in bilgi:
@@ -174,7 +203,7 @@ def sehir_senaryo(is_):
     sonuc = {}
     try:
         for r in trafolar:
-            tr = {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
+            tr = ko.trafo_satiri(r)
             no = r['trafo_no']
             frng = random.Random(f'bilgi-{tohum}-{no}')
             n_panel = int(tr['panel_sayisi'])
@@ -197,19 +226,7 @@ def sehir_senaryo(is_):
             t = tahmin[no]
             if 'yuk' in bilgi:
                 t = dict(t, olculdu='1', ogle_min_kw_olculen=cevap[no]['ogle_min_kw'], guven='yuksek')
-            s = ko.trafo_cek(tr, t, rng)
-            aday = max(0, int(tr['abone_konut'] - tr['panel_sayisi']))
-            p_bugun = sum(b for b, _, _ in s) / len(s)
-            p_iki = sum(i for _, _, i in s) / len(s)
-            kac = [min(k, aday) for _, k, _ in s]
-            if p_bugun >= ko.KIRMIZI_P:
-                renk = 'kirmizi'
-            elif p_iki >= ko.YESIL_P and t['guven'] == 'yuksek':
-                renk = 'yesil'
-            else:
-                renk = 'sari'
-            sonuc[no] = dict(renk=renk, kar=ko.nicel(kac, 0.1), orta=ko.nicel(kac, 0.5), iyi=ko.nicel(kac, 0.9),
-                             p_bugun=p_bugun, p_iki=p_iki, guven=t['guven'])
+            sonuc[no] = dict(renk_sayilar(tr, t, rng), guven=t['guven'])
     finally:                   # işçi süreç sıradaki senaryoya temiz geçsin
         ko.ag_kur, ko.KOL_P = asil_ag_kur, asil_kol
     return str(klasor), ad, sonuc
@@ -217,15 +234,7 @@ def sehir_senaryo(is_):
 
 def olc(klasorler, sonuclar, ad):
     """sinav.py faz3 ile aynı tanımlar: küme kac_ev_aday > 0; dolu = kac_ev_gercek = 0."""
-    satir = []
-    for k in klasorler:
-        with open(k / 'cevap_anahtari.csv', encoding='utf-8', newline='') as fh:
-            for r in csv.DictReader(fh):
-                if int(r['kac_ev_aday']) == 0:
-                    continue
-                x = sonuclar[(str(k), ad)][r['trafo_no']]
-                satir.append(dict(x, sehir=k.name, gercek=int(r['kac_ev_gercek']), tavan=int(r['kac_ev_tavan']),
-                                  gercek_min=int(r['kac_ev_gercek_min'])))
+    satir = faz3_satirlari(klasorler, sonuclar, ad)
     n = len(satir)
     kir = [x for x in satir if x['renk'] == 'kirmizi']
     yes = [x for x in satir if x['renk'] == 'yesil']
@@ -265,12 +274,7 @@ def main():
     with ProcessPoolExecutor() as ex:
         sonuclar = {(k, ad): s for k, ad, s in ex.map(sehir_senaryo, isler)}
 
-    # S0 doğruluk sınaması: resmi kac_ev.csv ile renk birebir
-    fark = 0
-    for k in klasorler:
-        with open(k / 'kac_ev.csv', encoding='utf-8', newline='') as fh:
-            for r in csv.DictReader(fh):
-                fark += sonuclar[(str(k), 'S0')][r['trafo_no']]['renk'] != r['renk']
+    fark = s0_farki(klasorler, sonuclar)       # S0 doğruluk sınaması (renk_sayilar'daki nota bak)
     print(f'S0 ile resmi kac_ev.csv arasında renk farkı: {fark} trafo')
 
     tablo = {}

@@ -28,7 +28,6 @@ Etiket: gösterim; inverter verisi her panelli evden gelmez, pilotta ev sahibi i
   python3 src/pv_acilma.py <şehir kökü> --aralik 1-10
 """
 import argparse
-import csv
 import json
 import math
 import random
@@ -38,8 +37,9 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 _argv, sys.argv = sys.argv, sys.argv[:1]
+import bilgi_degeri as bd  # noqa: E402
 import kac_ev_olasilik as ko  # noqa: E402
-import kac_ev as ke  # noqa: E402
+import sinav  # noqa: E402  (Can'ın; yalnız okunur)
 sys.argv = _argv
 
 SENARYOLAR = {'S0': (), 'S-kademe': ('kademe',), 'S-inverter': ('inverter',), 'S-ikisi': ('kademe', 'inverter')}
@@ -53,17 +53,12 @@ def sehir_senaryo(is_):
     klasor, ad = Path(is_[0]), is_[1]
     bilgi = SENARYOLAR[ad]
     tohum = int(klasor.name.split('-')[1])
-    with open(klasor / 'trafolar.csv', encoding='utf-8', newline='') as fh:
-        trafolar = list(csv.DictReader(fh))
-    with open(klasor / 'tahmin.csv', encoding='utf-8', newline='') as fh:
-        tahmin = {r['trafo_no']: r for r in csv.DictReader(fh)}
-    with open(klasor / 'cevap_anahtari.csv', encoding='utf-8', newline='') as fh:
-        cevap = {r['trafo_no']: r for r in csv.DictReader(fh)}
+    trafolar, tahmin, cevap = bd.sehir_dosyalari(klasor)
     asil = (ko.ag_kur, ko.SAPMA_MU, ko.SAPMA_SIGMA)
     sonuc = {}
     try:
         for r in trafolar:
-            tr = {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
+            tr = ko.trafo_satiri(r)
             no = r['trafo_no']
             frng = random.Random(f'acilma-{tohum}-{no}')
             panelli = int(tr['panel_sayisi']) > 0
@@ -88,20 +83,7 @@ def sehir_senaryo(is_):
             ko.ag_kur = ag_kur
             ko.SAPMA_MU, ko.SAPMA_SIGMA = (0.0, 0.0) if inv else asil[1:]
             rng = random.Random(f'olasilik-{r["sehir"]}-{no}')       # resmi hesapla aynı tohum
-            t = tahmin[no]
-            s = ko.trafo_cek(tr, t, rng)
-            aday = max(0, int(tr['abone_konut'] - tr['panel_sayisi']))
-            p_bugun = sum(b for b, _, _ in s) / len(s)
-            p_iki = sum(i for _, _, i in s) / len(s)
-            kac = [min(k, aday) for _, k, _ in s]
-            if p_bugun >= ko.KIRMIZI_P:
-                renk = 'kirmizi'
-            elif p_iki >= ko.YESIL_P and t['guven'] == 'yuksek':
-                renk = 'yesil'
-            else:
-                renk = 'sari'
-            sonuc[no] = dict(renk=renk, kar=ko.nicel(kac, 0.1), orta=ko.nicel(kac, 0.5), iyi=ko.nicel(kac, 0.9),
-                             p_bugun=p_bugun, panelli=panelli)
+            sonuc[no] = dict(bd.renk_sayilar(tr, tahmin[no], rng), panelli=panelli)
     finally:
         ko.ag_kur, ko.SAPMA_MU, ko.SAPMA_SIGMA = asil
     return str(klasor), ad, sonuc
@@ -112,7 +94,7 @@ def olc(satirlar):
     kir = [x for x in satirlar if x['renk'] == 'kirmizi']
     yes = [x for x in satirlar if x['renk'] == 'yesil']
     kes = [x for x in satirlar if not x['tavan']]
-    sinir = 0.5 - 2 * math.sqrt(0.25 / len(kir)) if kir else float('nan')
+    sinir = sinav.KIRMIZI_ASAN_MIN - 2 * math.sqrt(0.25 / len(kir)) if kir else float('nan')   # sinav.py faz3 ile aynı
     asan = sum(x['asar'] for x in kir) / len(kir) if kir else float('nan')
     return dict(n=n, dolu=sum(x['gercek'] == 0 for x in satirlar),
                 yesil=len(yes), yanlis_yesil=sum(x['gercek'] == 0 for x in yes),
@@ -133,23 +115,11 @@ def main():
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
     with ProcessPoolExecutor() as ex:
         sonuclar = {(k, ad): s for k, ad, s in ex.map(sehir_senaryo, [(str(k), ad) for ad in SENARYOLAR for k in klasorler])}
-    fark = 0
-    for k in klasorler:
-        with open(k / 'kac_ev.csv', encoding='utf-8', newline='') as fh:
-            for r in csv.DictReader(fh):
-                fark += sonuclar[(str(k), 'S0')][r['trafo_no']]['renk'] != r['renk']
+    fark = bd.s0_farki(klasorler, sonuclar)
     print(f'S0 ile resmi kac_ev.csv arasında renk farkı: {fark} trafo')
     tablo = {}
     for ad in SENARYOLAR:
-        satir = []
-        for k in klasorler:
-            with open(k / 'cevap_anahtari.csv', encoding='utf-8', newline='') as fh:
-                for c in csv.DictReader(fh):
-                    if int(c['kac_ev_aday']) == 0:
-                        continue
-                    x = sonuclar[(str(k), ad)][c['trafo_no']]
-                    satir.append(dict(x, gercek=int(c['kac_ev_gercek']), tavan=int(c['kac_ev_tavan']),
-                                      asar=float(c['v_max_bugun_v']) > ke.V_SINIR, tip=c['tip']))
+        satir = bd.faz3_satirlari(klasorler, sonuclar, ad)
         tablo[ad] = dict(tum=olc(satir), panelli=olc([x for x in satir if x['panelli']]),
                          tip_yesil={t: sum(1 for x in satir if x['tip'] == t and x['renk'] == 'yesil')
                                     for t in sorted({x['tip'] for x in satir})},

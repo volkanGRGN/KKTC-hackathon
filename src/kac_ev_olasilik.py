@@ -58,7 +58,8 @@ YESIL_GUVEN_SARTI = False               # ADR-0019: yeşil / hemen evet için y�
 
 ABONE = ['abone_konut', 'abone_ticari1', 'abone_ticari2', 'abone_turizm', 'abone_sanayi1', 'abone_sanayi2',
          'abone_su_motoru']
-# Abone başına yıllık MWh (Kıb-Tek 2023, sablon.py ile aynı kaynak): yalnız trafonun yükünü abonelere bölmek için.
+# Abone başına yıllık MWh [Hesap: Kıb-Tek 2023 istatistiği, sınıfın yıllık tüketimi ÷ abone sayısı; sablon.py ile aynı
+# kaynak, data/raw/kibtek-istatistik/]: yalnız trafonun yükünü abonelere bölmek için.
 MWH = {'abone_konut': 648494 / 175577, 'abone_ticari1': 210978 / 20950, 'abone_ticari2': 169496 / 494,
        'abone_turizm': 215147 / 171, 'abone_sanayi1': 22391 / 1227, 'abone_sanayi2': 95996 / 352,
        'abone_su_motoru': 51256 / 3250}
@@ -170,14 +171,47 @@ def durum(ag, evler, yuk, ek, m, warm=None, iters=6):
     return V, max(tb.house_voltages(ag, V).values()), s_tr
 
 
-def trafo_cek(tr, t, rng):
-    """Bir trafo için CEKILIS kez: (bugün aşar mı, kaç ev, ilk iki sığar mı) listesi."""
+def trafo_satiri(r):
+    """trafolar.csv satırı → hesap sözlüğü (metin alanlar dışında sayı)."""
+    return {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
+
+
+def yuk_bandi(t):
+    """Trafonun öğlen yükü için Faz 2 bandından log-normal (mu, sd): P10 ve P90 ±1,2816 sd."""
     p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
+    mu = (math.log(max(p10, 0.01)) + math.log(max(p90, 0.01))) / 2
+    sd = max(1e-6, (math.log(max(p90, 0.01)) - math.log(max(p10, 0.01))) / (2 * 1.2816))
+    return mu, sd
+
+
+def cekilis_ozeti(tr, s):
+    """trafo_cek çıktısı → (bugün aşma olasılığı, ilk iki sığma olasılığı, aday sayısıyla kesilmiş kaç ev listesi)."""
+    aday = max(0, int(tr['abone_konut'] - tr['panel_sayisi']))
+    return sum(b for b, _, _ in s) / len(s), sum(i for _, _, i in s) / len(s), [min(k, aday) for _, k, _ in s]
+
+
+def renk_ver(p_bugun, p_iki, guven, guven_sarti=None):
+    """Harita rengi (ADR-0010 / 0011 / 0019). guven_sarti None ise YESIL_GUVEN_SARTI; eski deneme betikleri True."""
+    sart = YESIL_GUVEN_SARTI if guven_sarti is None else guven_sarti
+    if p_bugun >= KIRMIZI_P:
+        return 'kirmizi'
+    if p_iki >= YESIL_P and (not sart or guven == 'yuksek'):
+        return 'yesil'
+    return 'sari'
+
+
+def trafo_cek(tr, t, rng, v0=None, vrng=None, yuk=None):
+    """Bir trafo için CEKILIS kez: (bugün aşar mı, kaç ev, ilk iki sığar mı) listesi. Ölçüm denemeleri için
+    (`olcum_sirasi.py`): v0 = callable(vrng) bara gerilimini, yuk = ölçülen öğlen yükünü verir; bilgi ayrı akıştan,
+    resmi çekilişlerin akışı değişmez."""
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
+    mu, sd = yuk_bandi(t)
     sonuc = []
     srng = random.Random(f'sapma-{tr["sehir"]}-{tr["trafo_no"]}')   # ayrı akış: diğer çekilişler v1 ile aynı kalır
     for _ in range(CEKILIS):
         ag, evler = ag_kur(tr, rng)
+        if v0 is not None:
+            ag['v0'] = v0(vrng)
         sapma = math.exp(srng.gauss(SAPMA_MU, SAPMA_SIGMA)) if (SAPMA_MU or SAPMA_SIGMA) else 1.0
         for f in ag['feeders']:
             f['zs'], f['zn'] = f['zs'] * sapma, f['zn'] * sapma
@@ -187,12 +221,12 @@ def trafo_cek(tr, t, rng):
         if t['olculdu'] == '1' and not math.isnan(olculen):
             toplam = olculen
         else:
-            mu = (math.log(max(p10, 0.01)) + math.log(max(p90, 0.01))) / 2
-            sd = max(1e-6, (math.log(max(p90, 0.01)) - math.log(max(p10, 0.01))) / (2 * 1.2816))
             toplam = math.exp(rng.gauss(mu, sd))
-        yuk = yuk_dagit(evler, toplam, rng)
+        if yuk is not None:
+            toplam = yuk
+        yk = yuk_dagit(evler, toplam, rng)
         m = 1 + rng.uniform(*OG)
-        V, vmax, s_tr = durum(ag, evler, yuk, {}, m)
+        V, vmax, s_tr = durum(ag, evler, yk, {}, m)
         bugun = vmax > ke.V_SINIR or s_tr > ag['kva']
         adaylar = [h['id'] for h in evler if h['sinif'] == 'abone_konut' and h['pv'] == 0]
         if not adaylar:                       # başvuru ticari aboneden de gelebilir: renk için sanal aday
@@ -202,7 +236,7 @@ def trafo_cek(tr, t, rng):
         if not bugun:
             for j, hid in enumerate(adaylar):
                 ek[hid] = ke.YENI_PANEL_KW
-                V2, vmax2, s2 = durum(ag, evler, yuk, ek, m, [[list(v) for v in hat] for hat in V], iters=4)
+                V2, vmax2, s2 = durum(ag, evler, yk, ek, m, [[list(v) for v in hat] for hat in V], iters=4)
                 if vmax2 > ke.V_SINIR or s2 > ag['kva']:
                     del ek[hid]
                     if j < 2:
@@ -224,8 +258,8 @@ def konum_payi(tr, t, rng):
     (temkinli). Yalnız panelli evlerden oluşan kol (çekilişlerin bir kısmı) atlanır: başvuran panelsiz."""
     if YESIL_GUVEN_SARTI and t['guven'] != 'yuksek':                 # ADR-0019: şart yeşilinkiyle birlikte kalktı
         return 0.0
-    p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
+    mu, sd = yuk_bandi(t)
     srng = random.Random(f'konum-sapma-{tr["sehir"]}-{tr["trafo_no"]}')
     x = 1.0
     for _ in range(CEKILIS):
@@ -238,8 +272,6 @@ def konum_payi(tr, t, rng):
         if t['olculdu'] == '1' and not math.isnan(olculen):
             toplam = olculen
         else:
-            mu = (math.log(max(p10, 0.01)) + math.log(max(p90, 0.01))) / 2
-            sd = max(1e-6, (math.log(max(p90, 0.01)) - math.log(max(p10, 0.01))) / (2 * 1.2816))
             toplam = math.exp(rng.gauss(mu, sd))
         yuk = yuk_dagit(evler, toplam, rng)
         m = 1 + rng.uniform(*OG)
@@ -277,20 +309,11 @@ def sehir_calistir(klasor):
     tek = {x['trafo_no']: x for x in ke.sehir_hesapla(klasor)}     # pay sütunları ve %40 kuralı tek denklemden
     satirlar = []
     for r in trafolar:
-        tr = {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
+        tr = trafo_satiri(r)
         t = tahmin[r['trafo_no']]
         rng = random.Random(f'olasilik-{r["sehir"]}-{r["trafo_no"]}')
-        s = trafo_cek(tr, t, rng)
-        aday = max(0, int(tr['abone_konut'] - tr['panel_sayisi']))
-        p_bugun = sum(b for b, _, _ in s) / len(s)
-        p_iki = sum(i for _, _, i in s) / len(s)
-        kac = [min(k, aday) for _, k, _ in s]
-        if p_bugun >= KIRMIZI_P:
-            renk = 'kirmizi'
-        elif p_iki >= YESIL_P and (not YESIL_GUVEN_SARTI or t['guven'] == 'yuksek'):
-            renk = 'yesil'
-        else:
-            renk = 'sari'
+        p_bugun, p_iki, kac = cekilis_ozeti(tr, trafo_cek(tr, t, rng))
+        renk = renk_ver(p_bugun, p_iki, t['guven'])
         satirlar.append({**tek[r['trafo_no']], 'kac_ev_karamsar': nicel(kac, 0.1), 'kac_ev_iyimser': nicel(kac, 0.9),
                          'renk': renk, 'p_bugun_asar': round(p_bugun, 3), 'p_iki_ev_sigar': round(p_iki, 3),
                          'kac_ev_orta': nicel(kac, 0.5), 'pv_uc': pv_uc(renk, p_bugun)})
