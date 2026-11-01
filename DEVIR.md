@@ -18,7 +18,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 |---|---|---|---|
 | PR #43 üretici 1.6 (yaz eğimi Kıbrıs evlerine; sınav 51–60) | BUILD 1; birleştirme Can | TEST'te tuttu (1d49c85; uç 374710c yalnız main); 199 V kıl payı KALDI (faz dengesizliği) | sunumdan sonra birleşir; 1.7 listesi (KARAR 11:11) + (e) 41–50 175 V |
 | PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
-| PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (789ea17) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
+| PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri | Can (Volkan, 1 Kasım 11:2x: TEST oturumu yeni PR almıyor) | — | KARAR'ın kutu girdisi |
