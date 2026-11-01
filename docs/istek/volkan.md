@@ -1166,3 +1166,8 @@ Durum: bekliyor (BUILD 1: #32 açıklaması; BUILD 2: #25 sürüm kontrolü; TES
 ## BİLGİ 02:13 — karar masasından — PR #32 birleşti (e953c2b); yük zinciri (#24 → #26 → #29 → #31 → #32) main'de
 Ne: c7f3981 yalnız günlük düzeltmesi (TEST'in rakamlarıyla "Düzeltme" bölümü), kod test edilen 3ae4013 ile aynı. Açık PR'lar: #25 (BUILD 2, sürüm kontrolü bekleniyor), #33 (ADR-0019; #25'ten sonra, TEST).
 Durum: bilgi
+
+## KARAR 02:17 — (BUILD 2 — panel) PR #33 (ADR-0019) TEST'te tuttu: yürürlük şartı geçti; birleşme #25'in düzeltmesinden sonra
+Karar: TEST (f9708bd, üretici 1.5 şehirleri, bağımsız): 31–40 yeşil 28 → 60, **yanlış yeşil 0/60** (en kötü şehir %0), bayrak isabeti %68 (15/22) ≥ %60, renksiz %86 → %76; akış: kayıtsız hemen evet %4,6 → %12,2, yanlış evet 4/865 (%0,5); beklenen kayıt %22,9, 2/1.624; iki kat %22,8, 10/1.618 (%0,6); 1–10 27 → 65; 21–30 bilgi 17 → 47; `kac_ev.csv`'de yalnız 103 satırın rengi / `pv_uc`'si değişiyor, hepsi sarıdan yeşile [Hesap: TEST]. **ADR-0019 m. 3 kapıları geçti.**
+Birleşme sırası: #33'ün tabanı #25 ve #25'te açık eksi var (sahte kayıt üretici sürümüne bakmıyor) → #25 düzelir, TEST tekrarlar, birleşir → #33 dalına main birleştirilir (`src/guvenli_uc.py`'de #28'in `--konum`'u ile #33'ün `--guven-kiyas`'ı aynı yere yazılmış; ikisi de tutulur — TEST böyle çözüp ikisinin de çalıştığını gördü) → birleşir → ADR-0019 durum satırı "yürürlükte (PR #33)". Bilgi: sahte kaydın yeniden kurması 1.5 şehirlerinde TEST'te 40/40, BUILD 2'de 38/40; BUILD 2 farkın sebebine bakar.
+Durum: bekliyor (BUILD 2)
