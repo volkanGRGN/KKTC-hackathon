@@ -241,3 +241,16 @@ Ne: Volkan "Civan'ın haritasının en son sürümü dashboard'da olsun" dedi. D
 Soru: b2fcba2 main'e gidebilir mi (bitmiş sürüm mü, yoksa yarım mı)? Evetse PR #41'de GitHub "Approve" ya da burada "onay" yeter.
 Dosya: PR #41; app/harita.py, app/ui-brief.md
 Durum: değişti 11:06 — Volkan beklememeyi seçti: dashboard haritasız birleşti (PR #41, 7ef24b2); `harita/ui` dalın (b2fcba2) main'e girmedi. Hazır olduğunda `app/` için kendi PR'ını aç (dashboard "Harita" sayfası `app/harita.py` fonksiyonları gelince kendiliğinden açılır); testini TEST koşar, karar masası birleştirir.
+
+## UYARI! 1 Kasım 12:1x — Can'dan — pitch 6. slayt: BEKLİYOR'lar tahminle doldu; toplam sunumla aynı sayı; 22/44 → 24/46
+Ne: Pitch metnini okudum (senin yaman). Kesin rakam şart değil, tahmin yeter; ayrıntı ve kaynaklar `docs/log/2026-11-01-can-pitch-maliyet-tahmin.md`. Kutulara:
+(1) **Kutu 1 TOPLAM:** başlık sunum ve dashboard'la aynı: "~2,2–3,2 milyon TL (~40–57 bin €)" [Hesap: maliyet günlüğü]. Senin nakit toplamın küçük yazıya: "Nakit çıkışı ~2,7–3,4 milyon TL; fark, 3 cihaz pilottan sonra 64–114 ölçüm daha yapar." Neden: rakam kaynağı `icerik.json` (KARAR 09:43); üç yerde aynı soruya iki sayı olmasın.
+(2) **Kutu 1 başlangıç ve işletme / bakım:** KARAR 09:46 (2)'nin nitel cümlesi: "Yazılım açık kaynak, Kıb-Tek'in kendi bilgisayarında çalışır (barındırma yok); geliştirme 2 gün, 3 kişi (hackathon); bakım her ölçüm partisinden sonra yeniden kalibrasyon [Yorum]." Para tahmini (~170 bin TL) Volkan'a soruldu; evet derse eklenir.
+(3) **Kutu 3 "Fayda (para dışı)":** "22/44" değil, resmi rakam "24/46 ↔ 0" (şehir 31–40, `icerik.json`).
+(4) **Kutu 3 "Yıllık fayda (para)":** "Panel takan ev yılda ~26 bin TL fatura öder ya da ödemez; ilk 20 ölçümün açtığı 64–133 ev takarsa ~1,7–3,5 milyon TL/yıl." [Hesap: ortalama konut 308 kWh/ay × Kıb-Tek Haziran 2026 tarifesi; mahsuplaşma fiyatı BULAMADIM; farazi şehir, gösterim]
+(5) **Kutu 3 "Geri ödeme":** "Pilot, ~5–7 gereksiz direk trafosu büyütmesini ya da ~1 yeni trafo merkezini önlerse kendini öder." [Hesap: İngiltere NIE Networks fiyatı 7.408 £ / 50.000 £, vekil; Kıb-Tek'inki BULAMADIM]
+(6) **Kutu 3 "Emisyon etkisi":** "Panel takan ev başına ~6–9 ton CO₂/yıl; 64–133 ev ~390–1.230 ton/yıl." [Hesap: 10.400 kWh × 0,584–0,886 kg/kWh, Kaynaklı: Erciyas, EMU 2014; farazi şehir, gösterim]
+Kutu 2 olduğu gibi kalır. Senin günlük dosyan depoda değil (yama); kendin gönder, append-only olduğu için düzeltmeyi yeni dosya ya da bu girdi taşır.
+Dosya: pitch şablonu 6. slayt; `docs/log/2026-11-01-civan-pitch-maliyet.md` (senin)
+Neden: Civan'ın "Can'a not"u (puanlayan Can); Can, 1 Kasım: "tahmini değer yeterli".
+Durum: bekliyor

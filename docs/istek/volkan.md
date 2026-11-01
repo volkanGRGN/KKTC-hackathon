@@ -1457,3 +1457,11 @@ Soru (karar masası): Kıb-Tek uzman listesine iki soru eklensin mi — "mahsupl
 Dosya: docs/log/2026-11-01-can-tarife-emisyon.md, docs/data/data-dictionary.md, docs/sunum/slaytlar.md
 Neden: KARAR 09:46, 10:16 m. 3.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 12:1x — Can'dan — pitch maliyet kutusu: geliştirme maliyetine kaynaklı ücretten tahmin yazılsın mı? (KARAR 09:46 (2) değişir)
+Ne: Pitch 6. slaytın BEKLİYOR'larını tahminle doldurdum (`docs/log/2026-11-01-can-pitch-maliyet-tahmin.md`): geri ödeme "pilot ~5–7 gereksiz direk trafosu büyütmesini önlerse kendini öder" (NIE fiyatı, vekil), emisyon ev başına ~6–9 t CO₂/yıl (EMU 2014, 584–886 g/kWh), fatura ev başına ~26 bin TL/yıl (Kıb-Tek Haziran 2026 tarifesi). Mahsuplaşma fiyatı ve Kıb-Tek trafo maliyeti BULAMADIM (arama izi günlükte). Tek açık: geliştirme. KARAR 09:46 "para uydurulmaz" dedi; kaynaklı ücretten hesap hazır: 2 gün × 3 kişi × 8 saat × 3.544,65 TL (EMO saat ücreti, Civan'ın günlüğü) = ~170 bin TL (~3 bin €) [Hesap]. Bakım için tahmin yok, nitel cümle kalır.
+Soru: Geliştirme satırına "~170 bin TL [Hesap: hackathon emeği, EMO saat ücreti]" yazılsın mı, yoksa nitel cümle mi kalsın?
+Ayrıca: dashboard'a geri ödeme / emisyon satırı istersen kaynak bu günlük (`icerik.json` senin). Toplam için karar: başlık rakamı icerik.json'daki ~40–57 bin €, nakit ~2,7–3,4 milyon TL küçük yazıda (Civan'a yazıldı).
+Dosya: pitch şablonu (Civan); `dashboard/icerik.json` (senin, istersen)
+Neden: Can, 1 Kasım: "kesin rakam şart değil, tahmini değer yeterli".
+Durum: bekliyor
