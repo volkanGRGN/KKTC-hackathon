@@ -4,7 +4,7 @@ Lisans: CC BY 4.0 (https://open-meteo.com/en/license); sunumda "Weather data by 
 Adres (aynısını çalıştırınca aynı dosya iner):
 https://archive-api.open-meteo.com/v1/archive?latitude=35.1856&longitude=33.3823&start_date=2024-01-01&end_date=2025-12-31&hourly=shortwave_radiation,direct_normal_irradiance,diffuse_radiation,global_tilted_irradiance,temperature_2m,cloud_cover&tilt=30&azimuth=0&timezone=Europe%2FNicosia&format=csv
 
-Dosya adı: lefkosa_saatlik_2024_2025.csv
+Dosya adı: lefkosa_saatlik_2024_2025.csv — 773.425 bayt, SHA-256 ba297ed72e165dcee602c7481a9787b10bb71ba231c35f9cce6d52c67032e53a (Can, 1 Kasım; eksikti, eklendi)
 Biçim: ilk 2 satır konum bilgisi (ızgara noktası 35.1845, 33.4056, 130 m), 3. satır boş, 4. satır başlık, sonra 17.544 saat.
 Sütunlar: time (yerel saat, Europe/Nicosia, yaz saati dahil), shortwave_radiation (yatay küresel, W/m²), direct_normal_irradiance, diffuse_radiation, global_tilted_irradiance (30° eğim, güneye), temperature_2m (°C), cloud_cover (%).
 Not: ışınım değerleri önceki saatin ortalaması (ör. 12:00 satırı = 11:00–12:00).
@@ -19,3 +19,4 @@ Sağlama (Volkan, 31 Ekim) [Hesap]: yatay yıllık 1.903, 30° güney 2.102 kWh/
 Üçüncü dosya (yük haritası tasarım sıcaklığı, ADR-0018 m. 4; KARAR 1 Kasım 00:50): lefkosa_sicaklik_2015_2025.csv — aynı nokta, yalnız sıcaklık, 11 yıl:
 https://archive-api.open-meteo.com/v1/archive?latitude=35.1856&longitude=33.3823&start_date=2015-01-01&end_date=2025-12-31&hourly=temperature_2m&timezone=Europe%2FNicosia&format=csv
 İndirildi 1 Kasım 2026 (BUILD 1). 2.111.056 bayt, SHA-256 e63c92be06428fe4388ad5b8ac227946a1676ce3f630461e0e723e1abb744a0e. Biçim: ilk 2 satır konum, 3. boş, 4. başlık (time, temperature_2m (°C)), sonra 96.432 saat.
+Doğrulama (Can, 1 Kasım 2026): üçüncü dosya aynı adresten yeniden indirildi; bayt ve SHA-256 birebir, 96.432 saat; 2023–2025'in 26.304 saatinde sıcaklık eski iki dosyayla birebir (0 fark).
