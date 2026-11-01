@@ -530,4 +530,4 @@ Karar: TEST oturumu envanteri ve `sinav.py`'nin 12 bulgusunu bağımsız tekrarl
 3. **Ölçüm betiği `src/sicak_nokta.py`, senin dosyan** (planla aynı yer); CONTRIBUTING sahiplik satırına eklendi.
 4. **Yorum biçimi:** planın §5b'deki biçimi; sapma gerekirse günlüğe gerekçesiyle.
 **Zamanlama:** plan §6 adım 5'in şartı geldi (bu gece bütün dallar main'e alındı, açık PR yok). "Öncesi" ölçümünü bugünkü main'de yeniden al (35d5445'ten beri `src/`'de çok dosya değişti), sonra `sinav.py` temizliği önerdiğin sırayla; her adım ayrı commit, her adımda faz1 / faz2 (`--ispanya --ispanya-tepe`) / faz3 çıktısı aynı. Başkalarının dosyalarındaki işaretler (S-05 sözlükleri, `bilgi_degeri.py` / `pv_acilma.py` kopyası) karar masasına UYARI; BUILD'lere ben yönlendiririm.
-Durum: karar verildi
+Durum: karar verildi; madde 1 (araç izni) Volkan'ın kendi sözüyle teyitli (09:38, "İzin ver")
