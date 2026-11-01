@@ -1403,7 +1403,7 @@ Durum: bekliyor (TEST; Civan)
 
 ## KARAR 10:34 — PR #41 (dashboard canlı tahmin) TEST'te tuttu, bir eksi; düzeltme ve Civan'ın onayından sonra birleşir
 Karar: TEST (aab9d6c, main ile birleşik, üretici 1.5 şehirleri 31–40): 17 AppTest adımı hata 0; canlı motor önerilen 12 ölçümle 10 şehrin hepsinde main'in bugünkü `tahmin.csv` (bayt bayt), `kac_ev.csv` ve `tepe.csv` ile birebir (#39 sonrası da); cevap anahtarını yalnız `sinav_kiyasi()` okuyor, modele yol yok, etiket var; git status temiz; `app/` dosyaları b2fcba2 ile birebir. **Eksi:** eski sürüm önbelleği geçici klasörde bütün kopyalar için ortak ve data bağlantısı ilk kuran klasöre kalıcı işaret ediyor; o klasör değişirse eski sürümler uyarısız başka veriyle koşar. Düzeltme dashboard oturumunda (her çağrıda bağlantı yenilenir); TEST o noktayı yeniden koşar. Sınav görünümü deneme şehrinde varsayılan açık kalır. **Civan'ın `app/` onayı** hâlâ bekleniyor (civan.md, BLOKLUYOR).
-Durum: bekliyor (dashboard düzeltmesi; Civan onayı)
+Durum: TEST tuttu 10:59 (3c8e38d; iki kopya denemesi, 18 AppTest adımı, canlı motor birebir); yalnız Civan'ın app/ onayı kaldı
 
 ## KARAR 10:43 — sunumun yük rakamları: yeni model (B-Y2), çünkü iki modelin farkı güvenli yönde; fark sunumda açıkça söylenir
 Karar: Volkan (10:43): "modeller arasındaki farka bağlı olarak değiştirelim, sapma vs." → Ölçüt sapmanın yönü. İki model aynı şehirlerde (31–40, ölçülmeyen 280 trafo) [Hesap: karar masası Mac]:
