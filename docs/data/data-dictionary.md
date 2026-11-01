@@ -72,6 +72,13 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Yanlılık: Ekim 2024 fiyatı, enflasyonla güncel değil; asgari, piyasa değil; brüt / net asgari ücret belirtilmemiş [Yorum: Civan brütü aldı].
 - Kullanım: trafo ölçüm maliyeti (sabit ↔ taşınabilir kaydedici; Civan'ın günlüğü), pilot bütçesi.
 
+**Kıbrıs 20 konut prosumer, 2016 — eşzamanlılık ve sıcaklık eğimi** — `data/raw/kibris-20-prosumer/`
+- 20 ev, her biri ayrı sayfa; şebekeden çekilen, verilen, PV üretimi, tüketim; 30 dk; 2016 tam yıl. Birim: 30 dk ortalama güç (W; başlıktaki "kWh" yanlış [Yorum]).
+- Kaynak: Zenodo 23043383, CC BY 4.0. İndirildi 1 Kasım 2026 (Can); md5 Zenodo'yla aynı, SHA-256 KAYNAK.txt'de.
+- Ölçülü: evet, sayaç (gerçek ev). Sağlama [Hesap]: import − export + üretim = tüketim bütün satırlarda (19 ev); brüt 4,4–9,5 MWh/yıl, ortanca 7,2.
+- Yanlılık: hepsi panelli, ortalamadan büyük (Kıb-Tek konut ortalaması 3,7 MWh); Güney Kıbrıs, tek yıl; ev 4'ün export / tüketim sütunu bozuk.
+- Kullanım: `src/eszamanlilik.py` → eşzamanlılık c (sıcak 2,5 / diğer 4,7), yaz eğimi (Temmuz ölçeğinde %6,5/°C), tasarım akşamı 33,4 °C; B-Y2 (`tepe.py`). Günlük [2026-11-01-can-eszamanlilik](../log/2026-11-01-can-eszamanlilik.md).
+
 **OSM kasaba haritası** — `data/raw/osm-kasaba/`
 - Girne merkez (~1 km × 1,1 km) bina ve yol geometrisi (Overpass JSON). İndirildi 31 Ekim 2026 (Civan).
 - Kaynak: OpenStreetMap, ODbL 1.0; "© OpenStreetMap katkıcıları" atfı.

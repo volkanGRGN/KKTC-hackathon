@@ -74,11 +74,13 @@ VERI_TURU = {
     "gercek": "gerçek veri — Kıbrıs değil",
     "kaynakli": "kaynaklı",
     "sahte_kayit": "sahte kayıtla — gösterim",
+    "hesap": "kaynaklı fiyatlardan kaba hesap",
 }
-KATMANLAR = [
+KATMANLAR = [  # sıra: Volkan 1 Kasım, "yük haritası öne"
     ("sorun", "Sorun", "Neden önemli"),
-    ("panel", "Panel katmanı", "Güneş için ne kadar yer var · bahar öğleni"),
     ("yuk", "Yük haritası", "Trafo ne kadar dolu · yılın tepesi, ön sürüm"),
+    ("panel", "Panel katmanı", "Güneş için ne kadar yer var · bahar öğleni"),
+    ("maliyet", "Maliyet", "Ölçüm ve pilot · kaba hesap"),
 ]
 DOSYALAR = [  # Ham veri sekmesi. cevap_anahtari.csv bilerek yok (sözleşme: yalnız sınav okur).
     ("trafolar.csv", "Trafo tablosu: Kıb-Tek'in bildiği (konum, güç, hat, abone, panel)"),

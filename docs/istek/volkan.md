@@ -1265,9 +1265,120 @@ Ne: Kaba maliyet hesabı [Hesap; Civan'ın ölçüm maliyeti günlüğünden]: t
 Soru: (1) Dashboard (`dashboard/icerik.json`, senin dosyan) "Proje" sekmesine bu tablo eklensin mi? Can, Civan'ın görmesini ve eklemesini istiyor; sahiplik KARAR 09:21'de sende. (2) Pitch'in "geliştirme / bakım maliyeti" kutusu için ne varsayılsın (ekip saati, barındırma) — yoksa BEKLİYOR mu kalsın? (3) Geri ödeme / emisyon için tarife ve emisyon katsayısı aransın mı?
 Dosya: docs/sunum/slaytlar.md "Maliyet" bölümü; docs/log/2026-11-01-can-maliyet.md; civan.md (aynı saat)
 Neden: volkan.md 09:46 (pitch'te eksik maliyet kutuları).
-Durum: bekliyor
+Durum: karar verildi 09:46 → can.md (dashboard'a Maliyet bölümü eklendi; geliştirme / bakım parası yazılmaz, nitel cümle; tarife, emisyon, trafo değişim maliyeti aranır)
 
 ## BİLGİ 1 Kasım (10:45 sonrası) — Can'dan — clean review araçları kuruldu, "öncesi" ölçümü araçlarla yapıldı
 Ne: Can'ın isteğiyle lizard 1.24.3 + vulture 2.16 (`.venv`, git dışı) ve jscpd 4.3.0 (`npx`) kuruldu; izin sorusundaki (1) bu yüzden fiilen kapandı, iptal istersen `.venv` silinir. Main 7b0b836 [Hesap: araç çıktıları]: 28 dosya / 9.158 satır, 366 fonksiyon, CCN > 15: 44, > 30: 10; birebir kopya %2,05 (24 klon); sıcak nokta 1. `sinav.py` 6.208, 2. `sehir_uret.py` 3.444, 3. `basvuru.py` 1.089 (yeni; %15 kopya, `ag_kur_kayitli` CCN 75). Senin / BUILD dosyalarında işaretler: `olcum_sirasi.py` olasılıklı çekilişi `kac_ev_olasilik.py`'den dört parça hâlinde kopyalamış; `bilgi_degeri.py` ↔ `pv_acilma.py` beş klon; `trafo_bos_kapasite.py:479` `rooms` hesaplanıp kullanılmıyor (saf fonksiyon, silinirse çıktı aynı; vulture). Yukarıdaki diğer sorular (`app/` kapsamı, betiğin yeri, yorum biçimi) açık.
 Dosya: docs/log/2026-11-01-can-kod-envanteri-araclarla.md
 Durum: bilgi
+
+## UYARI! 1 Kasım (11:00 sonrası) — Can'dan — Clean review bulguları: dosya sahibine göre liste; senin dosyalarında 7 iş, `sinav.py` temizliğine başlama zamanı
+Ne: Ölçüm (main 7b0b836, lizard / jscpd / vulture) ve `sinav.py` deneme incelemesi (12 bulgu, ikinci gözle teyitli) bitti; kod değişmedi. Bulgular sahibine göre (ayrıntı, kanıt ve "neden var" günlüklerde):
+**Senin / BUILD dosyaların (karar ve iş sende):**
+1. `src/trafo_bos_kapasite.py:479` — `rooms = [group_room(…) …]` hesaplanıyor, hiç kullanılmıyor; `group_room` (304) saf, satır silinirse çıktı aynı, süre kısalır (vulture; ilk commit e05c9fa'dan, projede kullanılmayan inverter haritası bölümü). Ölü kod.
+2. `src/olcum_sirasi.py` ↔ `src/kac_ev_olasilik.py` — olasılıklı çekiliş dört parça hâlinde kopyalanmış (181–193 ↔ 122–134, 205–214 ↔ 148–157, 199–205 ↔ 142–148, 237–247 ↔ 127+; jscpd). Çekiliş değişirse ölçüm sırası eskisiyle koşar; tek kaynak (`kac_ev_olasilik`'ten import) önerilir. Rastgele akış değişmesin: önce aynı tohumla çıktı karşılaştırması.
+3. `src/bilgi_degeri.py` ↔ `src/pv_acilma.py` — beş klon (%17 / %26 kopya), ikisi de `sinav.py faz3` tanımlarını ("dolu = kac_ev_gercek = 0", yanlış yeşil, kaç ev hatası) yeniden yazıyor (`bilgi_degeri.py:218-249`, `pv_acilma.py:126-170`). `grafikler.py` aynı işi `import sinav` ile yapıyor; ortak ölçü fonksiyonu önerilir (sınav tanımı tek yerde).
+4. `src/basvuru.py` — 3. sıcak nokta (9 commit), %15 kopya, dosya içi iki klon (271–281 ↔ 236–246, 265–271 ↔ 230–236), `ag_kur_kayitli` (95–213) CCN 75.
+5. `src/sehir_uret.py` 681–690 ↔ 728–738 dosya içi klon; `sehir_uret` (793–973) CCN 76. Dokunulursa aynı tohumla bayt bayt karşılaştırma şart (plan §3 m. 7).
+6. Abone başına MWh sözlüğü beş dosyada (`sinav.py:175`, `sablon.py:58`, `kac_ev_olasilik.py:60`, `tepe.py:79`, `app/ornek_veri.py:41`; ayrıca `sehir_uret.py:161-170` `SINIFLAR`), değerler bugün aynı. Birleştirme değil (sınav bilerek kendi kopyasını tutar), eşitlik denetimi önerilir; `kac_ev_olasilik.py:59`'da etiket yok ([Hesap] olmalı).
+7. `src/sahte_kayit.py:252` `kayit_oku` — vulture "kullanılmıyor" diyor; gerçek Kıb-Tek kaydının okuyucusu olarak yazılmış, **bırak** (bilgi).
+**Civan'ın:** `app/ornek_veri.py` 93–111 ↔ `src/sehir_uret.py` 402–420 (iki klon) — `app/` kapsam sorusu açık (02:30 girdisi).
+**Can'ın (`sinav.py`, S-01…S-12):** en büyükleri `faz2` (337–606, CCN 126, dokuz bölüm tek fonksiyonda) ve `faz3` (CCN 94) — yalnız taşıma; `next(hata)` eşlemesi `_hatalar`'ın filtresine gizli bağlı (S-03); "dolu" tanımı 10 yerde satır içi (S-11); docstring `kac_ev.csv`'nin yazarını `kac_ev.py` diyor (S-06); `[Kaynaklı]` etiketi yanlış, [Hesap] (S-05). Sıra: karakterizasyon dosyaları (aynı şehirlerde faz1/2/3 çıktısı) → küçükler → taşıma; her adım ayrı commit, çıktı aynı.
+Soru: (1) Açık PR kalmadı (a200f94); plan §6 adım 5'in şartı ("dallar main'de") sağlandıysa `sinav.py` temizliğine başlayayım mı? (2) 1–6 için sıra / kim (BUILD 1, BUILD 2, sen)?
+Dosya: docs/log/2026-11-01-can-kod-envanteri.md (`sinav.py` bulguları), docs/log/2026-11-01-can-kod-envanteri-araclarla.md (araç ölçümü)
+Neden: Clean review planı §6 adım 4 (rapor; dosya sahibi ve karar masası önceliği seçer).
+Durum: karar verildi 09:58 → can.md (sinav.py temizliği başlar; madde 1 BUILD 1, 2 / 3 / 6-etiket BUILD 2, 6-denetim Can, 4 / 5 sunumdan sonra, 7 bırak; TEST koşar)
+
+## BİLGİ 1 Kasım (08:00 sonrası) — Can'dan — eşzamanlılık ve sıcaklık eğimi tabloları (KARAR 23:12 "tablo olarak kutuya"); B-Y2 PR'ı sırada
+Ne: 20 Kıbrıs prosumer evi (Zenodo 23043383, 2016, 30 dk) + Lefkoşa sıcaklığı [Hesap: `src/eszamanlilik.py`; günlük docs/log/2026-11-01-can-eszamanlilik.md]:
+- Eşzamanlılık (ev başına tepe = a(1 + c/√N), net): **sıcak akşam c 2,51** (a 1,48 kW), **diğer günler c 4,74** (a 1,07 kW). N = 20'de CF 0,45 / 0,35. İki bileşen: sıcak günde 0,79 × (1 + 4,74/√N) + **0,70 kW/ev klima** (N'den bağımsız). `tepe.py` bugün c'yi ölçülülerin Nisan R'sinden uyduruyor (31–40'ta c = 0).
+- Yaz eğimi: eşik 24,5 °C üstü 0,104 kW/°C/ev; **Temmuz ölçeğinde %6,5/°C** (P10–P90 5,6–7,5). `tepe.py`'nin EAC'den çıkan konut yaz eğimi **%3,0** → sıcak günde konut tepesi az gösteriliyor (güvensiz yön).
+- Tasarım akşamı (19–22, 10 yılda bir): 33,4 °C.
+- Tek evin yıl tepesi: 20 evin 8'i Temmuz, 9'u Kasım–Şubat; 13'ü akşam.
+Sınır: 20 ev, büyük ve panelli; farazi şehir bu sayıları sınayamaz (üretici kendi β'sıyla); İspanya'da klima yok. Gerçek ölçü pilot (Faz 10).
+Dosya: src/eszamanlilik.py, data/raw/kibris-20-prosumer/KAYNAK.txt, docs/log/2026-11-01-can-eszamanlilik.md
+Neden: KARAR 23:12 / 23:18 / 00:15. Sırada: `tepe.py`'ye bağlama (dal `yuk/b-y2`, PR, BUILD 1 inceler); üretici β çapası (senin dosyan) ayrı.
+Durum: bilgi
+
+## UYARI! 1 Kasım 10:02 — (BUILD 1 — yük) — Yük haritası ilk sürüm ↔ bugünkü, aynı 1.5 şehirlerinde: tepe %6,7 → %5,8, uyarı 92 → 87, dolu trafo kaçmıyor; pano yük kartları 1.5'e (PR #38)
+Ne: Volkan sunum için ilk sürümle bugünkünü karşılaştırmak istedi. İki `tepe.py` (0991064 ve ana dal) aynı üretici 1.5 şehirlerinde (1–10, 31–40) koşuldu; şehir, şablon ve eğri kodu iki uçta aynı, fark yalnız modelden [Hesap; farazi, gösterim; BUILD 1, resmi değil]. 31–40, ölçülmeyen 280: tepe %6,7 / %15,3 → %5,8 / %15,1, gerçek P90 üstü 0 → 0; saat ±60 dk %47,5 → %52,1, dönem %60,7 → %69,3; ≥ %80 uyarısı 92 → 87 (kalkan 5'in hiçbiri dolu değil; dolu 16 / 16 ikisinde de); akşam gerilimi yalnız bugünküde. Bugünkü sürüm tepe saati günlüğüyle, ilk sürüm üretici 1.5 yük günlüğüyle birebir.
+Eksi / bilinmeyen: (1) Yurt kuralı 31–40'ta 5 çarşıya da dokundu (1–10'da 0 / 41): dördünde tepe yaklaştı, sehir-032 T24'te −%15,9 → −%25,6 (gerçek bandın içinde); kural değiştirilmedi. (2) KARAR 02:12 doluluk ölçümü (92 / 37 uyarı) #32 öncesi koddan; bugünkü kodla 87 / 34. (3) Panel, BUILD 1'in değil: Volkan sunum için 1.5'i seçti; pano içeriğinde iki panel kartı hâlâ üretici 1.3 / sınav 21–30 rakamı ("öğlen yükü hatası %12,2": 1.5'te Can'ın faz2'si %11,3; "22 / 44 ↔ 0": 1.5'te 24 / 46 ↔ 0).
+PR #38: pano içeriğinde akşam gerilimi kartı 1.5'e (2 / 2, "yeterli" 233'te 0 yanlış, 47 uyarı; önceki kart üretici 1.4'tendi), "%80'den dolu" kartı 87 uyarıya, rakam notu "sunum 1.5"; günlük. Pano kodu değişmedi; sürümleri haritada yan yana gösteren canlı tahmin sayfası pano oturumunda.
+Dosya: PR #38 (https://github.com/volkanGRGN/KKTC-hackathon/pull/38), docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md (dalda)
+Neden: Volkan'ın isteği (1 Kasım sabahı); KARAR 02:12 doluluk ölçümü.
+Durum: yapıldı 10:16 — PR #38 karar masası koşusuyla birebir, birleşti (f7b1089); iki panel kartı da 1.5'e çevrildi (09fba3f)
+
+## BİLGİ 10:04 — karar masasından — PR #38 birleşti; dashboard bütünüyle üretici 1.5 rakamlarında; doluluk ölçümüme düzeltme
+Ne: PR #38 (BUILD 1; yük kartları 1.5'e) karar masasının koşusuyla birebir tuttu ve birleşti (f7b1089). İki panel kartı da 1.5 / 31–40'a çevrildi (09fba3f): öğlen hatası %11,3 / %28 (önce 21–30'un %12,2 / %27'si), %40 kuralı 24/46 ↔ 0 (önce 22/44). **Düzeltme (KARAR 02:12):** oradaki doluluk ölçümü tepe saati PR'ından (#32) önceki koddandı; bugünkü kodla %80 dolu 16/16 yakalanır, uyarı 92 değil **87**; gücü aşan 2/2, uyarı 37 değil **34** (BUILD 1 buldu, karar masası doğruladı).
+Durum: bilgi
+
+## UYARI! 1 Kasım (11:30 sonrası) — Can'dan — sunum rakamlarının yedek listesi (unutulmasın diye): kullanılacaklar, kullanılmayacaklar, açıklar
+Ne: Sunumda kullanılabilecek bütün rakamlar tek yerde, etiket ve kaynağıyla; ana kaynak `dashboard/icerik.json` (10:03, üretici 1.5, sınav 31–40) ve KARAR 09:43 / 10:04. Farazi şehir rakamı her yerde "gösterim". Yeni rakam yok, yalnız derleme.
+**A. Sorun ve bağlam (kaynaklı):**
+- ~2.670 bekleyen çatı güneşi başvurusu; alçak / orta gerilimde izleme sistemi yok [Kaynaklı: KTTO, Mart 2023 — **adres doğrulanmadı**].
+- Güney Kıbrıs 2025'te dağıtıma bağlı güneşin %47,44'ünü kıstı, Ocak–Mayıs 2026 %65 [Kaynaklı: pv magazine 13.01.2026, 15.06.2026].
+- İngiltere 824 trafoyu (%2,6) ölçüp gerisini ~%80 doğrulukla tahmin etti [Kaynaklı: Ofgem, WPD LV Templates 2013 / 2015].
+- Kıb-Tek PV üretimi 2023: 110.371 MWh, toplamın %5,81'i [Kaynaklı: Kıb-Tek 2023 istatistik; ADR-0006].
+- Kıb-Tek 2022 sistem puantı 368 MW, enerji 1.836 GWh [Kaynaklı: KTEMO, Yakıt Değişim Fizibilite sunumu slayt 38].
+- KTEMO akü çalıştayı (13.06.2026): "kritik pik talep bölgelerinde projelere öncelik" — yük haritasının işi [Kaynaklı].
+- KTEMO solar sunumu: 2018 sonu 21 MWp devrede, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru [Kaynaklı].
+- Jüri: Malta'da izin hiçbir merkezde gücün %25'ini geçmiyor, Kıb-Tek kuralı %40 [Hesap: Enemalta haritası, 1.332 merkez]; Hawaii düz kuralı %15 → %250 [Kaynaklı: HECO 2014].
+**B. Yük haritası (ana katman, KARAR 09:43):**
+- Yılın tepesi hatası, gerçek İspanya: %15,4 / %36,1 (eşik %15 / %35, kıl payı üstü, kabul) [gerçek veri].
+- Aynı, deneme şehri: %5,8 / %15,1 (iyimser) [farazi, gösterim]; gerçek veride hata ~3 kat.
+- %80'den dolu trafo 16/16 yakalanır, **87** uyarı (her 5–6 uyarıdan 1'i gerçek); gücü aşan 2/2, **34** uyarı.
+- Akşam 207 V altı 2/2 yakalanır; "yeterli" dediğimiz 233 trafonun 0'ı altına iner; 47 uyarı.
+- Tepe saati ±1 saat %52; iki aday saatten biri %60.
+- Kıb-Tek tepe kaydı olan trafoda hata %3,7 [sahte kayıt, şehir 1–10, 83 trafo].
+- Cümle: "Hangi trafonun dolu olduğunu kaçırmadan, ölçüm cihazını nereye takacağınızı söylüyoruz."
+**C. Panel (ikinci katman):**
+- Öğlen yükü, gerçek İspanya 29 trafo: %25 → %10 (abone sayısı → fatura) [gerçek veri; manşet].
+- %80 aralık gerçekte %82,1 tuttu (hedef %70–90) [gerçek veri, İspanya 28 trafo].
+- Öğlen hatası deneme şehri %11,3 / %28; yanlış yeşil **0/60**; %40 kuralı dolu trafoya "yer var" **24/46 ↔ biz 0**; "büyük olasılıkla dolu" isabeti 15/22 (%68); renksiz %76 [farazi, gösterim].
+- Kıb-Tek kayıtlarıyla başvuru anında hemen evet %3,8 → ~%8, yanlış evet < %1 [sahte kayıt, gösterim].
+- Pilotta ilk 20 ölçüm 8–11 trafoyu yeşile çeviriyor, 64–133 ev açıyor [farazi, 31–40 ve 41–50].
+- Ekran 6: çıkış gerilimi bilinince "dolu" yanılması %27 → %19 (konuşmada: adres + faz → %4) [Hesap: bilginin değeri, **eski şehirler 11–20**; 1.5'te yeniden ölçülmedi — kullanılacaksa etiketi bu].
+- KARAR 02:05 jüri cümlesi "yeşil %5 → %13; yanlış yeşil hâlâ 0" — dashboard'da yok; kullanılacaksa hangi kümenin payı olduğu teyit edilsin.
+**D. Maliyet [Hesap, kaba]:** bir trafoyu bir hafta ölçmek ~333 € (18.589 TL); ilk 20 trafo ~6.700 €; pilot 120–170 trafo ~40–57 bin € (işçilik dahil), başlangıçta 3 cihaz ~18.500 €; pilot, her trafoya kalıcı cihazın ~%1'i (~5,4–7,5 milyon €); panel 800 €/kW [Kaynaklı: KTEMO PİD Ekim 2024]. Geliştirme / bakım: para yok, nitel cümle (KARAR 09:46).
+**E. Kullanılmayacaklar:** "inverterle yeşil %5 → %10" (00:49); "hemen evet %10,5" (01:22); eski şehirlerin 41/73, 0/87, 0/21 ↔ 41/284 ve 21–30'un 22/44, %12,2 / %27 (→ 24/46, %11,3 / %28); "her 6 uyarıdan 1" (→ 5–6); doluluk uyarısı 92 / 37 (→ 87 / 34); İspanya aralığı "%79" (→ %82,1); eski "~20 bin € + pens" (yalnız donanım).
+**F. Açıklar:** geri ödeme ve emisyon yok (tarife, emisyon katsayısı, Kıb-Tek trafo değişim maliyeti aranıyor); KTTO 2.670 kaynağının adresi; "çoğu 5–8 kW" ve ev başına 6,5 kW kaynaksız; %27 → %19 eski şehirlerden.
+**G. Can'ın sunum dosyalarında hâlâ eski rakam (Can düzeltiyor):** `docs/sunum/ekranlar.md:37` (0/87 ↔ 41/284, 41/73), `:43` (%27, 12/44); `docs/sunum/konusma-notu.md:21` (%79), `:25` (41/73, 87 yeşil, yeşil %25 / sarı %62), `:52` (22/44 / 41/73); slaytlar ve konuşma notu henüz "yük haritası öne" sırasında değil.
+Soru: Eksik ya da yanlış satır var mı? %27 → %19 ve "%5 → %13" kalsın mı?
+Dosya: dashboard/icerik.json; docs/sunum/; docs/log/2026-11-01-can-maliyet.md
+Neden: Can'ın isteği (yedek liste, unutulmasın); KARAR 09:43, 10:04.
+Durum: karar verildi 10:16 → can.md (liste doğru; %27 → %19 kalkar, %5 → %13 yerine 28 → 60 trafo)
+
+## BİLGİ 1 Kasım (11:45 sonrası) — Can'dan — sunum dosyalarındaki eski rakamlar üretici 1.5 rakamlarına çevrildi (yedek listenin G maddesi)
+Ne: `docs/sunum/ekranlar.md`, `konusma-notu.md`, `slaytlar.md`: 41/73, 0/87, 41/284, 22/44, %79, yeşil %25 / sarı %62 / kırmızıların %27'si, farazi %3,8 / %20,6, "~20 bin € + pens" → `dashboard/icerik.json` rakamları (24/46 ↔ 0, 0/60, %82,1, %11,3 / %28, renksiz %76, 15/22, maliyet tablosu); "yeşil = güven yüksek" ifadeleri ADR-0019'a göre düzeltildi; konuşma notunda "sıradaki katman, sunumda gösterilmez" bölümü yerine yük haritası cümleleri (16/16 ve 87 uyarı, 207 V 2/2 ve 233 "yeterli", İspanya tepe %15). Yeni rakam yok.
+Açık kalan: kilit grafik PNG eski şehirlerden (0/87 ↔ 41/284) — 1.5 şehirleri 31–40 ile yeniden üretilecek, **BEKLİYOR**; kaç ev hatası 1.5'te raporlanmadı (BEKLİYOR); ekran 6 %27 → %19 ve "%5 → %13" senin cevabını bekliyor; slayt sırası henüz "yük öne" değil.
+Dosya: docs/sunum/
+Durum: bilgi
+
+## UYARI! 1 Kasım (10:30 sonrası) — Can'dan — B-Y2 PR #39 inceleme ve koşum için hazır; ayrı bulgu: 41–50'de öğlen yükü P90 %30,1 KALDI
+Ne: (1) **PR #39 (`yuk/b-y2`, `tepe.py`):** varsayılan `--model b-y2` = konut yaz eğimi 20 Kıbrıs evinden (0,065/°C; EAC 0,030); ev çeşitliliği `--model b-y2-esz` deneme, kapalı (31–40'ta konut dışı tepeyi %18–28 az gösterdi: güvensiz); `--model on` eski. Sözleşme değişmiyor. **41–50 bir kez (KARAR 09:58):** tepe hatası %11,4 / P90 %23,9, %80 bant %95,0, işaretli +%11,1 (güvenli; konut +%13,6), akşam gerilimi "yeterli" 211 trafoda 0 yanlış. 31–40 (seçimde kullanıldı): on %5,8 / %15,1 → b-y2 %10,1 / %19,9. Farazi eğimi sınayamaz (üretici β'sı gerçek evlerden düşük; PR açıklamasında). Üretici β çapası sunumdan sonra (BUILD 1, üretici 1.6).
+(2) **Ayrı bulgu (sablon.py, B-Y2'den bağımsız):** hiç bakılmamış 41–50'de öğlen en düşük yük maddesi KALDI: ortanca %12,4, P90 %30,1 (eşik %30; en kötü sehir-048 %15,3 / %37,6); arketip %80,4 geçti. Windows koşumu; Mac koşumuyla teyit gerekir.
+Dosya: PR #39 (https://github.com/volkanGRGN/KKTC-hackathon/pull/39); docs/log/2026-11-01-can-eszamanlilik.md
+Neden: KARAR 09:58 m. 3; öneren ≠ puanlayan (BUILD 1 inceler, TEST koşar).
+Durum: bekliyor
+
+## UYARI! 1 Kasım (12:00 sonrası) — Can'dan — sıradaki iş: elimdeki yedi işten hangisi önce?
+Ne: can.md'deki kararların (09:33, 09:43, 09:46, 09:58) bende açık kalanları; yapılanlar: araçlarla "öncesi" ölçümü (ffa1035), maliyet tablosu, sunum rakamlarının 1.5'e çevrilmesi (73456b2), yedek rakam listesi.
+Açık işler (önerdiğim sıra; "öncelik sunum", 09:58):
+1. **Sunum akışı "yük haritası öne"** (09:43): slayt ve ekran sırası hâlâ eski (panel önde); yük cümleleri konuşma notunda hazır. Sırayı ben mi çevireyim, yoksa senin / Civan'ın pitch şablonu mu esas?
+2. **Kilit grafik** `docs/sunum/kilit_yanlis_yesil.png` eski şehirlerden (0/87 ↔ 41/284); 1.5 şehirleri 31–40'ı üretip `grafikler.py faz3 --aralik 31-40` ile yeniden (~15–20 dk). Sunumda kullanılacak mı?
+3. **Tarife, emisyon katsayısı, Kıb-Tek trafo değişim maliyeti** araması (09:46; sonuncusu en değerlisi), Bulamadım akışıyla.
+4. **`sinav.py` temizliği** (09:33 / 09:58): karakterizasyon → küçükler → taşıma.
+5. **Beş MWh sözlüğünün eşitlik denetimi** (09:58 madde 6; `tepe.py:94` dahil).
+6. **`src/sicak_nokta.py`** (09:33 madde 3): ölçüm betiğini kalıcı yap.
+7. **`app/` bulguları** `civan.md`'ye (09:33 madde 2): bugün yalnız `ornek_veri.py` ↔ `sehir_uret.py` klonu.
+Soru: Sıra bu mu (1–2 sunum, 3 sunuma yetişirse, 4–7 sunumdan sonra), yoksa öncelikli başka bir iş var mı? Ekran 6 %27 → %19 ve "yeşil %5 → %13" sorusu da (11:30 girdisi) bekliyor.
+Dosya: docs/istek/can.md (KARAR 09:33–09:58)
+Neden: Can'ın isteği: sıradaki işi karar masası belirlesin.
+Durum: karar verildi 10:16 → can.md (sıra 1 → 2 → 3 sunuma kadar; 4–7 sonra)
+
+## UYARI! 1 Kasım 10:14 — (BUILD 1 — yük) — Clean review madde 1: trafo_bos_kapasite.py'de kullanılmayan satır kaldırıldı, çıktılar bayt bayt aynı (PR #40); test edin
+Ne: KARAR 09:5x (can.md). `main()` içindeki `rooms = [group_room(…)]` kaldırıldı; `group_room` saf, satır yalnız betik olarak çalışan `main()`'de (üretici ve öbür modüller `main()`'i çağırmıyor) [Hesap: BUILD 1]. Üretici 1.5 şehirleri 1–10 ve 31–40: trafolar, yuk_5dk, yaz / kış, cevap anahtarı 100 / 100 dosya bayt bayt aynı, ayar.json süre dışında aynı; benzetim betiği tohum 7, 1, 31'de JSON ve ekran çıktısı aynı.
+Süre: benzetim betiği eski / yeni sırayla 3'er koşu 3,54–4,19 ↔ 3,73–4,23 sn, fark gürültü içinde; 20 şehir üretiminde 995 → 1.150 sn makine yükü (satır üretimde çalışmıyor).
+Dosya: PR #40 (https://github.com/volkanGRGN/KKTC-hackathon/pull/40)
+Neden: KARAR 09:5x, clean review madde 1.
+Durum: bekliyor

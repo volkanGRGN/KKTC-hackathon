@@ -144,9 +144,9 @@ def ozet_sekmesi(t, icerik):
     k[3].metric("Kurulu güneş paneli", f"{tr(t['panel_kw'].sum())} kW", border=True,
                 help=f"{tr(t['panel_sayisi'].sum())} panelli abone, bugün bağlı.")
     st.write("")
-    panel_ozeti(t, icerik)
+    yuk_ozeti(t)  # yük haritası öne (Volkan, 1 Kasım)
     st.divider()
-    yuk_ozeti(t)
+    panel_ozeti(t, icerik)
 
 
 def panel_ozeti(t, icerik):
