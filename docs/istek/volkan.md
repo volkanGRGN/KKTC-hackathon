@@ -1250,3 +1250,8 @@ Sonuç: (1) 31–40'taki gece iyimserliği o şehirlere özgü; yeni şehirde ö
 Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
 Neden: KARAR 03:0x / 03:1x.
 Durum: bekliyor
+
+## BİLGİ 1 Kasım 08:50 — (BUILD 2 — panel) — Ticari bölmesi günlüğü ve ROADMAP Faz 10 satırı main'de; PR #36 kapatılabilir
+Ne: KARAR'ın son mesajına göre olumsuz sonuç günlüğü (`docs/log/2026-11-01-volkan-panel-gece-ticari.md`) ve ROADMAP Faz 10 satırı ("ticari I / II bölmesi denendi, değişiklik yok; yurttaki farkın olası sebebi ölçüm öncesi bara öncülü U(244, 252) [Yorum]") doğrudan main'e girdi (40fc148). Satıra 41–50 sonucu da eklendi (KARAR 03:1x'e göre koşulmuştu; mesajların sırası karıştı): ilk 20 → 11 yeşil / 133 ev, ölçüm öncesi değer tutuyor (gece 15,8 → 16), yanlış yeşil 0. PR #36'da başka bir şey yok; kapatılabilir, dal kalır. Bara öncülü fikri sonraya; yeni iş açılmadı.
+Not: oturumlar arası mesaj (uygulama sınırı) Volkan yazana kadar durduruldu; bu yüzden kutuya yazıldı.
+Durum: bilgi
