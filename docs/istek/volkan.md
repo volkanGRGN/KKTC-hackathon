@@ -1259,3 +1259,10 @@ Durum: bilgi
 ## KARAR 09:21 — PR #37 (dashboard sayfası) birleşti; `dashboard/` Volkan'ın dosyası
 Karar: "Hekaton dashboard sayfası" oturumunun PR'ı (303e6ff). Karar masası Mac testi (main ile birleşik, kendi üretici 1.5 şehirleri 31–40): Streamlit AppTest hata yok, altı sekme (Özet, Trafolar, Şehirler, Model ne kadar iyi, Proje, Ham veri); kurallar tutuyor (cevap anahtarı okunmuyor, yük serisinden yalnız ölçülü trafolar). `icerik.json` rakamları resmi koşularla aynı: 0/60, 15/22, %76, 22/44 ↔ 0, %15,4 / %36,1, %5,8 / %15,1 (bu koşuda yeniden ölçüldü), 16/16 ve 16/16, %3,7. Not: sayfa klasördeki tabloyu gösterir; dashboard oturumunun kopyasında 63 yeşil görünmesi o kopyanın daha eski bir koddan olmasından, resmi rakam `icerik.json`'da. **Sahiplik:** `dashboard/` Volkan'ın (+ Claude) dosyası (CONTRIBUTING, CLAUDE.md); harita `app/` Civan'ın kalır. Rakamlar değişince `icerik.json`'u güncelleyen: karar masası (resmi koşudan sonra).
 Durum: bilgi
+
+## UYARI! 1 Kasım (10:00 sonrası) — Can'dan — maliyet tablosu sunumda; dashboard `icerik.json`'a eklensin mi, geliştirme / bakım maliyeti ne alınsın
+Ne: Kaba maliyet hesabı [Hesap; Civan'ın ölçüm maliyeti günlüğünden]: trafo başına ölçüm ~18,6 bin TL (~333 €); pilot 120–170 trafo ~2,2–3,2 milyon TL (~40–57 bin €); her trafoya kalıcı cihaz ~300–419 milyon TL (pilot bunun ~%1'i); başlangıçta 3 cihaz ~1,03 milyon TL. KTEMO belgeleri yalnız ölçüm ve panel kurulumunu (800 €/kW) karşılıyor; tarife, emisyon katsayısı, Kıb-Tek trafo maliyeti yok → geri ödeme ve emisyon hesaplanmadı. Konuşma notunun eski "~20 bin €" (yalnız donanım) satırı düzeltildi.
+Soru: (1) Dashboard (`dashboard/icerik.json`, senin dosyan) "Proje" sekmesine bu tablo eklensin mi? Can, Civan'ın görmesini ve eklemesini istiyor; sahiplik KARAR 09:21'de sende. (2) Pitch'in "geliştirme / bakım maliyeti" kutusu için ne varsayılsın (ekip saati, barındırma) — yoksa BEKLİYOR mu kalsın? (3) Geri ödeme / emisyon için tarife ve emisyon katsayısı aransın mı?
+Dosya: docs/sunum/slaytlar.md "Maliyet" bölümü; docs/log/2026-11-01-can-maliyet.md; civan.md (aynı saat)
+Neden: volkan.md 09:46 (pitch'te eksik maliyet kutuları).
+Durum: bekliyor

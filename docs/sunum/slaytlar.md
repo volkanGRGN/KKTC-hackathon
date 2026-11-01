@@ -32,6 +32,23 @@ Süre hedefi 5–7 dk; dakika sütunu kaba [Yorum].
 | **Komşu etkisi:** bir onay komşunun payını yer | Onaylar bağımsız sayılmaz; kalan pay her onaydan sonra yeniden hesaplanır (sunum sonrası, sözleşme 1.3) |
 | **Zamanla bozulma:** paneller arttıkça şablon eskir | Ölçüm cihazları her ilkbahar sarılara dolaşır; şablon her yıl yenilenir [Yorum] |
 
+## Maliyet (slayt 8'e ek; pitch şablonunun maliyet kutusu, dashboard)
+
+Kaba hesap; kesinlik iddiası yok. Ayrıntı ve dahil olmayanlar: [maliyet günlüğü](../log/2026-11-01-can-maliyet.md).
+
+| Ne | Kaç trafo | Maliyet | Etiket |
+|---|---|---|---|
+| Bir trafoyu taşınabilir cihazla ölçmek | 1 | ~18,6 bin TL (~333 €) | [Hesap: Civan'ın ölçüm maliyeti günlüğü — KTEMO birim fiyatı, EMO mühendis saati, Fluke 1736, TCMB kuru] |
+| Kıbrıs pilotu | 120–170 | ~2,2–3,2 milyon TL (~40–57 bin €) | [Hesap: maliyet günlüğü] |
+| Kıyas: her trafoya kalıcı cihaz | ~6.400–6.700 | ~300–419 milyon TL (~5,4–7,5 milyon €) | [Hesap: Civan'ın günlüğü, B tablosu] |
+| Başlangıçta 3 cihaz almak | — | ~1,03 milyon TL (~18,5 bin €) | [Hesap: Fluke 6.164 € × 55,82] |
+
+Söylenebilecek iki cümle:
+- "Pilot, her trafoya cihaz takmanın yüzde biri." [Hesap: 3,16 ÷ 300 milyon TL]
+- "Bir trafoyu ölçmek, o trafodaki bir evin güneş panelinin yüzde altısı." [Hesap: 333 € ↔ 6,5 kW × 800 €/kW = 5.200 €; 800 €/kW Kaynaklı: KTEMO PİD Ekim 2024, J1; 6,5 kW Yorum]
+
+Yok: geliştirme / bakım maliyeti, geri ödeme, emisyon etkisi — **BEKLİYOR** (tarife ve emisyon katsayısı depoda yok; geliştirme maliyeti ekibin kararı).
+
 ## Kaynak slaydı (12)
 
 - **İngiltere yöntemi:** Ofgem, WPD "LV Network Templates" ilerleme raporu (Mayıs 2013) ve ödül başvurusu (Mayıs 2015) — https://www.ofgem.gov.uk/sites/default/files/docs/2013/09/ppr_wpd_lv_templates_may2013.pdf · https://www.ofgem.gov.uk/sites/default/files/docs/2015/05/final_-_sdrc_reward_submission_v1.7_redacted.pdf
@@ -44,4 +61,5 @@ Süre hedefi 5–7 dk; dakika sütunu kaba [Yorum].
 - **Kuzey bekleyen başvuru:** KTTO raporu, Mart 2023 — adres doğrulanmadı (Can ve Volkan aramalarında bulunamadı).
 - **Malta kapasite haritası:** Enemalta, "Available Capacity" haritasının verisi, 31 Ekim 2026'da indirildi (1.332 trafo merkezi; adres [ada ülkeleri günlüğü](../log/2026-10-31-volkan-ada-ulkeleri.md), `data/raw/enemalta-kapasite/KAYNAK.txt`); lisans belirsiz, ham veri depoda yok. "%25 tavanı" Enemalta'nın yazdığı kural değil, bizim veriden çıkarımımız (karar masası 20:47).
 - **Hawaii düz kuralı:** Hawaiian Electric (HECO), "Minimum Day Time Load Calculation and Screening", 2014 — https://www.energy.gov/sites/prod/files/Hawaiian%20Electric%202014-04-30_minimum-day-time-load-calculation-and-screening.pdf
+- **Maliyet:** KTEMO (KTMMOB Elektrik Mühendisleri Odası) PİD Elektrik Tesisatları Asgari Birim Fiyat Listesi, Ekim 2024 — https://www.ktemo.org/files/teknikbilgiler/EKIM2024.pdf; KTEMO kontrollük ücretleri Rev.13; Fluke 1736/EUS bayi fiyatı (datatec.eu, 1 Kasım 2026); TCMB kuru 30.10.2026 ([Civan'ın günlüğü](../log/2026-11-01-civan-olcum-maliyeti.md)).
 - Bütün liste ve adresler: [veri sözlüğü](../data/data-dictionary.md), [araştırma günlüğü](../log/2026-10-31-kapsamli-arastirma.md) "Kaynaklar" bölümü.

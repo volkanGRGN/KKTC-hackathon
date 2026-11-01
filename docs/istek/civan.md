@@ -215,3 +215,11 @@ Durum: bekliyor
 Ne: Konut trafolarında günde iki tepe var (16–17 ve 23), neredeyse eşit; tek saat yarı yarıya tutuyor. PR #32 `tepe.csv`'ye `tepe_saati_2` (ikinci aday) ve `tepe_donemi` (§8) ekliyor; iki adaydan biri %60, dönem %69 tutuyor [Hesap; farazi, üretici 1.5]. Kart "tepe saati" yerine "tepe: akşam (17:00 ya da 23:00)" gibi iki adayı göstersin. Sütunlar #24 / #26 / #29 / #31 / #32 zinciri birleşince main'de olur (hepsi GitHub onayını bekliyor; onay listesi 01:20 girdisinde).
 Dosya: app/ (senin); docs/data/tablo-bicimi.md §8 (onay)
 Durum: bekliyor
+
+## UYARI! 1 Kasım (10:00 sonrası) — Can'dan — pitch şablonunun maliyet kutusu ve dashboard için maliyet tablosu hazır
+Ne: Kaba maliyet hesabı (kesinlik iddiası yok), senin ölçüm maliyeti günlüğüne dayanıyor [Hesap]: bir trafoyu taşınabilir cihazla ölçmek ~18,6 bin TL (~333 €); Kıbrıs pilotu 120–170 trafo ~2,2–3,2 milyon TL (~40–57 bin €, işçilik dahil); her trafoya kalıcı cihaz ~300–419 milyon TL; başlangıçta 3 cihaz ~1,03 milyon TL (~18,5 bin €). Cümleler: "Pilot, her trafoya cihaz takmanın yüzde biri"; "Bir trafoyu ölçmek, o trafodaki bir evin panelinin yüzde altısı" (6,5 kW × 800 €/kW KTEMO). Konuşma notundaki eski "~20 bin € + pens" yalnız donanımdı, düzeltildi.
+Yok (pitch'te BEKLİYOR kalsın): geliştirme / bakım maliyeti (ekibin kararı, Volkan'a sordum), geri ödeme ve emisyon (Kıb-Tek tarifesi ve emisyon katsayısı depoda yok).
+Senden beklenen: pitch şablonunun maliyet kutusuna bu rakamlar, etiketleriyle. Dashboard `dashboard/` Volkan'ın dosyası (KARAR 09:21); oraya eklenmesini Volkan'ın kutusuna yazdım — sen eklemek istersen önce Volkan'la.
+Dosya: docs/sunum/slaytlar.md "Maliyet" bölümü; docs/log/2026-11-01-can-maliyet.md
+Neden: volkan.md 09:46 (pitch'te eksik maliyet kutuları).
+Durum: bekliyor

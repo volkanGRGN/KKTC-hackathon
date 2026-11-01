@@ -40,7 +40,7 @@ Kaynak: [araştırma günlüğü](../log/2026-10-31-kapsamli-arastirma.md) böl�
 | 1 | İngiltere'nin kopyası değil mi? | Yöntem İngiltere'nin, hedef bizim: ilkbahar öğlen en düşük yük ve hat ucu gerilimi; bunu doğrulayan çalışma bulamadık | |
 | 2 | Veri nereden? | Tüketim eğrileri Güney Kıbrıs dağıtım şirketinin 2022 resmi profilleri, büyüklükler Kıb-Tek 2023 istatistiği, güneş Lefkoşa'nın gerçek verisi; şebeke ölçüleri Alman açık setinden (SimBench); köy, yurt ve sulama varsayım | |
 | 3 | Doğruluğunuz ne? | Güven merdiveni: İspanya gerçek veride faturayla ~%10; İngiltere ~%80; farazi şehir gösterim; Kıbrıs için pilot ve kör test | |
-| 4 | Kıb-Tek bunu neden alsın? | Başvurular bekliyor, izleme sistemi yok; Güney bağladı, şimdi kısıyor. Pilot 120–170 trafo, taşınabilir cihazla ~20 bin € + pens | |
+| 4 | Kıb-Tek bunu neden alsın? | Başvurular bekliyor, izleme sistemi yok; Güney bağladı, şimdi kısıyor. Pilot 120–170 trafo, taşınabilir cihazla ~2,2–3,2 milyon TL (~40–57 bin €, işçilik dahil); her trafoya cihaz takmanın ~%1'i [Hesap: docs/log/2026-11-01-can-maliyet.md] | |
 | 5 | Hangi abone hangi trafoda, biliyor musunuz? | Hayır; Kıb-Tek başvuruda abonelik belgesi istiyor, eşleşme onda. Uzmana ilk sorumuz | |
 | 6 | Model yanlış "yer var" derse? | Yeşil yalnız karamsar senaryo marjla geçiyor ve güven yüksekse; canlı bütçe yanlış yeşil < %2; sarılara ölçüm cihazı | |
 | 7 | "Yapay zekâ hayır dedi" — kim hesap verir? | Ret yok, triyaj var; son karar Kıb-Tek mühendisinin; itiraz eden gerçek ölçüm ister | |
