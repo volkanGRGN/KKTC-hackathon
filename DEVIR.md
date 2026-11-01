@@ -11,7 +11,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:00)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:05)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
@@ -19,7 +19,8 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | eksi düzeltildi (7ba3b72); gerçekçi rakam hemen evet ~%8 | TEST tekrarı → KARAR birleştirir |
 | PR #30 Faz 10 ölçüm sırası (taban main) | BUILD 2 | 5721c98: gece / kademe sonrası bayrak yok; acf4fc9 TEST'te tuttu | TEST (5721c98) → KARAR birleştirir |
-| ADR-0019 uygulaması: yeşil kapısında güven şartı kalkar, 31–40'ta bir kez | BUILD 2 | başladı (dal `panel/guven-kapisi`; 1.5 şehirleri üretiliyor) | — |
+| PR #33 ADR-0019 uygulaması (yeşil kapısında güven şartı kalkar; taban #25) | BUILD 2 | 31–40: yeşil 28 → 60, yanlış yeşil 0, bayrak %68 — yürürlük şartı tutuyor (KARAR 02:05) | TEST → #25 → #33 |
+| Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
 | PR #31 yük modeli üretici 1.5 şehirlerinde, KTEMO günlüğü, pf notu (taban main) | BUILD 1 | sistem oranına çapalama yok (KARAR 01:30) | TEST → KARAR birleştirir |
 | PR #32 tepe saati (`tepe_saati_2`, `tepe_donemi`; #31 üstünde) | BUILD 1 | 31–40 saat %52, iki adaydan biri %60 (KARAR 01:36) | TEST; #31 → KARAR birleştirir; kart Civan |

@@ -1153,3 +1153,7 @@ Soru: ADR-0019 yürürlüğe girince #30'u yeni kurala çevireyim mi (ölçüm s
 Dosya: PR #33 (https://github.com/volkanGRGN/KKTC-hackathon/pull/33), docs/log/2026-11-01-volkan-panel-guven-kapisi.md (dalda); PR #25, PR #30
 Neden: KARAR 01:22; ADR-0019 m. 3.
 Durum: bekliyor
+
+## KARAR 02:05 — (BUILD 2 — panel) PR #33 (ADR-0019 uygulaması): TEST'e; #30 olduğu gibi birleşir, yeni kurala geçişi ayrı küçük PR
+Karar: (1) PR #33 (f9708bd; taban #25) TEST'e: BUILD 2'nin ölçümü ADR-0019 m. 3 yürürlük şartını tutuyor (üretici 1.5 şehirleri 31–40 bir kez: yeşil 28 → 60, **yanlış yeşil 0/60**, bayrak isabeti %68 (15/22) ≥ %60, renksiz %86 → %76; akış: kayıtsız hemen evet %4,6 → %12,2, yanlış evet 4/865 = %0,5; beklenen kayıt %22,9, 2/1.624; 21–30 bilgi 17 → 47, BUILD 1'in karşı-olgusuyla birebir; konut hemen hemen aynı) [Hesap: BUILD 2; TEST tekrarlayacak]. TEST "tuttu" deyince #25 → #33 sırayla birleşir ve ADR-0019'un durum satırı "kabul, yürürlükte (PR #33)" olur. (2) Soruya karar: **#30 olduğu gibi birleşir** (eski kural, test edilmiş hâli); #33 birleşince BUILD 2 küçük bir PR'la ölçüm sırasını ve konum payı analizini yeni kurala çevirir, 31–40 bir kez (renksiz küme küçülür, "ilk 20" listesi değişir), ROADMAP Faz 10 satırı güncellenir. (3) Sunum / jüri cümlesi (Can'a, #33 birleşince): "yeşil %5 → %13; yanlış yeşil hâlâ 0".
+Durum: bekliyor (TEST: #25, #30, #31, #32, #33)
