@@ -102,6 +102,22 @@ Mac tekrarı birebir. (1) Motor inverter barasını **yalnız ölçülmüş kaym
 - **Eksi:** eski tür (türetilmiş) `inverter` satırının gerçek kayıtta kullanılmasını kod engellemiyordu; motor bu satırdan bara yanında hat boyunu da (±%20) alıyor, §7 bu türü geçerli sayıyordu. **Düzeltme:** `sahte_kayit.kayit_uret` kayda `kaynak = 'sahte'` yazar; `kayit_oku(yol, kaynak='gercek')` türetilmiş satırı gerçek kayıtta atlar ve UYARI basar (sahte dosya için `kaynak='sahte'`); motor (`ag_kur_kayitli`) kaynağı sahte olmayan kayıtta türetilmiş satırı görürse hata verir. §7: türetilmiş tür "yalnız deneme". Sınandı: 36 türetilmiş satır gerçek diye okununca 0'a iner (UYARI), sahte diye okununca 36; elle verilen gerçek kayıtta motor reddeder.
 - **Gerçekçi rakam:** PR #22'nin "hemen evet %3,8 → %10,5"i ve iki kat varsayımla %9,7–10,1, inverter kaydını gerçek ± gürültü sayıyordu (bara ±1–2 V, hat boyu ±%20–40 doğru). Ham özet yolunda (R3) hemen evet **%7,8–8,0** (sınav 21–30). Kayıtlar gelirse söylenecek rakam "%3,8 → ~%8"; ROADMAP Faz 9'a yazıldı.
 
+## Düzeltme ve üretici 1.5 ile yeniden koşum (karar masası 02:1x, TEST'in eksisi)
+- **Eksi:** `sahte_kayit.py` şehrin "gerçek" ağını o anki `sehir_uret.py` ile yeniden kuruyor, şehrin hangi üreticiyle yapıldığına (`ayar.json` `uretici_surumu`) bakmıyordu. Main üretici 1.5'e geçince 1.3 şehirlerinde ağ sessizce değişiyordu (TEST: 40 trafonun 12'sinde kVA farklı; BUILD 2: kVA, hat ya da panel sayısı 24/40'ta farklı). Etkilenen: `sahte_kayit`, `basvuru_testi`, `inverter_geri_cozum`, `guvenli_uc --kayitli / --konum`.
+- **Düzeltme:** `gercek_sehir()` şehrin üretici sürümünü `sehir_uret.URETICI_SURUMU` ile karşılaştırır, farklıysa `YenidenKurmaHatasi` ("bu şehir üretici 1.3 ile yapıldı; yeniden kurma 1.5 ile tutmaz"); yeniden kurulan ağı `trafolar.csv` ile (kVA, hat sayısı, panel sayısı) karşılaştırır, uyuşmazlıkta durur. Bilerek zorlamak için açık bayrak `--surum-zorla` (dört betikte; yalnız uyarır). Sınandı: 1.3 şehri bayraksız durdu; zorlanınca iki uyarı (sürüm, 24/40 trafo); 1.5 şehri hatasız, yeniden kurma 38/40 birebir.
+- **Yeniden koşum, üretici 1.5** (main'in üreticisiyle BUILD 2 klasöründe sıfırdan; `sablon.py`, `kac_ev_olasilik.py` bu dalın koduyla, güven şartı var): bara kayması 1–10'da yeniden ölçüldü, `INV_BARA_HATA_Q` güncellendi (ortanca **−0,62 V**, P10–P90 −1,47 … −0,15 V, ≤ 1 V %76; 1.3'te −0,79 V idi). Hat boyu çevirici yine tutmuyor (×0,29 … ×2,60). Resmi panel sınavı artık **31–40** (dokunulmamış 1.5); 21–30 1.3'te kaldı. **Sınav 31–40 bir kez** (~02:17):
+
+| Kayıtlar (motor iki kat varsayar) | R0 türetilmiş inverter (yalnız sahte): hemen evet / yanlış evet | R3 ham özet: hemen evet / yanlış evet |
+|---|---|---|
+| Kayıtsız (bugün) | %4,6 / 0/326 | — |
+| Yarı | %10,8 / 1/762 | %8,9 / 1/633 |
+| Beklenen | %11,0 / 2/783 | **%8,8 / 0/622** |
+| İki kat | %10,6 / 9/751 = %1,2 (aralık %0,6–2,3; 3 trafo) | **%8,3 / 0/591** |
+| Kusursuz bilgi | %18,7 / 10/1.326 | — |
+
+Geri çözüm hatası 31–40: ortanca −0,53 V, P10–P90 −1,43 … +0,06 V, ≤ 1 V %80. İnverterli 165 trafoda (aday evi olan): kayıtsız yeşil 6 / bayrak 21 (15 dolu) / renksiz %84 → kayıtlı yeşil 4–8 / bayrak 24–28 (19–24 dolu) / renksiz %80–82; yanlış yeşil 0. Geliştirme 1–10 (1.5): R0 beklenen %10,4 / 3/761, iki kat %10,4 / 2/761; R3 %8,9 / 2/651 ve %8,9 / 2/650. Harita politikası (yeşilse ilk iki) R0 iki kat kayıtta 4/168 (%2,4; türetilmiş inverter yolu, yalnız sahte), R3'te 0/138.
+- Sonuç değişmedi: gerçekçi inverter yolunda hemen evet ~%8–9, yanlış evet sınırın güvenle altında; inverter haritayı açmıyor; hat boyu inverterden çözülmüyor.
+
 ## Deney defteri
 | Tarih | Sürüm | Tohum | Hipotez | Sonuç | Karar |
 |---|---|---|---|---|---|
@@ -110,5 +126,6 @@ Mac tekrarı birebir. (1) Motor inverter barasını **yalnız ölçülmüş kaym
 | 1 Kas ~00:28 | motor v1.1 (iki kat) + R1 / R2 (bara hatası 1–10'dan) | 1–10 | R1 yanlış evet artar, R2 geri indirir | iki kat: %1,1 → %1,7 → %0,4 | 21–30 bir kez |
 | 1 Kas ~00:30 | aynı | 21–30 | aynı | geri çözüm −0,97 V; iki kat: R0 %1,9 → R1 %2,7 → R2 %1,3 (aralık %0,7–2,5); hemen evet %10,1 → %9,6; yanlış yeşil 0 | karar masasına (PR) |
 | 1 Kas ~00:43 | motor v1.2: `inverter_ham`, bara 1–10 nicelikleriyle, boy çevirici kapalı (1–10'da ×0,30–2,63) | 21–30 | gerçekçi inverterle yanlış evet < %2, inverterli trafoda açılır | iki kat 4/576 (%0,7; üst %1,8); hemen evet %8,0; inverterli yeşil 0 → 1–3, yanlış yeşil 0 | karar masasına (PR) |
+| 1 Kas ~02:17 | motor v1.3: sürüm / sağlama kontrolü, `INV_BARA_HATA_Q` üretici 1.5 1–10'dan | 31–40 (1.5) | 1.5'te de gerçekçi inverterle yanlış evet < %2 | R3: 0/622, 0/591; hemen evet %8,3–8,9; kayma −0,53 V; inverterli yeşil 6 → 4–8 | TEST'e |
 
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->

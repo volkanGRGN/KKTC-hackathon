@@ -14,11 +14,17 @@ Sınav maddesi Can'ın (`sinav.py faz3`, 3b); bu betik BUILD 2'nin geliştirme �
 `basvuru.harita_rengi`'den, `basvuru_testi.py`'nin tohumlarıyla (renkler o tablonun aynısı). PR #22 kodu
 (`basvuru.py`, `sahte_kayit.py`) gerekir. Etiket: farazi şehir, gösterim.
 
+`--konum`: konum payı analizi (ADR-0015 m. 4; `kac_ev_olasilik.konum_payi`, `kac_ev.csv`'ye yazılmaz — karar masası
+01:01): payı > 0 olan trafolarda hattın ilk x'indeki her panelsiz konutun tek başvurusu (6,5 kW) gerçek ağda kritik
+anlarda sığıyor mu (`sahte_kayit.gercekte_asar`, cevap anahtarının tanımı). Ölçü: konum payı yanlış evet (kapı ≤ %2),
+bilgi verilen başvuru payı. PR #22 kodu gerekir.
+
 `--guven-kiyas` (ADR-0019): aynı `kac_ev.csv`'den iki görünüm: güven şartlı (eski kural: yeşil ayrıca güven yüksek
 ister; kırmızı ve bayrak aynı) ve şartsız (yeni); şehir başına en kötü yanlış yeşil oranı (ADR-0019 m. 3: ≤ %10).
 
 Çalıştırma:
   python3 src/guvenli_uc.py data/synthetic/u13 --aralik 1-10
+  python3 src/guvenli_uc.py data/synthetic/u13 --aralik 1-10 --konum
   python3 src/guvenli_uc.py data/synthetic/u15 --aralik 1-10 --guven-kiyas
   python3 src/guvenli_uc.py data/synthetic/u13 --aralik 1-10 --kayitli aynen,iki_kat
 """
@@ -99,6 +105,52 @@ def kayitli(is_):
     return out
 
 
+def konum_dogrula(klasor):
+    """Bir şehir: [(trafo_no, pv_uc, konum payı, aday sayısı, [(yer, gerçekte aşar mı) payın içindeki adaylar])]."""
+    try:
+        import sahte_kayit as sk
+    except ImportError:
+        sys.exit('--konum için PR #22 kodu (src/sahte_kayit.py) gerekir.')
+    klasor = Path(klasor)
+    sehir = sk.gercek_sehir(klasor)
+    trafolar = {r['trafo_no']: r for r in _csv(klasor / 'trafolar.csv')}
+    tahmin = {r['trafo_no']: r for r in _csv(klasor / 'tahmin.csv')}
+    out = []
+    for r in _csv(klasor / 'kac_ev.csv'):
+        tr = {k: (v if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(v)) for k, v in trafolar[r['trafo_no']].items()}
+        x = 0.0 if float(r['p_bugun_asar']) > 1 - ko.YESIL_P else ko.konum_payi(     # haritayla çelişmesin
+            tr, tahmin[r['trafo_no']], random.Random(f'konum-{trafolar[r["trafo_no"]]["sehir"]}-{r["trafo_no"]}'))
+        gtr = sehir['trafolar'][r['trafo_no']]
+        ad = sk.adaylar(gtr)
+        icinde = []
+        if x > 0 and ad:
+            gt = sk.gercek_trafo(sehir, r['trafo_no'])
+            yer = sk.ev_yeri(gtr)
+            for hid in ad:
+                j, k, n = yer[hid]
+                if (k + 1) / n <= x + 1e-9:
+                    icinde.append(((k + 1) / n, sk.gercekte_asar(sehir, gt, {hid: ke.YENI_PANEL_KW})))
+        out.append((r['trafo_no'], r['pv_uc'], x, len(ad), icinde))
+    return out
+
+
+def konum_yaz(klasorler):
+    with ProcessPoolExecutor() as ex:
+        sonuc = list(ex.map(konum_dogrula, [str(k) for k in klasorler]))
+    print('\nkonum payı (ADR-0015 m. 4) — gerçek ağda tek başvuru: durum | trafo | payı > 0 | pay ortancası | '
+          'payın içindeki aday / tüm aday | yanlış evet (gerçekte aşan) | yanlış evetli trafo')
+    for uc in ('bos', 'yesil', 'dolu_bayrak', 'hepsi'):
+        satir = [x for s in sonuc for x in s if uc == 'hepsi' or x[1] == uc]
+        pozitif = [x for x in satir if x[2] > 0]
+        icinde = [a for x in pozitif for a in x[4]]
+        yanlis = sum(a[1] for a in icinde)
+        tr_y = sum(1 for x in pozitif if any(a[1] for a in x[4]))
+        tum = sum(x[3] for x in satir)
+        orta = sorted(x[2] for x in pozitif)[len(pozitif) // 2] if pozitif else float('nan')
+        print(f'{uc} | {len(satir)} | {len(pozitif)} | {orta:.1f} | {yuzde(len(icinde), tum)} | '
+              f'{yuzde(yanlis, len(icinde))} | {tr_y}/{len(pozitif)}')
+
+
 def olc(klasorler, durumlar):
     """durumlar: {klasör adı: [(trafo_no, pv_uc, p_bugun, renk)]}."""
     n = dolu = yesil = yy = bayrak = b_dolu = b_asan = bos = kir = k_dolu = 0
@@ -148,7 +200,13 @@ def main():
     ap.add_argument('--aralik', default='1-10')
     ap.add_argument('--kayitli', help='virgülle: yari, aynen, iki_kat, kusursuz (PR #22 kodu gerekir)')
     ap.add_argument('--guven-kiyas', action='store_true', help='ADR-0019: güven şartlı / şartsız görünüm')
+    ap.add_argument('--konum', action='store_true', help='konum payı doğrulaması (PR #22 kodu gerekir)')
+    ap.add_argument('--surum-zorla', action='store_true',
+                    help='şehrin üretici sürümü farklıysa da yeniden kur (yalnız uyar; sonuç güvenilmez)')
     a = ap.parse_args()
+    if a.surum_zorla:
+        import sahte_kayit as sk
+        sk.surum_zorla(True)
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
     print(f'şehir {a.aralik} — panel katmanı güvenli uçlar (ADR-0017), aday evi olan trafolar; farazi, gösterim')
@@ -168,6 +226,8 @@ def main():
         for i, d in enumerate(duzeyler):
             parca = sonuc[i * len(klasorler):(i + 1) * len(klasorler)]
             yaz(f'sahte kayıt, {d}', olc(klasorler, {k.name: s for k, s in zip(klasorler, parca)}))
+    if a.konum:
+        konum_yaz(klasorler)
 
 
 if __name__ == '__main__':

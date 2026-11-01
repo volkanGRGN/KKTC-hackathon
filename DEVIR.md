@@ -2,7 +2,7 @@
 
 Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ Claude) günceller; eski hali silinir, geçmiş [docs/log/](docs/log/) altında. Yeni gelen ya da yeni oturum: önce bunu, sonra [README](README.md) ve [Faz 0](docs/02-faz-0-ogrenim.md).
 
-**Güncellendi:** 1 Kasım 2026, 00:30 (KARAR) — PR #19, #21 birleşti; iş tahtası; üç oturum düzeni, ADR-0017 / 0018. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
+**Güncellendi:** 1 Kasım 2026, 01:53 (KARAR) — faz haritası ROADMAP'te; #27 birleşti; 10 PR testi geçti, onay bekliyor; ADR-0017 / 0018 / 0019. Önceki 00:30: PR #19, #21 birleşti; iş tahtası; üç oturum düzeni. Önceki: 31 Ekim 2026, 23:55 — oturumlar siliniyor (Volkan); bütün iş main'de ya da PR dallarında (#19, #21, #22). Yeni oturum buradan, `grep -n "Durum: bekliyor" docs/istek/*.md` ve ROADMAP "Faz 6–12"den devam eder.
 
 ## Kim nerede (1 Kasım 00:15; Volkan'ın üç oturumu, CONTRIBUTING "Volkan'ın üç oturumu")
 - **KARAR:** Volkan adına karar, istek kutusu (`docs/istek/volkan.md`), PR birleştirme, ADR. PR'ların Mac testini 1 Kasım 00:42'den beri **TEST** oturumu (Opus) koşar ve KARAR'a yazar (öneren ≠ puanlayan; resmi rakam Mac koşusu).
@@ -11,30 +11,25 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 01:36)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:05)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
-| PR #22 başvuru anı motoru + sahte kayıt (deneme) | BUILD 2 | testi geçti, birleşmeye hazır (34c10ab) | GitHub onayı (Can / Civan) |
-| PR #26 Kıb-Tek tepe verisi girişi (Muhittin 4 m. 3; #24 üstünde, §9) | BUILD 1 | TEST'te tuttu (KARAR 01:22) | #24, sonra taban main; onay |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
-| PR #23 güvenli uçlar, `pv_uc` (Muhittin 4 m. 1 panel, ADR-0017) | BUILD 2 | testi geçti, birleşmeye hazır | GitHub onayı (Can / Civan) |
-| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; #22 üstünde) | BUILD 2 | TEST'te bir eksi: türetilmiş inverter satırı gerçek kayıtta engellenmiyor (KARAR 01:22) | düzeltme (BUILD 2); #22; onay |
-| PR #28 sarıda konum payı (ADR-0015 m. 4; #23 üstünde) | BUILD 2 | 9138806 testi geçti (KARAR 01:12); yalnız analiz, sözleşmeye dokunmuyor | #23, sonra taban main; GitHub onayı |
-| PR #30 Faz 10 ölçüm sırası (#23 üstünde) | BUILD 2 | gece / kademe sonrası yalnız yeşil yönü (KARAR 01:22) | TEST |
-| ADR-0019 uygulaması: yeşil kapısında güven şartı kalkar, 31–40'ta bir kez | BUILD 2 | sırada | — |
-| PR #24 yılın tepesi ön sürümü (`tepe.py`, ADR-0018) + öğlende net fatura seçeneği | BUILD 1 | TEST'te tuttu (KARAR 01:22); İspanya KALDI kabul | GitHub onayı (Can / Civan) |
+| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | eksi düzeltildi (7ba3b72); gerçekçi rakam hemen evet ~%8 | TEST tekrarı → KARAR birleştirir |
+| PR #30 Faz 10 ölçüm sırası (taban main) | BUILD 2 | 5721c98: gece / kademe sonrası bayrak yok; acf4fc9 TEST'te tuttu | TEST (5721c98) → KARAR birleştirir |
+| PR #33 ADR-0019 uygulaması (yeşil kapısında güven şartı kalkar; taban #25) | BUILD 2 | 31–40: yeşil 28 → 60, yanlış yeşil 0, bayrak %68 — yürürlük şartı tutuyor (KARAR 02:05) | TEST → #25 → #33 |
+| Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
-| PR #31 yük modeli üretici 1.5 şehirlerinde, KTEMO günlüğü, pf notu (#29 üstünde) | BUILD 1 | sistem oranına çapalama yok (KARAR 01:30) | TEST; #29; onay |
-| PR #32 tepe saati (`tepe_saati_2`, `tepe_donemi`; #31 üstünde) | BUILD 1 | 31–40 saat %52, iki adaydan biri %60 (KARAR 01:36) | TEST; #31; onay; kart Civan |
+| PR #31 yük modeli üretici 1.5 şehirlerinde, KTEMO günlüğü, pf notu (taban main) | BUILD 1 | sistem oranına çapalama yok (KARAR 01:30) | TEST → KARAR birleştirir |
+| PR #32 tepe saati (`tepe_saati_2`, `tepe_donemi`; #31 üstünde) | BUILD 1 | 31–40 saat %52, iki adaydan biri %60 (KARAR 01:36) | TEST; #31 → KARAR birleştirir; kart Civan |
 | B-Y2 incelemesi (Can'ın PR'ı gelince) | BUILD 1 | bekliyor | Can |
-| PR #29 akşam gerilimi (`v_min_tepe_v`, karar P10 ≥ 207 V; #26 üstünde) | BUILD 1 | TEST'te tuttu (KARAR 01:22) | #26, sonra taban main; onay |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
-| Harita: güvenli uçlar kartı, yük ikinci sayısı; Faz 4 kalanı | Civan | `pv_uc` sütunu gelince (civan.md 00:15) | BUILD 2 |
+| Harita: güvenli uçlar kartı (`pv_uc`), yük ikinci sayısı ve iki aday saat (`tepe.csv`); Faz 4 kalanı | Civan | sütunlar main'de (02:00) | — |
 | Sunum rakam sürümü (v2 / v3) | Volkan | bekliyor | — |
 
-Birleşenler (1 Kasım): #19 (07ea153), #21 (c53ab31), #27 (6013342, üretici 1.5). **Birleştirme kuralı:** izin sistemi GitHub onayı olmayan PR'ı birleştirmiyor; Volkan'ın açtığı PR'ları Can ya da Civan onaylar.
+Birleşenler (1 Kasım): #19, #21, #27, #22, #23, #28, #24, #26, #29. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -97,7 +92,7 @@ Birleşenler (1 Kasım): #19 (07ea153), #21 (c53ab31), #27 (6013342, üretici 1.
 - Farazi isabet gerçeğin üst sınırı (ADR-0008); farazi faturalı iyimser.
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
-## Sıradaki üç adım
-1. PR #22: iki kat hata varsayan motor koşumu + tüzük madde 2 cümlesi (BUILD); Mac tekrarı (karar masası); §7 onayı (Can / Civan).
-2. PR #21 Civan onayı, PR #19 ve #21 için Volkan'ın "birleştir" sözü.
-3. Can'ın üretici 1.5 + tepe modeli PR'ları geldikçe BUILD onayı; sunum sürümü kararı (Volkan).
+## Sıradaki üç adım (1 Kasım 01:53)
+1. Altı PR birleşti (02:00); kalan #25, #30, #31, #32 TEST'in "tuttu"suyla KARAR birleştirir. Faz haritası ROADMAP "Faz 6–12" başında.
+2. BUILD 2: #25 düzeltmesi (türetilmiş inverter satırı yalnız sahte kayıtta), ADR-0019 uygulaması ve 31–40 sınavı; BUILD 1: Can'ın B-Y2'sini inceler. TEST: #30, #31, #32.
+3. Civan: güvenli uçlar kartı, yük ikinci sayısı, iki aday saat. Volkan: sunum rakam sürümü, Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.

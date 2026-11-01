@@ -174,7 +174,10 @@ def main():
     ap.add_argument('--inverter-ham', help='inverter_geri_cozum.py JSON: inverter kaydı ham özet, çözüm motorda')
     ap.add_argument('--guven-sarti', action='store_true', help='ADR-0019 öncesi kural: hemen evet ayrıca güven yüksek ister')
     ap.add_argument('--json')
+    ap.add_argument('--surum-zorla', action='store_true',
+                    help='şehrin üretici sürümü farklıysa da yeniden kur (yalnız uyar; sonuç güvenilmez)')
     a = ap.parse_args()
+    sk.surum_zorla(a.surum_zorla)
     bas, son = (int(x) for x in a.aralik.split('-'))
     klasorler = [Path(a.kok) / f'sehir-{t:03d}' for t in range(bas, son + 1)]
     senaryolar = a.senaryo.split(',') if a.senaryo else SENARYOLAR
