@@ -20,7 +20,6 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
 | PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
 | PR #46 dashboard sade dil (#45'in üstünde) | Can (test); harita animasyonu oturumu | açık | Can'ın testi, #45 |
-| PR #47 sunum maliyet tablosu (yalnız günlük) | KARAR | karar masası hesapları tuttu | Volkan'ın "birleştir" sözü |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri | Can (Volkan, 1 Kasım 11:2x: TEST oturumu yeni PR almıyor) | — | KARAR'ın kutu girdisi |
@@ -28,7 +27,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı (`pv_uc`), yük ikinci sayısı ve iki aday saat (`tepe.csv`); Faz 4 kalanı | Civan | sütunlar main'de (02:00) | — |
 
-Birleşenler (1 Kasım): #19, #21–#35, #37–#42 (#41 haritasız); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık: #43, #44, #45; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
+Birleşenler (1 Kasım): #19, #21–#35, #37–#42 (#41 haritasız), #47 (maliyet tablosu); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık: #43, #44, #45; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).

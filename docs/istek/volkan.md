@@ -1494,4 +1494,4 @@ Karar: Volkan: "maliyet verilerini gerçeğe yakın yap, sunuma koyacağız" →
 - **Slayt 8 (Can):** "adadaki ~6.400 trafonun ~%2'si" → "Kuzey'deki ~6.400–6.700 trafonun (vekil) ~%2–3'ü" (sayı Güney'den vekil; "adadaki" yanlış okunur).
 - **Dashboard maliyet kartı (`icerik.json`):** "Geri ödeme ve emisyon … aranıyor" eski → "Geri ödeme hesaplanmadı: Kıb-Tek'in trafo büyütme maliyeti ve mahsuplaşma bedeli bulunamadı." Aynı dosyanın yazılarını #46 değiştirdiği için düzeltme #46'ya girer (harita animasyonu oturumuna iletildi).
 - Geri ödeme (NIE 2024 vekili, ~5–7 direk trafosu büyütmesi), fatura ~26 bin TL/yıl ve emisyon 0,58–0,89 kg/kWh yalnız bağlam, soru gelirse. BULAMADIM: mahsuplaşma bedeli, Kıb-Tek trafo sayısı ve büyütme maliyeti (uzman listesinde).
-Durum: bekliyor (#47 için Volkan'ın sözü); metin düzeltmeleri → can.md, harita animasyonu oturumu
+Durum: yapıldı 13:23 — Volkan: "Birleştir", #47 birleşti; dashboard kartı düzeltmesi #46'da (fde3529); slayt 8 → can.md
