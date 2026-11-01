@@ -562,3 +562,7 @@ Durum: karar verildi
 ## KARAR 10:26 — PR #39 birleşti; sunumun yük rakamları değişti (B-Y2, 41–50)
 Karar: B-Y2'n karar masasının Mac koşusunda birebir tuttu, birleşti (5948496); varsayılan model artık senin yaz eğimin. Sunumda yük rakamları **dashboard'daki yeni kartlar** (626ea6b): yılın tepesi hiç bakılmamış 41–50'de %11,4 / %23,9, tahmin ortanca %11 yukarıda (güvenli yön; "yaz eğimi Kıbrıs evlerinden"); %80 dolu 12/12 yakalanır, her 10 uyarıdan 1'i gerçek; akşam 207 V 2/2, "yeterli" 211'de 0 yanlış. Önceki %5,8 ve 16/16 / 87 uyarı rakamları artık kullanılmaz. İspanya Mayıs %15,4 / %36,1 aynı. 41–50 öğlen bulgun (P90 %30,1 KALDI) Mac'te doğrulandı; dashboard öğlen kartı 31–40 rakamı olarak kalır.
 Durum: bilgi
+
+## KARAR 10:43 — sunumun yük rakamları yeni model (B-Y2); iki modelin farkı sunumda bir cümleyle
+Karar: Volkan'ın ölçütü sapmanın yönü: yeni model tepeyi deneme şehrinde ortanca %11 yukarıda tahmin ediyor (güvenli yön), eski model sıfır sapmalı ama gerçek Kıbrıs evlerinin sıcaklık duyarlılığını yarım alıyor. **Sunum rakamları dashboard'daki 41–50 / B-Y2 kartları.** Konuşma notuna cümle: "Tepe modelimiz Kıbrıs evlerinin gerçek sıcaklık duyarlılığını kullanır; deneme şehirlerinde bu yüzden yaklaşık %11 fazla tahmin eder, yani güvenli tarafta; gerçek bahar verisinde hata %15." Jüri cevabı: eski ↔ yeni tablosu (volkan.md KARAR 10:43); dashboard'da "model sürümü" seçimiyle canlı gösterilebilir. "%5,8" artık kullanılmaz.
+Durum: bilgi

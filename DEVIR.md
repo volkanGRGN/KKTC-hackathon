@@ -90,4 +90,4 @@ Birleşenler (1 Kasım): #19, #21–#35, #37 (dashboard); #36 kapatıldı (olums
 ## Sıradaki üç adım (1 Kasım 01:53)
 1. Gece 14 PR birleşti, açık PR yok (02:29); ADR-0019 yürürlükte. Faz haritası ROADMAP "Faz 6–12" başında (01:53 hâli; Faz 9–12 satırlarındaki "onay bekliyor" ifadeleri artık "main'de").
 2. BUILD 2: ölçüm sırası ve konum payını ADR-0019 kuralına çevirir (31–40 bir kez); BUILD 1: Can'ın B-Y2'sini inceler; TEST: gelen PR'lar.
-3. Sunum: Volkan 09:43 "yük haritası öne"; rakamlar `dashboard/icerik.json` (üretici 1.5, 31–40); Civan video için şehir 31'i üretir, kartlar; Can konuşma notu. Volkan: Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.
+3. Sunum yük rakamları: yeni model B-Y2, 41–50 (Volkan 10:43: ölçüt sapmanın yönü; fark sunumda bir cümleyle). Volkan 09:43 "yük haritası öne"; rakamlar `dashboard/icerik.json` (üretici 1.5, 31–40); Civan video için şehir 31'i üretir, kartlar; Can konuşma notu. Volkan: Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.

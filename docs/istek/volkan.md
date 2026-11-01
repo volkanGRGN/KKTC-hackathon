@@ -1404,3 +1404,16 @@ Durum: bekliyor (TEST; Civan)
 ## KARAR 10:34 — PR #41 (dashboard canlı tahmin) TEST'te tuttu, bir eksi; düzeltme ve Civan'ın onayından sonra birleşir
 Karar: TEST (aab9d6c, main ile birleşik, üretici 1.5 şehirleri 31–40): 17 AppTest adımı hata 0; canlı motor önerilen 12 ölçümle 10 şehrin hepsinde main'in bugünkü `tahmin.csv` (bayt bayt), `kac_ev.csv` ve `tepe.csv` ile birebir (#39 sonrası da); cevap anahtarını yalnız `sinav_kiyasi()` okuyor, modele yol yok, etiket var; git status temiz; `app/` dosyaları b2fcba2 ile birebir. **Eksi:** eski sürüm önbelleği geçici klasörde bütün kopyalar için ortak ve data bağlantısı ilk kuran klasöre kalıcı işaret ediyor; o klasör değişirse eski sürümler uyarısız başka veriyle koşar. Düzeltme dashboard oturumunda (her çağrıda bağlantı yenilenir); TEST o noktayı yeniden koşar. Sınav görünümü deneme şehrinde varsayılan açık kalır. **Civan'ın `app/` onayı** hâlâ bekleniyor (civan.md, BLOKLUYOR).
 Durum: bekliyor (dashboard düzeltmesi; Civan onayı)
+
+## KARAR 10:43 — sunumun yük rakamları: yeni model (B-Y2), çünkü iki modelin farkı güvenli yönde; fark sunumda açıkça söylenir
+Karar: Volkan (10:43): "modeller arasındaki farka bağlı olarak değiştirelim, sapma vs." → Ölçüt sapmanın yönü. İki model aynı şehirlerde (31–40, ölçülmeyen 280 trafo) [Hesap: karar masası Mac]:
+| | Eski (eğim EAC'den, %3,0/°C) | Yeni B-Y2 (eğim 20 Kıbrıs evinden, %6,5/°C) |
+|---|---|---|
+| Tepe hatası ortanca / P90 | %5,8 / %15,1 | %10,1 / %19,9 (41–50: %11,4 / %23,9) |
+| İşaretli sapma (tahmin − gerçek) | ≈ 0 | **+%8,4** (41–50: +%11,1; konut +%13,6) — tahmin yukarıda |
+| Gerçek bandın üstünde | 0 | 0 |
+| %80 dolu yakalanan / uyarı | 16/16 / 87 | 16/16 / 107 |
+| Akşam "yeterli"de yanlış | 0 | 0 |
+| İspanya Mayıs (gerçek) | %15,4 / %36,1 | aynı (klima yok) |
+Eski modelin farazi hatası daha küçük, çünkü deneme şehirleri aynı düşük eğimle kuruldu; gerçek Kıbrıs evleri sıcağa iki kat duyarlı. Yeni modelin fazlası **güvenli yöne**: tepeyi az göstermez (ADR-0018'in "güvensiz yön" uyarısı). **Sunum rakamları yeni model (dashboard kartları, 41–50).** Sunumda tek cümle: "Tepe modelimiz Kıbrıs evlerinin gerçek sıcaklık duyarlılığını kullanır; deneme şehirlerinde bu yüzden %11 fazla tahmin eder, yani güvenli tarafta; gerçek bahar verisinde hata %15." Jüri sorarsa iki modelin tablosu dashboard'da ("model sürümü" seçimi, f51e434 ↔ güncel). Bedel (daha çok uyarı) dürüstçe söylenir. Üretici eğimi gerçek evlere çapalanınca (1.6, sunumdan sonra) farazi fark kapanır.
+Durum: karar verildi
