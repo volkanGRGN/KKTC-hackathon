@@ -46,7 +46,7 @@ Geliştirme 1–10 aynı yönde: tepe %7,5 / %18,4 → %6,3 / %16,8; saat %42,1 
 4. İspanya Mayıs tepesi (%15,4 / %36,1) iki sürümde aynı: `edp_test.py` 0991064'ten beri değişmedi.
 
 ## Panoda
-- `dashboard/icerik.json`: yük haritası bölümüne beş karşılaştırma kartı; akşam gerilimi kartı 1.5 şehirlerine (2 / 2, 233 "yeterli", 47 uyarı), "%80'den dolu" kartı 87 uyarıya; rakam notuna sunum sürümü 1.5. Pano kodu değişmedi.
+- `dashboard/icerik.json`: akşam gerilimi kartı 1.5 şehirlerine (2 / 2, 233 "yeterli", 47 uyarı; önceki kart üretici 1.4'tendi), "%80'den dolu" kartı bugünkü koda (87 uyarı); rakam notuna sunum sürümü 1.5. Pano kodu değişmedi. Karşılaştırma kart olarak eklenmedi: sürümleri harita üzerinde yan yana gösteren canlı tahmin sayfası pano oturumunda yapılıyor (dal `dashboard/canli-tahmin`, eski sürümü depo tarihçesinden çalıştırıyor).
 - İki modelin çıktısı iki veri seti olarak (yerel, git dışı): `data/synthetic/yuk-kiyas/1-ilk-surum-gece` ve `2-bugunku-ana-dal`, şehir 31–40 (trafolar, tahmin, kac_ev, tepe; cevap anahtarı kopyalanmadı). Açmak için: `DASHBOARD_VERI=data/synthetic/yuk-kiyas streamlit run dashboard/dashboard.py`, sol menüden veri seti.
 
 ## Yeniden üretim

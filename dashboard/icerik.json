@@ -214,56 +214,6 @@
       "kaynak": "docs/log/2026-11-01-volkan-yuk-kibtek-tepe.md"
     },
     {
-      "katman": "yuk",
-      "deger": "%6,7 → %5,8",
-      "baslik": "yılın tepesi hatası: ilk sürüm → bugünkü",
-      "aciklama": "Ortanca hata indi; en kötü onda birlik dilim %15,3 → %15,1. Gerçek tepe ikisinde de hiçbir trafoda temkinli ucun üstüne çıkmadı. En büyük kazanç yurtlarda: %8,4 → %5,3.",
-      "veri": "farazi",
-      "kapsam": "Aynı sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo. İlk sürüm: gecenin ilk yük modeli (PR #24); bugünkü: ana dal. BUILD 1 koşusu, resmi değil",
-      "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md"
-    },
-    {
-      "katman": "yuk",
-      "deger": "%61 → %69",
-      "baslik": "tepe dönemi isabeti: ilk sürüm → bugünkü",
-      "aciklama": "Tepe doğru dönemde mi (sabah, öğle, öğleden sonra, gece). Bir saat içinde isabet %47,5 → %52,1; bugünkü sürüm ikinci aday saati de veriyor, ikisinden biri %60 tutuyor. Yurtta dönem %9 → %77.",
-      "veri": "farazi",
-      "kapsam": "Aynı sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo. İlk sürüm: gecenin ilk yük modeli (PR #24); bugünkü: ana dal. BUILD 1 koşusu, resmi değil",
-      "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md"
-    },
-    {
-      "katman": "yuk",
-      "deger": "92 → 87",
-      "baslik": "\"%80'den dolu olabilir\" uyarısı: ilk sürüm → bugünkü",
-      "aciklama": "Kalkan 5 uyarının hiçbiri gerçekten dolu bir trafoda değildi. Gerçekten dolu 16 trafonun 16'sı ikisinde de uyarı alıyor. Gücü aşabilir görünen trafo 37 → 34. Ölçülüler dahil 400 trafoda (Özet sekmesi) uyarı 100 → 95.",
-      "veri": "farazi",
-      "kapsam": "Aynı sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo. İlk sürüm: gecenin ilk yük modeli (PR #24); bugünkü: ana dal. BUILD 1 koşusu, resmi değil",
-      "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md"
-    },
-    {
-      "katman": "yuk",
-      "deger": "yok → var",
-      "baslik": "akşam gerilimi: ilk sürümde yoktu",
-      "aciklama": "İlk sürüm yalnız yılın tepesini söylüyordu. Bugünkü her trafo için akşam geriliminin 207 V altına inip inmediğini de söylüyor; \"yeterli\" dediklerinde yanlış yok.",
-      "veri": "farazi",
-      "kapsam": "Aynı sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo. İlk sürüm: gecenin ilk yük modeli (PR #24); bugünkü: ana dal. BUILD 1 koşusu, resmi değil",
-      "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md"
-    },
-    {
-      "katman": "yuk",
-      "deger": "262 / 400",
-      "baslik": "trafonun sayısı değişti: ilk sürüm → bugünkü",
-      "aciklama": "Tepe saati düzeltmesi bütün trafoların ortak oranını da oynattı; değişimin ortancası %1'in altında. Gözle görülür değişen 19 trafonun hepsi yurt ya da çarşı, hepsinde boş kapasite arttı. Yurt kuralı 5 çarşıya da dokundu: dördünde tepe gerçeğe yaklaştı, birinde %16 eksikten %26 eksiğe.",
-      "veri": "farazi",
-      "kapsam": "Aynı sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo. İlk sürüm: gecenin ilk yük modeli (PR #24); bugünkü: ana dal. BUILD 1 koşusu, resmi değil",
-      "durum": "uyari",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md"
-    },
-    {
       "katman": "maliyet",
       "deger": "~333 €",
       "baslik": "bir trafoyu bir hafta ölçmek",
