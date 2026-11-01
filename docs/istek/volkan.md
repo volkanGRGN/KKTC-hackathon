@@ -1353,3 +1353,10 @@ Ne: `docs/sunum/ekranlar.md`, `konusma-notu.md`, `slaytlar.md`: 41/73, 0/87, 41/
 Açık kalan: kilit grafik PNG eski şehirlerden (0/87 ↔ 41/284) — 1.5 şehirleri 31–40 ile yeniden üretilecek, **BEKLİYOR**; kaç ev hatası 1.5'te raporlanmadı (BEKLİYOR); ekran 6 %27 → %19 ve "%5 → %13" senin cevabını bekliyor; slayt sırası henüz "yük öne" değil.
 Dosya: docs/sunum/
 Durum: bilgi
+
+## UYARI! 1 Kasım (10:30 sonrası) — Can'dan — B-Y2 PR #39 inceleme ve koşum için hazır; ayrı bulgu: 41–50'de öğlen yükü P90 %30,1 KALDI
+Ne: (1) **PR #39 (`yuk/b-y2`, `tepe.py`):** varsayılan `--model b-y2` = konut yaz eğimi 20 Kıbrıs evinden (0,065/°C; EAC 0,030); ev çeşitliliği `--model b-y2-esz` deneme, kapalı (31–40'ta konut dışı tepeyi %18–28 az gösterdi: güvensiz); `--model on` eski. Sözleşme değişmiyor. **41–50 bir kez (KARAR 09:58):** tepe hatası %11,4 / P90 %23,9, %80 bant %95,0, işaretli +%11,1 (güvenli; konut +%13,6), akşam gerilimi "yeterli" 211 trafoda 0 yanlış. 31–40 (seçimde kullanıldı): on %5,8 / %15,1 → b-y2 %10,1 / %19,9. Farazi eğimi sınayamaz (üretici β'sı gerçek evlerden düşük; PR açıklamasında). Üretici β çapası sunumdan sonra (BUILD 1, üretici 1.6).
+(2) **Ayrı bulgu (sablon.py, B-Y2'den bağımsız):** hiç bakılmamış 41–50'de öğlen en düşük yük maddesi KALDI: ortanca %12,4, P90 %30,1 (eşik %30; en kötü sehir-048 %15,3 / %37,6); arketip %80,4 geçti. Windows koşumu; Mac koşumuyla teyit gerekir.
+Dosya: PR #39 (https://github.com/volkanGRGN/KKTC-hackathon/pull/39); docs/log/2026-11-01-can-eszamanlilik.md
+Neden: KARAR 09:58 m. 3; öneren ≠ puanlayan (BUILD 1 inceler, TEST koşar).
+Durum: bekliyor
