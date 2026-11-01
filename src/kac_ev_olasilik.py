@@ -219,9 +219,10 @@ KONUM_Y = [k / 10 for k in range(1, 11)]      # başvuranın hattaki yeri, hat b
 
 def konum_payi(tr, t, rng):
     """Hattın ilk x'i (ADR-0015 m. 4): x'e kadar her yerdeki evden tek başvuru, bütün hatlarda ve bütün çekilişlerde
-    sığıyor (P ≥ YESIL_P) ve güven yüksek; haritanın bugün aşma olasılığı da ≤ 1 − YESIL_P olmalı (çağıran bakar). Yer = (hattaki sıra + 1) ÷ hattaki ev; y için o hattın y'yi geçen ilk evi
+    sığıyor (P ≥ YESIL_P; güven şartı yeşilinkiyle aynı, ADR-0019'dan beri yok); haritanın bugün aşma olasılığı da
+    ≤ 1 − YESIL_P olmalı (çağıran bakar). Yer = (hattaki sıra + 1) ÷ hattaki ev; y için o hattın y'yi geçen ilk evi
     (temkinli). Yalnız panelli evlerden oluşan kol (çekilişlerin bir kısmı) atlanır: başvuran panelsiz."""
-    if t['guven'] != 'yuksek':
+    if YESIL_GUVEN_SARTI and t['guven'] != 'yuksek':                 # ADR-0019: şart yeşilinkiyle birlikte kalktı
         return 0.0
     p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
