@@ -132,17 +132,13 @@ def egri_grafigi(df, bantli):
 
 def ozet_sekmesi(t, icerik):
     n = len(t)
-    k = st.columns(4)
-    k[0].metric("Trafo", tr(n), border=True)
-    if "olculdu" in t:
-        olc = int(t["olculdu"].sum())
-        k[1].metric("Ölçülen trafo", f"{tr(olc)} · {yuzde(olc / n)}", border=True,
-                    help="Cihaz takılı trafolar. Gerisinin yükü bunlardan öğrenilen şablonla tahmin edilir.")
-    else:
-        k[1].metric("Ölçülen trafo", "—", border=True, help="Tahmin tablosu (tahmin.csv) yok.")
-    k[2].metric("Abone", tr(t["abone_toplam"].sum()), border=True, help="Bütün tarife sınıfları.")
-    k[3].metric("Kurulu güneş paneli", f"{tr(t['panel_kw'].sum())} kW", border=True,
-                help=f"{tr(t['panel_sayisi'].sum())} panelli abone, bugün bağlı.")
+    olc = int(t["olculdu"].sum()) if "olculdu" in t else None
+    kutu_izgarasi([
+        sunum("trafo", tr(n)),
+        sunum("olculen", "—" if olc is None else f"{tr(olc)} · {yuzde(olc / n)}"),
+        sunum("abone", tr(t["abone_toplam"].sum())),
+        sunum("panel_kurulu", f"{tr(t['panel_kw'].sum())} kW", f"{tr(t['panel_sayisi'].sum())} panelli abone."),
+    ])
     st.write("")
     yuk_ozeti(t)  # yük haritası öne (Volkan, 1 Kasım)
     st.divider()
@@ -239,24 +235,17 @@ def yuk_ozeti(t):
         st.code("python3 src/tepe.py <şehir klasörlerinin kökü>", language="bash")
         return
     n = len(t)
-    k = st.columns(5)
-    k[0].metric("Ortanca doluluk", yuzde(t["doluluk"].median()), border=True,
-                help="Yılın tepesi ÷ trafo gücü, orta tahmin; trafoların ortancası.")
-    dolu = int((t["doluluk_temkinli"] >= DOLU_ESIK).sum())
-    k[1].metric("%80'den dolu olabilir", f"{tr(dolu)} trafo", border=True,
-                help="Temkinli uçta (aralığın üstü) doluluk %80 ve üstü. \"Önce bak\" listesi: dolu olanı kaçırmaz, "
-                     "ama uyarıların çoğu gerçekte dolu değil.")
-    asan = int((t["doluluk_temkinli"] > 1).sum())
-    k[2].metric("Gücü aşabilir", f"{tr(asan)} trafo", border=True,
-                help="Temkinli uçta yılın tepesi trafo gücünü aşıyor.")
+    kutular = [
+        sunum("doluluk_tipik", yuzde(t["doluluk"].median())),
+        sunum("once_bak", tr((t["doluluk_temkinli"] >= DOLU_ESIK).sum())),
+        sunum("gucu_asabilir", tr((t["doluluk_temkinli"] > 1).sum())),
+    ]
     if "v_min_tepe_v_p10" in t:
-        bak = int((t["v_min_tepe_v_p10"] < V_AKSAM_SINIR).sum())
-        k[3].metric("Akşam: önce bak", f"{tr(bak)} trafo", border=True,
-                    help="Akşam gerilimi: temkinli uçta bir evde 207 V altına inebilir. \"Yeterli\" dediklerimiz "
-                         "sınavda hiç inmedi.")
-    bos = t["bos_kva_p10"].clip(lower=0).sum() if "bos_kva_p10" in t else float("nan")
-    k[4].metric("Boş güç, kVA", tr(bos), border=True,
-                help="Yük için boş: trafo gücü − temkinli tepe, bütün trafoların toplamı; eksi olanlar sıfır sayıldı.")
+        kutular.append(sunum("aksam_gerilim", tr((t["v_min_tepe_v_p10"] < V_AKSAM_SINIR).sum()),
+                             "\"Yeterli\" dediklerimiz sınavda hiç inmedi."))
+    if "bos_kva_p10" in t:
+        kutular.append(sunum("bos_guc", f"{tr(t['bos_kva_p10'].clip(lower=0).sum())} kVA"))
+    kutu_izgarasi(kutular)
     sol, sag = st.columns([3, 2])
     with sol:
         st.markdown("**Doluluk dağılımı** · orta tahmin")
@@ -269,7 +258,7 @@ def yuk_ozeti(t):
         if "tepe_ayi" in t:
             aylar = t["tepe_ayi"].value_counts().sort_index()
             st.caption("Tepe ayı: " + " · ".join(f"{AY_ADI.get(int(a), a)} {tr(s)}" for a, s in aylar.items()))
-    st.caption(f"{tr(n)} trafo. Tepe trafo başına bilerek temkinli; şehir toplamı fider ya da sistem tepesi değildir.")
+    st.caption(f"{tr(n)} trafo. Yoğun saat tahmini trafo başına bilerek güvenli tarafta; trafoların toplamı hattın ya da adanın yoğun saati değildir.")
 
 
 # ---------- trafolar ----------
@@ -289,10 +278,10 @@ def tablo_gorunumu(s, cok_sehir):
         g["Güvenli uç"] = s["pv_uc"].map(PV_UC_ADI)
     if "doluluk" in s:
         g["Doluluk"] = s["doluluk"] * 100
-        g["Doluluk temkinli"] = s["doluluk_temkinli"] * 100
+        g["Doluluk, en kötü durum"] = s["doluluk_temkinli"] * 100
         g["Tepe saati"] = s["tepe_saati"]
         if "v_min_tepe_v_p10" in s:
-            g["Akşam alt uç (V)"] = s["v_min_tepe_v_p10"]
+            g["Akşam en düşük gerilim (V)"] = s["v_min_tepe_v_p10"]
     g["kVA"] = s["kva"]
     g["Bölge"] = s["bolge"].map(lambda b: BOLGE_ADI.get(b, b))
     g["Montaj"] = s["montaj"]
@@ -312,9 +301,9 @@ SUTUN_AYARI = {
     "%40 kuralı": st.column_config.NumberColumn("%40 kuralı", help="Bugünkü kural, panelsiz konutla kesilmiş"),
     "Güvenli uç": st.column_config.TextColumn("Güvenli uç", help="Panel katmanı (ADR-0017)"),
     "Doluluk": st.column_config.NumberColumn("Doluluk", format="%%%.0f", help="Yük haritası: yılın tepesi ÷ trafo gücü, orta tahmin"),
-    "Doluluk temkinli": st.column_config.NumberColumn("Doluluk temkinli", format="%%%.0f", help="Yük haritası: aralığın üstü"),
+    "Doluluk, en kötü durum": st.column_config.NumberColumn("Doluluk, en kötü durum", format="%%%.0f", help="Yük haritası: aralığın üst ucu"),
     "Tepe saati": st.column_config.TextColumn("Tepe saati", help="Yük haritası"),
-    "Akşam alt uç (V)": st.column_config.NumberColumn("Akşam alt uç (V)", format="%.1f", help="Yük haritası: tepe anında en düşük ev gerilimi, temkinli uç; 207 V sınır"),
+    "Akşam en düşük gerilim (V)": st.column_config.NumberColumn("Akşam en düşük gerilim (V)", format="%.1f", help="Yük haritası: tepe anında en düşük ev gerilimi, temkinli uç; 207 V sınır"),
     "Panel (kW)": st.column_config.NumberColumn("Panel (kW)", format="%.1f", help="Bugün bağlı paneller"),
     "Öğlen yükü (kW)": st.column_config.NumberColumn("Öğlen yükü (kW)", format="%.1f", help="Panel katmanının girdisi: öğlen en düşük yük, orta tahmin"),
 }
@@ -458,14 +447,14 @@ def trafo_karti(r, sehir_t, klasor):
             st.markdown("**Yük haritası** · yılın tepesi, ön sürüm")
             if "doluluk" in r and pd.notna(r.get("doluluk")):
                 st.markdown(f"<div class='buyuk'>{yuzde(r['doluluk'])} dolu</div>", unsafe_allow_html=True)
-                st.caption(f"Orta tahmin. Temkinli uçta {yuzde(r['doluluk_temkinli'])}.")
+                st.caption(f"Tahmin. En kötü durumda {yuzde(r['doluluk_temkinli'])}.")
                 saat = r["tepe_saati"]
                 if isinstance(r.get("tepe_saati_2"), str) and r["tepe_saati_2"]:
                     saat += f", ikinci aday {r['tepe_saati_2']}"
                 satirlar = [
                     ("Yılın tepesi", f"{tr(r['tepe_kw'], 1)} kW (aralık {aralik(r['tepe_kw_p10'], r['tepe_kw_p90'], 1)})"),
                     ("Görünür güç", f"{tr(r['tepe_kva'], 1)} kVA (aralık {aralik(r['tepe_kva_p10'], r['tepe_kva_p90'], 1)})"),
-                    ("Yük için boş", f"{tr(r['bos_kva_p10'], 1)} kVA (temkinli)"),
+                    ("Yeni yük için boş güç", f"{tr(r['bos_kva_p10'], 1)} kVA (en kötü durumda)"),
                     ("Tepe saati", saat),
                     ("Tepe dönemi", DONEM_ADI.get(r.get("tepe_donemi"), r.get("tepe_donemi"))),
                     ("Tepe ayı", AY_ADI.get(int(r["tepe_ayi"]), r["tepe_ayi"]) if pd.notna(r.get("tepe_ayi")) else "—"),
@@ -475,7 +464,7 @@ def trafo_karti(r, sehir_t, klasor):
                     satirlar += [
                         ("Akşam en düşük gerilim", f"{tr(r['v_min_tepe_v'], 1)} V (aralık "
                          f"{aralik(r['v_min_tepe_v_p10'], r['v_min_tepe_v_p90'], 1)})"),
-                        ("Akşam gerilimi", "yeterli (alt uç ≥ 207 V)" if yeterli else "önce bak (alt uç < 207 V)"),
+                        ("Akşam gerilimi", "yeterli (en kötü durumda da ≥ 207 V)" if yeterli else "önce bak (en kötü durumda < 207 V)"),
                         ("207 V altına inme payı", yuzde(r["p_aksam_207"], 1)),
                     ]
                 kor = "; ".join(KOR_NOKTA_ADI.get(p, p) for p in str(r.get("kor_nokta", "")).split(";") if p)
@@ -575,17 +564,17 @@ def sehirler_sekmesi(t_hepsi, klasorler):
             satir["Kaç ev aralığı"] = aralik(s["kac_ev_karamsar"].sum(), s["kac_ev_iyimser"].sum())
             satir["%40 kuralı (ev)"] = int(s["kural_gosterilen"].sum())
         if "doluluk" in s:
-            satir["Ortanca doluluk"] = s["doluluk"].median() * 100
-            satir["%80'den dolu olabilir"] = int((s["doluluk_temkinli"] >= DOLU_ESIK).sum())
+            satir["Tipik doluluk"] = s["doluluk"].median() * 100
+            satir["Önce bakılacak"] = int((s["doluluk_temkinli"] >= DOLU_ESIK).sum())
             if "v_min_tepe_v_p10" in s:
-                satir["Akşam: önce bak"] = int((s["v_min_tepe_v_p10"] < V_AKSAM_SINIR).sum())
+                satir["Akşam gerilimi düşebilecek"] = int((s["v_min_tepe_v_p10"] < V_AKSAM_SINIR).sum())
         satir["Üretici"] = str(ayar.get("uretici_surumu", "—"))
         satir["Hava yılı"] = str(ayar.get("hava_yili", "—"))
         satirlar.append(satir)
     df = pd.DataFrame(satirlar)
     st.caption("Her satır bir şehir. Renkler, kaç ev ve %40 kuralı panel katmanının; doluluk ve akşam gerilimi yük haritasının.")
     st.dataframe(df, hide_index=True, width="stretch", column_config={
-        "Ortanca doluluk": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası"),
+        "Tipik doluluk": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası: trafoların yarısı bundan az dolu"),
         "Kaç ev (yaklaşık)": st.column_config.NumberColumn(help="Panel katmanı, şehir toplamı"),
     })
     if "renk" in t_hepsi:

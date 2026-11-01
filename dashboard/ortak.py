@@ -125,10 +125,11 @@ a.cip:hover {border-color:rgba(42,120,214,.7);}
 .bilgi td:first-child {opacity:.68; white-space:nowrap; width:44%;}
 .sehir-satir {display:grid; grid-template-columns:5.5rem 1fr 7rem; align-items:center; gap:10px; font-size:.88rem;}
 .sehir-satir .yigin {margin:.2rem 0;}
-.kutular {display:grid; grid-template-columns:repeat(auto-fit, minmax(118px, 1fr)); gap:8px; margin:.3rem 0 .5rem;}
-.kutu {border:1px solid rgba(128,128,128,.3); border-radius:10px; padding:8px 11px;}
-.kutu .deger {font-size:1.45rem; font-weight:650; line-height:1.2;}
-.kutu .etiket {font-size:.8rem; opacity:.75; line-height:1.25;}
+.kutular {display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; margin:.3rem 0 .6rem;}
+.kutu {border:1px solid rgba(128,128,128,.3); border-radius:10px; padding:9px 12px;}
+.kutu .etiket {font-size:.86rem; font-weight:600; line-height:1.25;}
+.kutu .deger {font-size:1.55rem; font-weight:650; line-height:1.2; margin:.15rem 0 .2rem;}
+.kutu .aciklama {font-size:.76rem; opacity:.72; line-height:1.32;}
 </style>
 """
 
@@ -319,8 +320,46 @@ def harita_yakinligi(enlem, boylam, yukseklik_px):
     return min(14.0, math.log2(yukseklik_px * 360 / (256 * acik * 1.25)))
 
 
+# Sunumda söylenecek ad ve altındaki açıklama (Volkan, 1 Kasım: "sunabileceğimiz şekilde, altına açıklaması").
+# Teknik ad (ortanca, P90, temkinli uç) ekranda yok; açıklama ekibin anlaması için düz Türkçe.
+SUNUM = {
+    "trafo": ("Mahalle trafosu", "Şehirdeki trafolar; her biri bir mahalleyi besler."),
+    "olculen": ("Ölçülen trafo", "Cihaz takılı (ya da takılmış sayılan) trafolar. Model yalnız bunlardan öğrenir."),
+    "tahmin_edilen": ("Model tahmin etti", "Ölçülmeyen trafolar; değerleri ölçülenlerden öğrenilen şablondan."),
+    "abone": ("Abone", "Konut, ticaret, otel, sanayi ve su motoru aboneleri birlikte."),
+    "panel_kurulu": ("Kurulu güneş paneli", "Bugün şebekeye bağlı çatı panellerinin toplam gücü."),
+    "doluluk_tipik": ("Tipik trafo doluluğu", "Trafoların yarısı bundan az, yarısı bundan çok dolu. Doluluk: yılın en "
+                                               "yoğun saatindeki yük ÷ trafo gücü."),
+    "once_bak": ("Önce bakılacak trafo", "En kötü durumda %80'den fazla dolu olabilir. Kıb-Tek önce bunlara bakar; "
+                                         "çoğu gerçekte dolu çıkmaz."),
+    "gucu_asabilir": ("Gücünü aşabilecek trafo", "En kötü durumda yılın en yoğun saatinde trafonun gücünü aşabilir."),
+    "aksam_gerilim": ("Akşam gerilimi düşebilecek trafo", "En kötü durumda bir evde akşam gerilimi 207 V sınırının "
+                                                          "altına inebilir."),
+    "bos_guc": ("Yeni yük için boş güç", "En kötü durumda bütün trafolarda kalan güç (kVA): klima ve elektrikli araç "
+                                         "için yer."),
+    "tepe_sapma": ("Yoğun saat tahmininde sapma", "Yılın en yoğun saatindeki yükü tahmin ederken tipik trafoda gerçekten "
+                                                  "bu kadar saptık."),
+    "tepe_aralik": ("Gerçek, söylediğimiz aralıkta", "Verdiğimiz aralık gerçek değeri bu kadar trafoda içine aldı."),
+    "dolu_yakalama": ("Dolu trafoyu yakalama", "Gerçekte %80'den dolu trafolardan kaçını önce bakılacaklar listesine "
+                                               "aldık."),
+    "ogle_sapma": ("Öğlen yükü tahmininde sapma", "Bahar öğleninde en düşük yükü tahmin ederken tipik trafoda gerçekten "
+                                                  "bu kadar saptık. Panel kararının girdisi."),
+    "yanlis_yesil": ("Yanlışlıkla \"yer var\" dediğimiz", "Yeşil dediğimiz ama gerçekte hiç ev sığmayan trafo. En "
+                                                           "kritik ölçü; sınır %2."),
+    "kural_yanlis": ("Bugünkü kuralın yanlış \"yer var\"ı", "Gerçekte dolu trafolardan bugünkü %40 kuralının "
+                                                             "\"yer var\" dediği."),
+}
+
+
+def sunum(anahtar, deger, ek=""):
+    """(sunum adı, değer, açıklama [+ ek]) üçlüsü; kutu_izgarasi için."""
+    ad, aciklama = SUNUM[anahtar]
+    return ad, deger, f"{aciklama} {ek}".strip()
+
+
 def kutu_izgarasi(kutular):
-    """Dar sütunda kesilmeyen küçük sayı kutuları: [(etiket, değer, açıklama)]; açıklama üstüne gelince görünür."""
-    govde = "".join(f"<div class='kutu' title='{e(y)}'><div class='etiket'>{e(a)}</div><div class='deger'>{e(d)}</div></div>"
-                    for a, d, y in kutular)
+    """Sunulabilir sayı kutuları: üstte ad, ortada değer, altında açıklama (dar sütunda da kesilmez).
+    kutular: [(ad, değer, açıklama)]."""
+    govde = "".join(f"<div class='kutu'><div class='etiket'>{e(a)}</div><div class='deger'>{e(d)}</div>"
+                    f"<div class='aciklama'>{e(y)}</div></div>" for a, d, y in kutular)
     st.markdown(f"<div class='kutular'>{govde}</div>", unsafe_allow_html=True)

@@ -160,9 +160,9 @@ def ipucu_satirlari(r, gercek):
     s = []
     if pd.notna(r.get("doluluk")):
         s.append(f"Yük haritası: yılın tepesi {tr(r['tepe_kw'])} kW, doluluk {yuzde(r['doluluk'])} "
-                 f"(temkinli {yuzde(r['doluluk_temkinli'])})")
+                 f"(en kötü durumda {yuzde(r['doluluk_temkinli'])})")
         if pd.notna(r.get("v_min_tepe_v_p10")):
-            s.append(f"Akşam en düşük gerilim: {tr(r['v_min_tepe_v'], 1)} V (alt uç {tr(r['v_min_tepe_v_p10'], 1)} V; "
+            s.append(f"Akşam en düşük gerilim: {tr(r['v_min_tepe_v'], 1)} V (en kötü durumda {tr(r['v_min_tepe_v_p10'], 1)} V; "
                      "sınır 207 V)")
     if isinstance(r.get("renk"), str):
         ara = aralik(r["kac_ev_karamsar"], r["kac_ev_iyimser"])
@@ -255,7 +255,7 @@ def lejant(katman, sonuc, zemin):
     st.markdown(f"<div class='lejant'>{renkli}</div>", unsafe_allow_html=True)
     not_ = "Sütun boyu = trafo gücü · beyaz uç = ölçüldü · üstüne gelince sayılar."
     if katman == "yuk" and sonuc is not None:
-        not_ += " Renk temkinli uca göre; eşikler gösterim için (Özet'teki %80 ve %100)."
+        not_ += " Renk en kötü duruma göre; eşikler gösterim için (Özet'teki %80 ve %100)."
     if zemin is not None:
         not_ += f" {civan.OSM_ATIF}"
     if not CIVAN_KATMANLARI:
@@ -270,12 +270,9 @@ def ozet_kutulari(sonuc, katman):
     if katman == "yuk":
         aksam = int((t["v_min_tepe_v_p10"] < 207).sum()) if "v_min_tepe_v_p10" in t else None
         kutu_izgarasi([
-            ("Ortanca doluluk", yuzde(t["doluluk"].median()),
-             "Yük haritası: yılın tepesi ÷ trafo gücü, orta tahmin, bütün trafolar."),
-            ("%80'den dolu olabilir", tr((t["doluluk_temkinli"] >= 0.8).sum()),
-             "Yük haritası: temkinli uçta doluluk %80 ve üstü; önce bak listesi."),
-            ("Akşam 207 V altı olabilir", "—" if aksam is None else tr(aksam),
-             "Yük haritası: temkinli uçta bir evde akşam 207 V altına inebilir."),
+            sunum("doluluk_tipik", yuzde(t["doluluk"].median())),
+            sunum("once_bak", tr((t["doluluk_temkinli"] >= 0.8).sum())),
+            sunum("aksam_gerilim", "—" if aksam is None else tr(aksam)),
         ])
     else:
         sayim = t["renk"].value_counts()
@@ -295,25 +292,20 @@ def sinav_paneli(ozet, katman, gecmis):
     st.markdown(f"**Gerçekle kıyas — yalnız deneme şehrinde, model görmez** · ölçülmeyen {ozet['olculmeyen']} trafo")
     if katman == "yuk" and "tepe_hata" in ozet:
         kutular = [
-            ("Tepe hatası", yuzde(ozet.get("tepe_hata")),
-             f"Yük haritası: |tahmin − gerçek| ÷ gerçek, ortanca. Kötü onda bir: {yuzde(ozet.get('tepe_hata_p90'))}."),
-            ("Gerçek aralıkta", yuzde(ozet.get("tepe_kapsama")),
-             "Yük haritası: gerçek yılın tepesi tahminin aralığının içinde."),
+            sunum("tepe_sapma", yuzde(ozet.get("tepe_hata")),
+                  f"Kötü giden onda birlik dilimde {yuzde(ozet.get('tepe_hata_p90'))}."),
+            sunum("tepe_aralik", yuzde(ozet.get("tepe_kapsama"))),
         ]
         if "dolu80" in ozet:
-            kutular.append(("%80+ dolu yakalandı", f"{ozet['dolu80_yakalanan']} / {ozet['dolu80']}",
-                            f"Yük haritası: gerçekte %80'den dolu trafolardan temkinli uçla yakalanan. "
-                            f"Toplam uyarı {ozet['dolu80_uyari']}."))
+            kutular.append(sunum("dolu_yakalama", f"{ozet['dolu80_yakalanan']} / {ozet['dolu80']}",
+                                 f"Bunun için {ozet['dolu80_uyari']} trafoya uyarı verdik."))
         kutu_izgarasi(kutular)
     else:
         kutu_izgarasi([
-            ("Öğlen yükü hatası", yuzde(ozet.get("ogle_hata")),
-             f"Panel katmanının girdisi: |tahmin − gerçek| ÷ gerçek, ortanca. Kötü onda bir: "
-             f"{yuzde(ozet.get('ogle_hata_p90'))}."),
-            ("Yanlış yeşil", f"{ozet['yanlis_yesil']} / {ozet['yesil']}",
-             "Panel: yeşil dediğimiz ve gerçekte hiç ev sığmayan trafo. En kritik ölçü; sınır %2."),
-            ("%40 kuralının yanlış yeşili", f"{ozet['kural_yanlis']} / {ozet['dolu']}",
-             "Panel: gerçekte dolu trafolardan bugünkü kuralın yer var dediği."),
+            sunum("ogle_sapma", yuzde(ozet.get("ogle_hata")),
+                  f"Kötü giden onda birlik dilimde {yuzde(ozet.get('ogle_hata_p90'))}."),
+            sunum("yanlis_yesil", f"{ozet['yanlis_yesil']} / {ozet['yesil']}"),
+            sunum("kural_yanlis", f"{ozet['kural_yanlis']} / {ozet['dolu']}"),
         ])
         if ozet["yanlis_yesil"] > 0:
             st.error(f"{ozet['yanlis_yesil']} trafoya yanlış yeşil: model az ölçümle fazla emin olabilir.")
@@ -336,7 +328,7 @@ def hata_grafigi(gecmis):
     renk = alt.Scale(domain=["yılın tepesi (yük haritası)", "öğlen yükü (panel)"], range=[MAVI_HEX, "#eb6834"])
     taban = alt.Chart(df).encode(
         x=alt.X("n:Q", title="Ölçülen trafo sayısı", axis=alt.Axis(tickMinStep=1)),
-        y=alt.Y("hata:Q", title="Hata, ortanca (%)", scale=alt.Scale(zero=True)),
+        y=alt.Y("hata:Q", title="Tipik trafoda sapma (%)", scale=alt.Scale(zero=True)),
         color=alt.Color("seri:N", scale=renk, legend=alt.Legend(title=None, orient="top")),
         tooltip=[alt.Tooltip("seri:N", title="Ne"), alt.Tooltip("n:Q", title="Ölçülen"),
                  alt.Tooltip("hata:Q", title="Hata %", format=".1f")],
@@ -352,16 +344,16 @@ def tahmin_tablosu(sonuc, gercek):
     ayar = {}
     if "doluluk" in t:
         g["Doluluk"] = t["doluluk"] * 100
-        g["Doluluk temkinli"] = t["doluluk_temkinli"] * 100
+        g["Doluluk, en kötü durum"] = t["doluluk_temkinli"] * 100
         g["Tepe (kW)"] = t["tepe_kw"]
         ayar.update({
             "Doluluk": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası, orta tahmin"),
-            "Doluluk temkinli": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası, aralığın üstü"),
+            "Doluluk, en kötü durum": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası: aralığın üst ucu"),
             "Tepe (kW)": st.column_config.NumberColumn(format="%.1f", help="Yük haritası"),
         })
         if "v_min_tepe_v_p10" in t:
-            g["Akşam alt uç (V)"] = t["v_min_tepe_v_p10"]
-            ayar["Akşam alt uç (V)"] = st.column_config.NumberColumn(format="%.1f", help="Yük haritası; sınır 207 V")
+            g["Akşam en düşük gerilim (V)"] = t["v_min_tepe_v_p10"]
+            ayar["Akşam en düşük gerilim (V)"] = st.column_config.NumberColumn(format="%.1f", help="Yük haritası, en kötü durumda; sınır 207 V")
     g["Renk"] = t["renk"].map(lambda r: f"{RENK_ISARET[r]} {RENK_ADI[r]}")
     g["259 V'u aşma"] = t["p_bugun_asar"] * 100
     g["Kaç ev"] = t["kac_ev_orta"]
@@ -453,9 +445,8 @@ def sayfa():
         lejant(gosterilen, sonuc, zemin)
     with sag:
         kutu_izgarasi([
-            ("Ölçülen", f"{len(olculu)} / {len(h['nolar'])}", "Ölçüm cihazı takılmış sayılan trafolar."),
-            ("Model tahmin etti", tr(len(h["nolar"]) - len(olculu)) if sonuc else "—",
-             "Ölçülmeyen trafolar; model yalnız ölçülenlerden öğrenir."),
+            sunum("olculen", f"{len(olculu)} / {len(h['nolar'])}"),
+            sunum("tahmin_edilen", tr(len(h["nolar"]) - len(olculu)) if sonuc else "—"),
         ])
         if sonuc is None:
             kalan = canli.EN_AZ_OLCULU - len(olculu)
