@@ -1,6 +1,8 @@
 # Slayt listesi (iskelet)
 
-Hikâye: **güven merdiveni** (karar masası 17:00). Tek cümle: *"Kıbrıs'ı ölçemiyoruz; yöntemi ölçebildiğimiz her şeyde kanıtlıyoruz, sonra uyguluyoruz."* Dört basamak, her birinde tek iddia + tek rakam, hepsi "saf tahmine göre ne kadar iyi" cinsinden. Manşet rakam: **İspanya %25 → %10.**
+Akış: **yük haritası öne** (Volkan 09:43; sıra KARAR 10:16): sorun → yük haritası (doluluk, yılın tepesi "ön", akşam 207 V) → neden inanılır (İspanya öğlen %25 → %10, Mayıs tepesi %15, bant %82) → panel güvenli uçlar (0/60, 15/22, renksiz %76, 24/46 ↔ 0) → pilot ve maliyet → jüri cevapları. Tek cümle: *"Kıbrıs'ı ölçemiyoruz; yöntemi ölçebildiğimiz her şeyde kanıtlıyoruz, sonra uyguluyoruz."* Her slaytta tek iddia + tek rakam. Manşet rakam: **İspanya %25 → %10.**
+
+Rakam kaynağı `dashboard/icerik.json` (KARAR 09:43). Yük rakamları yeni tepe modeli B-Y2, hiç bakılmamış sınav şehirleri 41–50 (KARAR 10:26, 10:43); panel rakamları 31–40. İkisi de üretici 1.5, farazi, **gösterim**. Eski yük rakamları (%5,8 / %15,1; 16/16, 87 uyarı; "yeterli" 233) ve "%27 → %19" (eski yanlış kırmızı ölçüsü, KARAR 10:16) kullanılmaz.
 
 Süre hedefi 5–7 dk; dakika sütunu kaba [Yorum].
 
@@ -8,18 +10,16 @@ Süre hedefi 5–7 dk; dakika sütunu kaba [Yorum].
 |---|---|---|---|---|
 | 1 | Sorun | Kuzey'de çatı güneşi başvuruları bekliyor; Kıb-Tek mahalle trafolarını göremiyor | ~2.670 bekleyen başvuru, çoğu 5–8 kW; alçak/orta gerilimde izleme sistemi yok [Kaynaklı: KTTO raporu, Mart 2023; adres doğrulanmadı] (karar masası 17:38; bulunursa değişir) | 0,5 |
 | 2 | Neden şimdi | Güney bağladı, şimdi üretimi kısıyor | 2025'te dağıtıma bağlı güneşin %47,44'ü kısıldı, Ocak–Mayıs 2026 %65 [Kaynaklı: pv-magazine.com 13.01.2026 ve 15.06.2026] | 0,5 |
-| 3 | Fikir | Az trafoyu ölç, gerisini şablonla tahmin et (İngiltere'nin yöntemi) | İngiltere 824 trafoyu (%2,6) ölçüp gerisini ~%80 doğrulukla tahmin etti; başka şirketlerin 284 trafosunda %80–90 [Kaynaklı: Ofgem WPD LV Templates raporları 2013, 2015] | 0,75 |
-| 4 | Bizim uyarlamamız: fotoğraf değil film | Kurulumcu gerilimi tek noktada, tek gün ölçüyor; biz trafonun gün ve mevsim boyu davranışını tahmin edip "kaç ev daha eklenince sınıra gelir"i önceden söylüyoruz | Hedef: ilkbahar öğlen en düşük yük (11–14) ve hat ucu gerilimi; planlama sınırı 259 V, inverter 264 V'ta kapanır [Kaynaklı: CLAUDE.md / ADR-0002] | 0,75 |
-| 5 | Güven merdiveni — basamak 1: farazi şehir (kontrollü gerçek) | Cevabı bildiğimiz şehirde yöntem çalışıyor | Öğlen yük hatası ortanca / en kötü onda birlik dilim (faturalı): %11,3 / %28; yanında İspanya %10 [Hesap: sınav şehirleri 31–40, üretici 1.5; karar masası Mac koşusu (volkan.md KARAR 01:20) ve ADR-0019 ölçümü (docs/log/2026-11-01-volkan-panel-guven-kapisi.md); `dashboard/icerik.json`] — **üst sınır (gösterim)**, manşet İspanya (karar masası 17:38). Eski 11–20 rakamları (%3,8 / %8,0, %20,6 / %50,7) ve %8,6 kullanılmaz | 0,5 |
-| 6 | Basamak 2: İspanya (yük, gerçek veri) — **MANŞET** | Hiç görmediğimiz 29 gerçek trafoda, Kıb-Tek'in zaten elinde olan abone sayısı + faturayla | Yalnız müşteri sayısıyla ~%25, faturayla ~%10 ortanca hata [Hesap: PR #10, docs/log/2026-10-31-volkan-edp-gercek.md; veri Arboleya vd. 2019, CC BY] | 0,75 |
-| 7 | Basamak 3: İngiltere (gerilim, gerçek veri) | Gerilim hesabımız gerçek hatlarda tutuyor; tutmadığı yer yüzünden yeşil önce pilotla sınanır | 6 gerçek hattın 5'inde ölçülen yükselme hesabın güvenli sınırının altında; birinde (Bancroft, panelli kol) küçük gördük [Hesap: PR #11 + docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md; veri UKPN 2015, CC BY] (karar masası 18:46) | 0,5 |
-| 8 | Basamak 4: Kıbrıs pilotu (saha) | Kıbrıs'taki doğruluğu pilot söyler; ilk ölçülecek şey trafonun çıkış gerilimi | Çıkış gerilimi bilinince "dolu" dediğimiz trafolardaki yanılma %27 → %19 [Hesap: bilginin değeri denemesi, farazi 11–20, kusursuz bilgi üst sınırı; docs/log/2026-10-31-volkan-faz3.md] (karar masası 20:47; ekran 6). 120–170 trafo ölç (adadaki ~6.400 trafonun ~%2'si) [Hesap: araştırma günlüğü §7; ~6.400 trafo Güney'den vekil, Kıb-Tek sayısı BULAMADIM]; taşınabilir cihazla ~2,2–3,2 milyon TL (~40–57 bin €, işçilik dahil), ilkbaharda [Hesap: docs/log/2026-11-01-can-maliyet.md; aşağıda "Maliyet"; eski "~20 bin € + pens" yalnız donanımdı]; kör test 10 trafo, başarı: gerçek kırmızıların ≥ %90'ı yakalanır, öğlen yük hatası ±%20 [Yorum: validation.md] | 0,5 |
-| 9 | Canlı harita | Her trafo yeşil / sarı / kırmızı, "ölçülmedi" etiketiyle | Faz 4 paneli (Civan); farazi şehirde "SAHTE VERİ / gösterim" yazısı — **BEKLİYOR** | 1 |
-| 10 | %40 kuralıyla yan yana | Bugünkü kural ("trafo gücünün %40'ı") ile modelin yanlış yeşili aynı trafolarda yan yana | **KİLİT GRAFİK**: dolu trafoya "yer var" — %40 kuralı 46 dolu trafonun 24'üne, biz hiçbirine; yanlış yeşil 0/60 [Hesap: sınav şehirleri 31–40, üretici 1.5; karar masası Mac koşusu (volkan.md KARAR 01:20) ve ADR-0019 ölçümü (docs/log/2026-11-01-volkan-panel-guven-kapisi.md); `dashboard/icerik.json`] — **gösterim**. Bedeli söylenir: ölçülmeyenlerin %76'sı renksiz (önce ölç ya da başvuruda karar); "büyük olasılıkla dolu" 22 uyarının 15'i gerçekten dolu [Hesap: aynı]. [kilit_yanlis_yesil.png](kilit_yanlis_yesil.png) eski şehirlerden (0/87 ↔ 41/284, 11–20): 1.5 ile yeniden üretilecek — **BEKLİYOR**. Eski rakamlar (0/87, 41/73, 41/284, %25 / %62 / %27, 0/21, %42, %63) kullanılmaz | 0,5 |
-| 11 | İtirazlar ve triyaj | Ret değil triyaj; son karar insanın | Aşağıda "İtiraz slaydı" | 0,5 |
-| 12 | Kaynaklar | Her rakamın nereden geldiği | Aşağıda "Kaynak slaydı" | (gösterilmez, soru gelirse) |
+| 3 | Fikir | Az trafoyu ölç, gerisini şablonla tahmin et (İngiltere'nin yöntemi); her trafoya iki soru: ne kadar dolu, güneşe ne kadar yer var | İngiltere 824 trafoyu (%2,6) ölçüp gerisini ~%80 doğrulukla tahmin etti; başka şirketlerin 284 trafosunda %80–90 [Kaynaklı: Ofgem WPD LV Templates raporları 2013, 2015]. İki an: yılın tepesi (çoğunlukla yaz akşamı; sınır trafo gücü ve 207 V) ve bahar öğleni (11–14; sınır 259 V, inverter 264 V'ta kapanır) [Kaynaklı: ADR-0002, ADR-0014] | 0,75 |
+| 4 | Yük haritası — trafo ne kadar dolu | Hangi trafonun dolu olduğunu kaçırmadan "önce buraya bak" listesi veriyoruz | **%80'den dolu 12/12 yakalanır**; bedeli: 124 uyarının 12'si gerçek (her 10 uyarıdan 1'i) [Hesap: sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo, tepe modeli B-Y2; docs/log/2026-11-01-can-eszamanlilik.md; `dashboard/icerik.json`] — **gösterim**. Yılın tepesi "ön" etiketiyle: hata ortanca %11,4, en kötü onda birlik dilim %23,9; tahmin gerçeğin ortanca %11 üstünde (güvenli yön), gerçek hiçbir trafoda bandın üstüne çıkmadı [Hesap: aynı] | 1 |
+| 5 | Yük haritası — akşam gerilimi | "Yeterli" dediğimiz trafo akşam 207 voltun altına inmiyor | **"Yeterli" 211 trafonun 0'ı** gerçekte 207 V altında; altına inen 2 trafonun 2'si yakalandı; 69 uyarının 2'si gerçek [Hesap: aynı küme] — **gösterim** | 0,5 |
+| 6 | Neden inanılır — güven merdiveni | Yöntemi ölçebildiğimiz her yerde sınadık; farazi şehir üst sınırdır | **MANŞET — İspanya, 29 gerçek trafo, öğlen yükü: yalnız müşteri sayısıyla ~%25, faturayla ~%10 ortanca hata** [Hesap: PR #10, docs/log/2026-10-31-volkan-edp-gercek.md; veri Arboleya vd. 2019, CC BY]. Konuşmada açılan basamaklar: İspanya yılın (Mayıs) tepesi %15,4 / %36,1 [gerçek veri; docs/log/2026-11-01-volkan-yuk-tepe-on.md]; %80 aralık gerçekte %82,1 tuttu [gerçek veri, 28 trafo; docs/log/2026-11-01-volkan-faz7-kalibrasyon.md]; İngiltere gerilim: 6 gerçek hattın 5'inde ölçülen yükselme hesabın güvenli sınırının altında, birinde (Bancroft) küçük gördük → yeşil önce pilotla sınanır [Hesap: PR #11 + docs/log/2026-10-31-volkan-faz3-ukpn-geritest.md; UKPN 2015, CC BY]; deneme şehrinde öğlen hatası %11,3 / %28, gerçekle aynı seviye [Hesap: sınav 31–40, üretici 1.5; `dashboard/icerik.json`; gösterim, üst sınır] | 1,25 |
+| 7 | Panel — güvenli uçlar (canlı harita + kilit grafik) | Dolu trafoya "yer var" demiyoruz; bugünkü %40 kuralı diyor | **KİLİT GRAFİK: dolu trafoya "yer var" — %40 kuralı 46 dolu trafonun 24'üne, biz hiçbirine; yanlış yeşil 0/60** [Hesap: sınav şehirleri 31–40, üretici 1.5; karar masası Mac koşusu (volkan.md KARAR 01:20) ve ADR-0019 ölçümü (docs/log/2026-11-01-volkan-panel-guven-kapisi.md); `dashboard/icerik.json`] — **gösterim**. Bedeli söylenir: ölçülmeyenlerin %76'sı renksiz (önce ölç ya da başvuruda karar); "büyük olasılıkla dolu" 22 uyarının 15'i gerçekten dolu [Hesap: aynı]. [kilit_yanlis_yesil.png](kilit_yanlis_yesil.png). Canlı harita (Faz 4, Civan; farazi şehirde "SAHTE VERİ / gösterim") — **BEKLİYOR**. Eski rakamlar (0/87, 41/73, 41/284, %25 / %62 / %27, 0/21, %42, %63) kullanılmaz | 1 |
+| 8 | Pilot ve maliyet | Kıbrıs'taki doğruluğu pilot söyler; ilk ölçülecek şey trafonun çıkış gerilimi | 120–170 trafo ölç (adadaki ~6.400 trafonun ~%2'si) [Hesap: araştırma günlüğü §7; ~6.400 trafo Güney'den vekil, Kıb-Tek sayısı BULAMADIM]; taşınabilir cihazla ~2,2–3,2 milyon TL (~40–57 bin €, işçilik dahil), ilkbaharda; her trafoya cihaz takmanın ~%1'i [Hesap: docs/log/2026-11-01-can-maliyet.md; aşağıda "Maliyet"]; kör test 10 trafo, başarı: gerçek kırmızıların ≥ %90'ı yakalanır, öğlen yük hatası ±%20 [Yorum: validation.md] | 0,75 |
+| 9 | İtirazlar ve jüri cevapları | Ret değil triyaj; son karar insanın | Aşağıda "İtiraz slaydı"; jüri cevapları [konusma-notu.md](konusma-notu.md) | 0,5 |
+| 10 | Kaynaklar | Her rakamın nereden geldiği | Aşağıda "Kaynak slaydı" | (gösterilmez, soru gelirse) |
 
-## İtiraz slaydı (11)
+## İtiraz slaydı (9)
 
 [ADR-0005](../decisions/adr-0005-triyaj-ret-degil.md), [ADR-0010](../decisions/adr-0010-yesil-karari-marj-guven-kumulatif.md).
 
@@ -32,7 +32,7 @@ Süre hedefi 5–7 dk; dakika sütunu kaba [Yorum].
 | **Komşu etkisi:** bir onay komşunun payını yer | Onaylar bağımsız sayılmaz; kalan pay her onaydan sonra yeniden hesaplanır (sunum sonrası, sözleşme 1.3) |
 | **Zamanla bozulma:** paneller arttıkça şablon eskir | Ölçüm cihazları her ilkbahar sarılara dolaşır; şablon her yıl yenilenir [Yorum] |
 
-## Maliyet (slayt 8'e ek; pitch şablonunun maliyet kutusu, dashboard)
+## Maliyet (slayt 8; pitch şablonunun maliyet kutusu, dashboard)
 
 Kaba hesap; kesinlik iddiası yok. Ayrıntı ve dahil olmayanlar: [maliyet günlüğü](../log/2026-11-01-can-maliyet.md).
 
@@ -49,7 +49,9 @@ Söylenebilecek iki cümle:
 
 Yok: geliştirme / bakım maliyeti, geri ödeme, emisyon etkisi — **BEKLİYOR** (tarife ve emisyon katsayısı depoda yok; geliştirme maliyeti ekibin kararı).
 
-## Kaynak slaydı (12)
+## Kaynak slaydı (10)
+
+- **Kıbrıs evlerinin sıcaklık duyarlılığı (yük modeli yaz eğimi):** 20 konut prosumer, Güney Kıbrıs, 2016, Zenodo 23043383, CC BY 4.0 (`data/raw/kibris-20-prosumer/KAYNAK.txt`; [eşzamanlılık günlüğü](../log/2026-11-01-can-eszamanlilik.md)).
 
 - **İngiltere yöntemi:** Ofgem, WPD "LV Network Templates" ilerleme raporu (Mayıs 2013) ve ödül başvurusu (Mayıs 2015) — https://www.ofgem.gov.uk/sites/default/files/docs/2013/09/ppr_wpd_lv_templates_may2013.pdf · https://www.ofgem.gov.uk/sites/default/files/docs/2015/05/final_-_sdrc_reward_submission_v1.7_redacted.pdf
 - **İngiltere gerilim verisi:** UK Power Networks, "Validation of PV Connection Assessment Tool" kapanış raporu v1.1, Ofgem, Mart 2015 — https://www.ofgem.gov.uk/ofgem-publications/93938/pvtoolcdrfinal-pdf ; veri London Datastore, CC BY 4.0. Dış çapalar: bara gerilimi tasarım varsayımı 248 V; gündüz en düşük talep müşteri başına 200–400 W; faz dengesizliği kentsel %25 / kırsal %50 ([Faz 1 günlüğü](../log/2026-10-31-volkan-faz1.md)).
