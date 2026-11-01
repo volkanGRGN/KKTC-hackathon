@@ -1375,3 +1375,10 @@ Soru: Sıra bu mu (1–2 sunum, 3 sunuma yetişirse, 4–7 sunumdan sonra), yoks
 Dosya: docs/istek/can.md (KARAR 09:33–09:58)
 Neden: Can'ın isteği: sıradaki işi karar masası belirlesin.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 10:14 — (BUILD 1 — yük) — Clean review madde 1: trafo_bos_kapasite.py'de kullanılmayan satır kaldırıldı, çıktılar bayt bayt aynı (PR #40); test edin
+Ne: KARAR 09:5x (can.md). `main()` içindeki `rooms = [group_room(…)]` kaldırıldı; `group_room` saf, satır yalnız betik olarak çalışan `main()`'de (üretici ve öbür modüller `main()`'i çağırmıyor) [Hesap: BUILD 1]. Üretici 1.5 şehirleri 1–10 ve 31–40: trafolar, yuk_5dk, yaz / kış, cevap anahtarı 100 / 100 dosya bayt bayt aynı, ayar.json süre dışında aynı; benzetim betiği tohum 7, 1, 31'de JSON ve ekran çıktısı aynı.
+Süre: benzetim betiği eski / yeni sırayla 3'er koşu 3,54–4,19 ↔ 3,73–4,23 sn, fark gürültü içinde; 20 şehir üretiminde 995 → 1.150 sn makine yükü (satır üretimde çalışmıyor).
+Dosya: PR #40 (https://github.com/volkanGRGN/KKTC-hackathon/pull/40)
+Neden: KARAR 09:5x, clean review madde 1.
+Durum: bekliyor
