@@ -37,4 +37,12 @@ Ana tepe saatinin seçimi değişmedi (zarfın en büyüğü).
 | 1 Kas 01:35 | tepe.py + arketipli ticari II, ikinci aday | 1–10 | yurt doğru eğriyle saat ve tepe düzelir; iki aday konutun iki tepesini kapsar | yurt %8 → %53; iki adaydan biri %59; dönem %59 → %69; tepe hatası %7,5 → %6,3 | kabul |
 | 1 Kas 01:35 | aynı | 31–40 bir kez | aynı | saat %48 → %52, iki aday %60, dönem %61 → %69; tepe %6,7 → %5,8, P90 üstü 0 | PR |
 
+## Düzeltme (02:11, TEST bulgusu, KARAR 02:0x) — "önceki sütunlar ve akşam gerilimi değişmedi" doğru değil
+Yukarıdaki "Ana tepe saatinin seçimi değişmedi" yalnız seçim kuralı için doğru; "Akşam gerilimi değişmedi" yanlış. **Yurt eğrisi değişince ölçülü yurt trafolarının Nisan oranı (R) değişir, R'lerin ortalaması popülasyon R'si olduğu için yurt dışındaki ölçülmeyen trafoların tepesi, bandı ve boş kVA'sı da değişir** [Hesap; TEST'in bağımsız koşusu ve BUILD 1'in koşusu birebir; üretici 1.5, 31–40]:
+- Tepe, P90 ya da boş kVA'sı değişen trafo: **262/400**.
+- Popülasyon R'si (Velander R0): 9/10 şehirde **−%0,3 … −%1,5** (şehir 31–40: −1,2, −0,9, −1,0, −1,0, −0,3, −0,6, −1,5, −1,2, −0,6, 0,0).
+- Yurt dışındaki trafolarda tepe değişimi: ortanca **%0,4**, en çok **%13,8**.
+- Akşam gerilimi neredeyse aynı, birebir değil: "yeterli" (P10 ≥ 207 V) **232 → 233** (ikisinde de 0 yanlış), uyarı **48 → 47**, %80 kapsama **%87,9 → %88,9**.
+- Ölçüm rakamları değişmedi (saat ±60 dk %52,1, iki aday %60,0, dönem %69,3, tepe hatası %5,8, gerçek P90 üstü 0). Kod değişmedi.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
