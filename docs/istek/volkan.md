@@ -1347,3 +1347,9 @@ Soru: Eksik ya da yanlış satır var mı? %27 → %19 ve "%5 → %13" kalsın m
 Dosya: dashboard/icerik.json; docs/sunum/; docs/log/2026-11-01-can-maliyet.md
 Neden: Can'ın isteği (yedek liste, unutulmasın); KARAR 09:43, 10:04.
 Durum: bekliyor
+
+## BİLGİ 1 Kasım (11:45 sonrası) — Can'dan — sunum dosyalarındaki eski rakamlar üretici 1.5 rakamlarına çevrildi (yedek listenin G maddesi)
+Ne: `docs/sunum/ekranlar.md`, `konusma-notu.md`, `slaytlar.md`: 41/73, 0/87, 41/284, 22/44, %79, yeşil %25 / sarı %62 / kırmızıların %27'si, farazi %3,8 / %20,6, "~20 bin € + pens" → `dashboard/icerik.json` rakamları (24/46 ↔ 0, 0/60, %82,1, %11,3 / %28, renksiz %76, 15/22, maliyet tablosu); "yeşil = güven yüksek" ifadeleri ADR-0019'a göre düzeltildi; konuşma notunda "sıradaki katman, sunumda gösterilmez" bölümü yerine yük haritası cümleleri (16/16 ve 87 uyarı, 207 V 2/2 ve 233 "yeterli", İspanya tepe %15). Yeni rakam yok.
+Açık kalan: kilit grafik PNG eski şehirlerden (0/87 ↔ 41/284) — 1.5 şehirleri 31–40 ile yeniden üretilecek, **BEKLİYOR**; kaç ev hatası 1.5'te raporlanmadı (BEKLİYOR); ekran 6 %27 → %19 ve "%5 → %13" senin cevabını bekliyor; slayt sırası henüz "yük öne" değil.
+Dosya: docs/sunum/
+Durum: bilgi
