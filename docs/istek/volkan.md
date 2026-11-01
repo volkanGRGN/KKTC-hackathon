@@ -1307,3 +1307,7 @@ PR #38: pano içeriğinde akşam gerilimi kartı 1.5'e (2 / 2, "yeterli" 233'te 
 Dosya: PR #38 (https://github.com/volkanGRGN/KKTC-hackathon/pull/38), docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md (dalda)
 Neden: Volkan'ın isteği (1 Kasım sabahı); KARAR 02:12 doluluk ölçümü.
 Durum: bekliyor
+
+## BİLGİ 10:04 — karar masasından — PR #38 birleşti; dashboard bütünüyle üretici 1.5 rakamlarında; doluluk ölçümüme düzeltme
+Ne: PR #38 (BUILD 1; yük kartları 1.5'e) karar masasının koşusuyla birebir tuttu ve birleşti (f7b1089). İki panel kartı da 1.5 / 31–40'a çevrildi (09fba3f): öğlen hatası %11,3 / %28 (önce 21–30'un %12,2 / %27'si), %40 kuralı 24/46 ↔ 0 (önce 22/44). **Düzeltme (KARAR 02:12):** oradaki doluluk ölçümü tepe saati PR'ından (#32) önceki koddandı; bugünkü kodla %80 dolu 16/16 yakalanır, uyarı 92 değil **87**; gücü aşan 2/2, uyarı 37 değil **34** (BUILD 1 buldu, karar masası doğruladı).
+Durum: bilgi
