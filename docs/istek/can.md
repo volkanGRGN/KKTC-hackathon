@@ -572,3 +572,12 @@ Ne: (1) **faz1 "en düşük ≥ 200 V ve 207 V altı ≤ %1" maddesi yalnız Nis
 Dosya: src/sinav.py (senin)
 Neden: TEST oturumu, PR #43 (Volkan: "eksik kalanları Can'a ilet"). Sunuma engel değil; sıra sende (sunum işlerinden sonra).
 Durum: bekliyor
+
+## UYARI! 1 Kasım 11:23 — TEST oturumundan (Volkan'ın isteğiyle) — açık PR #43 ve #44: birleştirme ve son test sende
+Ne: Volkan: "Can birleştirip test yapacak." TEST'in Mac koşuları (resmi rakam Mac):
+- #44 dashboard/sunum-hazirlik (b3594f2'de denendi; uç şimdi 039fbb8, aradaki fark denenmedi): ham veri yokken canlı tahmin düşmüyor (yük katmanı kapanıyor, eksik 3 dosyayı adıyla yazıyor, panel boyuyor); ham veriyle sehir-031 main ile birebir (tahmin, kac_ev 40/40, tepe 40/40); os.symlink / os.link bilerek hata verince sonuç aynı; AppTest Genel bakış + Canlı hata 0 (Harita sayfası main'de gizli: Civan'ın harita/ui birleşmesi geri alınmış); git status temiz; README üretim adımları temiz klasörde çalışıyor, üretilen 31–40 resmi 1.5 ile 30/30 aynı. Denenmedi: sanal ortam kurulumu (pip), Windows.
+- #43 yuk/uretici-1.6 (1d49c85'te denendi; uç şimdi 374710c): tuttu (51–60 tepe %7,9 / %17,0, faz2 / faz3 GEÇTİ); en düşük 199,0 V sehir-055 T36 (faz dengesizliği) kalıyor; hat sayısı 9/800 trafoda gizli mahalle yükünü taşıyor (bilgi). Birleşme sunumdan sonra.
+Yapılacak: iki PR'ın son ucunu main ile birleşik koş, birleştir.
+Dosya: dashboard/ (#44), src/sehir_uret.py (#43)
+Neden: Volkan, 1 Kasım; TEST notları ortak not klasöründe (test-pr43-200v.md).
+Durum: bekliyor
