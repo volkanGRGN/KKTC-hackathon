@@ -1232,3 +1232,7 @@ Soru: PR #36 kapatılsın mı (günlük main'e ayrı mı girsin), birleşsin mi?
 Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
 Neden: KARAR 03:0x.
 Durum: bekliyor
+
+## KARAR 08:41 — (BUILD 2 — panel) PR #36 (ticari I / II bölmesi): olumsuz sonuç; kod birleşmez, günlük main'e
+Karar: "Baskın sınıf" ayırmıyor (ticari II çarşıda da yurtta da baskın); küçük dükkân sayısıyla bölme (eşik 12; kalibrasyon 1–10: dükkân −1,06, büyük −0,93 V) sonucu değiştirmedi: gece prizi 1–10 15 / 182, 31–40 10 / 72 (#35 ile aynı), beklenen → gerçekleşen 16,1 → 10, yanlış yeşil 0. Yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep ölçüm öncesi bara öncülü U(244, 252) [Yorum]. **Kod birleşmez**, PR kapanır (dal kalır); olumsuz sonuç günlüğü ve ROADMAP Faz 10 satırı main'e ayrı girer (BUILD 2). 31–40 bu betik için üçüncü kez bakıldı, görülmüş; 41–50 bu iş için gerekmedi.
+Durum: bekliyor (BUILD 2 günlük; sonra karar masası #36'yı kapatır)
