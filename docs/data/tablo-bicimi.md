@@ -190,13 +190,13 @@ Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama 
 | Sütun | Tür | Birim | Örnek | Açıklama |
 |---|---|---|---|---|
 | `sehir`, `trafo_no` | | | | anahtar |
-| `tur` | str | — | `panelli` | `kademe` / `hat` / `panelli` / `inverter` |
+| `tur` | str | — | `panelli` | `kademe` / `hat` / `panelli` / `inverter_ham` (gerçek inverter kaydı) / `inverter` (türetilmiş: **yalnız deneme**, sahte kayıt; gerçek kayıtta okuyucu satırı atlar ve uyarır, motor reddeder — karar masası 01:22) |
 | `abone_no` | int | — | `17` | `panelli` ve `inverter`: trafo içi anonim abone sırası |
 | `hat_no` | int | — | `0` | `hat`, `panelli`, `inverter`: alçak gerilim hattının trafodaki sırası (0'dan) |
 | `yer` | float | oran | `0.8125` | `panelli`: hattaki yeri, direk sırası ÷ hattaki direk sayısı (0–1; 1 = hat ucu) |
 | `faz` | str | — | `B` | `panelli`: `A` / `B` / `C` / `3` (üç faz); boş = kayıt yok |
 | `kw` | float | kWp | `5.00` | `panelli`: kurulu güç |
-| `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy). **Türetilmiş değer, ham kayıt değil:** inverterin ham gerilim / güç serisi bu dosyaya girmez, geri çözümün sonucu girer; gerçek kayıtta önce geri çözüm adımı gerekir (ham seriden, `src/inverter_kaydi.py` gibi). 1.4 kesinleşirken iki değerin ayrı sütun olması önerilir (`bara_v`, `esdeger_boy_m`) (Civan, 23:56; karar masası 00:10) |
+| `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy). **Türetilmiş değer, ham kayıt değil:** inverterin ham gerilim / güç serisi bu dosyaya girmez, geri çözümün sonucu girer; gerçek kayıtta önce geri çözüm adımı gerekir (ham seriden, `src/inverter_kaydi.py` gibi). 1.4 kesinleşirken iki değerin ayrı sütun olması önerilir (`bara_v`, `esdeger_boy_m`) (Civan, 23:56; karar masası 00:10) · `inverter_ham` (karar masası 00:27, Muhittin 4 madde 5B): `bara_olcum_V;egim_V_kW` = inverterin kendi kaydının ham özeti, model varsayımı yok (`inverter_kaydi.geri_coz`: bara ölçümü = her günün ilk geçerli değerinin ortancası, inverter gece uyur; eğim = gündüz gerilim ↔ kendi panel gücü doğrusu, V/kW; güç sütunu yoksa boş). Bara ve hat boyu motorda çözülür (`basvuru.py`; sabah değerinin barayı düşük göstermesi 1–10'da ölçüldü). Ham seri depoya girmez (kişisel veri) |
 
 Başvuru formu (başvuranın hattı, yeri, fazı) aynı alanlarla ayrı gelir; testte `sahte_kayit.basvuru_kaydi` üretir, dosyası henüz yok.
 

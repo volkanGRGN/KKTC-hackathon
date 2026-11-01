@@ -34,6 +34,7 @@ MODEL = dict(bara=(245.1, 247.6, 250.6), vmax=(249.5, 253.8, 260.0), yukselme=(3
 ZAMAN_ADAY = ('time', 'zaman', 'date', 'tarih', 'timestamp', 'update', 'collect')
 GERILIM_ADAY = ('grid voltage', 'vac', 'ac voltage', 'phase voltage', 'gerilim', 'u_ac', 'uac', 'ua', 'ub', 'uc',
                 'l1', 'l2', 'l3', 'voltage')
+GUC_ADAY = ('ac power', 'pac', 'output power', 'active power', 'power', 'güç', 'gücü', 'guc')
 ZAMAN_BICIM = ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M', '%d.%m.%Y %H:%M:%S', '%d.%m.%Y %H:%M', '%d/%m/%Y %H:%M:%S',
                '%d/%m/%Y %H:%M', '%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M', '%Y/%m/%d %H:%M:%S', '%Y/%m/%d %H:%M',
                '%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M:%SZ')
@@ -109,6 +110,30 @@ def sayi(x):
         return None
 
 
+def dogru(xy):
+    """En küçük kareler: y = a + s x. Dönüş (a, s)."""
+    n = len(xy)
+    mx = sum(x for x, _ in xy) / n
+    my = sum(y for _, y in xy) / n
+    sxx = sum((x - mx) ** 2 for x, _ in xy)
+    s = sum((x - mx) * (y - my) for x, y in xy) / sxx if sxx else 0.0
+    return my - s * mx, s
+
+
+def geri_coz(veri):
+    """İnverter kaydının ham özeti (Muhittin 4 madde 5B; model varsayımı yok). veri: [(zaman, V, kendi panel gücü kW
+    ya da None)]. Bara ölçümü: her günün ilk geçerli değeri (inverter güneşle uyanır, gece kaydı yok), günlerin
+    ortancası. Eğim: gündüz V = a + s × P doğrusunun s'si (V / kW); güç sütunu yoksa None. Düzeltme yok: sabah
+    değerinin barayı ne kadar düşük gösterdiği ve eğimin hat boyuna çevrilmesi motorda (`basvuru.inverter_coz`)."""
+    veri = sorted(veri, key=lambda x: x[0])
+    ilk = {}
+    for t, v, _ in veri:
+        ilk.setdefault(t.date(), v)
+    xy = [(p, v) for _, v, p in veri if p is not None and p > 0]
+    return dict(bara_olcum_v=round(st.median(ilk.values()), 2) if ilk else None,
+                egim_v_kw=round(dogru(xy)[1], 4) if len(xy) > 10 else None, gun=len(ilk))
+
+
 def nicel(x, q):
     x = sorted(x)
     return x[min(len(x) - 1, max(0, int(round(q * (len(x) - 1)))))] if x else float('nan')
@@ -119,6 +144,7 @@ def main():
     ap.add_argument('dosya')
     ap.add_argument('--zaman')
     ap.add_argument('--gerilim', action='append')
+    ap.add_argument('--guc', help='kendi panel gücü sütunu (W ya da kW); yoksa aranır')
     a = ap.parse_args()
     baslik, rows = satirlar(a.dosya)
     low = [b.lower() for b in baslik]
@@ -130,7 +156,18 @@ def main():
               and not any(y in b for y in ('pv', 'dc', 'bat', 'mppt', 'string', 'bus'))]
     if not gi:
         sys.exit(f'Gerilim sütunu bulunamadı. Başlıklar: {baslik}')
-    print(f'zaman sütunu: {baslik[zi]!r}; gerilim sütunları: {[baslik[i] for i in gi]}')
+    pi = baslik.index(a.guc) if a.guc else next((i for i, b in enumerate(low) if i != zi and i not in gi and any(
+        g in b for g in GUC_ADAY) and not any(y in b for y in ('reactive', 'apparent', 'factor', 'limit'))), None)
+    print(f'zaman sütunu: {baslik[zi]!r}; gerilim sütunları: {[baslik[i] for i in gi]}; '
+          f'güç sütunu: {baslik[pi] if pi is not None else "yok"!r}')
+    guc = {}
+    if pi is not None:
+        for r in rows:
+            if len(r) > max(zi, pi) and zaman_oku(r[zi]) and sayi(r[pi]) is not None:
+                guc[zaman_oku(r[zi])] = sayi(r[pi])
+        pozitif = [x for x in guc.values() if x > 0]
+        if pozitif and st.median(pozitif) > 50:      # W → kW
+            guc = {t: x / 1000 for t, x in guc.items()}
     for i in gi:
         veri = []
         for r in rows:
@@ -174,6 +211,9 @@ def main():
             kova.setdefault(k, []).append(v)
         on = {k: st.mean(x) for k, x in kova.items()}
         print(f'10 dk ortalaması > 253 V: {sum(x > 253 for x in on.values())} pencere / {len(on)}')
+        oz = geri_coz([(t, v, guc.get(t)) for t, v in veri])
+        print(f"ham özet (motorun girdisi; Muhittin 5B): bara ölçümü (sabah ilk değer, {oz['gun']} gün ortancası) "
+              f"{oz['bara_olcum_v']} V; eğim " + (f"{oz['egim_v_kw']} V/kW" if oz['egim_v_kw'] is not None else 'yok (güç sütunu yok)'))
         print('gün gün: gece ortanca | öğlen en yüksek | > 253 nokta')
         for g in gunler:
             gv = [v for t, v in veri if t.date() == g]

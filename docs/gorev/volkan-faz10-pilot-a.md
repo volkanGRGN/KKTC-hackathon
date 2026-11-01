@@ -20,6 +20,7 @@ Amaç (1 cümle): Kıbrıs'tan ilk gerçek gerilim verisini tüzük kartlarıyla
 - **Kaynak:** birkaç evde 15–20 €'luk priz, gece 00–05. Satın alma ve kurulum Volkan'ın.
 - **Ne verir:** gece bara seviyesine en yakın değer; P6'nın gece boşluğunu kapatır.
 - **Kullanım:** bara bandının (244–252 V, karar masası 16:27, İngiltere çapası) ilk Kıbrıs çapası. Bölünme P6 ile aynı kural.
+- **P6 ile aynı evde, aynı hafta (karar masası 00:39):** en az birkaç panelli evde P6 inverter kaydı ve P7 priz gece seviyesi yan yana alınır. Sabahın ilk inverter değeri ile gece seviyesi arasındaki fark, inverterin barayı ne kadar düşük gösterdiğini (kayma) gerçek veriden verir; farazi şehirde ortanca −0,8 / −1,0 V, P10 −2,15 V ([günlük](../log/2026-11-01-volkan-panel-inverter-geri-cozum.md)) [Hesap, farazi]. **Pilot şartı:** inverter barasına dayanan "hemen evet" ancak bu kayma gerçek veriden çıkınca; o zamana kadar "önce ölç".
 
 ### P8 — trafo plakası fotoğrafı (`P8-plaka-trafo-NN`)
 - **Ne verir:** kısa devre gerilimi (uk), kademe aralığı ve ayarı (uzmana soru 8).
