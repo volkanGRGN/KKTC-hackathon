@@ -48,7 +48,15 @@ def kimlik_bandi(k):
 def veri_bandi(klasorler, t):
     ayarlar = {sehir_no(k): (json_oku(k / "ayar.json") or {}) for k in klasorler}
     etiketler = sorted({etiket(no, a) for no, a in ayarlar.items()})
-    st.warning(" · ".join(etiketler))
+    nolar = sorted(ayarlar)
+    sehirler = "1 şehir" if len(nolar) == 1 else f"{len(nolar)} şehir"
+    ek = " · cevabını bildiğimiz deneme şehirleri, trafo yerleri gerçek değil" if max(nolar) < 800 else ""
+    st.warning(" · ".join(etiketler) + f" · {sehirler}, {tr(len(t))} trafo{ek}")
+
+
+def teknik_veri_notu(klasorler, t):
+    """Verinin teknik kimliği (üretici, sözleşme, hava yılı, tablolar): yalnız "Ekip için"de."""
+    ayarlar = {sehir_no(k): (json_oku(k / "ayar.json") or {}) for k in klasorler}
 
     def kume(anahtar):
         degerler = sorted({str(a[anahtar]) for a in ayarlar.values() if a.get(anahtar) not in (None, "")})
@@ -81,11 +89,11 @@ def doluluk_grafigi(t):
     cubuk = alt.Chart(df).mark_bar(
         color=MAVI_HEX, cornerRadiusTopLeft=4, cornerRadiusTopRight=4
     ).encode(
-        x=alt.X("bas:Q", title="Doluluk, orta tahmin (%)", scale=alt.Scale(domain=[0, ust])),
+        x=alt.X("bas:Q", title="Trafo ne kadar dolu (%)", scale=alt.Scale(domain=[0, ust])),
         x2="son_bosluklu:Q",
         y=alt.Y("trafo:Q", title="Trafo sayısı"),
         y2=alt.datum(0),  # x2 varken çubuk dikey kalsın: alt uç sıfır
-        tooltip=[alt.Tooltip("aralik:N", title="Doluluk"), alt.Tooltip("trafo:Q", title="Trafo")],
+        tooltip=[alt.Tooltip("aralik:N", title="Ne kadar dolu"), alt.Tooltip("trafo:Q", title="Trafo")],
     )
     esik = pd.DataFrame({"x": [80, 100], "ad": ["%80", "%100"]})
     cizgi = alt.Chart(esik).mark_rule(strokeDash=[4, 3], color=GRI_HEX, strokeWidth=1.5).encode(x="x:Q")
@@ -101,7 +109,7 @@ def donem_grafigi(t):
     taban = alt.Chart(df).encode(
         y=alt.Y("donem:N", sort=[DONEM_ADI[d] for d in DONEM_SIRA], title=None, axis=alt.Axis(labelLimit=220)),
         x=alt.X("trafo:Q", title="Trafo sayısı"),
-        tooltip=[alt.Tooltip("donem:N", title="Tepe dönemi"), alt.Tooltip("trafo:Q", title="Trafo")],
+        tooltip=[alt.Tooltip("donem:N", title="En yoğun saat"), alt.Tooltip("trafo:Q", title="Trafo")],
     )
     cubuk = taban.mark_bar(color=MAVI_HEX, cornerRadiusTopRight=4, cornerRadiusBottomRight=4, height=18)
     yazi = taban.mark_text(align="left", dx=4, fontSize=12, color=GRI_HEX).encode(text="trafo:Q")
@@ -146,9 +154,9 @@ def ozet_sekmesi(t, icerik):
 
 
 def panel_ozeti(t, icerik):
-    st.subheader("Panel katmanı · güneş için ne kadar yer var")
-    st.caption("Bahar öğleni (11:00–14:00), yükün en düşük olduğu saatler. Sınır: evde 259 V ve trafo gücü. "
-               "Bu bölümdeki bütün rakamlar panel katmanının.")
+    st.subheader("Güneş paneli için ne kadar yer var?")
+    st.caption("Bahar öğleninde (11:00–14:00) elektrik en az kullanılır, paneller en çok üretir; evdeki gerilim 259 "
+               "voltu aşmamalı. Bu bölümdeki rakamlar güneş paneli sorusunun.")
     if "renk" not in t:
         st.info("Kaç ev tablosu yok, renk ve kaç ev hesaplanmamış. Üretmek için:")
         st.code("python3 src/kac_ev_olasilik.py <şehir klasörlerinin kökü>", language="bash")
@@ -164,14 +172,15 @@ def panel_ozeti(t, icerik):
             st.markdown(yigin_html(parcalar), unsafe_allow_html=True)
             st.markdown(lejant_html(parcalar, [cumleler[r] for r in RENK_SIRA]), unsafe_allow_html=True)
             if "olculdu" in t:
-                st.caption(f"{tr(t['olculdu'].sum())} trafo ölçülü, {tr(n - t['olculdu'].sum())} trafo tahmin.")
+                st.caption(f"{tr(t['olculdu'].sum())} trafo ölçüldü, {tr(n - t['olculdu'].sum())} trafo tahmin.")
             if "pv_uc" in t:
-                st.markdown("**Güvenli uçlar**")
+                st.markdown("**Emin olduğumuz trafolar**")
                 sayim = t["pv_uc"].value_counts()
                 parcalar = [(PV_UC_ADI[u], int(sayim.get(u, 0)), PV_UC_HEX[u]) for u in PV_UC_SIRA]
                 st.markdown(yigin_html(parcalar), unsafe_allow_html=True)
                 st.markdown(lejant_html(parcalar), unsafe_allow_html=True)
-                st.caption("Büyük olasılıkla dolu: bugün sınırı aşma olasılığı en az %70. Ret değil, başvuruda ölçüm.")
+                st.caption("Büyük ihtimalle dolu: bugün sınırı aşma ihtimali %70 ya da daha fazla. Ret değil; "
+                           "başvuru gelince ölçülür.")
     with s2:
         with st.container(border=True):
             st.markdown("**Kaç ev daha panel takabilir**")
@@ -179,32 +188,32 @@ def panel_ozeti(t, icerik):
             if "kac_ev_orta" in t:
                 st.markdown(f"<div class='buyuk'>yaklaşık {tr(t['kac_ev_orta'].sum())} ev</div>",
                             unsafe_allow_html=True)
-                st.markdown(f"büyük olasılıkla toplam **{aralik(kar, iyi)} ev**")
+                st.markdown(f"10'da 8 ihtimalle toplam **{aralik(kar, iyi)} ev**")
             else:
                 st.markdown(f"<div class='buyuk'>{aralik(kar, iyi)} ev</div>", unsafe_allow_html=True)
-            st.caption("Trafo aralıklarının toplamı; her trafonun aralığı %80 ihtimalle.")
+            st.caption("Bütün trafoların toplamı. Ortadaki sayı tahmin, aralık 10'da 8 ihtimalle.")
             kural, gosterilen = t["kural40_ev"].sum(), t["kural_gosterilen"].sum()
             st.markdown(f"Bugünkü %40 kuralı: **{tr(gosterilen)} ev**"
                         + (f" ({tr(kural)} evlik yer)" if kural > gosterilen else ""))
-            st.caption(f"Kuralın sayısı panelsiz konut sayısıyla kesilir. Panelsiz konut toplam {tr(t['aday'].sum())}.")
+            st.caption(f"Kural, panelsiz ev sayısından fazlasını söyleyemez. Panelsiz ev toplam {tr(t['aday'].sum())}.")
     with s3:
         with st.container(border=True):
-            st.markdown("**Güneş payının dolu kısmı**")
+            st.markdown("**Güneşe ayrılabilecek yerin dolan kısmı**")
             panel = t["panel_kw"].sum()
             pay_k, pay_i = t["pay_karamsar"].sum(), t["pay_iyimser"].sum()
             dol_k = panel / (panel + pay_k) if panel + pay_k > 0 else float("nan")
             dol_i = panel / (panel + pay_i) if panel + pay_i > 0 else float("nan")
             metin = yuzde(dol_k) if yuzde(dol_k) == yuzde(dol_i) else f"{yuzde(dol_i)}–{yuzde(dol_k)}"
             st.markdown(f"<div class='buyuk'>{metin}</div>", unsafe_allow_html=True)
-            st.caption(f"Bağlı paneller {tr(panel)} kW. Kalan pay {aralik(pay_k, pay_i)} kW (karamsar–iyimser). "
-                       "Dolu kısım = bağlı ÷ (bağlı + kalan). Aralık geniş, çünkü hat ucundaki gerilim bilinmiyor.")
-            st.caption("Öğlen yükünün trafo gücüne oranı doluluk değildir: öğlen yükü düşük trafo panel için daha risklidir.")
+            st.caption(f"Bugün bağlı paneller {tr(panel)} kW; daha eklenebilecek {aralik(pay_k, pay_i)} kW (kötü ve iyi "
+                       "senaryo). Aralık geniş, çünkü hattın ucundaki evlerin gerilimi bilinmiyor.")
+            st.caption("Öğlen az elektrik kullanan trafo, panel için daha risklidir: üretilen elektriği tüketecek kimse yok.")
     kural_kiyasi(t)
 
 
 def kural_kiyasi(t):
     """Bugünkü %40 kuralı ile renklerimiz aynı trafolarda yan yana (cevap anahtarı okunmaz)."""
-    st.markdown("**Bugünkü %40 kuralı ile renklerimiz yan yana**")
+    st.markdown("**Bugünkü kural (trafo gücünün %40'ı) ile bizim renklerimiz yan yana**")
     yer_var = t["kural_gosterilen"] >= 1
     satirlar = []
     for r in RENK_SIRA:
@@ -221,15 +230,16 @@ def kural_kiyasi(t):
     with sag:
         celiski = int(((t["renk"] == "kirmizi") & yer_var).sum())
         st.markdown(f"Kuralın **\"yer var\"** dediği **{tr(celiski)} trafoya** biz kırmızı diyoruz: "
-                    "büyük olasılıkla bugün bile sınırda.")
-        st.caption("Hangisinin gerçekte dolu olduğunu yalnız sınav bilir; cevap anahtarı burada okunmaz. "
-                   "Sınavdaki sonuç \"Model ne kadar iyi\" sekmesinde.")
+                    "büyük ihtimalle bugün bile sınırda.")
+        st.caption("Hangisinin gerçekte dolu olduğunu burada göstermiyoruz; gerçekle karşılaştırma \"Ne kadar tutuyor\" "
+                   "sekmesinde.")
 
 
 def yuk_ozeti(t):
-    st.subheader("Yük haritası · trafo ne kadar dolu")
-    st.caption("Yılın en yüksek saati, çoğunlukla yaz akşamı. Sınır: trafo gücü ve akşam evde 207 V. Ön sürüm: yaz "
-               "ölçümü yok, sıcak dalga ölçülmedi. Bu bölümdeki bütün rakamlar yük haritasının.")
+    st.subheader("Trafo ne kadar dolu?")
+    st.caption("Yılın en yoğun saatine bakıyoruz; Kıbrıs'ta çoğunlukla yaz akşamı. Trafonun gücü aşılmamalı, evdeki "
+               "gerilim 207 voltun altına inmemeli. İlk sürüm: yazın ölçüm yapılmadı, sıcak dalga ölçülmedi. Bu "
+               "bölümdeki rakamlar trafo doluluğu sorusunun.")
     if "doluluk" not in t:
         st.info("Yılın tepesi tablosu (tepe.csv) yok. Üretmek için:")
         st.code("python3 src/tepe.py <şehir klasörlerinin kökü>", language="bash")
@@ -242,23 +252,24 @@ def yuk_ozeti(t):
     ]
     if "v_min_tepe_v_p10" in t:
         kutular.append(sunum("aksam_gerilim", tr((t["v_min_tepe_v_p10"] < V_AKSAM_SINIR).sum()),
-                             "\"Yeterli\" dediklerimiz sınavda hiç inmedi."))
+                             "\"Yeterli\" dediklerimizin hiçbiri denemede inmedi."))
     if "bos_kva_p10" in t:
         kutular.append(sunum("bos_guc", f"{tr(t['bos_kva_p10'].clip(lower=0).sum())} kVA"))
     kutu_izgarasi(kutular)
     sol, sag = st.columns([3, 2])
     with sol:
-        st.markdown("**Doluluk dağılımı** · orta tahmin")
+        st.markdown("**Trafolar ne kadar dolu**")
         doluluk_grafigi(t)
-        st.caption("Kesik çizgiler: %80 ve %100. %100 trafo gücüne eşit demek.")
+        st.caption("Her çubuk o doluluktaki trafo sayısı. Kesik çizgiler %80 ve %100; %100 trafonun gücüne eşit demek.")
     with sag:
         if "tepe_donemi" in t:
-            st.markdown("**Yılın tepesi ne zaman**")
+            st.markdown("**Trafolar en çok ne zaman zorlanıyor**")
             donem_grafigi(t)
         if "tepe_ayi" in t:
             aylar = t["tepe_ayi"].value_counts().sort_index()
-            st.caption("Tepe ayı: " + " · ".join(f"{AY_ADI.get(int(a), a)} {tr(s)}" for a, s in aylar.items()))
-    st.caption(f"{tr(n)} trafo. Yoğun saat tahmini trafo başına bilerek güvenli tarafta; trafoların toplamı hattın ya da adanın yoğun saati değildir.")
+            st.caption("En yoğun ay: " + " · ".join(f"{AY_ADI.get(int(a), a)} {tr(s)}" for a, s in aylar.items()))
+    st.caption(f"{tr(n)} trafo. Her trafonun tahmini bilerek güvenli tarafta; bu yüzden trafoları toplayıp adanın "
+               "yoğun saatini bulamazsınız.")
 
 
 # ---------- trafolar ----------
@@ -538,7 +549,7 @@ def kucuk_harita(sehir_t, secili):
                             zoom=harita_yakinligi(v["enlem"], v["boylam"], 280))
     st.pydeck_chart(pdk.Deck(layers=[nokta, halka], initial_view_state=gorunum, map_style=None,
                              tooltip={"text": "{trafo_no} · {renk_adi} · {kva} kVA"}), height=280)
-    st.caption("Mavi halka seçili trafo. Renk panel katmanının. Yerler farazi, gerçek trafo yeri değil.")
+    st.caption("Mavi halka seçili trafo. Renk güneş paneli sorusunun. Kıbrısçık: trafo yerleri gerçek değil.")
 
 
 # ---------- şehirler ----------
@@ -613,8 +624,7 @@ def rakam_karti(r, depo):
 def model_sekmesi(icerik):
     rakamlar = icerik.get("rakamlar", [])
     depo = icerik.get("kimlik", {}).get("depo", DEPO_VARSAYILAN).rstrip("/")
-    st.caption(f"{icerik.get('rakam_notu', '')} Güncellendi: {icerik.get('guncellendi', '—')}. "
-               "Bu rakamlar dashboard/icerik.json dosyasından gelir; yeni sonuçta yalnız o dosya değişir.")
+    st.caption(f"{icerik.get('rakam_notu', '')} Güncellendi: {icerik.get('guncellendi', '—')}.")
     if not rakamlar:
         st.info("dashboard/icerik.json'da rakam yok.")
         return
@@ -663,16 +673,15 @@ def proje_sekmesi(icerik):
         for baslik, anahtar in (("Sorun", "sorun"), ("Kullanıcı", "kullanici"), ("Yöntem", "yontem"), ("Karar", "karar")):
             if k.get(anahtar):
                 st.markdown(f"**{baslik}.** {k[anahtar]}")
-        st.markdown("**Panel katmanında üç renk**")
+        st.markdown("**Güneş paneli sorusunda üç renk**")
         st.markdown("<div class='lejant'>" + "<br>".join(
             f"<span class='nokta' style='color:{RENK_HEX[r]}'>●</span> <b>{RENK_ADI[r]}</b>: {e(cumleler[r])}"
             for r in RENK_SIRA) + "</div>", unsafe_allow_html=True)
         if k.get("iki_soru"):
-            st.markdown("**İki ayrı soru, birbirinden bağımsız**")
+            st.markdown("**Her trafo için iki ayrı soru**")
             for s in k["iki_soru"]:
-                katman = "Yük haritası" if s.get("katman") == "yuk" else "Panel katmanı"
-                st.markdown(f"- **{katman}: {s.get('soru', '')}** {s.get('an', '')}. Sınır: {s.get('sinir', '')}.")
-            st.caption("Panel akşam tepesini düşürmez: tepe gün battıktan sonra, batarya yok.")
+                st.markdown(f"- **{s.get('soru', '')}** {s.get('an', '')}. Sınır: {s.get('sinir', '')}.")
+            st.caption("Güneş paneli akşamki yoğunluğu azaltmaz: yoğunluk gün battıktan sonra, evlerde batarya yok.")
     with sag:
         st.subheader("Kim")
         bilgi_tablosu([
@@ -685,10 +694,12 @@ def proje_sekmesi(icerik):
             ("Kategori", k.get("kategori", "—")),
             ("Depo", k.get("depo", DEPO_VARSAYILAN)),
         ])
-        with st.expander("Sözlük: terimler sade dille", expanded=False):
+        with st.expander("Sözlük: terimler sade dille", expanded=True):
             for s in icerik.get("sozluk", []):
                 st.markdown(f"**{s.get('terim', '')}.** {s.get('anlam', '')}")
-    st.subheader("Veri kaynakları")
+
+
+def kaynaklar_sekmesi():
     df = kaynak_tablosu()
     if df.empty:
         st.info("data/raw altında KAYNAK.txt bulunamadı.")
@@ -757,10 +768,7 @@ def genel_sayfa():
             format_func=lambda p: f"Bütün şehirler ({len(klasorler)})" if p == "hepsi" else p.name,
         )
         tek = None if secenek == "hepsi" else secenek
-    st.sidebar.caption("Yeni veri: şehir klasörlerini data/synthetic altına ya da bir alt klasöre koy, sayfayı "
-                       "yenile. Kod değişmez.")
-    st.sidebar.caption("Kimlik, resmi rakamlar ve sözlük: dashboard/icerik.json.")
-    st.sidebar.caption("Harita ayrı sayfa: streamlit run app/harita.py")
+    st.sidebar.caption("Kıbrısçık: cevabını bildiğimiz deneme şehirleri. Bütün şehirlere ya da tek şehre bakabilirsin.")
 
     t_hepsi = t = None
     if klasorler:
@@ -768,34 +776,45 @@ def genel_sayfa():
         t = t_hepsi if tek is None else t_hepsi[t_hepsi["sehir"] == sehir_no(tek)]
         veri_bandi([tek] if tek else klasorler, t)
 
-    sekmeler = st.tabs(["Özet", "Trafolar", "Şehirler", "Model ne kadar iyi", "Proje", "Ham veri"])
-    with sekmeler[3]:
+    # Sunumda görünenler önde, teknik tablolar "Ekip için"de (Volkan, 1 Kasım: pitch'te herkes anlasın)
+    ozet, tutuyor, proje, ekip = st.tabs(["Özet", "Ne kadar tutuyor", "Proje ve ekip", "Ekip için"])
+    with tutuyor:
         model_sekmesi(icerik)
-    with sekmeler[4]:
+    with proje:
         proje_sekmesi(icerik)
+    with ekip:
+        st.caption("Ekibin çalışma tabloları: her trafo, şehir şehir sonuçlar, veri kaynakları ve ham dosyalar. "
+                   "Kimlik, rakamlar ve sözlük dashboard/icerik.json'da; yeni şehir verisi data/synthetic altına konur, "
+                   "kod değişmez.")
+        if klasorler:
+            teknik_veri_notu([tek] if tek else klasorler, t)
+        trafolar, sehirler, kaynaklar, ham = st.tabs(["Trafolar", "Şehirler", "Veri kaynakları", "Ham veri"])
+        with kaynaklar:
+            kaynaklar_sekmesi()
     if not klasorler:
-        for i in (0, 1, 2, 5):
-            with sekmeler[i]:
+        for sekme in (ozet, trafolar, sehirler, ham):
+            with sekme:
                 st.info(f"Şehir verisi yok ({kisa_yol(VERI_KOK)}). Deneme şehri üretmek için:")
                 st.code("python3 src/sehir_uret.py 1 10", language="bash")
         return
-    with sekmeler[0]:
+    with ozet:
         ozet_sekmesi(t, icerik)
-    with sekmeler[1]:
+    with trafolar:
         trafolar_sekmesi(t, klasorler, tek)
-    with sekmeler[2]:
+    with sehirler:
         sehirler_sekmesi(t_hepsi, klasorler)
-    with sekmeler[5]:
+    with ham:
         ham_veri_sekmesi(klasorler, tek)
 
 
 def main():
     st.set_page_config(page_title="Trafo Görünürlük Haritası · Dashboard", page_icon="⚡", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
-    sayfalar = [st.Page(genel_sayfa, title="Genel bakış", icon=":material/dashboard:", default=True)]
+    sayfalar = [st.Page(genel_sayfa, title="Kıbrısçık'a genel bakış", icon=":material/dashboard:", default=True)]
     if harita_sayfa.KULLANILABILIR:  # Civan'ın harita/ui düzeni varsa (yoksa sayfa gizli)
         sayfalar.append(st.Page(harita_sayfa.sayfa, title="Harita", icon=":material/map:", url_path="harita"))
-    sayfalar.append(st.Page(canli_sayfa.sayfa, title="Canlı tahmin", icon=":material/bolt:", url_path="canli"))
+    sayfalar.append(st.Page(canli_sayfa.sayfa, title="Kıbrısçık'ta canlı tahmin", icon=":material/bolt:",
+                            url_path="canli"))
     st.navigation(sayfalar).run()
 
 

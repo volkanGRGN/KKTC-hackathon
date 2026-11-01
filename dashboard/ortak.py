@@ -31,12 +31,12 @@ RENK_ADI = {"yesil": "yeşil", "sari": "sarı", "kirmizi": "kırmızı"}
 RENK_BUYUK = {"yesil": "YEŞİL", "sari": "SARI", "kirmizi": "KIRMIZI"}  # str.upper() "YEŞIL" yazar
 RENK_ISARET = {"yesil": "🟢", "sari": "🟡", "kirmizi": "🔴"}
 VARSAYILAN_RENK_CUMLE = {
-    "yesil": "İlk 2 başvuru güvenle sığar (≥ %98)",
-    "sari": "Önce ölç",
-    "kirmizi": "Ölç ya da güçlendir",
+    "yesil": "İlk 2 başvuru güvenle sığar (100'de 98'den fazla ihtimalle)",
+    "sari": "Emin değiliz: önce ölç",
+    "kirmizi": "Büyük ihtimalle dolu: ölç ya da güçlendir",
 }
 PV_UC_SIRA = ["yesil", "dolu_bayrak", "bos"]  # ADR-0017 güvenli uçlar
-PV_UC_ADI = {"yesil": "yeşil", "dolu_bayrak": "büyük olasılıkla dolu", "bos": "renksiz, başvuruda bakılır"}
+PV_UC_ADI = {"yesil": "yeşil: yer var", "dolu_bayrak": "büyük ihtimalle dolu", "bos": "emin değiliz: başvuruda bakılır"}
 PV_UC_HEX = {"yesil": RENK_HEX["yesil"], "dolu_bayrak": RENK_HEX["kirmizi"], "bos": GRI_HEX}
 DONEM_SIRA = ["sabah", "ogle", "ogleden_sonra", "gece"]
 DONEM_ADI = {
@@ -63,23 +63,23 @@ OGLE_ADIMLARI = range(132, 168)  # 11:00–14:00, sözleşme "Öğlen penceresi"
 V_AKSAM_SINIR = 207
 DOLU_ESIK = 0.8
 
-DURUM = {
-    "gecti": ("GEÇTİ", "✓", RENK_HEX["yesil"]),
-    "kaldi": ("KALDI", "✗", RENK_HEX["kirmizi"]),
-    "uyari": ("UYARI", "!", "#d9822b"),
+DURUM = {  # herkesin anlayacağı dil (Volkan, 1 Kasım: pitch'te kullanılacak)
+    "gecti": ("HEDEFTE", "✓", RENK_HEX["yesil"]),
+    "kaldi": ("HEDEFİN BİRAZ DIŞINDA", "✗", RENK_HEX["kirmizi"]),
+    "uyari": ("DİKKAT", "!", "#d9822b"),
     "bilgi": ("BİLGİ", "i", GRI_HEX),
 }
 VERI_TURU = {
-    "farazi": "farazi şehir — gösterim",
+    "farazi": "Kıbrısçık deneme şehirleri — gösterim",
     "gercek": "gerçek veri — Kıbrıs değil",
-    "kaynakli": "kaynaklı",
-    "sahte_kayit": "sahte kayıtla — gösterim",
+    "kaynakli": "kaynaklı bilgi",
+    "sahte_kayit": "gerçeğe benzeyen sahte kayıtla — gösterim",
     "hesap": "kaynaklı fiyatlardan kaba hesap",
 }
 KATMANLAR = [  # sıra: Volkan 1 Kasım, "yük haritası öne"
     ("sorun", "Sorun", "Neden önemli"),
-    ("yuk", "Yük haritası", "Trafo ne kadar dolu · yılın tepesi, ön sürüm"),
-    ("panel", "Panel katmanı", "Güneş için ne kadar yer var · bahar öğleni"),
+    ("yuk", "Trafo ne kadar dolu?", "Yılın en yoğun saatine göre (çoğunlukla yaz akşamı); ilk sürüm"),
+    ("panel", "Güneş paneli için ne kadar yer var?", "Bahar öğlenine göre, elektrik en az kullanılırken"),
     ("maliyet", "Maliyet", "Ölçüm ve pilot · kaba hesap"),
 ]
 DOSYALAR = [  # Ham veri sekmesi. cevap_anahtari.csv bilerek yok (sözleşme: yalnız sınav okur).
@@ -299,7 +299,7 @@ def etiket(no, ayar):
     if no in GERCEK_VERI_SEHIRLERI:
         kaynak = ayar.get("veri_kaynagi", "gerçek ölçüm verisi")
         return f"GERÇEK ÖLÇÜM — {kaynak} (Kıbrıs değil)"
-    return "örnek veri (farazi şehir) — gösterim"
+    return "gösterim — Kıbrısçık ülkesindeki şehirler"  # Volkan, 1 Kasım: "farazi şehir" değil
 
 
 def veri_seti_sec():
@@ -325,7 +325,7 @@ def harita_yakinligi(enlem, boylam, yukseklik_px):
 SUNUM = {
     "trafo": ("Mahalle trafosu", "Şehirdeki trafolar; her biri bir mahalleyi besler."),
     "olculen": ("Ölçülen trafo", "Cihaz takılı (ya da takılmış sayılan) trafolar. Model yalnız bunlardan öğrenir."),
-    "tahmin_edilen": ("Model tahmin etti", "Ölçülmeyen trafolar; değerleri ölçülenlerden öğrenilen şablondan."),
+    "tahmin_edilen": ("Model tahmin etti", "Ölçülmeyen trafolar; değerlerini ölçülen trafolardan öğrendik."),
     "abone": ("Abone", "Konut, ticaret, otel, sanayi ve su motoru aboneleri birlikte."),
     "panel_kurulu": ("Kurulu güneş paneli", "Bugün şebekeye bağlı çatı panellerinin toplam gücü."),
     "doluluk_tipik": ("Tipik trafo doluluğu", "Trafoların yarısı bundan az, yarısı bundan çok dolu. Doluluk: yılın en "
@@ -335,8 +335,8 @@ SUNUM = {
     "gucu_asabilir": ("Gücünü aşabilecek trafo", "En kötü durumda yılın en yoğun saatinde trafonun gücünü aşabilir."),
     "aksam_gerilim": ("Akşam gerilimi düşebilecek trafo", "En kötü durumda bir evde akşam gerilimi 207 V sınırının "
                                                           "altına inebilir."),
-    "bos_guc": ("Yeni yük için boş güç", "En kötü durumda bütün trafolarda kalan güç (kVA): klima ve elektrikli araç "
-                                         "için yer."),
+    "bos_guc": ("Yeni yük için boş güç", "En kötü durumda bütün trafolarda kalan güç: klima ve elektrikli araç için "
+                                         "yer."),
     "tepe_sapma": ("Yoğun saat tahmininde sapma", "Yılın en yoğun saatindeki yükü tahmin ederken tipik trafoda gerçekten "
                                                   "bu kadar saptık."),
     "tepe_aralik": ("Gerçek, söylediğimiz aralıkta", "Verdiğimiz aralık gerçek değeri bu kadar trafoda içine aldı."),

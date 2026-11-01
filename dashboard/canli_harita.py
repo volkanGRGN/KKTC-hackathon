@@ -1,6 +1,6 @@
 """Canlı tahmin haritası: kendi çizimimiz (harita karosu yok, internetsiz) ve sunum animasyonu (Volkan, 1 Kasım).
 
-Etkileşim: Girne'deki farazi şehir; trafoya tıkla, ölçülmüş sayılır (sayfa modeli yeniden kurar).
+Etkileşim: Girne'deki deneme şehri; trafoya tıkla, kartından ölç (sayfa modeli yeniden kurar).
 Animasyon (~30 sn, kendi oynar): Girne'de küçük bir mahalle, sonra sağındaki ve solundaki mahalle belirir ve oradaki
 trafo ölçülür; üç ölçümle model kurulur, 12 ölçüme kadar mahalleler açılır; sonra görünüm adaya açılır, öbür deneme
 şehirleri kasabalara temsili yerleşir ve kasaba kasaba dolar. Güney Kıbrıs soluk, Kuzey belirgin.
@@ -190,13 +190,13 @@ def kasaba_ipucu(r):
     """Kasabadaki trafonun kartı (resmi çıktıdan): iki katmanın sonucu."""
     s = [f"Trafo gücü {tr(r['kva'])} kVA"]
     if pd.notna(r.get("tepe_kva")):
-        s.append(f"Yük haritası: yılın tepesi {tr(r['tepe_kw'])} kW, doluluk {yuzde(r['tepe_kva'] / r['kva'])} "
+        s.append(f"Yılın en yoğun saatinde {tr(r['tepe_kw'])} kW: trafo {yuzde(r['tepe_kva'] / r['kva'])} dolu "
                  f"(en kötü durumda {yuzde(r['tepe_kva_p90'] / r['kva'])})")
         if pd.notna(r.get("v_min_tepe_v_p10")):
-            s.append(f"Akşam en düşük gerilim: {tr(r['v_min_tepe_v'], 1)} V (en kötü durumda "
-                     f"{tr(r['v_min_tepe_v_p10'], 1)} V; sınır 207 V)")
+            s.append(f"Akşam evdeki en düşük gerilim {tr(r['v_min_tepe_v'], 1)} V (en kötü durumda "
+                     f"{tr(r['v_min_tepe_v_p10'], 1)} V; alt sınır 207 V)")
     if isinstance(r.get("renk"), str):
-        s.append(f"Panel: {RENK_ADI[r['renk']]} · yaklaşık {tr(r['kac_ev_orta'])} ev "
+        s.append(f"Güneş paneli: {RENK_ADI[r['renk']]} · yaklaşık {tr(r['kac_ev_orta'])} ev daha "
                  f"({aralik(r['kac_ev_karamsar'], r['kac_ev_iyimser'])})")
     return "<br/>".join(e(x) for x in s)
 

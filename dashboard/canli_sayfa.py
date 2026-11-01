@@ -4,7 +4,8 @@ Hesap dashboard/canli.py'de (ürünün kendi kodu: sablon.py, kac_ev_olasilik.py
 dashboard/surumler.py ile depo tarihçesinden. Harita kendi çizimimiz (dashboard/canli_harita.py, internetsiz): ölçülen
 trafo dolu nokta, tahmin soluk halka; bütün ada, yakınlaşılır, trafoya tıklayınca kart. "Oynat" Girne'de 12 ölçümü
 (karanlıkta küçük daireler), sonra adayı oynatır (Volkan, 1 Kasım).
-Gerçekle kıyas (sınav görünümü) yalnız farazi şehirde ve ölçülmeyen trafolarda; model gerçeği görmez.
+Gerçekle kıyas (sınav görünümü) yalnız deneme şehrinde ve ölçülmeyen trafolarda; model gerçeği görmez. Teknik seçimler
+(katman, kıyas, model sürümü) "Ayrıntı" altında (Volkan, 1 Kasım: pitch'te herkes anlasın).
 """
 
 import random
@@ -21,7 +22,8 @@ from ortak import *  # noqa: F401,F403 — sabitler, renkler, biçim ve veri oku
 
 ONERI_SAYISI = 12  # ürünün tasarımı: 40 trafodan 12'si ölçülür (sablon.py OLCULU_ANA)
 HARITA_YUKSEKLIK = 660
-KATMAN_ADI = {"yuk": "Yük haritası · yılın tepesi", "panel": "Panel · öğlen gerilimi (259 V)"}
+RENK_KISA = {"yesil": "ilk 2 başvuru güvenle sığar", "sari": "emin değiliz, önce ölç", "kirmizi": "büyük ihtimalle dolu"}
+KATMAN_ADI = {"yuk": "Trafo ne kadar dolu (yaz akşamı)", "panel": "Güneşe ne kadar yer var (bahar öğleni)"}
 
 
 # ---------- hesap (önbellekli) ----------
@@ -147,33 +149,34 @@ def _durdur(a):
 # ---------- harita (kendi çizimimiz: canli_harita.py) ----------
 
 def ipucu_satirlari(r, gercek):
-    """Haritada üstüne gelince: iki katmanın tahmini, sınav açıksa gerçeği."""
+    """Trafonun kartı (sade dil): iki sorunun cevabı, gerçekle kıyas açıksa gerçeği."""
     s = []
     if pd.notna(r.get("doluluk")):
-        s.append(f"Yük haritası: yılın tepesi {tr(r['tepe_kw'])} kW, doluluk {yuzde(r['doluluk'])} "
+        s.append(f"Yılın en yoğun saatinde {tr(r['tepe_kw'])} kW: trafo {yuzde(r['doluluk'])} dolu "
                  f"(en kötü durumda {yuzde(r['doluluk_temkinli'])})")
         if pd.notna(r.get("v_min_tepe_v_p10")):
-            s.append(f"Akşam en düşük gerilim: {tr(r['v_min_tepe_v'], 1)} V (en kötü durumda {tr(r['v_min_tepe_v_p10'], 1)} V; "
-                     "sınır 207 V)")
+            s.append(f"Akşam evdeki en düşük gerilim {tr(r['v_min_tepe_v'], 1)} V (en kötü durumda "
+                     f"{tr(r['v_min_tepe_v_p10'], 1)} V; alt sınır 207 V)")
     if isinstance(r.get("renk"), str):
         ara = aralik(r["kac_ev_karamsar"], r["kac_ev_iyimser"])
-        ev = "panelsiz konut yok" if r["aday"] <= 0 else f"yaklaşık {int(r['kac_ev_orta'])} ev ({ara})"
-        s.append(f"Panel: {RENK_ADI[r['renk']]} · {ev} · bugün 259 V'u aşma olasılığı {yuzde(r['p_bugun_asar'])}")
+        ev = "panelsiz ev yok" if r["aday"] <= 0 else f"yaklaşık {int(r['kac_ev_orta'])} ev daha ({ara})"
+        s.append(f"Güneş paneli: {RENK_ADI[r['renk']]} ({RENK_KISA[r['renk']]}) · "
+                 f"{ev} · bugün öğlen 259 voltu aşma ihtimali {yuzde(r['p_bugun_asar'])}")
     if pd.notna(r.get("ogle_min_kw")):
         if r["olculdu"] == 1:
-            s.append(f"Öğlen en düşük yük: {tr(r['ogle_min_kw_olculen'], 1)} kW (ölçülen)")
+            s.append(f"Bahar öğleni en düşük yük {tr(r['ogle_min_kw_olculen'], 1)} kW (ölçüldü)")
         else:
-            s.append(f"Öğlen en düşük yük: {tr(r['ogle_min_kw'], 1)} kW "
-                     f"(aralık {aralik(r['ogle_min_kw_p10'], r['ogle_min_kw_p90'], 1)})")
+            s.append(f"Bahar öğleni en düşük yük {tr(r['ogle_min_kw'], 1)} kW "
+                     f"(10'da 8 ihtimalle {aralik(r['ogle_min_kw_p10'], r['ogle_min_kw_p90'], 1)})")
     if gercek is not None and r["olculdu"] == 0 and r["trafo_no"] in gercek:
         g = gercek[r["trafo_no"]]
         parca = []
         if pd.notna(g.get("gercek_doluluk")):
-            parca.append(f"doluluk {yuzde(g['gercek_doluluk'])}")
+            parca.append(f"{yuzde(g['gercek_doluluk'])} dolu")
         parca.append(f"öğlen {tr(g['gercek_ogle_kw'], 1)} kW")
         if g.get("kac_ev_aday", 0) > 0:
-            parca.append(f"kaç ev {int(g['gercek_kac_ev'])}")
-        s.append("Gerçek: " + " · ".join(parca))
+            parca.append(f"{int(g['gercek_kac_ev'])} ev sığar")
+        s.append("Gerçekte (deneme şehrinin cevabı): " + " · ".join(parca))
     return "<br/>".join(e(x) for x in s)
 
 
@@ -184,7 +187,7 @@ def harita_verisi(h, sonuc, olculu, katman, gercek):
         v["olculdu"] = v["trafo_no"].isin(set(olculu)).astype(int)
         v["sinif"] = None
         v["durum"] = ["ölçüldü" if o else "henüz tahmin yok" for o in v["olculdu"]]
-        v["metin"] = e(f"Model için en az {canli.EN_AZ_OLCULU} ölçülü trafo gerekir.")
+        v["metin"] = e(f"Henüz tahmin yok: model için en az {canli.EN_AZ_OLCULU} trafo ölçülmeli.")
     else:
         v = sonuc["tablo"].set_index("trafo_no").loc[h["nolar"]].reset_index()
         if katman == "yuk":  # doluluk yoksa renk yok (yeşil sanılmasın)
@@ -202,11 +205,6 @@ def harita_verisi(h, sonuc, olculu, katman, gercek):
                       baslik=e(f"{r['trafo_no']} · Girne · {r['durum']}"),
                       metin=e(f"Trafo gücü {tr(kva[r['trafo_no']])} kVA") + "<br/>" + r["metin"]))
     return n
-
-
-def sayfa_etiketi(no, ayar):
-    """Volkan, 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil, Kıbrısçık ülkesindeki şehirler (yine gösterim)."""
-    return canli_harita.ETIKET.split(" · ")[0] if no < 800 else etiket(no, ayar)
 
 
 def harita_basligi(h, sonuc, olculu):
@@ -237,10 +235,10 @@ def animasyon_verisi(h, klasor, oneri, surum):
 def lejant(katman, sonuc):
     """Renklerin lejantı haritanın içinde (sunumda tam ekranda da görünsün); burada yalnız açıklama."""
     not_ = ("Dolu nokta = ölçüldü · halka = model tahmini · gri = henüz tahmin yok. Tekerlek, sürükleme ya da +/− ile "
-            "yakınlaş; trafoya tıkla: kartı açılır, Girne'de \"Ölçülmüş say\". Öbür kasabalar her şehrin resmi 12 "
-            "ölçümlü sonucu. Oynat: Girne'de 12 ölçüm, sonra ada (yarım dakika).")
-    if katman == "yuk" and sonuc is not None:
-        not_ += " Renk en kötü duruma göre; eşikler gösterim için (Özet'teki %80 ve %100)."
+            "yakınlaş; trafoya tıkla, kartı açılır; Girne'de kartta \"Ölçülmüş say\". Öbür kasabalarda her şehrin 12 "
+            "trafosu ölçülmüş sonuç var. Oynat: Girne'de 12 ölçüm, sonra ada (yarım dakika).")
+    if katman == "yuk":
+        not_ += " Renk en kötü duruma göre: %80 altı yeşil, %80–100 sarı (önce bak), %100 üstü kırmızı."
     st.caption(not_)
 
 
@@ -258,19 +256,21 @@ def ozet_kutulari(sonuc, katman):
     else:
         sayim = t["renk"].value_counts()
         parcalar = [(RENK_ADI[r], int(sayim.get(r, 0)), RENK_HEX[r]) for r in RENK_SIRA]
-        st.markdown("**Panel katmanı · öğlen gerilimi**")
+        st.markdown("**Güneş paneli için yer**")
         st.markdown(yigin_html(parcalar), unsafe_allow_html=True)
         st.markdown(lejant_html(parcalar, [VARSAYILAN_RENK_CUMLE[r] for r in RENK_SIRA]), unsafe_allow_html=True)
-        st.caption(f"Kaç ev daha: yaklaşık {tr(t['kac_ev_orta'].sum())} ev, büyük olasılıkla "
-                   f"{aralik(t['kac_ev_karamsar'].sum(), t['kac_ev_iyimser'].sum())} (trafo aralıklarının toplamı).")
+        st.caption(f"Kaç ev daha panel takabilir: yaklaşık {tr(t['kac_ev_orta'].sum())} ev, 10'da 8 ihtimalle "
+                   f"{aralik(t['kac_ev_karamsar'].sum(), t['kac_ev_iyimser'].sum())} (bütün trafoların toplamı).")
     m = sonuc["model"]
-    st.caption(f"Model {len(sonuc['olculu'])} ölçümle kuruldu: {m['k']} günlük eğri tipi "
-               f"({', '.join(a.replace('_', ' ') for a in m['ad'])}). Öğlen yükü %80 aralığı tahminin "
-               f"×{tr(m['bant'][0], 2)}–×{tr(m['bant'][1], 2)} katı.")
+    with st.expander("Modelin içi (ekip için)"):
+        st.caption(f"Model {len(sonuc['olculu'])} ölçümle kuruldu: {m['k']} günlük eğri tipi "
+                   f"({', '.join(a.replace('_', ' ') for a in m['ad'])}). Öğlen yükü %80 aralığı tahminin "
+                   f"×{tr(m['bant'][0], 2)}–×{tr(m['bant'][1], 2)} katı.")
 
 
 def sinav_paneli(ozet, katman, gecmis):
-    st.markdown(f"**Gerçekle kıyas — yalnız deneme şehrinde, model görmez** · ölçülmeyen {ozet['olculmeyen']} trafo")
+    st.markdown(f"**Gerçekle karşılaştırma** · ölçülmeyen {ozet['olculmeyen']} trafo (deneme şehrinin gerçek cevabını "
+                "biliyoruz; model görmez)")
     if katman == "yuk" and "tepe_hata" in ozet:
         kutular = [
             sunum("tepe_sapma", yuzde(ozet.get("tepe_hata")),
@@ -289,8 +289,8 @@ def sinav_paneli(ozet, katman, gecmis):
             sunum("kural_yanlis", f"{ozet['kural_yanlis']} / {ozet['dolu']}"),
         ])
         if ozet["yanlis_yesil"] > 0:
-            st.error(f"{ozet['yanlis_yesil']} trafoya yanlış yeşil: model az ölçümle fazla emin olabilir.")
-    st.caption("Gerçek, deneme şehrinin cevap anahtarından; model onu görmez. Yalnız farazi şehirde, gösterim.")
+            st.error(f"{ozet['yanlis_yesil']} trafoya yanlışlıkla yeşil: az ölçümle model kendinden fazla emin olabilir.")
+    st.caption("Gerçek, deneme şehrinin cevap anahtarından; model onu görmez. Kıbrısçık, gösterim.")
     if len(gecmis) >= 2:
         hata_grafigi(gecmis)
 
@@ -300,21 +300,21 @@ def hata_grafigi(gecmis):
     satirlar = []
     for n, (ogle, tepe) in sorted(gecmis.items()):
         if ogle is not None:
-            satirlar.append(dict(n=n, seri="öğlen yükü (panel)", hata=ogle * 100))
+            satirlar.append(dict(n=n, seri="bahar öğleni (güneş paneli)", hata=ogle * 100))
         if tepe is not None:
-            satirlar.append(dict(n=n, seri="yılın tepesi (yük haritası)", hata=tepe * 100))
+            satirlar.append(dict(n=n, seri="yoğun saat (doluluk)", hata=tepe * 100))
     if not satirlar:
         return
     df = pd.DataFrame(satirlar)
-    renk = alt.Scale(domain=["yılın tepesi (yük haritası)", "öğlen yükü (panel)"], range=[MAVI_HEX, "#eb6834"])
+    renk = alt.Scale(domain=["yoğun saat (doluluk)", "bahar öğleni (güneş paneli)"], range=[MAVI_HEX, "#eb6834"])
     taban = alt.Chart(df).encode(
         x=alt.X("n:Q", title="Ölçülen trafo sayısı", axis=alt.Axis(tickMinStep=1)),
         y=alt.Y("hata:Q", title="Tipik trafoda sapma (%)", scale=alt.Scale(zero=True)),
         color=alt.Color("seri:N", scale=renk, legend=alt.Legend(title=None, orient="top")),
         tooltip=[alt.Tooltip("seri:N", title="Ne"), alt.Tooltip("n:Q", title="Ölçülen"),
-                 alt.Tooltip("hata:Q", title="Hata %", format=".1f")],
+                 alt.Tooltip("hata:Q", title="Sapma %", format=".1f")],
     )
-    st.markdown("**Ölçtükçe hata**")
+    st.markdown("**Ölçülen trafo sayısına göre sapma**")
     st.altair_chart((taban.mark_line(strokeWidth=2) + taban.mark_point(filled=True, size=70))
                     .properties(height=200), width="stretch")
 
@@ -326,21 +326,21 @@ def tahmin_tablosu(sonuc, gercek):
     if "doluluk" in t:
         g["Doluluk"] = t["doluluk"] * 100
         g["Doluluk, en kötü durum"] = t["doluluk_temkinli"] * 100
-        g["Tepe (kW)"] = t["tepe_kw"]
+        g["Yoğun saatte yük (kW)"] = t["tepe_kw"]
         ayar.update({
             "Doluluk": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası, orta tahmin"),
             "Doluluk, en kötü durum": st.column_config.NumberColumn(format="%%%.0f", help="Yük haritası: aralığın üst ucu"),
-            "Tepe (kW)": st.column_config.NumberColumn(format="%.1f", help="Yük haritası"),
+            "Yoğun saatte yük (kW)": st.column_config.NumberColumn(format="%.1f", help="Yılın en yoğun saati"),
         })
         if "v_min_tepe_v_p10" in t:
             g["Akşam en düşük gerilim (V)"] = t["v_min_tepe_v_p10"]
             ayar["Akşam en düşük gerilim (V)"] = st.column_config.NumberColumn(format="%.1f", help="Yük haritası, en kötü durumda; sınır 207 V")
     g["Renk"] = t["renk"].map(lambda r: f"{RENK_ISARET[r]} {RENK_ADI[r]}")
-    g["259 V'u aşma"] = t["p_bugun_asar"] * 100
+    g["Öğlen 259 voltu aşma ihtimali"] = t["p_bugun_asar"] * 100
     g["Kaç ev"] = t["kac_ev_orta"]
     g["Aralık"] = [aralik(a, b) for a, b in zip(t["kac_ev_karamsar"], t["kac_ev_iyimser"])]
     g["Öğlen yükü (kW)"] = t["ogle_min_kw"]
-    ayar["259 V'u aşma"] = st.column_config.NumberColumn(format="%%%.0f", help="Panel: bugün aşma olasılığı")
+    ayar["Öğlen 259 voltu aşma ihtimali"] = st.column_config.NumberColumn(format="%%%.0f", help="Bugünkü panellerle")
     ayar["Öğlen yükü (kW)"] = st.column_config.NumberColumn(format="%.1f", help="Panel katmanının girdisi")
     if gercek is not None:
         gg = gercek.set_index("trafo_no")
@@ -366,11 +366,6 @@ def sayfa():
         st.info("Canlı tahmin için şehir klasöründe yuk_5dk.csv gerekir (ölçülecek trafoların yükü).")
         return
     klasor = st.sidebar.selectbox("Şehir", gerekli, key="canli_sehir", format_func=lambda p: p.name)
-    secenekler = [s for s in surumler.SURUMLER if surumler.kullanilabilir(s)[0]]
-    surum = st.sidebar.selectbox("Model sürümü", [s["anahtar"] for s in secenekler], key="canli_surum",
-                                 format_func=lambda k: surumler.surum(k)["ad"],
-                                 help="Depo tarihçesinden: aynı ölçümlerle eski sürüm ne derdi?")
-    st.sidebar.caption(surumler.surum(surum)["aciklama"])
     st.sidebar.caption("Haritada bir trafoya tıkla: kartı açılır; Girne'deki trafoyu \"Ölçülmüş say\" ile ölç. "
                        "Tekerlek ya da +/− ile yakınlaş, sürükleyerek kaydır.")
 
@@ -383,32 +378,39 @@ def sayfa():
     ayar = json_oku(klasor / "ayar.json") or {}
     sinav_var = (klasor / "cevap_anahtari.csv").exists() and sehir_no(klasor) < 800
 
-    st.markdown("## Canlı tahmin")
-    st.caption("Girne'de harita kapalı açılır. Bir trafoya tıkla, kartından ölç. Model o an yalnız ölçülenlerden "
-               f"kurulur ve ölçülmeyen bütün trafoları tahmin eder. En az {canli.EN_AZ_OLCULU} ölçüm gerekir; "
-               f"ürünün tasarımı 40 trafodan {ONERI_SAYISI}'si. Oynat: Girne'de bir mahalleden başlar, önerilen "
-               f"{ONERI_SAYISI} trafo mahalle mahalle ölçülür, sonra görünüm adaya açılır (yarım dakika).")
-    st.warning(f"{sayfa_etiketi(sehir_no(klasor), ayar)} · {klasor.name} · {len(h['nolar'])} trafo · trafo yerleri gerçek "
-               f"değil · model: {surumler.surum(surum)['ad']}")
+    st.markdown("## Kıbrısçık ülkesinde canlı tahmin")
+    st.caption("Her trafoya cihaz takmak çok pahalı. Burada Girne'deki trafolardan birkaçını ölçüyoruz; model "
+               f"ölçülenlerden öğrenip gerisini tahmin ediyor (en az {canli.EN_AZ_OLCULU} ölçüm; ürünün tasarımı "
+               f"40 trafodan {ONERI_SAYISI}'si). Bir trafoya tıkla, kartından ölç. Oynat: Girne'den başlayıp adaya açılan "
+               "yarım dakikalık gösterim.")
 
-    ust = st.columns([2.4, 1.25, 1.25, 1.25, 1])
-    katman = ust[0].radio("Haritada", ["yuk", "panel"], horizontal=True, key="canli_katman",
-                          format_func=lambda k: KATMAN_ADI[k])
-    ust[1].button(f"Önerilen {ONERI_SAYISI}'yi ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, True),
-                  width="stretch", help="Ürünün tabakalı seçimi: benzer trafolar değil, boşluklar ölçülür.")
-    ust[2].button("Önerilenden 1 ekle", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, False), width="stretch")
+    ust = st.columns(4)
+    ust[0].button(f"Önerilen {ONERI_SAYISI} trafoyu ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, True),
+                  width="stretch", help="Ürünün seçtiği 12 trafo: birbirine benzeyenler değil, farklı türden trafolar.")
+    ust[1].button("Bir trafo daha ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, False), width="stretch")
     oynat = st.session_state[a["oynat"]]
     if oynat:
-        ust[3].button("Haritaya dön", on_click=_durdur, args=(a,), width="stretch", type="primary",
-                      help="Animasyonu kapatır; Girne haritası ve o ana kadarki ölçümler kalır.")
+        ust[2].button("Haritaya dön", on_click=_durdur, args=(a,), width="stretch", type="primary",
+                      help="Gösterimi kapatır; harita ve o ana kadarki ölçümler kalır.")
     else:
-        ust[3].button("Oynat", on_click=_oynat, args=(a,), width="stretch",
-                      help=f"Haritayı kapatır; Girne'de bir mahalleden başlayıp önerilen {ONERI_SAYISI} trafoyu "
-                           "mahalle mahalle ölçer, sonra adaya açılır (yarım dakika).")
-    ust[4].button("Sıfırla", on_click=_sifirla, args=(a,), width="stretch", help="Haritayı kapatır.")
-    sinav = st.toggle("Gerçekle kıyas — yalnız deneme şehrinde, model görmez", value=sinav_var, disabled=not sinav_var,
-                      key="canli_sinav", help="Benzetimin bildiği gerçekle (cevap anahtarı) yalnız puanlar; tahmine giden "
-                                              "hiçbir yola girmez (KARAR, 1 Kasım).")
+        ust[2].button("Oynat", on_click=_oynat, args=(a,), width="stretch", type="primary",
+                      help=f"Haritayı kapatır; Girne'de bir mahalleden başlayıp önerilen {ONERI_SAYISI} trafoyu ölçer, "
+                           "sonra adaya açılır (yarım dakika).")
+    ust[3].button("Sıfırla", on_click=_sifirla, args=(a,), width="stretch", help="Bütün ölçümleri siler.")
+    with st.expander("Ayrıntı: haritadaki soru, gerçekle karşılaştırma, model sürümü"):
+        katman = st.radio("Haritada hangi soru", ["yuk", "panel"], horizontal=True, key="canli_katman",
+                          format_func=lambda k: KATMAN_ADI[k])
+        sinav = st.toggle("Gerçekle karşılaştır (deneme şehrinin gerçek cevabı; model görmez)", value=False,
+                          disabled=not sinav_var, key="canli_sinav",
+                          help="Benzetimin bildiği gerçekle (cevap anahtarı) yalnız puanlar; tahmine giden hiçbir yola "
+                               "girmez (KARAR, 1 Kasım).")
+        secenekler = [s for s in surumler.SURUMLER if surumler.kullanilabilir(s)[0]]
+        surum = st.selectbox("Model sürümü", [s["anahtar"] for s in secenekler], key="canli_surum",
+                             format_func=lambda k: surumler.surum(k)["ad"],
+                             help="Depo tarihçesinden: aynı ölçümlerle eski sürüm ne derdi?")
+        st.caption(surumler.surum(surum)["aciklama"])
+    ek = "" if surum == "guncel" else f" · model: {surumler.surum(surum)['ad']}"
+    st.warning(f"{etiket(sehir_no(klasor), ayar)} · {len(h['nolar'])} trafo · trafo yerleri gerçek değil{ek}")
 
     olculu = st.session_state[a["olculu"]]
     with st.spinner("Model kuruluyor…" if surum == "guncel" else "Eski sürüm hazırlanıyor (ilk seferde birkaç saniye)…"):
@@ -448,18 +450,18 @@ def sayfa():
         ])
         if sonuc is None:
             kalan = canli.EN_AZ_OLCULU - len(olculu)
-            st.info(f"Harita kapalı. Model için {kalan} trafo daha ölç: haritada bir trafoya tıklayıp kartından ölç ya da "
-                    "\"Önerilenden 1 ekle\".")
+            st.info(f"Girne'de harita kapalı. Model için {kalan} trafo daha ölç: haritada bir trafoya tıklayıp kartından "
+                    "ölç ya da \"Bir trafo daha ölç\".")
         else:
             if len(olculu) < canli.GUVENILIR_OLCULU:
-                st.warning(f"{len(olculu)} ölçümle aralıklar güvenilmez: aralık ölçülülerin birbirini tahmin etme "
-                           "hatasından çıkıyor, az ölçümde fazla dar. Model fazla emin olabilir.")
+                st.warning(f"Az ölçüm var ({len(olculu)}): model kendinden fazla emin olabilir, aralıklar dar çıkar. "
+                           f"Ürünün tasarımı {ONERI_SAYISI} ölçüm.")
             ozet_kutulari(sonuc, gosterilen)
             if ozet is not None:
                 sinav_paneli(ozet, gosterilen, gecmis)
         st.multiselect("Ölçülen trafolar", h["nolar"], key=a["olculu"], placeholder="henüz yok",
-                       help="Elle de eklenip çıkarılabilir.")
+                       help="Buradan da ekleyip çıkarabilirsin.")
 
     if sonuc is not None:
-        with st.expander("Bütün tahminler (tablo)"):
+        with st.expander("Bütün trafolar tek tek (tablo)"):
             tahmin_tablosu(sonuc, gercek)
