@@ -11,14 +11,14 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:17)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:20)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
-| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | 7ba3b72 düzeltmesi tuttu; yeni eksi: sahte kayıt üretici sürümüne bakmıyor (KARAR 02:12) | sürüm kontrolü + 1.5 şehirleriyle tablolar (BUILD 2); TEST |
-| PR #33 ADR-0019 uygulaması (yeşil kapısında güven şartı kalkar; taban #25) | BUILD 2 | TEST'te tuttu, ADR-0019 kapıları geçti: yeşil 28 → 60, yanlış yeşil 0 (KARAR 02:17) | #25 düzeltmesi → main birleştir (`guvenli_uc.py` çakışması) → KARAR birleştirir |
+| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | 9c5b897: üretici sürüm kontrolü, uyuşmazlıkta dur; 31–40 (1.5) ham yolda hemen evet ~%9, yanlış evet ≤ 1/633 | TEST → KARAR birleştirir |
+| PR #33 ADR-0019 uygulaması (taban #25) | BUILD 2 | 9896ed2: main + #25 birleşik, `guvenli_uc.py` çakışması çözüldü; sonuçlar aynı | TEST → #25'ten sonra KARAR birleştirir |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
 | B-Y2 incelemesi (Can'ın PR'ı gelince) | BUILD 1 | bekliyor | Can |
