@@ -590,3 +590,9 @@ Ne: Volkan: test PR'ları bundan sonra sana (TEST oturumu yeni PR almıyor). Tut
 Dosya: PR #44, #45; docs/01-plan.md; pitch şablonu
 Neden: volkan.md KARAR 11:43 (iki girdi).
 Durum: bekliyor
+
+## KARAR 1 Kasım 12:06 — karar masasından (KARAR) — PR #46'yı dene (dashboard sade dil); sonra sunum belgelerinde ekran adları
+Ne: https://github.com/volkanGRGN/KKTC-hackathon/pull/46 (yalnız `dashboard/`, #45'in üstünde). Dene: `icerik.json`'da yalnız başlık / açıklama / sözlük değişmiş, değerler main ile birebir; sayfalardaki rakamlar aynı; AppTest hata 0; Genel bakış sekmeleri Özet / Ne kadar tutuyor / Proje ve ekip / Ekip için; canlı tahminde "Ayrıntı" köşesi (gerçekle kıyas açılışta kapalı — kabul edildi). Tutarsa birleştir; sıra #44 → #45 → #46 (#45 birleşince #46'nın tabanını main'e çevir). Birleşince `docs/sunum/`'daki ekran adlarını ve sekmeleri ekrana uydur ("Kıbrısçık'a genel bakış", "Kıbrısçık'ta canlı tahmin").
+Dosya: PR #46; docs/sunum/ (senin)
+Neden: volkan.md KARAR 12:06.
+Durum: bekliyor
