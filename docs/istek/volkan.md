@@ -1359,7 +1359,7 @@ Ne: (1) **PR #39 (`yuk/b-y2`, `tepe.py`):** varsayılan `--model b-y2` = konut y
 (2) **Ayrı bulgu (sablon.py, B-Y2'den bağımsız):** hiç bakılmamış 41–50'de öğlen en düşük yük maddesi KALDI: ortanca %12,4, P90 %30,1 (eşik %30; en kötü sehir-048 %15,3 / %37,6); arketip %80,4 geçti. Windows koşumu; Mac koşumuyla teyit gerekir.
 Dosya: PR #39 (https://github.com/volkanGRGN/KKTC-hackathon/pull/39); docs/log/2026-11-01-can-eszamanlilik.md
 Neden: KARAR 09:58 m. 3; öneren ≠ puanlayan (BUILD 1 inceler, TEST koşar).
-Durum: bekliyor
+Durum: yapıldı 10:26 — karar masası Mac koşusu birebir, PR #39 birleşti (5948496); 41–50 öğlen KALDI Mac'te de doğrulandı (KARAR 10:26)
 
 ## UYARI! 1 Kasım (12:00 sonrası) — Can'dan — sıradaki iş: elimdeki yedi işten hangisi önce?
 Ne: can.md'deki kararların (09:33, 09:43, 09:46, 09:58) bende açık kalanları; yapılanlar: araçlarla "öncesi" ölçümü (ffa1035), maliyet tablosu, sunum rakamlarının 1.5'e çevrilmesi (73456b2), yedek rakam listesi.
@@ -1389,3 +1389,10 @@ Not: (a) `sinav.py`'de faz3 tanımları ayrı fonksiyon değil (`faz3()` içinde
 Dosya: PR #42 (https://github.com/volkanGRGN/KKTC-hackathon/pull/42)
 Neden: KARAR 09:5x.
 Durum: bekliyor
+
+## KARAR 10:26 — PR #39 (B-Y2, Can) birleşti; tepe modeli varsayılanı Kıbrıs evlerinin yaz eğimi; dashboard yük kartları 41–50'ye; 41–50 öğlen maddesi kıl payı KALDI
+Karar: Volkan: "Can'ın dediğini test et." Karar masası Mac koşusu (main ile birleşik; üretici 1.5 şehirleri 41–50 sıfırdan üretildi): **hiç bakılmamış 41–50'de tepe hatası %11,4 / P90 %23,9, %80 bant %95,0, işaretli sapma +%11,1 (konut +%13,6; güvenli yön), gerçek P90 üstü 0/280; %80 dolu 12/12 yakalanır (124 uyarı, her 10'da 1 gerçek); akşam gerilimi "yeterli" 211'de 0 yanlış, 207 V altı 2/2 (69 uyarı)**; 31–40 (bilgi) %10,1 / %19,9; İspanya Mayıs tepesi değişmedi (%15,4 / %36,1) [Hesap: karar masası 10:26]. Can'ın rakamlarıyla birebir → **#39 birleşti** (5948496).
+- **Varsayılan model artık B-Y2** (konut yaz eğimi 20 Kıbrıs evinden %6,5/°C; eski %3,0 EAC'den). Farazi şehirde hata %5,8 → %11 görünür, çünkü üretici eski eğimle kuruldu: tahmin bilerek yukarıda (gerçek Kıbrıs evleri daha duyarlı). Bedel: daha çok uyarı. Üretici β çapası (üretici 1.6, BUILD 1) sunumdan sonra; o zaman farazi hata yeniden düşer. `--model on` eski model olarak duruyor.
+- **Dashboard yük kartları** B-Y2 ve 41–50'ye çevrildi (626ea6b; AppTest hata yok): tepe %11,4 / %23,9, 12/12 (124 uyarı), akşam 2/2 (211 yeterli, 0 yanlış), saat %47 (iki adaydan biri %59).
+- **Ayrı bulgu (sablon.py, B-Y2'den bağımsız; Can'ın Windows koşusu Mac'te birebir):** 41–50'de öğlen en düşük yük maddesi **KALDI**: ortanca %12,4, P90 %30,1 (eşik %30; en kötü sehir-048 %15,3 / %37,6); arketip %80,4 geçti. 31–40'ta %11,3 / %28,1 geçiyordu. Kıl payı; eşik oynatılmaz. Dashboard'daki öğlen kartı 31–40 rakamı olarak kalır, kapsamı yazılı; BUILD 1 sunumdan sonra sehir-048'e bakar.
+Durum: bilgi

@@ -558,3 +558,7 @@ Karar: **Sıra: 1 → 2 → 3 (sunuma kadar), 4–7 sunumdan sonra.**
 **Yedek listeye cevaplar:** (a) **"%27 → %19" kalkar** — eski "yanlış kırmızı" ölçüsü; ADR-0017'den beri kırmızı yok, yerine "büyük olasılıkla dolu uyarısının 22'sinde 15'i gerçekten dolu". (b) **"%5 → %13" yerine sayı:** ADR-0019 ile yeşil 28 → 60 trafo (aday evli 347 trafonun %8'i → %17'si; 21–30'daki %5 → %13 eski şehirler), yanlış yeşil 0/60 — dashboard'la aynı. Listenin kalanı doğru; G'deki eski rakamları düzeltmen yeterli.
 PR #39 ve 41–50 öğlen bulgusu: karar masası Mac'te koşuyor, sonuç ayrı girdi.
 Durum: karar verildi
+
+## KARAR 10:26 — PR #39 birleşti; sunumun yük rakamları değişti (B-Y2, 41–50)
+Karar: B-Y2'n karar masasının Mac koşusunda birebir tuttu, birleşti (5948496); varsayılan model artık senin yaz eğimin. Sunumda yük rakamları **dashboard'daki yeni kartlar** (626ea6b): yılın tepesi hiç bakılmamış 41–50'de %11,4 / %23,9, tahmin ortanca %11 yukarıda (güvenli yön; "yaz eğimi Kıbrıs evlerinden"); %80 dolu 12/12 yakalanır, her 10 uyarıdan 1'i gerçek; akşam 207 V 2/2, "yeterli" 211'de 0 yanlış. Önceki %5,8 ve 16/16 / 87 uyarı rakamları artık kullanılmaz. İspanya Mayıs %15,4 / %36,1 aynı. 41–50 öğlen bulgun (P90 %30,1 KALDI) Mac'te doğrulandı; dashboard öğlen kartı 31–40 rakamı olarak kalır.
+Durum: bilgi
