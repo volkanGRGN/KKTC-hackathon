@@ -47,7 +47,11 @@ Söylenebilecek iki cümle:
 - "Pilot, her trafoya cihaz takmanın yüzde biri." [Hesap: 3,16 ÷ 300 milyon TL]
 - "Bir trafoyu ölçmek, o trafodaki bir evin güneş panelinin yüzde altısı." [Hesap: 333 € ↔ 6,5 kW × 800 €/kW = 5.200 €; 800 €/kW Kaynaklı: KTEMO PİD Ekim 2024, J1; 6,5 kW Yorum]
 
-Yok: geliştirme / bakım maliyeti, geri ödeme, emisyon etkisi — **BEKLİYOR** (tarife ve emisyon katsayısı depoda yok; geliştirme maliyeti ekibin kararı).
+Bağlam (pitch kutusu; ayrıntı [tarife / emisyon günlüğü](../log/2026-11-01-can-tarife-emisyon.md)):
+- Kıb-Tek konut tarifesi: ilk 250 kWh 5,86 TL/kWh, üst kademeler 12,09–16,84 TL/kWh (1 Haziran 2026) [Kaynaklı: Cyprus Mail 26.05.2026; Kıb-Tek belgesi değil, ikincil].
+- Kuzey'in elektriği fuel oilden; termik santrallerde ~0,58–0,89 kg CO₂/kWh [Kaynaklı: Erciyas 2014, DAÜ tezi; eski, resmi katsayı BULAMADIM].
+
+Yok: geliştirme / bakım maliyeti (ekibin kararı; para yazılmaz, KARAR 09:46), geri ödeme (mahsuplaşma bedeli BULAMADIM), Kıb-Tek trafo değişim maliyeti (BULAMADIM; Türkiye TEDAŞ 2022 vekili günlükte, sunumda kullanılmaz) — nitel cümleyle kalır (KARAR 10:16 m. 3).
 
 ## Kaynak slaydı (10)
 

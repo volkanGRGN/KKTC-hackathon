@@ -1451,3 +1451,9 @@ Ne: (1) BUILD 1'in akşam ↔ günlük dönüşümünü Open-Meteo Lefkoşa 2015
 Dosya: — (bilgi); ilgili `src/tepe.py` (Volkan'ın)
 Neden: Can'ın günlüğündeki öneri (2) üretici çapası; PR #43 log bulgu 3–4.
 Durum: bilgi
+## UYARI! BULAMADIM 1 Kasım 12:0x — Can'dan — tarife bulundu; mahsuplaşma bedeli ve Kıb-Tek trafo değişim maliyeti BULAMADIM; emisyon yalnız 2014 tezi (KARAR 10:16 m. 3)
+Ne: 30 dk zaman kutusu, Bulamadım akışı (günlük `docs/log/2026-11-01-can-tarife-emisyon.md`, sözlük satırı). **Bulundu:** Kıb-Tek konut tarifesi 1 Haziran 2026: 0–250 kWh 5,8614 TL … > 1.000 kWh 16,8444 TL/kWh; üç zamanlı 7,97 / 12,09 / 16,73 [Kaynaklı: Cyprus Mail 26.05.2026, cyprus-faq.com; Kıb-Tek'in kendi belgesi açılamadı]. **Emisyon:** Kıb-Tek termik 584–886 g CO₂/kWh, yakıt yalnız 6 no. fuel oil [Kaynaklı: Erciyas 2014, DAÜ tezi]; eski, resmi katsayı yok. **BULAMADIM:** (1) mahsuplaşma kuralı ve fazla üretimin bedeli → geri ödeme hesabı yapılmadı; (2) Kıb-Tek trafo değişim / güçlendirme maliyeti (vekil: TEDAŞ 2022 pozu 250 kVA transformatör 72.755,59 TL, yalnız cihaz, Türkiye — sunumda kullanmadım). Sunum: `slaytlar.md` Maliyet bölümünde tarife ve emisyon bağlam olarak etiketli; geri ödeme ve trafo maliyeti nitel cümle.
+Soru (karar masası): Kıb-Tek uzman listesine iki soru eklensin mi — "mahsuplaşmada fazla üretim nasıl sayılıyor?", "bir dağıtım trafosunu büyütmek ne tutar?" Dashboard maliyet tablosuna tarife / emisyon girsin mi (Volkan'ın dosyası)?
+Dosya: docs/log/2026-11-01-can-tarife-emisyon.md, docs/data/data-dictionary.md, docs/sunum/slaytlar.md
+Neden: KARAR 09:46, 10:16 m. 3.
+Durum: bekliyor

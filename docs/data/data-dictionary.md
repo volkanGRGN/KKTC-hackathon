@@ -117,6 +117,13 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - [Hesap: ada ülkeleri günlüğü] ek panel ÷ trafo gücü hiçbir merkezde %25'in üstünde değil; kural Enemalta'nın yazdığı değil, bizim çıkarımımız.
 - Yanlılık: Malta şebekesi (akıllı sayaçlı, yoğun kentsel); trafo merkezi düzeyinde toplam, tek trafo değil. Kullanım: jüri cevabı (Malta %25 ↔ Kıb-Tek %40) ve kaynak slaydı (karar masası 20:47); üretici 1.3 trafo boyutu çapası adayı (ROADMAP).
 
+**Tarife, emisyon, trafo fiyatı (pitch maliyet / etki kutusu; indirilmedi, web sayfası)** — [günlük](../log/2026-11-01-can-tarife-emisyon.md)
+- Kıb-Tek konut tarifesi 1 Haziran 2026 (0–250 kWh 5,8614 TL … > 1.000 kWh 16,8444 TL; üç zamanlı 7,97 / 12,09 / 16,73) [Kaynaklı: Cyprus Mail 26.05.2026; cyprus-faq.com]; Kıb-Tek'in kendi belgesi açılamadı, ikincil kaynak.
+- Emisyon: Kıb-Tek termik 584–886 g CO₂/kWh, yakıt yalnız 6 no. fuel oil [Kaynaklı: Erciyas 2014, DAÜ tezi, hdl.handle.net/11129/1625]; eski (2012–2014), resmi katsayı BULAMADIM.
+- Trafo: TEDAŞ pozu 250 kVA direk tipi transformatör 72.755,59 TL/adet, Eylül 2022 [Kaynaklı: TKDK özel poz tablosu]; Türkiye vekili, yalnız cihaz. Kıb-Tek trafo değişim maliyeti BULAMADIM.
+- Mahsuplaşma (fazla üretimin bedeli / devri): BULAMADIM.
+- Yanlılık: ikincil haber kaynağı; tez eski; TEDAŞ başka ülke ve 2022 TL. Kullanım: yalnız pitch'te etiketli; modele girmez.
+
 ## Adaylar (henüz indirilmedi)
 - **NGED LV Load Monitor Data** (İngiltere): 301 CSV, gerçek trafo ölçümü; kayıt istiyor (kaydı Volkan yapmalı).
 - **Korsika EDF SEI, ek tablolar** (opendata.edf.fr, Licence Ouverte 2.0; arama izi ve rakamlar [docs/log/2026-10-31-can-korsika-veri.md](../log/2026-10-31-can-korsika-veri.md)):
