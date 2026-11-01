@@ -11,14 +11,12 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:20)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:29) — açık PR yok
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
-| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | 9c5b897: üretici sürüm kontrolü, uyuşmazlıkta dur; 31–40 (1.5) ham yolda hemen evet ~%9, yanlış evet ≤ 1/633 | TEST → KARAR birleştirir |
-| PR #33 ADR-0019 uygulaması (taban #25) | BUILD 2 | 9896ed2: main + #25 birleşik, `guvenli_uc.py` çakışması çözüldü; sonuçlar aynı | TEST → #25'ten sonra KARAR birleştirir |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
 | B-Y2 incelemesi (Can'ın PR'ı gelince) | BUILD 1 | bekliyor | Can |
@@ -26,7 +24,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | Harita: güvenli uçlar kartı (`pv_uc`), yük ikinci sayısı ve iki aday saat (`tepe.csv`); Faz 4 kalanı | Civan | sütunlar main'de (02:00) | — |
 | Sunum rakam sürümü (v2 / v3) | Volkan | bekliyor | — |
 
-Birleşenler (1 Kasım): #19, #21, #27, #22, #23, #28, #24, #26, #29, #30, #31, #32. Yük zinciri bitti. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
+Birleşenler (1 Kasım): #19, #21, #22, #23, #24, #25, #26, #27, #28, #29, #30, #31, #32, #33 — açık PR yok; ADR-0019 yürürlükte. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).
@@ -91,6 +89,6 @@ Birleşenler (1 Kasım): #19, #21, #27, #22, #23, #28, #24, #26, #29, #30, #31, 
 - Sunum saati bilinmiyor; sıra var, saat yok.
 
 ## Sıradaki üç adım (1 Kasım 01:53)
-1. Altı PR birleşti (02:00); kalan #25, #30, #31, #32 TEST'in "tuttu"suyla KARAR birleştirir. Faz haritası ROADMAP "Faz 6–12" başında.
-2. BUILD 2: #25 düzeltmesi (türetilmiş inverter satırı yalnız sahte kayıtta), ADR-0019 uygulaması ve 31–40 sınavı; BUILD 1: Can'ın B-Y2'sini inceler. TEST: #30, #31, #32.
+1. Gece 14 PR birleşti, açık PR yok (02:29); ADR-0019 yürürlükte. Faz haritası ROADMAP "Faz 6–12" başında (01:53 hâli; Faz 9–12 satırlarındaki "onay bekliyor" ifadeleri artık "main'de").
+2. BUILD 2: ölçüm sırası ve konum payını ADR-0019 kuralına çevirir (31–40 bir kez); BUILD 1: Can'ın B-Y2'sini inceler; TEST: gelen PR'lar.
 3. Civan: güvenli uçlar kartı, yük ikinci sayısı, iki aday saat. Volkan: sunum rakam sürümü, Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.
