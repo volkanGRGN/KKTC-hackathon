@@ -267,7 +267,7 @@ function adYaz(S, metin, x, y, alfa) {
 function adaBasligi(V, girneOlculu, girneTahmin) { // bütün adanın özeti (animasyonun sonu ve uzak görünüm)
   let olc = girneOlculu, tah = girneTahmin;
   V.kasabalar.forEach((kz) => kz.n.forEach((p) => { if (p.o) olc++; else tah++; }));
-  return `Kıbrısçık · ${V.kasabalar.length + 1} şehir · ${olc} trafo ölçüldü, ${tah} trafo tahmin`;
+  return `Kıbrıscık · ${V.kasabalar.length + 1} şehir · ${olc} trafo ölçüldü, ${tah} trafo tahmin`;
 }
 
 function adlarCiz(S, kam, alfa) {
@@ -514,7 +514,7 @@ function oynatCiz(S, simdi) {
   let baslik;
   if (t < C.acBas - BEKLE_SN) baslik = C.metin[k];
   else if (t < C.acBas) baslik = `Girne · ${girneOlc} trafo ölçüldü, ${girneTah} trafo tahmin`;
-  else if (kasaba < 0) baslik = "Kıbrısçık · öbür şehirler kasabalara";
+  else if (kasaba < 0) baslik = "Kıbrıscık · öbür şehirler kasabalara";
   else if (t < C.son) {
     const kz = V.kasabalar[kasaba], o = kz.n.filter((p) => p.o).length;
     baslik = `${kz.ad} · ${o} trafo ölçüldü, ${kz.n.length - o} trafo tahmin`;

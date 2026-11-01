@@ -1,33 +1,42 @@
 {
   "aciklama": "Dashboard'un kod dışı içeriği: proje kimliği, resmi rakamlar, sözlük. Yeni sonuç gelince yalnız bu dosya değişir, app/dashboard.py değişmez. Her rakamın katmanı (panel / yuk / sorun), veri türü ve kaynağı yazılı; kaynak depodaki dosyanın yolu.",
-  "guncellendi": "1 Kasım 2026, 10:25",
+  "guncellendi": "1 Kasım 2026, 12:30 (sade dil)",
   "kimlik": {
     "ad": "Trafo Görünürlük Haritası",
     "calisma_adi": "Trafo Şablonu",
-    "tek_cumle": "Kıb-Tek'in göremediği mahalle trafolarını, az sayıda ölçümden öğrenen bir modelle haritada görünür kılar: her trafo ne kadar dolu, kaç ev daha güneş paneli takabilir, ne kadar eminiz.",
-    "sorun": "Kıb-Tek mahalle trafolarının gerçek yükünü ve hat ucundaki gerilimi görmüyor; bu yüzden yaklaşık 2.670 çatı güneşi başvurusu bekliyor.",
-    "kullanici": "Kıb-Tek planlama birimi",
-    "yontem": "Trafoların küçük bir kısmını ölç, gerisini benzer trafolardan öğrenilen günlük eğriyle (şablon) tahmin et. İngiltere'nin mahalle trafosu şablonu yönteminin Kıbrıs'a uyarlaması.",
-    "karar": "Başvuru reddetmez, ayırır: bariz uygun hızlı onay alır, bariz dolu işaretlenir, emin olunmayan yerde önce ölçülür.",
+    "tek_cumle": "Kıb-Tek mahalle trafolarının çoğunu ölçemiyor. Biz birkaçını ölçüp gerisini tahmin ediyoruz: her trafo ne kadar dolu, kaç ev daha güneş paneli takabilir ve ne kadar eminiz.",
+    "sorun": "Kıb-Tek mahalle trafolarının ne kadar dolu olduğunu görmüyor. Bu yüzden temkinli davranıyor ve yaklaşık 2.670 çatı güneşi başvurusu bekliyor.",
+    "kullanici": "Kıb-Tek'in planlama birimi",
+    "yontem": "Her trafoya cihaz takmak çok pahalı. Birkaç trafoyu ölçüyoruz; model, ölçülen trafolara benzeyenlerin gününü onlardan öğrenip gerisini tahmin ediyor. İngiltere aynı yöntemi kullandı.",
+    "karar": "Başvuruyu reddetmez, sıraya koyar: kesin uygun olan hızlı onay alır, büyük ihtimalle dolu olan işaretlenir, emin olmadığımız yerde önce ölçülür.",
     "iki_soru": [
       {
         "katman": "yuk",
         "soru": "Trafo ne kadar dolu?",
-        "an": "Yılın en yüksek saati, çoğunlukla yaz akşamı",
-        "sinir": "Trafo gücü (kVA) ve akşam gerilim düşümü, 207 V"
+        "an": "Yılın en yoğun saatinde, çoğunlukla yaz akşamı",
+        "sinir": "Trafonun gücü ve akşam evdeki gerilimin 207 voltun altına düşmemesi"
       },
       {
         "katman": "panel",
-        "soru": "Güneş için ne kadar yer var?",
-        "an": "Bahar öğleni, yükün en düşük olduğu saatler (11:00–14:00)",
-        "sinir": "Öğlen gerilim yükselmesi, 259 V, ve trafo gücü"
+        "soru": "Güneş paneli için ne kadar yer var?",
+        "an": "Bahar öğleninde, elektrik en az kullanılırken (11:00–14:00)",
+        "sinir": "Öğlen evdeki gerilimin 259 voltu aşmaması ve trafonun gücü"
       }
     ],
     "takim": "VCC-2",
     "uyeler": [
-      {"ad": "Volkan Görgün", "rol": "Takım lideri; model ve panel katmanı"},
-      {"ad": "Can Şahin", "rol": "Veri, yük haritası ve sınav"},
-      {"ad": "Civan Orak", "rol": "Harita, veri araştırması ve sunum"}
+      {
+        "ad": "Volkan Görgün",
+        "rol": "Takım lideri; model ve panel katmanı"
+      },
+      {
+        "ad": "Can Şahin",
+        "rol": "Veri, yük haritası ve sınav"
+      },
+      {
+        "ad": "Civan Orak",
+        "rol": "Harita, veri araştırması ve sunum"
+      }
     ],
     "etkinlik": "Sürdürülebilir Kıbrıs Hackathonu",
     "duzenleyen": "Gençlik Federasyonu",
@@ -37,17 +46,17 @@
     "depo": "https://github.com/volkanGRGN/KKTC-hackathon"
   },
   "renk_cumleleri": {
-    "yesil": "İlk 2 başvuru güvenle sığar (≥ %98)",
-    "sari": "Önce ölç",
-    "kirmizi": "Ölç ya da güçlendir"
+    "yesil": "İlk 2 başvuru güvenle sığar (100'de 98'den fazla ihtimalle)",
+    "sari": "Emin değiliz: önce ölç",
+    "kirmizi": "Büyük ihtimalle dolu: ölç ya da güçlendir"
   },
-  "rakam_notu": "Resmi rakam karar masasının Mac koşusudur; farazi şehir rakamları gösterimdir ve gerçeğin üst sınırıdır. Sunum rakamları üretici 1.5 şehirlerinden (Volkan, 1 Kasım sabahı).",
+  "rakam_notu": "Kıbrıscık rakamları cevabını bildiğimiz deneme şehirlerinden: gösterimdir ve gerçeğin üst sınırıdır. \"Gerçek veri\" yazanlar İspanya ve İngiltere'den. Kıbrıs'taki gerçek doğruluğu pilot söyler.",
   "rakamlar": [
     {
       "katman": "sorun",
       "deger": "~2.670",
-      "baslik": "bekleyen çatı güneşi başvurusu",
-      "aciklama": "Kıb-Tek mahalle trafolarını göremediği için başvurular bekliyor; çoğu 5–8 kW.",
+      "baslik": "çatı güneşi başvurusu bekliyor",
+      "aciklama": "Kıb-Tek trafoların ne kadar dolu olduğunu görmediği için başvurular bekliyor. Çoğu 5–8 kW'lık ev paneli.",
       "veri": "kaynakli",
       "kapsam": "KTTO raporu, Mart 2023 (adres doğrulanmadı)",
       "durum": "bilgi",
@@ -56,8 +65,8 @@
     {
       "katman": "sorun",
       "deger": "%47,44",
-      "baslik": "Güney Kıbrıs'ta 2025'te kısılan güneş üretimi",
-      "aciklama": "Güney paneli bağladı, şebeke taşıyamayınca üretimi kısıyor; Ocak–Mayıs 2026'da %65.",
+      "baslik": "Güney Kıbrıs'ta 2025'te boşa giden güneş üretimi",
+      "aciklama": "Güney panelleri bağladı, şebeke taşıyamayınca üretimi kesiyor. 2026'nın ilk beş ayında %65.",
       "veri": "kaynakli",
       "kapsam": "pv-magazine.com, 13.01.2026 ve 15.06.2026",
       "durum": "bilgi",
@@ -67,7 +76,7 @@
       "katman": "sorun",
       "deger": "%2,6",
       "baslik": "İngiltere'nin ölçtüğü trafo payı",
-      "aciklama": "İngiltere 824 trafoyu ölçüp gerisini yaklaşık %80 doğrulukla tahmin etti; yöntemimizin dayanağı.",
+      "aciklama": "İngiltere 824 trafoyu ölçüp gerisini yaklaşık %80 doğrulukla tahmin etti. Bizim yöntemimiz bu.",
       "veri": "kaynakli",
       "kapsam": "Ofgem, WPD LV Templates raporları, 2013 ve 2015",
       "durum": "bilgi",
@@ -76,8 +85,8 @@
     {
       "katman": "panel",
       "deger": "%25 → %10",
-      "baslik": "öğlen yükü hatası, gerçek İspanya verisinde",
-      "aciklama": "Hiç görmediğimiz 29 gerçek trafoda: yalnız abone sayısıyla yaklaşık %25, faturayla yaklaşık %10 ortanca hata. Kazancın çoğu faturadan gelir.",
+      "baslik": "gerçek İspanya trafolarında öğlen tahmininin sapması",
+      "aciklama": "Hiç görmediğimiz 29 gerçek trafoda tipik sapma: yalnız abone sayısıyla %25, fatura bilgisiyle %10. İyileşmenin çoğu faturadan geliyor.",
       "veri": "gercek",
       "kapsam": "İspanya, EDP Oviedo, 29 trafo",
       "durum": "bilgi",
@@ -86,8 +95,8 @@
     {
       "katman": "panel",
       "deger": "%82,1",
-      "baslik": "%80 aralığımızın gerçekte tutma oranı",
-      "aciklama": "Söylediğimiz %80 aralık gerçek İspanya verisinde trafoların %82,1'inde tuttu. Hedef %70–90.",
+      "baslik": "aralığımız gerçekte ne kadar tuttu",
+      "aciklama": "\"10 trafonun 8'inde gerçek bu aralıkta\" dediğimiz aralık, gerçek İspanya verisinde trafoların %82,1'inde tuttu. Hedef %70–90.",
       "veri": "gercek",
       "kapsam": "İspanya, 28 trafo, düzeltme katsayısı 1,47",
       "durum": "gecti",
@@ -96,8 +105,8 @@
     {
       "katman": "panel",
       "deger": "%11,3",
-      "baslik": "öğlen yükü hatası, gerçekçi deneme şehirlerinde",
-      "aciklama": "Ortanca %11,3, en kötü onda birlik dilimde %28. İspanya'daki gerçek hatayla aynı seviyede.",
+      "baslik": "Kıbrıscık'ta öğlen tahmininin sapması",
+      "aciklama": "Tipik trafoda %11,3, en kötü onda birlik dilimde %28. İspanya'daki gerçek sapmayla aynı seviyede.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
       "durum": "bilgi",
@@ -106,18 +115,18 @@
     {
       "katman": "panel",
       "deger": "0 / 60",
-      "baslik": "yanlış yeşil",
-      "aciklama": "Panelsiz konutu olan trafolarda yeşil dediğimiz 60 trafonun hiçbiri gerçekte dolu değil (ölçülü ve ölçülmeyen birlikte, sinav.py faz3 kümesi). Sınır %2.",
+      "baslik": "yanlışlıkla \"yer var\" dediğimiz trafo",
+      "aciklama": "Panelsiz evi olan trafolarda yeşil (\"yer var\") dediğimiz 60 trafonun hiçbiri gerçekte dolu değil. En pahalı hata bu; sınırımız %2.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
+      "kapsam": "Sınav şehirleri 31–40, üretici 1.5; ölçülen ve ölçülmeyen birlikte (sinav.py faz3)",
       "durum": "gecti",
       "kaynak": "docs/log/2026-11-01-volkan-panel-guven-kapisi.md"
     },
     {
       "katman": "panel",
       "deger": "24 / 46 ↔ 0",
-      "baslik": "dolu trafoya \"yer var\": bugünkü kural ↔ biz",
-      "aciklama": "Gerçekte dolu 46 trafonun 24'üne bugünkü %40 kuralı \"yer var\" diyor, biz hiçbirine.",
+      "baslik": "dolu trafoya \"yer var\" demek: bugünkü kural ↔ biz",
+      "aciklama": "Gerçekte dolu 46 trafonun 24'üne bugünkü %40 kuralı \"yer var\" diyor, biz hiçbirine demiyoruz.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
       "durum": "bilgi",
@@ -126,8 +135,8 @@
     {
       "katman": "panel",
       "deger": "15 / 22",
-      "baslik": "\"büyük olasılıkla dolu\" uyarısının isabeti",
-      "aciklama": "Dolu diye işaretlediğimiz 22 trafonun 15'i gerçekten dolu (%68). Eşik %60.",
+      "baslik": "\"büyük ihtimalle dolu\" uyarımız ne kadar doğru",
+      "aciklama": "Dolu diye işaretlediğimiz 22 trafonun 15'i gerçekten dolu (%68). Hedefimiz %60'ın üstü.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
       "durum": "gecti",
@@ -136,8 +145,8 @@
     {
       "katman": "panel",
       "deger": "%76",
-      "baslik": "renksiz trafo payı",
-      "aciklama": "Trafoların çoğunda emin değiliz; bunlarda karar başvuru gelince verilir ya da önce ölçülür.",
+      "baslik": "emin olmadığımız trafo payı",
+      "aciklama": "Trafoların çoğunda emin değiliz; buralarda karar başvuru gelince verilir ya da önce ölçülür.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
       "durum": "uyari",
@@ -146,8 +155,8 @@
     {
       "katman": "panel",
       "deger": "%3,8 → ~%8",
-      "baslik": "Kıb-Tek kayıtları gelirse hemen \"evet\" alan başvuru",
-      "aciklama": "Sahte ama gerçeğe yakın kayıtlarla denendi; yanlış evet %1'in altında. Gerçek kayıtla sınanmadı.",
+      "baslik": "Kıb-Tek kayıtları gelirse hemen \"evet\" alabilecek başvuru",
+      "aciklama": "Gerçeğe benzeyen sahte kayıtlarla denendi; yanlış \"evet\" %1'in altında. Gerçek kayıtla henüz denenmedi.",
       "veri": "sahte_kayit",
       "kapsam": "Sınav şehirleri 21–30",
       "durum": "bilgi",
@@ -156,8 +165,8 @@
     {
       "katman": "yuk",
       "deger": "%15,4 / %36,1",
-      "baslik": "yılın tepesi hatası, gerçek İspanya verisinde",
-      "aciklama": "Ortanca / en kötü onda birlik dilim. Geçici eşik %15 / %35, kıl payı üstünde; kabul edildi, Kıb-Tek tepe verisi gelince yeniden.",
+      "baslik": "gerçek İspanya trafolarında yoğun saat tahmininin sapması",
+      "aciklama": "Tipik trafoda %15,4, en kötü onda birlik dilimde %36,1. Geçici hedefimizin (%15 / %35) kıl payı üstünde; Kıb-Tek'in yoğun saat kayıtları gelince yeniden ölçülecek.",
       "veri": "gercek",
       "kapsam": "İspanya, Mayıs tepesi, 10 ölçülü",
       "durum": "kaldi",
@@ -166,8 +175,8 @@
     {
       "katman": "yuk",
       "deger": "%11,4",
-      "baslik": "yılın tepesi hatası, deneme şehirlerinde",
-      "aciklama": "Ortanca %11,4, en kötü onda birlik dilimde %23,9; tahmin gerçeğin ortanca %11 üstünde (güvenli yön), gerçek hiçbir trafoda bandın üstüne çıkmadı. Yaz eğimi 20 Kıbrıs evinden (%6,5/°C); deneme şehri bunu sınayamaz, çünkü üretici daha düşük bir eğimle kuruldu.",
+      "baslik": "Kıbrıscık'ta yoğun saat tahmininin sapması",
+      "aciklama": "Tipik trafoda %11,4, en kötü onda birlik dilimde %23,9. Tahminimiz gerçeğin genelde %11 üstünde, yani güvenli tarafta; gerçek hiçbir trafoda aralığımızın üstüne çıkmadı. Sıcakta tüketimin ne kadar arttığını 20 gerçek Kıbrıs evinden aldık; deneme şehirleri bunu sınayamıyor.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "bilgi",
@@ -176,8 +185,8 @@
     {
       "katman": "yuk",
       "deger": "2 / 2",
-      "baslik": "akşam 207 V altına inen trafo yakalandı",
-      "aciklama": "\"Yeterli\" dediğimiz 211 trafonun hiçbiri gerçekte 207 V altına inmedi. Uyarıların çoğu gereksiz: 69 uyarının 2'si gerçek.",
+      "baslik": "akşam gerilimi 207 voltun altına inen trafoyu yakalama",
+      "aciklama": "\"Yeterli\" dediğimiz 211 trafonun hiçbirinde gerilim 207 voltun altına inmedi. Uyarıların çoğu gereksiz: 69 uyarının 2'si gerçek.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "gecti",
@@ -186,8 +195,8 @@
     {
       "katman": "yuk",
       "deger": "12 / 12",
-      "baslik": "%80'den dolu trafo yakalandı",
-      "aciklama": "Temkinli uç dolu trafoyu kaçırmıyor, ama 124 uyarının yalnız 12'si gerçek (her 10 uyarıdan 1'i). Harita \"önce bak\" listesi verir.",
+      "baslik": "%80'den dolu trafoyu yakalama",
+      "aciklama": "Dolu trafoların hiçbirini kaçırmadık, ama 124 uyarının yalnız 12'si gerçek (her 10 uyarıdan biri). Harita ret değil, \"önce buraya bak\" listesi verir.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "uyari",
@@ -196,8 +205,8 @@
     {
       "katman": "yuk",
       "deger": "%47",
-      "baslik": "tepe saati, bir saat içinde isabet",
-      "aciklama": "İki aday saatten biri %59 tutuyor; konutta öğleden sonra ve gece tepeleri neredeyse eşit.",
+      "baslik": "yoğun saati bir saat içinde bilme",
+      "aciklama": "Trafonun en yoğun saatini bir saat içinde %47 bildik; iki aday saatten biri %59 tutuyor. Evlerde öğleden sonra ve gece yoğunluğu neredeyse eşit.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "bilgi",
@@ -206,8 +215,8 @@
     {
       "katman": "yuk",
       "deger": "%3,7",
-      "baslik": "Kıb-Tek tepe kaydı olan trafoda hata",
-      "aciklama": "Sayaçtaki en yüksek talep kaydı olan trafoda tahmin kayda oturuyor (ortanca %3,7).",
+      "baslik": "Kıb-Tek'in yoğun saat kaydı olan trafoda sapma",
+      "aciklama": "Sayacında en yüksek talep kaydı olan trafoda tahmin kayda çok yakın: tipik sapma %3,7.",
       "veri": "sahte_kayit",
       "kapsam": "Şehir 1–10, 83 kayıtlı trafo",
       "durum": "bilgi",
@@ -217,7 +226,7 @@
       "katman": "maliyet",
       "deger": "~333 €",
       "baslik": "bir trafoyu bir hafta ölçmek",
-      "aciklama": "Taşınabilir kaydediciyle (18.589 TL): cihaz üç yılda 78 ölçüme bölünür, iki gidiş, mühendis saati dahil. Bir evin paneli ~5.200 €; bir trafoyu ölçmek bunun ~%6'sı.",
+      "aciklama": "Taşınabilir ölçüm cihazıyla (18.589 TL, üç yılda 78 ölçüme bölündü), iki gidiş ve mühendis saati dahil. Bir evin paneli ~5.200 €; bir trafoyu ölçmek bunun ~%6'sı.",
       "veri": "hesap",
       "kapsam": "KTEMO / EMO birim fiyatları (Ekim 2024), Fluke 1736, TCMB kuru 30.10.2026",
       "durum": "bilgi",
@@ -227,16 +236,16 @@
       "katman": "maliyet",
       "deger": "~6.700 €",
       "baslik": "pilotta ilk 20 trafo",
-      "aciklama": "Ölçüm sırasının ilk 20 trafosu. Deneme şehirlerinde bu 20 ölçüm 8–11 trafoyu yeşile çeviriyor, 64–133 ev açıyor (önce kademe fotoğrafı).",
+      "aciklama": "Ölçüm sırasındaki ilk 20 trafo. Deneme şehirlerinde bu 20 ölçüm 8–11 trafoyu yeşile çeviriyor ve 64–133 eve yer açıyor.",
       "veri": "hesap",
-      "kapsam": "Ölçüm sırası, sınav şehirleri 31–40 ve 41–50, üretici 1.5",
+      "kapsam": "Ölçüm sırası, sınav şehirleri 31–40 ve 41–50, üretici 1.5 (ölçümden önce kademe fotoğrafı)",
       "durum": "bilgi",
       "kaynak": "docs/log/2026-11-01-can-maliyet.md"
     },
     {
       "katman": "maliyet",
       "deger": "~40–57 bin €",
-      "baslik": "Kıbrıs pilotu, 120–170 trafo",
+      "baslik": "Kıbrıs pilotu: 120–170 trafo",
       "aciklama": "İşçilik dahil. Başlangıçta 3 cihaz ~18.500 €.",
       "veri": "hesap",
       "kapsam": "Kaba hesap; KDV, gümrük, Kıb-Tek personel süresi dahil değil",
@@ -246,8 +255,8 @@
     {
       "katman": "maliyet",
       "deger": "~%1",
-      "baslik": "pilot, her trafoya kalıcı cihazın maliyetine göre",
-      "aciklama": "Her trafoya kalıcı ölçüm cihazı ~5,4–7,5 milyon € (~6.400–6.700 trafo). Geri ödeme ve emisyon hesaplanmadı: Kıb-Tek tarifesi, emisyon katsayısı ve trafo değişim maliyeti aranıyor.",
+      "baslik": "pilotun maliyeti, her trafoya kalıcı cihaza göre",
+      "aciklama": "Her trafoya kalıcı ölçüm cihazı ~5,4–7,5 milyon € tutar (~6.400–6.700 trafo); pilot bunun yüzde biri. Geri ödeme hesaplanmadı: Kıb-Tek'in trafo büyütme maliyeti ve mahsuplaşma bedeli bulunamadı.",
       "veri": "hesap",
       "kapsam": "Kuzey'in trafo sayısı vekili",
       "durum": "bilgi",
@@ -255,19 +264,61 @@
     }
   ],
   "sozluk": [
-    {"terim": "Trafo", "anlam": "Mahallenin köşesindeki gri kutu; elektriğin evden önceki son durağı. Panel, klima, elektrikli araç önce bu kutuyu zorlar."},
-    {"terim": "Ölçülü / ölçülmedi", "anlam": "Ölçülü trafoya cihaz takılı, yükünü biliyoruz. Ölçülmeyenin yükünü benzer trafolardan tahmin ediyoruz."},
-    {"terim": "Yeşil", "anlam": "İlk 2 başvuru güvenle sığar (≥ %98). Panel katmanı."},
-    {"terim": "Sarı", "anlam": "Emin değiliz; önce ölç. Panel katmanı."},
-    {"terim": "Kırmızı", "anlam": "Büyük olasılıkla bugün bile sınırda; ölç ya da güçlendir. Ret değil, işaret."},
-    {"terim": "Büyük olasılıkla dolu", "anlam": "Bugün sınırı aşma olasılığı en az %70 olan trafo; başvuruda ölçüm ya da güçlendirme gerekir."},
-    {"terim": "%40 kuralı", "anlam": "Bugünkü kaba kural: trafo gücünün %40'ına kadar panel. Hat ucundaki gerilimi görmez."},
-    {"terim": "%80 aralık", "anlam": "Gerçek değer 10 trafonun 8'inde bu aralığın içinde kalır. \"En az\" ya da \"en çok\" değildir."},
-    {"terim": "Yaklaşık N ev (A–B)", "anlam": "Kaç ev daha panel takabilir: ortadaki tahmin ve %80 aralık. Vaat sayıda değil renkte."},
-    {"terim": "Yılın tepesi", "anlam": "Trafodan bir yılda geçen en yüksek yük; Kıbrıs'ta çoğunlukla yaz akşamı. Yük haritası."},
-    {"terim": "Doluluk", "anlam": "Yılın tepesi ÷ trafo gücü (kVA). %100 üstü trafo gücünü aşıyor demek."},
-    {"terim": "Temkinli uç", "anlam": "Güvenli tarafta kalan tahmin: yükte aralığın üst ucu, gerilimde alt ucu."},
-    {"terim": "259 V ve 207 V", "anlam": "Ev geriliminin üst ve alt planlama sınırı. Öğlen panel gerilimi yükseltir (259 V), akşam yük düşürür (207 V)."},
-    {"terim": "Farazi şehir", "anlam": "Cevabını bildiğimiz deneme şehri. Rakamları gösterimdir, gerçek trafo yeri değildir."}
+    {
+      "terim": "Trafo",
+      "anlam": "Mahallenin köşesindeki gri kutu; elektriğin evden önceki son durağı. Panel, klima ve elektrikli araç önce bu kutuyu zorlar."
+    },
+    {
+      "terim": "Ölçülü / ölçülmedi",
+      "anlam": "Ölçülen trafoya cihaz takılı, yükünü biliyoruz. Ölçülmeyenin yükünü, ona benzeyen ölçülmüş trafolardan tahmin ediyoruz."
+    },
+    {
+      "terim": "Yeşil",
+      "anlam": "İlk 2 başvuru güvenle sığar (100'de 98'den fazla ihtimalle). Güneş paneli sorusu."
+    },
+    {
+      "terim": "Sarı",
+      "anlam": "Emin değiliz; önce ölç. Güneş paneli sorusu."
+    },
+    {
+      "terim": "Kırmızı",
+      "anlam": "Büyük ihtimalle bugün bile sınırda; ölç ya da güçlendir. Ret değil, işaret."
+    },
+    {
+      "terim": "Büyük olasılıkla dolu",
+      "anlam": "Bugün sınırı aşma ihtimali %70 ya da daha fazla olan trafo; başvuruda ölçüm ya da güçlendirme gerekir."
+    },
+    {
+      "terim": "%40 kuralı",
+      "anlam": "Bugünkü kaba kural: trafonun gücünün %40'ına kadar panel. Hattın ucundaki evlerin gerilimini görmez."
+    },
+    {
+      "terim": "%80 aralık",
+      "anlam": "Gerçek değer 10 trafonun 8'inde bu aralığın içinde kalır. \"En az\" ya da \"en çok\" değildir."
+    },
+    {
+      "terim": "Yaklaşık N ev (A–B)",
+      "anlam": "Kaç ev daha panel takabilir: ortadaki tahmin ve %80 aralık. Söz verdiğimiz şey sayı değil, renk."
+    },
+    {
+      "terim": "Yılın tepesi",
+      "anlam": "Trafodan bir yılda geçen en yüksek yük, yani yılın en yoğun saati; Kıbrıs'ta çoğunlukla yaz akşamı."
+    },
+    {
+      "terim": "Doluluk",
+      "anlam": "Yılın en yoğun saatindeki yük ÷ trafonun gücü. %100'ün üstü, trafonun gücünü aşıyor demek."
+    },
+    {
+      "terim": "Temkinli uç",
+      "anlam": "\"En kötü durumda\" dediğimiz tahmin: güvenli tarafta kalmak için yükte aralığın üst ucu, gerilimde alt ucu."
+    },
+    {
+      "terim": "259 V ve 207 V",
+      "anlam": "Evdeki gerilimin üst ve alt sınırı. Öğlen paneller gerilimi yükseltir (259 V), akşam yük düşürür (207 V)."
+    },
+    {
+      "terim": "Kıbrıscık",
+      "anlam": "Cevabını bildiğimiz deneme şehirlerinin ülkesi. Rakamları gösterimdir; trafo yerleri gerçek değildir."
+    }
   ]
 }
