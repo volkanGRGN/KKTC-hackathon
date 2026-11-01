@@ -41,7 +41,6 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 _argv, sys.argv = sys.argv, sys.argv[:1]
-import kac_ev as ke  # noqa: E402
 import kac_ev_olasilik as ko  # noqa: E402
 sys.argv = _argv
 
@@ -109,54 +108,10 @@ def _nicelden(q, rng):
 
 
 def cek(tr, t, rng, vrng, v0=None, yuk=None):
-    """Resmi `trafo_cek`'in aynısı; bilgi ayrı akıştan (vrng): v0 = callable(vrng) ya da None, yuk = ölçülen öğlen
-    yükü ya da None (verilirse güven yüksek). Dönüş (p_bugun, p_iki, karamsar kaç ev)."""
-    p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
-    olculen = ke.sayi(t['ogle_min_kw_olculen'])
-    srng = random.Random(f'sapma-{tr["sehir"]}-{tr["trafo_no"]}')
-    sonuc = []
-    for _ in range(ko.CEKILIS):
-        ag, evler = ko.ag_kur(tr, rng)
-        if v0 is not None:
-            ag['v0'] = v0(vrng)
-        sapma = math.exp(srng.gauss(ko.SAPMA_MU, ko.SAPMA_SIGMA)) if (ko.SAPMA_MU or ko.SAPMA_SIGMA) else 1.0
-        for f in ag['feeders']:
-            f['zs'], f['zn'] = f['zs'] * sapma, f['zn'] * sapma
-        if not evler:
-            sonuc.append((False, 0, True))
-            continue
-        if t['olculdu'] == '1' and not math.isnan(olculen):
-            toplam = olculen
-        else:
-            mu = (math.log(max(p10, 0.01)) + math.log(max(p90, 0.01))) / 2
-            sd = max(1e-6, (math.log(max(p90, 0.01)) - math.log(max(p10, 0.01))) / (2 * 1.2816))
-            toplam = math.exp(rng.gauss(mu, sd))
-        if yuk is not None:
-            toplam = yuk
-        yk = ko.yuk_dagit(evler, toplam, rng)
-        m = 1 + rng.uniform(*ko.OG)
-        V, vmax, s_tr = ko.durum(ag, evler, yk, {}, m)
-        bugun = vmax > ke.V_SINIR or s_tr > ag['kva']
-        adaylar = [h['id'] for h in evler if h['sinif'] == 'abone_konut' and h['pv'] == 0]
-        if not adaylar:
-            adaylar = [h['id'] for h in evler if h['pv'] == 0]
-        rng.shuffle(adaylar)
-        ek, kabul, ilk_iki = {}, 0, not bugun
-        if not bugun:
-            for j, hid in enumerate(adaylar):
-                ek[hid] = ke.YENI_PANEL_KW
-                V2, vmax2, s2 = ko.durum(ag, evler, yk, ek, m, [[list(v) for v in hat] for hat in V], iters=4)
-                if vmax2 > ke.V_SINIR or s2 > ag['kva']:
-                    del ek[hid]
-                    if j < 2:
-                        ilk_iki = False
-                else:
-                    kabul += 1
-                    V = V2
-        sonuc.append((bugun, kabul, ilk_iki))
-    aday = max(0, int(tr['abone_konut'] - tr['panel_sayisi']))
-    kac = [min(k, aday) for _, k, _ in sonuc]
-    return (sum(b for b, _, _ in sonuc) / len(sonuc), sum(i for _, _, i in sonuc) / len(sonuc), ko.nicel(kac, 0.1))
+    """Resmi `trafo_cek` (aynı çekilişler), bilgi ayrı akıştan (vrng): v0 = callable(vrng) ya da None, yuk = ölçülen
+    öğlen yükü ya da None. Dönüş (p_bugun, p_iki, karamsar kaç ev)."""
+    p_bugun, p_iki, kac = ko.cekilis_ozeti(tr, ko.trafo_cek(tr, t, rng, v0=v0, vrng=vrng, yuk=yuk))
+    return p_bugun, p_iki, ko.nicel(kac, 0.1)
 
 
 def uc(p_bugun, p_iki, guven, olcum=None):
@@ -209,9 +164,7 @@ def varsayimsal(olcum, t, rng, grup=None):
     if olcum == 'kademe':
         v0 = rng.uniform(*ko.V0)
         return min(KADEME_V, key=lambda v: abs(v - v0))
-    p10, p90 = ke.sayi(t['ogle_min_kw_p10']), ke.sayi(t['ogle_min_kw_p90'])
-    mu = (math.log(max(p10, 0.01)) + math.log(max(p90, 0.01))) / 2
-    sd = max(1e-6, (math.log(max(p90, 0.01)) - math.log(max(p10, 0.01))) / (2 * 1.2816))
+    mu, sd = ko.yuk_bandi(t)
     return math.exp(rng.gauss(mu, sd))
 
 
@@ -230,7 +183,7 @@ def sehir_isle(is_):
         no = r['trafo_no']
         if resmi[no]['pv_uc'] != 'bos' or int(cevap[no]['kac_ev_aday']) <= 0:
             continue
-        tr = {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
+        tr = ko.trafo_satiri(r)
         t = tahmin[no]
         rng_ad = f'olasilik-{r["sehir"]}-{no}'                      # resmi akış
         grup = tarife_grubu(r)
