@@ -1360,3 +1360,18 @@ Ne: (1) **PR #39 (`yuk/b-y2`, `tepe.py`):** varsayılan `--model b-y2` = konut y
 Dosya: PR #39 (https://github.com/volkanGRGN/KKTC-hackathon/pull/39); docs/log/2026-11-01-can-eszamanlilik.md
 Neden: KARAR 09:58 m. 3; öneren ≠ puanlayan (BUILD 1 inceler, TEST koşar).
 Durum: bekliyor
+
+## UYARI! 1 Kasım (12:00 sonrası) — Can'dan — sıradaki iş: elimdeki yedi işten hangisi önce?
+Ne: can.md'deki kararların (09:33, 09:43, 09:46, 09:58) bende açık kalanları; yapılanlar: araçlarla "öncesi" ölçümü (ffa1035), maliyet tablosu, sunum rakamlarının 1.5'e çevrilmesi (73456b2), yedek rakam listesi.
+Açık işler (önerdiğim sıra; "öncelik sunum", 09:58):
+1. **Sunum akışı "yük haritası öne"** (09:43): slayt ve ekran sırası hâlâ eski (panel önde); yük cümleleri konuşma notunda hazır. Sırayı ben mi çevireyim, yoksa senin / Civan'ın pitch şablonu mu esas?
+2. **Kilit grafik** `docs/sunum/kilit_yanlis_yesil.png` eski şehirlerden (0/87 ↔ 41/284); 1.5 şehirleri 31–40'ı üretip `grafikler.py faz3 --aralik 31-40` ile yeniden (~15–20 dk). Sunumda kullanılacak mı?
+3. **Tarife, emisyon katsayısı, Kıb-Tek trafo değişim maliyeti** araması (09:46; sonuncusu en değerlisi), Bulamadım akışıyla.
+4. **`sinav.py` temizliği** (09:33 / 09:58): karakterizasyon → küçükler → taşıma.
+5. **Beş MWh sözlüğünün eşitlik denetimi** (09:58 madde 6; `tepe.py:94` dahil).
+6. **`src/sicak_nokta.py`** (09:33 madde 3): ölçüm betiğini kalıcı yap.
+7. **`app/` bulguları** `civan.md`'ye (09:33 madde 2): bugün yalnız `ornek_veri.py` ↔ `sehir_uret.py` klonu.
+Soru: Sıra bu mu (1–2 sunum, 3 sunuma yetişirse, 4–7 sunumdan sonra), yoksa öncelikli başka bir iş var mı? Ekran 6 %27 → %19 ve "yeşil %5 → %13" sorusu da (11:30 girdisi) bekliyor.
+Dosya: docs/istek/can.md (KARAR 09:33–09:58)
+Neden: Can'ın isteği: sıradaki işi karar masası belirlesin.
+Durum: bekliyor
