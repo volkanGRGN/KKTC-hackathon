@@ -548,3 +548,13 @@ Durum: (3) yapıldı — PR #39 (`yuk/b-y2`): varsayılan yalnız konut yaz eği
 ## BİLGİ 10:04 — karar masasından — sunum rakamları: dashboard tamamen üretici 1.5'te
 Ne: `dashboard/icerik.json` artık bütün kartlarda üretici 1.5 / sınav 31–40: öğlen %11,3 / %28; %40 kuralı **24/46 ↔ 0** (21–30'un 22/44'ü yerine); yanlış yeşil 0/60; uyarı isabeti 15/22; akşam gerilimi "yeterli" 233'te 0 yanlış, 47 uyarı, 2/2; %80 dolu 16/16, 87 uyarı (her 5–6 uyarıdan 1'i gerçek). Konuşma notu ve slaytlarda 22/44 ve "her 6 uyarıdan 1" geçiyorsa bu rakamlara çevir.
 Durum: bilgi
+
+## KARAR 10:16 — sıradaki iş sırası; yedek rakam listesine iki cevap
+Karar: **Sıra: 1 → 2 → 3 (sunuma kadar), 4–7 sunumdan sonra.**
+1. **Sunum akışı "yük haritası öne":** slayt ve ekran sırasını **sen çevir** (`docs/sunum/` senin); Civan'ın pitch şablonu da aynı sıraya uyar (civan.md 09:43). Yeni sıra: sorun → yük haritası (doluluk, yılın tepesi "ön", akşam 207 V) → neden inanılır (İspanya öğlen %25 → %10, Mayıs tepesi %15, bant %82) → panel güvenli uçlar (0/60, 15/22, renksiz %76, 24/46 ↔ 0) → pilot ve maliyet → jüri cevapları.
+2. **Kilit grafik:** evet, sunumda kullanılacak; üretici 1.5 şehirleri 31–40 ile yeniden (`grafikler.py faz3 --aralik 31-40`); rakam dashboard'la aynı olmalı (yanlış yeşil 0/60 ↔ %40 kuralı 24/46).
+3. **Tarife, emisyon katsayısı, Kıb-Tek trafo değişim maliyeti:** 30 dakika zaman kutusu, Bulamadım akışı; bulunamazsa pitch kutuları nitel cümleyle kalır.
+4–7 sunumdan sonra (sinav.py temizliği, MWh sözlüğü denetimi, sicak_nokta.py, app/ bulguları).
+**Yedek listeye cevaplar:** (a) **"%27 → %19" kalkar** — eski "yanlış kırmızı" ölçüsü; ADR-0017'den beri kırmızı yok, yerine "büyük olasılıkla dolu uyarısının 22'sinde 15'i gerçekten dolu". (b) **"%5 → %13" yerine sayı:** ADR-0019 ile yeşil 28 → 60 trafo (aday evli 347 trafonun %8'i → %17'si; 21–30'daki %5 → %13 eski şehirler), yanlış yeşil 0/60 — dashboard'la aynı. Listenin kalanı doğru; G'deki eski rakamları düzeltmen yeterli.
+PR #39 ve 41–50 öğlen bulgusu: karar masası Mac'te koşuyor, sonuç ayrı girdi.
+Durum: karar verildi

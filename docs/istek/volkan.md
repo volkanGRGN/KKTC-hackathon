@@ -1306,7 +1306,7 @@ Eksi / bilinmeyen: (1) Yurt kuralı 31–40'ta 5 çarşıya da dokundu (1–10'd
 PR #38: pano içeriğinde akşam gerilimi kartı 1.5'e (2 / 2, "yeterli" 233'te 0 yanlış, 47 uyarı; önceki kart üretici 1.4'tendi), "%80'den dolu" kartı 87 uyarıya, rakam notu "sunum 1.5"; günlük. Pano kodu değişmedi; sürümleri haritada yan yana gösteren canlı tahmin sayfası pano oturumunda.
 Dosya: PR #38 (https://github.com/volkanGRGN/KKTC-hackathon/pull/38), docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md (dalda)
 Neden: Volkan'ın isteği (1 Kasım sabahı); KARAR 02:12 doluluk ölçümü.
-Durum: bekliyor
+Durum: yapıldı 10:16 — PR #38 karar masası koşusuyla birebir, birleşti (f7b1089); iki panel kartı da 1.5'e çevrildi (09fba3f)
 
 ## BİLGİ 10:04 — karar masasından — PR #38 birleşti; dashboard bütünüyle üretici 1.5 rakamlarında; doluluk ölçümüme düzeltme
 Ne: PR #38 (BUILD 1; yük kartları 1.5'e) karar masasının koşusuyla birebir tuttu ve birleşti (f7b1089). İki panel kartı da 1.5 / 31–40'a çevrildi (09fba3f): öğlen hatası %11,3 / %28 (önce 21–30'un %12,2 / %27'si), %40 kuralı 24/46 ↔ 0 (önce 22/44). **Düzeltme (KARAR 02:12):** oradaki doluluk ölçümü tepe saati PR'ından (#32) önceki koddandı; bugünkü kodla %80 dolu 16/16 yakalanır, uyarı 92 değil **87**; gücü aşan 2/2, uyarı 37 değil **34** (BUILD 1 buldu, karar masası doğruladı).
@@ -1346,7 +1346,7 @@ Ne: Sunumda kullanılabilecek bütün rakamlar tek yerde, etiket ve kaynağıyla
 Soru: Eksik ya da yanlış satır var mı? %27 → %19 ve "%5 → %13" kalsın mı?
 Dosya: dashboard/icerik.json; docs/sunum/; docs/log/2026-11-01-can-maliyet.md
 Neden: Can'ın isteği (yedek liste, unutulmasın); KARAR 09:43, 10:04.
-Durum: bekliyor
+Durum: karar verildi 10:16 → can.md (liste doğru; %27 → %19 kalkar, %5 → %13 yerine 28 → 60 trafo)
 
 ## BİLGİ 1 Kasım (11:45 sonrası) — Can'dan — sunum dosyalarındaki eski rakamlar üretici 1.5 rakamlarına çevrildi (yedek listenin G maddesi)
 Ne: `docs/sunum/ekranlar.md`, `konusma-notu.md`, `slaytlar.md`: 41/73, 0/87, 41/284, 22/44, %79, yeşil %25 / sarı %62 / kırmızıların %27'si, farazi %3,8 / %20,6, "~20 bin € + pens" → `dashboard/icerik.json` rakamları (24/46 ↔ 0, 0/60, %82,1, %11,3 / %28, renksiz %76, 15/22, maliyet tablosu); "yeşil = güven yüksek" ifadeleri ADR-0019'a göre düzeltildi; konuşma notunda "sıradaki katman, sunumda gösterilmez" bölümü yerine yük haritası cümleleri (16/16 ve 87 uyarı, 207 V 2/2 ve 233 "yeterli", İspanya tepe %15). Yeni rakam yok.
@@ -1374,7 +1374,7 @@ Açık işler (önerdiğim sıra; "öncelik sunum", 09:58):
 Soru: Sıra bu mu (1–2 sunum, 3 sunuma yetişirse, 4–7 sunumdan sonra), yoksa öncelikli başka bir iş var mı? Ekran 6 %27 → %19 ve "yeşil %5 → %13" sorusu da (11:30 girdisi) bekliyor.
 Dosya: docs/istek/can.md (KARAR 09:33–09:58)
 Neden: Can'ın isteği: sıradaki işi karar masası belirlesin.
-Durum: bekliyor
+Durum: karar verildi 10:16 → can.md (sıra 1 → 2 → 3 sunuma kadar; 4–7 sonra)
 
 ## UYARI! 1 Kasım 10:14 — (BUILD 1 — yük) — Clean review madde 1: trafo_bos_kapasite.py'de kullanılmayan satır kaldırıldı, çıktılar bayt bayt aynı (PR #40); test edin
 Ne: KARAR 09:5x (can.md). `main()` içindeki `rooms = [group_room(…)]` kaldırıldı; `group_room` saf, satır yalnız betik olarak çalışan `main()`'de (üretici ve öbür modüller `main()`'i çağırmıyor) [Hesap: BUILD 1]. Üretici 1.5 şehirleri 1–10 ve 31–40: trafolar, yuk_5dk, yaz / kış, cevap anahtarı 100 / 100 dosya bayt bayt aynı, ayar.json süre dışında aynı; benzetim betiği tohum 7, 1, 31'de JSON ve ekran çıktısı aynı.
