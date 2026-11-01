@@ -11,14 +11,14 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:17)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 02:20)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
-| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | 7ba3b72 düzeltmesi tuttu; yeni eksi: sahte kayıt üretici sürümüne bakmıyor (KARAR 02:12) | sürüm kontrolü + 1.5 şehirleriyle tablolar (BUILD 2); TEST |
-| PR #33 ADR-0019 uygulaması (yeşil kapısında güven şartı kalkar; taban #25) | BUILD 2 | TEST'te tuttu, ADR-0019 kapıları geçti: yeşil 28 → 60, yanlış yeşil 0 (KARAR 02:17) | #25 düzeltmesi → main birleştir (`guvenli_uc.py` çakışması) → KARAR birleştirir |
+| PR #25 inverter geri çözümü (Muhittin 4 m. 5B; taban main) | BUILD 2 | 9c5b897: üretici sürüm kontrolü, uyuşmazlıkta dur; 31–40 (1.5) ham yolda hemen evet ~%9, yanlış evet ≤ 1/633 | TEST → KARAR birleştirir |
+| PR #33 ADR-0019 uygulaması (taban #25) | BUILD 2 | 9896ed2: main + #25 birleşik, `guvenli_uc.py` çakışması çözüldü; sonuçlar aynı | TEST → #25'ten sonra KARAR birleştirir |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
 | B-Y2 incelemesi (Can'ın PR'ı gelince) | BUILD 1 | bekliyor | Can |
@@ -75,6 +75,7 @@ Birleşenler (1 Kasım): #19, #21, #27, #22, #23, #28, #24, #26, #29, #30, #31, 
 7. **BUILD'in yerel durumu** (git dışı): üretici 1.3 şehirleri `trafo-sablonu-build/data/synthetic/u13/` (1–10, 21–30; K_YUK 1,47 ile `tahmin.csv` / `kac_ev.csv`; her şehirde sahte `kayitlar.csv`); Open-Meteo 2024–2025 dosyası yalnız bu klasörde (`data/raw/open-meteo-lefkosa/`); İspanya ham verisi `hackaton/edp-ham/Sim_files_190128_OK_V0/GIS_data`. Başvuru testi: `python3 src/basvuru_testi.py data/synthetic/u13 --aralik 21-30 --json x.json` (~1 dk).
 
 ## Bilinen sorunlar ve kararlar
+- Sahte kaydın "gerçek" ağı yeniden kurması `kac_ev_gercek`'te 784/800 birebir (farklar 1–2 ev): kritik anlar 0,1 V'a yuvarlanmış gerilim serisinden seçiliyor. Panel sınavlarında trafoların ~%2'si bu payla okunur; düzeltme yavaş, şimdilik yok (karar masası 02:25).
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
 - Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Üretici 1.2 iki yeni dosya ister: kıyı (`osm-kasaba`) ve Open-Meteo 2023 (README).
 - **Sanal ortam şart** (`pip install -r requirements.txt`). `openpyxl` yoksa üretici sessizce yer tutucu eğriye düşer; `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak.
