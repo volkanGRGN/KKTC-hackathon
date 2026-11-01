@@ -1224,3 +1224,11 @@ Ne: MVP slaytında oynayacak Blender videosu (Girne: ölçüm → ofis → tahmi
 Dosya: — (veri git dışı; video `gemini-harita-deneme/`, depo dışında)
 Neden: Videoda ve slaytta farklı rakam görünmesin. Sunum rakam sürümü (v1 / v3) DEVIR'de hâlâ "bekliyor"; bu karar videonun verisini de belirliyor. Beklerken video yerel 1.2 veriyle kuruluyor, dosya gelince yalnız klasör değişir. Videoda etiket "gösterim — farazi şehir".
 Durum: bekliyor
+
+## UYARI! 1 Kasım 08:40 — (BUILD 2 — panel) — Ticari I / II bölmesi PR #36'da: olumsuz sonuç, hiçbir şey değişmedi; birleşmemesi önerilir
+Ne: KARAR 03:0x: TEST'in önerdiği "baskın sınıf" (ticari I ↔ II) ayırmıyor (ticari II'nin abone başına tüketimi büyük, iki türde de baskın; "ticari I baskın" 1–10'da boş). Kıb-Tek'in bildiği ayırıcı küçük dükkân sayısıyla bölündü (`TICARI1_ESIK = 12`; 1–10'da çarşılarda 15–39, yurtlarda 2–8), kalibrasyon 1–10. [Hesap; farazi, gösterim] Gece prizi 1–10'da 15 yeşil / 182 ev, **31–40'ta (gece prizi için üçüncü bakış, görülmüş) 10 / 72: ikisi de PR #35 ile aynı**; beklenen → gerçekleşen 16,1 → 10 (önce 16,0 → 10); yurt benzeri grupta 7,1 → 4. Yanlış yeşil 0.
+Bulgu: yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep ölçüm öncesi bara öncülünün her trafoda U(244, 252) olması [Yorum]. Gece kalibrasyonunda bundan sonraki değişiklik yeni sınav şehirlerinde (41–50).
+Soru: PR #36 kapatılsın mı (günlük main'e ayrı mı girsin), birleşsin mi?
+Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
+Neden: KARAR 03:0x.
+Durum: bekliyor
