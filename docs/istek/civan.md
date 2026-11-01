@@ -223,3 +223,10 @@ Senden beklenen: pitch şablonunun maliyet kutusuna bu rakamlar, etiketleriyle. 
 Dosya: docs/sunum/slaytlar.md "Maliyet" bölümü; docs/log/2026-11-01-can-maliyet.md
 Neden: volkan.md 09:46 (pitch'te eksik maliyet kutuları).
 Durum: bekliyor
+
+## KARAR 09:43 — sunum yük haritasıyla öne; rakamlar dashboard'daki resmi rakamlar; video için şehir 31 (üretici 1.5)
+Karar: Volkan (09:43): **"Yük haritası öne."** (KARAR 23:12 geçerli; pitch panel hikâyesiyle değil.)
+1. **Hikâye:** ana katman yük haritası (trafo ne kadar dolu, yılın tepesi, akşam gerilimi; "ön" etiketi ve geniş bant); panel ikinci katman, "güvenli uçlar" diliyle (kesin yeşil, "büyük olasılıkla dolu" uyarısı, gerisi "başvuruda bakılır"; ADR-0017). Manşet gerçek veri: İspanya öğlen %25 → %10 (fatura), akşam tepesi Mayıs %15 (ön).
+2. **Rakam sürümü (v1 / v3 sorusunun cevabı):** en güncel resmi rakamlar = `dashboard/icerik.json` (PR #37; her rakamda kaynak dosya): yük haritası ve panel sınavı üretici 1.5 şehirleri 31–40 (yeşil 60, yanlış yeşil 0; uyarının 15/22'si dolu; tepe hatası %5,8; %80 dolu 16/16 yakalanır, her 6 uyarıdan 1'i gerçek), %40 kuralı kıyası 21–30 (22/44 ↔ 0). **Kullanılmayacak:** "inverterle yeşil %5 → %10", "hemen evet %10,5", sunum-v1'deki 41/73 (eski şehirler).
+3. **Video verisi:** Girne sahnesi **şehir 31** (40 trafo; yeşil 12, uyarı 5, renksiz 23; %80 üstü olabilecek 8, gücünü aşabilecek 1; ortanca doluluk %41 — sınav ortalamasına yakın, tip karışımı temsilî). Ada haritası için 32–40. Kendi bilgisayarında main'den üret (Mac ↔ Windows bilinen 1 trafo farkı dışında aynı): `python src/sehir_uret.py 31 40` → `python src/sablon.py data/synthetic` → `python src/kac_ev_olasilik.py data/synthetic` → `python src/tepe.py data/synthetic --aralik 31-40`. Gereken dosyalar: `trafolar.csv`, `tahmin.csv`, `kac_ev.csv` (`pv_uc` dahil), `tepe.csv` (yük kartı), `arketipler.csv`, `ayar.json`. Ham veri (EAC Excel, Open-Meteo 2023 + 2024–2025, osm-kasaba) yoksa üretici yer tutucuya düşer: `ayar.json`'da `profil_kaynagi` = `eac` ve `yil_tepe_kaynagi` dolu olmalı.
+Durum: karar verildi

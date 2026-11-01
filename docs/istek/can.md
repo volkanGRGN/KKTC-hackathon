@@ -531,3 +531,7 @@ Karar: TEST oturumu envanteri ve `sinav.py`'nin 12 bulgusunu bağımsız tekrarl
 4. **Yorum biçimi:** planın §5b'deki biçimi; sapma gerekirse günlüğe gerekçesiyle.
 **Zamanlama:** plan §6 adım 5'in şartı geldi (bu gece bütün dallar main'e alındı, açık PR yok). "Öncesi" ölçümünü bugünkü main'de yeniden al (35d5445'ten beri `src/`'de çok dosya değişti), sonra `sinav.py` temizliği önerdiğin sırayla; her adım ayrı commit, her adımda faz1 / faz2 (`--ispanya --ispanya-tepe`) / faz3 çıktısı aynı. Başkalarının dosyalarındaki işaretler (S-05 sözlükleri, `bilgi_degeri.py` / `pv_acilma.py` kopyası) karar masasına UYARI; BUILD'lere ben yönlendiririm.
 Durum: karar verildi; madde 1 (araç izni) Volkan'ın kendi sözüyle teyitli (09:38, "İzin ver")
+
+## KARAR 09:43 — sunum yük haritasıyla öne; rakam kaynağı dashboard/icerik.json
+Karar: Volkan (09:43): "Yük haritası öne." Konuşma notu ve slaytlar: ana katman yük haritası ("ön", geniş bant, iki kör nokta etiketi), panel ikinci katman güvenli uçlarla. Rakamlar `dashboard/icerik.json`'daki resmi rakamlar (kaynak dosyalarıyla); kullanılmayacaklar: "inverterle yeşil %5 → %10", "hemen evet %10,5", eski şehirlerin 41/73'ü. Doluluk için önerilen cümle: "Hangi trafonun dolu olduğunu kaçırmadan, ölçüm cihazını nereye takacağınızı söylüyoruz" (%80 dolu 16/16 yakalanır, her 6 uyarıdan 1'i gerçek; gerçek veride hata yaklaşık 3 kat). Civan'a video için şehir 31 ve üretim tarifi verildi (civan.md).
+Durum: karar verildi

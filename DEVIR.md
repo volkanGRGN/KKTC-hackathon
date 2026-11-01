@@ -11,7 +11,7 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 09:22) — açık PR yok
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 09:43) — açık PR yok
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
 
 | İş | Kimde | Durum | Bekleyen |
@@ -22,7 +22,6 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | B-Y2 incelemesi (Can'ın PR'ı gelince) | BUILD 1 | bekliyor | Can |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı (`pv_uc`), yük ikinci sayısı ve iki aday saat (`tepe.csv`); Faz 4 kalanı | Civan | sütunlar main'de (02:00) | — |
-| Sunum rakam sürümü (v2 / v3) | Volkan | bekliyor | — |
 
 Birleşenler (1 Kasım): #19, #21–#35, #37 (dashboard); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık PR yok; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
 
@@ -91,4 +90,4 @@ Birleşenler (1 Kasım): #19, #21–#35, #37 (dashboard); #36 kapatıldı (olums
 ## Sıradaki üç adım (1 Kasım 01:53)
 1. Gece 14 PR birleşti, açık PR yok (02:29); ADR-0019 yürürlükte. Faz haritası ROADMAP "Faz 6–12" başında (01:53 hâli; Faz 9–12 satırlarındaki "onay bekliyor" ifadeleri artık "main'de").
 2. BUILD 2: ölçüm sırası ve konum payını ADR-0019 kuralına çevirir (31–40 bir kez); BUILD 1: Can'ın B-Y2'sini inceler; TEST: gelen PR'lar.
-3. Civan: güvenli uçlar kartı, yük ikinci sayısı, iki aday saat. Volkan: sunum rakam sürümü, Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.
+3. Sunum: Volkan 09:43 "yük haritası öne"; rakamlar `dashboard/icerik.json` (üretici 1.5, 31–40); Civan video için şehir 31'i üretir, kartlar; Can konuşma notu. Volkan: Kıb-Tek istek metni, tanıdık evde inverter + priz ölçümü.
