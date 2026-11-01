@@ -20,14 +20,14 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from ortak import GRI_HEX, HAM_KOK, KOK, MAVI_HEX, RENK_HEX, degisim_zamani, sehir_no
+from ortak import GRI_HEX, HAM_KOK, KOK, MAVI_HEX, RENK_ADI, RENK_HEX, aralik, degisim_zamani, e, sehir_no, tr, yuzde
 
 ADA_DOSYASI = KOK / "app" / "ada_kiyi.json"  # Natural Earth 1:50m, kamu malı (Civan, 31 Ekim)
 GIRNE_KIYI = HAM_KOK / "osm-kasaba" / "girne_kiyi.json"
 GIRNE_BINA = HAM_KOK / "osm-kasaba" / "girne_merkez.json"
 JS_DOSYASI = Path(__file__).resolve().with_name("canli_harita.js")
 OSM_ATIF = "© OpenStreetMap katkıcıları"
-ETIKET = "gösterim — farazi şehir · noktalar temsili"
+ETIKET = "gösterim — Kıbrısçık ülkesindeki şehirler · noktalar temsili"  # Volkan, 1 Kasım: "farazi şehir" değil
 
 GIRNE_MERKEZ = (35.3375, 33.318)  # şehir üreticisinin referans noktası (osm-kasaba KAYNAK.txt)
 GIRNE_YAMA = (35.22, 33.19, 35.42, 33.45)  # güney, batı, kuzey, doğu: ayrıntılı OSM kıyısının çizildiği dikdörtgen
@@ -186,26 +186,50 @@ def siniflar(sonuc, nolar):
     return dict(yuk=yuk, panel=panel)
 
 
+def kasaba_ipucu(r):
+    """Kasabadaki trafonun kartı (resmi çıktıdan): iki katmanın sonucu."""
+    s = [f"Trafo gücü {tr(r['kva'])} kVA"]
+    if pd.notna(r.get("tepe_kva")):
+        s.append(f"Yük haritası: yılın tepesi {tr(r['tepe_kw'])} kW, doluluk {yuzde(r['tepe_kva'] / r['kva'])} "
+                 f"(en kötü durumda {yuzde(r['tepe_kva_p90'] / r['kva'])})")
+        if pd.notna(r.get("v_min_tepe_v_p10")):
+            s.append(f"Akşam en düşük gerilim: {tr(r['v_min_tepe_v'], 1)} V (en kötü durumda "
+                     f"{tr(r['v_min_tepe_v_p10'], 1)} V; sınır 207 V)")
+    if isinstance(r.get("renk"), str):
+        s.append(f"Panel: {RENK_ADI[r['renk']]} · yaklaşık {tr(r['kac_ev_orta'])} ev "
+                 f"({aralik(r['kac_ev_karamsar'], r['kac_ev_iyimser'])})")
+    return "<br/>".join(e(x) for x in s)
+
+
 @st.cache_data(show_spinner=False, max_entries=64)
 def _kasaba_sehri(klasor, zamanlar):
     k = Path(klasor)
-    oku = lambda ad, sutunlar: pd.read_csv(k / ad, encoding="utf-8", dtype={"trafo_no": str})[sutunlar]
+
+    def oku(ad, sutunlar):
+        t = pd.read_csv(k / ad, encoding="utf-8", dtype={"trafo_no": str})
+        return t[[c for c in sutunlar if c in t]]
+
     t = oku("trafolar.csv", ["trafo_no", "enlem", "boylam", "kva"]).merge(
         oku("tahmin.csv", ["trafo_no", "olculdu"]), on="trafo_no")
-    t["yuk"] = None
     if (k / "tepe.csv").exists():
-        t = t.merge(oku("tepe.csv", ["trafo_no", "tepe_kva_p90"]), on="trafo_no", how="left")
-        t["yuk"] = [doluluk_sinifi(p / v)[0] if pd.notna(p) else None for p, v in zip(t["tepe_kva_p90"], t["kva"])]
-    t["panel"] = None
+        t = t.merge(oku("tepe.csv", ["trafo_no", "tepe_kw", "tepe_kva", "tepe_kva_p90", "v_min_tepe_v",
+                                     "v_min_tepe_v_p10"]), on="trafo_no", how="left")
     if (k / "kac_ev.csv").exists():
-        t = t.drop(columns="panel").merge(oku("kac_ev.csv", ["trafo_no", "renk"]).rename(columns={"renk": "panel"}),
-                                          on="trafo_no", how="left")
-        t["panel"] = [r if isinstance(r, str) else None for r in t["panel"]]
-    return t[["enlem", "boylam", "olculdu", "yuk", "panel"]].to_dict("records")
+        t = t.merge(oku("kac_ev.csv", ["trafo_no", "renk", "kac_ev_orta", "kac_ev_karamsar", "kac_ev_iyimser"]),
+                    on="trafo_no", how="left")
+    satirlar = []
+    for r in t.to_dict("records"):
+        p90 = r.get("tepe_kva_p90")
+        satirlar.append(dict(
+            no=r["trafo_no"], enlem=r["enlem"], boylam=r["boylam"], o=int(r["olculdu"]),
+            yuk=doluluk_sinifi(p90 / r["kva"])[0] if p90 is not None and pd.notna(p90) else None,
+            panel=r["renk"] if isinstance(r.get("renk"), str) else None,
+            durum="ölçüldü" if r["olculdu"] else "model tahmini", metin=kasaba_ipucu(r)))
+    return satirlar
 
 
 def kasabalar(klasorler, haric):
-    """Öbür farazi şehirler kasabalara: her şehrin resmi çıktısı (tahmin.csv gerekir). Girne'ye yakınlık sırasıyla."""
+    """Öbür şehirler kasabalara: her şehrin resmi çıktısı (tahmin.csv gerekir). Girne'ye yakınlık sırasıyla."""
     uygun = [k for k in klasorler if k != haric and sehir_no(k) < 800 and (k / "tahmin.csv").exists()]
     sonuc = []
     for klasor, (ad, enlem, boylam) in zip(uygun, KASABALAR):
@@ -216,37 +240,41 @@ def kasabalar(klasorler, haric):
         noktalar = []
         for s in satirlar:
             x, y = xy(enlem + (s["enlem"] - orta_e) * KUCULTME, boylam + (s["boylam"] - orta_b) * KUCULTME)
-            noktalar.append(dict(x=x, y=y, o=int(s["olculdu"]), yuk=s["yuk"], panel=s["panel"]))
+            noktalar.append(dict(no=s["no"], x=x, y=y, o=s["o"], yuk=s["yuk"], panel=s["panel"], metin=s["metin"],
+                                 baslik=e(f"{s['no']} · {ad} ({klasor.name}) · {s['durum']}")))
         x, y = xy(enlem, boylam)
         sonuc.append(dict(ad=ad, sehir=klasor.name, x=x, y=y, n=noktalar))
     gx, gy = xy(*GIRNE_MERKEZ)
     return sorted(sonuc, key=lambda k: math.hypot(k["x"] - gx, k["y"] - gy))
 
 
-def animasyon(h, sira, adimlar, klasorler, klasor):
+def animasyon(h, sira, adimlar):
     """sira: ölçülme sırası (trafo no); adimlar: her adımda siniflar() (3 ölçümden önce None)."""
-    nolar = h["nolar"]
-    return dict(
-        mahalle=mahalleler(h["tr"], sira),
-        sira=[nolar.index(t) for t in sira],
-        adimlar=adimlar,
-        kasabalar=kasabalar(klasorler, klasor),
-    )
+    return dict(mahalle=mahalleler(h["tr"], sira), sira=[h["nolar"].index(t) for t in sira], adimlar=adimlar)
 
 
 # ---------- bileşen ----------
 
 CSS = """
 .kok {position:relative; width:100%; overflow:hidden; border-radius:10px; user-select:none;}
-canvas {display:block; width:100%; height:100%;}
-.ipucu {position:absolute; pointer-events:none; display:none; max-width:340px; padding:8px 10px; border-radius:8px;
-        font:12.5px/1.45 var(--st-font, sans-serif); background:rgba(20,24,31,.92); color:#f1f4f7;
-        box-shadow:0 4px 14px rgba(0,0,0,.25); z-index:3;}
-.ipucu b {font-weight:650;}
-.dugmeler {position:absolute; top:10px; right:10px; display:none; gap:6px; z-index:2;}
-.dugmeler button {font:600 12.5px var(--st-font, sans-serif); padding:6px 12px; border-radius:999px; cursor:pointer;
-                  border:1px solid rgba(128,128,128,.45); background:rgba(255,255,255,.9); color:#1f2933;}
-.dugmeler button:hover {border-color:#2a78d6;}
+canvas {display:block; width:100%; height:100%; touch-action:none;}
+.kart {position:absolute; display:none; width:300px; padding:10px 12px 11px; border-radius:10px; z-index:3;
+       font:12.5px/1.45 var(--st-font, sans-serif); background:rgba(20,24,31,.94); color:#f1f4f7;
+       box-shadow:0 6px 20px rgba(0,0,0,.3);}
+.kart .ust {display:flex; justify-content:space-between; gap:8px; font-weight:650; margin-bottom:5px;}
+.kart .kapat {cursor:pointer; opacity:.7; font-size:15px; line-height:1;}
+.kart .kapat:hover {opacity:1;}
+.kart .olc {margin-top:8px; width:100%; font:600 12.5px var(--st-font, sans-serif); padding:6px; border-radius:7px;
+            cursor:pointer; border:1px solid #2a78d6; background:#2a78d6; color:#fff;}
+.kart .olc.kaldir {background:transparent; color:#cfe0f5;}
+.dugmeler, .yakinlik {position:absolute; display:none; gap:6px; z-index:2;}
+.dugmeler {top:10px; right:10px;}
+.yakinlik {right:10px; bottom:28px; flex-direction:column; align-items:flex-end;}
+.yakinlik .sira {display:flex; gap:6px;}
+.dugmeler button, .yakinlik button {font:600 12.5px var(--st-font, sans-serif); padding:6px 12px; border-radius:999px;
+    cursor:pointer; border:1px solid rgba(128,128,128,.45); background:rgba(255,255,255,.92); color:#1f2933;}
+.yakinlik .kare {width:34px; padding:6px 0; border-radius:8px; font-size:16px; line-height:1;}
+.dugmeler button:hover, .yakinlik button:hover {border-color:#2a78d6;}
 """
 
 _bilesen = None
@@ -265,7 +293,7 @@ def renkler():
 
 
 def ciz(anahtar, veri, **olaylar):
-    """veri: zemin, sehir (etkileşim), anim (oynarken), katman, lejant, oynat, oynat_no, yukseklik.
+    """veri: zemin, sehir (Girne, etkileşim), kasabalar, anim (oynarken), katman, lejant, oynat, oynat_no, yukseklik.
     olaylar: on_tiklama_change, on_bitti_change, on_bastan_change, on_don_change."""
     veri = dict(veri, etiket=ETIKET, renk=renkler())
     return _harita()(key=anahtar, data=veri, height="content", **olaylar)

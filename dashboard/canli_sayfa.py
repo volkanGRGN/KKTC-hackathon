@@ -2,7 +2,8 @@
 
 Hesap dashboard/canli.py'de (ürünün kendi kodu: sablon.py, kac_ev_olasilik.py, tepe.py); eski model sürümleri
 dashboard/surumler.py ile depo tarihçesinden. Harita kendi çizimimiz (dashboard/canli_harita.py, internetsiz): ölçülen
-trafo dolu nokta, tahmin soluk halka; "Oynat" Girne'de mahalle mahalle 12 ölçümü, sonra adayı oynatır (Volkan, 1 Kasım).
+trafo dolu nokta, tahmin soluk halka; bütün ada, yakınlaşılır, trafoya tıklayınca kart. "Oynat" Girne'de 12 ölçümü
+(karanlıkta küçük daireler), sonra adayı oynatır (Volkan, 1 Kasım).
 Gerçekle kıyas (sınav görünümü) yalnız farazi şehirde ve ölçülmeyen trafolarda; model gerçeği görmez.
 """
 
@@ -19,7 +20,7 @@ from canli_harita import DOLULUK_SINIF, doluluk_sinifi
 from ortak import *  # noqa: F401,F403 — sabitler, renkler, biçim ve veri okuma (ortak.py)
 
 ONERI_SAYISI = 12  # ürünün tasarımı: 40 trafodan 12'si ölçülür (sablon.py OLCULU_ANA)
-HARITA_YUKSEKLIK = 600
+HARITA_YUKSEKLIK = 660
 KATMAN_ADI = {"yuk": "Yük haritası · yılın tepesi", "panel": "Panel · öğlen gerilimi (259 V)"}
 
 
@@ -91,9 +92,11 @@ def _tiklama(a, nolar):
 
 
 def _bitti(a, nolar, klasor, sira, surum, sinav):
-    """Animasyon bitti: Girne'nin 12 ölçümü sayfaya geçer; sınav açıksa ölçtükçe hata grafiği her adımla dolar."""
+    """Animasyon bitti: harita normal haritaya geçer, Girne'nin 12 ölçümü sayfaya; sınav açıksa ölçtükçe hata grafiği
+    her adımla dolar."""
     if not st.session_state[a["oynat"]]:
         return
+    st.session_state[a["oynat"]] = False
     olculu_ayarla(a, nolar, sira)
     if sinav:
         gecmis = st.session_state[a["gecmis"]].setdefault(surum, {})
@@ -191,42 +194,51 @@ def harita_verisi(h, sonuc, olculu, katman, gercek):
         v["durum"] = ["ölçüldü" if o else "model tahmini" for o in v["olculdu"]]
         g = None if gercek is None else gercek.set_index("trafo_no").to_dict("index")
         v["metin"] = [ipucu_satirlari(r, g) for r in v.to_dict("records")]
+    kva = h["tr"].set_index("trafo_no")["kva"]
     n = []
     for r in v.to_dict("records"):
         x, y = canli_harita.xy(r["enlem"], r["boylam"])
         n.append(dict(no=r["trafo_no"], x=x, y=y, sinif=r["sinif"], o=int(r["olculdu"]),
-                      baslik=e(f"{r['trafo_no']} · {r['durum']}"), metin=r["metin"]))
+                      baslik=e(f"{r['trafo_no']} · Girne · {r['durum']}"),
+                      metin=e(f"Trafo gücü {tr(kva[r['trafo_no']])} kVA") + "<br/>" + r["metin"]))
     return n
+
+
+def sayfa_etiketi(no, ayar):
+    """Volkan, 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil, Kıbrısçık ülkesindeki şehirler (yine gösterim)."""
+    return canli_harita.ETIKET.split(" · ")[0] if no < 800 else etiket(no, ayar)
 
 
 def harita_basligi(h, sonuc, olculu):
     if sonuc is not None:
-        return f"{len(olculu)} trafo ölçüldü · {len(h['nolar']) - len(olculu)} trafo tahmin"
+        return f"Girne · {len(olculu)} trafo ölçüldü · {len(h['nolar']) - len(olculu)} trafo tahmin"
     if olculu:
-        return f"{len(olculu)} trafo ölçüldü · model için en az {canli.EN_AZ_OLCULU}"
-    return "Harita kapalı · bir trafoya tıkla, ölçülmüş sayılır"
+        return f"Girne · {len(olculu)} trafo ölçüldü · model için en az {canli.EN_AZ_OLCULU}"
+    return "Girne'de harita kapalı · trafoya tıkla, kartından ölç"
 
 
 def lejant_parcalari(katman, model_var):
-    if not model_var:
-        return [("ölçüldü", MAVI_HEX), ("henüz tahmin yok", GRI_HEX)]
+    """Kasabalar hep renkli; Girne'de model yokken mavi (ölçüldü) ve gri (henüz tahmin yok) da var."""
     if katman == "yuk":
-        return [(ad, RENK_HEX[r]) for _, r, ad in reversed(DOLULUK_SINIF)]
-    return [(RENK_ADI[r], RENK_HEX[r]) for r in RENK_SIRA]
+        parca = [(ad, RENK_HEX[r]) for _, r, ad in reversed(DOLULUK_SINIF)]
+    else:
+        parca = [(RENK_ADI[r], RENK_HEX[r]) for r in RENK_SIRA]
+    return parca if model_var else parca + [("ölçüldü, model yok", MAVI_HEX), ("henüz tahmin yok", GRI_HEX)]
 
 
-def animasyon_verisi(h, klasor, klasorler, oneri, surum):
+def animasyon_verisi(h, klasor, oneri, surum):
     """Girne'de ölçülme sırası ve her adımda o anki ölçülerle kurulan modelin renkleri; öbür şehirler kasabalara."""
     sira = canli_harita.girne_sirasi(h["tr"], oneri)
     adimlar = [canli_harita.siniflar(hesap(klasor, [t for t in h["nolar"] if t in set(sira[:k])], surum), h["nolar"])
                for k in range(1, len(sira) + 1)]
-    return sira, canli_harita.animasyon(h, sira, adimlar, klasorler, klasor)
+    return sira, canli_harita.animasyon(h, sira, adimlar)
 
 
 def lejant(katman, sonuc):
     """Renklerin lejantı haritanın içinde (sunumda tam ekranda da görünsün); burada yalnız açıklama."""
-    not_ = ("Dolu nokta = ölçüldü · halka = model tahmini · gri = henüz tahmin yok · üstüne gelince sayılar. "
-            "Oynat: Girne'de mahalle mahalle 12 ölçüm, sonra ada (yarım dakika).")
+    not_ = ("Dolu nokta = ölçüldü · halka = model tahmini · gri = henüz tahmin yok. Tekerlek, sürükleme ya da +/− ile "
+            "yakınlaş; trafoya tıkla: kartı açılır, Girne'de \"Ölçülmüş say\". Öbür kasabalar her şehrin resmi 12 "
+            "ölçümlü sonucu. Oynat: Girne'de 12 ölçüm, sonra ada (yarım dakika).")
     if katman == "yuk" and sonuc is not None:
         not_ += " Renk en kötü duruma göre; eşikler gösterim için (Özet'teki %80 ve %100)."
     st.caption(not_)
@@ -359,7 +371,8 @@ def sayfa():
                                  format_func=lambda k: surumler.surum(k)["ad"],
                                  help="Depo tarihçesinden: aynı ölçümlerle eski sürüm ne derdi?")
     st.sidebar.caption(surumler.surum(surum)["aciklama"])
-    st.sidebar.caption("Haritada bir trafoya tıkla: ölçülmüş sayılır. Ölçümü kaldırmak için aşağıdaki listeden çıkar.")
+    st.sidebar.caption("Haritada bir trafoya tıkla: kartı açılır; Girne'deki trafoyu \"Ölçülmüş say\" ile ölç. "
+                       "Tekerlek ya da +/− ile yakınlaş, sürükleyerek kaydır.")
 
     h = hazir(klasor)
     a = anahtarlar(klasor)
@@ -371,11 +384,11 @@ def sayfa():
     sinav_var = (klasor / "cevap_anahtari.csv").exists() and sehir_no(klasor) < 800
 
     st.markdown("## Canlı tahmin")
-    st.caption("Harita kapalı açılır. Bir trafoya tıkla: o trafo ölçülmüş sayılır. Model o an yalnız ölçülenlerden "
+    st.caption("Girne'de harita kapalı açılır. Bir trafoya tıkla, kartından ölç. Model o an yalnız ölçülenlerden "
                f"kurulur ve ölçülmeyen bütün trafoları tahmin eder. En az {canli.EN_AZ_OLCULU} ölçüm gerekir; "
                f"ürünün tasarımı 40 trafodan {ONERI_SAYISI}'si. Oynat: Girne'de bir mahalleden başlar, önerilen "
                f"{ONERI_SAYISI} trafo mahalle mahalle ölçülür, sonra görünüm adaya açılır (yarım dakika).")
-    st.warning(f"{etiket(sehir_no(klasor), ayar)} · {klasor.name} · {len(h['nolar'])} trafo · trafo yerleri gerçek "
+    st.warning(f"{sayfa_etiketi(sehir_no(klasor), ayar)} · {klasor.name} · {len(h['nolar'])} trafo · trafo yerleri gerçek "
                f"değil · model: {surumler.surum(surum)['ad']}")
 
     ust = st.columns([2.4, 1.25, 1.25, 1.25, 1])
@@ -410,13 +423,15 @@ def sayfa():
     sira = anim = None
     if oynat:
         with st.spinner("Animasyon hazırlanıyor: Girne'de her ölçüm adımında model kuruluyor (ilk seferde ~15 sn)…"):
-            sira, anim = animasyon_verisi(h, klasor, klasorler, oneri, surum)
+            sira, anim = animasyon_verisi(h, klasor, oneri, surum)
     veri = dict(zemin=canli_harita.zemin(), anim=anim, katman=gosterilen, yukseklik=HARITA_YUKSEKLIK, hiz=1.0,
-                sehir=dict(n=harita_verisi(h, sonuc, olculu, gosterilen, gercek), baslik=harita_basligi(h, sonuc, olculu)),
+                kasabalar=canli_harita.kasabalar(klasorler, klasor),
+                sehir=dict(ad="Girne", n=harita_verisi(h, sonuc, olculu, gosterilen, gercek),
+                           baslik=harita_basligi(h, sonuc, olculu)),
                 lejant=lejant_parcalari(gosterilen, oynat or sonuc is not None),
                 oynat=oynat, oynat_no=st.session_state.get(a["oynat_no"], 0))
 
-    sol, sag = (st.container(), st.container()) if oynat else st.columns([3, 2])  # oynarken harita tam genişlik
+    sol, sag = st.container(), st.container()  # harita tam genişlik (sunum), sayılar altında
     with sol:
         if katman == "yuk" and yuk_yok:
             st.info("Bu model sürümünde yük haritası yoktu (ilk kez 1 Kasım 01:58); panel katmanı gösteriliyor.")
@@ -433,7 +448,7 @@ def sayfa():
         ])
         if sonuc is None:
             kalan = canli.EN_AZ_OLCULU - len(olculu)
-            st.info(f"Harita kapalı. Model için {kalan} trafo daha ölç: haritada bir trafoya tıkla ya da "
+            st.info(f"Harita kapalı. Model için {kalan} trafo daha ölç: haritada bir trafoya tıklayıp kartından ölç ya da "
                     "\"Önerilenden 1 ekle\".")
         else:
             if len(olculu) < canli.GUVENILIR_OLCULU:
