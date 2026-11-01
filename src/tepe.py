@@ -29,6 +29,8 @@ Yöntem (ADR-0018 m. 1–4, 6; BUILD 1):
     trafoda); kayıtlardan popülasyon R'si ve bant önerisi `tepe_ozet.json`'a, sürümlü yeniden-fit (tüzük m. 4) KARAR'da.
     OG fider tepesi: aşağıdan yukarı toplamla mutabakat (fider başına kayıt ÷ tahmin; kontrol). `--fider-duzelt` ölçülmeyenleri
     fider oranına ölçekler (yukarıdan aşağı); 1–10'da kötüleştirdi, varsayılan kapalı.
+  7 Tepe saati (KARAR 01:30): ticari II abonesi, öğlen arketipi akşam tepeliyse konut eğrisiyle (yurt); ikinci aday saat
+    (konutta öğleden sonra ↔ gece neredeyse eşit) ve dönem (sabah / öğle / öğleden sonra / gece).
   6 Akşam gerilimi (KARAR 00:57 m. 4; ADR-0014, 207 V): tepe anında en düşük ev gerilimi, panel tarafıyla aynı fizik
     (`kac_ev_olasilik.ag_kur`: Kıb-Tek'in bildiğiyle ağ, bilinmeyenler aralıktan; İngiltere'ye kalibre empedans payı;
     `trafo_bos_kapasite.solve`). Çekiliş başına: ağ, tepe bandından toplam yük, sınıfların tepe anındaki payı × kişisel fark,
@@ -37,7 +39,7 @@ Yöntem (ADR-0018 m. 1–4, 6; BUILD 1):
 Farazi sınav uyarısı: üretici de yazı EAC ay tipik günleriyle kuruyor; model aynı açık veriyi kullandığı için farazi tepe
 sınavı iyimser (ADR-0008), eğim hatasını ve "Kuzey ≠ Güney Kıbrıs"ı görmez. Gerçek ölçü İspanya Mayıs (sinav.py faz2).
 
-Okur: trafolar.csv (hepsi), yuk_5dk.csv (YALNIZ ölçülülerin satırları), ayar.json'dan yalnız `hava_yili` (hangi yıl; Kıb-Tek
+Okur: trafolar.csv (hepsi), yuk_5dk.csv (YALNIZ ölçülülerin satırları), tahmin.csv + arketipler.csv (sablon.py; arketip), ayar.json'dan yalnız `hava_yili` (hangi yıl; Kıb-Tek
 bilir), Open-Meteo Lefkoşa saatlik dosyaları. cevap_anahtari.csv'yi okumaz.
 Yazar: tepe.csv (sözleşme §8, 1.4 adayı, satır = trafo), tepe_ozet.json (bilgi).
 
@@ -114,10 +116,15 @@ FIDER_ORAN_SINIR = (0.7, 1.5)
 CEKILIS_V = 40
 OG_AKSAM = (-0.01, 0.0)
 V_ALT = 207.0
+# Tepe saati (KARAR 01:30) [Yorum; şehir 1–10'da]: ikinci aday ana tepeden en az IKINCI_ARALIK_SAAT uzakta ve zarfın
+# IKINCI_ESIK'i kadar yüksekse yazılır. Ticari II abonesi olan trafoda öğlen modelinin arketipi "akşam tepeli" ise (ölçülü
+# trafoların Nisan eğrilerinden, sablon.py) ticari II konut eğrisini alır (yurt gibi); yoksa büyük ticaret. Kıb-Tek tarife
+# sınıfını bilir, yapı tipini bilmez; arketip bunun vekili (1–10'da yurtların 41/48'i akşam tepeli, çarşıların 0/41'i).
+IKINCI_ESIK, IKINCI_ARALIK_SAAT = 0.95, 3
 TEPE_SUTUNLARI = ['sehir', 'trafo_no', 'olculdu', 'tepe_kw', 'tepe_kw_p10', 'tepe_kw_p90', 'tepe_saati', 'tepe_ayi',
                   'pf_varsayim', 'tepe_kva', 'tepe_kva_p10', 'tepe_kva_p90', 'bos_kva', 'bos_kva_p10', 'bos_kva_p90',
                   'guven', 'kor_nokta', 'tepe_kaynagi', 'v_min_tepe_v', 'v_min_tepe_v_p10', 'v_min_tepe_v_p90',
-                  'p_aksam_207']
+                  'p_aksam_207', 'tepe_saati_2', 'tepe_donemi']
 
 
 # ---------- açık veri: EAC eğrileri, hava ----------
@@ -233,39 +240,58 @@ def sinif_kw(tr):
     return E / 8.76
 
 
-def net_egri(kw, eac, ay, g, dT, egim, carp, panel_kw, ghi, mevsim):
+def net_egri(kw, eac, ay, g, dT, egim, carp, panel_kw, ghi, mevsim, sinif=None):
     """Bir trafonun ayın tipik günü net yükü (288, kW)."""
     out = np.zeros(ADIM)
     for j, a in enumerate(ABONE):
         if kw[j] <= 0:
             continue
-        c = SINIF[a]
+        c = (sinif or SINIF)[a]
         f = 1.0 if mevsim is None else max(SICAKLIK_TABAN, 1 + egim[c][mevsim] * carp * dT)
         out += kw[j] * eac[(c, ay, g)] * f
     return out - panel_kw * ghi / 1000 * PR_GUNES
 
 
-def tarama(kw, panel_kw, eac, kosul, egim, carp=1.0):
+def tarama(kw, panel_kw, eac, kosul, egim, carp=1.0, sinif=None):
     """Yıl taraması: Nisan + yaz ayları + kış ayları, iş günü ve tatil; en büyük net değer. -> (kW, adım, ay)."""
     en = (-math.inf, 0, 0)
+    zarf = np.full(ADIM, -np.inf)
     for m, k in kosul.items():
         mev = None if m == NISAN else ('yaz' if m in YAZ else 'kis')
         for g in ('is', 'tatil'):
-            e = net_egri(kw, eac, m, g, k['dT'], egim, carp, panel_kw, k['ghi'], mev)
+            e = net_egri(kw, eac, m, g, k['dT'], egim, carp, panel_kw, k['ghi'], mev, sinif)
+            zarf = np.maximum(zarf, e)
             i = int(e.argmax())
             if e[i] > en[0]:
                 en = (float(e[i]), i, m)
-    return en
+    return en + (zarf,)
 
 
-def nisan_tepesi(kw, panel_kw, eac, kosul, egim):
+def ikinci_aday(zarf, ana):
+    """Ana tepeden en az IKINCI_ARALIK_SAAT uzakta zarfın en büyüğü; ana tepenin IKINCI_ESIK'i kadar yüksekse adımı, yoksa
+    None. Konutun Temmuz gününde öğleden sonra (16–17) ve gece (23–00) tepeleri neredeyse eşit; hangisinin yılın tepesi
+    olacağı haftanın havasına, panele ve gürültüye bağlı (tek saat yarı yarıya tutar)."""
+    uzak = np.abs((np.arange(ADIM) - ana + ADIM // 2) % ADIM - ADIM // 2) >= IKINCI_ARALIK_SAAT * 12
+    if not uzak.any():
+        return None
+    j = int(np.where(uzak, zarf, -np.inf).argmax())
+    return j if zarf[j] >= IKINCI_ESIK * zarf[ana] else None
+
+
+def donem(adim):
+    s = adim * 5 // 60
+    return 'gece' if s >= 20 or s < 4 else 'sabah' if s < 10 else 'ogle' if s < 14 else 'ogleden_sonra'
+
+
+def nisan_tepesi(kw, panel_kw, eac, kosul, egim, sinif=None):
     k = kosul[NISAN]
-    return max(float(net_egri(kw, eac, NISAN, g, 0.0, egim, 1.0, panel_kw, k['ghi'], None).max()) for g in ('is', 'tatil'))
+    return max(float(net_egri(kw, eac, NISAN, g, 0.0, egim, 1.0, panel_kw, k['ghi'], None, sinif).max())
+               for g in ('is', 'tatil'))
 
 
-def yaz_egrileri(kw, panel_kw, eac, kosul, egim):
+def yaz_egrileri(kw, panel_kw, eac, kosul, egim, sinif=None):
     """Yaz aylarının tipik günleri (iş günü, tatil): {(ay, gün türü): 288}."""
-    return {(m, g): net_egri(kw, eac, m, g, kosul[m]['dT'], egim, 1.0, panel_kw, kosul[m]['ghi'], 'yaz')
+    return {(m, g): net_egri(kw, eac, m, g, kosul[m]['dT'], egim, 1.0, panel_kw, kosul[m]['ghi'], 'yaz', sinif)
             for m in YAZ for g in ('is', 'tatil')}
 
 
@@ -274,7 +300,7 @@ def zaman_coz(z):
     return d.date(), (d.hour * 60 + d.minute) // 5
 
 
-def gun_egrisi(kw, panel_kw, eac, hava, gun, egim):
+def gun_egrisi(kw, panel_kw, eac, hava, gun, egim, sinif=None):
     """Belli bir günün önsel net eğrisi: ayın tipik günü × o günün sıcaklık sapması, o günün ışınımı."""
     m = gun.month
     ort = statistics.fmean(statistics.fmean(hava[d][0]) for d in hava if d.year == gun.year and d.month == m)
@@ -282,7 +308,7 @@ def gun_egrisi(kw, panel_kw, eac, hava, gun, egim):
     mev = 'yaz' if m in YAZ else ('kis' if m in KIS else None)
     g = 'tatil' if gun.weekday() >= 5 else 'is'
     ghi = np.repeat(np.array(hava[gun][1]), ADIM // 24)
-    return net_egri(kw, eac, m, g, (dT if mev == 'yaz' else -dT) if mev else 0.0, egim, 1.0, panel_kw, ghi, mev)
+    return net_egri(kw, eac, m, g, (dT if mev == 'yaz' else -dT) if mev else 0.0, egim, 1.0, panel_kw, ghi, mev, sinif)
 
 
 def kibtek_oku(klasor):
@@ -312,7 +338,7 @@ def en_dusuk_gerilim(ag, V):
     return lo
 
 
-def tepe_payi(kw, eac, egim, kosul, ay, adim, abone_sayisi):
+def tepe_payi(kw, eac, egim, kosul, ay, adim, abone_sayisi, sinif=None):
     """Tepe anında abone başına yük ağırlığı (sınıf sütunu → kW / abone) ve o andaki güneş çarpanı (kW / kWp).
     Gün türü o adımda toplamı büyük olan."""
     mev = None if ay == NISAN else ('yaz' if ay in YAZ else 'kis')
@@ -322,7 +348,7 @@ def tepe_payi(kw, eac, egim, kosul, ay, adim, abone_sayisi):
         for j, a in enumerate(ABONE):
             if kw[j] <= 0 or abone_sayisi[j] <= 0:
                 continue
-            c = SINIF[a]
+            c = (sinif or SINIF)[a]
             f = 1.0 if mev is None else max(SICAKLIK_TABAN, 1 + egim[c][mev] * kosul[ay]['dT'])
             pay[a] = kw[j] * float(eac[(c, ay, g)][adim]) * f / abone_sayisi[j]
         top = sum(pay[a] * abone_sayisi[ABONE.index(a)] for a in pay)
@@ -364,6 +390,18 @@ def aksam_gerilimi(trs, pay, gunes, tepe, p10, p90, rng, srng):
 
 # ---------- şehir ----------
 
+def arketip_aksam(klasor):
+    """{trafo_no: True/False}: öğlen modelinin arketipi akşam tepeli mi (tahmin.csv + arketipler.csv, sablon.py yazar).
+    Dosya yoksa boş (ticari II büyük ticaret eğrisini alır)."""
+    if not ((klasor / 'tahmin.csv').exists() and (klasor / 'arketipler.csv').exists()):
+        print(f'UYARI: {klasor.name}: tahmin.csv / arketipler.csv yok (önce sablon.py); ticari II büyük ticaret eğrisiyle')
+        return {}
+    ad = pd.read_csv(klasor / 'arketipler.csv', encoding='utf-8')[['arketip', 'arketip_adi']].drop_duplicates()
+    ad = dict(zip(ad['arketip'], ad['arketip_adi']))
+    t = pd.read_csv(klasor / 'tahmin.csv', encoding='utf-8')
+    return {r['trafo_no']: str(ad.get(r['arketip'], '')).startswith('aksam_tepeli') for _, r in t.iterrows()}
+
+
 def eszamanlilik(n, c):
     """Eşzamanlılık çarpanı (ADR-0018 m. 5): Velander biçimi 1 + c ÷ √n (n = konut abonesi eşdeğeri). Can'ın B-Y2'si
     iki bileşenli (taban √N, klima ~doğrusal) düzeltmeyi buraya getirir."""
@@ -398,11 +436,14 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
     y = yuk[yuk['trafo_no'].isin(ids)].groupby('trafo_no')['net_kw'].max()          # model yalnız bunu görür
 
     KW = sinif_kw(tr)
+    aksam = arketip_aksam(klasor)
+    snf = [dict(SINIF, abone_ticari2='konut') if aksam.get(t) and tr['abone_ticari2'].iloc[i] > 0 else None
+           for i, t in enumerate(tr['trafo_no'])]
     panel = tr['panel_kw'].fillna(0).to_numpy(float)
     n_esd = KW.sum(1) * 8.76 / KONUT_MWH            # enerji, konut abonesi eşdeğeri (Velander'in N·a'sı)
     R = {}
     for i in secilen:
-        p = nisan_tepesi(KW[i], panel[i], eac, kosul, egim)
+        p = nisan_tepesi(KW[i], panel[i], eac, kosul, egim, snf[i])
         R[tr['trafo_no'].iloc[i]] = float(y[tr['trafo_no'].iloc[i]]) / max(p, 0.1)
     logR = np.log(list(R.values()))
     R_ort = float(np.exp(logR.mean()))
@@ -419,9 +460,9 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
         i = sira[k['trafo_no']]
         if isinstance(k['zaman'], str) and k['zaman']:
             gun, s = zaman_coz(k['zaman'])
-            p = float(gun_egrisi(KW[i], panel[i], eac, hava, gun, egim)[s])
+            p = float(gun_egrisi(KW[i], panel[i], eac, hava, gun, egim, snf[i])[s])
         else:                                   # MD: sezonun en yükseği, zamanı yok
-            p = max(float(e.max()) for e in yaz_egrileri(KW[i], panel[i], eac, kosul_yil, egim).values())
+            p = max(float(e.max()) for e in yaz_egrileri(KW[i], panel[i], eac, kosul_yil, egim, snf[i]).values())
         RK[k['trafo_no']] = float(k['tepe_kw']) / max(p, 0.1)
         kayit_turu[k['trafo_no']] = 'kayit_md' if k['kaynak'] == 'md_kaydi' else 'kayit_etut'
     # Popülasyon R'si tabakalı ölçülülerden kalır: Kıb-Tek kayıtları temsilî değil (MD göstergesi çoğunlukla büyük yer
@@ -458,10 +499,11 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
             uye = [u for u in str(f['trafolar']).split(';') if u in sira]
             if isinstance(f['zaman'], str) and f['zaman']:
                 gun, s = zaman_coz(f['zaman'])
-                parca = {u: r_tr[u] * float(gun_egrisi(KW[sira[u]], panel[sira[u]], eac, hava, gun, egim)[s]) for u in uye}
+                parca = {u: r_tr[u] * float(gun_egrisi(KW[sira[u]], panel[sira[u]], eac, hava, gun, egim, snf[sira[u]])[s])
+                         for u in uye}
                 tah = sum(parca.values())
             else:
-                eg = {u: yaz_egrileri(KW[sira[u]], panel[sira[u]], eac, kosul_yil, egim) for u in uye}
+                eg = {u: yaz_egrileri(KW[sira[u]], panel[sira[u]], eac, kosul_yil, egim, snf[sira[u]]) for u in uye}
                 anah = max(eg[uye[0]], key=lambda a: sum(r_tr[u] * eg[u][a] for u in uye).max())
                 top = sum(r_tr[u] * eg[u][anah] for u in uye)
                 s = int(top.argmax())
@@ -484,9 +526,10 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
     satirlar = []
     lo_k, hi_k = BANT_LOG
     for i, t in enumerate(tr['trafo_no']):
-        ham, adim, ay = tarama(KW[i], panel[i], eac, kosul, egim)
-        ham_lo = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[0])[0]
-        ham_hi = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[1])[0]
+        ham, adim, ay, zarf = tarama(KW[i], panel[i], eac, kosul, egim, 1.0, snf[i])
+        ham_lo = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[0], snf[i])[0]
+        ham_hi = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[1], snf[i])[0]
+        adim2 = ikinci_aday(zarf, adim)
         tepe = max(r_tr[t] * fider_carpan.get(t, 1.0) * ham, 0.0)
         s_lo = math.log(max(ham_lo, 1e-6) / max(ham, 1e-6))
         s_hi = math.log(max(ham_hi, 1e-6) / max(ham, 1e-6))
@@ -501,7 +544,7 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
         p90 = tepe * math.exp(math.sqrt(b ** 2 + max(s_hi, 0.0) ** 2 + e_hi ** 2))
         kva = float(tr['kva'].iloc[i])
         abone_sayisi = tr[ABONE].iloc[i].fillna(0).to_numpy(float)
-        pay, gunes = tepe_payi(KW[i], eac, egim, kosul, ay, adim, abone_sayisi)
+        pay, gunes = tepe_payi(KW[i], eac, egim, kosul, ay, adim, abone_sayisi, snf[i])
         vs = sorted(aksam_gerilimi(tr.iloc[i].to_dict(), pay, gunes, tepe, p10, p90,
                                    random.Random(f'aksam-{sehir}-{t}'), random.Random(f'aksam-sapma-{sehir}-{t}')))
         satirlar.append(dict(
@@ -512,7 +555,8 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
             guven='on', kor_nokta=KOR_NOKTA, tepe_kaynagi=kaynak[t] + ('+fider' if t in fider_carpan else ''),
             v_min_tepe_v=round(float(np.median(vs)), 1), v_min_tepe_v_p10=round(float(np.quantile(vs, 0.1)), 1),
             v_min_tepe_v_p90=round(float(np.quantile(vs, 0.9)), 1),
-            p_aksam_207=round(sum(v < V_ALT for v in vs) / len(vs), 3)))
+            p_aksam_207=round(sum(v < V_ALT for v in vs) / len(vs), 3),
+            tepe_saati_2='' if adim2 is None else f'{adim2 * 5 // 60:02d}:{adim2 * 5 % 60:02d}', tepe_donemi=donem(adim)))
     with open(klasor / 'tepe.csv', 'w', encoding='utf-8', newline='') as fh:
         w = csv.DictWriter(fh, fieldnames=TEPE_SUTUNLARI, lineterminator='\n')
         w.writeheader()
@@ -524,6 +568,7 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
                 egim={c: {k: round(v, 4) for k, v in e.items()} for c, e in egim.items()},
                 dT={m: round(k['dT'], 1) for m, k in kosul.items()}, bant_log=[lo_k, hi_k], egim_aralik=list(EGIM_ARALIK),
                 pr_gunes=PR_GUNES, pf=PF, kor_nokta=KOR_NOKTA,
+                ticari2_konut_egrisi=[t for i, t in enumerate(tr['trafo_no']) if snf[i] is not None],
                 kibtek=dict(kayit=len(RK), md=sum(v == 'kayit_md' for v in kayit_turu.values()),
                             etut=sum(v == 'kayit_etut' for v in kayit_turu.values()),
                             R_kayit={t: round(v, 3) for t, v in RK.items()}, populasyon_R=round(R_pop, 3),
