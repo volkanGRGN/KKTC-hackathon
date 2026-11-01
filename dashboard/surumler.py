@@ -4,9 +4,11 @@ Kod kopyalanmaz: her sürüm git tarihçesinden olduğu gibi alınır (git archi
 Bu modül bilerek canli.py'yi en üstte içe aktarmaz: ayrı süreç önce CANLI_SRC'yi ayarlamalı, sonra canli.py'yi yüklemeli.
 """
 
+import hashlib
 import io
 import multiprocessing as mp
 import os
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -58,20 +60,33 @@ def kullanilabilir(s):
         return False, "bu bilgisayarda git ya da o commit yok"
 
 
+def _veri_bagla(hedef):
+    """hedef/data bu depo kopyasının data klasörünü göstersin; göstermiyorsa yenilenir (TEST, KARAR 10:34)."""
+    bag, dogru = hedef / "data", (KOK / "data").resolve()
+    if bag.is_symlink() and bag.resolve() == dogru:
+        return
+    if bag.is_symlink() or bag.exists():
+        bag.unlink()
+    bag.symlink_to(dogru, target_is_directory=True)
+
+
 def klasor(s):
-    """Sürümün src/'si geçici klasörde; ilk çağrıda çıkarılır. Veri klasörü bağlantı (eski kod KOK/data okur)."""
+    """Sürümün src/'si geçici klasörde; ilk çağrıda çıkarılır. Klasör her depo kopyasına ayrı (commit + kopya yolu):
+    eski kod KOK/data okur, başka bir kopyanın verisine bağlanmasın. Veri bağlantısı her çağrıda doğrulanır."""
     tam = _git("rev-parse", f"{s['commit']}^{{commit}}").decode().strip()
-    hedef = ONBELLEK / tam[:12]
-    if (hedef / "src" / "sablon.py").exists():
-        return hedef
+    kopya = hashlib.sha1(str(KOK.resolve()).encode("utf-8")).hexdigest()[:8]
+    hedef = ONBELLEK / f"{tam[:12]}-{kopya}"
     with _kilit:
-        gecici = ONBELLEK / f".{tam[:12]}-{os.getpid()}"
-        gecici.mkdir(parents=True, exist_ok=True)
-        with tarfile.open(fileobj=io.BytesIO(_git("archive", tam, "src")), mode="r:") as arsiv:
-            arsiv.extractall(gecici, filter="data")
-        (gecici / "data").symlink_to(KOK / "data", target_is_directory=True)
         if not (hedef / "src" / "sablon.py").exists():
-            gecici.rename(hedef)
+            gecici = ONBELLEK / f".{tam[:12]}-{kopya}-{os.getpid()}"
+            gecici.mkdir(parents=True, exist_ok=True)
+            with tarfile.open(fileobj=io.BytesIO(_git("archive", tam, "src")), mode="r:") as arsiv:
+                arsiv.extractall(gecici, filter="data")
+            if not (hedef / "src" / "sablon.py").exists():
+                gecici.rename(hedef)
+            else:  # başka bir süreç önce çıkardı
+                shutil.rmtree(gecici, ignore_errors=True)
+        _veri_bagla(hedef)
     return hedef
 
 
