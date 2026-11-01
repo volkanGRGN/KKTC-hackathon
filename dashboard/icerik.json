@@ -1,6 +1,6 @@
 {
   "aciklama": "Dashboard'un kod dışı içeriği: proje kimliği, resmi rakamlar, sözlük. Yeni sonuç gelince yalnız bu dosya değişir, app/dashboard.py değişmez. Her rakamın katmanı (panel / yuk / sorun), veri türü ve kaynağı yazılı; kaynak depodaki dosyanın yolu.",
-  "guncellendi": "1 Kasım 2026, 10:03",
+  "guncellendi": "1 Kasım 2026, 10:25",
   "kimlik": {
     "ad": "Trafo Görünürlük Haritası",
     "calisma_adi": "Trafo Şablonu",
@@ -165,43 +165,43 @@
     },
     {
       "katman": "yuk",
-      "deger": "%5,8",
+      "deger": "%11,4",
       "baslik": "yılın tepesi hatası, deneme şehirlerinde",
-      "aciklama": "Ortanca %5,8, en kötü onda birlik dilimde %15,1. Deneme şehri iyimser: üretici de aynı açık veriyi kullanıyor.",
+      "aciklama": "Ortanca %11,4, en kötü onda birlik dilimde %23,9; tahmin gerçeğin ortanca %11 üstünde (güvenli yön), gerçek hiçbir trafoda bandın üstüne çıkmadı. Yaz eğimi 20 Kıbrıs evinden (%6,5/°C); deneme şehri bunu sınayamaz, çünkü üretici daha düşük bir eğimle kuruldu.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
+      "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-tepe-saati.md"
+      "kaynak": "docs/log/2026-11-01-can-eszamanlilik.md"
     },
     {
       "katman": "yuk",
       "deger": "2 / 2",
       "baslik": "akşam 207 V altına inen trafo yakalandı",
-      "aciklama": "\"Yeterli\" dediğimiz 233 trafonun hiçbiri gerçekte 207 V altına inmedi. Ama uyarıların çoğu gereksiz: 47 uyarının 2'si gerçek.",
+      "aciklama": "\"Yeterli\" dediğimiz 211 trafonun hiçbiri gerçekte 207 V altına inmedi. Uyarıların çoğu gereksiz: 69 uyarının 2'si gerçek.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo",
+      "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "gecti",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-tepe-saati.md"
+      "kaynak": "docs/log/2026-11-01-can-eszamanlilik.md"
     },
     {
       "katman": "yuk",
-      "deger": "16 / 16",
+      "deger": "12 / 12",
       "baslik": "%80'den dolu trafo yakalandı",
-      "aciklama": "Temkinli uç dolu trafoyu kaçırmıyor, ama 87 uyarının yalnız 16'sı gerçek (her 5–6 uyarıdan 1'i). Harita \"önce bak\" listesi verir.",
+      "aciklama": "Temkinli uç dolu trafoyu kaçırmıyor, ama 124 uyarının yalnız 12'si gerçek (her 10 uyarıdan 1'i). Harita \"önce bak\" listesi verir.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 31–40, üretici 1.5, ölçülmeyen 280 trafo",
+      "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "uyari",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md"
+      "kaynak": "docs/log/2026-11-01-can-eszamanlilik.md"
     },
     {
       "katman": "yuk",
-      "deger": "%52",
+      "deger": "%47",
       "baslik": "tepe saati, bir saat içinde isabet",
-      "aciklama": "İki aday saatten biri %60 tutuyor; konutta öğleden sonra ve gece tepeleri neredeyse eşit.",
+      "aciklama": "İki aday saatten biri %59 tutuyor; konutta öğleden sonra ve gece tepeleri neredeyse eşit.",
       "veri": "farazi",
-      "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
+      "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
       "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-volkan-yuk-tepe-saati.md"
+      "kaynak": "docs/log/2026-11-01-can-eszamanlilik.md"
     },
     {
       "katman": "yuk",

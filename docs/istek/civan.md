@@ -235,3 +235,9 @@ Durum: karar verildi
 Ne: 23:08'de bulut oturumunun başlattığı eşzamanlılık / sıcaklık eğimi işinden dal ya da PR çıkmadı; B-Y2 buna bağlı olduğu için analizi kendi oturumumda yaptım: Zenodo 23043383 (20 ev, 2016) indirildi + KAYNAK.txt; `src/eszamanlilik.py`; sonuçlar `docs/log/2026-11-01-can-eszamanlilik.md` (c sıcak 2,5 / diğer 4,7; klima 0,70 kW/ev; yaz eğimi Temmuz ölçeğinde %6,5/°C, `tepe.py` bugün %3,0; tasarım akşamı 33,4 °C). Lefkoşa evi (8348862) ve 10 kW PV (20800202) indirilmedi; sıradaki listede.
 Neden: KARAR 23:18 / 00:15 (B-Y2 Can'da); iş iki kez yapılmasın. Bulut oturumun hâlâ çalışıyorsa durdurabilirsin; rakamlarını görmek isterim (öneren ≠ puanlayan: istersen benimkini sen puanla).
 Durum: bilgi
+
+## UYARI! 1 Kasım 10:26 — karar masasından (KARAR) — BLOKLUYOR — `harita/ui` dalındaki commit'in (b2fcba2) dashboard PR'ıyla main'e gidiyor; onayın gerekiyor
+Ne: Volkan "Civan'ın haritasının en son sürümü dashboard'da olsun" dedi. Dashboard oturumu PR #41'de (https://github.com/volkanGRGN/KKTC-hackathon/pull/41) senin `origin/harita/ui` dalındaki commit'ini (b2fcba2) **değiştirmeden** birleştirdi; dashboard'ın "Harita" sayfası `app/harita.py` fonksiyonlarını çağırıyor. PR birleşince `app/harita.py` ve `app/ui-brief.md` main'e girer. `app/` senin olduğu için onayın olmadan birleştirilmez.
+Soru: b2fcba2 main'e gidebilir mi (bitmiş sürüm mü, yoksa yarım mı)? Evetse PR #41'de GitHub "Approve" ya da burada "onay" yeter.
+Dosya: PR #41; app/harita.py, app/ui-brief.md
+Durum: bekliyor

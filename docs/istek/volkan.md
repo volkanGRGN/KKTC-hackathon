@@ -1359,7 +1359,7 @@ Ne: (1) **PR #39 (`yuk/b-y2`, `tepe.py`):** varsayılan `--model b-y2` = konut y
 (2) **Ayrı bulgu (sablon.py, B-Y2'den bağımsız):** hiç bakılmamış 41–50'de öğlen en düşük yük maddesi KALDI: ortanca %12,4, P90 %30,1 (eşik %30; en kötü sehir-048 %15,3 / %37,6); arketip %80,4 geçti. Windows koşumu; Mac koşumuyla teyit gerekir.
 Dosya: PR #39 (https://github.com/volkanGRGN/KKTC-hackathon/pull/39); docs/log/2026-11-01-can-eszamanlilik.md
 Neden: KARAR 09:58 m. 3; öneren ≠ puanlayan (BUILD 1 inceler, TEST koşar).
-Durum: bekliyor
+Durum: yapıldı 10:26 — karar masası Mac koşusu birebir, PR #39 birleşti (5948496); 41–50 öğlen KALDI Mac'te de doğrulandı (KARAR 10:26)
 
 ## UYARI! 1 Kasım (12:00 sonrası) — Can'dan — sıradaki iş: elimdeki yedi işten hangisi önce?
 Ne: can.md'deki kararların (09:33, 09:43, 09:46, 09:58) bende açık kalanları; yapılanlar: araçlarla "öncesi" ölçümü (ffa1035), maliyet tablosu, sunum rakamlarının 1.5'e çevrilmesi (73456b2), yedek rakam listesi.
@@ -1382,3 +1382,21 @@ Süre: benzetim betiği eski / yeni sırayla 3'er koşu 3,54–4,19 ↔ 3,73–4
 Dosya: PR #40 (https://github.com/volkanGRGN/KKTC-hackathon/pull/40)
 Neden: KARAR 09:5x, clean review madde 1.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 10:22 — (BUILD 2 — panel) — Temizlik PR #42'de: kopya çekiliş ve faz3 satırları tek yerde; çıktılar önce / sonra bayt bayt aynı — test edin
+Ne: KARAR 09:5x (Can'ın kod incelemesi): (1) `olcum_sirasi.py`'nin kopya çekilişi kalktı, `kac_ev_olasilik.py`'deki ortak yardımcılarla (`trafo_satiri`, `yuk_bandi`, `cekilis_ozeti`, `renk_ver`; `trafo_cek`'e isteğe bağlı `v0` / `vrng` / `yuk` kancaları); (2) `bilgi_degeri.py` ↔ `pv_acilma.py` ortak okuma (`sinav._csv`), renk, faz3 satırları ve S0 sınaması tek yerde, kırmızı sınırı `sinav.KIRMIZI_ASAN_MIN`; (3) MWH sabitine [Hesap]. Sınama (önce 26a829e ↔ sonra, aynı veri): `kac_ev.csv` üretici 1.5 şehirleri 1–10, 31–40, 41–50 **30/30 bayt bayt aynı**; `olcum_sirasi` 1–10 / 31–40 / 41–50 metin + json **6/6 aynı**; `bilgi_degeri` ve `pv_acilma` 1–10 metin + json aynı. Ana dalda bu dosyalara dokunan değişiklik yok; açık PR'larla dosya çakışması yok.
+Not: (a) `sinav.py`'de faz3 tanımları ayrı fonksiyon değil (`faz3()` içinde); alınabilen yalnız sabitler ve okuyucu. (b) `bilgi_degeri` / `pv_acilma` rengi ADR-0019 öncesi güven şartlı kuralla veriyor (çıktılar birebir kalsın diye korundu); içlerindeki S0 sınaması bu yüzden tutmuyor (1–10'da 53 trafo; öncekinde de aynı). Yeni kurala çevirmek ayrı küçük iş, çıktıları değiştirir.
+Dosya: PR #42 (https://github.com/volkanGRGN/KKTC-hackathon/pull/42)
+Neden: KARAR 09:5x.
+Durum: TEST'e gitti 10:27 (karar masası); birleştirme merge commit'le (squash yok, dal kalır); (b) bilgi_degeri / pv_acilma'yı ADR-0019 kuralına çevirmek sunumdan sonra
+
+## KARAR 10:26 — PR #39 (B-Y2, Can) birleşti; tepe modeli varsayılanı Kıbrıs evlerinin yaz eğimi; dashboard yük kartları 41–50'ye; 41–50 öğlen maddesi kıl payı KALDI
+Karar: Volkan: "Can'ın dediğini test et." Karar masası Mac koşusu (main ile birleşik; üretici 1.5 şehirleri 41–50 sıfırdan üretildi): **hiç bakılmamış 41–50'de tepe hatası %11,4 / P90 %23,9, %80 bant %95,0, işaretli sapma +%11,1 (konut +%13,6; güvenli yön), gerçek P90 üstü 0/280; %80 dolu 12/12 yakalanır (124 uyarı, her 10'da 1 gerçek); akşam gerilimi "yeterli" 211'de 0 yanlış, 207 V altı 2/2 (69 uyarı)**; 31–40 (bilgi) %10,1 / %19,9; İspanya Mayıs tepesi değişmedi (%15,4 / %36,1) [Hesap: karar masası 10:26]. Can'ın rakamlarıyla birebir → **#39 birleşti** (5948496).
+- **Varsayılan model artık B-Y2** (konut yaz eğimi 20 Kıbrıs evinden %6,5/°C; eski %3,0 EAC'den). Farazi şehirde hata %5,8 → %11 görünür, çünkü üretici eski eğimle kuruldu: tahmin bilerek yukarıda (gerçek Kıbrıs evleri daha duyarlı). Bedel: daha çok uyarı. Üretici β çapası (üretici 1.6, BUILD 1) sunumdan sonra; o zaman farazi hata yeniden düşer. `--model on` eski model olarak duruyor.
+- **Dashboard yük kartları** B-Y2 ve 41–50'ye çevrildi (626ea6b; AppTest hata yok): tepe %11,4 / %23,9, 12/12 (124 uyarı), akşam 2/2 (211 yeterli, 0 yanlış), saat %47 (iki adaydan biri %59).
+- **Ayrı bulgu (sablon.py, B-Y2'den bağımsız; Can'ın Windows koşusu Mac'te birebir):** 41–50'de öğlen en düşük yük maddesi **KALDI**: ortanca %12,4, P90 %30,1 (eşik %30; en kötü sehir-048 %15,3 / %37,6); arketip %80,4 geçti. 31–40'ta %11,3 / %28,1 geçiyordu. Kıl payı; eşik oynatılmaz. Dashboard'daki öğlen kartı 31–40 rakamı olarak kalır, kapsamı yazılı; BUILD 1 sunumdan sonra sehir-048'e bakar.
+Durum: bilgi
+
+## KARAR 10:26 — PR #41 (dashboard: canlı tahmin, Civan'ın haritası, model sürümleri): TEST'e; cevap anahtarı yalnız puanlamada; Civan'ın onayı şart
+Karar: (1) **TEST koşar:** bütün sayfalar hata 0; canlı tahmin resmi 12 ölçümle main'deki `tahmin.csv` / `kac_ev.csv` / `tepe.csv` ile birebir mi (B-Y2 artık varsayılan, #39 birleşti; PR o hâliyle güncellenmeli); model sürümü seçiminin (git archive + ayrı süreç) depoyu kirletmediği. (2) **"Gerçekle kıyas" cevap anahtarını okuyabilir:** yalnız deneme şehrinde ve yalnız puanlama için; modele giden hiçbir yola girmediği kodda gösterilir (TEST kontrol eder); sayfada açık etiket: "gerçekle kıyas — yalnız deneme şehrinde, model görmez". Sözleşmenin "harita okumaz" kuralının amacı sızıntıyı önlemek; gösterim için okumak serbest. (3) **`app/harita.py` / `app/ui-brief.md` main'e Civan'ın onayıyla** (civan.md UYARI 10:26, BLOKLUYOR): Civan'ın kendi commit'i (b2fcba2), değiştirilmemiş; ama `app/` onun ve dal yarım olabilir. Onay gelmezse PR haritasız (harita sayfası sonraya) birleşebilir.
+Durum: bekliyor (TEST; Civan)

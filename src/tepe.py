@@ -10,14 +10,19 @@ Yöntem (ADR-0018 m. 1–4, 6; BUILD 1):
   2 Ölçülü trafolar (sablon.py'nin tabakalı seçtiği 12'si; bugün yalnız Nisan ölçümü var) önseli ölçüye bağlar:
     R = ölçülen Nisan net tepesi ÷ önselin Nisan tepesi. Ölçülmeyen trafo R'lerin geometrik ortalamasını alır, ölçülü kendi R'sini.
     Eşzamanlılık varsayılanı (ADR-0018 m. 5, Velander biçimi N·a + b·√(N·a)): R = R0 × (1 + c ÷ √n), n = trafonun enerjisi
-    konut abonesi cinsinden; c ölçülülerin Nisan R'lerinden (CF(N) ölçülü trafolardan), belirsizliği banda. Can'ın B-Y2'si
-    (iki bileşen: taban √N, klima ~doğrusal) `eszamanlilik`'i değiştirir.
+    konut abonesi cinsinden; c ölçülülerin Nisan R'lerinden (CF(N) ölçülü trafolardan), belirsizliği banda.
+    B-Y2 deneme (`--model b-y2-esz`, varsayılan değil): c 20 Kıbrıs evinin verisinden, yalnız konut payına; Nisan ölçümü R0'a
+    diğer günlerin c'siyle bağlanır, yaz tepesi sıcak akşamların c'siyle (yaz eğrisi × f_sıcak ÷ f_diğer). 31–40'ta konut dışı
+    tepeyi %18–26 az gösterdi (R0 konut ağırlıklı ölçülülerden düşüyor; üretici küçük-N fazlasını kurmuyor, 20 evden 100 eve
+    taşıma da veri dışı) → pilot verisi gelene kadar kapalı (günlük docs/log/2026-11-01-can-eszamanlilik.md).
   3 Yıl taraması: Haziran–Eylül ve Ocak–Şubat'ın her ayı (ve Nisan) için ayın tipik günü × sıcaklık terimi
     (1 ± eğim × ΔT; ΔT = hava yılında ayın en sıcak / en soğuk gününün ay ortalamasından farkı; tasarım kipinde Lefkoşa
     2015–2025 serisinden 10 yılda bir uç günün iklim ortalamasından farkı),
     iş günü ve tatil; en büyük net değer tepe, saati ve ayı (tepe anı saate kilitlenmez; ADR-0014).
     Eğim (ADR-0018 m. 4): sınıfın EAC ay tipik günü tepesinin Lefkoşa ay ortalama sıcaklığına regresyonu (yaz: Nisan–Ağustos,
     kış: Kasım–Mart), Temmuz / Ocak tepesine göre [Hesap: EAC 2022 × Open-Meteo 2023–2025 ay ortalaması; yıllar farklı, Yorum].
+    B-Y2 (varsayılan `--model b-y2`): konutun yaz eğimi 20 Kıbrıs evinden (Temmuz ölçeğinde 0,065/°C; EAC'den çıkan 0,030
+    sıcak günü az gösteriyordu). `--model on`: eski ön sürüm (bütün eğimler EAC'den), kıyas için.
   4 Bant (ADR-0018 m. 2): İspanya Mayıs tepesinin bir-dışarıda log artıkları (edp_test.py --hedef tepe; BANT_LOG, K_TEPE)
     ⊕ eğim belirsizliği (eğim × EGIM_ARALIK ile yeniden tarama). Farazi şehre uydurulmaz. Haritanın "yük için boş" sayısı
     P90 tepeden (`bos_kva_p10`; ADR-0018 m. 6).
@@ -93,6 +98,18 @@ TASARIM_NICEL = 0.9
 # yıllık enerjisi. c ölçülü trafolardan (ızgara 0–VELANDER_C_UST); bant c = 0 ile max(2ĉ; VELANDER_C_BANT) arası [Yorum].
 KONUT_MWH = 648494 / 175577
 VELANDER_C_UST, VELANDER_C_BANT = 3.0, 0.5
+# B-Y2 (Can, 1 Kasım; src/eszamanlilik.py, docs/log/2026-11-01-can-eszamanlilik.md) [Hesap: 20 Kıbrıs konut prosumer'ı, 2016,
+# Zenodo 23043383, net yük; Lefkoşa sıcaklığı]: ev başına tepe = a (1 + c ÷ √N), N = ev; sıcak akşam (19–22 ≥ yılın P90'ı)
+# c 2,51, diğer günler 4,74. n burada enerji cinsinden konut eşdeğeri; 20 evin brüt ortancası 7,21 MWh/yıl →
+# c_n = c_ev × √(7,21 ÷ KONUT_MWH). c belirsizliği ×0,5–×1,5 [Yorum; 20 ev]. Konut yaz eğimi Temmuz ortalama akşamındaki
+# tepeye göre °C başına 0,065 (bootstrap P10–P90 0,056–0,075); EAC'den çıkan 0,030'un yerine. Uydurma ölçülü trafolardan
+# değil: farazi şehir bu sayıları sınayamaz (üretici kendi β'sıyla kuruyor; ADR-0008) [Yorum]. Varsayılan 'b-y2' yalnız eğimi
+# alır; c'yi 'b-y2-esz' (deneme) kullanır.
+MODEL = 'b-y2'                         # 'on': eski ön sürüm (eğim EAC'den); 'b-y2-esz': + ev çeşitliliği (deneme)
+ESZ_C_EV = {'sicak': 2.51, 'diger': 4.74}
+ESZ_EV_MWH = 7.21
+ESZ_C_ARALIK = (0.5, 1.5)
+KONUT_YAZ_EGIM = 0.065
 # Bant tabanı (ADR-0018 m. 2): İspanya Mayıs tepesi (EDP Oviedo 2018, 28 trafo), girdi c (fatura), tabakalı 10 + 15 ölçülü,
 # bir-dışarıda log artıkları ln(gerçek ÷ tahmin): P10 −0,218, ortanca −0,041, P90 +0,420 (660 satır) [Hesap: edp_test.py
 # --hedef tepe --kalibrasyonsuz]. Sağa çarpık: gerçek tepe tahminin %52 üstüne çıkabiliyor; bant simetrik yapılmaz (güvenli
@@ -182,6 +199,8 @@ def egimler(eac, hava):
         b_yaz = statistics.linear_regression([Tay[m] for m in YAZ_EGIM_AYLARI], [tep[m] for m in YAZ_EGIM_AYLARI]).slope
         b_kis = statistics.linear_regression([Tay[m] for m in KIS_EGIM_AYLARI], [tep[m] for m in KIS_EGIM_AYLARI]).slope
         out[c] = dict(yaz=max(0.0, b_yaz / tep[7]), kis=max(0.0, -b_kis / tep[1]))
+    if MODEL in ('b-y2', 'b-y2-esz'):
+        out['konut']['yaz'] = KONUT_YAZ_EGIM
     return out, Tay
 
 
@@ -252,14 +271,17 @@ def net_egri(kw, eac, ay, g, dT, egim, carp, panel_kw, ghi, mevsim, sinif=None):
     return out - panel_kw * ghi / 1000 * PR_GUNES
 
 
-def tarama(kw, panel_kw, eac, kosul, egim, carp=1.0, sinif=None):
-    """Yıl taraması: Nisan + yaz ayları + kış ayları, iş günü ve tatil; en büyük net değer. -> (kW, adım, ay)."""
+def tarama(kw, panel_kw, eac, kosul, egim, carp=1.0, sinif=None, yaz_carp=1.0):
+    """Yıl taraması: Nisan + yaz ayları + kış ayları, iş günü ve tatil; en büyük net değer. yaz_carp: yaz aylarının eğrisine
+    eşzamanlılık oranı (B-Y2, yaz_orani). -> (kW, adım, ay, zarf)."""
     en = (-math.inf, 0, 0)
     zarf = np.full(ADIM, -np.inf)
     for m, k in kosul.items():
         mev = None if m == NISAN else ('yaz' if m in YAZ else 'kis')
         for g in ('is', 'tatil'):
             e = net_egri(kw, eac, m, g, k['dT'], egim, carp, panel_kw, k['ghi'], mev, sinif)
+            if mev == 'yaz':
+                e = e * yaz_carp
             zarf = np.maximum(zarf, e)
             i = int(e.argmax())
             if e[i] > en[0]:
@@ -403,9 +425,28 @@ def arketip_aksam(klasor):
 
 
 def eszamanlilik(n, c):
-    """Eşzamanlılık çarpanı (ADR-0018 m. 5): Velander biçimi 1 + c ÷ √n (n = konut abonesi eşdeğeri). Can'ın B-Y2'si
-    iki bileşenli (taban √N, klima ~doğrusal) düzeltmeyi buraya getirir."""
+    """Eşzamanlılık çarpanı (ADR-0018 m. 5): Velander biçimi 1 + c ÷ √n (n = konut abonesi eşdeğeri)."""
     return 1 + c / np.sqrt(np.maximum(np.asarray(n, float), 1.0))
+
+
+def esz_c(tur):
+    """B-Y2: 20 evin c'si (ev başına) → n'nin ölçeğine (enerji cinsinden konut eşdeğeri)."""
+    return ESZ_C_EV[tur] * math.sqrt(ESZ_EV_MWH / KONUT_MWH)
+
+
+def yaz_orani(carp, c_diger):
+    """B-Y2: Nisan'a (diğer günlerin c'siyle) bağlanmış R'yi yaz tepesine taşır: f_sıcak ÷ f_diğer (carp: c → trafonun
+    eşzamanlılık çarpanı); sıcak c'si diğer c'yle aynı oranda (bant uçlarında da). Yalnız `--model b-y2-esz`; yoksa 1."""
+    if MODEL != 'b-y2-esz':
+        return 1.0
+    return carp(c_diger * ESZ_C_EV['sicak'] / ESZ_C_EV['diger']) / carp(c_diger)
+
+
+def sabit_c(R, carp, c):
+    """B-Y2: c sabit (veriden); R0 ölçülülerin Nisan R'lerinden: ln R0 = ort(ln R − ln f(c)); carp: {trafo: c → çarpan}.
+    -> (c, R0 fonksiyonu)."""
+    lr = np.log(np.array(list(R.values())))
+    return c, lambda c_: float(np.exp((lr - np.log([carp[t](c_) for t in R])).mean()))
 
 
 def velander_uydur(R, n):
@@ -441,14 +482,29 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
            for i, t in enumerate(tr['trafo_no'])]
     panel = tr['panel_kw'].fillna(0).to_numpy(float)
     n_esd = KW.sum(1) * 8.76 / KONUT_MWH            # enerji, konut abonesi eşdeğeri (Velander'in N·a'sı)
+    # B-Y2: ev çeşitliliği (20 evin verisi) yalnız konut payına: tek sayaçlı otelde, çarşıda, sanayide ev çeşitliliği yok;
+    # bütün enerjiye uygulanınca 31–40'ta büyük ticari / otel / sanayi tepesi %24–28 az çıktı (güvensiz yön). Pay = konut
+    # enerji payı [Yorum: tepe anındaki pay yerine].
+    pay_k = np.divide(KW[:, 0], KW.sum(1), out=np.zeros(len(KW)), where=KW.sum(1) > 0)
+    n_k = KW[:, 0] * 8.76 / KONUT_MWH
+
+    def carpan(i, c):
+        if MODEL != 'b-y2-esz':
+            return float(eszamanlilik(n_esd[i], c))
+        return float(pay_k[i] * eszamanlilik(n_k[i], c) + 1 - pay_k[i])
     R = {}
     for i in secilen:
         p = nisan_tepesi(KW[i], panel[i], eac, kosul, egim, snf[i])
         R[tr['trafo_no'].iloc[i]] = float(y[tr['trafo_no'].iloc[i]]) / max(p, 0.1)
     logR = np.log(list(R.values()))
     R_ort = float(np.exp(logR.mean()))
-    c_hat, R0 = velander_uydur(R, {t: n_esd[secilen[j]] for j, t in enumerate(R)})
-    c_bant = (0.0, max(2 * c_hat, VELANDER_C_BANT))
+    n_olc = {t: n_esd[secilen[j]] for j, t in enumerate(R)}
+    if MODEL == 'b-y2-esz':
+        c_hat, R0 = sabit_c(R, {t: (lambda c, i=secilen[j]: carpan(i, c)) for j, t in enumerate(R)}, esz_c('diger'))
+        c_bant = tuple(c_hat * k for k in ESZ_C_ARALIK)
+    else:
+        c_hat, R0 = velander_uydur(R, n_olc)
+        c_bant = (0.0, max(2 * c_hat, VELANDER_C_BANT))
     # bir-dışarıda (bilgi): ölçülü trafonun Nisan tepesi öbürlerinin R'siyle
     loo = [float(np.log(R[t]) - (logR.sum() - np.log(R[t])) / (len(logR) - 1)) for t in R]
 
@@ -490,7 +546,7 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
         elif t in R:
             r_tr[t], kaynak[t] = R[t], 'olcum_nisan'
         else:
-            r_tr[t], kaynak[t] = R0(c_hat) * float(eszamanlilik(n_esd[i], c_hat)), 'model'
+            r_tr[t], kaynak[t] = R0(c_hat) * carpan(i, c_hat), 'model'
 
     # Fider mutabakatı (aşağıdan yukarı ↔ OG kaydı); isteğe bağlı yukarıdan aşağı düzeltme
     fider_rapor, fider_carpan = [], {}
@@ -526,9 +582,12 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
     satirlar = []
     lo_k, hi_k = BANT_LOG
     for i, t in enumerate(tr['trafo_no']):
-        ham, adim, ay, zarf = tarama(KW[i], panel[i], eac, kosul, egim, 1.0, snf[i])
-        ham_lo = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[0], snf[i])[0]
-        ham_hi = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[1], snf[i])[0]
+        # B-Y2: Nisan seviyesindeki R (model ve Nisan ölçümü) yaz aylarında sıcak akşam eşzamanlılığına taşınır; Kıb-Tek
+        # kaydı zaten yaz tepesi.
+        yo = yaz_orani(lambda c: carpan(i, c), c_hat) if kaynak[t] in ('model', 'olcum_nisan') else 1.0
+        ham, adim, ay, zarf = tarama(KW[i], panel[i], eac, kosul, egim, 1.0, snf[i], yo)
+        ham_lo = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[0], snf[i], yo)[0]
+        ham_hi = tarama(KW[i], panel[i], eac, kosul, egim, EGIM_ARALIK[1], snf[i], yo)[0]
         adim2 = ikinci_aday(zarf, adim)
         tepe = max(r_tr[t] * fider_carpan.get(t, 1.0) * ham, 0.0)
         s_lo = math.log(max(ham_lo, 1e-6) / max(ham, 1e-6))
@@ -538,7 +597,8 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
         a, b = {'model': (lo_k, hi_k), 'olcum_nisan': (0.0, 0.0), 'kayit_etut': (lo_k, hi_k)}.get(kaynak[t], KAYIT_BANT_LOG)
         e_lo = e_hi = 0.0
         if kaynak[t] == 'model':
-            rc = [R0(c) * float(eszamanlilik(n_esd[i], c)) / (R0(c_hat) * float(eszamanlilik(n_esd[i], c_hat))) for c in c_bant]
+            oy = (lambda c: yaz_orani(lambda c_: carpan(i, c_), c) / yo) if ay in YAZ else (lambda c: 1.0)  # noqa: E731
+            rc = [R0(c) * carpan(i, c) * oy(c) / (R0(c_hat) * carpan(i, c_hat)) for c in c_bant]
             e_lo, e_hi = math.log(min(rc + [1.0])), math.log(max(rc + [1.0]))
         p10 = tepe * math.exp(-math.sqrt(a ** 2 + min(s_lo, 0.0) ** 2 + e_lo ** 2))
         p90 = tepe * math.exp(math.sqrt(b ** 2 + max(s_hi, 0.0) ** 2 + e_hi ** 2))
@@ -563,7 +623,8 @@ def sehir_calistir(klasor, eac, hava, egim, kip='yil', tasarim=None, fider_duzel
         w.writerows(satirlar)
     ozet = dict(sehir=sehir, hava_yili=yil, kip=kip, olculu=ids, R={t: round(v, 3) for t, v in R.items()},
                 R_ortalama=round(R_ort, 3), R_bir_disarida_log_artik=[round(x, 3) for x in loo],
-                velander_c=round(c_hat, 2), velander_R0=round(R0(c_hat), 3), velander_c_bant=list(c_bant),
+                model=MODEL, velander_c=round(c_hat, 2), velander_R0=round(R0(c_hat), 3),
+                velander_c_bant=[round(c, 2) for c in c_bant], esz_c_ev=ESZ_C_EV if MODEL == 'b-y2-esz' else None,
                 tasarim_dT=None if tasarim is None else {m: round(v, 1) for m, v in tasarim.items()},
                 egim={c: {k: round(v, 4) for k, v in e.items()} for c, e in egim.items()},
                 dT={m: round(k['dT'], 1) for m, k in kosul.items()}, bant_log=[lo_k, hi_k], egim_aralik=list(EGIM_ARALIK),
@@ -588,7 +649,12 @@ def main():
     ap.add_argument('--fatura-net', action='store_true', help='fatura mahsuplaşmalı abonelerde net (sablon.py ile aynı)')
     ap.add_argument('--kibtek-yok', action='store_true', help='kibtek_tepe.csv / kibtek_fider.csv olsa da okuma (kıyas)')
     ap.add_argument('--fider-duzelt', action='store_true', help='ölçülmeyen trafoları OG fider kaydının oranına ölçekle')
+    ap.add_argument('--model', choices=['b-y2', 'b-y2-esz', 'on'], default='b-y2',
+                    help='b-y2: konut yaz eğimi 20 Kıbrıs evinden (Can); b-y2-esz: + ev çeşitliliği konut payına (deneme); '
+                         'on: eski ön sürüm (kıyas)')
     a = ap.parse_args()
+    global MODEL
+    MODEL = a.model
     import sablon
     sablon.FATURA_NET = a.fatura_net
     if a.aralik:
