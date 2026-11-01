@@ -1288,3 +1288,14 @@ Soru: (1) Açık PR kalmadı (a200f94); plan §6 adım 5'in şartı ("dallar mai
 Dosya: docs/log/2026-11-01-can-kod-envanteri.md (`sinav.py` bulguları), docs/log/2026-11-01-can-kod-envanteri-araclarla.md (araç ölçümü)
 Neden: Clean review planı §6 adım 4 (rapor; dosya sahibi ve karar masası önceliği seçer).
 Durum: bekliyor
+
+## BİLGİ 1 Kasım (08:00 sonrası) — Can'dan — eşzamanlılık ve sıcaklık eğimi tabloları (KARAR 23:12 "tablo olarak kutuya"); B-Y2 PR'ı sırada
+Ne: 20 Kıbrıs prosumer evi (Zenodo 23043383, 2016, 30 dk) + Lefkoşa sıcaklığı [Hesap: `src/eszamanlilik.py`; günlük docs/log/2026-11-01-can-eszamanlilik.md]:
+- Eşzamanlılık (ev başına tepe = a(1 + c/√N), net): **sıcak akşam c 2,51** (a 1,48 kW), **diğer günler c 4,74** (a 1,07 kW). N = 20'de CF 0,45 / 0,35. İki bileşen: sıcak günde 0,79 × (1 + 4,74/√N) + **0,70 kW/ev klima** (N'den bağımsız). `tepe.py` bugün c'yi ölçülülerin Nisan R'sinden uyduruyor (31–40'ta c = 0).
+- Yaz eğimi: eşik 24,5 °C üstü 0,104 kW/°C/ev; **Temmuz ölçeğinde %6,5/°C** (P10–P90 5,6–7,5). `tepe.py`'nin EAC'den çıkan konut yaz eğimi **%3,0** → sıcak günde konut tepesi az gösteriliyor (güvensiz yön).
+- Tasarım akşamı (19–22, 10 yılda bir): 33,4 °C.
+- Tek evin yıl tepesi: 20 evin 8'i Temmuz, 9'u Kasım–Şubat; 13'ü akşam.
+Sınır: 20 ev, büyük ve panelli; farazi şehir bu sayıları sınayamaz (üretici kendi β'sıyla); İspanya'da klima yok. Gerçek ölçü pilot (Faz 10).
+Dosya: src/eszamanlilik.py, data/raw/kibris-20-prosumer/KAYNAK.txt, docs/log/2026-11-01-can-eszamanlilik.md
+Neden: KARAR 23:12 / 23:18 / 00:15. Sırada: `tepe.py`'ye bağlama (dal `yuk/b-y2`, PR, BUILD 1 inceler); üretici β çapası (senin dosyan) ayrı.
+Durum: bilgi

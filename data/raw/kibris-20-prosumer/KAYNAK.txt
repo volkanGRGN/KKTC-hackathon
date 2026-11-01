@@ -1,0 +1,21 @@
+Energy Community Net-Consumption Data of 20 Prosumers in Cyprus — 20 konut prosumer, 2016 tam yıl, 30 dk.
+Kayıt: Zenodo 23043383, https://zenodo.org/records/23043383 (yayın 29 Eylül 2026), lisans CC BY 4.0, erişim açık.
+Doğrulama: karar masası 22:58 (Zenodo API); Can yeniden baktı 1 Kasım 2026 (API: başlık, lisans, dosya, md5).
+İndirildi: 1 Kasım 2026 (Can), tek istek:
+  curl -sSL -o kibris_20_prosumer_2016.xlsx "https://zenodo.org/api/records/23043383/files/Dataset%20-%2020%20energy%20community%20prosumers%20net%20conumption%2001012016%20-%2031122016.xlsx/content"
+  kibris_20_prosumer_2016.xlsx — 17.717.823 bayt, md5 5d2e604ba0ad6b5d9f03b2d444efb420 (Zenodo'nun md5'iyle aynı),
+  SHA-256 2147ef62a1fae849afdb46bd8bcbeb1df07b7b9ebf6d0da5575339c63406b2d1. Makro yok (vba_archive boş).
+Dosya yalnız değer olarak okundu (openpyxl read_only, data_only); formül ya da makro çalıştırılmadı. Ham dosya depoya girmez.
+
+Biçim: 20 sayfa ("1" … "20"), her biri bir ev. Sütunlar: Timestamp (yerel saat, yaz saatli; 2016-01-01 00:00 – 2016-12-31 23:30,
+30 dk, 17.568 satır; yaz saati dönüşünde 4 tekrar eden damga), Import Energy, Export Energy, Production Energy, Consumption Energy.
+Birim [Yorum, Can]: başlıklar "kWh" diyor ama değerler 30 dakikalık ortalama güç, W: PV tepesi evlerde 2.319–3.014
+(~3 kW; 2016 Kıbrıs net ölçüm şemasının 3 kWp sınırı); kWh olsaydı 3 kWp panel yarım saatte 5,4 kWh üretirdi. kW = değer ÷ 1000;
+yıllık enerji = Σ değer × 0,5 ÷ 1000 kWh.
+Sağlama [Hesap, Can]: import − export + üretim = tüketim, 19 evin bütün satırlarında (1 W üstü fark 0; ev 4 hariç). Yıllık brüt
+tüketim ev başına 4,39–9,51 MWh (ortanca 7,21; 19 ev); PV üretimi 2,56–5,51 MWh.
+Kusurlar: ev 4'te tüketim sütunu bütün yıl "#REF!", export sabit 592 → ev 4'ün neti = import, brüt hesaba girmez.
+Ev 15'te veri satırlarından sonra 17.568 boş satır (atlanır).
+Yanlılık [Yorum]: hepsi panelli (prosumer) ve ortalamadan büyük evler (Kıb-Tek konut ortalaması 3,7 MWh/yıl); bir enerji
+topluluğu, Güney Kıbrıs; 2016 tek yıl. Eşzamanlılık bu 20 evin içinden (aynı mahalle olmayabilir).
+Kullanım: src/eszamanlilik.py (eşzamanlılık, sıcaklık eğimi; B-Y2 girdisi); günlük docs/log/2026-11-01-can-eszamanlilik.md.
