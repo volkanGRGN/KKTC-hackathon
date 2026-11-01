@@ -75,6 +75,7 @@ Birleşenler (1 Kasım): #19, #21, #27, #22, #23, #28, #24, #26, #29, #30, #31, 
 7. **BUILD'in yerel durumu** (git dışı): üretici 1.3 şehirleri `trafo-sablonu-build/data/synthetic/u13/` (1–10, 21–30; K_YUK 1,47 ile `tahmin.csv` / `kac_ev.csv`; her şehirde sahte `kayitlar.csv`); Open-Meteo 2024–2025 dosyası yalnız bu klasörde (`data/raw/open-meteo-lefkosa/`); İspanya ham verisi `hackaton/edp-ham/Sim_files_190128_OK_V0/GIS_data`. Başvuru testi: `python3 src/basvuru_testi.py data/synthetic/u13 --aralik 21-30 --json x.json` (~1 dk).
 
 ## Bilinen sorunlar ve kararlar
+- Sahte kaydın "gerçek" ağı yeniden kurması `kac_ev_gercek`'te 784/800 birebir (farklar 1–2 ev): kritik anlar 0,1 V'a yuvarlanmış gerilim serisinden seçiliyor. Panel sınavlarında trafoların ~%2'si bu payla okunur; düzeltme yavaş, şimdilik yok (karar masası 02:25).
 - BUILD klasöründeki şehirler (16:57) karar masasının sıfırdan ürettikleriyle aynı renkleri verir, ama 11–20'de bir trafo farkı var (dolu 74 ↔ 73); sebep aranmadı. Resmi rakam karar masasınınki.
 - Ham veri depoda yok; KAYNAK.txt adreslerinden indirilir. Üretici 1.2 iki yeni dosya ister: kıyı (`osm-kasaba`) ve Open-Meteo 2023 (README).
 - **Sanal ortam şart** (`pip install -r requirements.txt`). `openpyxl` yoksa üretici sessizce yer tutucu eğriye düşer; `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak.
