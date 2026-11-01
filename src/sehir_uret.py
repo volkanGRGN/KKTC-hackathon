@@ -55,6 +55,11 @@ ayrı akışlardan (`klima14-`, `yaz14-`, `kis14-`, `og14-`), şehrin ağı ayn�
   en düşük ev gerilimi (`v_min_tepe_v`, 207 V), `kva_tavan` (gereken güç 1000 kVA'yı aştı, listeye kesildi; Nisan
   donuk olduğu için 1.600 / 2.500 kVA eklenmedi). Yeni dosyalar `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv`.
 
+Sürüm 1.6 (BUILD 1, 1 Kasım; Volkan): konut ve yurt yaz eğimi (SICAKLIK_BETA yaz) 20 Kıbrıs evinin ölçülen eğimine çapalı
+(0,045 → 0,060; SICAKLIK_BETA'nın üstündeki not). 1.5'te üretici eğimi gerçek evlerden düşüktü; model (tepe.py B-Y2) gerçek
+eğimi kullanınca farazi sınav doğru yöne gidişi "hata" sayıyordu. Eğim trafo boyutuna da girer (1 + β_yaz · ΔT_tasarım), bu yüzden
+bazı konut / yurt trafolarının gücü, dolayısıyla Nisan dosyaları da değişir. Yeni sınav şehirleri 51–60. Rastgele akış aynı.
+
 Çalıştırma:
   python3 src/sehir_uret.py 7            # data/synthetic/sehir-007/
   python3 src/sehir_uret.py 1 20         # sehir-001 … sehir-020
@@ -85,7 +90,7 @@ KIYI_JSON = KOK / 'data' / 'raw' / 'osm-kasaba' / 'girne_kiyi.json'
 CIKTI = KOK / 'data' / 'synthetic'
 
 SOZLESME_SURUMU = '1.2'
-URETICI_SURUMU = '1.5'                   # 1.5: trafo gücü yıl tepesinden, akşam düşümüne göre hat tasarımı; 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
+URETICI_SURUMU = '1.6'                   # 1.6: konut / yurt yaz eğimi 20 Kıbrıs evine çapalı; 1.5: trafo gücü yıl tepesinden, akşam düşümüne göre hat tasarımı; 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -141,11 +146,15 @@ MEVSIM_GUN = 7
 # özgü sınıf eğimi BULAMADIM; Can'ın 20 ev + sıcaklık analiziyle çapalanacak]. Konut ve küçük ticaret klimalı;
 # sanayi ve büyük sanayi az; su motoru yazın sıcakla sulama artar, kışın değişmez.
 SICAKLIK_BETA = {
-    'yaz': {'konut': 0.045, 'ticari1': 0.03, 'dukkan': 0.03, 'otel': 0.02, 'sanayi1': 0.01, 'sanayi2': 0.005,
-            'su_motoru': 0.02, 'yurt': 0.045},
+    'yaz': {'konut': 0.060, 'ticari1': 0.03, 'dukkan': 0.03, 'otel': 0.02, 'sanayi1': 0.01, 'sanayi2': 0.005,
+            'su_motoru': 0.02, 'yurt': 0.060},
     'kis': {'konut': 0.03, 'ticari1': 0.02, 'dukkan': 0.015, 'otel': 0.015, 'sanayi1': 0.005, 'sanayi2': 0.0,
             'su_motoru': 0.0, 'yurt': 0.03},
 }
+# 1.6: konut ve yurt yaz eğimi 0,045 [Yorum] → 0,060 [Hesap]: 20 Kıbrıs konut prosumer'ının yaz akşamı tepesi, akşam (19–22)
+# sıcaklığına göre Temmuz ölçeğinde 0,065/°C (bootstrap P10–P90 0,056–0,075) [Hesap: Can, docs/log/2026-11-01-can-eszamanlilik.md,
+# Zenodo 23043383]; üretici günlük ortalamanın ay ortalamasından farkını kullanır, Lefkoşa 2015–2025 Haziran–Eylül'de akşam farkı
+# günlük farkın 0,92 katı (r 0,94, 1.342 gün) → 0,065 × 0,92 ≈ 0,060 [Hesap: BUILD 1]. Öbür sınıflar ve kış değişmedi (veri yok).
 KLIMA_YAYGINLIK = (0.5, 1.5)             # trafo başına β çarpanı, gizli [Yorum]
 SICAKLIK_TABAN = 0.6                     # sıcaklık çarpanı en az [Yorum]
 # Yaz ve kış tatilleri: hafta sonu + KKTC resmi tatilleri [Kaynaklı: 1 Ocak ve 20 Temmuz KKTC resmi tatil; Kurban
