@@ -1299,3 +1299,11 @@ Sınır: 20 ev, büyük ve panelli; farazi şehir bu sayıları sınayamaz (üre
 Dosya: src/eszamanlilik.py, data/raw/kibris-20-prosumer/KAYNAK.txt, docs/log/2026-11-01-can-eszamanlilik.md
 Neden: KARAR 23:12 / 23:18 / 00:15. Sırada: `tepe.py`'ye bağlama (dal `yuk/b-y2`, PR, BUILD 1 inceler); üretici β çapası (senin dosyan) ayrı.
 Durum: bilgi
+
+## UYARI! 1 Kasım 10:02 — (BUILD 1 — yük) — Yük haritası ilk sürüm ↔ bugünkü, aynı 1.5 şehirlerinde: tepe %6,7 → %5,8, uyarı 92 → 87, dolu trafo kaçmıyor; pano yük kartları 1.5'e (PR #38)
+Ne: Volkan sunum için ilk sürümle bugünkünü karşılaştırmak istedi. İki `tepe.py` (0991064 ve ana dal) aynı üretici 1.5 şehirlerinde (1–10, 31–40) koşuldu; şehir, şablon ve eğri kodu iki uçta aynı, fark yalnız modelden [Hesap; farazi, gösterim; BUILD 1, resmi değil]. 31–40, ölçülmeyen 280: tepe %6,7 / %15,3 → %5,8 / %15,1, gerçek P90 üstü 0 → 0; saat ±60 dk %47,5 → %52,1, dönem %60,7 → %69,3; ≥ %80 uyarısı 92 → 87 (kalkan 5'in hiçbiri dolu değil; dolu 16 / 16 ikisinde de); akşam gerilimi yalnız bugünküde. Bugünkü sürüm tepe saati günlüğüyle, ilk sürüm üretici 1.5 yük günlüğüyle birebir.
+Eksi / bilinmeyen: (1) Yurt kuralı 31–40'ta 5 çarşıya da dokundu (1–10'da 0 / 41): dördünde tepe yaklaştı, sehir-032 T24'te −%15,9 → −%25,6 (gerçek bandın içinde); kural değiştirilmedi. (2) KARAR 02:12 doluluk ölçümü (92 / 37 uyarı) #32 öncesi koddan; bugünkü kodla 87 / 34. (3) Panel, BUILD 1'in değil: Volkan sunum için 1.5'i seçti; pano içeriğinde iki panel kartı hâlâ üretici 1.3 / sınav 21–30 rakamı ("öğlen yükü hatası %12,2": 1.5'te Can'ın faz2'si %11,3; "22 / 44 ↔ 0": 1.5'te 24 / 46 ↔ 0).
+PR #38: pano içeriğinde akşam gerilimi kartı 1.5'e (2 / 2, "yeterli" 233'te 0 yanlış, 47 uyarı; önceki kart üretici 1.4'tendi), "%80'den dolu" kartı 87 uyarıya, rakam notu "sunum 1.5"; günlük. Pano kodu değişmedi; sürümleri haritada yan yana gösteren canlı tahmin sayfası pano oturumunda.
+Dosya: PR #38 (https://github.com/volkanGRGN/KKTC-hackathon/pull/38), docs/log/2026-11-01-volkan-yuk-surum-kiyasi.md (dalda)
+Neden: Volkan'ın isteği (1 Kasım sabahı); KARAR 02:12 doluluk ölçümü.
+Durum: bekliyor
