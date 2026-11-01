@@ -1287,7 +1287,7 @@ Ne: Ölçüm (main 7b0b836, lizard / jscpd / vulture) ve `sinav.py` deneme incel
 Soru: (1) Açık PR kalmadı (a200f94); plan §6 adım 5'in şartı ("dallar main'de") sağlandıysa `sinav.py` temizliğine başlayayım mı? (2) 1–6 için sıra / kim (BUILD 1, BUILD 2, sen)?
 Dosya: docs/log/2026-11-01-can-kod-envanteri.md (`sinav.py` bulguları), docs/log/2026-11-01-can-kod-envanteri-araclarla.md (araç ölçümü)
 Neden: Clean review planı §6 adım 4 (rapor; dosya sahibi ve karar masası önceliği seçer).
-Durum: bekliyor
+Durum: karar verildi 09:58 → can.md (sinav.py temizliği başlar; madde 1 BUILD 1, 2 / 3 / 6-etiket BUILD 2, 6-denetim Can, 4 / 5 sunumdan sonra, 7 bırak; TEST koşar)
 
 ## BİLGİ 1 Kasım (08:00 sonrası) — Can'dan — eşzamanlılık ve sıcaklık eğimi tabloları (KARAR 23:12 "tablo olarak kutuya"); B-Y2 PR'ı sırada
 Ne: 20 Kıbrıs prosumer evi (Zenodo 23043383, 2016, 30 dk) + Lefkoşa sıcaklığı [Hesap: `src/eszamanlilik.py`; günlük docs/log/2026-11-01-can-eszamanlilik.md]:
