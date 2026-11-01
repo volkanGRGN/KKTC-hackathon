@@ -276,6 +276,12 @@ def _dakika_fark(a, b):
     return min(d, 1440 - d)
 
 
+def _donem(a):
+    """"HH:MM" → tepe dönemi; sınırlar `tepe.py` donem() ile aynı (sözleşme §8 `tepe_donemi`)."""
+    s = int(a[:2])
+    return 'gece' if s >= 20 or s < 4 else 'sabah' if s < 10 else 'ogle' if s < 14 else 'ogleden_sonra'
+
+
 def faz2_oku(s):
     """Faz 2 dosyalarını şehir sözlüğüne ekler; eksikse eksik dosya adını döner."""
     k = s['klasor']
@@ -456,6 +462,7 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
                 g = cevap[r['trafo_no']]
                 tepe_sat.append(dict(t=float(r['tepe_kw']), lo=float(r['tepe_kw_p10']), hi=float(r['tepe_kw_p90']),
                                      g=float(g['tepe_yil_kw']), ts=r.get('tepe_saati'), gs=g.get('tepe_saati'),
+                                     ts2=r.get('tepe_saati_2'), dn=r.get('tepe_donemi'),
                                      vt=float(r['v_min_tepe_v']) if r.get('v_min_tepe_v') else None,
                                      # "yeterli" kararı karamsar uçtan (BUILD 1, 01:10; ADR-0018 m. 6); yoksa ortanca
                                      vk=float(r.get('v_min_tepe_v_p10') or r.get('v_min_tepe_v') or 0) or None,
@@ -467,11 +474,17 @@ def faz2(sehirler, ispanya=None, ispanya_tepe=None):
         h = [abs(x['t'] - x['g']) / x['g'] for x in tepe_sat if x['g'] >= GERCEK_MIN_KW]
         kt = kalibrasyon([(x['lo'], x['hi'], x['g']) for x in tepe_sat])
         saat = [_dakika_fark(x['ts'], x['gs']) for x in tepe_sat if x['ts'] and x['gs']]
+        # Sözleşme §8 (PR #32, BUILD 1 01:36 önerisi): ikinci aday saat ve dönem; sütun yoksa satır yazılmaz (bilgi).
+        iki = [min(_dakika_fark(x['ts'], x['gs']), _dakika_fark(x['ts2'], x['gs']) if x['ts2'] else 1440)
+               for x in tepe_sat if x['ts'] and x['gs'] and x['ts2'] is not None]
+        dnm = [x['dn'] == _donem(x['gs']) for x in tepe_sat if x['dn'] and x['gs']]
         bilgi.append(f'yük haritası (tepe, net), farazi (gösterim): hata ortanca {_yuzde(st.median(h))}, P90 {_yuzde(_p90(h))} '
                      f'(geçici eşik ≤ %{100 * TEPE_HATA_ORTANCA_MAX:g} / %{100 * TEPE_HATA_P90_MAX:g}); '
                      f"%80 bant kapsama {_yuzde(kt['kapsama'][0.80])}, %95 {_yuzde(kt['kapsama'][0.95])}"
                      + (f'; tepe saati ±{TEPE_SAAT_TOLERANS_DK} dk isabet '
                         f'{_oran(sum(d <= TEPE_SAAT_TOLERANS_DK for d in saat), len(saat))}' if saat else '')
+                     + (f', iki adaydan biri {_oran(sum(d <= TEPE_SAAT_TOLERANS_DK for d in iki), len(iki))}' if iki else '')
+                     + (f'; dönem aynı {_oran(sum(dnm), len(dnm))}' if dnm else '')
                      + f'; n = {len(tepe_sat)}')
         # Akşam gerilimi: "yeterli" (≥ 207 V) dediğimiz trafoda gerçekte altına iniyorsa yük tarafının yanlış yeşili.
         v = [x for x in tepe_sat if x['vt'] is not None and x['vg'] is not None]

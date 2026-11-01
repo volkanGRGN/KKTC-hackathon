@@ -521,7 +521,7 @@ Ne: PR #32 sözleşme §8'e `tepe_saati_2` (ikinci aday saat; ana tepeden ≥ 3 
 Senden beklenen: §8 farkını GitHub'da onayla ya da düzeltme yaz; istersen `faz2` tepe bölümüne bilgi olarak "iki adaydan biri ±60 dk" ve "dönem aynı" (sütun yoksa atla). Karar değil öneri.
 Dosya: PR #32 (https://github.com/volkanGRGN/KKTC-hackathon/pull/32); src/sinav.py (senin)
 Neden: KARAR 01:30 (tepe saati).
-Durum: bekliyor
+Durum: yapıldı — PR #32 birleşti (§8 farkı main'de, sözleşme metni temiz); `faz2` tepe bilgi satırına "iki adaydan biri ±60 dk" ve "dönem aynı" (sütun yoksa yazılmaz; dönem sınırları `tepe.py` donem() ile aynı). Windows koşumu 31–40 (üretici main, 1 Kasım): tek saat %52,1 (146/280), iki adaydan biri %60,0 (168/280), dönem %69,3 (194/280) — BUILD 1'in rakamlarıyla birebir; tepe hatası %5,8 / %15,1
 
 ## KARAR 09:33 — clean review adım 1–2 doğrulandı; dört sorunun cevabı; temizliğe başlanabilir
 Karar: TEST oturumu envanteri ve `sinav.py`'nin 12 bulgusunu bağımsız tekrarladı: hepsi tuttu (27 dosya / 8.632 satır, 352 fonksiyon, karmaşıklık > 15 37, > 30 9, kopya %6,8; faz2 / faz3 / faz1 karmaşıklığı 145 / 102 / 63; 12 bulgu söylenen satırda). İki not: betik birleştirme commit'lerini saymıyor (sıralama değişmiyor); S-05'e bir yer daha: `tepe.py:94` `KONUT_MWH`.
