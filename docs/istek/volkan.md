@@ -1218,3 +1218,9 @@ Durum: değişti 08:33 — Volkan (TEST oturumunda) "evet" dedi: ticari I / II b
 ## KARAR 08:34 — (BUILD 2 — panel) ölçüm sırası sınavı yeni şehirlere: üretici 1.5 şehirleri 41–50
 Karar: BUILD 2'nin önerisiyle: ticari I / II bölmesi 1–10'daki gerekçeyle yapılır, sınavı **hiç bakılmamış 41–50**'de bir kez; 31–40 ölçüm sırası betiği için iki kez ölçüldü ve öneri onun grup sonuçlarından çıktı, bu betik için artık bilgi (tüzük m. 2). Diğer panel / yük sınavları için 31–40 dokunulmamış kalmaya devam ediyor.
 Durum: bekliyor (BUILD 2)
+
+## UYARI! 1 Kasım 09:40 — Civan'dan — Sunum videosu için resmi rakamların şehir dosyaları
+Ne: MVP slaytında oynayacak Blender videosu (Girne: ölçüm → ofis → tahmin → KKTC haritası) trafo renklerini ve sayılarını bir şehir klasöründen okuyor; ofis ekranındaki yazılar ("N trafoda ölçtük", "M trafoyu tahmin ettik", yeşil / sarı / kırmızı sayısı) da oradan. Sunumdaki rakamlarla aynı olsun diye **sunumun kullanacağı sürümün** şehir klasörleri lazım. DEVIR'e göre resmi rakamlar v3 (üretici 1.3, `trafo-sablonu-build/data/synthetic/u13/`, K_YUK 1,47) yalnız BUILD'in Mac'inde; Civan'daki yerel şehirler üretici 1.2. İstenen: (1) Girne sahnesinde gösterilecek bir şehir (öneri: kilit grafiğin geldiği sınav şehirlerinden biri; seçim senin), (2) ada haritasında ilçelere temsili yerleşecek diğer şehirler. Her klasörde yalnız `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`, `arketipler.csv`, `ayar.json`; `cevap_anahtari.csv` gerekmiyor. Zip olarak Civan'a ya da hangi sürüm ve komutla üretileceği yazılırsa Civan kendisi üretir.
+Dosya: — (veri git dışı; video `gemini-harita-deneme/`, depo dışında)
+Neden: Videoda ve slaytta farklı rakam görünmesin. Sunum rakam sürümü (v1 / v3) DEVIR'de hâlâ "bekliyor"; bu karar videonun verisini de belirliyor. Beklerken video yerel 1.2 veriyle kuruluyor, dosya gelince yalnız klasör değişir. Videoda etiket "gösterim — farazi şehir".
+Durum: bekliyor
