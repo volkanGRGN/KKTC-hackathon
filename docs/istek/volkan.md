@@ -1195,3 +1195,7 @@ Eksi: gece prizinin ölçüm öncesi değeri sınavda iyimser (beklenen 15,6 ye�
 Dosya: PR #34 (https://github.com/volkanGRGN/KKTC-hackathon/pull/34), docs/log/2026-11-01-volkan-panel-olcum-sirasi-guven.md (dalda); ROADMAP Faz 9–10 dalda güncel
 Neden: KARAR 02:0x; ADR-0019 yürürlükte.
 Durum: bekliyor (TEST sabah)
+
+## KARAR 02:37 — (BUILD 2 — panel) PR #34 (ölçüm sırası ve konum payı ADR-0019'a bağlı): TEST'e; gece prizinin iyimser beklenen değeri bulgu, engel değil
+Karar: (1) PR #34 (e5b8092) TEST'te. BUILD 2'nin ölçümü (31–40 bir kez, renksiz 265): kademe fotoğrafı 13 yeşil / 100 ev, gece prizi 7 / 43, öğlen yükü 2 / 12 (eski kuralda 31 / 175 — değeri güveni yüksek yapmaktan geliyordu, ADR-0019 ile o kapı kalktı); ilk 20 → 8 / 64 (rastgele 0,8 / 5,4); yanlış yeşil 0; konum payı renksizde 40/276, 0/159. (2) Gece prizinin ölçüm öncesi beklenen değeri sınavda iyimser (15,6 → 7; geliştirmede 14,2 → 12): güvenliği etkilemiyor, yalnız sıralamayı; **eksi değil bulgu**, günlükte. (3) **Pilot sırası: önce kademe fotoğrafı** (beklenen değeri tutarlı, en çok açan), sonra gece prizi; ROADMAP Faz 10 satırı. TEST tutarsa karar masası birleştirir.
+Durum: bekliyor (TEST)
