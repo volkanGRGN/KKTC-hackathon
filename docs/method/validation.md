@@ -19,6 +19,8 @@ Kural: **test seti asla yalnız farazi değil.** Farazi şehir yöntemin çalı�
 | Kaç ev hatası | tahmini kaç ev − ev ev benzetimde gerçek kaç ev | ürünün asıl sayısı |
 | Kalibrasyon | %80 bandın gerçek değeri kapsama oranı | sahte güven var mı |
 
+**Kalibrasyon kapısının resmi koşulu (gerçek veri, İspanya):** girdi c (abone sayısı + fatura), 10 ölçülü trafo, **tabakalı** seçim (ürünün ölçülü trafo seçimi), bir-dışarıda; rastgele seçimle havuzlanmaz, çünkü iki yol ters yönde yanılır ve havuz PIT'i yanıltıcı biçimde "geçer" gösterir (Can, 31 Ekim; karar masası 21:51; K_YUK 1,47 ile %80 bant %82,1, PIT 0,066). Tolerans: PIT sapması ≤ max(0,05; 2·√(0,09 ÷ n)), n = bağımsız trafo.
+
 Yanlış yeşil eşikleri: farazi şehirde ≤ %5 (en kötü şehir ≤ %10) **gösterim** eşiği; canlıya geçiş bütçesi **< %2**, gerçek veride geri-testle tutulur (ADR-0010; marj ve güven eşikleri bu bütçeye göre ayarlanır). Faz 2'de ayrıca **saf tahmin** kıyası: model, saf tahminden ortanca ve P90'da en az %25 iyi olmalı (ADR-0008; tanımı karar masasında: abone sayısı / tarife enerjisi / fatura).
 
 Her ölçü 20–30 şehir üzerinden **aralık** olarak raporlanır (ortanca, en kötü). Ayrıca kaba kıyas: New York şirketlerinin "öğlen yükü = tepenin %15–40'ı" kuralı.

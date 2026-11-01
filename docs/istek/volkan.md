@@ -589,7 +589,7 @@ Durum: karar verildi 21:51 → volkan.md (KARAR aşağıda): (1) farazi kapsama 
 Ne: (1) `sinav.py faz2`'ye kalibrasyon maddeleri geldi (main'de; `--ispanya <edp_test.py --cikti CSV>`). **Önce** (main'deki model, gerçek veri — İspanya, girdi c, 10 ölçülü, **tabakalı**): nominal %50 / 80 / 90 / 95 → ampirik %46,1 / **%66,6** / %77,6 / **%83,4**; PIT en büyük sapma **0,108, fazla emin** (10. kova %21, 1. kova %13) → kapsama maddesi KALDI, PIT UYARI. Farazi 11–20 (bilgi): %60,7 / %87,9 / %93,9 / %96,8, PIT 0,046 fazla geniş — ters yön; farazide ayarlamak İspanya'yı daha emin yapar. (2) **Resmi koşul benim kararım:** c / 10 / tabakalı (ürünün girdisi ve seçimi). Rastgeleyle havuzlamıyorum: iki yol ters yönde yanılıyor, havuzda PIT 0,046 "geçer" görünüyor (rastgele 0,068 geniş, tabakalı 0,108 emin). k katsayın bu koşulda sınanacak; az ölçülüde (5) bant en kötü (c %57–59), k ölçülü sayısına bağlı olmalı [Yorum]. (3) `docs/method/validation.md`'ye (senin) tanım satırı, kartın istediği: "Kalibrasyon (Faz 7, ADR-0013 m. 3): bant log uzayında normal sayılır (orta = P10–P90 log ortası, σ = log genişlik ÷ 2,563); nominal %50 / 80 / 90 / 95 ↔ ampirik kapsama, madde %80 bant %70–90 ve %95 bant ≥ %90; PIT 10 kova, en büyük sapma ≤ 0,05, yön uç kovalardan; resmi ölçü gerçek veride (İspanya c / 10 / tabakalı), farazi bilgi."
 Dosya: src/sinav.py (Can, yapıldı), docs/method/validation.md (senin), docs/log/2026-10-31-can-faz7.md, docs/log/holdout-defteri.md
 Neden: Faz 7 kartı C1 ve 21:32 KARAR; PR'ın "sonra" rakamı aynı komutla ölçülecek. Bloklamıyor.
-Durum: bekliyor
+Durum: yapıldı — kapı c / 10 / tabakalı resmi koşul oldu; K_YUK 1,47 ile İspanya %80 bant %82,1, PIT 0,066 GEÇTİ (PR #16 main'de); tanım satırı docs/method/validation.md'de (09:29)
 
 ## KARAR 21:51 — BUILD'e: PR #16 (Faz 7) dört eksi bulgu; birleşme koşulu
 Karar:
@@ -626,7 +626,7 @@ Ne: C1 dalda koşuldu (Windows, 5711aeb; şehirlerin kopyası, sınav main'deki 
 Bilgi (PR'ı bloklamaz, günlükte): (1) **Tek k ortalamayı düzeltiyor, koşulu değil:** aynı k ile c / 10 / rastgele %92 / %99 (PIT 0,132 fazla geniş, toleransı aşıyor), c / 5 her iki yol %71–72 / %84 (hâlâ fazla emin). k'nın ölçülü sayısına ve seçime bağlı olması gerekir [Yorum]; Faz 10 / pilot adayı. (2) **PIT toleransı 29 trafoda ayırt etmiyor:** "önce" (0,108, açıkça fazla emin) de 0,113 ile geçiyor; bu gece kapıyı taşıyan kapsama maddesi. Hold-out defterine BUILD'in ayar bakışı (k, s) ve karar masasının 21:55 teyidi satır olarak eklendi (6, 7).
 Dosya: PR #16 (onay), docs/log/2026-10-31-can-faz7.md, docs/log/holdout-defteri.md
 Neden: KARAR 21:51 birleşme koşulu (b). Bloklamıyor.
-Durum: bekliyor
+Durum: yapıldı — PR #16 main'de (Can birleştirdi, 31 Eki 23:06); iki bilgi Faz 7 günlüğünde ve hold-out defterinde (09:29)
 
 ## UYARI! 31 Eki 22:05 — BUILD'den — PR #16'da yeni eksi bulgu: k_yük ölçülü trafo sayısına bağlı; model n = 12, k 1,475 değil ~1,27
 Ne: Faz 8 ayarında farazi kapsama hiç inmedi; sebebi aranırken bulundu. İspanya k'si `edp_test.py`'nin 5, 10 ve 15 ölçülü trafolu denemelerinin karışımından hesaplanmıştı. Ölçülü sayısına göre ayrı hesap (kalibrasyonsuz satırlar, `kalibrasyon.py`):
@@ -713,7 +713,7 @@ Karar: Volkan (23:02): "Kıbrıs'taki trafolardan veri alacağız ama şimdi de�
 5. **Paralel, değişmez:** yük ve akşam tepesi Can'da (can.md 23:02); tepe modeli (öğlen + tepe hedefi, Temmuz şehirleri, sıcaklık terimi) bu işten sonra BUILD'de.
 Neden: Volkan'ın kararı; Muhittin 5 (kademe ayrık öncül, inverter geri çözümü, PV erken açılabilir); veri geldiğinde boru hattı hazır olsun; kusursuz bilgi (S4–S6) gerçekçi değil, kusurlu kayıt gerçekçi.
 Senden beklenen (BUILD): 1–4; ilk sonuç kutuya UYARI; karar masası Mac'te tekrarlar. Kayıt hata oranlarının gerçek değerleri uzmana / Kıb-Tek'e soru listesine (Faz 9 istek taslağına) eklenir.
-Durum: bekliyor
+Durum: yapıldı — sahte kayıtlarla başvuru anı motoru PR #22'de main'de (9a6226c) (09:29)
 
 ## UYARI! 31 Eki 23:02 — BUILD'den — PV açılma testi (PR #20): inverter kaydı açıyor, iki değerli kademe açmıyor, sarı değişmiyor — test edin
 Ne: KARAR 22:56. `src/pv_acilma.py` (gerçekçi bilgi_degeri; resmi hesap değişmez; S0 resmi tabloyla birebir). Sınav 21–30 bir kez:
@@ -738,7 +738,7 @@ Karar: (1) **Kademe:** iki değerli politika açmıyor (6,25 V adım, 8 V bant) 
 **Pilot / sunum cümlesi (Can'a, ekran 6 konuşma notu; v3 seçilirse):** "Mahallede tek bir panelli evin inverter kaydı bile yeterse, gerçekçi şehirde yeşil iki katına çıkıyor (%5 → %10), konut trafolarında ilk yeşiller beliriyor, yanlış kırmızı yarıya iniyor; dolu trafoya 'evet' yine sıfır." [Hesap: PR #20, sınav 21–30, her panelli trafoda bir inverter (iyimser uç), gösterim]. %20 kapsama sonucu sahte kayıt testinden gelince yanına.
 Neden: tüzük madde 2 (yanlış yeşil kapısı 0 kaldı); Muhittin 5B doğrulandı (inverter açıyor), 5A yalnız trafo başına kayıtla.
 Senden beklenen (BUILD): Kıb-Tek taslağı kalemi; sahte kayıt testine (a) ve (b); Can'ın PR onaylarından sonra.
-Durum: bekliyor
+Durum: yapıldı — PR #20 main'de; sahte kayıt planının düzeltmeleri PR #22'de (main) (09:29)
 
 ## BİLGİ 23:07 — karar masasından — PR #16, #18, #20 main'de (Can birleştirdi)
 Ne: Can PR #18'i (`uretici/1.3`, içinde PR #20 deneme) tabanına, sonra PR #16'yı main'e birleştirdi (996e40f, 31 Ekim 23:06). Böylece main'de: Faz 7 kalibrasyonu (K_YUK 1,27, İngiltere sapma çarpanı), Faz 8 üretici 1.3 ve yeni sınav şehirleri 21–30, PV açılma deneme betiği. Üçü de karar masasının Mac koşumlarıyla doğrulanmıştı. **Yeni şehirler üretilip model koşulunca resmi rakamlar artık v3** (gerçekçi şehirler); sunum metni hâlâ `sunum-v1` rakamlarında: hangi sürümün anlatılacağı Volkan'da. Açık PR: #19 (Faz 10 hazırlığı, Volkan'ın sözüyle birleşir).
@@ -816,7 +816,7 @@ Karar: Volkan (23:18): "Bunu zaten simüle ediyoruz, kesin oran bulmanın anlam�
 4. **Sıra (BUILD devri, Volkan panelde):** K_YUK 1,47 (yapılıyor) → **sahte kayıtlar + başvuru anı motoru** → ROADMAP Faz 6–12. **B-Y1 / B-Y2 (yük haritası kodu) Can'a geçti** (can.md 23:18): Can senin dosyalarına (`sehir_uret.py`, yeni `src/tepe.py`) dal + PR ile yazar, sen onaylarsın.
 Neden: Muhittin 4: sarının tabanı (%41) başvuranın konumundan; harita bunu kaldıramaz, başvuru anı kaldırır. Volkan panelde, Can yükte; dosya sahipliği PR onayıyla korunur.
 Senden beklenen: 1–3, dal + PR; ilk sonuç kutuya UYARI; karar masası Mac'te tekrarlar.
-Durum: bekliyor
+Durum: yapıldı — başvuru anı motoru + sahte kayıt PR #22 (9a6226c), konum payı denendi PR #28 (618e758) (09:29)
 
 ## UYARI! 31 Eki 23:35 — BUILD'den — B-Y1 (yıl boyu üretici) 23:18'den önce bitti: PR #21; Can'a devredildi; üç eksi bulgu
 Ne: KARAR 23:12'yle B-Y1 yazıldı, 23:18 kararı PR açıldıktan sonra görüldü; PR #21 Can'a devredildi (can.md UYARI 23:35), Can üstüne devam eder. Üretici 1.4 yalnız ekleme: **Nisan çıktıları 1.3 ile bayt bayt aynı** (1–10 ve 21–30, 60/60 dosya). Yazın en sıcak ve kışın en soğuk haftası; cevap anahtarına yılın net tepesi, kVA'sı, saati, ayı, 207 V düşümü, brüt tepe (sözleşme 1.4 adayı, Can ya da Civan onayı). Şehir 1–10: Faz 1 5/5; tepe ayı Ağustos 198 / Temmuz 80 / Ocak 67 / Haziran 51; konut gece ve akşam, çarşı ve otel öğlen.
@@ -854,7 +854,7 @@ Durum: karar verildi 23:47 → volkan.md (KARAR aşağıda): (1) motor kayıt ka
 ## KARAR 23:47 — BUILD'e: PR #22 (başvuru anı motoru, panel) iki soru
 Karar: (1) **Kayıt doğruluğu kuralı:** Kıb-Tek kayıtlarının doğruluğu sahada bir örnekle (pilotta 20–30 kayıt: kademe, direk sırası, faz) ölçülene kadar motor **iki kat hata varsayar** (temkinli; yanlış evet kapısı kayıt kalitesi bilinmeden korunur). Ölçülünce varsayım ölçülen orana iner. Senden bir koşum: motor "iki kat" varsayarken gerçek kayıt hatası beklenen / yarı olduğunda hemen evet ve yanlış evet (bedeli görmek için), günlüğe. Tüzüğe (madde 2) bir cümle: "kayıt kalitesi ölçülmeden kayda koşullu kararlar en kötü kayıt hatasıyla verilir." (2) **Deneme olarak birleşir** (resmi hesap değişmez): koşul karar masasının Mac tekrarı (21–30) ve sözleşme §7 (`kayitlar.csv` adayı) için Can ya da Civan onayı. Darboğazın yük güveni olması bilgi: güveni yüksek olmayan trafolar Faz 10'da ölçüm sırasının başına (konum payı ve kayıtlı kaç ev bandı sonraki adım).
 Neden: tüzük madde 2 (yanlış yeşil / evet kapısı pazarlık değil); Muhittin 3 (ölçülmemiş bilgiye güvenme); Volkan: sahte veriyle çalış, gerçek kayıt gelince dosya değişir.
-Durum: bekliyor
+Durum: yapıldı — iki kat hata varsayımı ve pilot şartı PR #22'de; PR #22 main'de (9a6226c) (09:29)
 
 ## KONTROL 31 Eki (23:45 sonrası) — Can'dan — PR #21 (üretici 1.4) düzeltmesi gözden geçirildi: temiz
 Ne ölçüldü (Windows, dal df08987, ayrı çalışma klasörü): (1) **Veri varken çıktı aynı:** sehir-001 düzeltme öncesi (172ea8d) ve sonrası kodla: `trafolar.csv`, `yuk_5dk.csv`, `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv`, `cevap_anahtari.csv` bayt bayt aynı; `ayar.json`'da yalnız yeni `yil_tepe_kaynagi` = `nisan+yaz+kis` (ve süre). (2) **Dosya yokken:** `lefkosa_saatlik_2024_2025.csv` kaldırılınca sehir-001 (hava yılı 2024) iki yüksek sesli UYARI basıyor ("… yıl tepesi sütunları BOŞ, bu şehir yük haritası sınavına girmez"), cevap anahtarında `tepe_yil_kw` / `tepe_ayi` boş, `yil_tepe_kaynagi` = null. sehir-005 (2023) etkilenmiyor (Temmuz 23:30 tepe). (3) Sınav uyumu: `sinav.py faz2` artık yıl tepesi boş şehri saymıyor ve adını yazıyor; akşam en düşük gerilim ≥ 207 V kontrolü eklendi (23:12), `tepe.csv`'de `v_min_tepe_v` varsa ölçülür (main, bu commit).
@@ -869,7 +869,7 @@ Karar: Karar masası Mac'te PR #19'u main'le birleşik hâliyle koştu. **Tutan:
 İkisi de yüksek sesle duruyor (yanlış rakam yazmıyor), ama tanıdık evden gelecek ilk kaydın Türkçe Excel'den geçme olasılığı yüksek; kart (P6) "~5 dk" diyor.
 Senden beklenen: iki düzeltme PR #19 dalına; deneme: cp1254 noktalı virgüllü, üstte iki bilgi satırlı, gece 0 yazan üç fazlı kayıt. Bitince karar masasına mesaj; karar masası Mac'te tekrarlar ve birleştirir (Volkan'ın sözü: "PR'ları test et ve yolla").
 Neden: Volkan'ın kuralı (eksi bulgulu PR düzelmeden birleşmez).
-Durum: bekliyor
+Durum: yapıldı — iki eksi düzeltildi (d974753), PR #19 main'de (07ea153) (09:29)
 
 ## KARAR 00:10 — (BUILD 2 — panel) PR #22 (başvuru anı motoru + sahte kayıt): birleşme için kalanlar
 Karar: PR #22, KARAR 23:47'deki şartlar ve Civan'ın sözleşme §7 incelemesindeki iki düzeltmeyle birleşir. Sıra:
@@ -880,7 +880,7 @@ Karar: PR #22, KARAR 23:47'deki şartlar ve Civan'ın sözleşme §7 incelemesin
 5. **§7 onayı:** düzeltmelerden sonra Civan'dan (ya da Can'dan) GitHub onayı; isteği civan.md'ye UYARI olarak yaz.
 Sonra karar masasına mesaj; karar masası Mac'te 21–30'u (dört kayıt düzeyi + iki kat koşumu) tekrarlar, rakamlar tutarsa deneme olarak birleştirir (resmi hesap değişmez).
 Neden: KARAR 23:47; Civan'ın §7 incelemesi (onay değil, iki düzeltme önerisi); Volkan'ın kuralı.
-Durum: bekliyor
+Durum: yapıldı — beş madde tamam, PR #22 main'de (9a6226c) (09:29)
 
 ## UYARI! 1 Kasım 00:20 — (BUILD 1 — yük) — PR #21'de yeni eksi bulundu ve düzeltildi: yaz penceresi yılın tepesini kaçırıyordu (2024 şehirlerinde konutta ~%35 eksik); test edin
 Ne: Civan'ın onay notunu ("`tepe_yil_kw` yılın tepesinin alt sınırı") ölçerken çıktı: üreticinin yaz yükü günün ayının EAC tipik günü × (1 + β·ΔT), ama pencere "günlük ortalama sıcaklığı en yüksek 7 gün" diye seçiliyordu. EAC konut tepesi Haziran 1,37, Temmuz 1,89; 2024 hava yılında en sıcak hafta 3–9 Haziran. O şehirlerde (1–10'da 001, 002, 010) cevap anahtarının yıl tepesi üreticinin kendi dünyasındaki tepeden konutta %33–35, otelde %21–26 düşüktü; 2025'te konut %9–12 [Hesap: gürültüsüz sınıf eğrisi, klima 0,5 / 1,5]. Yük haritasının sınavı tepeyi az gösteren modeli ödüllendirirdi (ADR-0018'in "güvensiz yön" uyarısı).
@@ -889,7 +889,7 @@ Eksiler (kalan): (1) mevsim başına tek pencere: tepe ayı hemen hep Temmuz, ot
 Soru: PR #21 bu düzeltmeyle Mac'te tekrar koşulup birleşsin mi (sözleşme sütunları aynı; Civan'ın onayı sütunlara)?
 Dosya: PR #21 (https://github.com/volkanGRGN/KKTC-hackathon/pull/21), docs/log/2026-11-01-volkan-yuk-pencere.md (dalda)
 Neden: PR #21 yük tarafı ve BUILD 1'in (üç oturum düzeni); Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir).
-Durum: bekliyor
+Durum: yapıldı — düzeltme Mac'te birebir, PR #21 main'de (c53ab31) (09:29)
 
 ## KARAR 00:16 — (BUILD 1 — yük) PR #21 (üretici 1.4, yıl boyu tepe): Mac testi tuttu; birleşme Volkan'ın KARAR oturumundaki sözünü bekliyor
 Karar: Karar masası Mac'te main ile PR #21'in birleşik hâlini sıfırdan koştu (şehir 1–10 ve 21–30, Open-Meteo 2023 + 2024–2025). **Nisan dosyaları 1.3 ile 40/40 bayt bayt aynı** (`trafolar.csv`, `yuk_5dk.csv`), cevap anahtarının eski sütunları aynı; yeni on sütun geldi, UYARI yok. Yıl tepesi 23:35 tablosuyla birebir: 1–10'da tepe ayı Ağustos 198, Temmuz 80, Ocak 67, Haziran 51, Nisan 3, Şubat 1; kVA'yı aşan 17/400; akşam 207 V altı 8/400, en düşük 162,8 V. 21–30 (bilgi): Temmuz 160, Ocak 83, Ağustos 80, Haziran 77; aşan 9/400; 207 V altı 14/400, en düşük 170,6 V (yaz boyutlandırması üretici 1.5'te, 23:35) [Hesap: karar masası 00:15]. Sözleşme 1.4 onayı Civan'dan (GitHub APPROVED), Can'ın KONTROL'ü temiz.
@@ -904,7 +904,7 @@ Karar: Yük tarafında açık PR işi kalmadı (#21 test edildi, söz bekliyor);
 3. **Kıb-Tek tepe verisi (madde 3):** istek metnine kalemler eklendi (`docs/istek/kibtek-veri-istegi-taslak.md` madde 7–10). Senden: bu veri geldiğinde modele nasıl gireceği — trafo maksimum talep kaydı → o trafo ölçülü sayılır (tahmin ölçülene çöker, popülasyon öncülü güncellenir; tüzük madde 4), OG fider tepesi → aşağıdan yukarı toplamla mutabakat kontrolü; giriş biçimi + gerçeğe yakın sahte örnek; Faz 9 veri partisi kartı.
 4. **Öğlen yükü (madde 4, ADR-0018 m. 7):** "fatura × oran + kalibre bant" (K_YUK 1,47) öğlen için üretim yöntemi kalır. Kontrol: panelli abonede öğlen net yükü panelin kendi tüketimiyle düşülüyor mu, fatura net ise iki kez düşülüyor mu; 1–10'da ölç, gerekiyorsa düzelt.
 Kurallar: dal `yuk/`, PR başlığı "[Yük]"; yalnız karar masasına yaz (kutu girdisinin başlığında "(BUILD 1 — yük)"); panel konusu BUILD 2'nin; Can'ın (`sinav.py`, `profiller.py`, `grafikler.py`) ve Civan'ın (`app/`) dosyalarına dokunma. Her PR'dan sonra karar masasına mesaj; karar masası Mac'te tekrarlar.
-Durum: bekliyor
+Durum: yapıldı — madde 1–2 PR #24 (0991064), madde 3 PR #26 (7397440), madde 4 PR #24'te; akşam gerilimi PR #29, tepe saati PR #32 (09:29)
 
 ## UYARI! 1 Kasım 00:18 — (BUILD 2 — panel) — PR #22 iki kat hata koşumu yapıldı (sınırda: %2,6 → %1,9, güvenle değil); PR #19 iki eksi düzeltildi — test edin
 Ne: (1) **PR #22** (KARAR 23:47 / 00:10 madde 1–3): motor kayıt hatasını iki kat varsayar (`basvuru.VARSAYILAN_HATA`; `basvuru_testi.py --model-hata iki_kat|aynen`, `aynen` ilk koşumu verir; 1–10'da birebir sağlandı). Sınav 21–30 bir kez [Hesap; farazi, sahte kayıt, gösterim]:
@@ -920,14 +920,14 @@ Soru (PR #22): kural yeterli mi, yoksa (b) pilot şartı (sahada 20–30 kayıt 
 Kalan (PR #22): PR #21 birleşince dal main'e göre güncellenir (sözleşme sürüm satırı tek satır çakışır, iki ibare birlikte kalır); §7 GitHub onayı Civan'dan istendi (civan.md 00:18).
 Dosya: PR #22 (858a999; https://github.com/volkanGRGN/KKTC-hackathon/pull/22), docs/log/2026-11-01-volkan-panel-iki-kat-hata.md; PR #19 (d974753; https://github.com/volkanGRGN/KKTC-hackathon/pull/19). Mac tekrarı: `python3 src/basvuru_testi.py data/synthetic/u13 --aralik 21-30 --json x.json` (iki kat varsayılan; `--model-hata aynen` ilk tablo).
 Neden: KARAR 23:47, 00:10; Volkan'ın kuralı (eksi bulgulu PR karar masasında test edilir).
-Durum: bekliyor
+Durum: yapıldı — karar 00:27 (pilot şartı); PR #19 ve #22 main'de (09:29)
 
 ## UYARI! 1 Kasım 00:23 — (BUILD 2 — panel) — Muhittin madde 1 (PV): `pv_uc` sütunu PR #23'te — yanlış yeşil 0, bayrak isabeti %75, renksiz %89; test edin
 Ne: ADR-0017: `kac_ev_olasilik.py` `kac_ev.csv` sonuna `pv_uc` (`yesil` / `dolu_bayrak` ≥ 0,7 / `bos`) yazar; `guvenli_uc.py` madde 3 ölçüsü (+ `--kayitli`, PR #22 koduyla). Ayar yok, yalnız 1–10 [Hesap, farazi, gösterim]: resmi yeşil 20 / yanlış yeşil 0; bayrak 20, gerçekte dolu %75 (15/20) ≥ %59 → geçer; renksiz %89 (ADR tablosuyla birebir). Sahte kayıtla (motor iki kat varsayar) yeşil 28–32, bayrak isabeti %79–89, kusursuz bilgide %96 (27/28); yanlış yeşil her satırda 0. Sağlama: 1–10'da eski `kac_ev.csv` ile 400 satırda ilk 13 sütun birebir.
 Açık (eksi değil): gerçekte dolu 47 trafonun yalnız üçte biri bayraklı; kalan dolular "başvuruda bakılır"da. Sözleşme sürüm satırına dokunmadım (PR #21 / #22 aynı satırda); 1.4 notu §6'da. Civan'a onay ve harita UYARI'sı (civan.md 00:23).
 Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23), docs/log/2026-11-01-volkan-panel-guvenli-uc.md
 Neden: Muhittin 4 madde 1; ADR-0017 "Sonuçlar" (BUILD 2).
-Durum: bekliyor
+Durum: yapıldı — PR #23 main'de (b517015) (09:29)
 
 ## KARAR 00:27 — PR #19 ve #21 birleşti; PR #22 Mac'te birebir, iki şart kaldı; kayda koşullu evet için pilot şartı (BUILD 2 — panel)
 Karar: Volkan (KARAR oturumu): "Test ettiysen birleştir."
@@ -936,19 +936,19 @@ Karar: Volkan (KARAR oturumu): "Test ettiysen birleştir."
 3. **PR #22 Mac tekrarı birebir** (858a999; karar masasının kendi ürettiği 1.3 şehirleri 21–30, sablon → kac_ev_olasilik → sahte_kayit → basvuru_testi): motor iki kat varsayarken hemen evet / yanlış evet: yarı %10,7 / 1/766, beklenen %9,7 / 0/694, **iki kat %10,1 / 14/722 (%1,9)**, kusursuz %18,0 / 5/1.295; `aynen` ilk tabloyu birebir verdi (beklenen %10,5 / 1/751, iki kat 20/770); yanlış yeşil her satırda 0; yeniden kurma 396/400 trafo birebir [Hesap: karar masası 00:26].
 4. **BUILD 2'nin sorusuna karar — pilot şartı da gelir:** iki kat hatalı kayıtta yanlış evet %1,9 ama %95 aralığın üst ucu %3,2; tüzük madde 2 kapısı güvenle tutmuyor. Kural: motor iki kat hata varsayar **ve** gerçek Kıb-Tek kayıtlarıyla canlıda **kayda koşullu "hemen evet" ancak kayıt kalitesi sahada ölçüldükten sonra** (pilotta 20–30 kayıt: kademe, direk sırası, faz); o zamana kadar motorun kayda koşullu evet'i "önce ölç (kayıt teyidi)" olarak verilir. Haritanın kayıtsız yeşili bundan etkilenmez. Deneme şehirlerindeki ölçüm (gösterim) değişmez. BUILD 2: bir cümle günlüğe ve ROADMAP Faz 9'a, PR #22'de ya da sonraki `panel/` PR'ında.
 5. **PR #22 için kalan:** (a) dal main'e göre güncellenir (#21 birleşti; sözleşme sürüm satırında iki ibare birlikte); (b) Civan'ın §7 GitHub onayı (civan.md 00:18; şu an yalnız yorum var). İkisi tamamlanınca karar masası birleştirir (Volkan'ın sözü geçerli).
-Durum: bekliyor (#22: dal güncellemesi BUILD 2, onay Civan)
+Durum: yapıldı — PR #22 main'de (9a6226c) (09:29)
 
 ## BAŞLA 00:27 — (BUILD 2 — panel) Muhittin 4: madde 1'in panel kısmı (güvenli uçlar) ve madde 5 (kademe, inverter geri çözümü)
 Karar: Panel tarafının PR işi bitti (#19 birleşti, #22 yalnız dal güncellemesi ve Civan onayı bekliyor); BUILD 2 başlar.
 1. **Güvenli uçlar ([ADR-0017](../decisions/adr-0017-pv-katmani-guvenli-uclar.md)):** `kac_ev_olasilik.py` `kac_ev.csv`'ye `pv_uc` (`yesil` / `dolu_bayrak` / `bos`; bayrak `p_bugun_asar` ≥ 0,7) yazar, sözleşme 1.4 notu (Civan ya da Can onayı); bayrak isabetini 1–10'da ölçer (karar masası: 20 bayrağın 15'i dolu), sahte kayıtlı görünümde aynı ölçü yan yana. Eşik ayarı yalnız 1–10'da; 21–30 daha önce görüldü (bilgi).
 2. **Kademe ve inverter geri çözümü (Muhittin 5):** (A) kademe ayrık öncülü: trafonun kendi ayarı kayıttan (Kıb-Tek istek metni madde 4); standart tek başına açmıyor (PR #20). (B) inverter geriliminden geri çözüm: sakin sabah ev gerilimi ≈ bara (datum), yüksek PV öğleninde salınım → hat empedansı; tek inverterden çıkış gerilimi ve hat parametresi. PR #19'daki okuyucu ve sahte kayıttaki `inverter` satırı buna bağlanır; Civan'ın notuna göre ham kayıt (zaman damgalı gerilim) girdi, `bara_v` / `esdeger_boy_m` motorun içinde çözülür. Ölçü: inverterli trafolarda yeşil / bayrak / renksiz payı ve yanlış yeşil (kapı); 1–10'da kur, 21–30 bir kez.
 Kurallar: dal `panel/`, PR başlığı "[Panel]"; yalnız karar masasına yaz (kutu girdisinin başlığında "(BUILD 2 — panel)"); yük konusu BUILD 1'in; Can'ın ve Civan'ın dosyalarına dokunma.
-Durum: bekliyor
+Durum: yapıldı — güvenli uçlar PR #23, kademe / inverter PR #25 (01c1b0d), ölçüm sırası PR #30 / #34 / #35 (09:29)
 
 ## KARAR 00:32 — (BUILD 2 — panel) PR #23 (güvenli uçlar, `pv_uc`): Mac'te tuttu; birleşme Civan'ın §6 onayını bekliyor
 Karar: Karar masası Mac'te main ile PR #23'ün (f9d52bc) birleşik hâlini kendi ürettiği 1.3 şehirleri 1–10'da koştu (`sablon.py` → `kac_ev_olasilik.py` → `guvenli_uc.py --aralik 1-10`): aday evli 354 trafo, dolu 47; yeşil 20, **yanlış yeşil 0/20**; bayrak 20, **gerçekte dolu 15/20 (%75) ≥ %59 (ortalama p 0,78'in n toleranslısı) GEÇER**; bayrağın yakaladığı dolu 15/47; renksiz %88,7; eski kırmızının dolu payı %54,7 — BUILD 2 ve ADR-0017 tablosuyla birebir. `kac_ev.csv`'nin ilk 13 sütunu main'in çıktısıyla 400/400 satırda aynı, yalnız sonda `pv_uc` [Hesap: karar masası 00:31]. Eksi bulgu yok.
 Kalan: sözleşme §6 notu (1.4 adayı `pv_uc`) için Civan ya da Can GitHub onayı (civan.md 00:23). Onay gelince karar masası birleştirir (Volkan'ın sözü geçerli). #22 ile aynı dosyanın farklı bölümleri; #22 önce birleşirse dal güncellemesi gerekebilir.
-Durum: bekliyor (onay Civan / Can)
+Durum: yapıldı — PR #23 main'de (b517015) (09:29)
 
 ## UYARI! 1 Kasım 00:33 — (BUILD 2 — panel) — Muhittin madde 5: (A) taslakta var; (B) inverter geri çözümü benzetimde: bara hep düşük çıkıyor, motorun bugünkü varsayımıyla yanlış evet %2,7 (PR #25) — test edin
 Ne: (A) Kıb-Tek taslağı madde 4'te trafo başına kademe ayarı ve devreye alma kaydı zaten var (00:14); yeni iş yok. (B) PR #20'de ve PR #22'de inverter kaydı "gerçek + gürültü" (±1 / ±2 V) idi; karar masası 23:03'ün düzeltmeleri (%20 kapsama, empedans yalnız inverterin hattında) PR #22 motorunda var, PR #20 betiğinde yok. Şimdi geri çözüm benzetimde gerçekten yapıldı (`inverter_geri_cozum.py`: yalnız gündüz, sabah ilk değer → bara). Bulgu [Hesap; farazi, gösterim]: **geri çözülen bara hep gerçekten düşük**, ortanca −0,8 V (1–10) / −1,0 V (21–30), P10 −2,15 V, ≤ 1 V evlerin %52–62'si; alt kuyruk P1 −5,4 V. Güvensiz yön. Uçtan uca, sınav 21–30 bir kez, kayıtlar iki kat hatalı:
@@ -962,7 +962,7 @@ Eksi: (1) PR #22'nin iki kat kuralı bu kaymayı kapsamıyor; gerçekçi inverte
 Soru: motor inverter barasını ölçülmüş kaymayla mı kullansın (R2; bedel hemen evet −1 puan), yoksa inverter barası pilotta gece seviyesi (akıllı priz, Faz 10 P7) aynı evde ölçülene kadar hiç kullanılmasın mı?
 Dosya: PR #25 (taban PR #22; https://github.com/volkanGRGN/KKTC-hackathon/pull/25), docs/log/2026-11-01-volkan-panel-inverter-geri-cozum.md (dalda)
 Neden: Muhittin 4 madde 5; karar masası 22:56 / 23:03; BUILD 2 görevi.
-Durum: bekliyor
+Durum: yapıldı — karar 00:39; PR #25 main'de (01c1b0d) (09:29)
 
 ## UYARI! 1 Kasım 00:45 — (BUILD 1 — yük) — Akşam tepesi ön sürümü PR #24'te (Muhittin 4 madde 2, ADR-0018): İspanya Mayıs tepesi faturayla %15,4, farazi %6; test edin
 Ne: `src/tepe.py` her trafoda yılın net tepesini (kW, kVA), saatini, ayını ve geniş bandını yazar (`tepe.csv`, sözleşme §7 adayı, Can'ın sütun adları + `kor_nokta`; `guven` = on). Yöntem: EAC 2022 ay tipik günü × faturadan sınıf enerjisi × ölçülü 12 trafonun Nisan oranı; Haziran–Eylül ve Ocak–Şubat taraması, ayın en sıcak / soğuk günü terimi; eğim EAC'nin aylar arası farkından (konut yaz %3,0/°C) [Hesap]; bant İspanya Mayıs artıklarından (P10 −0,218, P90 +0,420; sağa çarpık) ⊕ eğim × 0,5–2. Haritanın "yük için boş" sayısı `bos_kva_p10` (P90 tepeden). `edp_test.py --hedef tepe` İspanya tepe satırlarını yazar (K_TEPE 1,164); öğlen satırları main'le bayt bayt aynı.
@@ -971,7 +971,7 @@ Eksiler: (1) İspanya'da hata Can'ın geçici eşiğinin (%15 / %35) kıl payı 
 Soru: İspanya maddesi kıl payı kalıyor; eşik [Yorum] Can'ın. Ön sürüm bu hâliyle birleşsin mi (öneri: evet, "ön" etiketi ve eşik notuyla)?
 Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), docs/log/2026-11-01-volkan-yuk-tepe-on.md (dalda)
 Neden: BAŞLA 00:16 madde 1–2; ADR-0018.
-Durum: bekliyor
+Durum: yapıldı — karar 00:42; PR #24 main'de (0991064) (09:29)
 
 ## KARAR 00:39 — (BUILD 2 — panel) PR #25 (inverter geri çözümü): Mac'te birebir; motor inverter barasını yalnız ölçülmüş kaymayla kullanır, canlıda pilot şartıyla; iki düzeltme, sonra #22'nin ardından birleşir
 Karar: Karar masası Mac'te PR #25'i (c53730d; #22 üstünde, main ile birleşik) kendi 1.3 şehirleriyle baştan koştu (`sahte_kayit` 1–10 ve 21–30 → `inverter_geri_cozum` 1–10 / 21–30 → `basvuru_testi` 21–30 R0 / R1 / R2): geri çözülen bara (sabah ilk değer − gerçek) ortanca −0,79 V (1–10) / −0,97 V (21–30), P10 −2,15 V, |hata| ≤ 1 V %62 / %52; sakin an 05:00–06:30'un %68 / %65'inde inverter uyanık; iki kat hatalı kayıtta yanlış evet R0 %1,9 (14/722) → R1 %2,7 (21/772) → R2 %1,3 (9/692); beklenen kayıtta R1 %0,9 (7/749), R2 %0,3 (2/680); yanlış yeşil her satırda 0 — BUILD 2 ile birebir [Hesap: karar masası 00:36].
@@ -979,7 +979,7 @@ Karar: Karar masası Mac'te PR #25'i (c53730d; #22 üstünde, main ile birleşik
 **Düzeltmeler (birleşmeden önce):** (a) `basvuru.py`: `inv_bara_hata` yoksa inverter barası kullanılmaz (R1 geri dönüşü kalkar); (b) Faz 10 kartı ve günlüğe pilot şartı cümlesi. Empedans geri çözümü şimdilik yok (eğimin günden güne oynaklığı ortanca %21–23, P90 ~%100; gerçek pilot verisi beklenir).
 **Birleşme sırası:** #22 (Civan'ın §7 onayı) → #25'in tabanı main'e çevrilir → karar masası kısa Mac tekrarı (R2 satırı) → birleşir.
 Neden: tüzük madde 2–3; Muhittin 3 (ölçülmemiş bilgiye güvenme); Volkan'ın kuralı (eksi bulgulu PR düzelmeden birleşmez).
-Durum: bekliyor (düzeltmeler BUILD 2, sıra #22'de)
+Durum: yapıldı — iki düzeltme ve sürüm kontrolü; PR #25 main'de (01c1b0d) (09:29)
 
 ## KARAR 00:42 — (BUILD 1 — yük) PR #24 (yılın tepesi ön sürümü): Mac'te birebir; İspanya maddesi kıl payı KALDI, eşik oynatılmaz; ADR-0018'e iki uyum düzeltmesi, sonra 21–30 bir kez daha
 Karar: Karar masası Mac'te PR #24'ü (dab129e; main ile birleşik) kendi üretici 1.4 şehirleriyle koştu (`sablon.py` → `tepe.py` 1–10 / 21–30 → `edp_test.py --hedef tepe` → Can'ın `sinav.py faz2 --aralik 21-30 --ispanya --ispanya-tepe`): **İspanya Mayıs tepesi (10 ölçülü, tabakalı) hata %15,4 / P90 %36,1, %80 bant %80,3 → madde KALDI** (eşik ≤ %15 / %35); gerçek, tahmin ortasının altında %64 (fazla tahmin, güvenli yön). Farazi 21–30 (gösterim): %6,0 / %17,7, kapsama %98,6, tepe saati ±60 dk %45,4. Değişmemesi gerekenler aynı: `tahmin.csv` 20/20 şehir ve İspanya öğlen satırları main'le bayt bayt; faz2'nin öğlen maddeleri aynı (%12,2 / %27,0; İspanya %82,1) [Hesap: karar masası 00:41]. BUILD 1 ile birebir.
@@ -987,7 +987,7 @@ Karar: Karar masası Mac'te PR #24'ü (dab129e; main ile birleşik) kendi üreti
 **Birleşmeden önce iki uyum düzeltmesi (ADR-0018):** (a) **m. 5 Velander varsayılanı:** sınıf eğrisi tam çeşitlilik varsayar; az aboneli trafoda tepe bu yüzden az çıkar (güvensiz yön). Can'ın B-Y2'si gelene kadar N·a + b·√(N·a) varsayılanı [Yorum] ve belirsizliği banda. (b) **m. 4 tasarım sıcaklığı uzun seriden:** Open-Meteo arşivinden Lefkoşa ≥ 10 yıl saatlik sıcaklık (açık veri, `data/raw/open-meteo-lefkosa/KAYNAK.txt`'e satır), 10 yılda bir sıcak akşam; "3 yıl + 2 °C" kalkar. Sonra sınav 21–30 ve İspanya bir kez daha (yöntem değişti); karar masası (TEST oturumu) tekrarlar.
 **Sözleşme:** #22 de §7'yi (`kayitlar.csv`) kullanıyor; ikinci birleşen numarasını kaydırır (`tepe.csv` → §8 önerisi). Onay Civan ya da Can.
 Kalan bilgi (bloklamaz): tepe saati zayıf (konutta iki tepe), akşam gerilimi tahmini yok, `--fatura-net` varsayılan kapalı (Kıb-Tek faturası net mi BULAMADIM; istek metni madde 3).
-Durum: bekliyor (BUILD 1 düzeltmeleri; onay Civan / Can)
+Durum: yapıldı — Velander ve uzun seri eklendi, PR #24 main'de (0991064) (09:29)
 
 ## UYARI! 1 Kasım 00:46 — (BUILD 2 — panel) — PR #22 dal güncellendi (Civan onayı kaldı); PR #25 karar masası 00:27'ye göre: ham özet kayda, yanlış evet %0,7; inverter haritayı açmıyor, PR #20 cümlesi iyimser — test edin
 Ne: (1) **PR #22** (34c10ab): main birleştirildi, sözleşme sürüm satırında iki ibare birlikte; pilot şartı günlüğe ve ROADMAP Faz 9'a. Kalan yalnız Civan'ın §7 GitHub onayı. (2) **PR #25** (bf19af4, taban #22), KARAR 00:27 madde 2'ye göre: kayıtta inverterin **ham özeti** (§7 yeni tür `inverter_ham`: bara ölçümü = günlerin ilk değerinin ortancası, eğim V/kW); `inverter_kaydi.geri_coz` gerçek kayıt ve benzetim için tek fonksiyon (okuyucu güç sütununu da arar); bara motorda, 1–10'da ölçülen kaymayla. **Hat boyu çevirici tutmadı** (eğimden boy ×0,30–2,63, kayıttaki ±%15'ten kötü) → kapalı, olumsuz sonuç günlükte. Sınav 21–30 bir kez [Hesap; farazi, sahte kayıt, gösterim], iki kat hatalı kayıtta yanlış evet **4/576 = %0,7** (aralık %0,3–1,8, 2 trafo; R0 %1,9), beklenende 1/558, yarıda 0; hemen evet %10,1 → %8,0; yanlış yeşil 0. İnverterli 156 trafoda: kayıtsız yeşil 0 / bayrak 20 (14 dolu) / renksiz %87 → kayıtlı yeşil 1–3 / bayrak 9–15 / renksiz %90–92.
@@ -995,7 +995,7 @@ Eksi: (1) **inverter haritayı açmıyor**; PR #20'nin "tek inverter kaydıyla y
 Not: 00:33 girdisindeki soru (R2 mi, hiç kullanmamak mı) bu PR'la cevaplandı sayılabilir: R3 = ölçülmüş kaymayla, ama yalnız bara.
 Dosya: PR #25 (https://github.com/volkanGRGN/KKTC-hackathon/pull/25), günlük ek bölümü; §7 değişikliği için Civan'a UYARI (civan.md 00:46)
 Neden: KARAR 00:27 madde 2; Muhittin 4 madde 5B.
-Durum: bekliyor
+Durum: yapıldı — PR #22 (9a6226c) ve PR #25 (01c1b0d) main'de (09:29)
 
 ## UYARI! 1 Kasım 01:35 — (BUILD 1 — yük) — Muhittin 4 madde 3 ve 4: net fatura iki kez düşüyor (PR #24'e eklendi), Kıb-Tek tepe verisinin girişi PR #26'da; dört maddenin durumu; test edin
 Ne: (1) **Madde 4, öğlen (PR #24, ikinci commit):** model faturayı brüt sayıyor, panel üretimi öğlende kac_ev fiziğinde bir kez düşülüyor; deneme şehirleri brüt, iki kez düşülmüyor. Kıb-Tek'in mahsuplaşma faturası net ise düşülür: 1–10'da faturayı net yapınca paneli tüketiminin %30'undan fazlası olan trafolarda **öğlen −%24** (kapsama %67), **yılın tepesi −%27** (gerçek P90'ın üstünde %36) [Hesap]. `sablon.py --fatura-net` (ve `tepe.py`) panel kW × 1,69 MWh/kWp'i geri ekler; verim ±%15 hatalıyken sapma ≤ %2. **Varsayılan brüt, `tahmin.csv` 1–10'da resmi u13 ile 10/10 bayt bayt aynı.** Kıb-Tek'in faturası net mi: BULAMADIM (istek metni madde 3 soruyor).
@@ -1005,11 +1005,11 @@ Dört maddenin durumu: **madde 1** (yük temel katman, Kıb-Tek verisiyle kalibr
 Soru: Kayıtlardan popülasyona aktarım şimdilik kapalı kalsın mı (öneri: evet, B-Y2 eşzamanlılığıyla tabakalı yeniden-fitte açılır)?
 Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #26 (https://github.com/volkanGRGN/KKTC-hackathon/pull/26); günlükler docs/log/2026-11-01-volkan-yuk-ogle-fatura.md, docs/log/2026-11-01-volkan-yuk-kibtek-tepe.md (dallarda)
 Neden: BAŞLA 00:16 madde 3–4; ADR-0018 m. 7.
-Durum: bekliyor
+Durum: yapıldı — karar 00:57; PR #24 ve #26 main'de (09:29)
 
 ## KARAR 00:49 — (BUILD 2 — panel) PR #25 yeni hâli (bf19af4): TEST oturumunda; ROADMAP Faz 10 ve kart düzeltmesi; sıradaki iş konum payı
 Karar: (1) PR #25'in yeni hâli (ham inverter özeti, ölçülmüş kayma `INV_BARA_HATA_Q`, hat boyu çevirici kapalı) TEST oturumunda Mac'te tekrarlanır; sonuç gelince karar. (2) **Önemli sonuç kabul:** inverter kaydı haritayı açmıyor (PR #20'nin "%5 → %10"u iyimser uçtu); başvuru anında yanlış evet'i düşürüyor (iki kat hatalı kayıtta %1,9 → %0,7, 4/576). Can'a sunum uyarısı (can.md 00:49). (3) BUILD 2 #25'e ekler: ROADMAP Faz 10'daki "Inverter kaydı açıyor (PR #20)" satırını bu sonuçla değiştirir ve "Hazırlık (PR #19, açık)" satırını "birleşti" yapar; Faz 10 kartına P6 / P7 "aynı evde, aynı hafta" satırı (KARAR 00:39 m. 3); motorda türetilmiş `inverter` satırı için ±`inv_bara_v` geri dönüşü yalnız sahte kayıt (gerçek ± gürültü) içindir, gerçek kayıt `inverter_ham` yolundan gider: bu ayrım kodda açıklama satırıyla yazılsın. (4) **Sıradaki iş: sarıda konum payı** (`yesil_konum_payi`, ADR-0015 m. 4; renksiz trafolarda yan panele bilgi, renk değil). Empedansı gözlenen öğlen yükselmesine göre tartarak çözme önerisi sonra (konum payından sonra, gerekirse).
-Durum: bekliyor (TEST; BUILD 2)
+Durum: yapıldı — PR #25 main'de (01c1b0d); konum payı PR #28 main'de (09:29)
 
 ## UYARI! 1 Kasım 02:20 — (BUILD 1 — yük) — PR #24'e KARAR 00:50'nin iki düzeltmesi: Velander varsayılanı ve tasarım sıcaklığı uzun seriden; İspanya değişmedi (KALDI kalır); 21–30 bir kez; PR #26 güncel — test edin
 Ne: (a) **Velander varsayılanı (ADR-0018 m. 5):** ölçülmeyende R = R0 × (1 + c ÷ √n), n = enerji ÷ konut abonesi yıllık enerjisi; c ölçülü 12 trafonun Nisan R'lerinden ızgarayla (0–3), belirsizliği banda (c = 0 ile max(2ĉ; 0,5) arası). Şehir 1–10'da ĉ 6 şehirde 0, ötekilerde 0,05–1,0; 21–30'da 0–0,5 [Hesap]. **İspanya'da aynı biçim** (fatura × (1 + c ÷ √müşteri), c yalnız ölçülülerde): tabakalıda c = 0 seçiliyor, sonuç birebir (10 ölçülü %15,4 / %36,1, %80 bant %80,3; k 1,164) → **madde KALDI kalır**. Denenip kullanılmayan: serbest iki katsayılı fit %19,2 / %39,6 (günlükte). (b) **Tasarım sıcaklığı:** Lefkoşa 2015–2025 saatlik sıcaklık Open-Meteo'dan indirildi (11 yıl, KAYNAK.txt'te adres ve SHA-256; 2023–2025 eski dosyalarla birebir). 10 yılda bir uç gün (yıllık uçların %90'lık değeri [Yorum]): Temmuz ay ortalamasının +4,7 °C, Ağustos +4,4, Haziran +6,4; Ocak −6,4. "3 yıl + 2 °C" kalktı; tasarım ÷ hava yılı tepesi ortanca 1,019 (P90 1,065).
@@ -1018,7 +1018,7 @@ PR #26 (Kıb-Tek tepe verisi, #24'ün üstünde) bu düzeltmelerle birleştirild
 Tekrar: main + #24 ile 1–10 / 21–30 üret → `python3 src/tepe.py <kök> --aralik 21-30` → `python3 src/edp_test.py <GIS_data> --hedef tepe --cikti t.csv` → Can'ın `sinav.py faz2 --ispanya-tepe t.csv`. Tasarım: `--hava tasarim`.
 Dosya: PR #24 (855a6c3), PR #26 (1e158e1), docs/log/2026-11-01-volkan-yuk-tepe-on.md "Ek" (dalda)
 Neden: KARAR 00:50.
-Durum: bekliyor
+Durum: yapıldı — PR #24 main'de (0991064) (09:29)
 
 ## UYARI! 1 Kas — Can'dan — Üretici 1.5 hazır: PR #27 (taban PR #21); Mac koşumu ve onay
 Ne: Karar masası 23:35 (2). `uretici/1.5` (PR #27, https://github.com/volkanGRGN/KKTC-hackathon/pull/27; önce PR #21 birleşmeli). Üç değişiklik: trafo gücü yılın tepesinden (yaz tasarım payı, büyük abonenin büyüklüğü, 1.600 / 2.500 kVA); büyük abone baradan kendi kablosuyla (1.4'teki otel aşımı ve gerilim çöküşünün sebebi ortak hattaki büyük akımdı); hat akşam tepesine göre (kesit, bölme). Sonuç, sınav şehirleri 31–40 (bir kez): yıl tepesi ÷ güç P50 / P90 **0,43 / 0,67** (Malta 0,42 / 0,74), aşan **%0,8** (Malta %1,5; 1.4 %4,3), 207 V altı **%0,5**, en düşük **202,8 V** (1.4: 162,8). faz2 / faz3 GEÇTİ (yanlış yeşil 0/28).
@@ -1026,11 +1026,11 @@ Ne: Karar masası 23:35 (2). `uretici/1.5` (PR #27, https://github.com/volkanGRG
 Sınav kodu benim, modeli de ben yazdım: öneren ≠ puanlayan → Mac koşumu ve onay karar masası / Civan / BUILD.
 Dosya: PR #27; docs/log/2026-11-01-can-uretici-1.5.md (dalda)
 Neden: yük haritası gerçekçi şebekede sınanmalı; tepe modeli (B-Y2) 1.5 şehirlerinde kurulacak. Bloklamıyor.
-Durum: bekliyor
+Durum: yapıldı — karar masası Mac testi tuttu, Volkan onayladı, PR #27 main'de (6013342) (09:29)
 
 ## KARAR 00:57 — (BUILD 1 — yük) PR #24 düzeltmeleri ve PR #26: TEST sırasına; popülasyona aktarım kapalı; sıradaki iş akşam gerilimi
 Karar: (1) PR #24'ün yeni hâli (855a6c3: Velander varsayılanı R0 × (1 + c/√n), İspanya'da c = 0 seçiliyor, sonuç aynı ve madde KALDI kalır; tasarım sıcaklığı Lefkoşa 2015–2025 Open-Meteo, 10 yılda bir uç gün Temmuz +4,7 °C; 21–30 %5,8 / %17,7, bant %99,3; `tepe.csv` §8) ve PR #26 (Kıb-Tek tepe verisi girişi, #24 üstünde, §9) **TEST oturumunda Mac'te tekrarlanır**; sonuç gelince karar. (2) **Soruya karar — kayıtlardan popülasyona aktarım kapalı kalır:** MD kayıtları büyük yer tipi trafolarda, temsilî değil; aktarım tahmini −%2 / −%4 kaydırdı (yükte güvensiz yön). Açma şartı: tabakalı (yer tipine göre) seçim + kayıtların ayar / doğrulama payına bölünmesi (tüzük m. 1), doğrulama payında bant kapsaması %70–90 ve fazla tahmin yönü korunursa; B-Y2 eşzamanlılığıyla sürümlü yeniden-fitte (tüzük m. 4). Fider oranıyla yukarıdan aşağı düzeltme de kapalı, yalnız kontrol. (3) Pilotta trafo başı cihazı net ölçer: ölçülü trafonun üretimi geri eklenmeli; not BUILD 1'in Faz 9 tepe kartına ve günlüğe (Faz 10 kartı BUILD 2'nin; gerekirse karar masası iletir). (4) **Sıradaki iş (BUILD 1): akşam gerilimi tahmini** — `tepe.csv`'ye `v_min_tepe_v` (akşam tepesinde en düşük ev gerilimi; sınavın 207 V maddesi bunu bekliyor, ADR-0014 / 23:12), aynı geniş bant ve "ön" etiketiyle; 1–10'da kur, 21–30 bir kez. Sonra tepe saati (konutta iki tepe). (5) Kutu girdisi saatleri bilgisayarın yerel saatiyle yazılsın (01:35 / 02:20 girdileri gerçekte ~00:3x / ~00:5x).
-Durum: bekliyor (TEST; BUILD 1)
+Durum: yapıldı — PR #24, #26 main'de; akşam gerilimi PR #29 main'de (ff8836f) (09:29)
 
 ## KONTROL 01:00 — TEST oturumundan (karar masası kaydeder) — main sağlık koşusu (3292509, #19 ve #21 sonrası): beklenen her rakam birebir
 Ne ölçüldü (TEST, Mac, main'in temiz kopyası, şehirler sıfırdan): Nisan dosyaları 1.4 ↔ 1.3 40/40 bayt bayt; cevap anahtarı eski sütunları 20/20 aynı; yük haritası cevap anahtarı 1–10 tepe ayı Temmuz 396 / Ocak 4, kVA aşan 22/400, 207 V altı 10/400 (en düşük 160,1 V) — 21–30 bilgi: Temmuz 399 / Ocak 1, aşan 15/400, 207 V altı 16/400 (157,1 V); `tahmin.csv`, `kac_ev.csv` 20/20 BUILD u13 ile aynı. Sınavlar: faz1 20 şehir 5/5; faz2 21–30 (öğlen) %12,2 / %27,0, İspanya %80 bant %82,1, PIT 0,066 GEÇTİ; faz3 21–30 (panel) yanlış yeşil 0/17, kırmızı kovası %49,2 GEÇTİ, sarı %77,7 [Hesap: TEST 00:5x].
@@ -1043,18 +1043,18 @@ Eksi (PR #28): konum payı güvenli ama renksiz trafoda neredeyse hiç bilgi ver
 Soru: yan paneldeki konum cümlesi bu kadar az trafoda çıkacaksa Civan'a gösterim kartı açılsın mı, yoksa sütun yalnız veri olarak kalsın mı?
 Dosya: PR #28 (https://github.com/volkanGRGN/KKTC-hackathon/pull/28), docs/log/2026-11-01-volkan-panel-konum-payi.md (dalda); PR #25 (https://github.com/volkanGRGN/KKTC-hackathon/pull/25)
 Neden: KARAR 00:39 / 00:49; ADR-0015 m. 4.
-Durum: bekliyor
+Durum: yapıldı — karar 01:01; PR #28 main'de (618e758) (09:29)
 
 ## KARAR 01:01 — (BUILD 2 — panel) PR #28 (sarıda konum payı): haritaya kart yok, sözleşmeye sütun yok; hesap analiz seçeneği ve günlükte kalır; TEST sırasına; sıradaki iş Faz 10 ölçüm sırası
 Karar: (1) **Soruya karar — gösterim kartı açılmaz, `yesil_konum_payi` sözleşmeye girmez:** renksiz 336 trafonun yalnız 17'sinde pay > 0, adayların %0,4'ü; yan panelde neredeyse hep boş bir satır olur ve Civan'ın sırası dolu. ADR-0015 m. 4'ün harita dili ADR-0017 ile zaten değişti (sarı → renksiz, "başvuruda bakılır"); evin konumuna göre kararı başvuru anı motoru veriyor. Hesap `guvenli_uc.py --konum` analiz seçeneği olarak kalır, sonuç (21–30 bir kez: 17 trafo, yanlış evet 0/33; toplam 0/110) günlüğe ve ROADMAP Faz 9'a "denendi, renksiz trafoda bilgi vermiyor; darboğaz yük güveni (%57) ve bugünkü aşma olasılığı (%33)". BUILD 2: `kac_ev.csv`'ye sütun yazan kısmı PR #28'den çıkarır (ilk 13 + `pv_uc` aynen kalır); Civan'dan §6 onayı istenmez (civan.md 00:57 girdisi "geri çekildi" olur). (2) PR #28'in kalan hâli TEST sırasına (#25, #24, #26'dan sonra). (3) **Önemli bulgu kabul:** panelde "evet"in darboğazı ağ kaydı değil öğlen yükünün güveni (trafoların %57'sinde yüksek değil). Bu yük tarafının sorusu; BUILD 1'e iletilir (akşam gerilimi işinden sonra: güven kuralı ölçülü trafolarla doğru mu, fatura ve Kıb-Tek tepe kaydı güveni yükseltir mi). (4) **Sıradaki iş (BUILD 2): Faz 10 ölçüm sırası** — her renksiz trafo için hangi tek ucuz ölçüm (akıllı prizle gece bara seviyesi, trafo başında bir haftalık öğlen yükü, plaka / kademe) onu yeşile ya da bayrağa en çok taşır (`bilgi_degeri.py` üstüne); çıktı: pilot için "ilk 20 trafo" listesi ve her ölçümün açtığı ev sayısı. 1–10'da kur, 21–30 bir kez; yanlış yeşil kapısı her satırda.
-Durum: bekliyor (BUILD 2; TEST)
+Durum: yapıldı — PR #28 (618e758) ve ölçüm sırası PR #30 (fe6c769) main'de (09:29)
 
 ## BİLGİ 1 Kasım 01:05 — Civan'dan — sunum 6. madde: bir trafoyu ölçmenin maliyeti (EMO belgeleriyle)
 Ne: [Hesap] Taşınabilir kaydediciyle (Fluke 1736, pensli; kesinti ve akım trafosu yok) bir trafo ~18–27 bin TL; 12 trafoluk pilot 3 cihazla 8 haftada ~1,2 milyon TL. Her trafoya kalıcı analizör ~47–62 bin TL + iletişim; Kuzey'in tümü (vekil ~6.400–6.700 trafo) ~300–419 milyon TL, pilotun ~250–350 katı. Dayanak: PİD birim fiyat Ekim 2024 (akım trafosu, pano), EMO Rev.13 (mühendis saati = asgari ücretin %5'i; brüt 70.893 TL), Fluke 6.164 € KDV hariç, TCMB 55,8153.
 Eksiler: panel analizörü fiyatı BULAMADIM (doğrulanmış); GSM iletişim BULAMADIM; PİD 2024 fiyatı; ölçüm süresi (2 hafta) ve gidiş saatleri [Yorum]; gümrük/KDV yok.
 Dosya: docs/log/2026-11-01-civan-olcum-maliyeti.md
 Neden: 17:32 kararındaki sunum akışı madde 6 ("Pilot: ne kadar ölçüm, ne kadar maliyet") ve madde 3 ("her kutuya cihaz takmak çok pahalı") rakamsızdı.
-Durum: bekliyor
+Durum: karar verildi — sunum 6. madde için kabul, rakamlar [Hesap] etiketiyle; panel analizörü ve GSM fiyatı BULAMADIM olarak kalır (karar masası) (09:29)
 
 ## UYARI! 1 Kasım 01:10 — (BUILD 1 — yük) — Akşam gerilimi ön sürümü PR #29'da: P10 kararıyla 207 V altına inen trafolar 16/16 yakalandı, "yeterli" dediklerimizde 0 yanlış; test edin
 Ne: KARAR 00:57 madde 4. `tepe.py` tepe anında en düşük ev gerilimini panel tarafıyla aynı fizikle hesaplar (`kac_ev_olasilik.ag_kur` + `solve`, İngiltere'ye kalibre empedans payı; 40 çekiliş, yük tepe bandından). `tepe.csv` sonuna `v_min_tepe_v` (ortanca), P10 / P90, `p_aksam_207` (sözleşme §8). Karar P10'dan: P10 ≥ 207 V "yeterli".
@@ -1063,21 +1063,21 @@ Eksiler: (1) uyarı çok: ölçülmeyenin ~%37'sinde P10 < 207, gerçek 6–10 (
 Soru: Akşam gerilimi kararı P10 ≥ 207 V olsun mu (öneri: evet; harita "yük için boş" sayısı da P90 tepeden, aynı ilke)?
 Dosya: PR #29 (https://github.com/volkanGRGN/KKTC-hackathon/pull/29; #26'nın üstünde), docs/log/2026-11-01-volkan-yuk-aksam-gerilim.md (dalda)
 Neden: KARAR 00:57 madde 4; ADR-0014, ADR-0016 m. 3.
-Durum: bekliyor
+Durum: yapıldı — karar P10 ≥ 207 V; PR #29 main'de (ff8836f) (09:29)
 
 ## KARAR 01:12 — #25 ve #28 Mac'te tuttu; testi geçen dört panel PR'ı birleşmeye hazır, yalnız GitHub onayı eksik (BUILD 2 — panel)
 Karar: Volkan (01:0x): "testi yap, hata yoksa pushla devam et." Karar masası kendi şehirleriyle koştu:
 - **PR #25 (a5cfddd):** `--kalibrasyon` sabitleri `INV_BARA_HATA_Q` ile aynı; ham kayıtsız koşu PR #22 tablosunu birebir verir (yarı 1/766, beklenen 0/694, iki kat 14/722, kusursuz 5/1.295); ham inverter kaydıyla iki kat 4/576 (%0,7), beklenen 1/558, yarı 0/568; yanlış yeşil her satırda 0; inverterli 156 trafoda kayıtlı yeşil 1–5 (yanlış 0); ROADMAP Faz 10 "haritayı açmıyor" satırı, kartta P6 / P7 "aynı ev, aynı hafta", kodda "türetilmiş satır yalnız sahte kayıt" açıklaması var [Hesap: karar masası 01:08]. Tuttu.
 - **PR #28 (9138806):** `kac_ev.csv` ilk 13 sütun 800/800 aynı, ek yalnız `pv_uc` (1–10'da #23 çıktısıyla tam aynı); sözleşmeye dokunmuyor; konum payı analizinde 21–30 renksiz 336'nın 17'sinde pay > 0, yanlış evet 0/33, toplam 0/110; 1–10'da 18 trafo, 0/34 [Hesap: karar masası 01:06]. Tuttu.
 - **Birleştirme durdu:** izin sistemi GitHub onayı olmayan PR'ın birleştirilmesine izin vermiyor ("incelemesiz birleştirme"). Volkan'ın açtığı PR'ları Volkan onaylayamaz (GitHub yazarına izin vermez); **Can ya da Civan onaylamalı**. Hazır sıra: **#22 → #25** (taban main'e çevrilir) ve **#23 → #28** (taban main'e çevrilir). #24 ve #26 TEST'te.
-Durum: bekliyor (Can / Civan GitHub onayı: #22, #23, #25, #28)
+Durum: yapıldı — Volkan'ın sözüyle dört PR main'de (#22, #23, #25, #28) (09:29)
 
 ## UYARI! 1 Kasım 01:16 — (BUILD 1 — yük) — Madde 5: öğlen güven etiketi hatayı ayırmıyor, bant ayırıyor; yeşil kapısı açılınca yeşil ~2,5 katı, yanlış yeşil 0; konutta değişmiyor
 Ne: KARAR 00:57 madde 5 (yalnız ölçüm, yöntem değişmedi). (1) Güven sırası hatayı ayırmıyor: 21–30'da yüksek / orta / düşük %11,1 / %11,1 / %13,0; İspanya gerçek veride yüksek %13,9, orta %8,7 (ters). Etiketin girdisi arketip olasılığı hatayı haber vermiyor; abone sayısı ve büyük abone haber veriyor. (2) Panel için tehlikeli yanda (gerçek öğlen yükü < P10) bütün sınıflar nominal %10'un altında: 21–30 %9,2 / %2,7 / %0; İspanya %2,4 / %2,1 / %6,0 → bant belirsizliği zaten taşıyor, "güven yüksek" kapısı güvenlik eklemiyor. (3) Karşı-olgu (mevcut çıktılar, panel kodu değişmedi): kapı orta + düşüğe açılınca yeşil 1–10'da 20 → 47, 21–30'da 17 → 47; yanlış yeşil 0, ilk iki sözü bozulan 0 [Hesap; farazi]. **Konut yeşili değişmiyor (0–1):** konutta darboğaz güven değil, gerilim fiziği ve ağ bilgisi. (4) Fatura güveni meşru yükseltir (hata %28 → %10); Kıb-Tek tepe kaydı öğlen güvenini yükseltmez (kayıtla düzeltme %12,3 → %12,7).
 Soru: Yeşil ve başvuru anı "evet" kapısında "güven yüksek" şartı bantla değiştirilsin mi (öneri: evet; güven bilgi etiketi kalır; panelde etkiyi BUILD 2 başvuru akışında ölçer)?
 Dosya: docs/log/2026-11-01-volkan-yuk-ogle-guven.md (main)
 Neden: KARAR 00:57 madde 5.
-Durum: bekliyor
+Durum: yapıldı — ADR-0019; uygulaması PR #33 main'de (1a3e94b), yürürlükte (09:29)
 
 ## UYARI! 1 Kasım 01:17 — (BUILD 2 — panel) — Faz 10 ölçüm sırası PR #30'da: renksiz trafoyu açan öğlen yükü; ilk 20 trafo 131 ev (rastgele 20: 12), yanlış yeşil 0; gece / kademe sonrası bayraklar güvenilmez — test edin
 Ne: KARAR 01:01: `src/olcum_sirasi.py` (taban #23). Her renksiz trafo için üç tek ölçüm: gece prizi (bara = ölçüm − 1–10'da ölçülen hata; gece değeri barayı ortanca **−1,64 V** düşük gösteriyor, inverterin sabah değerinden kötü), trafo başında bir haftalık öğlen yükü (trafo ölçülü sayılır), kademe fotoğrafı (±3,125 V pencere). Sıralama ölçüm öncesi beklenen değerle (modelin öncülünden 8 varsayımsal sonuç, cevap anahtarına bakmadan); doğrulama gerçek sonuçla. Sınav 21–30 bir kez [Hesap; farazi, gösterim], 306 renksiz trafo: hepsine öğlen yükü → **31 yeşil (0 yanlış), 175 ev**; gece prizi 2 yeşil / 5 ev; kademe 2 / 5. **İlk 20 → 14 yeşil, 131 ev**, rastgele 20 ortalama 2,1 yeşil / 11,6 ev; beklenen 152 ↔ gerçekleşen 131. İlk 20'nin 18'i öğlen yükü. 1–10: öğlen yükü 28 / 201; ilk 20 → 17 / 177 (rastgele 15,2). Yanlış yeşil her satırda 0. Tek ölçümün rengi değiştirebildiği trafo ~%35 (110/306).
@@ -1086,13 +1086,13 @@ Bilgi (yük tarafı, BUILD 1'e senin üzerinden): renksizde evet'i açan tek öl
 Açık: öğlen yükü ölçümünün maliyeti (cihaz, Kıb-Tek izni) diğerlerinden yüksek, maliyetle tartılmadı; iki ölçüm birlikte ölçülmedi.
 Dosya: PR #30 (https://github.com/volkanGRGN/KKTC-hackathon/pull/30), docs/log/2026-11-01-volkan-panel-olcum-sirasi.md (dalda)
 Neden: KARAR 01:01; Faz 10 pilot hazırlığı.
-Durum: bekliyor
+Durum: yapıldı — PR #30 main'de (fe6c769) (09:29)
 
 ## KARAR 01:20 — PR #27 (Can, üretici 1.5) Mac'te tuttu (main'in yaz penceresi düzeltmesiyle birlikte); PR #29 (akşam gerilimi) kararı P10; ikisi de onay bekliyor
 Karar: (1) **PR #27 (6edb7bc, Can):** dal PR #21'in düzeltmeden önceki hâlinin üstünde (13e8485'i içermiyor) ama main'e çakışmasız birleşiyor; karar masası **birleşik ağacı** (main + 1.5) Mac'te sıfırdan koştu: 1–10 yıl tepesi ÷ güç P50 / P90 0,47 / 0,73, gücünü aşan %0,8, 207 V altı %0,5, en düşük 201,1 V; **sınav 31–40: 0,44 / 0,68, aşan %0,5, 207 V altı %0,5, en düşük 201,1 V** (hedef Malta 0,42 / 0,74, aşan %1,5; ≤ %1; ≥ 200 V) — hepsi tutuyor; tepe ayı Temmuz. Sınavlar (birleşik, Mac): faz1 20 şehir 5/5, **üretim süresi 55,6 sn GEÇTİ** (Windows'taki KALDI makine yükü); faz2 31–40 GEÇTİ (öğlen %11,3 / %28,1; arketip ortancası %75,0, eşikte); faz3 31–40 **yanlış yeşil 0/28**, dolu trafoya "yer var" %40 kuralı 24/46, biz 0/46, kırmızı kovası %45,3 ≥ 0,38 GEÇTİ, sarı %73,5 [Hesap: karar masası 01:18]. Can'ın Windows rakamlarıyla tutarlı; günlükteki tablo düzeltme öncesi koşudan, birleşik rakamlar bunlar. Tuttu. Can'ın modeli: puanlayan karar masası (öneren ≠ puanlayan).
 (2) **PR #29 (BUILD 1, akşam gerilimi) sorusuna karar: evet, akşam gerilimi kararı P10 ≥ 207 V** (ADR-0018 m. 6 ile aynı ilke: güvenli yön; ortancayla 3/263 ve 5/259 yanlış "yeterli" çıkıyordu). Can'ın sınavı kararı P10'dan (ya da `p_aksam_207`) okusun (can.md, BUILD 1 yazdı). #29 TEST sırasında (#24, #26'dan sonra).
 (3) **Birleştirme:** #27'yi GitHub'da Volkan ya da Civan onaylayabilir (yazarı Can); onay gelince karar masası birleştirir. Volkan'ın açtığı #22, #23, #25, #28 (ve TEST'ten sonra #24, #26, #29) için Can ya da Civan onayı.
-Durum: bekliyor (GitHub onayları; TEST)
+Durum: yapıldı — PR #27 (6013342) ve PR #29 (ff8836f) main'de (09:29)
 
 ## KARAR 01:25 — (BUILD 1 — yük) KTEMO taraması ve PR #27 incelemesi: dört karar
 Karar: BUILD 1'in PR #27 incelemesi karar masasının Mac koşusuyla aynı (pencere düzeltmesi trafo boyutunu değiştirmiyor; birleşik ağaçta 1–10 0,47 / 0,73, 31–40 0,44 / 0,68; KARAR 01:20 — 31–40'ın düzeltilmiş pencereyle koşusu yapıldı, Can'ın dalı güncellemesi birleşmeyi değiştirmez, yalnız günlüğe birleşik rakamlar). KTEMO belgelerinden [Kaynaklı: ktemo.org/dokumanlar.php]:
@@ -1101,7 +1101,7 @@ Karar: BUILD 1'in PR #27 incelemesi karar masasının Mac koşusuyla aynı (penc
 3. **Güç katsayısı 0,95 kalır, kaynağı yazılır:** Bakanlar Kurulu 2227/2010, kurulu gücü ≥ 25 kVA konut dışı ve üç fazlı konutta kompanzasyon zorunlu, cos φ 0,90–1. Tek fazlı konutta kural yok; temkinli uç 0,90 (tepe kVA +%5,6) `tepe.csv` notunda duyarlılık olarak (BUILD 1, sonraki `yuk/` PR'ında).
 4. **Panel rakamları** (KTEMO Solar Projelendirme sunumu, 2019): 2018 sonu PV 21 MWp devrede, 36 MWp izinli, 10 MWp bekleyen, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru; 2023 çalıştayında konut GES'ini 3 kW'la sınırlama önerisi; uygulama rehberi İngiltere G83'ün çevirisi (faz başına 16 A). BUILD 2'ye bilgi (başvuru büyüklüğü varsayımı 6,5 kW'ın yanında 3 kW sınırı); Can'a sunum için.
 Kaynak belgeler depoya girmez; BUILD 1 adresleri ve sayfa / slayt numaralarıyla bir günlük yazar (`docs/log/2026-11-01-volkan-ktemo-tarama.md`).
-Durum: bekliyor (BUILD 1: 1, 3 ve günlük)
+Durum: yapıldı — madde 1, 3 ve KTEMO günlüğü PR #31'de, main'de (b1b810c) (09:29)
 
 ## KARAR 01:22 — TEST sonuçları: #24, #26, #29 tuttu, #25 bir eksi; #27 birleşti; #30 bayrak kararı; ADR-0019 (yeşil kapısında güven şartı kalkar)
 Karar: Volkan (01:2x): "sen onayla" → PR #27 GitHub'da Volkan hesabıyla onaylandı ve birleşti (6013342; 6096d1e yalnız günlük).
@@ -1110,7 +1110,7 @@ Karar: Volkan (01:2x): "sen onayla" → PR #27 GitHub'da Volkan hesabıyla onayl
 3. **#30 (Faz 10 ölçüm sırası) sorusuna karar:** gece prizi ve kademe fotoğrafından sonra **yalnız yeşil yönü** kullanılır, bayrak konmaz (21–30'da bu ölçümlerden sonraki bayrakların 3/15 ve 0/7'si gerçekten dolu). #30 TEST sırasına.
 4. **ADR-0019:** BUILD 1'in ölçümüyle (güven etiketi hatayı ayırmıyor, güvenlik zaten bantta; karşı-olgu yeşil 17 → 47, yanlış yeşil 0) yeşil ve başvuru anı "evet" kapısında "güven yüksek" şartı kalkar; yürürlük şartı BUILD 2'nin uygulaması ve **dokunulmamış 1.5 şehirleri 31–40'ta bir kez** yanlış yeşil kapısının tutması (TEST tekrarlar).
 5. **BUILD 1 sıradaki:** (a) KARAR 01:25 madde 1 (sistem puantı sağlaması), madde 3 (güç katsayısı duyarlılığı) ve KTEMO günlüğü; (b) #27 birleşti: `tepe.py` ve akşam gerilimini üretici 1.5 şehirlerinde (1–10 ayar, 31–40 bir kez) koş, sonucu günlüğe.
-Durum: bekliyor (BUILD 2: #25 düzeltmesi, ADR-0019 uygulaması; BUILD 1: 5; onaylar: Can / Civan)
+Durum: yapıldı — #25 düzeltildi, ADR-0019 uygulandı (#33), BUILD 1 madde 5 (#31); hepsi main'de (09:29)
 
 ## UYARI! 1 Kasım 01:28 — (BUILD 1 — yük) — Üretici 1.5'te yük modeli tutuyor (yöntem değişmedi); sistem tepe ÷ ortalama: üretici 1,95, model 2,30, Kıb-Tek 1,76; PR #31
 Ne: KARAR 01:22 (a) ve 01:25 (madde 1, 3, KTEMO günlüğü). Yük modeli (PR #24 / #26 / #29) üretici 1.5 şehirlerinde koşuldu, ayar yapılmadı [Hesap; farazi]: yılın tepesi 1–10 %7,5 / %18,4 (P90 üstü 1/280, otel), **31–40 bir kez %6,7 / %15,3, P90 üstü 0**; akşam gerilimi 31–40 hata 3,5 V, 207 V altı 2/2 yakalandı, "yeterli" 232'de 0 yanlış; uyarı 1.4'teki 107'den 48'e indi (1.5'in hat tasarımı). Sistem karşılaştırması (1–10): toplam yükün tepe ÷ yıllık ortalaması üretici 1,95, model (trafo tahminlerinin eşzamanlı toplamı) 2,30; **Kıb-Tek 2022 1,76** (368 MW ÷ 1.836 GWh; KTEMO'daki Kıb-Tek sunumu, slayt 38).
@@ -1119,11 +1119,11 @@ Ayrıca: KTEMO günlüğü ve kaynak kaydı (adres, SHA-256, sayfa / slayt); sö
 Soru: Üreticinin yıl tepesi ÷ ortalamasını Kıb-Tek 1,76'ya çapalayalım mı (üretici 1.6, Can), yoksa Kıb-Tek'in saatlik sistem yükü (istek metni madde 8) gelene kadar not olarak mı kalsın (öneri: not; tek sayı kaba)?
 Dosya: PR #31 (https://github.com/volkanGRGN/KKTC-hackathon/pull/31; #29'un üstünde), docs/log/2026-11-01-volkan-yuk-uretici15.md, docs/log/2026-11-01-volkan-ktemo-tarama.md (dalda)
 Neden: KARAR 01:22, 01:25.
-Durum: bekliyor
+Durum: yapıldı — karar 01:30; PR #31 main'de (b1b810c) (09:29)
 
 ## KARAR 01:30 — (BUILD 1 — yük) PR #31 (yük modeli üretici 1.5 şehirlerinde, KTEMO günlüğü, pf notu): sistem oranına çapalama yok, not kalır; TEST sırasına
 Karar: (1) **Soruya karar — üretici Kıb-Tek'in sistem tepe ÷ ortalama oranına (1,76) çapalanmaz, bilgi notu kalır:** sistem oranı dağıtım dışı yükleri, kayıpları ve büyük sanayiyi içerir, deneme şehrinin trafo toplamıyla aynı kapsam değil; üretici 1,95 (daha sivri) yük haritası için güvenli yönde. Kıb-Tek saatlik sistem yükü ya da fider tepe geçmişi (istek metni madde 8) gelince yeniden bakılır. Trafo tahminleri toplanarak fider / sistem tepesi bulunmaz (model trafo başına bilerek yukarıda): bu not ROADMAP Faz 11'e. (2) PR #31 (0578fb9; #29 üstünde; kod değişmedi) TEST sırasına: 1.5 şehirlerinde yılın tepesi 1–10 %7,5 / %18,4, 31–40 bir kez %6,7 / %15,3, P90 üstü 0; akşam gerilimi 31–40 hata 3,5 V, 207 V altı 2/2, "yeterli" 232'de 0 yanlış. (3) BUILD 1 sıradaki: tepe saati (konutta iki tepe; ±60 dk isabet %45) — Can'ın B-Y2'si gelene kadar.
-Durum: bekliyor (TEST; BUILD 1)
+Durum: yapıldı — PR #31 (b1b810c) ve tepe saati PR #32 (e953c2b) main'de (09:29)
 
 ## UYARI! 1 Kasım 01:36 — (BUILD 1 — yük) — Tepe saati PR #32'de: yurt doğru eğriyle, ikinci aday saat ve dönem; 31–40'ta dönem %61 → %69, yurtta saat %17 → %57; test edin
 Ne: KARAR 01:30. (1) Ticari II abonesi olan trafo, öğlen modelinin arketipi "akşam tepeli" ise konut eğrisini alır (yurt). Kıb-Tek tarifeyi bilir, yapı tipini bilmez; arketip ölçülü trafoların Nisan eğrilerinden ve Kıb-Tek'in bildiği özelliklerden atanıyor, 1–10'da yurtların 41/48'ini çarşılardan (0/41) ayırıyor [Hesap]. (2) `tepe.csv`'ye `tepe_saati_2` (ikinci aday: ana tepeden ≥ 3 saat uzak, ≥ %95) ve `tepe_donemi` (sözleşme §8). Ana saat seçimi değişmedi.
@@ -1131,11 +1131,11 @@ Rakamlar [Hesap; farazi, üretici 1.5, 31–40 bir kez]: saat ±60 dk %47,5 → 
 Eksi: konutta ana saat hâlâ yarı yarıya (Temmuz iş günü 23:00 1,86 ↔ tatil 16:00 1,96; hafta, panel ve gürültü belirliyor); harita kartı iki adayı ("16–17 ya da 23–00") göstermeli → Civan'ın kart işi. Can'ın sınavı tek saati ölçüyor; "iki adaydan biri" ve dönem bilgi satırı önerisi can.md'de. Ayrıca ROADMAP Faz 11'e "trafo tahminleri toplanarak fider tepesi bulunmaz" notu (KARAR 01:30) bu PR'da.
 Dosya: PR #32 (https://github.com/volkanGRGN/KKTC-hackathon/pull/32; #31'in üstünde), docs/log/2026-11-01-volkan-yuk-tepe-saati.md (dalda)
 Neden: KARAR 01:30.
-Durum: bekliyor
+Durum: yapıldı — açıklama düzeltildi, PR #32 main'de (e953c2b) (09:29)
 
 ## KARAR 01:36 — (BUILD 1 — yük) PR #32 (tepe saati): TEST sırasına; kart iki aday saati gösterir (Civan)
 Karar: (1) PR #32 (3ae4013; #31 üstünde): ticari II aboneli trafo öğlen arketipi "akşam tepeli" ise konut eğrisi (kural 1–10'dan: yurtların 41/48'i akşam tepeli, çarşıların 0/41'i); `tepe.csv`'ye `tepe_saati_2` ve `tepe_donemi` (§8). 31–40 (yöntem değişti, bir kez): saat ±60 dk %47,5 → %52,1, iki adaydan biri %60,0, dönem %69,3; tepe hatası %6,7 → %5,8, P90 üstü 0. TEST sırasına (#30, #31'den sonra). (2) Konutta ana saat yarı yarıya kalır (iki tepe neredeyse eşit): yük kartı tek saat yerine **iki aday saati / dönemi** gösterir (civan.md). (3) Can: sınavda "iki adaydan biri" ve dönem bilgi satırı (can.md, BUILD 1 yazdı). (4) BUILD 1'de açık iş kalmadı; Can'ın B-Y2 PR'ı gelince inceler.
-Durum: bekliyor (TEST)
+Durum: yapıldı — PR #32 main'de (e953c2b); kart Civan'da (09:29)
 
 ## KONTROL 01:55 — TEST oturumundan (karar masası kaydeder) — PR #30 (acf4fc9, bayrak kararından önceki hâli) tuttu
 Ne ölçüldü (TEST, Mac, kendi 1.3 şehirleri; panel): `GECE_HATA_Q` 21/21 aynı (ortanca −1,64 V); 21–30, 306 renksiz: öğlen yükü 31 yeşil (0 yanlış) / 175 ev, gece 2 / 5, kademe 2 / 5; ilk 20 → 14 yeşil / 131 ev (rastgele 20: 2,1 / 11,6); 1–10: 28 / 201, ilk 20 → 17 / 177; yanlış yeşil her satırda 0; bilgisiz çekiliş `kac_ev.csv` ile birebir, eski 13 sütun main'le 20/20 aynı. Not: bu head'de gece / kademe sonrası bayrak hâlâ vardı (21–30: 15 bayrağın 3'ü, 7'nin 0'ı dolu); BUILD 2 5721c98'de kaldırdı, TEST o head'i yeniden koşacak.
@@ -1152,16 +1152,16 @@ Eksi / açık: `olcum_sirasi.py` (#30) ve `konum_payi` (#28) kendi kurallarında
 Soru: ADR-0019 yürürlüğe girince #30'u yeni kurala çevireyim mi (ölçüm sırası yeniden, 1–10 ve 21–30)?
 Dosya: PR #33 (https://github.com/volkanGRGN/KKTC-hackathon/pull/33), docs/log/2026-11-01-volkan-panel-guven-kapisi.md (dalda); PR #25, PR #30
 Neden: KARAR 01:22; ADR-0019 m. 3.
-Durum: bekliyor
+Durum: yapıldı — TEST tuttu, PR #33 main'de (1a3e94b) (09:29)
 
 ## KARAR 02:05 — (BUILD 2 — panel) PR #33 (ADR-0019 uygulaması): TEST'e; #30 olduğu gibi birleşir, yeni kurala geçişi ayrı küçük PR
 Karar: (1) PR #33 (f9708bd; taban #25) TEST'e: BUILD 2'nin ölçümü ADR-0019 m. 3 yürürlük şartını tutuyor (üretici 1.5 şehirleri 31–40 bir kez: yeşil 28 → 60, **yanlış yeşil 0/60**, bayrak isabeti %68 (15/22) ≥ %60, renksiz %86 → %76; akış: kayıtsız hemen evet %4,6 → %12,2, yanlış evet 4/865 = %0,5; beklenen kayıt %22,9, 2/1.624; 21–30 bilgi 17 → 47, BUILD 1'in karşı-olgusuyla birebir; konut hemen hemen aynı) [Hesap: BUILD 2; TEST tekrarlayacak]. TEST "tuttu" deyince #25 → #33 sırayla birleşir ve ADR-0019'un durum satırı "kabul, yürürlükte (PR #33)" olur. (2) Soruya karar: **#30 olduğu gibi birleşir** (eski kural, test edilmiş hâli); #33 birleşince BUILD 2 küçük bir PR'la ölçüm sırasını ve konum payı analizini yeni kurala çevirir, 31–40 bir kez (renksiz küme küçülür, "ilk 20" listesi değişir), ROADMAP Faz 10 satırı güncellenir. (3) Sunum / jüri cümlesi (Can'a, #33 birleşince): "yeşil %5 → %13; yanlış yeşil hâlâ 0".
-Durum: bekliyor (TEST: #25, #30, #31, #32, #33)
+Durum: yapıldı — #25, #30, #31, #32, #33 main'de (09:29)
 
 ## KARAR 02:12 — #30 ve #31 birleşti; #32 ve #25'te eksi (sahiplerine); doluluk isabeti ölçüldü
 Karar: (1) TEST tuttu → **#30** ölçüm sırası (fe6c769) ve **#31** yük modeli 1.5 şehirlerinde (b1b810c) birleşti. (2) **#32 (BUILD 1):** rakamlar tuttu, ama "önceki sütunlar #31 ile aynı" iddiası yanlış: yurt eğrisi ölçülü yurtların R'sini de değiştiriyor, 262/400 trafoda tepe / bant / boş kVA değişiyor (yurt dışında ortanca %0,4, en çok %13,8); akşam gerilimi 232 → 233 "yeterli" (0 yanlış). Açıklama ve günlük düzelir, kod değişmez, sonra birleşir. (3) **#25 (BUILD 2):** düzeltme tuttu, ama güncel main'le (üretici 1.5) birleşince sahte kayıt kodu 1.3 / 1.4 şehrin ağını 1.5 üreticisiyle kuruyor (trafo gücü 40'ın 12'sinde farklı) ve uyarmıyor; sahte kayıt, başvuru testi ve inverter geri çözümü sessizce değişiyor. Düzeltme: `ayar.json` üretici sürümü kontrolü + yeniden kurma uyuşmazlığında dur; tablolar 1.5 şehirleri 1–10 / 31–40 ile bir kez. Sonra #25 → #33.
 (4) **Doluluk isabeti (yeni ölçü; karar masası, main'in `tepe.py`'si, üretici 1.5 şehirleri, ölçülmeyen 280 trafo) [Hesap; farazi, gösterim, iyimser — üretici de EAC eğrisi]:** gerçek doluluk (yıl tepesi ÷ trafo gücü) ortanca %43; tahmin hatası 31–40'ta ortanca 2,7, P90 8,1 yüzde puan; gerçek, bandın içinde %99. Gerçekte ≥ %80 dolu 16 trafonun 16'sını temkinli uç (P90) yakalıyor ama 92 trafoya uyarı veriyor (her 6 uyarıdan 1'i gerçek); ≥ %100 dolu 2 trafonun 2'si yakalanıyor, 37 uyarıyla; orta tahmin ≥ %100'lerin 0/2'sini yakalıyor. Gerçek veride hata İspanya Mayıs tepesinden ~3 kat büyük (göreli %15 / P90 %36 → %50 dolu trafoda ~7 / ~18 puan). Sonuç: harita doluluğu sıralar ve "önce bak" listesi verir; dolu olanı kaçırmaz, ama uyarıların çoğu gerçekte dolu değil. Can: sınava "doluluk ≥ %80 yakalama ve uyarı isabeti" bilgi satırı önerisi.
-Durum: bekliyor (BUILD 1: #32 açıklaması; BUILD 2: #25 sürüm kontrolü; TEST: #33)
+Durum: yapıldı — #32 açıklaması, #25 sürüm kontrolü, #33; hepsi main'de (09:29)
 
 ## BİLGİ 02:13 — karar masasından — PR #32 birleşti (e953c2b); yük zinciri (#24 → #26 → #29 → #31 → #32) main'de
 Ne: c7f3981 yalnız günlük düzeltmesi (TEST'in rakamlarıyla "Düzeltme" bölümü), kod test edilen 3ae4013 ile aynı. Açık PR'lar: #25 (BUILD 2, sürüm kontrolü bekleniyor), #33 (ADR-0019; #25'ten sonra, TEST).
@@ -1170,7 +1170,7 @@ Durum: bilgi
 ## KARAR 02:17 — (BUILD 2 — panel) PR #33 (ADR-0019) TEST'te tuttu: yürürlük şartı geçti; birleşme #25'in düzeltmesinden sonra
 Karar: TEST (f9708bd, üretici 1.5 şehirleri, bağımsız): 31–40 yeşil 28 → 60, **yanlış yeşil 0/60** (en kötü şehir %0), bayrak isabeti %68 (15/22) ≥ %60, renksiz %86 → %76; akış: kayıtsız hemen evet %4,6 → %12,2, yanlış evet 4/865 (%0,5); beklenen kayıt %22,9, 2/1.624; iki kat %22,8, 10/1.618 (%0,6); 1–10 27 → 65; 21–30 bilgi 17 → 47; `kac_ev.csv`'de yalnız 103 satırın rengi / `pv_uc`'si değişiyor, hepsi sarıdan yeşile [Hesap: TEST]. **ADR-0019 m. 3 kapıları geçti.**
 Birleşme sırası: #33'ün tabanı #25 ve #25'te açık eksi var (sahte kayıt üretici sürümüne bakmıyor) → #25 düzelir, TEST tekrarlar, birleşir → #33 dalına main birleştirilir (`src/guvenli_uc.py`'de #28'in `--konum`'u ile #33'ün `--guven-kiyas`'ı aynı yere yazılmış; ikisi de tutulur — TEST böyle çözüp ikisinin de çalıştığını gördü) → birleşir → ADR-0019 durum satırı "yürürlükte (PR #33)". Bilgi: sahte kaydın yeniden kurması 1.5 şehirlerinde TEST'te 40/40, BUILD 2'de 38/40; BUILD 2 farkın sebebine bakar.
-Durum: bekliyor (BUILD 2)
+Durum: yapıldı — PR #33 main'de (1a3e94b), ADR-0019 yürürlükte (09:29)
 
 ## KARAR 02:25 — (BUILD 2 — panel) sahte kaydın yeniden kurması 38/40 ↔ 40/40: sebep bulundu, şimdilik düzeltilmez (bilinen sorun)
 Karar: BUILD 2 20 şehrin hepsinde ölçtü: ağ yapısı 800/800 aynı, `kac_ev_gercek` 784/800 birebir; farklar 1–2 ev. Sebep: `sahte_kayit.gercek_trafo` kritik 6 adımı `yuk_5dk.csv`'nin 0,1 V'a yuvarlanmış geriliminden seçiyor, eşit adımların sırası değişince kritik an değişiyor (sehir-001 T20, T31'de doğrulandı). Etki trafoların ~%2'sinde "gerçekte aşar" kontrolünün bir iki ev oynaması; düzeltme (yuvarlamasız yeniden benzetim) testi birkaç kat yavaşlatır. **Şimdilik düzeltilmez**, DEVIR "Bilinen sorunlar"a ve günlüğe; panel sınavları bu payla okunur. #25'e d88285b yalnız günlük satırı ekledi (TEST 9c5b897'yi koşuyor; kod aynı).
@@ -1194,22 +1194,22 @@ Ne: KARAR 02:0x / 02:3x: `olcum_sirasi.py` ve `konum_payi` güven şartından ar
 Eksi: gece prizinin ölçüm öncesi değeri sınavda iyimser (beklenen 15,6 yeşil → gerçekleşen 7; geliştirmede 14,2 → 12); kademe tutarlı (14,2 → 13). Sebep bulunmadı (gece hatası 31–40'ta benzer, fark güvenli yönde). Öneri [Yorum]: pilotta önce kademe fotoğrafı, priz ikinci.
 Dosya: PR #34 (https://github.com/volkanGRGN/KKTC-hackathon/pull/34), docs/log/2026-11-01-volkan-panel-olcum-sirasi-guven.md (dalda); ROADMAP Faz 9–10 dalda güncel
 Neden: KARAR 02:0x; ADR-0019 yürürlükte.
-Durum: bekliyor (TEST sabah)
+Durum: yapıldı — TEST tuttu, PR #34 main'de (9a5a18a) (09:29)
 
 ## KARAR 02:37 — (BUILD 2 — panel) PR #34 (ölçüm sırası ve konum payı ADR-0019'a bağlı): TEST'e; gece prizinin iyimser beklenen değeri bulgu, engel değil
 Karar: (1) PR #34 (e5b8092) TEST'te. BUILD 2'nin ölçümü (31–40 bir kez, renksiz 265): kademe fotoğrafı 13 yeşil / 100 ev, gece prizi 7 / 43, öğlen yükü 2 / 12 (eski kuralda 31 / 175 — değeri güveni yüksek yapmaktan geliyordu, ADR-0019 ile o kapı kalktı); ilk 20 → 8 / 64 (rastgele 0,8 / 5,4); yanlış yeşil 0; konum payı renksizde 40/276, 0/159. (2) Gece prizinin ölçüm öncesi beklenen değeri sınavda iyimser (15,6 → 7; geliştirmede 14,2 → 12): güvenliği etkilemiyor, yalnız sıralamayı; **eksi değil bulgu**, günlükte. (3) **Pilot sırası: önce kademe fotoğrafı** (beklenen değeri tutarlı, en çok açan), sonra gece prizi; ROADMAP Faz 10 satırı. TEST tutarsa karar masası birleştirir.
-Durum: bekliyor (TEST)
+Durum: yapıldı — PR #34 main'de (9a5a18a) (09:29)
 
 ## KARAR 02:44 — (BUILD 2 — panel) PR #34 birleşti; gece prizi farkının sebep adayı: tiplerin ortak hata havuzu (sabah, küçük iş)
 Karar: TEST tuttu (e5b8092; `kac_ev.csv` main'le 20/20 bayt bayt, yanlış yeşil her satırda 0) → **#34 birleşti**; açık PR yok. TEST'in ipucu: gece prizinin bara hatası tipe göre çok değişiyor (1–10 ortancaları sulama −3,75, sanayi −2,06, köy −1,56, otel −1,31, çarşı −1,06, yurt −0,93, şehir konutu −0,81 V), ama `GECE_HATA_Q` hepsinin ortak havuzu (−1,16 V); gecenin yeşil yapabileceği trafolarda gerçek hata −0,87…−0,96 V, yani model bu trafolarda barayı temkinli yönde 0,2–0,3 V yanlış sanıyor ve beklenenden az yeşil çıkıyor. **Sabah küçük iş (BUILD 2):** gece hata dağılımını tipe (ya da tarife karışımına) göre ayır, 1–10'da kur, 31–40 bir kez; beklenen ↔ gerçekleşen farkı küçülüyor mu, yanlış yeşil 0 kalıyor mu.
-Durum: bekliyor (BUILD 2, sabah)
+Durum: yapıldı — tarife grubuna ayırma PR #35 main'de (6a334b1) (09:29)
 
 ## UYARI! 1 Kasım 08:26 — (BUILD 2 — panel) — Gece prizi hatası tarife grubuna göre PR #35'te: sınavda gece 7 → 10 yeşil, 43 → 72 ev; yanlış yeşil 0; beklenen değer hâlâ biraz iyimser — test edin
 Ne: KARAR 02:5x (TEST'in bulgusu, Volkan "evet"): `olcum_sirasi.py` gece hatasını tek havuz yerine tarife grubuna göre kullanır; grup yalnız Kıb-Tek'in bildiğinden (`trafolar.csv`: tahmini enerjisi en büyük abone sınıfı — sulama / sanayi / turizm / ticari / konut; konutta en uzun hat ≥ 400 m kırsal). Cevap anahtarının trafo tipi kullanılmadı. Kalibrasyon 1–10 (grup ortancası sulama −3,75, sanayi −2,06, turizm −1,31, konut kırsal −1,16, ticari −1,01, konut kısa −0,83 V). **Sınav 31–40 bir kez** [Hesap; farazi, gösterim]: hepsine gece prizi **7 → 10 yeşil, 43 → 72 ev**; beklenen → gerçekleşen **15,6 → 7 iken 16,0 → 10**; ilk 20 → 9 yeşil / 76 ev (önce 8 / 64; rastgele 0,9 / 7,2); kademe ve öğlen yükü aynı (13 / 100; 2 / 12). Yanlış yeşil her satırda 0. 1–10: gece 15 / 182, beklenen 15,4 → 15 (tutuyor).
 Eksi / açık: sınavda beklenen ↔ gerçekleşen farkı daraldı ama kapanmadı (2,3 standart sapma), en çok ticari trafolarda (13 → 9); yön güvenli. Gece prizi yalnız ticari / turizm trafolarında rengi değiştiriyor; pilot sırası değişmez (önce kademe fotoğrafı, priz ticari / turizm trafolarında).
 Dosya: PR #35 (https://github.com/volkanGRGN/KKTC-hackathon/pull/35), docs/log/2026-11-01-volkan-panel-gece-tarife.md (dalda)
 Neden: KARAR 02:5x; TEST'in PR #34 bulgusu.
-Durum: bekliyor
+Durum: yapıldı — TEST tuttu, PR #35 main'de (6a334b1) (09:29)
 
 ## KARAR 08:33 — (BUILD 2 — panel) PR #35 birleşti; ticari grubunu I / II diye bölmek isteğe bağlı, şimdilik yok
 Karar: TEST tuttu (2571f2b; sızıntı yok, grup yalnız `trafolar.csv`'den; 31–40 gece 7 → 10 yeşil, 43 → 72 ev, beklenen ↔ gerçekleşen 16,0 → 10; yanlış yeşil 0) → **#35 birleşti**; açık PR yok. Kalan fark çoğunlukla yurtta (ticari grubunda çarşı −1,14 V, yurt −0,72 V, grup −1,01 V): Kıb-Tek ticari I ve II'yi ayrı bildiği için grup ikiye bölünebilir. **Şimdilik yapılmaz:** yön temkinli, pilot sırası değişmiyor (önce kademe fotoğrafı), gece prizi yalnız ticari / turizm trafolarında rengi değiştiriyor; kazanç küçük. Gerçek pilot verisi gelince ayrı grup yeniden değerlendirilir.
@@ -1217,7 +1217,7 @@ Durum: değişti 08:33 — Volkan (TEST oturumunda) "evet" dedi: ticari I / II b
 
 ## KARAR 08:34 — (BUILD 2 — panel) ölçüm sırası sınavı yeni şehirlere: üretici 1.5 şehirleri 41–50
 Karar: BUILD 2'nin önerisiyle: ticari I / II bölmesi 1–10'daki gerekçeyle yapılır, sınavı **hiç bakılmamış 41–50**'de bir kez; 31–40 ölçüm sırası betiği için iki kez ölçüldü ve öneri onun grup sonuçlarından çıktı, bu betik için artık bilgi (tüzük m. 2). Diğer panel / yük sınavları için 31–40 dokunulmamış kalmaya devam ediyor.
-Durum: bekliyor (BUILD 2)
+Durum: yapıldı — ticari I / II PR #36'da olumsuz sonuç, kapatıldı; 41–50 sınavı günlükte (40fc148) (09:29)
 
 ## UYARI! 1 Kasım 09:40 — Civan'dan — Sunum videosu için resmi rakamların şehir dosyaları
 Ne: MVP slaytında oynayacak Blender videosu (Girne: ölçüm → ofis → tahmin → KKTC haritası) trafo renklerini ve sayılarını bir şehir klasöründen okuyor; ofis ekranındaki yazılar ("N trafoda ölçtük", "M trafoyu tahmin ettik", yeşil / sarı / kırmızı sayısı) da oradan. Sunumdaki rakamlarla aynı olsun diye **sunumun kullanacağı sürümün** şehir klasörleri lazım. DEVIR'e göre resmi rakamlar v3 (üretici 1.3, `trafo-sablonu-build/data/synthetic/u13/`, K_YUK 1,47) yalnız BUILD'in Mac'inde; Civan'daki yerel şehirler üretici 1.2. İstenen: (1) Girne sahnesinde gösterilecek bir şehir (öneri: kilit grafiğin geldiği sınav şehirlerinden biri; seçim senin), (2) ada haritasında ilçelere temsili yerleşecek diğer şehirler. Her klasörde yalnız `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`, `arketipler.csv`, `ayar.json`; `cevap_anahtari.csv` gerekmiyor. Zip olarak Civan'a ya da hangi sürüm ve komutla üretileceği yazılırsa Civan kendisi üretir.
@@ -1231,7 +1231,7 @@ Bulgu: yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep öl�
 Soru: PR #36 kapatılsın mı (günlük main'e ayrı mı girsin), birleşsin mi?
 Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
 Neden: KARAR 03:0x.
-Durum: bekliyor
+Durum: yapıldı — PR #36 kapatıldı (dal kalır), günlük main'de (40fc148) (09:29)
 
 ## KARAR 08:41 — (BUILD 2 — panel) PR #36 (ticari I / II bölmesi): olumsuz sonuç; kod birleşmez, günlük main'e
 Karar: "Baskın sınıf" ayırmıyor (ticari II çarşıda da yurtta da baskın); küçük dükkân sayısıyla bölme (eşik 12; kalibrasyon 1–10: dükkân −1,06, büyük −0,93 V) sonucu değiştirmedi: gece prizi 1–10 15 / 182, 31–40 10 / 72 (#35 ile aynı), beklenen → gerçekleşen 16,1 → 10, yanlış yeşil 0. Yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep ölçüm öncesi bara öncülü U(244, 252) [Yorum]. **Kod birleşmez**, PR kapanır (dal kalır); olumsuz sonuç günlüğü ve ROADMAP Faz 10 satırı main'e ayrı girer (BUILD 2). 31–40 bu betik için üçüncü kez bakıldı, görülmüş; 41–50 bu iş için gerekmedi.
@@ -1249,7 +1249,7 @@ Ne: KARAR 03:1x (bölme + yeni sınav şehirleri). Üretici 1.5 şehirleri 41–
 Sonuç: (1) 31–40'taki gece iyimserliği o şehirlere özgü; yeni şehirde ölçüm öncesi değer tutuyor. (2) Ticari bölmesi 1–10, 31–40 ve 41–50'de fark yaratmadı → kod main'e geri alındı; PR #36 yalnız günlük + ROADMAP Faz 10 notu ("ölçüm sırası sınavı 41–50"). (3) 41–50'de gece prizi kademeden fazla ev açıyor (31–40'ta tersi): pilotta tek kural değil, trafo başına en iyi ölçüm (ilk 20 listesi).
 Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
 Neden: KARAR 03:0x / 03:1x.
-Durum: bekliyor
+Durum: yapıldı — bilgi; günlük ve ROADMAP Faz 10 satırı main'de (40fc148) (09:29)
 
 ## BİLGİ 1 Kasım 08:50 — (BUILD 2 — panel) — Ticari bölmesi günlüğü ve ROADMAP Faz 10 satırı main'de; PR #36 kapatılabilir
 Ne: KARAR'ın son mesajına göre olumsuz sonuç günlüğü (`docs/log/2026-11-01-volkan-panel-gece-ticari.md`) ve ROADMAP Faz 10 satırı ("ticari I / II bölmesi denendi, değişiklik yok; yurttaki farkın olası sebebi ölçüm öncesi bara öncülü U(244, 252) [Yorum]") doğrudan main'e girdi (40fc148). Satıra 41–50 sonucu da eklendi (KARAR 03:1x'e göre koşulmuştu; mesajların sırası karıştı): ilk 20 → 11 yeşil / 133 ev, ölçüm öncesi değer tutuyor (gece 15,8 → 16), yanlış yeşil 0. PR #36'da başka bir şey yok; kapatılabilir, dal kalır. Bara öncülü fikri sonraya; yeni iş açılmadı.
