@@ -64,6 +64,14 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - Yanlılık: Kıbrıs değil; ada toplamı, mahalle dağılımı ve havai / yeraltı ayrımı yok; teslim noktası abone ile birebir değil [Yorum].
 - Kullanım: Kuzey trafo sayısı vekiline ikinci, bağımsız sağlama (~6.690); farazi şehirde trafo başına hat boyu için dış çapa (üretici 1.3 adayı).
 
+**KTEMO asgari birim fiyatları — ölçüm maliyeti** — `data/raw/ktemo-birim-fiyat/`
+- PİD Elektrik Tesisatları Asgari Birim Fiyat Listesi (Ekim 2024, TL/adet: ölçü akım trafosu, pano) ve Proje Hazırlama ve Kontrollük Asgari Birim Fiyat Rev.13 (mühendis saati = asgari ücretin %5'i); vize ücretleri (Eylül 2023), EMO laboratuvarı deney kapsamı.
+- Kaynak: KTMMOB Elektrik Mühendisleri Odası, ktemo.org/dokumanlar.php. İndirildi 1 Kasım 2026 (Civan; Can yeniden indirip SHA-256 aldı); lisans belirtilmemiş → kaynak gösterilir; ham dosya depoda yok.
+- Ölçülü değil: oda tarifesi (asgari fiyat). Birim TL, TL/adet, TL/saat.
+- [Kaynaklı] akım trafosu 100–500/5 A 3.286 TL, 501–2000/5 A 8.474 TL; pano 8.376 TL; kontrollük saati asgari ücretin %5'i. EMO laboratuvarında trafo yük ölçümü hizmeti yok.
+- Yanlılık: Ekim 2024 fiyatı, enflasyonla güncel değil; asgari, piyasa değil; brüt / net asgari ücret belirtilmemiş [Yorum: Civan brütü aldı].
+- Kullanım: trafo ölçüm maliyeti (sabit ↔ taşınabilir kaydedici; Civan'ın günlüğü), pilot bütçesi.
+
 **OSM kasaba haritası** — `data/raw/osm-kasaba/`
 - Girne merkez (~1 km × 1,1 km) bina ve yol geometrisi (Overpass JSON). İndirildi 31 Ekim 2026 (Civan).
 - Kaynak: OpenStreetMap, ODbL 1.0; "© OpenStreetMap katkıcıları" atfı.

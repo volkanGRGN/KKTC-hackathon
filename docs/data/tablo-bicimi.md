@@ -1,6 +1,6 @@
 # Tablo biçimi sözleşmesi
 
-Sürüm 1.3 · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
+Sürüm 1.4 adayı (PR, Can ya da Civan onayı bekliyor) · 31 Ekim 2026 (1.1: şehirler arası deney dosyası, `sablon_ozet.json`, JSON da LF, `oran` brüt; 1.2: `yillik_tuketim_mwh`, bayramlar tatil, gerçek veri 800–899, cevap anahtarında mahalle farkı, `ayar.json` bilgi anahtarları; ADR-0007, ADR-0008; 1.3: `kac_ev.csv` olasılıklı hesaptan, sonda üç ek sütun; ADR-0011; 1.4: yıl boyu tepe, cevap anahtarında sonda on sütun, `yuk_5dk_yaz.csv` / `yuk_5dk_kis.csv`; ADR-0014, karar masası 23:12; 1.4 adayı, deneme: §7 `kayitlar.csv`, PR #22) · sahibi Volkan (+ Claude) · değişiklik yalnız dal + PR ile, Can ya da Civan onayıyla ([CONTRIBUTING](../../CONTRIBUTING.md) "Dallar").
 
 Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun eksik ya da yanlış geliyorsa önce bu dosyaya bak; değişiklik gerekiyorsa [Volkan'ın kutusuna](../istek/volkan.md) yaz. Örnek değerler biçimi göstermek içindir; ölçüm ya da sonuç değildir.
 
@@ -22,10 +22,12 @@ Dosyalar arasında geçen tabloların **tek tanımı**. Kod buna uyar. Sütun ek
 |---|---|---|---|
 | `trafolar.csv` | `src/sehir_uret.py` (Volkan) | `sablon.py`, `kac_ev.py`, `sinav.py`, harita | 1 |
 | `yuk_5dk.csv` | `src/sehir_uret.py` | `sablon.py` ve harita yan paneli (**yalnız ölçülü trafoların satırları**; ölçülmeyenin eğrisi `arketipler.csv`'den), `sinav.py` (hepsi) | 1 |
+| `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv` | `src/sehir_uret.py` (**1.4**) | tepe modeli (yalnız ölçülü trafoların satırları), `sinav.py` (hepsi) | 11 |
 | `cevap_anahtari.csv` | `src/sehir_uret.py` | **yalnız** `sinav.py` ve `grafikler.py` | 1 |
 | `ayar.json` | `src/sehir_uret.py` | herkes (bilgi) | 1 |
 | `tahmin.csv`, `arketipler.csv` | `src/sablon.py` (Volkan) | `kac_ev.py`, `sinav.py`, harita | 2 |
 | `kac_ev.csv` | `src/kac_ev.py` (Volkan) | `sinav.py`, `grafikler.py`, harita | 3 |
+| `kayitlar.csv` (§7, 1.4 adayı, deneme) | `src/sahte_kayit.py` (Volkan; gerçekte Kıb-Tek) | `basvuru.py`, `basvuru_testi.py`; **harita ve resmi hesap okumaz** | 9 |
 
 **Ayrım kuralı:** `trafolar.csv` yalnız Kıb-Tek'in gerçekte bilebileceğini taşır (modelin girdisi). Benzetimin bilip Kıb-Tek'in bilmediği her şey (tip, faz dağılımı, trafo çıkış gerilimi, gerçek yük, gerçek kaç ev) `cevap_anahtari.csv`'dedir. Model ya da harita cevap anahtarını okursa sınav anlamsızlaşır.
 
@@ -108,8 +110,21 @@ Satır = bir trafo. **Model ve harita okumaz.**
 | `kac_ev_sinir` | str | — | `gerilim` | ortanca sırada ilk reddin nedeni (bugün zaten aşıyorsa bugünkü aşımın): `gerilim` / `isil` / `yok` (hiç ret yok) |
 | `mahalle_carpani` | float | oran | `0.932` | **1.2.** Trafonun küçük abonelerine (konut, ticari I, sanayi I, su motoru) uygulanan mahalle tüketim çarpanı, log-normal ([ADR-0008](../decisions/adr-0008-farazi-cesitlilik-saf-tahmin.md)) |
 | `saat_kaymasi_dk` | int | dk | `-15` | **1.2.** Trafonun bütün abonelerine eklenen saat kayması, ±30 dk (sınıf başına şehir kaymasının üstüne) |
+| `tepe_yil_kw` | float | kW | `88.23` | **1.4. Yük haritasının hedefi:** yılın net tepesi (trafodan geçen: tüketim − üretim), üç pencerenin (Nisan 14 gün, yazın ve kışın üreticinin konut yükünün en büyük olduğu 7 gün; `ayar.json` `pencere_secimi`) 5 dakikalık adımlarında en büyük. **Yılın tepesinin alt sınırı** (Civan): bütün yıl üretilmiyor, tepe pencere dışındaki bir günde olabilir; üreticinin gürültüsüz sınıf eğrisinde kalan pay sınıf başına ≤ %5 (BUILD 1, 1 Kasım; [günlük](../log/2026-11-01-volkan-yuk-pencere.md)). `tepe_ayi` bu yüzden çoğunlukla pencerenin ayı |
+| `tepe_yil_kva` | float | kVA | `102.20` | **1.4.** Aynı pencerelerde trafonun görünür gücü (yük akışından, kayıplar dahil), en büyük; `kva` ile kıyas: tüketim doluluğu |
+| `tepe_saati` | str | SS:DD | `19:55` | **1.4.** `tepe_yil_kw`'nin saati (adımın başı) |
+| `tepe_ayi` | int | ay | `8` | **1.4.** `tepe_yil_kw`'nin ayı (1–12) |
+| `v_min_tepe_v` | float | V | `201.3` | **1.4.** Üç pencerede en düşük ev gerilimi (akşam düşümü; 207 V kontrolü) |
+| `tepe_yaz_kw`, `tepe_kis_kw` | float | kW | `88.23` | **1.4.** Yaz ve kış penceresinin net tepesi. Pencerelerden biri üretilemediyse (EAC ya da hava yılının verisi yok) bütün yıl tepesi sütunları boş, `ayar.json` `yil_tepe_kaynagi` = null, üretici UYARI yazar; o şehir yük haritası sınavına girmez |
+| `kva_tavan` | int | 0/1 | `0` | **1.4.** 1 = gereken güç listedeki en büyük trafoyu (1000 kVA) aştı, listeye kesildi; tüketim doluluğu bu trafolarda üreticinin sınırı, ayrı raporlanır |
+| `klima_carpani` | float | oran | `1.12` | **1.4.** Trafonun sıcaklık duyarlılığı çarpanı (klima / ısıtma yaygınlığı), U(0,5; 1,5), gizli (mahalle çarpanı gibi) |
+| `tepe_yil_brut_kw` | float | kW | `91.40` | **1.4.** Aynı pencerelerde brüt tüketim tepesi (panelsiz); `tepe_yil_kw` ile farkı panelin tepeye etkisi (Can, volkan.md 23:12 sonrası madde 3) |
 
 **"Gerçek kaç ev" tanımı:** panelsiz konut aboneler rastgele sıraya dizilir (Kıb-Tek'in başvuru sırası gibi). Sırayla her birine 6,5 kW panel eklenir (ev tek fazlıysa kendi fazına) [ROADMAP Faz 1: bekleyen başvurular 5–8 kW, orta değer]. Kritik adımlarda (bugünkü en yüksek gerilimli 6 adım + en güçlü güneşli 3 adım) herhangi bir evde gerilim 259 V'u ya da trafo yükü kVA'yı aşarsa o başvuru reddedilir ve **sıradakine geçilir** (ilk retle durulmaz: hat ucundaki bir evin sığmaması trafoya yakın evi engellemez). Onaylanan ev sayısı sonuçtur. Bugün zaten aşıyorsa 0. 7 farklı sıra, ortanca.
+
+### 3b. `yuk_5dk_yaz.csv`, `yuk_5dk_kis.csv` — yaz ve kış penceresi (1.4, Faz 11)
+
+`yuk_5dk.csv` ile aynı satır düzeni, ayrıca `tarih` (ISO), `sicaklik_c` (Open-Meteo Lefkoşa, saatlikten doğrusal) ve `trafo_kva` (trafonun görünür gücü). Sütunlar: `sehir`, `trafo_no`, `gun`, `tarih`, `gun_turu`, `adim`, `saat`, `sicaklik_c`, `tuketim_kw`, `uretim_kw`, `net_kw`, `v_max_v`, `v_min_v`, `trafo_kva`. Pencere: şehrin hava yılında yazın (Haziran–Eylül) ve kışın (Ocak–Şubat) günlük ortalama sıcaklığı en uç 7 ardışık gün; tarihler `ayar.json` `yaz_penceresi` / `kis_penceresi`. Model bu dosyalardan yalnız ölçülü trafoların satırlarını okuyabilir (`yuk_5dk.csv` kuralı). Aynı ağ, aynı abone, aynı tohum; Nisan dosyaları 1.3 ile birebir.
 
 ## 4. `ayar.json` — şehrin ayarları (Faz 1)
 
@@ -162,10 +177,28 @@ Satır = bir trafo.
 | `p_bugun_asar` | float | oran | `0.125` | **1.3:** bugün (yeni panelsiz, öğlen güneşi, en düşük yük) 259 V ya da kVA'nın aşılma olasılığı; ≥ 0,5 → kırmızı |
 | `p_iki_ev_sigar` | float | oran | `0.975` | **1.3:** rastgele ilk iki başvurunun ikisinin de sığma olasılığı; ≥ 0,98 ve güven yüksek → yeşil |
 | `kac_ev_orta` | int | ev | `3` | **1.3:** çekilişlerin ortancası (haritada gösterilecek tek sayı: "yaklaşık N ev (karamsar–iyimser)"). Vaat sayıda değil renkte: yeşil = ilk iki başvuru ≥ %98 sığar |
+| `pv_uc` | str | — | `bos` | **1.4 adayı (ADR-0017, Muhittin 4 madde 1):** panel katmanının üç durumu: `yesil` (= `renk` yeşil; "ilk 2 başvuru güvenle sığar"), `dolu_bayrak` (`p_bugun_asar` ≥ 0,7; "büyük olasılıkla dolu; başvuruda ölçüm ya da güçlendirme gerekir", ret değil), `bos` (renksiz, "başvuruda bakılır"). Harita eşiği kendisi hesaplamaz, bu sütunu okur; `renk` geriye uyum için kalır |
 
-`isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda.
+`isil_pay_kw`, `gerilim_pay_kw_karamsar`, `gerilim_pay_kw_iyimser`, `sinir_karamsar`, `kural40_ev` 1.3'te de tek denklemden (`kac_ev.py`); `renk` olasılıklı hesaptan (ADR-0011: kırmızı `p_bugun_asar` ≥ 0,5; yeşil `p_iki_ev_sigar` ≥ 0,98 ve güven yüksek; diğerleri sarı). Var olan sütunların adı ve sırası değişmedi; yeni üçü sonda. **1.4 adayı:** sonda `pv_uc` (ADR-0017; `kac_ev_olasilik.py` yazar, harita okur); var olanlar değişmedi.
 
 "Ölçülmedi" etiketi = `tahmin.csv`'de `olculdu` = 0. Harita `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`'yi (sehir, trafo_no) ile birleştirir.
+
+## 7. `kayitlar.csv` — Kıb-Tek kayıtları (1.4 adayı, deneme; karar masası 23:02, 23:18)
+
+Kıb-Tek'in vereceği kayıtların biçimi. Bugün deneme şehrinde **sahte ama gerçeğe yakın** üretilir (`src/sahte_kayit.py`, cevap anahtarından bozularak, kusurları dosyanın başında); gerçek kayıt gelince yalnız bu dosya değişir, model (`src/basvuru.py`) aynı kalır. Kişisel veri yok: abone yerine trafo içi sıra numarası. Satır = bir kayıt; `tur` ne kaydı olduğunu söyler. Okuyan: `src/basvuru.py`, `src/basvuru_testi.py`. **Harita ve resmi hesap bugün okumaz.**
+
+| Sütun | Tür | Birim | Örnek | Açıklama |
+|---|---|---|---|---|
+| `sehir`, `trafo_no` | | | | anahtar |
+| `tur` | str | — | `panelli` | `kademe` / `hat` / `panelli` / `inverter` |
+| `abone_no` | int | — | `17` | `panelli` ve `inverter`: trafo içi anonim abone sırası |
+| `hat_no` | int | — | `0` | `hat`, `panelli`, `inverter`: alçak gerilim hattının trafodaki sırası (0'dan) |
+| `yer` | float | oran | `0.8125` | `panelli`: hattaki yeri, direk sırası ÷ hattaki direk sayısı (0–1; 1 = hat ucu) |
+| `faz` | str | — | `B` | `panelli`: `A` / `B` / `C` / `3` (üç faz); boş = kayıt yok |
+| `kw` | float | kWp | `5.00` | `panelli`: kurulu güç |
+| `deger` | str | — | `250.00` | `kademe`: kayıtlı kademenin boşta gerilimi (V; 237,50 / 243,75 / 250,00 / 256,25 / 262,50), boş = kayıt yok · `hat`: hat boyu (m) · `inverter`: `bara_V;esdeger_boy_m` (sakin an geriliminden bara, öğlen salınımından o hattın empedansına eşdeğer boy). **Türetilmiş değer, ham kayıt değil:** inverterin ham gerilim / güç serisi bu dosyaya girmez, geri çözümün sonucu girer; gerçek kayıtta önce geri çözüm adımı gerekir (ham seriden, `src/inverter_kaydi.py` gibi). 1.4 kesinleşirken iki değerin ayrı sütun olması önerilir (`bara_v`, `esdeger_boy_m`) (Civan, 23:56; karar masası 00:10) |
+
+Başvuru formu (başvuranın hattı, yeri, fazı) aynı alanlarla ayrı gelir; testte `sahte_kayit.basvuru_kaydi` üretir, dosyası henüz yok.
 
 ## 8. `tepe.csv` — Faz 11 yılın tepesi, ön sürüm (1.4 adayı; Can ya da Civan onayı; §7 PR #22'nin `kayitlar.csv`'si)
 Yazan `src/tepe.py` (Volkan, BUILD 1; ADR-0018), okuyan `sinav.py` (faz2 tepe bölümü) ve harita (yük kartı). Satır = trafo; harita `(sehir, trafo_no)` ile birleştirir. Sütun adları Can'ın önerisiyle (volkan.md 23:12 sonrası). Model `cevap_anahtari.csv`'yi okumaz; `ayar.json`'dan yalnız `hava_yili`. Dosyalar tablosuna satır PR #21 (sözleşme 1.4) birleşince eklenir (iki PR aynı satırlara dokunmasın).

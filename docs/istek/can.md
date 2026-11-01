@@ -445,7 +445,7 @@ Durum: gözden geçirildi — düzeltme (Volkan df08987) temiz: veri varken çı
 
 ## KARAR 23:35 — PR #21 (üretici 1.4) sende: bir düzeltme, sonra üretici 1.5 (yaz boyutlandırması, yeni sınav şehirleri 31–40)
 Karar: PR #21 Mac'te BUILD'in rakamlarıyla birebir (volkan.md 23:35). (1) **Düzeltme:** `lefkosa_saatlik_2024_2025.csv` yokken yaz / kış sessizce atlanıyor ve "yılın tepesi" Nisan çıkıyor → hata ya da yüksek sesli UYARI + `tepe_ayi` boş; `ayar.json`'a `yil_tepe_kaynagi`. BUILD yapmadıysa sen yap; Civan onaylar (sözleşme 1.4), birleşir. (2) **Üretici 1.5 (dal `uretici/1.5`, Volkan'ın dosyasına PR):** kVA yılın tepesi × 1,2–2,0'dan (yer tipine 1.600 / 2.500); akşam en düşük gerilimi 200 V altına inen hatta kesit bir üst ya da hat ikiye bölünür [Yorum]; çapalar: Malta (yıl tepesi ÷ güç ortanca 0,42, P90 0,74, aşan %1,5) ve ADR-0016 m. 3 (207 V altı ≤ %1, en düşük ≥ 200 V); ayar 1–10, **yeni sınav şehirleri 31–40** bir kez; günlüğe "1.4 ↔ 1.5 ↔ Malta" mesafe tablosu. (3) Sonra B-Y2 (tepe modeli) 1.5 şehirlerinde. Hava dosyası: `data/raw/open-meteo-lefkosa/lefkosa_saatlik_2024_2025.csv` (KAYNAK'ta var; yoksa indir).
-Durum: (1) düzeltmeyi Volkan yaptı (df08987), Can gözden geçirdi: temiz; (2) üretici 1.5 sürüyor (Can, dal uretici/1.5); (3) B-Y2 sonra
+Durum: (1) düzeltmeyi Volkan yaptı (df08987), Can gözden geçirdi: temiz; (2) üretici 1.5 yapıldı: PR #27 (31–40: Malta 0,43 / 0,67, aşan %0,8, en düşük 202,8 V; faz1 süre makine yükü, arketip %75 açık soru; Mac koşumu ve onay bekliyor); (3) B-Y2 sonra
 
 ## UYARI! 1 Kasım 00:15 — karar masasından (KARAR) — yük işi bölündü: Volkan tarafında BUILD 1; sen veride, eşzamanlılıkta, üretici 1.5'te ve B-Y2'de kalıyorsun; iki yeni ADR
 Ne: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç oturumu"): KARAR, **BUILD 1 — yük haritası**, BUILD 2 — panel. 23:18'deki "yük kodu baştan sona sende" şöyle uzlaştı:
@@ -454,4 +454,71 @@ Ne: Volkan'ın oturumları üçe ayrıldı (CONTRIBUTING "Volkan'ın üç oturum
 3. **[ADR-0017](../decisions/adr-0017-pv-katmani-guvenli-uclar.md) (panel güvenli uçlar):** `faz3`'e bayrak isabeti maddesi: `p_bugun_asar` ≥ 0,7 olan trafoların gerçekte dolu payı ≥ ortalama olasılıklarının n toleranslısı (≈ %70 − 2·√(0,21 ÷ n)); kırmızı kovası satırı bilgiye iner; bilgi: bayrağın yakaladığı dolu payı, renksiz kalan pay. Karar masasının ölçümü (aday evli trafolar): 1–10'da bayrak 20, 15'i dolu (%75); 21–30'da 26, 18'i dolu (%69, daha önce görüldü).
 Dosya: src/sinav.py (senin), PR'lar `yuk/` önekiyle
 Neden: Volkan'ın üç oturum düzeni; Muhittin 4 madde 1–2; öneren ≠ puanlayan.
+Durum: yapıldı — `faz3`: bayrak isabeti maddesi (p ≥ 0,7; dolu payı ≥ p̄ − 2·√(p̄(1 − p̄)/n); `pv_uc` varsa ondan), kırmızı kovası bilgi, güvenli uçlar bilgi satırı (yakalanan dolu, renksiz kalan); veri / eşzamanlılık analizi Civan'ın bulut oturumunda (dalı henüz yok); üretici 1.5 PR #27; B-Y2 sırada
+
+## UYARI! 1 Kasım 00:24 — karar masasından (KARAR) — üretici 1.5'ini PR #21'in son hâlinin (13e8485) üstüne kur: yaz penceresi düzeltildi, yıl tepesi değişti
+Ne: BUILD 1 PR #21'de bir eksi buldu ve düzeltti (volkan.md UYARI 00:20): yaz penceresi "en sıcak 7 gün" diye seçiliyordu; 2024 hava yılında bu Haziran'a düşüyor, oysa EAC konut tepesi Temmuz'da %38 yüksek. O şehirlerde cevap anahtarının yıl tepesi üreticinin kendi tepesinden konutta %33–35, otelde %21–26 düşüktü (sınav tepeyi az gösteren modeli ödüllendirirdi). Düzeltmeyle pencere konut yük vekiliyle seçiliyor; kalan eksik sınıf başına ≤ %5; Nisan dosyaları aynı. Şehir 1–10'da yıl tepesi ortanca +%4, 2024 şehirlerinde konut +%14; tepe ayı Temmuz 396 / Ocak 4 (önce Ağustos 198 / Temmuz 80 / Ocak 67 / Haziran 51); kVA'yı aşan 17 → 22, 207 V altı 8 → 10.
+Senden beklenen: `uretici/1.5` dalını 13e8485'in (birleşince main'in) üstüne taşı; yaz boyutlandırmasını (kVA = yıl tepesi × 1,2–2,0) bu tepeyle ayarla, eskisiyle ayarladıysan yeniden. Mevsim başına tek pencere hâlâ var (otelin Ağustos tepesi 2025'te %3,5 aşağıda); ikinci yaz penceresi gerekirse 1.5'te.
+Dosya: PR #21 (13e8485), docs/log/2026-11-01-volkan-yuk-pencere.md
+Neden: yük haritasının sınavı ve 1.5'in boyutlandırması bu tepeye dayanıyor.
+Durum: gerek kalmadı — karar masası birleşik ağacı (main + 1.5) Mac'te koştu, hedefler tuttu (KARAR 01:20: 31–40 0,44 / 0,68, aşan %0,5, en düşük 201,1 V, süre 55,6 sn); rakamlar dalın günlüğüne eklendi (6096d1e); dal yeniden kurulmadı
+
+## UYARI! 1 Kasım 00:49 — karar masasından (KARAR) — "tek inverter kaydıyla yeşil %5 → %10" rakamı sunumda ve jüri cevabında kullanılmasın
+Ne: PR #20'nin (PV açılma denemesi) "her panelli trafoda bir evin inverter kaydıyla yeşil %5 → %10, konut 0 → 9/142" sonucu iyimser uçtu: inverterden çıkan bara ±1 V, empedans ±%20 doğru varsayılıyordu. BUILD 2 geri çözümü benzetimde gerçekten yaptı (PR #25): geri çözülen bara hep biraz düşük çıkıyor (ortanca −0,8…−1,0 V), eğimden hat boyu tutmuyor; gerçekçi hâlde inverter haritayı açmıyor (inverterli 156 trafoda yeşil 0 → 1–3). Sunum dosyalarında bu cümle yok (karar masası baktı); jüri cevabına ya da ekran 6'ya eklenmesin. Doğru cümle: "İnverter kaydı haritayı açmıyor; başvuru anında, ölçülmüş sapmayla, yanlış evet'i düşürüyor (iki kat hatalı kayıtta %1,9 → %0,7; deneme, gösterim)."
+Dosya: docs/sunum/ (senin)
+Neden: PR #25 sonucu (volkan.md UYARI 00:46, BUILD 2); test sürüyor.
+Durum: yapıldı — sunum dosyalarında cümle yok (karar masasıyla aynı); eklenmeyecek
+
+## UYARI! 1 Kasım 01:00 — karar masasından (KARAR) — küçük: `sinav.py faz2 --ispanya-tepe <olmayan dosya>` çöküyor
+Ne: TEST oturumunun main sağlık koşusunda (volkan.md KONTROL 01:00) bayrak verilip dosya bulunamayınca "ölçülmedi" yerine dosya bulunamadı hatasıyla duruyor; bayrak hiç verilmezse doğru. Öneri: dosya yoksa yüksek sesli UYARI + madde "ölçülmedi". Ayrıca bilgi: üretici 1.4 şehir başına ~22–25 sn; faz1 süre maddesi iki üretim aynı anda koşunca 58,1 / 60 sn'ye çıktı (tek başına geçiyor).
+Dosya: src/sinav.py (senin)
+Neden: TEST sağlık koşusu. Acil değil.
+Durum: yapıldı — dosya yoksa yüksek sesli UYARI, madde "ölçülmedi"
+
+## UYARI! 1 Kasım 01:05 — Civan'dan — KAYNAK.txt ve sözlük satırı: EMO birim fiyatları (ölçüm maliyeti)
+Ne: `data/raw/ktemo-birim-fiyat/` indirildi (1 Kasım 2026, git dışı). KAYNAK.txt yaz: kaynak KTMMOB Elektrik Mühendisleri Odası, `https://www.ktemo.org/dokumanlar.php`; dosyalar ve adresleri günlükte; lisans belirtilmemiş (kamuya açık indirme). Veri sözlüğüne satır: PİD Elektrik Tesisatları Asgari Birim Fiyat Ekim 2024 (TL/adet; akım trafosu, pano), EMO Proje ve Kontrollük Asgari Birim Fiyat Rev.13 (mühendis saati = asgari ücretin %5'i). Yanlılık: PİD fiyatları Ekim 2024, enflasyonla güncel değil; "asgari" fiyat, piyasa fiyatı değil.
+Dosya: data/raw/ktemo-birim-fiyat/KAYNAK.txt, docs/data/data-dictionary.md
+Neden: her indirilen veri sözlükte satır olmalı; ikisi de senin dosyan. Ayrıntı ve arama izi: docs/log/2026-11-01-civan-olcum-maliyeti.md
+Durum: yapıldı — `data/raw/ktemo-birim-fiyat/KAYNAK.txt` (beş dosya Can'ca yeniden indirildi, bayt ve SHA-256; üç rakam PDF'te sağlandı) ve veri sözlüğü satırı
+
+## UYARI! 1 Kasım 01:10 — (BUILD 1 — yük) — `sinav.py faz2` akşam gerilimi maddesi: "yeterli" kararı `v_min_tepe_v_p10`'dan
+Ne: PR #29 `tepe.csv`'ye `v_min_tepe_v` (çekilişlerin ortancası), `v_min_tepe_v_p10`, `v_min_tepe_v_p90`, `p_aksam_207` yazıyor (sözleşme §8). Senin maddende "yeterli" = `v_min_tepe_v` ≥ 207. Ortancayla deneme şehirlerinde yük tarafının yanlış yeşili çıkıyor (1–10'da 3/263, 21–30'da 5/259 "yeterli" trafo gerçekte 207 V altında); P10 ile 0/178 ve 0/173 [Hesap]. Hata ölçüsü (|Δ|) ortancayla kalabilir.
+Senden beklenen: "yeterli" kararını `v_min_tepe_v_p10` ≥ 207 V'a (sütun yoksa ortancaya düş) çevir; istersen `p_aksam_207`'yi bilgi satırına ekle. Kararın kendisi KARAR'da (volkan.md UYARI aynı saat).
+Dosya: src/sinav.py (senin); PR #29
+Neden: güvenli yön (ADR-0018 m. 6 ile aynı ilke).
+Durum: yapıldı — "yeterli" = `v_min_tepe_v_p10` ≥ 207 V (yoksa ortanca); hata ortancayla; `p_aksam_207` bilgi
+
+## UYARI! 1 Kasım 01:20 — karar masasından (KARAR) — BLOKLUYOR — testi geçen PR'lar GitHub onayı bekliyor; ikinizden biri onaylasın
+Ne: Karar masası Mac'te test etti, hepsi tuttu; birleştirme izin sisteminde ancak GitHub'da bir onay varsa geçiyor. Volkan'ın açtığı PR'ları Volkan kendisi onaylayamıyor. Onay sırası (her biri için GitHub'da "Approve" yeter; rakamlar volkan.md KARAR 01:12 / 01:20):
+1. **#22** başvuru anı motoru + sahte kayıt (deneme; Civan'ın iki §7 notu işlendi; harita okumuyor).
+2. **#23** güvenli uçlar: `kac_ev.csv` sonuna `pv_uc` (§6; ADR-0017; Civan'ın haritası bu sütunu okuyacak).
+3. **#25** inverter geri çözümü (#22'nin üstünde; §7'ye `inverter_ham` türü).
+4. **#28** konum payı (#23'ün üstünde; sözleşmeye dokunmuyor, yalnız analiz).
+5. **#27** üretici 1.5 (Can'ın; Civan ya da Volkan onaylar).
+Sırada (TEST oturumu koşuyor): #24 yılın tepesi (`tepe.csv` §8), #26 Kıb-Tek tepe verisi (§9), #29 akşam gerilimi.
+Dosya: GitHub PR'ları
+Neden: Volkan: "hepsini bitirmemiz gerek"; sözleşme değişikliği Can ya da Civan onayı ister (CONTRIBUTING).
+Durum: bekliyor
+
+## BİLGİ 1 Kasım 01:25 — karar masasından — sunum için KTEMO'dan iki kaynaklı cümle (BUILD 1 taraması)
+Ne: (1) 13 Haziran 2026 akü çalıştayı raporu kısa vadede "kritik pik talep bölgelerinde projelere öncelik" diyor; yaz ve kış pik talebi ikisi de sorun — haritanın yük katmanının yaptığı iş. (2) KTEMO Solar Projelendirme sunumu (2019): 2018 sonu PV 21 MWp devrede, 36 MWp izinli, 10 MWp bekleyen, dolmuş kota 77 MWp; 2019 ilk 6 ayda 1.300+ başvuru. Kaynak: ktemo.org/dokumanlar.php; sayfa / slayt numaraları BUILD 1'in günlüğünde (yazılacak). Kıb-Tek 2022 sistem puantı 368 MW, enerji 1.836 GWh (Yakıt Değişim Fizibilite sunumu, slayt 38).
+Durum: bilgi
+
+## UYARI! 1 Kasım 01:22 — karar masasından (KARAR) — "başvuru anında hemen evet %3,8 → %10,5" rakamı iyimser; sunumda kullanılmasın
+Ne: TEST oturumu PR #25'i koşarken gördü: PR #22'nin sahte kayıtlarındaki inverter satırı motora bara yanında hat boyunu da (±%20) veriyor; inverterden hat boyu gerçekte çözülemiyor. Gerçekçi yolda (ham inverter özeti) hemen evet ~%8 (iki kat hatalı kayıtta yanlış evet %0,7). Sunumda ve jüri cevabında %10,5 değil "kayıtlarla başvuru anında hemen evet yaklaşık iki katına (%4 → ~%8), yanlış evet %1'in altında (deneme, gösterim)". Ayrıca ADR-0019: yeşilde "güven yüksek" şartı kalkıyor (31–40'ta sınanınca); sınavın faz3'ü değişmez, yeşil sayısı artacak.
+Dosya: docs/sunum/ (senin)
+Durum: bekliyor
+
+## UYARI! 1 Kasım 01:30 — (BUILD 1 — yük) — iki `KAYNAK.txt` satırı onayın için: Open-Meteo 11 yıllık sıcaklık (PR #24) ve KTEMO dokümanları (PR #31)
+Ne: `data/raw/*/KAYNAK.txt` senin dosyan (CONTRIBUTING); KARAR 01:30 onayını istiyor. (1) **PR #24**: `data/raw/open-meteo-lefkosa/KAYNAK.txt`'e üçüncü dosya: `lefkosa_sicaklik_2015_2025.csv` (yalnız sıcaklık, 11 yıl, adres, 2.111.056 bayt, SHA-256; 2023–2025 saatleri eski dosyalarla birebir) — tasarım sıcaklığı için. (2) **PR #31**: yeni klasör `data/raw/ktemo-dokumanlar/KAYNAK.txt` (Teknik Komite Bildirim No-1, reaktif güç, Kıb-Tek reaktif sunumu, Solar Projelendirme, 2023 ve 2026 çalıştay raporları; Kıb-Tek Yakıt Değişim sunumu slayt 38; adresler, bayt, SHA-256, sayfa / slayt numaraları). Birim fiyatlar senin `ktemo-birim-fiyat` klasöründe kaldı. Veri sözlüğüne satır gerekiyorsa senin dosyan; bilgisi KTEMO günlüğünde (`docs/log/2026-11-01-volkan-ktemo-tarama.md`, PR #31).
+Senden beklenen: PR #24 ve #31'de bu iki dosyayı GitHub'da onayla ya da düzeltme yaz (sözleşme onayı isteğiyle birlikte bakabilirsin). Bundan sonra yeni `KAYNAK.txt` satırlarını önce buraya yazacağım.
+Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #31 (https://github.com/volkanGRGN/KKTC-hackathon/pull/31)
+Neden: dosya sahipliği; KARAR 01:30.
+Durum: bekliyor
+
+## UYARI! 1 Kasım 01:36 — (BUILD 1 — yük) — `tepe.csv`'de iki yeni sütun (PR #32): `tepe_saati_2`, `tepe_donemi`; onay ve sınavda bilgi satırı önerisi
+Ne: PR #32 sözleşme §8'e `tepe_saati_2` (ikinci aday saat; ana tepeden ≥ 3 saat uzak ve ≥ %95 ise, yoksa boş) ve `tepe_donemi` (sabah 04–10 / öğle 10–14 / öğleden sonra 14–20 / gece 20–04) ekliyor. Konutun Temmuz gününde öğleden sonra ve gece tepeleri neredeyse eşit; tek saat yarı yarıya tutuyor. 31–40'ta [Hesap]: tek saat ±60 dk %52,1, iki adaydan biri %60,0, dönem %69,3.
+Senden beklenen: §8 farkını GitHub'da onayla ya da düzeltme yaz; istersen `faz2` tepe bölümüne bilgi olarak "iki adaydan biri ±60 dk" ve "dönem aynı" (sütun yoksa atla). Karar değil öneri.
+Dosya: PR #32 (https://github.com/volkanGRGN/KKTC-hackathon/pull/32); src/sinav.py (senin)
+Neden: KARAR 01:30 (tepe saati).
 Durum: bekliyor

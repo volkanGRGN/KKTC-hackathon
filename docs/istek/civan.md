@@ -170,3 +170,48 @@ Senden beklenen: farkı oku, GitHub'da onayla ya da düzeltme yaz. Sürüm satı
 Dosya: PR #22 (https://github.com/volkanGRGN/KKTC-hackathon/pull/22)
 Neden: CONTRIBUTING sözleşme kuralı; karar masası 00:10 madde 3 ve 5.
 Durum: bekliyor
+
+## UYARI! 1 Kasım 00:23 — (BUILD 2 — panel) — `pv_uc` sütunu hazır (PR #23): panel katmanı güvenli uçlar; sözleşme 1.4 onayı
+Ne: ADR-0017'nin sütunu (karar masası 00:15 girdin): `kac_ev.csv`'nin sonuna `pv_uc` = `yesil` / `dolu_bayrak` / `bos`. Var olan sütunlar değişmedi (1–10'da birebir); `renk` geriye uyum için duruyor. Gösterim ADR-0017'deki gibi: yeşil dolgu ("ilk 2 başvuru güvenle sığar"), `dolu_bayrak` kırmızı dolgu değil uyarı işareti ("büyük olasılıkla dolu; başvuruda ölçüm ya da güçlendirme gerekir"), `bos` renksiz ("başvuruda bakılır"). Geliştirme 1–10'da 354 trafoda: yeşil 20, bayrak 20, renksiz 314 (%89) [Hesap, farazi]. Sahte veri üreticin (`app/ornek_veri.py`) `KAC_EV_SUTUN`'una da eklemen gerekecek.
+Senden beklenen: (1) `docs/data/tablo-bicimi.md` §6 farkını oku, GitHub'da onayla ya da düzeltme yaz (1.4 adayı); (2) PR birleşip şehirler yeniden üretilince harita kartı (karar masası kartı gelir).
+Dosya: PR #23 (https://github.com/volkanGRGN/KKTC-hackathon/pull/23)
+Neden: ADR-0017; Muhittin 4 madde 1; sözleşme kuralı.
+Durum: bekliyor
+
+## UYARI! 1 Kasım 00:46 — (BUILD 2 — panel) — §7'ye yeni satır türü `inverter_ham` (PR #25; senin "türetilmiş değil ham kayıt" notun)
+Ne: Senin PR #22 notuna göre (karar masası 00:27): `kayitlar.csv`'de inverter için yeni tür `inverter_ham`, `deger` = `bara_olcum_V;egim_V_kW` (inverterin kendi kaydının ham özeti, model varsayımı yok; `inverter_kaydi.geri_coz` çıkarır). Bara ve hat boyu motorda çözülür. Eski türetilmiş `inverter` (`bara_V;esdeger_boy_m`) deneme için duruyor. Harita bu dosyayı okumuyor. Ham seri depoya girmez.
+Senden beklenen: PR #25'te `docs/data/tablo-bicimi.md` §7 farkını oku, onayla ya da düzeltme yaz (PR #22'nin §7 onayıyla birlikte bakabilirsin; #25 onun üstünde).
+Dosya: PR #25 (https://github.com/volkanGRGN/KKTC-hackathon/pull/25)
+Neden: sözleşme kuralı; karar masası 00:27.
+Durum: bekliyor
+
+## UYARI! 1 Kasım 00:57 — (BUILD 2 — panel) — `yesil_konum_payi` sütunu (PR #28, 1.4 adayı): onay; gösterim kararı karar masasında
+Ne: `kac_ev.csv`'nin sonuna (`pv_uc`'den sonra) `yesil_konum_payi` (0–1, 0,1 adım; 0 = bilgi yok): renksiz trafoda "hattın ilk %x'indeki evden başvuru büyük olasılıkla evet". Renk değil, yan panelde bilgi (ADR-0015 m. 4, ADR-0017). Deneme şehirlerinde renksiz trafoların yalnız ~%5'inde > 0; gösterim kartı açılıp açılmayacağı karar masasında (volkan.md). Var olan sütunlar değişmedi.
+Senden beklenen: §6 farkını oku, GitHub'da onayla ya da düzeltme yaz (PR #23'ün `pv_uc` onayıyla birlikte; #28 onun üstünde).
+Dosya: PR #28 (https://github.com/volkanGRGN/KKTC-hackathon/pull/28)
+Neden: sözleşme kuralı.
+Durum: geri çekildi (karar masası 01:01): sütun `kac_ev.csv`'ye girmiyor, sözleşme değişmiyor, haritaya kart yok; konum payı yalnız analiz (renksizde bilgi vermiyor).
+
+## UYARI! 1 Kasım 01:06 — (BUILD 1 — yük) — sözleşme §8 `tepe.csv` (PR #24) ve §9 `kibtek_tepe.csv` / `kibtek_fider.csv` (PR #26): GitHub onayı
+Ne: Yük haritası için iki yeni dosya tanımı (1.4 adayı; §7 PR #22'nin `kayitlar.csv`'si olduğu için numaralar 8 ve 9). (1) **§8 `tepe.csv`** (PR #24): satır = trafo; Can'ın önerdiği sütunlar (`tepe_kw`, P10 / P90, `tepe_saati`, `tepe_ayi`, `pf_varsayim`, `tepe_kva` + bant, `bos_kva` + bant, `guven` = on) + `kor_nokta` (ADR-0018 m. 3 etiketi). Haritanın "yük için boş" sayısı `bos_kva_p10` (P90 tepeden; ADR-0018 m. 6). (2) **§9** (PR #26, #24'ün üstünde): Kıb-Tek tepe kayıtlarının giriş biçimi (MD kaydı / etüt; kW ya da A; zaman) ve OG fider tepesi; `tepe.csv`'ye `tepe_kaynagi` sütunu. Harita bugün `tepe.csv`'yi okumuyor; kart görünümü senin işin, okuyacağın sütunlar §8'de.
+Senden beklenen: PR #24 ve #26'da `docs/data/tablo-bicimi.md` §8 / §9 farkını oku, GitHub'da onayla ya da düzeltme yaz (Can da onaylayabilir).
+Dosya: PR #24 (https://github.com/volkanGRGN/KKTC-hackathon/pull/24), PR #26 (https://github.com/volkanGRGN/KKTC-hackathon/pull/26)
+Neden: sözleşme kuralı; KARAR 00:57 madde 1.
+Durum: bekliyor
+
+## UYARI! 1 Kasım 01:20 — karar masasından (KARAR) — BLOKLUYOR — testi geçen PR'lar GitHub onayı bekliyor; ikinizden biri onaylasın
+Ne: Karar masası Mac'te test etti, hepsi tuttu; birleştirme izin sisteminde ancak GitHub'da bir onay varsa geçiyor. Volkan'ın açtığı PR'ları Volkan kendisi onaylayamıyor. Onay sırası (her biri için GitHub'da "Approve" yeter; rakamlar volkan.md KARAR 01:12 / 01:20):
+1. **#22** başvuru anı motoru + sahte kayıt (deneme; Civan'ın iki §7 notu işlendi; harita okumuyor).
+2. **#23** güvenli uçlar: `kac_ev.csv` sonuna `pv_uc` (§6; ADR-0017; Civan'ın haritası bu sütunu okuyacak).
+3. **#25** inverter geri çözümü (#22'nin üstünde; §7'ye `inverter_ham` türü).
+4. **#28** konum payı (#23'ün üstünde; sözleşmeye dokunmuyor, yalnız analiz).
+5. **#27** üretici 1.5 (Can'ın; Civan ya da Volkan onaylar).
+Sırada (TEST oturumu koşuyor): #24 yılın tepesi (`tepe.csv` §8), #26 Kıb-Tek tepe verisi (§9), #29 akşam gerilimi.
+Dosya: GitHub PR'ları
+Neden: Volkan: "hepsini bitirmemiz gerek"; sözleşme değişikliği Can ya da Civan onayı ister (CONTRIBUTING).
+Durum: bekliyor
+
+## UYARI! 1 Kasım 01:36 — karar masasından (KARAR) — yük kartı: tepe saati tek değil, iki aday saat / dönem
+Ne: Konut trafolarında günde iki tepe var (16–17 ve 23), neredeyse eşit; tek saat yarı yarıya tutuyor. PR #32 `tepe.csv`'ye `tepe_saati_2` (ikinci aday) ve `tepe_donemi` (§8) ekliyor; iki adaydan biri %60, dönem %69 tutuyor [Hesap; farazi, üretici 1.5]. Kart "tepe saati" yerine "tepe: akşam (17:00 ya da 23:00)" gibi iki adayı göstersin. Sütunlar #24 / #26 / #29 / #31 / #32 zinciri birleşince main'de olur (hepsi GitHub onayını bekliyor; onay listesi 01:20 girdisinde).
+Dosya: app/ (senin); docs/data/tablo-bicimi.md §8 (onay)
+Durum: bekliyor
