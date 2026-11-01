@@ -6,7 +6,10 @@ olasılıkla dolu" bayrağına en çok taşır; pilot için ilk 20 trafo. `bilgi
   gece    akıllı priz, gece 00:00–05:00: trafodaki bir evin gece gerilimi, 14 gecenin ortancası. Gerçek tarafı:
           `yuk_5dk.csv`'nin o adımdaki en düşük ve en yüksek ev gerilimi arasında trafoya özgü sabit bir yer (prizin
           evi hattın neresinde bilinmez) [Yorum]. Model: bara = ölçüm − hata, hata 1–10'da ölçülen nicelik
-          dağılımından (`GECE_HATA_Q`, `--kalibrasyon`).
+          dağılımından, **tarife grubuna göre** (`GECE_HATA_Q`, `--kalibrasyon`; karar masası 02:5x, TEST'in bulgusu:
+          gece hatası trafonun abone karışımına göre çok farklı). Grup yalnız Kıb-Tek'in bildiğinden (`trafolar.csv`):
+          tahmini enerjisi en büyük tarife (su motoru, sanayi, turizm, ticari, konut) ve konutta en uzun hat
+          ≥ KONUT_HAT_M (kırsal) ya da değil. Cevap anahtarının trafo tipi kullanılmaz (sınav sızar).
   yuk     trafo başında bir haftalık öğlen yükü: ilk 7 günün 11:00–14:00 tüketiminin en düşüğü. Trafo ölçülü sayılır
           (`sablon.py`'nin kuralı: öğlen yükü = ölçülen, güven yüksek).
   kademe  plaka / kademe fotoğrafı: trafonun kendi kademesi (5 pozisyon, ±2 × %2,5; boşta gerilime en yakın). Bara bu
@@ -48,10 +51,50 @@ KADEME_V = [250 + 6.25 * k for k in (-2, -1, 0, 1, 2)]
 KADEME_PENCERE_V = 3.125
 GECE = range(0, 60)                              # 00:00–04:55
 OGLE = range(132, 168)                           # 11:00–13:55
-# Gece prizi ölçümü − gerçek boşta gerilim (V), %0, %5, …, %100; geliştirme 1–10'dan (`--kalibrasyon`) [Hesap]
+# Gece prizi ölçümü − gerçek boşta gerilim (V), %0, %5, …, %100; geliştirme 1–10'dan (`--kalibrasyon`) [Hesap].
+# Havuz (tek dağılım; grup ayrımından önce ve küçük grupların kaydırma tabanı):
 GECE_HATA_Q = [-8.03, -3.92, -2.79, -2.39, -2.06, -1.84, -1.66, -1.54, -1.39, -1.26, -1.16, -1.09, -1.02, -0.93, -0.82,
                -0.77, -0.69, -0.63, -0.53, -0.41, -0.03]      # üretici 1.5, 400 trafo; hep aşağı, ortanca −1,16 V
 # (üretici 1.3 kalibrasyonu ortanca −1,64 V idi)
+KONUT_HAT_M = 400.0                      # konutta kırsal / kısa hat ayrımı (1–10'da seçildi) [Yorum]
+KUCUK_GRUP = 30                          # bundan az trafolu grupta havuz dağılımı grubun ortancasına kaydırılır
+# {tarife grubu: 21 nicelik}; üretici 1.5, 1–10, `--kalibrasyon` [Hesap]. Ortancalar: sulama −3,75, sanayi −2,06,
+# turizm −1,31, konut kırsal −1,16, ticari −1,01, konut kısa −0,83 V (n 37 / 34 / 42 / 104 / 89 / 94)
+GECE_HATA_GRUP = {
+    'konut_kirsal': [-5.07, -3.55, -2.65, -2.38, -2.07, -1.88, -1.75, -1.59, -1.43, -1.27, -1.12, -1.01, -0.91, -0.8,
+                     -0.78, -0.71, -0.65, -0.6, -0.41, -0.31, -0.03],
+    'konut_kisa': [-3.52, -2.2, -1.75, -1.6, -1.52, -1.36, -1.11, -1.06, -1.02, -0.95, -0.83, -0.77, -0.71, -0.66, -0.63,
+                   -0.55, -0.51, -0.47, -0.43, -0.34, -0.28],
+    'sanayi': [-4.02, -3.11, -3.08, -2.73, -2.68, -2.56, -2.49, -2.38, -2.37, -2.24, -2.12, -2.0, -1.93, -1.89, -1.82,
+               -1.6, -1.58, -1.55, -1.39, -1.29, -0.87],
+    'sulama': [-8.03, -6.78, -6.13, -6.01, -5.01, -4.74, -4.33, -4.17, -4.06, -3.92, -3.75, -3.28, -3.0, -2.96, -2.79,
+               -2.68, -2.34, -2.24, -2.19, -2.05, -1.39],
+    'ticari': [-2.32, -1.7, -1.47, -1.41, -1.24, -1.18, -1.16, -1.12, -1.1, -1.06, -1.01, -0.94, -0.9, -0.83, -0.8,
+               -0.74, -0.71, -0.64, -0.59, -0.5, -0.12],
+    'turizm': [-2.35, -1.82, -1.78, -1.73, -1.56, -1.54, -1.45, -1.4, -1.39, -1.36, -1.32, -1.26, -1.1, -1.05, -1.03,
+               -1.02, -1.0, -0.88, -0.82, -0.69, -0.67],
+}
+
+
+def tarife_grubu(tr):
+    """Trafonun tarife grubu, yalnız Kıb-Tek'in bildiğinden: tahmini enerjisi en büyük abone sınıfı (abone sayısı ×
+    sınıfın ortalama yıllık MWh'i, `kac_ev_olasilik.MWH`); konutta en uzun hat KONUT_HAT_M'den uzunsa kırsal."""
+    en = {c: float(tr[c]) * ko.MWH[c] for c in ko.ABONE}
+    b = max(en, key=en.get)
+    if b == 'abone_su_motoru':
+        return 'sulama'
+    if b in ('abone_sanayi1', 'abone_sanayi2'):
+        return 'sanayi'
+    if b == 'abone_turizm':
+        return 'turizm'
+    if b in ('abone_ticari1', 'abone_ticari2'):
+        return 'ticari'
+    return 'konut_kirsal' if float(tr['hat_boyu_max_m']) >= KONUT_HAT_M else 'konut_kisa'
+
+
+def gece_q(grup):
+    """Grubun gece hatası nicelikleri; grup kalibre edilmemişse havuz."""
+    return (GECE_HATA_GRUP or {}).get(grup) or GECE_HATA_Q
 
 
 def _csv(yol):
@@ -148,20 +191,21 @@ def gercek_olcumler(klasor):
     return out
 
 
-def bilgi(olcum, deger):
+def bilgi(olcum, deger, grup=None):
     """Ölçüm sonucu → cek()'in v0 / yuk argümanları."""
     if olcum == 'gece':
-        return dict(v0=lambda r, b=deger: b - _nicelden(GECE_HATA_Q, r))
+        q = gece_q(grup)
+        return dict(v0=lambda r, b=deger, q=q: b - _nicelden(q, r))
     if olcum == 'kademe':
         lo, hi = max(ko.V0[0], deger - KADEME_PENCERE_V), min(ko.V0[1], deger + KADEME_PENCERE_V)
         return dict(v0=lambda r, a=lo, b=hi: r.uniform(a, b))
     return dict(yuk=deger)
 
 
-def varsayimsal(olcum, t, rng):
+def varsayimsal(olcum, t, rng, grup=None):
     """Modelin öncülünden bir varsayımsal ölçüm sonucu (cevap anahtarına bakmadan)."""
     if olcum == 'gece':
-        return rng.uniform(*ko.V0) + _nicelden(GECE_HATA_Q, rng)
+        return rng.uniform(*ko.V0) + _nicelden(gece_q(grup), rng)
     if olcum == 'kademe':
         v0 = rng.uniform(*ko.V0)
         return min(KADEME_V, key=lambda v: abs(v - v0))
@@ -174,9 +218,10 @@ def varsayimsal(olcum, t, rng):
 def sehir_isle(is_):
     klasor, kalibrasyon = Path(is_[0]), is_[1]
     gercek = gercek_olcumler(klasor)
-    if kalibrasyon:
-        return dict(sehir=klasor.name, gece_hata=[g['gece'] - g['v0'] for g in gercek.values() if g['gece']])
     trafolar = _csv(klasor / 'trafolar.csv')
+    if kalibrasyon:
+        grup = {r['trafo_no']: tarife_grubu(r) for r in trafolar}
+        return dict(sehir=klasor.name, gece_hata=[(grup[no], g['gece'] - g['v0']) for no, g in gercek.items() if g['gece']])
     tahmin = {r['trafo_no']: r for r in _csv(klasor / 'tahmin.csv')}
     resmi = {r['trafo_no']: r for r in _csv(klasor / 'kac_ev.csv')}
     cevap = {r['trafo_no']: r for r in _csv(klasor / 'cevap_anahtari.csv')}
@@ -188,21 +233,22 @@ def sehir_isle(is_):
         tr = {k: (r[k] if k in ('trafo_no', 'kablo', 'bolge', 'montaj') else ke.sayi(r[k])) for k in r}
         t = tahmin[no]
         rng_ad = f'olasilik-{r["sehir"]}-{no}'                      # resmi akış
-        satir = dict(sehir=int(r['sehir']), trafo_no=no, guven=t['guven'], p_bugun=float(resmi[no]['p_bugun_asar']),
+        grup = tarife_grubu(r)
+        satir = dict(sehir=int(r['sehir']), trafo_no=no, guven=t['guven'], grup=grup, p_bugun=float(resmi[no]['p_bugun_asar']),
                      dolu=int(cevap[no]['kac_ev_gercek']) == 0, kac_ev_gercek=int(cevap[no]['kac_ev_gercek']), olcum={})
         for o in OLCUMLER:
             t_o = dict(t, guven='yuksek') if o == 'yuk' else t
             beklenen = []
             vr = random.Random(f'olcum-oncesi-{o}-{r["sehir"]}-{no}')
             for k in range(K):
-                d = varsayimsal(o, t, vr)
+                d = varsayimsal(o, t, vr, grup)
                 pb, pi, kar = cek(tr, t_o, random.Random(rng_ad), random.Random(f'bilgi-{o}-{k}-{r["sehir"]}-{no}'),
-                                  **bilgi(o, d))
+                                  **bilgi(o, d, grup))
                 u_ = uc(pb, pi, t_o['guven'], o)
                 beklenen.append((u_, kar if u_ == 'yesil' else 0))
             g = gercek[no][o]
             pb, pi, kar = cek(tr, t_o, random.Random(rng_ad), random.Random(f'bilgi-{o}-g-{r["sehir"]}-{no}'),
-                              **bilgi(o, g))
+                              **bilgi(o, g, grup))
             u_ = uc(pb, pi, t_o['guven'], o)
             satir['olcum'][o] = dict(
                 p_yesil=sum(x[0] == 'yesil' for x in beklenen) / K, p_bayrak=sum(x[0] == 'dolu_bayrak' for x in beklenen) / K,
@@ -245,11 +291,29 @@ def main():
     with ProcessPoolExecutor() as ex:
         sonuc = list(ex.map(sehir_isle, [(k, a.kalibrasyon) for k in klasorler]))
     if a.kalibrasyon:
-        e = sorted(x for s in sonuc for x in s['gece_hata'])
+        e = sorted(x for s in sonuc for _, x in s['gece_hata'])
         q = [round(ko.nicel(e, k / 20), 2) for k in range(21)]
         print(f'gece prizi hatası (ölçüm − v0), şehir {a.aralik}, {len(e)} trafo: ortanca {st.median(e):+.2f} V, '
               f'P10–P90 {ko.nicel(e, .1):+.2f} … {ko.nicel(e, .9):+.2f} V')
         print(f'GECE_HATA_Q = {q}')
+        gruplar = {}
+        for s_ in sonuc:
+            for g_, x in s_['gece_hata']:
+                gruplar.setdefault(g_, []).append(x)
+        ort = st.median(e)
+        tablo_g = {}
+        for g_, xs in sorted(gruplar.items()):
+            xs.sort()
+            if len(xs) >= KUCUK_GRUP:
+                tablo_g[g_] = [round(ko.nicel(xs, k / 20), 2) for k in range(21)]
+                yol = 'kendi nicelikleri'
+            else:
+                kay = st.median(xs) - ort
+                tablo_g[g_] = [round(v + kay, 2) for v in q]
+                yol = f'havuz {kay:+.2f} V kaydırıldı'
+            print(f'  {g_}: n {len(xs)}, ortanca {st.median(xs):+.2f} V, P10–P90 {ko.nicel(xs, .1):+.2f} … '
+                  f'{ko.nicel(xs, .9):+.2f} V ({yol})')
+        print(f'GECE_HATA_GRUP = {tablo_g}')
         return
     satirlar = [s for x in sonuc for s in x['trafolar']]
     print(f'şehir {a.aralik} — Faz 10 ölçüm sırası, renksiz trafolar (aday evi olan) {len(satirlar)}; farazi, gösterim')
@@ -263,6 +327,15 @@ def main():
     r_ev = tablo['en_iyi']['ev'] * 20 / n if n else 0
     r_y = tablo['en_iyi']['yesil'] * 20 / n if n else 0
     print(f'rastgele 20 renksiz trafo (kendi en iyi ölçümüyle, ortalama): yeşile dönen {r_y:.1f}, açılan ev {r_ev:.1f}')
+    print('beklenen ↔ gerçekleşen (bütün renksiz trafolar): ' + '; '.join(
+        f"{o} yeşil {sum(s['olcum'][o]['p_yesil'] for s in satirlar):.1f} → {sum(s['olcum'][o]['uc'] == 'yesil' for s in satirlar)}, "
+        f"ev {sum(s['olcum'][o]['beklenen_ev'] for s in satirlar):.0f} → {sum(s['olcum'][o]['ev'] for s in satirlar)}"
+        for o in OLCUMLER))
+    gruplar = sorted({s['grup'] for s in satirlar})
+    print('gece prizi, tarife grubuna göre (beklenen → gerçekleşen yeşil): ' + ', '.join(
+        f"{g_} {sum(s['olcum']['gece']['p_yesil'] for s in satirlar if s['grup'] == g_):.1f} → "
+        f"{sum(s['olcum']['gece']['uc'] == 'yesil' for s in satirlar if s['grup'] == g_)} (n {sum(s['grup'] == g_ for s in satirlar)})"
+        for g_ in gruplar))
     faydali = [s for s in satirlar if s['olcum'][s['en_iyi']]['beklenen_ev'] > 0 or s['olcum'][s['en_iyi']]['p_bayrak'] > 0]
     print(f'tek ölçümün renk değiştirebileceği {len(faydali)} trafoda en iyi ölçüm: '
           + ', '.join(f"{o} {sum(s['en_iyi'] == o for s in faydali)}" for o in OLCUMLER)
