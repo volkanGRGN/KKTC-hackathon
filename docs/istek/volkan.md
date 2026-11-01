@@ -1214,3 +1214,32 @@ Durum: bekliyor
 ## KARAR 08:33 — (BUILD 2 — panel) PR #35 birleşti; ticari grubunu I / II diye bölmek isteğe bağlı, şimdilik yok
 Karar: TEST tuttu (2571f2b; sızıntı yok, grup yalnız `trafolar.csv`'den; 31–40 gece 7 → 10 yeşil, 43 → 72 ev, beklenen ↔ gerçekleşen 16,0 → 10; yanlış yeşil 0) → **#35 birleşti**; açık PR yok. Kalan fark çoğunlukla yurtta (ticari grubunda çarşı −1,14 V, yurt −0,72 V, grup −1,01 V): Kıb-Tek ticari I ve II'yi ayrı bildiği için grup ikiye bölünebilir. **Şimdilik yapılmaz:** yön temkinli, pilot sırası değişmiyor (önce kademe fotoğrafı), gece prizi yalnız ticari / turizm trafolarında rengi değiştiriyor; kazanç küçük. Gerçek pilot verisi gelince ayrı grup yeniden değerlendirilir.
 Durum: değişti 08:33 — Volkan (TEST oturumunda) "evet" dedi: ticari I / II bölmesi yapılır (BUILD 2). Tüzük notu: bölme 1–10'daki farkla gerekçelenir (yurt 7,2 → 5 orada da görülüyor); 31–40 gece prizi için üçüncü kez bakılmış olur, günlükte "görülmüş" diye yazılır; gece kalibrasyonunda bir değişiklik daha olursa sınav yeni şehirlerde (41–50).
+
+## KARAR 08:34 — (BUILD 2 — panel) ölçüm sırası sınavı yeni şehirlere: üretici 1.5 şehirleri 41–50
+Karar: BUILD 2'nin önerisiyle: ticari I / II bölmesi 1–10'daki gerekçeyle yapılır, sınavı **hiç bakılmamış 41–50**'de bir kez; 31–40 ölçüm sırası betiği için iki kez ölçüldü ve öneri onun grup sonuçlarından çıktı, bu betik için artık bilgi (tüzük m. 2). Diğer panel / yük sınavları için 31–40 dokunulmamış kalmaya devam ediyor.
+Durum: bekliyor (BUILD 2)
+
+## UYARI! 1 Kasım 09:40 — Civan'dan — Sunum videosu için resmi rakamların şehir dosyaları
+Ne: MVP slaytında oynayacak Blender videosu (Girne: ölçüm → ofis → tahmin → KKTC haritası) trafo renklerini ve sayılarını bir şehir klasöründen okuyor; ofis ekranındaki yazılar ("N trafoda ölçtük", "M trafoyu tahmin ettik", yeşil / sarı / kırmızı sayısı) da oradan. Sunumdaki rakamlarla aynı olsun diye **sunumun kullanacağı sürümün** şehir klasörleri lazım. DEVIR'e göre resmi rakamlar v3 (üretici 1.3, `trafo-sablonu-build/data/synthetic/u13/`, K_YUK 1,47) yalnız BUILD'in Mac'inde; Civan'daki yerel şehirler üretici 1.2. İstenen: (1) Girne sahnesinde gösterilecek bir şehir (öneri: kilit grafiğin geldiği sınav şehirlerinden biri; seçim senin), (2) ada haritasında ilçelere temsili yerleşecek diğer şehirler. Her klasörde yalnız `trafolar.csv`, `tahmin.csv`, `kac_ev.csv`, `arketipler.csv`, `ayar.json`; `cevap_anahtari.csv` gerekmiyor. Zip olarak Civan'a ya da hangi sürüm ve komutla üretileceği yazılırsa Civan kendisi üretir.
+Dosya: — (veri git dışı; video `gemini-harita-deneme/`, depo dışında)
+Neden: Videoda ve slaytta farklı rakam görünmesin. Sunum rakam sürümü (v1 / v3) DEVIR'de hâlâ "bekliyor"; bu karar videonun verisini de belirliyor. Beklerken video yerel 1.2 veriyle kuruluyor, dosya gelince yalnız klasör değişir. Videoda etiket "gösterim — farazi şehir".
+Durum: bekliyor
+
+## UYARI! 1 Kasım 08:40 — (BUILD 2 — panel) — Ticari I / II bölmesi PR #36'da: olumsuz sonuç, hiçbir şey değişmedi; birleşmemesi önerilir
+Ne: KARAR 03:0x: TEST'in önerdiği "baskın sınıf" (ticari I ↔ II) ayırmıyor (ticari II'nin abone başına tüketimi büyük, iki türde de baskın; "ticari I baskın" 1–10'da boş). Kıb-Tek'in bildiği ayırıcı küçük dükkân sayısıyla bölündü (`TICARI1_ESIK = 12`; 1–10'da çarşılarda 15–39, yurtlarda 2–8), kalibrasyon 1–10. [Hesap; farazi, gösterim] Gece prizi 1–10'da 15 yeşil / 182 ev, **31–40'ta (gece prizi için üçüncü bakış, görülmüş) 10 / 72: ikisi de PR #35 ile aynı**; beklenen → gerçekleşen 16,1 → 10 (önce 16,0 → 10); yurt benzeri grupta 7,1 → 4. Yanlış yeşil 0.
+Bulgu: yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep ölçüm öncesi bara öncülünün her trafoda U(244, 252) olması [Yorum]. Gece kalibrasyonunda bundan sonraki değişiklik yeni sınav şehirlerinde (41–50).
+Soru: PR #36 kapatılsın mı (günlük main'e ayrı mı girsin), birleşsin mi?
+Dosya: PR #36 (https://github.com/volkanGRGN/KKTC-hackathon/pull/36), docs/log/2026-11-01-volkan-panel-gece-ticari.md (dalda)
+Neden: KARAR 03:0x.
+Durum: bekliyor
+
+## KARAR 08:41 — (BUILD 2 — panel) PR #36 (ticari I / II bölmesi): olumsuz sonuç; kod birleşmez, günlük main'e
+Karar: "Baskın sınıf" ayırmıyor (ticari II çarşıda da yurtta da baskın); küçük dükkân sayısıyla bölme (eşik 12; kalibrasyon 1–10: dükkân −1,06, büyük −0,93 V) sonucu değiştirmedi: gece prizi 1–10 15 / 182, 31–40 10 / 72 (#35 ile aynı), beklenen → gerçekleşen 16,1 → 10, yanlış yeşil 0. Yurttaki fark gece hatasının ortancasından gelmiyor; olası sebep ölçüm öncesi bara öncülü U(244, 252) [Yorum]. **Kod birleşmez**, PR kapanır (dal kalır); olumsuz sonuç günlüğü ve ROADMAP Faz 10 satırı main'e ayrı girer (BUILD 2). 31–40 bu betik için üçüncü kez bakıldı, görülmüş; 41–50 bu iş için gerekmedi.
+Durum: bekliyor (BUILD 2 günlük; sonra karar masası #36'yı kapatır)
+
+## UYARI! 1 Kasım 09:46 — Civan'dan (+ Claude) — Pitch şablonu panel hikâyesiyle dolduruluyor; KARAR 23:12 ("panel sunumda anlatılmayacak") ile çelişiyor
+Ne: Organizatörün 7 slaytlık pitch şablonu (5 dk) için Gemini'ye brif hazırlandı (`docs/istek/brif-gemini-pitch.md`, Civan'ın yerelinde, commit edilmedi). Civan hikâyeyi **panel (mevcut metin)** seçti: içerik `docs/sunum/` sunum-v1 rakamları (2.670 başvuru, İspanya %25 → %10, dolu trafoya "yer var" 41/73 ↔ 0, pilot ~20 bin €). Yük haritası rakamları henüz yok (PR #24 bekliyor).
+Eksik kutular (BEKLİYOR): takım adı; geliştirme / bakım maliyeti, toplam, geri ödeme; yıllık üretim ve emisyon etkisi.
+Soru: Sunum panel hikâyesiyle mi gitsin (23:12 kararı bu sunum için kalkar mı), yoksa yük haritası rakamları gelince slaytlar ona mı çevrilsin? Rakam sürümü v1 mi v3 mü?
+Neden: Civan'ın seçimi (1 Kasım); hikâye ve rakam sürümü kararı Volkan'da.
+Durum: bekliyor
