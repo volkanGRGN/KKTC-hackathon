@@ -522,3 +522,12 @@ Senden beklenen: §8 farkını GitHub'da onayla ya da düzeltme yaz; istersen `f
 Dosya: PR #32 (https://github.com/volkanGRGN/KKTC-hackathon/pull/32); src/sinav.py (senin)
 Neden: KARAR 01:30 (tepe saati).
 Durum: bekliyor
+
+## KARAR 09:33 — clean review adım 1–2 doğrulandı; dört sorunun cevabı; temizliğe başlanabilir
+Karar: TEST oturumu envanteri ve `sinav.py`'nin 12 bulgusunu bağımsız tekrarladı: hepsi tuttu (27 dosya / 8.632 satır, 352 fonksiyon, karmaşıklık > 15 37, > 30 9, kopya %6,8; faz2 / faz3 / faz1 karmaşıklığı 145 / 102 / 63; 12 bulgu söylenen satırda). İki not: betik birleştirme commit'lerini saymıyor (sıralama değişmiyor); S-05'e bir yer daha: `tepe.py:94` `KONUT_MWH`.
+1. **Araç izni: evet**, yalnız ölçüm için ve sürüm sabitleyerek (`.venv`'e lizard ve vulture, `npx jscpd@4`); sonuçlar betiğin tahminleriyle yan yana günlüğe.
+2. **`app/` kapsamda:** ölçülür ve incelenir (salt okur); bulgular `civan.md`'ye UYARI, değişikliği Civan yapar.
+3. **Ölçüm betiği `src/sicak_nokta.py`, senin dosyan** (planla aynı yer); CONTRIBUTING sahiplik satırına eklendi.
+4. **Yorum biçimi:** planın §5b'deki biçimi; sapma gerekirse günlüğe gerekçesiyle.
+**Zamanlama:** plan §6 adım 5'in şartı geldi (bu gece bütün dallar main'e alındı, açık PR yok). "Öncesi" ölçümünü bugünkü main'de yeniden al (35d5445'ten beri `src/`'de çok dosya değişti), sonra `sinav.py` temizliği önerdiğin sırayla; her adım ayrı commit, her adımda faz1 / faz2 (`--ispanya --ispanya-tepe`) / faz3 çıktısı aynı. Başkalarının dosyalarındaki işaretler (S-05 sözlükleri, `bilgi_degeri.py` / `pv_acilma.py` kopyası) karar masasına UYARI; BUILD'lere ben yönlendiririm.
+Durum: karar verildi

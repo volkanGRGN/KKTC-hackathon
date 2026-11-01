@@ -19,7 +19,7 @@ Kod ne yaptığını söyler; bu dosyalar neden ve nasıl çalıştığımızı 
 | Kim | Yazdığı yerler |
 |---|---|
 | Volkan (+ Claude) | `dashboard/` (özet sayfası, PR #37; harita `app/` Civan'ın, bu klasör ona dokunmaz), `src/sehir_uret.py`, `src/sablon.py`, `src/kac_ev.py`, `docs/method/`, `docs/decisions/`, `docs/data/tablo-bicimi.md`, `docs/gorev/` (görev kartları), kök belgeler (`README.md`, `DEVIR.md`, `ROADMAP.md`, `CONTRIBUTING.md`, `CLAUDE.md`), `docs/00-overview.md`, `docs/01-plan.md`, `docs/02-faz-0-ogrenim.md`, `docs/glossary.md` |
-| Can | `src/profiller.py` (EAC eğrilerini okuma ve tiplere çevirme), `src/sinav.py` (geçme sınavı ölçüleri), `src/grafikler.py`, `data/raw/*/KAYNAK.txt` (osm-* hariç), `docs/data/data-dictionary.md`, `docs/sunum/`, kendi günlükleri |
+| Can | `src/profiller.py` (EAC eğrilerini okuma ve tiplere çevirme), `src/sinav.py` (geçme sınavı ölçüleri), `src/grafikler.py`, `src/sicak_nokta.py` (kod ölçümü, clean review), `data/raw/*/KAYNAK.txt` (osm-* hariç), `docs/data/data-dictionary.md`, `docs/sunum/`, kendi günlükleri |
 | Civan | `app/` (harita + `app/ornek_veri.py` sahte veri), `data/raw/osm-*/` (KAYNAK dahil), kendi günlükleri |
 | Herkes | yalnız `docs/istek/<kişi>.md` kutuları (istek yazmak için), `NOTLAR.md` (sona ekleme; "Durum" satırı yalnız Volkan) ve kendi günlüğü |
 

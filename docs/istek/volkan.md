@@ -1182,7 +1182,7 @@ Adım 3 işaretleri (senin / BUILD dosyaların; incelenmedi): `sinav.py faz3` ta
 Soru: (1) lizard + jscpd + vulture kurulumuna izin (`.venv` + `npx jscpd@4`)? (2) `app/` (Civan'ın) inceleme kapsamında mı? (3) ölçüm betiği planın dediği gibi `src/sicak_nokta.py` olsun mu, kimin dosyası? (Bugün günlüğün sonunda tam metin.) (4) Yorum biçimi (plan §5b) kararın.
 Dosya: docs/log/2026-11-01-can-kod-envanteri.md
 Neden: Clean review planı §6 adım 0 (izin) ve 1–2.
-Durum: bekliyor
+Durum: karar verildi 09:33 → can.md (TEST adım 1–2'yi doğruladı; araç izni evet, sürüm sabit; `app/` salt okur kapsamda; `src/sicak_nokta.py` Can'ın; yorum biçimi plan §5b; temizliğe başlanabilir)
 
 ## KARAR 02:29 — #25 ve #33 birleşti; açık PR kalmadı; ADR-0019 yürürlükte
 Karar: TEST tuttu → **#25** inverter geri çözümü + üretici sürüm kontrolü (01c1b0d; d88285b yalnız günlük satırı) ve **#33** ADR-0019 (1a3e94b) birleşti. #33'te GitHub çakışma gösterdi ama git birleştirmesi temizdi; karar masası dala main'i birleştirdi (d2b0b72), kod test edilen 9896ed2 ile aynı. **ADR-0019 yürürlükte:** yeşil ve "hemen evet" kapısında güven şartı yok (31–40: yeşil 28 → 60, yanlış yeşil 0/60). Gece birleşenler: #19, #21, #22, #23, #24, #25, #26, #27, #28, #29, #30, #31, #32, #33 — **açık PR 0**.
