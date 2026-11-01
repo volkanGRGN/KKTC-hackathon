@@ -549,7 +549,7 @@ def kucuk_harita(sehir_t, secili):
                             zoom=harita_yakinligi(v["enlem"], v["boylam"], 280))
     st.pydeck_chart(pdk.Deck(layers=[nokta, halka], initial_view_state=gorunum, map_style=None,
                              tooltip={"text": "{trafo_no} · {renk_adi} · {kva} kVA"}), height=280)
-    st.caption("Mavi halka seçili trafo. Renk güneş paneli sorusunun. Kıbrısçık: trafo yerleri gerçek değil.")
+    st.caption("Mavi halka seçili trafo. Renk güneş paneli sorusunun. Kıbrıscık: trafo yerleri gerçek değil.")
 
 
 # ---------- şehirler ----------
@@ -768,7 +768,7 @@ def genel_sayfa():
             format_func=lambda p: f"Bütün şehirler ({len(klasorler)})" if p == "hepsi" else p.name,
         )
         tek = None if secenek == "hepsi" else secenek
-    st.sidebar.caption("Kıbrısçık: cevabını bildiğimiz deneme şehirleri. Bütün şehirlere ya da tek şehre bakabilirsin.")
+    st.sidebar.caption("Kıbrıscık: cevabını bildiğimiz deneme şehirleri. Bütün şehirlere ya da tek şehre bakabilirsin.")
 
     t_hepsi = t = None
     if klasorler:
@@ -810,10 +810,10 @@ def genel_sayfa():
 def main():
     st.set_page_config(page_title="Trafo Görünürlük Haritası · Dashboard", page_icon="⚡", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
-    sayfalar = [st.Page(genel_sayfa, title="Kıbrısçık'a genel bakış", icon=":material/dashboard:", default=True)]
+    sayfalar = [st.Page(genel_sayfa, title="Kıbrıscık'a genel bakış", icon=":material/dashboard:", default=True)]
     if harita_sayfa.KULLANILABILIR:  # Civan'ın harita/ui düzeni varsa (yoksa sayfa gizli)
         sayfalar.append(st.Page(harita_sayfa.sayfa, title="Harita", icon=":material/map:", url_path="harita"))
-    sayfalar.append(st.Page(canli_sayfa.sayfa, title="Kıbrısçık'ta canlı tahmin", icon=":material/bolt:",
+    sayfalar.append(st.Page(canli_sayfa.sayfa, title="Kıbrıscık'ta canlı tahmin", icon=":material/bolt:",
                             url_path="canli"))
     st.navigation(sayfalar).run()
 

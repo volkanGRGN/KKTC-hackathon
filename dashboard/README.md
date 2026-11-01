@@ -1,6 +1,6 @@
 # Dashboard (`dashboard/`)
 
-Haritadan ayrı uygulama. Sayfalar: **Kıbrısçık'a genel bakış** (proje kimliği, özet, rakamlar ne kadar tutuyor, proje ve ekip; teknik tablolar "Ekip için"de), **Harita** (Civan'ın haritası, `app/harita.py`; onun düzeni yoksa gizli) ve **Kıbrısçık'ta canlı tahmin** (bütün ada; Girne'de birkaç trafoyu ölç, model gerisini tahmin eder; Oynat). Bu klasör `app/`'e yazmaz. **Dil herkesin anlayacağı gibi** (Volkan, 1 Kasım: site pitch sunumunda kullanılacak): teknik terim yok ya da yanında açıklaması; her rakamın altında tek cümle.
+Haritadan ayrı uygulama. Sayfalar: **Kıbrıscık'a genel bakış** (proje kimliği, özet, rakamlar ne kadar tutuyor, proje ve ekip; teknik tablolar "Ekip için"de), **Harita** (Civan'ın haritası, `app/harita.py`; onun düzeni yoksa gizli) ve **Kıbrıscık'ta canlı tahmin** (bütün ada; Girne'de birkaç trafoyu ölç, model gerisini tahmin eder; Oynat). Bu klasör `app/`'e yazmaz. **Dil herkesin anlayacağı gibi** (Volkan, 1 Kasım: site pitch sunumunda kullanılacak): teknik terim yok ya da yanında açıklaması; her rakamın altında tek cümle.
 
 ## Çalıştırma
 
@@ -10,7 +10,7 @@ streamlit run dashboard/dashboard.py
 
 Tarayıcıda `http://localhost:8501` (harita açıksa bir sonraki port). Sayfalar sol menüde. Gereken paketler haritanınkiyle ve modelinkiyle aynı (`streamlit` ≥ 1.46, `pandas`, `pydeck`, `numpy`, `scipy`, `scikit-learn`; `altair` Streamlit'le gelir). Eski model sürümleri için `git` gerekir.
 
-## Kıbrısçık'a genel bakış: sekmeler
+## Kıbrıscık'a genel bakış: sekmeler
 
 Sunumda görünenler önde, ekibin çalışma tabloları "Ekip için"de (silinmedi).
 
@@ -27,7 +27,7 @@ Civan'ın haritası olduğu gibi: sütun = trafo, renk = karar, boy = trafo güc
 
 ## Canlı tahmin sayfası
 
-- **Harita kendi çizimimiz** (`canli_harita.py` + `canli_harita.js`, tuval; harita karosu yok, internetsiz; Volkan 1 Kasım "harita bizim olsun"): ada Natural Earth 1:50m (`app/ada_kiyi.json`, Civan'ın, yalnız okunur), Girne kıyısı ve binaları OSM (`data/raw/osm-kasaba/`, git dışı; yoksa yalnız ada çizimi). **Ölçülen trafo dolu nokta (kalın kontur), tahmin soluk halka, henüz tahmin yok gri nokta.** Etiket her karede: "gösterim — Kıbrısçık ülkesindeki şehirler · noktalar temsili" (Volkan 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil Kıbrısçık ülkesindeki şehirler; yine gösterim).
+- **Harita kendi çizimimiz** (`canli_harita.py` + `canli_harita.js`, tuval; harita karosu yok, internetsiz; Volkan 1 Kasım "harita bizim olsun"): ada Natural Earth 1:50m (`app/ada_kiyi.json`, Civan'ın, yalnız okunur), Girne kıyısı ve binaları OSM (`data/raw/osm-kasaba/`, git dışı; yoksa yalnız ada çizimi). **Ölçülen trafo dolu nokta (kalın kontur), tahmin soluk halka, henüz tahmin yok gri nokta.** Etiket her karede: "gösterim — Kıbrıscık ülkesindeki şehirler · noktalar temsili" (Volkan 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil Kıbrıscık ülkesindeki şehirler; yine gösterim).
 - **Normal harita bütün ada** (animasyonun sonundaki görünüm; tam genişlik, sayılar altında): Güney soluk, Kuzey belirgin; seçilen şehir Girne'de canlı, veri setindeki öbür şehirler kasabalara temsili yerleşir (`KASABALAR`, küçültme 0,55; gerçek trafo yeri değil) ve her birinin resmi 12 ölçümlü çıktısıyla boyanır (`tahmin.csv`, `tepe.csv`, `kac_ev.csv`). Tekerlek, sürükleme, çift tıklama, +/− ve "Girne" / "Kıbrıs" düğmeleriyle yakınlaşılır. Uzaktan bakınca başlık bütün adanın özeti.
 - **Trafoya tıkla: kart açılır** (Malta haritası gibi): trafo gücü, yük haritası (yılın tepesi, doluluk, akşam gerilimi), panel rengi ve kaç ev, öğlen yükü; sınav açıksa gerçek. Girne trafosunun kartında "Ölçülmüş say (cihaz takıldı)" / "Ölçümü kaldır". **Girne'de harita kapalı açılır:** en az 3 ölçümle model kurulur ve ölçülmeyen bütün trafoları boyar; her ölçümde yeniden kurulur (~1 sn). Ölçüm sağdaki listeden de eklenip çıkarılır.
 - **Düğmeler:** "Önerilen 12 trafoyu ölç" (ürünün tabakalı seçimi, resmi koşuyla aynı), "Bir trafo daha ölç", "Oynat", "Sıfırla". **"Ayrıntı" köşesi** (kapalı): haritadaki soru (doluluk / güneş paneli), gerçekle karşılaştırma, model sürümü. Sunumda ekranda yalnız harita, düğmeler ve birkaç sayı kalır.
@@ -49,7 +49,7 @@ Civan'ın haritası olduğu gibi: sütun = trafo, renk = karar, boy = trafo güc
 ## Kurallar
 
 - Genel bakış ve Harita `cevap_anahtari.csv`'yi okumaz. Canlı tahmin onu yalnız sınav görünümünde okur ve modele vermez (kapatılabilir). `yuk_5dk.csv`'den modele yalnız ölçülü (seçilen) trafoların satırları girer (sözleşme).
-- Etiket: şehir 900+ "SAHTE VERİ", 800–899 "GERÇEK ÖLÇÜM … (Kıbrıs değil)", diğerleri "gösterim — Kıbrısçık ülkesindeki şehirler" (Volkan, 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil).
+- Etiket: şehir 900+ "SAHTE VERİ", 800–899 "GERÇEK ÖLÇÜM … (Kıbrıs değil)", diğerleri "gösterim — Kıbrıscık ülkesindeki şehirler" (Volkan, 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil).
 - Dil: "en az" yok; "yaklaşık N ev (A–B)" ve "%80 ihtimalle"; vaat renkte. Her rakamın yanında katmanı (panel ya da yük haritası) yazılı.
 - Renkler haritayla aynı ve her zaman yazısıyla birlikte.
 

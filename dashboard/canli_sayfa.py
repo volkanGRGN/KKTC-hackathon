@@ -290,7 +290,7 @@ def sinav_paneli(ozet, katman, gecmis):
         ])
         if ozet["yanlis_yesil"] > 0:
             st.error(f"{ozet['yanlis_yesil']} trafoya yanlışlıkla yeşil: az ölçümle model kendinden fazla emin olabilir.")
-    st.caption("Gerçek, deneme şehrinin cevap anahtarından; model onu görmez. Kıbrısçık, gösterim.")
+    st.caption("Gerçek, deneme şehrinin cevap anahtarından; model onu görmez. Kıbrıscık, gösterim.")
     if len(gecmis) >= 2:
         hata_grafigi(gecmis)
 
@@ -378,7 +378,7 @@ def sayfa():
     ayar = json_oku(klasor / "ayar.json") or {}
     sinav_var = (klasor / "cevap_anahtari.csv").exists() and sehir_no(klasor) < 800
 
-    st.markdown("## Kıbrısçık ülkesinde canlı tahmin")
+    st.markdown("## Kıbrıscık ülkesinde canlı tahmin")
     st.caption("Her trafoya cihaz takmak çok pahalı. Burada Girne'deki trafolardan birkaçını ölçüyoruz; model "
                f"ölçülenlerden öğrenip gerisini tahmin ediyor (en az {canli.EN_AZ_OLCULU} ölçüm; ürünün tasarımı "
                f"40 trafodan {ONERI_SAYISI}'si). Bir trafoya tıkla, kartından ölç. Oynat: Girne'den başlayıp adaya açılan "

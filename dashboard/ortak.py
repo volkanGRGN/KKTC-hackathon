@@ -70,7 +70,7 @@ DURUM = {  # herkesin anlayacağı dil (Volkan, 1 Kasım: pitch'te kullanılacak
     "bilgi": ("BİLGİ", "i", GRI_HEX),
 }
 VERI_TURU = {
-    "farazi": "Kıbrısçık deneme şehirleri — gösterim",
+    "farazi": "Kıbrıscık deneme şehirleri — gösterim",
     "gercek": "gerçek veri — Kıbrıs değil",
     "kaynakli": "kaynaklı bilgi",
     "sahte_kayit": "gerçeğe benzeyen sahte kayıtla — gösterim",
@@ -299,7 +299,7 @@ def etiket(no, ayar):
     if no in GERCEK_VERI_SEHIRLERI:
         kaynak = ayar.get("veri_kaynagi", "gerçek ölçüm verisi")
         return f"GERÇEK ÖLÇÜM — {kaynak} (Kıbrıs değil)"
-    return "gösterim — Kıbrısçık ülkesindeki şehirler"  # Volkan, 1 Kasım: "farazi şehir" değil
+    return "gösterim — Kıbrıscık ülkesindeki şehirler"  # Volkan, 1 Kasım: "farazi şehir" değil
 
 
 def veri_seti_sec():

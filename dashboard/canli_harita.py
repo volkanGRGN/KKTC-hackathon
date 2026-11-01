@@ -27,7 +27,7 @@ GIRNE_KIYI = HAM_KOK / "osm-kasaba" / "girne_kiyi.json"
 GIRNE_BINA = HAM_KOK / "osm-kasaba" / "girne_merkez.json"
 JS_DOSYASI = Path(__file__).resolve().with_name("canli_harita.js")
 OSM_ATIF = "© OpenStreetMap katkıcıları"
-ETIKET = "gösterim — Kıbrısçık ülkesindeki şehirler · noktalar temsili"  # Volkan, 1 Kasım: "farazi şehir" değil
+ETIKET = "gösterim — Kıbrıscık ülkesindeki şehirler · noktalar temsili"  # Volkan, 1 Kasım: "farazi şehir" değil
 
 GIRNE_MERKEZ = (35.3375, 33.318)  # şehir üreticisinin referans noktası (osm-kasaba KAYNAK.txt)
 GIRNE_YAMA = (35.22, 33.19, 35.42, 33.45)  # güney, batı, kuzey, doğu: ayrıntılı OSM kıyısının çizildiği dikdörtgen

@@ -50,7 +50,7 @@
     "sari": "Emin değiliz: önce ölç",
     "kirmizi": "Büyük ihtimalle dolu: ölç ya da güçlendir"
   },
-  "rakam_notu": "Kıbrısçık rakamları cevabını bildiğimiz deneme şehirlerinden: gösterimdir ve gerçeğin üst sınırıdır. \"Gerçek veri\" yazanlar İspanya ve İngiltere'den. Kıbrıs'taki gerçek doğruluğu pilot söyler.",
+  "rakam_notu": "Kıbrıscık rakamları cevabını bildiğimiz deneme şehirlerinden: gösterimdir ve gerçeğin üst sınırıdır. \"Gerçek veri\" yazanlar İspanya ve İngiltere'den. Kıbrıs'taki gerçek doğruluğu pilot söyler.",
   "rakamlar": [
     {
       "katman": "sorun",
@@ -105,7 +105,7 @@
     {
       "katman": "panel",
       "deger": "%11,3",
-      "baslik": "Kıbrısçık'ta öğlen tahmininin sapması",
+      "baslik": "Kıbrıscık'ta öğlen tahmininin sapması",
       "aciklama": "Tipik trafoda %11,3, en kötü onda birlik dilimde %28. İspanya'daki gerçek sapmayla aynı seviyede.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 31–40, üretici 1.5",
@@ -175,7 +175,7 @@
     {
       "katman": "yuk",
       "deger": "%11,4",
-      "baslik": "Kıbrısçık'ta yoğun saat tahmininin sapması",
+      "baslik": "Kıbrıscık'ta yoğun saat tahmininin sapması",
       "aciklama": "Tipik trafoda %11,4, en kötü onda birlik dilimde %23,9. Tahminimiz gerçeğin genelde %11 üstünde, yani güvenli tarafta; gerçek hiçbir trafoda aralığımızın üstüne çıkmadı. Sıcakta tüketimin ne kadar arttığını 20 gerçek Kıbrıs evinden aldık; deneme şehirleri bunu sınayamıyor.",
       "veri": "farazi",
       "kapsam": "Sınav şehirleri 41–50 (hiç bakılmamış), üretici 1.5, ölçülmeyen 280 trafo; tepe modeli B-Y2",
@@ -317,7 +317,7 @@
       "anlam": "Evdeki gerilimin üst ve alt sınırı. Öğlen paneller gerilimi yükseltir (259 V), akşam yük düşürür (207 V)."
     },
     {
-      "terim": "Kıbrısçık",
+      "terim": "Kıbrıscık",
       "anlam": "Cevabını bildiğimiz deneme şehirlerinin ülkesi. Rakamları gösterimdir; trafo yerleri gerçek değildir."
     }
   ]
