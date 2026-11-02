@@ -24,7 +24,7 @@ python3 src/sehir_uret.py 7          # data/synthetic/sehir-007/
 python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
 ```
 
-Şehir başına ~10 saniye (Mac). Çıktının biçimi [docs/data/tablo-bicimi.md](../data/tablo-bicimi.md). EAC Excel'i (`data/raw/eac-profil-siniflari/`) ve `src/profiller.py` yoksa yer tutucu eğri, Lefkoşa ışınım dosyası (`data/raw/open-meteo-lefkosa/`) yoksa yapay ışınım kullanır ve bunu ekrana ve `ayar.json`'a yazar; yer tutucu şehir Faz 1 sınavına girmez.
+Şehir başına ~10 saniye (Mac). Çıktının biçimi [docs/data/tablo-bicimi.md](data/tablo-bicimi.md). EAC Excel'i (`data/raw/eac-profil-siniflari/`) ve `src/profiller.py` yoksa yer tutucu eğri, Lefkoşa ışınım dosyası (`data/raw/open-meteo-lefkosa/`) yoksa yapay ışınım kullanır ve bunu ekrana ve `ayar.json`'a yazar; yer tutucu şehir Faz 1 sınavına girmez.
 
 Üretimden sonra `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak: Excel okuyucusu (`openpyxl`) kurulu değilse üretici sessizce yer tutucuya düşer (sanal ortamı açmadan çalıştırınca bir kez oldu).
 
