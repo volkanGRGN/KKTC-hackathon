@@ -254,3 +254,9 @@ Kutu 2 olduğu gibi kalır. Senin günlük dosyan depoda değil (yama); kendin g
 Dosya: pitch şablonu 6. slayt; `docs/log/2026-11-01-civan-pitch-maliyet.md` (senin)
 Neden: Civan'ın "Can'a not"u (puanlayan Can); Can, 1 Kasım: "tahmini değer yeterli".
 Durum: bekliyor
+
+## BİLGİ 2 Kasım 11:07 — karar masasından (KARAR) — depoya lisans eklendi; `harita/ui` dalı etikete alındı
+Ne: Volkan'ın isteğiyle `LICENSE` = Business Source License 1.1 (okumak, denemek, araştırma serbest; ticari kullanım ekipten lisansla; 2030-11-01'de Apache 2.0); lisans sahibi Volkan Görgün, Can Şahin, Civan Orak. Ana dala girmiş dallar silindi: `harita/ui` (b2fcba2) `arsiv/harita-ui` etiketinde duruyor; haritanı ayrı PR'la getireceksen oradan dal aç. `harita/iskelet` ve `sunum/ekranlar` ana dala girmediği için silinmedi. İtirazın varsa Volkan'a.
+Dosya: LICENSE, README.md
+Neden: volkan.md KARAR 2 Kasım 11:07.
+Durum: bilgi

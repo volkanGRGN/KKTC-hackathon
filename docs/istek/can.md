@@ -602,3 +602,9 @@ Ne: Sunum maliyet tablosu: PR #47, `docs/log/2026-11-01-volkan-maliyet-sunum.md`
 Dosya: docs/sunum/slaytlar.md (senin); pitch şablonu (Civan)
 Neden: volkan.md KARAR 13:20.
 Durum: bekliyor
+
+## BİLGİ 2 Kasım 11:07 — karar masasından (KARAR) — depoya lisans eklendi; adın lisans sahipleri arasında
+Ne: Volkan'ın isteğiyle `LICENSE` = Business Source License 1.1: kodu okumak, denemek, değiştirmek, araştırma serbest; gerçek işletmede / ticari hizmette kullanım ekipten ticari lisansla; 2030-11-01'de Apache 2.0. Lisans sahibi Volkan Görgün, Can Şahin, Civan Orak. README ürün vitrinine çevrildi, geliştirici komutları `docs/calistirma.md`'de. Ana dala girmiş dallar silindi; senin `sinav/faz2` dalın ana dala girmediği için duruyor. İtirazın varsa Volkan'a.
+Dosya: LICENSE, README.md
+Neden: volkan.md KARAR 2 Kasım 11:07.
+Durum: bilgi

@@ -1495,3 +1495,10 @@ Karar: Volkan: "maliyet verilerini gerçeğe yakın yap, sunuma koyacağız" →
 - **Dashboard maliyet kartı (`icerik.json`):** "Geri ödeme ve emisyon … aranıyor" eski → "Geri ödeme hesaplanmadı: Kıb-Tek'in trafo büyütme maliyeti ve mahsuplaşma bedeli bulunamadı." Aynı dosyanın yazılarını #46 değiştirdiği için düzeltme #46'ya girer (harita animasyonu oturumuna iletildi).
 - Geri ödeme (NIE 2024 vekili, ~5–7 direk trafosu büyütmesi), fatura ~26 bin TL/yıl ve emisyon 0,58–0,89 kg/kWh yalnız bağlam, soru gelirse. BULAMADIM: mahsuplaşma bedeli, Kıb-Tek trafo sayısı ve büyütme maliyeti (uzman listesinde).
 Durum: yapıldı 13:23 — Volkan: "Birleştir", #47 birleşti; dashboard kartı düzeltmesi #46'da (fde3529); slayt 8 → can.md
+
+## KARAR 2 Kasım 11:07 — GitHub düzeni (hackathon sonrası): README vitrin, lisans BSL 1.1, birleşmiş 40 dal silindi
+Karar: Volkan (2 Kasım): "README'yi yap", "en mantıklı lisansı koy", "main'e merge ettiklerimizin dallarını sil"; açık PR'lara dokunulmadı.
+- **README** ürün vitrini: sorun, ne yapıyor (iki katman), ne kadar tutuyor (gerçek veri ↔ deneme şehri, etiketli), maliyet (#47), sıradaki adım (pilot), dene, ekip, lisans. Geliştirici komutları `docs/calistirma.md`'ye taşındı (içerik aynı). Depo açıklaması ve konu etiketleri eklendi.
+- **Lisans: Business Source License 1.1** (`LICENSE`). Neden: proje satılacak; MIT gibi serbest lisans ticari kullanımı bedava bırakır, "ticari olmayan" lisanslar (PolyForm NC) devlet kurumlarına (Kıb-Tek) bedava kullanım verir. BSL'de okumak, denemek, değiştirmek, araştırma serbest; üretimde kullanım ticari lisansla. Değişim tarihi 2030-11-01 → Apache 2.0. Lisans sahibi Volkan Görgün, Can Şahin, Civan Orak; `data/raw/` üçüncü taraf verisi kapsam dışı.
+- **Dallar:** ana dala tam girmiş 40 dal silindi (49 → 9); kalan: açık PR'ların dalları (#43–#46) ve ana dala girmemiş dört dal (`harita/iskelet`, `panel/gece-ticari`, `sinav/faz2`, `sunum/ekranlar`). Civan'ın `harita/ui` dalı `arsiv/harita-ui` etiketinde duruyor (haritası ayrı PR'la gelecekse oradan).
+Durum: yapıldı
