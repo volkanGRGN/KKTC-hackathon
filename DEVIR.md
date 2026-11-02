@@ -11,8 +11,10 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 11:43)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 2 Kasım)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
+
+**2 Kasım: hackathon bitti.** Sunum yapıldı; Kıb-Tek ve Elektrik odasıyla görüşme bekleniyor. Depo düzenlendi (volkan.md KARAR 2 Kasım): README ürün vitrini, komutlar `docs/calistirma.md`, `LICENSE` (Business Source License 1.1), ana dala girmiş dallar silindi. Açık PR'lar #43–#46 Volkan'ın açık sözünü bekliyor; sunum dosyaları (slaytlar, video, konuşma metni, satış PDF'i) depoda değil, Volkan'ın bilgisayarında.
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
