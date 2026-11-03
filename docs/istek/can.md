@@ -608,3 +608,9 @@ Ne: Volkan'ın isteğiyle `LICENSE` = Business Source License 1.1: kodu okumak, 
 Dosya: LICENSE, README.md
 Neden: volkan.md KARAR 2 Kasım 11:07.
 Durum: bilgi
+
+## UYARI! 3 Kasım 23:35 — Volkan'ın oturumundan — yeni veri setleri ve Open-Meteo saat dilimi düzeltmesi (KAYNAK + veri sözlüğü senin)
+Ne: Üç yeni veri seti indirildi; KAYNAK.txt taslakları ve Open-Meteo düzeltmesi [günlüğün ekinde](../log/2026-11-03-volkan-ktemo-pv-karsilastirma.md). (1) `data/raw/ktemo-solarweb/KAYNAK.txt` (KTEMO çatı paneli, 5 dk, 2018–2026) ve `data/raw/pvgis-lefkosa/KAYNAK.txt` (AB JRC uydu ışınımı, 2018–2023) ekle; (2) `data/raw/open-meteo-lefkosa/KAYNAK.txt`'te "yerel saat, yaz saati dahil" yanlış: saat sütunu bütün dosyalarda sabit UTC+2 (2015–2025 sıcaklık dosyası dahil); iki yeni dosyayı (2018–2022, 2026 Ocak–Nisan) ekle; (3) `docs/data/data-dictionary.md`: Güneş satırındaki "Yerel saat (yaz saati dahil)"ı düzelt, KTEMO ve PVGIS satırlarını ekle. Ayrıca `src/eszamanlilik.py` aynı sıcaklık dosyasını okuyor: yaz eğimi fitinde ev ölçümleriyle sıcaklık yazın 1 saat kayık olabilir — bak, etkisini yaz (düzeltme kararı DEVIR'deki saat işiyle birlikte).
+Dosya: data/raw/*/KAYNAK.txt, docs/data/data-dictionary.md, src/eszamanlilik.py (senin)
+Neden: KTEMO gerçek üretimiyle karşılaştırma (günlük 3 Kasım); DEVIR iş tahtası.
+Durum: bekliyor

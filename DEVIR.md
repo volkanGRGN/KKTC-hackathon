@@ -22,6 +22,11 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
 | PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
 | PR #46 dashboard sade dil (#45'in üstünde) | Can (test); harita animasyonu oturumu | açık | Can'ın testi, #45 |
+| **Hava verisinin saati (3 Kasım):** Open-Meteo saat sütunu yaz saatsiz (sabit UTC+2); `sehir_uret.py` (`isinim_oku`, `sicaklik_oku`) yaz saatli sanıyor → Mart sonu – Ekim sonu güneş ve sıcaklık 1 saat erken; `tepe.py`, `eszamanlilik.py`, `sahte_kayit.py` aynı klasörü okuyor. KTEMO gerçek paneliyle saatlik hata %35 → düzeltilince %16 ([günlük](docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)) | BUILD 1 + BUILD 2 | bulundu; düzeltilmedi, yük / panel rakamlarına etkisi ölçülmedi | Volkan'ın "başla"sı; ayar 1–10, yeni sınav şehirleri bir kez |
+| **Sıcaklıklı panel kaybı (3 Kasım):** sabit 0,82 açık öğlende Tem–Ağu %7–8 fazla, Şub–Mar %3–7 az, Nisan %0–2; PVGIS'in sıcaklıklı gücü aylara göre düz ([günlük](docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)) | BUILD 2 | bulundu; ölçülmedi | saat düzeltmesinden sonra |
+| **Hava kaynağı adayı (3 Kasım):** PVGIS (AB JRC, uydu) günlük hata %6 ↔ Open-Meteo %9, ama 2023'te bitiyor | BUILD 2 | aday | — |
+| **Yeni veri setleri (3 Kasım):** KTEMO çatı paneli 5 dk üretim 2018–2026, PVGIS Lefkoşa 2018–2023, Open-Meteo 2018–2022 + 2026; Open-Meteo KAYNAK'ındaki "yaz saati dahil" yanlış | Can (KAYNAK.txt + veri sözlüğü) | taslaklar günlüğün ekinde | can.md UYARI 3 Kasım |
+| **KTEMO'ya sorulacak (3 Kasım):** çatı sisteminin kurulu gücü (hesap ~16 kWp); sahip hesabında gerilim kaydı var mı | Volkan | sırada | — |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
 | PR testleri | Can (Volkan, 1 Kasım 11:2x: TEST oturumu yeni PR almıyor) | — | KARAR'ın kutu girdisi |
