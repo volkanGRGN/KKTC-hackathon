@@ -35,6 +35,20 @@ Civan'ın haritası olduğu gibi: sütun = trafo, renk = karar, boy = trafo güc
 - **Hesap ürünün kendi kodu:** öğlen yükü `src/sablon.py`, renk ve kaç ev `src/kac_ev_olasilik.py`, yılın tepesi `src/tepe.py` (geçici klasörde; şehir klasörüne yazmaz). Resmi 12 ölçümle sonuç main'deki `tahmin.csv`, `kac_ev.csv` ve `tepe.csv` ile birebir (sehir-031 ve -036, 40/40).
 - **Az ölçümde dikkat:** 8'in altında %80 aralık birkaç artıktan çıkıyor, fazla dar; sayfa uyarır. 3 ölçümle model sehir-031'de 11 trafoya yeşil dedi (12 ölçümle 12).
 
+## Sunum bilgisayarında
+
+Komut tek başına yetmez: şehir verisi ve canlı tahminin yük katmanı için ham veri depoda yok.
+
+1. **Depo ve sanal ortam** (kök README "Kurulum"). Komut depo kökünden, ortam açıkken: `streamlit run dashboard/dashboard.py`. Ortamı açmadan: Mac `.venv/bin/python -m streamlit run dashboard/dashboard.py`, Windows `.venv\Scripts\python -m streamlit run dashboard\dashboard.py`.
+2. **Şehir verisi** (`data/synthetic/`, git dışı). Yoksa sayfa yalnız kimliği, resmi rakamları ve proje sekmesini gösterir. İki yol:
+   - Hazır bilgisayardan kopyala (sunum için önerilen): `data/synthetic/u15/sehir-031` … `sehir-040` (sınav şehirleri, üretici 1.5; Volkan'ın bilgisayarında zip olarak hazır, `data/synthetic/u15/` altına açılır). `yuk_5dk_yaz.csv` ve `yuk_5dk_kis.csv` gerekmez; gerisi şehir başına ~9 MB. Gerçekle kıyas için `cevap_anahtari.csv` da kopyalanmalı.
+   - Üret (ham veri gerekir, ~2 dk): `python src/sehir_uret.py 31 40` → `python src/sablon.py data/synthetic --yalniz-ana` → `python src/kac_ev_olasilik.py data/synthetic` → `python src/tepe.py data/synthetic --aralik 31-40`. PR #43 (üretici 1.6) birleşirse üretilen şehirler resmi rakamlardan farklı olur: sunumda hazır kopyayı (zip) kullanın.
+3. **Ham veri** (canlı tahminin yük katmanı çalışırken okur): `data/raw/eac-profil-siniflari/Offtake_Profile_Classes.xlsx`, `data/raw/open-meteo-lefkosa/lefkosa_saatlik_2023.csv` ve `lefkosa_saatlik_2024_2025.csv` (adresler KAYNAK.txt'de). Yoksa sayfa durmaz: eksik dosyaları adıyla yazar, panel katmanı çalışır.
+4. **Eski model sürümleri** `git` ister; git yoksa listede yalnız "Güncel" görünür.
+5. **Windows (denenmedi):** sembolik bağlantı izni (geliştirici modu) gerekmez. Bağlantı kurulamazsa dosya katı bağlantı ya da kopyayla, klasör Windows bağlantısıyla (junction) kurulur. Windows'ta denenmedi; Mac'te bağlantı hatası bilerek verilip denendi.
+6. **İnternet:** canlı haritanın sokak altlığı internetten gelir; internetsizken sütunlar boş zeminde görünür. Civan'ın haritası birleşince Girne zemini internetsiz gelir.
+7. **Isıtma:** sunucu açıldıktan sonraki ilk hesap birkaç saniye sürer. Sunumdan önce canlı tahminde bir kez "Önerilen 12'yi ölç", sonra "Sıfırla".
+
 ## Veri değişince
 
 - **Şehir verisi:** `data/synthetic/` ve altındaki klasörler okunur (ör. `data/synthetic/u15/sehir-031`); sol menüden veri seti ve şehir seçilir. Yeni şehir klasörünü koy, sayfayı yenile; kod değişmez. Başka bir kök için `DASHBOARD_VERI=<klasör> streamlit run dashboard/dashboard.py`.
