@@ -44,11 +44,25 @@ Depo açık olduğu ve lisanslar belirsiz olduğu için ham dosyalar depoya konm
 - 17.886 dağıtım trafosu (direk 11.048 ort. ~95 kVA; yer 6.838 ort. ~583 kVA), alçak gerilim 18.203 km, 615.479 tüketici. Kuzey'in trafo sayısı için vekil **~6.400–6.700** [Hesap: 219.931 tüketici ÷ trafo başına 34,4 (Güney) ya da 32,9 (Korsika, aşağıda)].
 
 **Güneş (hava yılı)** — `data/raw/open-meteo-lefkosa/`
-- Lefkoşa saatlik, 2024 ve 2025 (17.544 saat): yatay küresel, doğrudan, yaygın ve 30° güney eğimli ışınım (W/m²), sıcaklık, bulutluluk. Yerel saat (yaz saati dahil).
+- Lefkoşa saatlik, 2024 ve 2025 (17.544 saat): yatay küresel, doğrudan, yaygın ve 30° güney eğimli ışınım (W/m²), sıcaklık, bulutluluk. **Saat: sabit UTC+2, yaz saati yok** (3 Kasım düzeltmesi; önce "yaz saati dahil" yazıyordu, yanlış; model yaz saatli okuyor → DEVIR iş tahtası). 2018–2022 ve 2026 Ocak–Nisan dosyaları da var (KTEMO karşılaştırması).
 - Kaynak: Open-Meteo Historical Weather API (ERA5 yeniden analiz), CC BY 4.0. İndirildi 31 Ekim 2026.
 - Ölçülü değil: uydu + model yeniden analizi, ~9 km ızgara; tek bulut geçişini göstermez (saatlik ortalama).
 - Sağlama [Hesap]: yatay yıllık 1.908 / 1.929 kWh/m² (2024 / 2025), Nisan 11–14 ortalaması ~780 W/m².
-- Kullanım: Faz 1 rastgeleleştirmede hava yılı 2024 / 2025. PVGIS ikinci kaynak olarak gerekirse.
+- Kullanım: Faz 1 rastgeleleştirmede hava yılı 2024 / 2025. İkinci kaynak PVGIS (aşağıda).
+
+**PVGIS Lefkoşa — uydu ışınımı (ikinci hava kaynağı)** — `data/raw/pvgis-lefkosa/`
+- Saatlik 2018–2023: 30° güneye eğik doğrudan / yaygın / yansıyan ışınım (W/m²), sıcaklık, rüzgâr ve 1 kWp sistemin sıcaklıklı gücü (W, %14 kayıp). Saat UTC, :09 anlık değer.
+- Kaynak: Avrupa Komisyonu JRC, PVGIS 5.3, PVGIS-SARAH3; serbest, kaynak gösterilir. İndirildi 3 Kasım 2026; anahtar gerekmez.
+- Ölçülü değil: uydu hesabı (~5 km). SARAH3 2023'te bitiyor.
+- Sağlama [Hesap]: KTEMO gerçek paneliyle sınav 2023 günlük hata %6 (Open-Meteo %9), sıcaklıklı güçle açık öğlen %3 ([günlük](../log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)).
+- Kullanım: hava kaynağı adayı; sıcaklıklı panel kaybının dayanağı (DEVIR iş tahtası).
+
+**KTEMO çatı paneli — Kuzey'de gerçek panel üretimi** — `data/raw/ktemo-solarweb/`
+- Lefkoşa'da tek çatı sistemi (etkin güç ~16 kWp [Hesap]; kurulu güç BULAMADIM), 5 dakikalık üretim (W), 2018-01-01 – 2026-04-10, 3.022 gün; zaman damgası UTC.
+- Kaynak: KTEMO "EMO Solar", Fronius Solar.web misafir görünümü; lisans belirtilmemiş, kaynak gösterilir. İndirildi 3 Kasım 2026.
+- Ölçülü: evet (inverter). Sağlama [Kaynaklı: sayfanın yıllık toplamı]: 2019 27,3 · 2023 26,6 · 2025 26,1 MWh. Sayfanın "tüketim"i binanın değil, inverterin kendi çekişi (yılda 80–215 kWh).
+- Yanlılık: tek sistem, tek yön / eğim (bilinmiyor); 9 gün çevrim dışı; verim 2019 → 2025 %9 düşüyor (yaşlanma, kir, kesinti ayrılmadı).
+- Kullanım: panel formülünün sınaması (`src/ktemo_karsilastir.py`, [günlük](../log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)): saatlik hata %16 (saat düzeltilmiş), sabit 0,82 yazın %7–8 fazla.
 
 **SimBench alçak gerilim şebekeleri** — `data/raw/simbench/`
 - Almanya'nın 6 tip AG şebekesi (rural1–3, semiurb4–5, urban6): trafo kVA, hat boyları, kablo tipi, yük düğümleri. Yalnız ölçü kaynağı (hat boyu, kablo, trafo başına ev sayısı); pandapower'a geçilmiyor.

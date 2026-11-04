@@ -1,0 +1,16 @@
+KTEMO (KTMMOB Elektrik Mühendisleri Odası) çatı güneş sistemi — Fronius Solar.web misafir görünümü, gerçek üretim ölçümü.
+Sistem: "KTEMO - ON-GRID PV SYSTEM", Nicosia (Lefkoşa). Kurulu güç sayfada yazmıyor (karşılaştırmada etkin güç ~16 kWp [Hesap]).
+Giriş: ktemo.org ana sayfası "EMO Solar" → https://www.solarweb.com/Home/GuestLogOn?pvSystemId=d32ed201-6fc3-4443-8bca-44aca07e06cc
+Veri (gün başına bir istek, misafir girişinin çereziyle; kayıt / anahtar gerekmez):
+  https://www.solarweb.com/Chart/GetChartNew?pvSystemId=4cace063-a5b4-4e4d-b61f-a4bf00dc7b64&year=Y&month=M&day=D&interval=day&view=production
+İndirildi: 3 Kasım 2026, curl, 2018-01-01 – 2026-04-10 (3.022 gün, ~58 MB). Son veri 10.04.2026 15:05; sistem o günden beri çevrim dışı.
+  Dosyalar: <klasör>/gunluk/YYYY-MM-DD.json. Yerelde hackaton/dis-veri/ktemo-solarweb (Volkan'ın Mac'i); depoya girmez.
+Biçim: Highcharts JSON; settings.series[].data = [[zaman damgası, değer], ...].
+  Zaman damgası: UTC milisaniye (gerçek UTC; yerel gün 00:00'da başlar). Değer: W, 5 dakikada bir (288 nokta / gün).
+  Seri id'leri: FromGenToGrid (şebekeye giden), FromGenToConsumer (doğrudan tüketilen), FromGenToSomewhere (2015–2017 sayaçsız dönem üretimi),
+  ToConsumer (binanın tüketimi DEĞİL: sayaç panelin bağlantısında, yalnız inverterin kendi çekişini görüyor; gece ~24 W, yılda 80–215 kWh).
+  Üretim = FromGen* serilerinin toplamı. Seri adları tarayıcı diline göre değişir (Türkçe / İngilizce); id'ye bakın.
+Sağlama [Kaynaklı: sayfanın kendi yıllık toplamı, MWh]: 2018 25,7 · 2019 27,3 · 2020 24,1 · 2021 27,8 · 2022 27,4 · 2023 26,6 · 2024 26,7 · 2025 26,1 · 2026 6,1; toplam (2015'ten) 238,78.
+Bilinen: 9 gün açık öğlende sıfır üretim (çevrim dışı) — karşılaştırmada atıldı.
+Lisans: belirtilmemiş (herkese açık misafir sayfası) → kaynak gösterilir.
+Karşılaştırma: src/ktemo_karsilastir.py, günlük docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md.
