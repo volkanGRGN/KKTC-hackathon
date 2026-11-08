@@ -84,3 +84,25 @@ Okuma [Yorum]:
 - Geliştirme şehirleri 1–10 bu makinede eski üreticiyle; koşulmadı (Mac koşumu TEST / BUILD 1).
 
 Öneri (karar masası / BUILD 1): (1) varsayılan b-y2 birleşsin; (2) üretici β'sı (sehir_uret.py) konutta bu eğime çapalansın — yoksa farazi tepe sınavı modelin doğru yöne gidişini "hata" sayıyor (Volkan'ın dosyası); (3) c pilotla.
+
+## Ek (8 Kasım) — Open-Meteo saati: eşleşme yazın bir saat kayıktı (3 Kasım UYARI'sı, KARAR 8 Kasım 16:36)
+
+**Etiket: gerçek veri — Kıbrıs (20 ev, 2016) ve Lefkoşa sıcaklığı; [Hesap].**
+
+Sorun: `sicaklik_oku()` Open-Meteo dosyasının saat etiketini yerel saat sayıyor; dosya sabit UTC+2 (Volkan, 3 Kasım). Yazın Kıbrıs UTC+3: evin 21:00 ölçümü 22:00'nin sıcaklığıyla eşleşiyordu (akşam soğuyor → sıcaklık düşük okunur). PR #49 üretici ve `tepe.py` için `pv_hava.om_yerel()` ile düzeltti; `eszamanlilik.py` düzeltilmedi.
+Ölçüm: aynı kod iki kez, yalnız sıcaklık okuyucusu farklı (bugünkü ↔ `om_yerel(etiket, ortalama=False)`; anlık sıcaklık), dosya değiştirilmedi (dal `veri/saat-sicaklik-pv` 772fa64 üstünde, scratchpad betiği).
+
+| Ölçü | bugünkü (kayık) | saat düzeltilmiş | fark |
+|---|---|---|---|
+| Sıcak akşam eşiği (19–22, yılın nicel'i) / gün | 29,7 °C / 39 | 30,8 °C / 37 | +1,1 °C |
+| Velander sıcak a / c | 1,48 kW / 2,51 | 1,49 kW / 2,47 | ~0 |
+| Velander diğer a / c | 1,07 kW / 4,74 | 1,06 kW / 4,84 | ~0 |
+| İki bileşen: klima / taban a | 0,70 / 0,79 kW/ev | 0,73 / 0,76 kW/ev | +%4 / −%3 |
+| Eğim eşiği T0 | 24,5 °C | 25,0 °C | +0,5 °C |
+| Eğim, kW/°C/ev (P10–P90) | 0,104 (0,089–0,133) | 0,092 (0,079–0,118) | −%11 |
+| **Temmuz ölçeği, `tepe.py`'ye giden (P10–P90)** | **0,065** (0,056–0,075) | **0,058** (0,051–0,068) | **−%10** |
+| Tasarım akşamı (10 yılda bir) | 33,4 °C | 35,4 °C | +2,0 °C |
+| Tasarım tepesi ÷ eşik altı (20 ev) | 1,88 | 1,92 | +%2 |
+
+Okuma [Yorum]: eşzamanlılık değişmiyor. Eğim %10 düşüyor ama eski bootstrap aralığının içinde; aynı düzeltme akşam sıcaklığını ve tasarım akşamını yükseltiyor, ikisi büyük ölçüde birbirini götürüyor (tasarım tepesi +%2). Tutarlılık için düzeltme gerekli: PR #49'dan sonra `tepe.py` sıcaklığı yerel saatle okuyor, ama kullandığı 0,065 kayık eşleşmeden geldi.
+Öneri: PR #49 birleşince `eszamanlilik.py` `pv_hava.om_yerel` ile okur (Can; `pv_hava` main'e #49 ile gelir), `tepe.py`'nin B-Y2 sabiti 0,065 → 0,058 (P10–P90 0,051–0,068) (BUILD 1). 61–70 sınavı #49'un bugünkü hâliyle (0,065) koşuldu; sabit değişirse etkisi tasarım tepesinde ~%2 düzeyinde [Yorum].

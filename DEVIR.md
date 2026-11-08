@@ -18,7 +18,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
-| PR #43 üretici 1.6 (yaz eğimi Kıbrıs evlerine; sınav 51–60) | BUILD 1; birleştirme Can | TEST'te tuttu (1d49c85; uç 374710c yalnız main); 199 V kıl payı KALDI (faz dengesizliği) | sunumdan sonra birleşir; 1.7 listesi (KARAR 11:11) + (e) 41–50 175 V |
+| PR #49 üretici 1.7 (hava saati yerel, panel kaybı sıcaklıklı; KTEMO) | KARAR; sınav Can | ayar 1–10 bitti (bozulan yok, tepe saati +9 puan) | Can'ın 61–70 sınavı, Volkan'ın sözü |
 | PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
 | PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
 | PR #46 dashboard sade dil (#45'in üstünde) | Can (test); harita animasyonu oturumu | açık | Can'ın testi, #45 |
@@ -34,7 +34,7 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı (`pv_uc`), yük ikinci sayısı ve iki aday saat (`tepe.csv`); Faz 4 kalanı | Civan | sütunlar main'de (02:00) | — |
 
-Birleşenler (1 Kasım): #19, #21–#35, #37–#42 (#41 haritasız), #47 (maliyet tablosu), #48 (slayt 8 cümlesi); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık: #43, #44, #45; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
+Birleşenler (1 Kasım): #19, #21–#35, #37–#42 (#41 haritasız), #47 (maliyet tablosu), #48 (slayt 8 cümlesi); 8 Kasım: #43 (üretici 1.6); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık: #43, #44, #45; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).

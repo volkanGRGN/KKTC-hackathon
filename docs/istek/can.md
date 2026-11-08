@@ -613,4 +613,22 @@ Durum: bilgi
 Ne: Üç yeni veri seti indirildi; KAYNAK.txt taslakları ve Open-Meteo düzeltmesi [günlüğün ekinde](../log/2026-11-03-volkan-ktemo-pv-karsilastirma.md). (1) `data/raw/ktemo-solarweb/KAYNAK.txt` (KTEMO çatı paneli, 5 dk, 2018–2026) ve `data/raw/pvgis-lefkosa/KAYNAK.txt` (AB JRC uydu ışınımı, 2018–2023) ekle; (2) `data/raw/open-meteo-lefkosa/KAYNAK.txt`'te "yerel saat, yaz saati dahil" yanlış: saat sütunu bütün dosyalarda sabit UTC+2 (2015–2025 sıcaklık dosyası dahil); iki yeni dosyayı (2018–2022, 2026 Ocak–Nisan) ekle; (3) `docs/data/data-dictionary.md`: Güneş satırındaki "Yerel saat (yaz saati dahil)"ı düzelt, KTEMO ve PVGIS satırlarını ekle. Ayrıca `src/eszamanlilik.py` aynı sıcaklık dosyasını okuyor: yaz eğimi fitinde ev ölçümleriyle sıcaklık yazın 1 saat kayık olabilir — bak, etkisini yaz (düzeltme kararı DEVIR'deki saat işiyle birlikte).
 Dosya: data/raw/*/KAYNAK.txt, docs/data/data-dictionary.md, src/eszamanlilik.py (senin)
 Neden: KTEMO gerçek üretimiyle karşılaştırma (günlük 3 Kasım); DEVIR iş tahtası.
-Durum: yapıldı (4 Kasım, Volkan'ın oturumu: KAYNAK.txt ve veri sözlüğü Volkan'ın sözüyle beklemeden yazıldı); `src/eszamanlilik.py` kontrolü sende bekliyor
+Durum: yapıldı (4 Kasım, Volkan'ın oturumu: KAYNAK.txt ve veri sözlüğü Volkan'ın sözüyle beklemeden yazıldı); `src/eszamanlilik.py` kontrolü yapıldı (8 Kasım, günlük 7270e25: eğim 0,065 → 0,058, tasarım tepesi +%2; düzeltme #49 birleşince)
+
+## UYARI! 8 Kasım 16:36 — karar masasından (KARAR) — PR #49 (üretici 1.7): sınav şehirleri 61–70'i üret ve koş
+Ne: Volkan'ın isteği. PR #49 hava verisinin saatini düzeltiyor (Open-Meteo sabit UTC+2 → yerel, yazın 1 saat) ve panel kaybını sıcaklığa bağlıyor (KTEMO ile ayarlı). **Önce karar masasının ayar 1–10 sonucunu bekle** (volkan.md'de "KONTROL … 1.7 ayar"); sorun yoksa:
+```
+git fetch origin && git checkout veri/saat-sicaklik-pv
+python src/sehir_uret.py 61 70 --cikti data/synthetic/u17
+python src/sablon.py data/synthetic/u17
+python src/kac_ev_olasilik.py data/synthetic/u17
+python src/tepe.py data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz1 data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz2 data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz3 data/synthetic/u17 --aralik 61-70
+```
+Ham veri (`data/raw/`): EAC Excel, osm-kasaba, open-meteo-lefkosa (`lefkosa_saatlik_2023.csv`, `lefkosa_saatlik_2024_2025.csv`, `lefkosa_sicaklik_2015_2025.csv`), kibris-20-prosumer — 1.6'daki gibi; yeni dosya gerekmez. 61–70 hiç üretilmedi; **bir kez** koşulur, sonuca bakıp ayar yapılmaz.
+Rapor: `volkan.md`'ye KONTROL: tepe.py özeti (tepe hatası ortanca / P90, işaretli sapma, %80 bant, %80'den dolu yakalanan ve uyarı, akşam 207 V) ve faz1–3 maddeleri; **yanlış yeşil** ayrıca. Ayrıca: `eszamanlilik.py` (senin) aynı hava klasörünü okuyor; saat düzeltmesi (pv_hava.om_yerel) ona da gerekiyor mu (3 Kasım UYARI'sıyla aynı iş).
+Dosya: PR #49 (https://github.com/volkanGRGN/KKTC-hackathon/pull/49), docs/log/2026-11-08-volkan-uretici-1.7-saat-sicaklik.md
+Neden: volkan.md KARAR 8 Kasım 16:36.
+Durum: yapıldı — 61–70 bir kez koşuldu (Windows, 772fa64); KONTROL volkan.md: yanlış yeşil 0/64, %40 kuralı 40/57, tepe %8,2 / %19,9, ≥ %80 dolu 14/14; faz2 öğlen P90 %30,1 KALDI, faz3 kaç ev 4 KALDI; akşam 207 V'ta 1 kaçırma (sehir-061 T34); eszamanlilik saat: eğim 0,065 → 0,058
