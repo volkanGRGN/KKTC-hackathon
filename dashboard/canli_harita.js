@@ -20,6 +20,7 @@ const KASABA_ARA = 0.85;
 const S_ANIM_EN_COK = 320; // px/km: animasyonda en yakın görünüm (bir mahalle)
 const S_EN_COK = 2500; // px/km: elle yakınlaşmanın sınırı
 const UST_PAY = 64; // px: üstteki etiket ve başlık kutusu, harita altında kalmasın
+const ALT_PAY = 58; // px: alttaki lejant ve düğmeler, harita altında kalmasın
 const AD_ESIK = 45; // px/km: bundan uzakta kasaba adları görünür
 const FONT = '"Source Sans Pro", "Source Sans 3", system-ui, -apple-system, sans-serif';
 
@@ -76,10 +77,10 @@ function kutuBul(noktalar, pay = 0) {
   });
   return [x0, y0, x1, y1];
 }
-function sigdir(k, W, H, pay = 1.2, sMax = S_ANIM_EN_COK) { // kutu, üst pay dışındaki alana sığsın
+function sigdir(k, W, H, pay = 1.2, sMax = S_ANIM_EN_COK) { // kutu, üst ve alt pay arasındaki alana sığsın, ortalansın
   const w = Math.max(k[2] - k[0], 0.3), h = Math.max(k[3] - k[1], 0.3);
-  const s = Math.min(W / (w * pay), (H - UST_PAY) / (h * pay), sMax);
-  return { cx: (k[0] + k[2]) / 2, cy: (k[1] + k[3]) / 2 - UST_PAY / 2 / s, s };
+  const s = Math.min(W / (w * pay), (H - UST_PAY - ALT_PAY) / (h * pay), sMax);
+  return { cx: (k[0] + k[2]) / 2, cy: (k[1] + k[3]) / 2 - (UST_PAY - ALT_PAY) / 2 / s, s };
 }
 function karistir(a, b, u) {
   if (u <= 0) return a;
@@ -92,9 +93,9 @@ function karistir(a, b, u) {
 const ekran = (kam, W, H, x, y) => [(x - kam.cx) * kam.s + W / 2, (y - kam.cy) * kam.s + H / 2];
 const yaricap = (s) => Math.max(1.9, Math.min(9, 1.4 + s * 0.085));
 
-function adaKutusu(z) {
+function adaKutusu(z) { // açılış görünümü Kuzey'e sığar ve onu ortalar (Volkan, 8 Kasım); Güney soluk, kenarda kalabilir
   const p = [];
-  [...z.kuzey, ...z.guney].forEach((h) => { for (let i = 0; i < h.length; i += 2) p.push([h[i], h[i + 1]]); });
+  (z.kuzey.length ? z.kuzey : z.guney).forEach((h) => { for (let i = 0; i < h.length; i += 2) p.push([h[i], h[i + 1]]); });
   return kutuBul(p);
 }
 const adaKam = (S) => sigdir(S.adaKutu, S.W, S.H, 1.06);
@@ -555,8 +556,14 @@ function dongu(S) {
   requestAnimationFrame(adim);
 }
 
+function yukseklikBul(S, W) { // yükseklik genişliğe göre: dar ekranda haritanın altı üstü boş deniz olmasın
+  const enCok = S.veri ? S.veri.yukseklik : 600;
+  return Math.round(Math.max(380, Math.min(enCok, W * 0.5 + UST_PAY + ALT_PAY)));
+}
+
 function boyutla(S) {
-  const W = S.kok.clientWidth, H = S.veri ? S.veri.yukseklik : 600;
+  const W = S.kok.clientWidth, H = yukseklikBul(S, W);
+  S.kok.style.height = `${H}px`;
   const dpr = window.devicePixelRatio || 1;
   if (W === S.W && H === S.H && dpr === S.dpr) return;
   Object.assign(S, { W, H, dpr });
@@ -583,7 +590,7 @@ function dugmeleriGuncelle(S) {
 }
 
 function dugmeIsle(S, is) {
-  const mx = S.W / 2, my = S.H / 2 + UST_PAY / 2;
+  const mx = S.W / 2, my = S.H / 2 + (UST_PAY - ALT_PAY) / 2;
   if (is === "duraklat") S.durdu = performance.now();
   else if (is === "devam") { S.t0 += performance.now() - S.durdu; S.durdu = null; }
   else if (is === "art") { S.kamElle = true; yakinlas(S, 1.8, mx, my, true); }
@@ -687,7 +694,6 @@ function guncelle(S, veri) {
     S.adaKutu = adaKutusu(veri.zemin);
   }
   S.veri = veri;
-  S.kok.style.height = `${veri.yukseklik}px`;
   S.tema = temaBul(S.kok);
   boyutla(S);
   if (veri.oynat && veri.anim) {

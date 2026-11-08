@@ -115,7 +115,9 @@ CSS = """
 <style>
 :root {--murekkep:#18222D; --soluk:#5B6573; --cizgi:#DDD8CD; --kart:#FFFFFF; --ana:#0E6F73; --ana-koyu:#0B3B40;
        --zemin:#F5F3EE; --ana-acik:#E3F0EF;}
-.block-container {padding-top:3.4rem; padding-bottom:3rem; max-width:1320px;}
+.block-container {padding:3.2rem 2.75rem 3rem; max-width:1240px;}
+[data-testid="stSidebar"][data-collapsed="false"] {width:14.5rem !important; min-width:14.5rem !important;}
+.block-container h2 {font-size:1.85rem;}
 [data-testid="stHeader"] {background:rgba(245,243,238,.85); backdrop-filter:blur(6px);}
 [data-testid="stSidebar"] [data-testid="stCaptionContainer"], [data-testid="stSidebar"] small {color:rgba(230,239,238,.66) !important;}
 [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {color:#FFFFFF; letter-spacing:-.01em;}
@@ -126,7 +128,7 @@ h2, h3 {letter-spacing:-.01em;}
 [data-testid="stCaptionContainer"] {color:var(--soluk);}
 
 /* başlık bandı */
-.kimlik {position:relative; overflow:hidden; border-radius:14px; padding:30px 34px 26px; margin:0 0 14px; color:#EAF4F3;
+.kimlik {position:relative; overflow:hidden; border-radius:14px; padding:24px 28px 22px; margin:0 0 14px; color:#EAF4F3;
          background-color:var(--ana-koyu);
          background-image:url("data:image/svg+xml;base64,__SVG__"),
            linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
@@ -134,13 +136,14 @@ h2, h3 {letter-spacing:-.01em;}
            linear-gradient(120deg, #0B3B40 0%, #0E5458 60%, #127075 100%);
          background-repeat:no-repeat, repeat, repeat, no-repeat;
          background-position:right -20px center, 0 0, 0 0, 0 0;
-         background-size:420px 220px, 28px 28px, 28px 28px, 100% 100%;
+         background-size:360px 189px, 28px 28px, 28px 28px, 100% 100%;
          box-shadow:0 10px 30px -18px rgba(11,59,64,.65);}
+@media (max-width:1180px) {.kimlik {background-size:0 0, 28px 28px, 28px 28px, 100% 100%;}}  /* dar ekranda desen yazının üstüne binmesin */
 .kimlik .ust {font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:#9FD3CF; font-weight:600;}
-.kimlik h1 {font-size:2.5rem; line-height:1.08; margin:.35rem 0 .55rem; padding:0; color:#FFFFFF; font-weight:780;
+.kimlik h1 {font-size:2.1rem; line-height:1.1; margin:.35rem 0 .55rem; padding:0; color:#FFFFFF; font-weight:780;
             letter-spacing:-.025em;}
 .kimlik .calisma {font-size:.9rem; font-weight:400; color:rgba(234,244,243,.55); letter-spacing:0;}
-.kimlik .cumle {font-size:1.08rem; line-height:1.5; margin:0 0 1rem; max-width:44rem; color:rgba(234,244,243,.9);}
+.kimlik .cumle {font-size:1rem; line-height:1.5; margin:0 0 .9rem; max-width:40rem; color:rgba(234,244,243,.9);}
 .cipler {display:flex; flex-wrap:wrap; gap:8px; position:relative;}
 .cip {font-size:.8rem; padding:5px 13px; border-radius:999px; border:1px solid rgba(255,255,255,.2);
       background:rgba(255,255,255,.07); color:#E6F2F1 !important; text-decoration:none !important;}
@@ -179,7 +182,7 @@ a.cip:hover {background:#F2C14E; border-color:#F2C14E;}
 .bilgi td:first-child {color:var(--soluk); white-space:nowrap; width:44%;}
 .sehir-satir {display:grid; grid-template-columns:5.5rem 1fr 7rem; align-items:center; gap:10px; font-size:.88rem;}
 .sehir-satir .yigin {margin:.2rem 0;}
-.kutular {display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:12px; margin:.4rem 0 .8rem;}
+.kutular {display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin:.4rem 0 .8rem;}
 .kutu {background:var(--kart); border:1px solid var(--cizgi); border-radius:12px; padding:14px 16px 13px;
        box-shadow:0 1px 2px rgba(24,34,45,.04); position:relative;}
 .kutu::before {content:""; position:absolute; left:16px; top:0; width:28px; height:3px; border-radius:0 0 3px 3px;

@@ -372,7 +372,7 @@ def sayfa():
     st.caption("Girne'de birkaç trafoyu ölçüyoruz; model gerisini tahmin ediyor.")
 
     ust = st.columns(4)
-    ust[0].button(f"Önerilen {ONERI_SAYISI} trafoyu ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, True),
+    ust[0].button(f"{ONERI_SAYISI} trafoyu ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, True),
                   width="stretch", help="Ürünün seçtiği 12 trafo: birbirine benzeyenler değil, farklı türden trafolar.")
     ust[1].button("Bir trafo daha ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, False), width="stretch")
     oynat = st.session_state[a["oynat"]]
