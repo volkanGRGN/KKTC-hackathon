@@ -6,7 +6,7 @@ https://archive-api.open-meteo.com/v1/archive?latitude=35.1856&longitude=33.3823
 
 Dosya adı: lefkosa_saatlik_2024_2025.csv — 773.425 bayt, SHA-256 ba297ed72e165dcee602c7481a9787b10bb71ba231c35f9cce6d52c67032e53a (Can, 1 Kasım; eksikti, eklendi)
 Biçim: ilk 2 satır konum bilgisi (ızgara noktası 35.1845, 33.4056, 130 m), 3. satır boş, 4. satır başlık, sonra 17.544 saat.
-Sütunlar: time (yerel saat, Europe/Nicosia, yaz saati dahil), shortwave_radiation (yatay küresel, W/m²), direct_normal_irradiance, diffuse_radiation, global_tilted_irradiance (30° eğim, güneye), temperature_2m (°C), cloud_cover (%).
+Sütunlar: time (DÜZELTME 3 Kasım 2026: yaz saatsiz sabit UTC+2 — istekte timezone=Europe/Nicosia olsa da; Mart / Ekim geçişinde atlanan ya da tekrarlanan saat yok, KTEMO gerçek üretimiyle kışın kayma 0, yazın 1 saat; docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md. Önceki not "yerel saat, yaz saati dahil" yanlıştı), shortwave_radiation (yatay küresel, W/m²), direct_normal_irradiance, diffuse_radiation, global_tilted_irradiance (30° eğim, güneye), temperature_2m (°C), cloud_cover (%).
 Not: ışınım değerleri önceki saatin ortalaması (ör. 12:00 satırı = 11:00–12:00).
 
 Sağlama (Can, 31 Ekim): yatay yıllık 1.908 (2024) / 1.929 (2025) kWh/m²; 30° güney 2.099 / 2.127 kWh/m²; Nisan 11–14 ortalaması 787 / 769 W/m²; Haziran tepe saati 12.
@@ -20,3 +20,11 @@ Sağlama (Volkan, 31 Ekim) [Hesap]: yatay yıllık 1.903, 30° güney 2.102 kWh/
 https://archive-api.open-meteo.com/v1/archive?latitude=35.1856&longitude=33.3823&start_date=2015-01-01&end_date=2025-12-31&hourly=temperature_2m&timezone=Europe%2FNicosia&format=csv
 İndirildi 1 Kasım 2026 (BUILD 1). 2.111.056 bayt, SHA-256 e63c92be06428fe4388ad5b8ac227946a1676ce3f630461e0e723e1abb744a0e. Biçim: ilk 2 satır konum, 3. boş, 4. başlık (time, temperature_2m (°C)), sonra 96.432 saat.
 Doğrulama (Can, 1 Kasım 2026): üçüncü dosya aynı adresten yeniden indirildi; bayt ve SHA-256 birebir, 96.432 saat; 2023–2025'in 26.304 saatinde sıcaklık eski iki dosyayla birebir (0 fark).
+
+Saat dilimi notu (3 Kasım 2026, bütün dosyalar): time sütunu sabit UTC+2'dir (yaz saati yok); lefkosa_sicaklik_2015_2025.csv dahil (2024-03-31T03:00 satırı var, tekrar eden saat yok).
+Bu klasörü okuyan kod (sehir_uret.py, tepe.py, eszamanlilik.py, sahte_kayit.py) etiketi yaz saatli yerel saat sayıyor → Mart sonu – Ekim sonu güneş ve sıcaklık 1 saat erken. Düzeltme DEVIR iş tahtasında.
+
+Dördüncü ve beşinci dosya (KTEMO karşılaştırması, 3 Kasım 2026, curl): aynı adres ve sütunlar, start_date / end_date değişik:
+  lefkosa_saatlik_2018_2022.csv (2018-01-01 – 2022-12-31, 43.824 saat) — 1.930.036 bayt, SHA-256 f8d280085726f7eb38442945d0a5785e2bb2dd6c01485ae896fda4ce0f5db0d0
+  lefkosa_saatlik_2026_ocak_nisan.csv (2026-01-01 – 2026-04-10) — 105.475 bayt, SHA-256 7e918ff4844c35c4e8615035f74efea96d2201cf82f3eef1b9a8bfa0745e70d7
+  Yerelde hackaton/dis-veri/open-meteo-lefkosa (2023 ve 2024_2025 dosyalarının kopyasıyla birlikte).

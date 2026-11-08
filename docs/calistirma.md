@@ -1,0 +1,49 @@
+# Çalıştırma (geliştirici)
+
+Depo kökünden çalıştırılır. Ürünün tanıtımı [README](../README.md)'de.
+
+## Kurulum
+
+Python 3.10 ya da üstü. Windows'ta `python3` yerine `python` yazın.
+
+```bash
+git clone https://github.com/volkanGRGN/KKTC-hackathon.git
+cd KKTC-hackathon
+python3 -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Ham veri depoda değil (açık depo, lisanslar belirsiz). Her `data/raw/<ad>/KAYNAK.txt` dosyasındaki adresten indirip aynı klasöre koyun; ilk gereken `data/raw/eac-profil-siniflari/`.
+
+## Çalıştırma
+
+**Deneme şehirleri (Faz 1):**
+
+```bash
+python3 src/sehir_uret.py 7          # data/synthetic/sehir-007/
+python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
+```
+
+Şehir başına ~10 saniye (Mac). Çıktının biçimi [docs/data/tablo-bicimi.md](data/tablo-bicimi.md). EAC Excel'i (`data/raw/eac-profil-siniflari/`) ve `src/profiller.py` yoksa yer tutucu eğri, Lefkoşa ışınım dosyası (`data/raw/open-meteo-lefkosa/`) yoksa yapay ışınım kullanır ve bunu ekrana ve `ayar.json`'a yazar; yer tutucu şehir Faz 1 sınavına girmez.
+
+Üretimden sonra `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak: Excel okuyucusu (`openpyxl`) kurulu değilse üretici sessizce yer tutucuya düşer (sanal ortamı açmadan çalıştırınca bir kez oldu).
+
+**Şablon modeli (Faz 2):**
+
+```bash
+python3 src/sablon.py data/synthetic               # her şehir: tahmin.csv, arketipler.csv, deney/ (5/10/20 ölçülü, şehirler arası)
+python3 src/sablon.py data/synthetic --sehir 7 --yalniz-ana
+python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da kullanma (kıyas)
+```
+
+Şehir başına ~1 saniye. Yöntem [docs/method/modeling.md](method/modeling.md); sınav `python3 src/sinav.py faz2 data/synthetic` (Can). Sürüm 1.2 şehirleri için önce iki indirme: kıyı (`data/raw/osm-kasaba/KAYNAK.txt`) ve Open-Meteo 2023 (`data/raw/open-meteo-lefkosa/`); yoksa üretici uyarıp eski kurala / yapay ışınıma düşer.
+
+**Kaç ev (Faz 3):** `python3 src/kac_ev_olasilik.py data/synthetic` → her şehirde `kac_ev.csv` (karamsar / orta / iyimser, renk, bugün aşma olasılığı, %40 kuralı; ADR-0011). `tahmin.csv` ister; şehir başına 3–5 saniye. Yedek yol (tek denklem, 0,1 sn): `python3 src/kac_ev.py data/synthetic`; aynı dosyayı üç ek sütunsuz yazar. Bilginin değeri denemesi (yalnız deney, dosya yazmaz): `python3 src/bilgi_degeri.py data/synthetic --aralik 1-10`.
+
+**Kalibrasyon (Faz 7):** `python3 src/kalibrasyon.py ispanya <edp_test.py --kalibrasyonsuz --cikti çıktısı>` ve `python3 src/kalibrasyon.py ingiltere <ukpn_olasilik.py CEKILIS_JSON çıktısı>` → yük bandı katsayısı k (`sablon.py` `K_YUK`) ve gerilim sapma çarpanı (`kac_ev_olasilik.py` `SAPMA_MU`, `SAPMA_SIGMA`); `--deneme` bilinen dağılımla sınar. Kurallar [docs/tuzuk.md](tuzuk.md).
+
+**Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
+
+**Dashboard** (üç sayfa: proje kimliği ve bütün tablolar, Civan'ın haritası, canlı tahmin — trafo ölç, model gerisini tahmin etsin): `streamlit run dashboard/dashboard.py`. Ayrıntı [dashboard/README.md](../dashboard/README.md).
+
+**Gerilim doğrulaması** (gerçek veri, İngiltere UKPN; sanal ortam ister): `python3 src/ukpn_test.py data/raw/ukpn-pv-dogrulama ukpn_sonuc.csv` — ~30 saniye; veri `data/raw/ukpn-pv-dogrulama/KAYNAK.txt`'ten indirilip `acik/` altına açılır. Sonuç [günlükte](log/2026-10-31-volkan-ukpn-gerilim.md).

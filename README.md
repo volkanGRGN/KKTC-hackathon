@@ -1,57 +1,79 @@
-# Trafo Şablonu (çalışma adı)
+# Trafo Görünürlük Haritası
 
-Kıb-Tek mahalle trafolarının gerçek yükünü ve hat ucundaki gerilimi görmüyor; bu yüzden ~2.670 çatı güneşi başvurusu bekliyor. Bu araç trafoların küçük bir kısmını ölçüp gerisini "şablonla" tahmin eder ve her trafo için **öğlen ne kadar dolu, kaç ev daha panel takabilir, ne kadar eminiz** sorusunu haritada cevaplar. Kullanıcısı Kıb-Tek'in planlama birimi; araç başvuru reddetmez, **ayırır**: bariz uygun → hızlı onay, bariz dolu → işaret, emin değil → ölçüm cihazı tak.
+Kıb-Tek'in göremediği mahalle trafolarını, az sayıda ölçümden öğrenen bir modelle haritada görünür kılar: her trafo yılın en yoğun saatinde ne kadar dolu, kaç ev daha çatıya güneş paneli takabilir, bu tahminden ne kadar eminiz.
 
-VCC-2 · Sürdürülebilir Kıbrıs Hackathonu · 31 Ekim – 1 Kasım 2026
+*In English:* a visibility map for distribution transformers in Northern Cyprus. A share of transformers is measured for two weeks; a template model estimates every other transformer's annual peak load and how many more homes can add rooftop solar, with an honest uncertainty band. Prototype built at the Sustainable Cyprus Hackathon (VCC-2), 31 Oct – 1 Nov 2026.
 
-## Kurulum
+Sürdürülebilir Kıbrıs Hackathonu (VCC-2) · Lapta · 31 Ekim – 1 Kasım 2026 · **Durum: çalışan prototip; Kıbrıs verisiyle henüz sınanmadı.**
 
-Python 3.10 ya da üstü. Windows'ta `python3` yerine `python` yazın.
+## Sorun
+
+- Kuzey'de yaklaşık **2.670 çatı güneşi başvurusu** bekliyor; Kıb-Tek'in alçak gerilim şebekesini izleyen bir sistemi yok [KTTO raporu, Mart 2023; adres doğrulanmadı].
+- Güney Kıbrıs paneli bağladı, şebeke taşıyamayınca 2025'te güneş üretiminin **%47'sini** kıstı [pv-magazine, Ocak 2026].
+- Bugünkü kaba kural ("trafo gücünün %40'ına kadar panel") hat ucundaki gerilimi görmüyor.
+
+## Ne yapıyor
+
+Trafoların bir kısmı iki hafta ölçülür. Model, benzer trafolardan öğrendiği günlük yük eğrileriyle ("şablon") gerisini tahmin eder ve haritada iki soruyu cevaplar:
+
+| Katman | Soru | Ne zaman | Sınır |
+|---|---|---|---|
+| **Yük haritası** | Trafo ne kadar dolu? | Yılın en yoğun saati, çoğunlukla yaz akşamı | Trafo gücü ve akşam gerilimi (207 V) |
+| **Panel** | Güneş için ne kadar yer var? | Bahar öğleni, yük en düşükken | Öğlen gerilimi (259 V) ve trafo gücü |
+
+Yöntem, İngiltere'nin 824 trafoyu ölçüp gerisini tahmin ettiği mahalle trafosu şablonu çalışmasının Kıbrıs'a uyarlamasıdır. Araç başvuru reddetmez, ayırır: bariz uygun olan hızlı onay alır, bariz dolu olan işaretlenir, emin olunamayan yerde önce ölçülür.
+
+## Ne kadar tutuyor
+
+Kıbrıs'tan trafo verisi alamadık. Yöntemi iki yoldan sınadık: açık **gerçek veride** (İspanya, İngiltere) ve Kıbrıs'a benzetilmiş **deneme şehirlerinde** (cevabı bilinen, modelin hiç görmediği şehirler). Deneme şehri rakamları gerçeğin üst sınırıdır.
+
+| Katman | Nerede | Sonuç |
+|---|---|---|
+| Yük haritası | Gerçek veri, İspanya, Mayıs tepesi | yılın tepesi hatası ortanca %15,4 (bölgede klima yok) |
+| Yük haritası | Deneme şehirleri 41–50 | tepe hatası ortanca %11,4; %80'den dolu 12 trafonun 12'si yakalandı; tahmin güvenli yönde, gerçeğin biraz üstünde |
+| Panel | Gerçek veri, İspanya, 29 trafo | öğlen yükü hatası yalnız abone sayısıyla ~%25, faturayla ~%10 |
+| Panel | Gerçek veri, İspanya, 28 trafo | söylenen "%80 aralık" trafoların %82,1'inde tuttu |
+| Panel | Deneme şehirleri 31–40 | "güvenle sığar" (yeşil) denen 60 trafonun hiçbiri dolu değil; gerçekte dolu 46 trafonun 24'üne bugünkü %40 kuralı "yer var" diyor, model hiçbirine |
+
+Ayrıntı ve kaynaklar: [dashboard/icerik.json](dashboard/icerik.json) ve [docs/log/](docs/log/).
+
+## Ne tutar
+
+| Ne | Maliyet |
+|---|---|
+| Bir trafoyu taşınabilir cihazla ölçmek | ~19 bin TL (~333–341 €) |
+| Kıbrıs pilotu, 120–170 trafo | ~2,2–3,2 milyon TL (~40–58 bin €) |
+| Kıyas: her trafoya kalıcı cihaz | ~300–419 milyon TL; pilot bunun ~%1'i |
+
+Kur TCMB 30.10.2026; KDV, gümrük ve Kıb-Tek personelinin süresi dahil değil. Hesap: [maliyet günlüğü](docs/log/2026-11-01-volkan-maliyet-sunum.md).
+
+## Sıradaki adım
+
+Kıb-Tek ile ilkbaharda 120–170 trafoluk pilot: ölç, tahmin et, 10 trafoda kör test. Başarı ölçütü: gerçekten dolu trafoların en az %90'ı yakalanır. Kıb-Tek'e sorulacaklar: [docs/01-plan.md](docs/01-plan.md) ("Uzmana sorulacaklar").
+
+## Dene
 
 ```bash
 git clone https://github.com/volkanGRGN/KKTC-hackathon.git
 cd KKTC-hackathon
 python3 -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+streamlit run dashboard/dashboard.py
 ```
 
-Ham veri depoda değil (açık depo, lisanslar belirsiz). Her `data/raw/<ad>/KAYNAK.txt` dosyasındaki adresten indirip aynı klasöre koyun; ilk gereken `data/raw/eac-profil-siniflari/`.
+Deneme şehirleri ve ham veri depoda değil: önce şehirleri üretin ya da hazır kopyayı `data/synthetic/` altına koyun. Komutlar [docs/calistirma.md](docs/calistirma.md), dashboard ayrıntısı [dashboard/README.md](dashboard/README.md).
 
-## Çalıştırma
+## Ekip
 
-**Deneme şehirleri (Faz 1):**
+Volkan Görgün (takım lideri; model ve panel katmanı) · Can Şahin (veri, yük haritası ve sınav) · Civan Orak (harita, veri araştırması ve sunum)
 
-```bash
-python3 src/sehir_uret.py 7          # data/synthetic/sehir-007/
-python3 src/sehir_uret.py 1 20       # sehir-001 … sehir-020
-```
+## Lisans
 
-Şehir başına ~10 saniye (Mac). Çıktının biçimi [docs/data/tablo-bicimi.md](docs/data/tablo-bicimi.md). EAC Excel'i (`data/raw/eac-profil-siniflari/`) ve `src/profiller.py` yoksa yer tutucu eğri, Lefkoşa ışınım dosyası (`data/raw/open-meteo-lefkosa/`) yoksa yapay ışınım kullanır ve bunu ekrana ve `ayar.json`'a yazar; yer tutucu şehir Faz 1 sınavına girmez.
+[Business Source License 1.1](LICENSE). Özetle: kodu okumak, denemek, değiştirmek ve araştırmada kullanmak serbest; gerçek şebeke işletmesinde ya da ticari bir hizmette kullanmak için ekipten ticari lisans gerekir. 1 Kasım 2030'da Apache 2.0'a döner. `data/raw/` altındaki üçüncü taraf verileri kendi lisanslarındadır (her klasörde KAYNAK.txt). Bağlayıcı metin [LICENSE](LICENSE).
 
-Üretimden sonra `ayar.json`'da `profil_kaynagi` = `eac` olduğuna bak: Excel okuyucusu (`openpyxl`) kurulu değilse üretici sessizce yer tutucuya düşer (sanal ortamı açmadan çalıştırınca bir kez oldu).
+## Ekip için: repo haritası
 
-**Şablon modeli (Faz 2):**
-
-```bash
-python3 src/sablon.py data/synthetic               # her şehir: tahmin.csv, arketipler.csv, deney/ (5/10/20 ölçülü, şehirler arası)
-python3 src/sablon.py data/synthetic --sehir 7 --yalniz-ana
-python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da kullanma (kıyas)
-```
-
-Şehir başına ~1 saniye. Yöntem [docs/method/modeling.md](docs/method/modeling.md); sınav `python3 src/sinav.py faz2 data/synthetic` (Can). Sürüm 1.2 şehirleri için önce iki indirme: kıyı (`data/raw/osm-kasaba/KAYNAK.txt`) ve Open-Meteo 2023 (`data/raw/open-meteo-lefkosa/`); yoksa üretici uyarıp eski kurala / yapay ışınıma düşer.
-
-**Kaç ev (Faz 3):** `python3 src/kac_ev_olasilik.py data/synthetic` → her şehirde `kac_ev.csv` (karamsar / orta / iyimser, renk, bugün aşma olasılığı, %40 kuralı; ADR-0011). `tahmin.csv` ister; şehir başına 3–5 saniye. Yedek yol (tek denklem, 0,1 sn): `python3 src/kac_ev.py data/synthetic`; aynı dosyayı üç ek sütunsuz yazar. Bilginin değeri denemesi (yalnız deney, dosya yazmaz): `python3 src/bilgi_degeri.py data/synthetic --aralik 1-10`.
-
-**Kalibrasyon (Faz 7):** `python3 src/kalibrasyon.py ispanya <edp_test.py --kalibrasyonsuz --cikti çıktısı>` ve `python3 src/kalibrasyon.py ingiltere <ukpn_olasilik.py CEKILIS_JSON çıktısı>` → yük bandı katsayısı k (`sablon.py` `K_YUK`) ve gerilim sapma çarpanı (`kac_ev_olasilik.py` `SAPMA_MU`, `SAPMA_SIGMA`); `--deneme` bilinen dağılımla sınar. Kurallar [docs/tuzuk.md](docs/tuzuk.md).
-
-**Temel benzetim** (saf Python, bağımlılık istemez): `python3 src/trafo_bos_kapasite.py 7 cikti.json` — 2 saniyede 3 trafonun sonucu. Kaç ev ve harita geldikçe buraya eklenecek.
-
-**Dashboard** (üç sayfa: proje kimliği ve bütün tablolar, Civan'ın haritası, canlı tahmin — trafo ölç, model gerisini tahmin etsin): `streamlit run dashboard/dashboard.py`. Ayrıntı [dashboard/README.md](dashboard/README.md).
-
-**Gerilim doğrulaması** (gerçek veri, İngiltere UKPN; sanal ortam ister): `python3 src/ukpn_test.py data/raw/ukpn-pv-dogrulama ukpn_sonuc.csv` — ~30 saniye; veri `data/raw/ukpn-pv-dogrulama/KAYNAK.txt`'ten indirilip `acik/` altına açılır. Sonuç [günlükte](docs/log/2026-10-31-volkan-ukpn-gerilim.md).
-
-## Repo haritası
-
+- [docs/calistirma.md](docs/calistirma.md) — bütün komutlar: deneme şehri üretimi, model, sınav, kalibrasyon, dashboard
 - [DEVIR.md](DEVIR.md) — **şu an nerede kaldık**: açık faz, kim nerede, bekleyen istekler, sıradaki adım
 - [NOTLAR.md](NOTLAR.md) — fikre dair yeni bulduğunu at: kaynak, itiraz, fikir (herkes ekler, Volkan işler)
 - [docs/02-faz-0-ogrenim.md](docs/02-faz-0-ogrenim.md) — **yeni gelen buradan başlar**: sorun, kavramlar, okuma sırası, ilk uygulama
@@ -65,9 +87,7 @@ python3 src/sablon.py data/synthetic --faturasiz   # yillik_tuketim_mwh olsa da 
 - [docs/decisions/](docs/decisions/) — karar kayıtları (ADR)
 - [docs/log/](docs/log/) — iş ve deney günlüğü (yalnız ekleme)
 - [data/raw/](data/raw/) — indirilen ham veri, her klasörde KAYNAK.txt
-- [dashboard/](dashboard/README.md) — proje kimliği, şehir özetleri, trafo kartları, resmi rakamlar, Civan'ın haritası, canlı tahmin (model sürümleriyle)
+- [dashboard/](dashboard/README.md) — proje kimliği, şehir özetleri, trafo kartları, resmi rakamlar, canlı tahmin (model sürümleriyle)
 - [docs/gorev/](docs/gorev/README.md) — görev kartları (Can ve Civan buradan iş alır)
 - [docs/istek/](docs/istek/README.md) — istek kutuları: başkasının dosyasında değişiklik istemek için
 - [CONTRIBUTING.md](CONTRIBUTING.md) — nasıl çalışıyoruz · [CLAUDE.md](CLAUDE.md) — aynı kurallar ajan için
-
-> Bu README kısa kalır. Derinlik `docs/` altındadır.
