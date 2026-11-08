@@ -388,20 +388,16 @@ def harita_yakinligi(enlem, boylam, yukseklik_px):
 # Sunumda söylenecek ad ve altındaki açıklama (Volkan, 1 Kasım: "sunabileceğimiz şekilde, altına açıklaması").
 # Teknik ad (ortanca, P90, temkinli uç) ekranda yok; açıklama ekibin anlaması için düz Türkçe.
 SUNUM = {
-    "trafo": ("Mahalle trafosu", "Şehirdeki trafolar; her biri bir mahalleyi besler."),
-    "olculen": ("Ölçülen trafo", "Cihaz takılı (ya da takılmış sayılan) trafolar. Model yalnız bunlardan öğrenir."),
-    "tahmin_edilen": ("Model tahmin etti", "Ölçülmeyen trafolar; değerlerini ölçülen trafolardan öğrendik."),
-    "abone": ("Abone", "Konut, ticaret, otel, sanayi ve su motoru aboneleri birlikte."),
-    "panel_kurulu": ("Kurulu güneş paneli", "Bugün şebekeye bağlı çatı panellerinin toplam gücü."),
-    "doluluk_tipik": ("Tipik trafo doluluğu", "Trafoların yarısı bundan az, yarısı bundan çok dolu. Doluluk: yılın en "
-                                               "yoğun saatindeki yük ÷ trafo gücü."),
-    "once_bak": ("Önce bakılacak trafo", "En kötü durumda %80'den fazla dolu olabilir. Kıb-Tek önce bunlara bakar; "
-                                         "çoğu gerçekte dolu çıkmaz."),
-    "gucu_asabilir": ("Gücünü aşabilecek trafo", "En kötü durumda yılın en yoğun saatinde trafonun gücünü aşabilir."),
-    "aksam_gerilim": ("Akşam gerilimi düşebilecek trafo", "En kötü durumda bir evde akşam gerilimi 207 V sınırının "
-                                                          "altına inebilir."),
-    "bos_guc": ("Yeni yük için boş güç", "En kötü durumda bütün trafolarda kalan güç: klima ve elektrikli araç için "
-                                         "yer."),
+    "trafo": ("Mahalle trafosu", "Her biri bir mahalleyi besler."),
+    "olculen": ("Ölçülen trafo", "Cihaz takılı; model bunlardan öğrenir."),
+    "tahmin_edilen": ("Model tahmin etti", "Ölçülmeyen trafolar."),
+    "abone": ("Abone", "Konut, ticaret, otel, sanayi, su motoru."),
+    "panel_kurulu": ("Kurulu güneş paneli", "Bugün bağlı çatı panelleri."),
+    "doluluk_tipik": ("Tipik trafo doluluğu", "Yoğun saatteki yük ÷ trafo gücü; trafoların yarısı bundan az."),
+    "once_bak": ("Önce bakılacak trafo", "En kötü durumda %80'den fazla dolu olabilir."),
+    "gucu_asabilir": ("Gücünü aşabilecek trafo", "En kötü durumda yoğun saatte trafonun gücünü aşar."),
+    "aksam_gerilim": ("Akşam gerilimi düşebilecek trafo", "En kötü durumda bir evde akşam 207 voltun altına iner."),
+    "bos_guc": ("Yeni yük için boş güç", "En kötü durumda kalan güç: klima ve elektrikli araç için."),
     "tepe_sapma": ("Yoğun saat tahmininde sapma", "Yılın en yoğun saatindeki yükü tahmin ederken tipik trafoda gerçekten "
                                                   "bu kadar saptık."),
     "tepe_aralik": ("Gerçek, söylediğimiz aralıkta", "Verdiğimiz aralık gerçek değeri bu kadar trafoda içine aldı."),

@@ -28,7 +28,6 @@ KULLANILABILIR = civan is not None and all(hasattr(civan, a) for a in GEREKEN)
 
 def sayfa():
     _, klasorler = veri_seti_sec()
-    st.sidebar.caption("Bu sayfa Civan'ın haritası (app/harita.py). Bir direğe tıkla: kararı ve gün boyu yükü.")
     if not klasorler:
         st.error("Şehir yok. Önce sahte şehirleri üret: python app/ornek_veri.py")
         return
