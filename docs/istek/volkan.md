@@ -1514,3 +1514,16 @@ Durum: bilgi
 ## KARAR 8 Kasım 16:42 — PR #43 (üretici 1.6) birleşti
 Karar: Volkan: "Evet, birleştir." Sunum bitti; #43 TEST'te tutmuştu (1d49c85, uç 374710c yalnız main). Main'in üreticisi artık 1.6; PR #49 (1.7) bunun üstünde, sınavı 61–70 Can'da. Dashboard ve sunum rakamları üretici 1.5 / 41–50'den kalma (bilgi; yenisi 1.7 sınavından sonra).
 Durum: yapıldı
+
+## KONTROL 8 Kasım — Can'dan — PR #49 (üretici 1.7) sınav şehirleri 61–70 (bir kez, hiç bakılmamış): kapılar tuttu; iki KALDI, bir yük tarafı kaçırma
+Ne ölçüldü (Windows, dal `veri/saat-sicaklik-pv` 772fa64, ayrı klasör; KARAR 16:36'daki komutlar aynen; ayar sonucuna bakılmadan bir kez) [Hesap; farazi, gösterim]:
+- **Üretim:** 10 şehir 37–52 sn (14:45–14:53). Tepe ayı ağırlıkla Temmuz (361/400), Nisan 3.
+- **faz1 5/5 GEÇTİ:** en düşük 201,7 V (sehir-061 T34, yılın tepesi), 207 V altı 2/400 (%0,5); süre en uzun 51,7 sn.
+- **faz2:** arketip %76,8 (eşiğe yakın; en kötü sehir-061 %46,4), şehirler arası 1,13, düşük güven %10,7 (en kötü %35,7 sehir-061) GEÇTİ; **öğlen yük hatası KALDI: ortanca %12,2, P90 %30,1** (eşik %30; en kötü sehir-063 %17,3 / %41,4). İspanya satırları komutta yoktu (ölçülmedi).
+- **Yük haritası (tepe.py özeti, ölçülmeyen 280):** tepe hatası ortanca **%8,2**, P90 **%19,9**; %80 bant **%98,2** (%95 bant %100; geniş, güvenli yön); tepe saati ±60 dk **%53,2**, iki adaydan biri %59,3, dönem %70,4. **Doluluk:** hata ortanca 3,0 / P90 8,3 yüzde puan, bant içinde %98,9; **≥ %80 dolu 14/14 yakalandı (104 uyarı)**; ≥ %100 dolu 2/2 yakalandı (51 uyarı), orta tahmin 1/2.
+- **Akşam 207 V:** gerçekte altında 2/280; yakalanan 1/2. **"Yeterli" dediğimiz 214 trafodan 1'i gerçekte altında** — yük tarafının yanlış yeşili: **sehir-061 T34** (köy, 100 kVA, 3 hat, en uzun 826 m, ABC95): gerçek 201,7 V, tahmin orta 231,7 / P10 212,2, p_aksam_207 %7,5. Öbürü (sehir-065 T25, şehir konutu, gerçek 202,8) P10 155,3 ile yakalandı.
+- **faz3:** **yanlış yeşil 0/64 GEÇTİ** (en kötü şehir 0/6); dolu trafoya "yer var" %40 kuralı **40/57**, model **0/57**; bayrak isabeti %68,8 ≥ 0,56 GEÇTİ (16 bayrak); sarı %63,2 UYARI; **kaç ev hatası KALDI: karamsar 10, iyimser 4, orta 4 ev** (eşik 2; n 225). Ayar 1–10'daki "kaç ev bandı tutucu tarafa kaydı" bulgusuyla aynı yön (dünyada panel sıcaklıkla az üretiyor, `kac_ev_olasilik.py` öğlen güneşi değişmedi) [Yorum]. Olasılık kovaları karamsar (0,5–0,7'de söylenen %57,7 ↔ gerçek %36,2).
+- **`eszamanlilik.py` saat (3 Kasım UYARI):** evet, düzeltme gerekiyor. Open-Meteo etiketi yerel sayılıyordu; `om_yerel` ile yaz eğimi (Temmuz ölçeği, `tepe.py`'ye giden) **0,065 → 0,058** (P10–P90 0,051–0,068; −%10, eski aralığın içinde), tasarım akşamı 33,4 → 35,4 °C, tasarım tepesi +%2; eşzamanlılık değişmiyor. Ayrıntı günlüğümde (7270e25). Öneri: #49 birleşince `eszamanlilik.py`'ye `om_yerel` (ben; `pv_hava` #49 ile gelir), `tepe.py` B-Y2 sabiti 0,065 → 0,058 (BUILD 1). Bu sınav #49'un bugünkü hâliyle (0,065).
+Karar senin: iki KALDI (öğlen P90 %30,1 sınırda; kaç ev 4 ev, bilinen yön) ve T34 kaçırması #49'u bloklar mı.
+Dosya: PR #49; çıktılar yerelde (scratchpad, depoda yok)
+Durum: bilgi
