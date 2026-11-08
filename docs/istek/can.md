@@ -614,3 +614,21 @@ Ne: Üç yeni veri seti indirildi; KAYNAK.txt taslakları ve Open-Meteo düzeltm
 Dosya: data/raw/*/KAYNAK.txt, docs/data/data-dictionary.md, src/eszamanlilik.py (senin)
 Neden: KTEMO gerçek üretimiyle karşılaştırma (günlük 3 Kasım); DEVIR iş tahtası.
 Durum: yapıldı (4 Kasım, Volkan'ın oturumu: KAYNAK.txt ve veri sözlüğü Volkan'ın sözüyle beklemeden yazıldı); `src/eszamanlilik.py` kontrolü sende bekliyor
+
+## UYARI! 8 Kasım 16:36 — karar masasından (KARAR) — PR #49 (üretici 1.7): sınav şehirleri 61–70'i üret ve koş
+Ne: Volkan'ın isteği. PR #49 hava verisinin saatini düzeltiyor (Open-Meteo sabit UTC+2 → yerel, yazın 1 saat) ve panel kaybını sıcaklığa bağlıyor (KTEMO ile ayarlı). **Önce karar masasının ayar 1–10 sonucunu bekle** (volkan.md'de "KONTROL … 1.7 ayar"); sorun yoksa:
+```
+git fetch origin && git checkout veri/saat-sicaklik-pv
+python src/sehir_uret.py 61 70 --cikti data/synthetic/u17
+python src/sablon.py data/synthetic/u17
+python src/kac_ev_olasilik.py data/synthetic/u17
+python src/tepe.py data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz1 data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz2 data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz3 data/synthetic/u17 --aralik 61-70
+```
+Ham veri (`data/raw/`): EAC Excel, osm-kasaba, open-meteo-lefkosa (`lefkosa_saatlik_2023.csv`, `lefkosa_saatlik_2024_2025.csv`, `lefkosa_sicaklik_2015_2025.csv`), kibris-20-prosumer — 1.6'daki gibi; yeni dosya gerekmez. 61–70 hiç üretilmedi; **bir kez** koşulur, sonuca bakıp ayar yapılmaz.
+Rapor: `volkan.md`'ye KONTROL: tepe.py özeti (tepe hatası ortanca / P90, işaretli sapma, %80 bant, %80'den dolu yakalanan ve uyarı, akşam 207 V) ve faz1–3 maddeleri; **yanlış yeşil** ayrıca. Ayrıca: `eszamanlilik.py` (senin) aynı hava klasörünü okuyor; saat düzeltmesi (pv_hava.om_yerel) ona da gerekiyor mu (3 Kasım UYARI'sıyla aynı iş).
+Dosya: PR #49 (https://github.com/volkanGRGN/KKTC-hackathon/pull/49), docs/log/2026-11-08-volkan-uretici-1.7-saat-sicaklik.md
+Neden: volkan.md KARAR 8 Kasım 16:36.
+Durum: bekliyor
