@@ -114,6 +114,9 @@ def gercek_sehir(klasor):
     tarihler = [__import__('datetime').date.fromisoformat(d) for d in ayar_dosya['tarihler']]
     saatlik = su.isinim_oku([y for y in su.ISINIM_DOSYALARI if y.exists()])
     g = [x for t in tarihler for x in su.gunun_isinimi(saatlik, t)]
+    if ayar_dosya.get('panel_sicaklik'):          # üretici 1.7: aynı sıcaklıklı ışınım
+        sicaklik = su.sicaklik_oku([y for y in su.ISINIM_DOSYALARI if y.exists()])
+        g = su.panel_isinimi(g, [x for t in tarihler for x in su.gunun_sicakligi(sicaklik, t)])
     og_ogle = random.Random(f'og13-{tohum}').uniform(*su.OG_OGLE_BANT)
     m = su.og_carpani(g, random.Random(f'og-{tohum}'), og_ogle)
     vmax = {}

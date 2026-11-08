@@ -82,6 +82,7 @@ from pathlib import Path
 # komut satırımız ona karışmasın. Rastgeleliğimiz kendi random.Random nesnelerimizde.
 _argv, sys.argv = sys.argv, sys.argv[:1]
 import trafo_bos_kapasite as tb  # noqa: E402
+import pv_hava  # noqa: E402
 sys.argv = _argv
 
 KOK = Path(__file__).resolve().parent.parent
@@ -92,7 +93,7 @@ KIYI_JSON = KOK / 'data' / 'raw' / 'osm-kasaba' / 'girne_kiyi.json'
 CIKTI = KOK / 'data' / 'synthetic'
 
 SOZLESME_SURUMU = '1.2'
-URETICI_SURUMU = '1.6'                   # 1.6: konut / yurt yaz eğimi 20 Kıbrıs evine çapalı; 1.5: trafo gücü yıl tepesinden, akşam düşümüne göre hat tasarımı; 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
+URETICI_SURUMU = '1.7'                   # 1.7: hava verisinin saati yerel (yaz saati) ve panel kaybı sıcaklıklı (KTEMO, pv_hava.py); 1.6: konut / yurt yaz eğimi 20 Kıbrıs evine çapalı; 1.5: trafo gücü yıl tepesinden, akşam düşümüne göre hat tasarımı; 1.4: yıl boyu tepe (ek); 0.2: panel %3–25 (ADR-0006); 1.2: mahalle farkı, fatura, bayram, kıyı
 ADIM = tb.STEPS_PER_DAY                  # 288, 5 dakika
 AY = 4                                   # Nisan: Kıb-Tek 2023'te en az tüketilen ay [Kaynaklı: stat_2023]
 GUN_SAYISI = 14                          # iki tam hafta = 10 iş günü + 4 tatil
@@ -257,7 +258,7 @@ def yillik_ortalama(veri, sinif):
 
 def isinim_oku(yollar):
     """Open-Meteo saatlik CSV'leri -> {tarih: 24 değer}, değer = eğik (30°, güney) ışınım ÷ 1000 W/m².
-    Satır 'T12:00' = 11:00–12:00 ortalaması (KAYNAK.txt)."""
+    Satır 'T12:00' = 11:00–12:00 ortalaması, sabit UTC+2 (KAYNAK.txt); 1.7'den beri yerel saate çevrilir (pv_hava.om_yerel)."""
     saatlik = {}
     for yol in yollar:
         saatlik.update(_isinim_dosyasi(yol))
@@ -275,13 +276,14 @@ def _isinim_dosyasi(yol):
         p = s.split(',')
         if len(p) <= sut or not p[sut]:
             continue
-        an = dt.datetime.fromisoformat(p[0]) - dt.timedelta(hours=1)   # saatin başı
+        an = pv_hava.om_yerel(dt.datetime.fromisoformat(p[0]), ortalama=True)   # saatin başı, yerel saat (1.7)
         saatlik.setdefault(an.date(), [0.0] * 24)[an.hour] = float(p[sut]) / 1000
     return saatlik
 
 
 def sicaklik_oku(yollar):
-    """1.4: Open-Meteo saatlik CSV'leri -> {tarih: 24 değer}, temperature_2m (°C), saatin kendisinde (anlık)."""
+    """1.4: Open-Meteo saatlik CSV'leri -> {tarih: 24 değer}, temperature_2m (°C), saatin kendisinde (anlık).
+    1.7: etiket sabit UTC+2, yerel saate çevrilir; yaz saatine geçişte boş kalan saat komşulardan doldurulur."""
     out = {}
     for yol in yollar:
         with open(yol, encoding='utf-8') as fh:
@@ -292,9 +294,15 @@ def sicaklik_oku(yollar):
             p = s.split(',')
             if len(p) <= sut or not p[sut]:
                 continue
-            an = dt.datetime.fromisoformat(p[0])
+            an = pv_hava.om_yerel(dt.datetime.fromisoformat(p[0]), ortalama=False)
             out.setdefault(an.date(), [float('nan')] * 24)[an.hour] = float(p[sut])
-    return out
+    return {d: pv_hava.bosluk_doldur(v) for d, v in out.items()}
+
+
+def panel_isinimi(g, T):
+    """1.7: panel üretimi için sıcaklıklı ışınım (kW/m² × pv_hava.panel_carpani; Nisan açık öğlede ~1, yazın < 1).
+    tb.PV_DERATE (0,82) değişmez; sıcaklık etkisi bu çarpanla gelir [Hesap: KTEMO 2018–2026, pv_hava.py]."""
+    return [x * pv_hava.panel_carpani(t, x * 1000) for x, t in zip(g, T)]
 
 
 def gunun_sicakligi(sicaklik, tarih):
@@ -830,9 +838,14 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
     tarihler = [bas + dt.timedelta(days=d) for d in range(GUN_SAYISI)]
     gun_turleri = ['tatil' if t.weekday() >= 5 or t in BAYRAMLAR else 'isgunu' for t in tarihler]
     saatlik = isinim_oku([y for y in ISINIM_DOSYALARI if y.exists()])
+    sicaklik = sicaklik_oku([y for y in ISINIM_DOSYALARI if y.exists()])
     if all(t in saatlik for t in tarihler):
         g = [x for t in tarihler for x in gunun_isinimi(saatlik, t)]
         ayar.update(isinim_kaynagi='open-meteo-lefkosa', hava_yili=yil)
+        if all(t in sicaklik for t in tarihler):      # 1.7: panel sıcaklık kaybı (OG çarpanı da bu ışınımla)
+            g = panel_isinimi(g, [x for t in tarihler for x in gunun_sicakligi(sicaklik, t)])
+            ayar.update(panel_sicaklik={'gamma': pv_hava.GAMMA, 'k_isinim': pv_hava.K_ISINIM, 't_ref_c': pv_hava.T_REF},
+                        hava_saati='Open-Meteo sabit UTC+2 -> Lefkoşa yerel (yaz saati)')
     else:
         print(f'UYARI: {yil} Nisan ışınımı yok (data/raw/open-meteo-lefkosa); yapay ışınım kullanılıyor.')
         g = yapay_isinim(random.Random(f'hava-{tohum}'))
@@ -858,7 +871,6 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
     # 1.4: yaz ve kış pencereleri, aynı hava yılı; ayrı akışlar (Nisan değişmez). EAC ve hava dosyası yoksa yok.
     mevsimler, egriler_m = {}, None
     if ayar['isinim_kaynagi'] == 'open-meteo-lefkosa' and profil_kaynagi == 'eac':
-        sicaklik = sicaklik_oku([y for y in ISINIM_DOSYALARI if y.exists()])
         egriler_m = mevsim_egrileri(sorted({a for v in MEVSIM_AYLARI.values() for a in v}))
         for mev, aylar in MEVSIM_AYLARI.items():
             if egriler_m is None:
@@ -867,9 +879,9 @@ def sehir_uret(tohum, n_trafo=40, cikti=CIKTI):
             if not gunler or not all(d in saatlik for d in gunler):
                 continue
             gt = ['tatil' if d.weekday() >= 5 or d in MEVSIM_BAYRAMLARI else 'isgunu' for d in gunler]
-            gm = [x for d in gunler for x in gunun_isinimi(saatlik, d)]
-            mevsimler[mev] = dict(tarihler=gunler, gun_turleri=gt, g=gm,
-                                  T=[x for d in gunler for x in gunun_sicakligi(sicaklik, d)],
+            Tm = [x for d in gunler for x in gunun_sicakligi(sicaklik, d)]
+            gm = panel_isinimi([x for d in gunler for x in gunun_isinimi(saatlik, d)], Tm)     # 1.7
+            mevsimler[mev] = dict(tarihler=gunler, gun_turleri=gt, g=gm, T=Tm,
                                   Tort={a: ay_ortalamasi(sicaklik, yil, a) for a in {d.month for d in gunler}},
                                   m=og_carpani(gm, random.Random(f'og14-{mev}-{tohum}'), og_ogle))
             ayar[f'{mev}_penceresi'] = {'tarihler': [d.isoformat() for d in gunler], 'gun_turleri': gt,
