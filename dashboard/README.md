@@ -1,6 +1,6 @@
 # Dashboard (`dashboard/`)
 
-Haritadan ayrı uygulama, üç sayfa: **Genel bakış** (proje kimliği, şehir özetleri, bütün trafo verisi, resmi rakamlar), **Harita** (Civan'ın haritası, `app/harita.py`) ve **Canlı tahmin** (harita kapalı açılır; trafoya tıkla, ölçülmüş sayılır; model o an kurulur, gerisini tahmin eder). Bu klasör `app/`'e yazmaz; Civan'ın haritası onun fonksiyonları çağrılarak gösterilir.
+Haritadan ayrı uygulama. Sayfalar: **Kıbrıscık'a genel bakış** (proje kimliği, özet, rakamlar ne kadar tutuyor, proje ve ekip; teknik tablolar "Ekip için"de), **Harita** (Civan'ın haritası, `app/harita.py`; onun düzeni yoksa gizli) ve **Kıbrıscık'ta canlı tahmin** (bütün ada; Girne'de birkaç trafoyu ölç, model gerisini tahmin eder; Oynat). Bu klasör `app/`'e yazmaz. **Dil herkesin anlayacağı gibi** (Volkan, 1 Kasım: site pitch sunumunda kullanılacak): teknik terim yok ya da yanında açıklaması; her rakamın altında tek cümle.
 
 ## Çalıştırma
 
@@ -8,18 +8,18 @@ Haritadan ayrı uygulama, üç sayfa: **Genel bakış** (proje kimliği, şehir 
 streamlit run dashboard/dashboard.py
 ```
 
-Tarayıcıda `http://localhost:8501` (harita açıksa bir sonraki port). Sayfalar sol menüde. Gereken paketler haritanınkiyle ve modelinkiyle aynı (`streamlit` ≥ 1.46, `pandas`, `pydeck`, `numpy`, `scipy`, `scikit-learn`; `altair` Streamlit'le gelir). Eski model sürümleri için `git` gerekir.
+Tarayıcıda `http://localhost:8501` (harita açıksa bir sonraki port). Komutu **depo kökünden** çalıştırın: görünüm (renkler, yazı tipi, üst menü) `.streamlit/config.toml`'dan okunur, başka klasörden çalışırsa Streamlit'in varsayılan teması gelir. Kenar menü yok (Volkan, 8 Kasım): sayfalar üst menüde, veri seti ve şehir seçimi sayfanın üst satırında. Açılışta canlı tahmin haritası gelir; genel bakış `/genel` adresinde. Gereken paketler haritanınkiyle ve modelinkiyle aynı (`streamlit` ≥ 1.46, `pandas`, `pydeck`, `numpy`, `scipy`, `scikit-learn`; `altair` Streamlit'le gelir). Eski model sürümleri için `git` gerekir.
 
-## Genel bakış sayfasının sekmeleri
+## Kıbrıscık'a genel bakış: sekmeler
+
+Sunumda görünenler önde, ekibin çalışma tabloları "Ekip için"de (silinmedi).
 
 | Sekme | Ne gösterir |
 |---|---|
-| Özet | Trafo, ölçülen trafo, abone, kurulu panel. **Panel katmanı:** trafo renkleri, güvenli uçlar, kaç ev daha (yaklaşık N, A–B), %40 kuralı, güneş payının dolu kısmı, kural ile renklerin yan yana tablosu (civan.md KARAR 18:46, 19:13, 20:56). **Yük haritası:** doluluk, %80'den dolu olabilecek trafo, gücü aşabilecek trafo, akşam gerilimi, boş güç; doluluk dağılımı ve tepe zamanı. |
-| Trafolar | Bütün trafolar, süzgeçle (renk, bölge, ölçüm, trafo no). Satıra tıklayınca kart: kimlik (Kıb-Tek'in bildiği), panel katmanı, yük haritası, günlük eğri, konum. |
-| Şehirler | Veri setindeki her şehir bir satır; şehir şehir renk çubukları. |
-| Model ne kadar iyi | Resmi rakamlar katmana göre (sorun, panel, yük haritası): durum (geçti / kaldı / uyarı / bilgi), veri türü, kapsam, depodaki kaynağa bağlantı. |
-| Proje | Sorun, kullanıcı, yöntem, renklerin anlamı, iki soru, takım, sözlük, veri kaynakları (`data/raw/*/KAYNAK.txt`'ten okunur). |
-| Ham veri | Şehrin her tablosu, CSV indirme. |
+| Özet | Trafo, ölçülen trafo, abone, kurulu panel. **Trafo ne kadar dolu?** (yılın en yoğun saati): tipik doluluk, önce bakılacak, gücünü aşabilecek, akşam gerilimi düşebilecek, boş güç; doluluk dağılımı ve en yoğun saat. **Güneş paneli için ne kadar yer var?** (bahar öğleni): renkler, emin olduğumuz trafolar, kaç ev daha (yaklaşık N, A–B), bugünkü %40 kuralı, kural ile renklerin yan yana tablosu. |
+| Ne kadar tutuyor | Resmi rakamlar konuya göre (sorun, doluluk, güneş paneli, maliyet): durum (hedefte / hedefin biraz dışında / dikkat / bilgi), veri türü, tek cümlelik açıklama, kapsam ve kaynak bağlantısı. Metinler `icerik.json`'da. |
+| Proje ve ekip | Sorun, kullanıcı, yöntem, karar, renklerin anlamı, iki soru, takım, sözlük (açık). |
+| Ekip için | Verinin teknik kimliği (üretici, sözleşme, hava yılı) ve alt sekmeler: **Trafolar** (süzgeçli tablo, satıra tıklayınca kart), **Şehirler**, **Veri kaynakları** (`data/raw/*/KAYNAK.txt`), **Ham veri** (CSV indirme). |
 
 ## Harita sayfası
 
@@ -27,13 +27,32 @@ Civan'ın haritası olduğu gibi: sütun = trafo, renk = karar, boy = trafo güc
 
 ## Canlı tahmin sayfası
 
-- **Harita kapalı açılır:** bütün trafolar gri. Bir sütuna tıkla: ölçülmüş sayılır (beyaz uç). En az 3 ölçümle model kurulur ve ölçülmeyen bütün trafoları boyar; her tıklamada yeniden kurulur (~1 sn). Ölçümü kaldırmak için sağdaki listeden çıkar.
-- **Düğmeler:** "Önerilen 12'yi ölç" (ürünün tabakalı seçimi, resmi koşuyla aynı), "Önerilenden 1 ekle", "Sırayla oynat" (kapalı haritadan 12'ye birer birer), "Sıfırla".
+- **Harita kendi çizimimiz** (`canli_harita.py` + `canli_harita.js`, tuval; harita karosu yok, internetsiz; Volkan 1 Kasım "harita bizim olsun"): ada Natural Earth 1:50m (`app/ada_kiyi.json`, Civan'ın, yalnız okunur), Girne kıyısı ve binaları OSM (`data/raw/osm-kasaba/`, git dışı; yoksa yalnız ada çizimi). **Ölçülen trafo dolu nokta (kalın kontur), tahmin soluk halka, henüz tahmin yok gri nokta.** Etiket her karede: "gösterim — Kıbrıscık ülkesindeki şehirler" (Volkan 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil Kıbrıscık ülkesindeki şehirler; yine gösterim. 8 Kasım: "noktalar temsili" / "trafo yerleri gerçek değil" notları kaldırıldı).
+- **Normal harita bütün ada** (animasyonun sonundaki görünüm; tam genişlik, sayılar altında; açılışta Kuzey ortalanır ve sığar, Güney kenarda kalabilir; harita yüksekliği genişliğe göre, en çok 660 px; üstte başlık, altta lejant için pay — Volkan, 8 Kasım "map biraz daha ortalansın"): Güney soluk, Kuzey belirgin; seçilen şehir Girne'de canlı, veri setindeki öbür şehirler kasabalara temsili yerleşir (`KASABALAR`, küçültme 0,55; gerçek trafo yeri değil) ve her birinin resmi 12 ölçümlü çıktısıyla boyanır (`tahmin.csv`, `tepe.csv`, `kac_ev.csv`). Tekerlek, sürükleme, çift tıklama, +/− ve "Girne" / "Kıbrıs" düğmeleriyle yakınlaşılır. Uzaktan bakınca başlık bütün adanın özeti.
+- **Trafoya tıkla: kart açılır** (Malta haritası gibi): trafo gücü, yük haritası (yılın tepesi, doluluk, akşam gerilimi), panel rengi ve kaç ev, öğlen yükü; sınav açıksa gerçek. Girne trafosunun kartında "Ölçülmüş say (cihaz takıldı)" / "Ölçümü kaldır". **Girne'de harita kapalı açılır:** en az 3 ölçümle model kurulur ve ölçülmeyen bütün trafoları boyar; her ölçümde yeniden kurulur (~1 sn). Ölçüm "Ayrıntı" köşesindeki listeden de eklenip çıkarılır.
+- **Düğmeler:** "12 trafoyu ölç" (önerilen 12: ürünün tabakalı seçimi, resmi koşuyla aynı), "Bir trafo daha ölç", "Oynat", "Sıfırla". **"Ayrıntı" düğmesi** (açılır kutu, düğmelerle aynı satırda): haritadaki soru (doluluk / güneş paneli), gerçekle karşılaştırma, model sürümü, ölçülen trafolar listesi. Sunumda ekranda yalnız harita, düğmeler ve birkaç sayı kalır; harita açılışta ekranın kalanını doldurur (başlık, seçimler ve düğmeler iki satırda; Volkan, 8 Kasım: "açtığım anda önüme harita çıkması lazım"). **Sade sayfa (Volkan, 8 Kasım: "boş şeyleri kes, simple and basic"):** yönerge cümlesi yok, renk açıklaması haritanın içindeki lejantta, ölçülen / tahmin sayısı haritanın başlığında (ayrı kutu yok); "Modelin içi" notu tablonun altında. Sayı kutularının açıklamaları tek kısa cümle (`ortak.py` `SUNUM`).
+- **Oynat (yarım dakika, kendi oynar):** her yer karanlık. Girne'de bir trafo ölçülür, çevresi küçük bir aydınlık daire olur; sonra sağdaki, sonra soldaki mahallede. 3 ölçümle model kurulur, tahminler karanlıkta belirir (az ölçüp çoğunu tahmin); 12 ölçüme kadar sürer. Sonra karanlık kalkar, görünüm adaya açılır, kasabalar sırayla dolar (önce ölçülenler, sonra tahminler). Haritada duraklat / baştan; bitince harita kendiliğinden normal haritaya geçer, sayfa 12 ölçümlü Girne sonucunu gösterir (sınav açıksa ölçtükçe hata grafiği 3–12 dolar).
+  - Sıra: ürünün önerdiği 12 trafo; ilki Girne merkezine en yakın, ikincisi onun doğusu (sağ), üçüncüsü batısı (sol), kalanı uzaklık sırasıyla. Küme aynı olduğu için 12. adım resmi koşuyla birebir (sehir-031, 40/40). Her trafo bir ölçülen trafonun adımında belirir (en yakından başlayarak adım başına en çok 4).
+  - Renkler gerçek modelden: Girne'de her adım o anki ölçülerle canlı kurulur (ilk Oynat ~10–15 sn hazırlık, sonra önbellekte); kasabalarda resmi çıktılar.
 - **Katman:** yük haritası (yılın tepesi; renk temkinli uçtaki doluluğa göre: %80 altı / %80–100 önce bak / %100 üstü; eşikler gösterim) ya da panel (öğlen gerilimi, 259 V; yeşil / sarı / kırmızı).
-- **Model sürümü** (sol menü): güncel ve depo tarihçesinden üç eski sürüm (1 Kasım 10:22 B-Y2 öncesi, 1 Kasım 01:59 yük haritası ilk sürüm, 31 Ekim 23:33 kalibrasyon sonrası, 31 Ekim 21:33 sunum v1). Eski sürümün kodu `git archive` ile geçici klasöre (her depo kopyasına ayrı; veri bağlantısı her çağrıda doğrulanır) çıkarılır ve ayrı süreçte koşar; ölçümler sürüm değişince yerinde kalır, aynı test sürümler arasında karşılaştırılır. Yük haritası olmayan sürümde panel gösterilir.
-- **Gerçekle kıyas (sınav görünümü):** yalnız farazi şehirde, yalnız ölçülmeyen trafolarda: tepe hatası, öğlen yükü hatası, yanlış yeşil, %40 kuralının yanlış yeşili; "ölçtükçe hata" grafiği. Gerçek cevap anahtarından gelir; **model onu görmez** (hesap `canli.py`'de, kıyas ayrı fonksiyonda). Sözleşmede harita cevap anahtarını okumaz; bu görünüm sinav.py gibi yalnız puanlar, kapatılabilir.
+- **Model sürümü** ("Ayrıntı" köşesinde): güncel ve depo tarihçesinden üç eski sürüm (1 Kasım 10:22 B-Y2 öncesi, 1 Kasım 01:59 yük haritası ilk sürüm, 31 Ekim 23:33 kalibrasyon sonrası, 31 Ekim 21:33 sunum v1). Eski sürümün kodu `git archive` ile geçici klasöre (her depo kopyasına ayrı; veri bağlantısı her çağrıda doğrulanır) çıkarılır ve ayrı süreçte koşar; ölçümler sürüm değişince yerinde kalır, aynı test sürümler arasında karşılaştırılır. Yük haritası olmayan sürümde panel gösterilir.
+- **Gerçekle karşılaştırma (sınav görünümü; "Ayrıntı" köşesinde, açılışta kapalı):** yalnız deneme şehrinde, yalnız ölçülmeyen trafolarda: tepe hatası, öğlen yükü hatası, yanlış yeşil, %40 kuralının yanlış yeşili; "ölçtükçe hata" grafiği. Gerçek cevap anahtarından gelir; **model onu görmez** (hesap `canli.py`'de, kıyas ayrı fonksiyonda). Sözleşmede harita cevap anahtarını okumaz; bu görünüm sinav.py gibi yalnız puanlar, kapatılabilir.
 - **Hesap ürünün kendi kodu:** öğlen yükü `src/sablon.py`, renk ve kaç ev `src/kac_ev_olasilik.py`, yılın tepesi `src/tepe.py` (geçici klasörde; şehir klasörüne yazmaz). Resmi 12 ölçümle sonuç main'deki `tahmin.csv`, `kac_ev.csv` ve `tepe.csv` ile birebir (sehir-031 ve -036, 40/40).
 - **Az ölçümde dikkat:** 8'in altında %80 aralık birkaç artıktan çıkıyor, fazla dar; sayfa uyarır. 3 ölçümle model sehir-031'de 11 trafoya yeşil dedi (12 ölçümle 12).
+
+## Sunum bilgisayarında
+
+Komut tek başına yetmez: şehir verisi ve canlı tahminin yük katmanı için ham veri depoda yok.
+
+1. **Depo ve sanal ortam** (kök README "Kurulum"). Komut depo kökünden, ortam açıkken: `streamlit run dashboard/dashboard.py`. Ortamı açmadan: Mac `.venv/bin/python -m streamlit run dashboard/dashboard.py`, Windows `.venv\Scripts\python -m streamlit run dashboard\dashboard.py`.
+2. **Şehir verisi** (`data/synthetic/`, git dışı). Yoksa sayfa yalnız kimliği, resmi rakamları ve proje sekmesini gösterir. İki yol:
+   - Hazır bilgisayardan kopyala (sunum için önerilen): `data/synthetic/u15/sehir-031` … `sehir-040` (sınav şehirleri, üretici 1.5; Volkan'ın bilgisayarında zip olarak hazır, `data/synthetic/u15/` altına açılır). `yuk_5dk_yaz.csv` ve `yuk_5dk_kis.csv` gerekmez; gerisi şehir başına ~9 MB. Gerçekle kıyas için `cevap_anahtari.csv` da kopyalanmalı.
+   - Üret (ham veri gerekir, ~2 dk): `python src/sehir_uret.py 31 40` → `python src/sablon.py data/synthetic --yalniz-ana` → `python src/kac_ev_olasilik.py data/synthetic` → `python src/tepe.py data/synthetic --aralik 31-40`. PR #43 (üretici 1.6) birleşirse üretilen şehirler resmi rakamlardan farklı olur: sunumda hazır kopyayı (zip) kullanın.
+3. **Ham veri** (canlı tahminin yük katmanı çalışırken okur): `data/raw/eac-profil-siniflari/Offtake_Profile_Classes.xlsx`, `data/raw/open-meteo-lefkosa/lefkosa_saatlik_2023.csv` ve `lefkosa_saatlik_2024_2025.csv` (adresler KAYNAK.txt'de). Yoksa sayfa durmaz: eksik dosyaları adıyla yazar, panel katmanı çalışır.
+4. **Eski model sürümleri** `git` ister; git yoksa listede yalnız "Güncel" görünür.
+5. **Windows (denenmedi):** sembolik bağlantı izni (geliştirici modu) gerekmez. Bağlantı kurulamazsa dosya katı bağlantı ya da kopyayla, klasör Windows bağlantısıyla (junction) kurulur. Windows'ta denenmedi; Mac'te bağlantı hatası bilerek verilip denendi.
+6. **İnternet:** canlı haritanın sokak altlığı internetten gelir; internetsizken sütunlar boş zeminde görünür. Civan'ın haritası birleşince Girne zemini internetsiz gelir.
+7. **Isıtma:** sunucu açıldıktan sonraki ilk hesap birkaç saniye sürer. Sunumdan önce canlı tahminde bir kez "Önerilen 12'yi ölç", sonra "Sıfırla".
 
 ## Veri değişince
 
@@ -44,10 +63,10 @@ Civan'ın haritası olduğu gibi: sütun = trafo, renk = karar, boy = trafo güc
 ## Kurallar
 
 - Genel bakış ve Harita `cevap_anahtari.csv`'yi okumaz. Canlı tahmin onu yalnız sınav görünümünde okur ve modele vermez (kapatılabilir). `yuk_5dk.csv`'den modele yalnız ölçülü (seçilen) trafoların satırları girer (sözleşme).
-- Etiket haritayla aynı: şehir 900+ "SAHTE VERİ", 800–899 "GERÇEK ÖLÇÜM … (Kıbrıs değil)", diğerleri "örnek veri (farazi şehir) — gösterim".
+- Etiket: şehir 900+ "SAHTE VERİ", 800–899 "GERÇEK ÖLÇÜM … (Kıbrıs değil)", diğerleri "gösterim — Kıbrıscık ülkesindeki şehirler" (Volkan, 1 Kasım: deneme şehirlerinin adı "farazi şehir" değil).
 - Dil: "en az" yok; "yaklaşık N ev (A–B)" ve "%80 ihtimalle"; vaat renkte. Her rakamın yanında katmanı (panel ya da yük haritası) yazılı.
 - Renkler haritayla aynı ve her zaman yazısıyla birlikte.
 
 ## Denendi
 
-Mac, Python 3.12, Streamlit 1.66: Genel bakış (bütün şehirler, tek şehir, veri yok, yalnız trafo tablosu olan şehir), Harita ve Canlı tahmin (önerilen 12, katman, dört sürüm, sıfırla) `AppTest` ile hatasız; tarayıcıda tıklayarak ölçme, sırayla oynatma, sürüm değiştirme. Deneme verisi üretici 1.5 sınav şehirleri 31–40. Windows denenmedi; Windows'ta süreç havuzu ve `git archive` denenmedi.
+Mac, Python 3.12, Streamlit 1.66: Genel bakış (bütün şehirler, tek şehir, veri yok, yalnız trafo tablosu olan şehir), Harita ve Canlı tahmin (önerilen 12, katman, dört sürüm, sıfırla) `AppTest` ile hatasız; tarayıcıda tıklayarak ölçme, sürüm değiştirme. Yeni harita (1 Kasım): `AppTest` ile açılış, önerilen 12, katman, Oynat, Haritaya dön, üç ölçüm, sıfırla, eski sürümle (B-Y2 öncesi, sunum v1) Oynat hatasız; tarayıcıda (açık ve koyu tema) yakınlaşma, Girne ve kasaba trafosunun kartı, karttan ölçme, Oynat baştan sona (karanlık ve daireler), duraklat, baştan, bitince normal haritaya geçiş. Haritanın tıklama ve animasyon olayları (`st.components.v2`) `AppTest`'te denenemiyor, yalnız tarayıcıda. Deneme verisi üretici 1.5 sınav şehirleri 31–40. Windows denenmedi; Windows'ta süreç havuzu ve `git archive` denenmedi.
