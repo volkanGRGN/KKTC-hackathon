@@ -410,7 +410,7 @@ def sayfa():
                              help="Depo tarihçesinden: aynı ölçümlerle eski sürüm ne derdi?")
         st.caption(surumler.surum(surum)["aciklama"])
     ek = "" if surum == "guncel" else f" · model: {surumler.surum(surum)['ad']}"
-    st.warning(f"{etiket(sehir_no(klasor), ayar)} · {len(h['nolar'])} trafo · trafo yerleri gerçek değil{ek}")
+    not_bandi(f"{etiket(sehir_no(klasor), ayar)} · {len(h['nolar'])} trafo · trafo yerleri gerçek değil{ek}")
 
     olculu = st.session_state[a["olculu"]]
     with st.spinner("Model kuruluyor…" if surum == "guncel" else "Eski sürüm hazırlanıyor (ilk seferde birkaç saniye)…"):

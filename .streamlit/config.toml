@@ -1,0 +1,30 @@
+# Dashboard görünümü (8 Kasım): açık kum zemin, koyu deniz yeşili kenar menü, tek ana renk.
+# Streamlit bu dosyayı çalıştırılan klasörden okur: depo kökünden `streamlit run dashboard/dashboard.py`.
+# Yazı tipi sistemin kendi yazı tipi: internetsiz sunumda da aynı görünür.
+
+[theme]
+base = "light"
+primaryColor = "#0E6F73"
+backgroundColor = "#F5F3EE"
+secondaryBackgroundColor = "#ECE8DF"
+textColor = "#18222D"
+linkColor = "#0E6F73"
+borderColor = "#DDD8CD"
+showWidgetBorder = true
+baseRadius = "8px"
+buttonRadius = "8px"
+font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+headingFont = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+headingFontWeights = [750, 700, 650, 650, 600, 600]
+baseFontSize = 15
+greenColor = "#2F8F4E"
+redColor = "#C8463D"
+yellowColor = "#D99A1E"
+blueColor = "#0E6F73"
+chartCategoricalColors = ["#0E6F73", "#D99A1E", "#7C5CBF", "#2F8F4E", "#C8463D", "#5B6573"]
+
+[theme.sidebar]
+backgroundColor = "#0F2E33"
+secondaryBackgroundColor = "#173F45"
+textColor = "#E6EFEE"
+borderColor = "#24525A"

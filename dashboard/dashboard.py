@@ -51,7 +51,7 @@ def veri_bandi(klasorler, t):
     nolar = sorted(ayarlar)
     sehirler = "1 şehir" if len(nolar) == 1 else f"{len(nolar)} şehir"
     ek = " · cevabını bildiğimiz deneme şehirleri, trafo yerleri gerçek değil" if max(nolar) < 800 else ""
-    st.warning(" · ".join(etiketler) + f" · {sehirler}, {tr(len(t))} trafo{ek}")
+    not_bandi(" · ".join(etiketler) + f" · {sehirler}, {tr(len(t))} trafo{ek}")
 
 
 def teknik_veri_notu(klasorler, t):

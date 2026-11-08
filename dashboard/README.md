@@ -8,7 +8,7 @@ Haritadan ayrı uygulama. Sayfalar: **Kıbrıscık'a genel bakış** (proje kiml
 streamlit run dashboard/dashboard.py
 ```
 
-Tarayıcıda `http://localhost:8501` (harita açıksa bir sonraki port). Sayfalar sol menüde. Gereken paketler haritanınkiyle ve modelinkiyle aynı (`streamlit` ≥ 1.46, `pandas`, `pydeck`, `numpy`, `scipy`, `scikit-learn`; `altair` Streamlit'le gelir). Eski model sürümleri için `git` gerekir.
+Tarayıcıda `http://localhost:8501` (harita açıksa bir sonraki port). Komutu **depo kökünden** çalıştırın: görünüm (renkler, yazı tipi, kenar menü) `.streamlit/config.toml`'dan okunur, başka klasörden çalışırsa Streamlit'in varsayılan teması gelir. Sayfalar sol menüde. Gereken paketler haritanınkiyle ve modelinkiyle aynı (`streamlit` ≥ 1.46, `pandas`, `pydeck`, `numpy`, `scipy`, `scikit-learn`; `altair` Streamlit'le gelir). Eski model sürümleri için `git` gerekir.
 
 ## Kıbrıscık'a genel bakış: sekmeler
 
