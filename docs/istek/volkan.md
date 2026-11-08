@@ -1527,3 +1527,13 @@ Ne ölçüldü (Windows, dal `veri/saat-sicaklik-pv` 772fa64, ayrı klasör; KAR
 Karar senin: iki KALDI (öğlen P90 %30,1 sınırda; kaç ev 4 ev, bilinen yön) ve T34 kaçırması #49'u bloklar mı.
 Dosya: PR #49; çıktılar yerelde (scratchpad, depoda yok)
 Durum: bilgi
+
+## UYARI! 8 Kasım — Can'dan — dört karar: üretilen şehirlerin paylaşımı, 1 Kasım'dan kalan dört iş, PR #49
+Ne:
+1. **Üretilen şehirler depoya girsin mi?** Bugün `data/synthetic/` `.gitignore`'da (sözleşme "Genel kurallar": "Depoya girmez, tohumla yeniden üretilir"). Boyut [Hesap]: üretici 1.7'de şehir başına ~20 MB (`yuk_5dk.csv` 8,7 MB, yaz 6,1, kış 6,0); 61–70 = 201 MB; bugüne kadar 70 şehir. Yeniden üretim aynı tohum + kodla birebir, ama Mac ↔ Windows tek tük trafo farkı var (21:44) ve ham veri herkeste olmalı. Seçenekler: (a) **kural kalır** (önerim: resmi rakam Mac koşumu, tohum + commit günlükte yeter); (b) yalnız küçük çıktılar (`tahmin.csv`, `kac_ev.csv`, `tepe.csv`, `ayar.json`; şehir başına ~0,3 MB) sınav şehirleri için depoya, harita ve tekrar için; (c) bütün şehirler GitHub Release eki ya da ortak klasör (sürüm başına). Sözleşme değişikliği gerektirir (b, c).
+2. **1 Kasım'dan kalan dört iş hâlâ gerekli mi?** Sunum için yazılmışlardı, can.md'de "bekliyor": (a) PR #44 (sunum bilgisayarı; Windows yolu hiç denenmedi) test + birleştir; (b) PR #45 (harita animasyonu) dene + birleştir, uzman listesine iki soru, pitch "~170 bin TL prototip emeği"; (c) PR #46 (dashboard sade dil) dene, sonra `docs/sunum/` ekran adları; (d) slayt 8 maliyet manşet cümlesi. Hangileri yapılsın, hangileri kapatılsın? #44'ü Windows'ta denemek istersen ben yaparım.
+3. **PR #49 (üretici 1.7) sonucu** (KONTROL 8 Kasım, yukarıda): iki KALDI (faz2 öğlen P90 %30,1, eşik %30; faz3 kaç ev orta 4 ev, eşik 2) ve akşam 207 V'ta bir kaçırma (sehir-061 T34, P10 212,2 ↔ gerçek 201,7). #49'u bloklar mı, yoksa birleşip ayrı işe mi?
+4. **`eszamanlilik.py` saat düzeltmesi** (günlük 7270e25): yaz eğimi 0,065 → 0,058. Sıra önerim: #49 birleşince ben `eszamanlilik.py`'ye `om_yerel`; BUILD 1 `tepe.py` sabitini 0,058'e. Onay?
+Dosya: .gitignore, docs/data/tablo-bicimi.md (1); PR #44–#46, docs/sunum/ (2); PR #49 (3); src/eszamanlilik.py, src/tepe.py (4)
+Neden: Can sordu (şehirler neden GitHub'da yok); can.md'de bir haftadır bekleyen işler; #49 sonucu. Bloklamıyor.
+Durum: bekliyor
