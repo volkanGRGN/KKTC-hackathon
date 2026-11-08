@@ -436,7 +436,8 @@ def sayfa():
     sol, sag = st.container(), st.container()  # harita tam genişlik (sunum), sayılar altında
     with sol:
         if katman == "yuk" and yuk_yok:
-            st.info("Bu model sürümünde yük haritası yoktu (ilk kez 1 Kasım 01:58); panel katmanı gösteriliyor.")
+            st.info((sonuc["model"].get("yuk_eksigi") or "Bu model sürümünde yük haritası yok.")
+                    + " Panel katmanı gösteriliyor.")
         canli_harita.ciz(a["harita"], veri,
                          on_tiklama_change=lambda: _tiklama(a, h["nolar"]),
                          on_bitti_change=lambda: _bitti(a, h["nolar"], klasor, sira or oneri, surum, sinav),
