@@ -88,4 +88,36 @@ Kim / nasıl: Can, Windows, dal `veri/saat-sicaklik-pv` 772fa64; komutlar `docs/
 - Ayrı iş (BUILD 2): `kac_ev_olasilik.py` öğlen güneşini dünyanın saat ve sıcaklık hesabıyla hizalamak; ayar 1–10, sınav 71–80. Sırası (#49'dan önce mi sonra mı) Volkan'a soruldu.
 - Ayrı iş: T34 tipi (uzun köy hattı) akşam gerilimi kaçırmasının sebebi.
 
+## Ek (8 Kasım, BUILD 2 — panel): kaç ev öğlen güneşini saat ve sıcaklıkla hizalamak denendi, olumsuz
+Volkan: "Önce düzelt, sonra birleştiririz." Hipotez: 61–70'teki kaç ev KALDI'sı, `kac_ev_olasilik.py`'nin öğlen güneşini dünyanın yeni saat ve sıcaklık hesabıyla hizalamamasından. **Sonuç: değil.** Kod birleşmez; dal `panel/oglen-gunes` (abdd632) kalır, PR açılmadı.
+
+**Ne denendi** (dal `panel/oglen-gunes`, #49'un üstünde): eskiden tam güneş (1 kW/kWp × 0,82) öğlenin en düşük yüküyle aynı anda sayılıyordu. Denemede her gündüz adımında güneş = Nisan açık gün zarfı (`pv_hava.gunes_zarfi`: Open-Meteo Lefkoşa 2018–2022 Nisan günleri, yerel saat, sıcaklıklı, her 5 dakikada günlerin en yükseği; dünyanın hava yılları 2023–2025 kullanılmadı), yük = çekilen öğlen en düşük yük × trafonun arketip biçimi (`arketipler.csv`, öğlenin en düşüğüne bölünmüş, iş günü ve tatilin küçüğü). Her çözümde iki an: toplam net vermenin en büyük olduğu adım ve güneşin tepesi; kötüsü sayılır. Çekilişler aynı. Eski kural (`--eski-gunes`) ayar 1–10'un 10/10 şehrinde `kac_ev.csv`'yi bayt bayt aynı verdi.
+
+**Ayar 1–10** (üretici 1.7 şehirleri, karar masasının 16:38 klasörü kopyası; Mac; `sinav.py faz3 --aralik 1-10`) [Hesap; farazi, gösterim]:
+
+| | Eski kural | Saat ve sıcaklıkla hizalı |
+|---|---|---|
+| Yanlış yeşil | 0/64 | 0/64 |
+| Kaç ev hatası karamsar / iyimser / orta | 9 / 2 / 3 ev | 9 / 2 / 3 ev |
+| Kaç ev bandı: gerçek P10 altı ; P90 üstü | %2,2 ; %13,9 | %2,2 ; **%18,2** |
+| Renk yeşil / sarı / kırmızı | 64 / 238 / 52 | 64 / 237 / 53 |
+
+**Neden işe yaramadı** [Hesap: ayar 1–10, `yuk_5dk.csv`; scratchpad betikleri]:
+- Gerçek havanın Nisan açık gün tepesi zaten ~1: 2018–2022 zarfı 12:30'da **1,011** kW/kWp (11:00'de 0,901, 14:00'te 0,959); dünyanın yılları 2023–2025'in zarfı 0,999. Eski 1,0 doğruymuş; hizalı zarf onu %1 artırıyor.
+- Modelin kendi yük biçimleri (arketip) öğlenin en düşüğünü güneşin tepesine yakın gösteriyor: seçilen an ortanca 12:30, o anda biçim çarpanı ~1,0–1,02. Yani modelin bildiğiyle "en düşük yük güneşin tepesinde değil" denemiyor.
+- Dünyada ise iki uç aynı anda gelmiyor: 14 günlük Nisan penceresinde güneş tepesi ortanca 0,987 (P10 0,967), 12:30'da; öğlenin en düşük yükü çoğu trafoda pencerenin başında (ortanca 11:15), o anda güneş ortanca 0,87; güneş tepesindeki yük öğlen en düşüğünün ortanca 1,17 katı. Öğlenin en düşüğü 14 gün × 36 adımın en küçüğü (tek bir an); güneşin tepesindeki yük sıradan.
+- Sonuç: dünyanın gün boyu en büyük net vermesi, eski kuralın varsaydığından panel gücünün ortanca %3,7'si kadar az (panel 4 katına çıkmış hâlde; yeni kural %4,4) [Hesap].
+
+**Duyarlılık (yalnız bilgi, benimsenmedi)**: modelin güneşi ×0,95 → kaç ev 9 / 3 / **2** (orta GEÇER), P10 altı %3,0, P90 üstü %2,2, yanlış yeşil 0/70 (yeşil 70); ×0,90 → 8 / 4 / 2, %4,3 / %1,3, 0/79. Bant güneşe çok duyarlı: %5 güneş, P90 üstü payını 13,9'dan 2,2'ye indiriyor.
+
+### Okuma [Yorum]
+- Kaç ev KALDI'sı saat ve sıcaklık hizasızlığından değil, modelin bilerek koyduğu çift uçtan: "en parlak an ile en düşük yük aynı anda". Dünyanın cevabı tek bir yılın iki Nisan haftası; gerçekte trafo yılın her gününde tutmalı, bu yüzden iki haftadan katı olmak güvenli yön.
+- Güneşi %5 kısmak hatayı kapatıyor ama bu, modeli farazi dünyaya uydurmak olur (ADR-0009: aralıklar üreticiden değil, gerçek veriden). Gerekçe ancak gerçek ölçümden gelir: düşük yük ile güneş tepesinin gerçek trafolarda ne kadar çakıştığı (pilot ölçümü ya da açık trafo verisi).
+- 61–70'te iyimser 4 ev, 1–10'da 2 ev: aynı yön, sınav şehirlerinde biraz daha geniş.
+
+### Karar / sıradaki
+- Kaç ev kodu değişmiyor; 71–80 sınavı gerekmiyor (yöntem değişmedi).
+- #49'un kaç ev KALDI'sı bilinen ve güvenli yönde; birleştirme Volkan'ın sözüyle.
+- Ayrı iş (pilot): gerçek trafoda öğlen en düşük yük ile güneş tepesinin çakışması; çıkarsa modelin güneşi o ölçümle.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
