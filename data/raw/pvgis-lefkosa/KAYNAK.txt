@@ -1,0 +1,12 @@
+PVGIS 5.3 (Avrupa Komisyonu Ortak Araştırma Merkezi, JRC), uydu tabanlı ışınım veritabanı PVGIS-SARAH3, Lefkoşa, saatlik 2018–2023.
+Adres (aynısını çalıştırınca aynı dosya iner, kayıt / anahtar gerekmez):
+https://re.jrc.ec.europa.eu/api/v5_3/seriescalc?lat=35.1856&lon=33.3823&startyear=2018&endyear=2023&pvcalculation=1&peakpower=1&loss=14&angle=30&aspect=0&components=1&outputformat=csv
+İndirildi: 3 Kasım 2026, curl, tek istek. pvgis_saatlik_2018_2023.csv — 52.607 satır, SHA-256 2afc109521e622e4d49aba88645e9f888c1b82ac539cf17ec16831600047b203
+  Yerelde hackaton/dis-veri/pvgis-lefkosa (Volkan'ın Mac'i).
+Biçim: üstte 10 satır açıklama, sonra başlık; altta sütun açıklamaları.
+Sütunlar: time (UTC, "YYYYMMDD:HHMM", dakika :09 — o anın değeri, saat ortalaması değil),
+  P (1 kWp sistemin gücü, W; sıcaklık etkisi ve %14 kayıp dahil), Gb(i) / Gd(i) / Gr(i) 30° güneye eğik doğrudan / yaygın / yansıyan ışınım (W/m²),
+  H_sun güneş yüksekliği (°), T2m sıcaklık (°C), WS10m rüzgâr (m/s), Int (1 = değer yeniden kurulmuş).
+Ölçülü değil: uydu görüntüsünden hesap (~5 km); saatlik, tek bulut geçişini göstermez. SARAH3 2023 sonunda bitiyor (2024–2025 yok).
+Lisans: serbest kullanım, kaynak gösterilir ("PVGIS © European Union, 2001–2026").
+Kullanım: KTEMO gerçek üretimiyle Open-Meteo'ya karşı ikinci hava kaynağı (docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md).

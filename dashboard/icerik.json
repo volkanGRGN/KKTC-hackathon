@@ -224,16 +224,6 @@
     },
     {
       "katman": "maliyet",
-      "deger": "~333 €",
-      "baslik": "bir trafoyu bir hafta ölçmek",
-      "aciklama": "Taşınabilir ölçüm cihazıyla (18.589 TL, üç yılda 78 ölçüme bölündü), iki gidiş ve mühendis saati dahil. Bir evin paneli ~5.200 €; bir trafoyu ölçmek bunun ~%6'sı.",
-      "veri": "hesap",
-      "kapsam": "KTEMO / EMO birim fiyatları (Ekim 2024), Fluke 1736, TCMB kuru 30.10.2026",
-      "durum": "bilgi",
-      "kaynak": "docs/log/2026-11-01-can-maliyet.md"
-    },
-    {
-      "katman": "maliyet",
       "deger": "~6.700 €",
       "baslik": "pilotta ilk 20 trafo",
       "aciklama": "Ölçüm sırasındaki ilk 20 trafo. Deneme şehirlerinde bu 20 ölçüm 8–11 trafoyu yeşile çeviriyor ve 64–133 eve yer açıyor.",

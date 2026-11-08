@@ -11,20 +11,30 @@ Bu dosya tek sayfa, anlık durum. Her faz sonunda ve iş devrederken Volkan (+ C
 - **Can:** veri, eşzamanlılık, sıcaklık eğimi, üretici 1.5 (31–40), B-Y2 (`tepe.py`'ye PR), tepe sınav kodu. **Civan:** Faz 4 kalanı, harita kartları (güvenli uçlar, yük ikinci sayısı).
 - BUILD'ler yalnız KARAR'a yazar; kutu girdisinin başlığında "(BUILD 1 — yük)" ya da "(BUILD 2 — panel)".
 
-## İş tahtası (KARAR günceller; her PR ve kutu olayında, 1 Kasım 11:11)
+## İş tahtası (KARAR günceller; her PR ve kutu olayında, 2 Kasım)
 Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı kutu girdisinde (`docs/istek/volkan.md`).
+
+**2 Kasım: hackathon bitti.** Sunum yapıldı; Kıb-Tek ve Elektrik odasıyla görüşme bekleniyor. Depo düzenlendi (volkan.md KARAR 2 Kasım): README ürün vitrini, komutlar `docs/calistirma.md`, `LICENSE` (Business Source License 1.1), ana dala girmiş dallar silindi. Açık PR'lar #43–#46 Volkan'ın açık sözünü bekliyor; sunum dosyaları (slaytlar, video, konuşma metni, satış PDF'i) depoda değil, Volkan'ın bilgisayarında.
 
 | İş | Kimde | Durum | Bekleyen |
 |---|---|---|---|
-| PR #43 üretici 1.6 (yaz eğimi Kıbrıs evlerine; sınav 51–60) | BUILD 1 | TEST'te tuttu (1d49c85); 199 V kıl payı KALDI (faz dengesizliği) | sunumdan sonra birleşir; 1.7 listesi (KARAR 11:11) |
+| PR #49 üretici 1.7 (hava saati yerel, panel kaybı sıcaklıklı; KTEMO) | KARAR; sınav Can | ayar 1–10 bitti (bozulan yok, tepe saati +9 puan) | Can'ın 61–70 sınavı, Volkan'ın sözü |
+| PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
+| PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
+| PR #46 dashboard sade dil (#45'in üstünde) | Can (test); harita animasyonu oturumu | açık | Can'ın testi, #45 |
+| **Hava verisinin saati (3 Kasım):** Open-Meteo saat sütunu yaz saatsiz (sabit UTC+2); `sehir_uret.py` (`isinim_oku`, `sicaklik_oku`) yaz saatli sanıyor → Mart sonu – Ekim sonu güneş ve sıcaklık 1 saat erken; `tepe.py`, `eszamanlilik.py`, `sahte_kayit.py` aynı klasörü okuyor. KTEMO gerçek paneliyle saatlik hata %35 → düzeltilince %16 ([günlük](docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)) | BUILD 1 + BUILD 2 | bulundu; düzeltilmedi, yük / panel rakamlarına etkisi ölçülmedi | Volkan'ın "başla"sı; ayar 1–10, yeni sınav şehirleri bir kez |
+| **Sıcaklıklı panel kaybı (3 Kasım):** sabit 0,82 açık öğlende Tem–Ağu %7–8 fazla, Şub–Mar %3–7 az, Nisan %0–2; PVGIS'in sıcaklıklı gücü aylara göre düz ([günlük](docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)) | BUILD 2 | bulundu; ölçülmedi | saat düzeltmesinden sonra |
+| **Hava kaynağı adayı (3 Kasım):** PVGIS (AB JRC, uydu) günlük hata %6 ↔ Open-Meteo %9, ama 2023'te bitiyor | BUILD 2 | aday | — |
+| **Yeni veri setleri (3 Kasım):** KTEMO çatı paneli 5 dk üretim 2018–2026, PVGIS Lefkoşa 2018–2023, Open-Meteo 2018–2022 + 2026; Open-Meteo KAYNAK'ındaki "yaz saati dahil" yanlış | Volkan'ın oturumu (4 Kasım) | bitti: KAYNAK.txt (ktemo-solarweb, pvgis-lefkosa, open-meteo düzeltmesi) ve veri sözlüğü | Can: `eszamanlilik.py` saat kontrolü |
+| **KTEMO'ya sorulacak (3 Kasım):** çatı sisteminin kurulu gücü (hesap ~16 kWp); sahip hesabında gerilim kaydı var mı | Volkan | sırada | — |
 | Öğlen yük güveni ölçümü (panelin darboğazı) | BUILD 1 | bitti → ADR-0019 | — |
 | Ölçüm sırası ve konum payı analizini yeni kurala çevirme (#33 sonrası, küçük PR) | BUILD 2 | sırada | #33 |
-| PR testleri (Mac, bağımsız koşu) | TEST oturumu (Opus) | main sağlık koşusu birebir (KONTROL 01:00); sırada #25 (a5cfddd), sonra #24, #26 | KARAR'ın mesajı |
+| PR testleri | Can (Volkan, 1 Kasım 11:2x: TEST oturumu yeni PR almıyor) | — | KARAR'ın kutu girdisi |
 | B-Y2 incelemesi (Can'ın PR'ı gelince) | BUILD 1 | bekliyor | Can |
 | B-Y2 (iki bileşen, eğim fitleri; `tepe.py`'ye PR), tepe ve bayrak sınav maddeleri | Can | sırada (can.md 00:15) | BUILD 1'in iskeleti |
 | Harita: güvenli uçlar kartı (`pv_uc`), yük ikinci sayısı ve iki aday saat (`tepe.csv`); Faz 4 kalanı | Civan | sütunlar main'de (02:00) | — |
 
-Birleşenler (1 Kasım): #19, #21–#35, #37–#42 (#41 haritasız); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık PR yok; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
+Birleşenler (1 Kasım): #19, #21–#35, #37–#42 (#41 haritasız), #47 (maliyet tablosu), #48 (slayt 8 cümlesi); 8 Kasım: #43 (üretici 1.6); #36 kapatıldı (olumsuz sonuç, günlük main'de) — açık: #43, #44, #45; ADR-0019 yürürlükte. Ölçüm sırasının yeni sınavı 41–50: ilk 20 → 11 yeşil / 133 ev, beklenen değer tutuyor, yanlış yeşil 0. **Birleştirme kuralı (Volkan 01:5x):** karar masasının (ya da TEST'in) Mac testini geçen PR GitHub onayı beklemeden birleşir; eksi bulgulu PR düzelmeden birleşmez.
 
 ## Durum
 - Fikir: trafo görünürlük haritası (MVP), güneş paneli ilk uygulama katmanı. Gerekçeler [docs/decisions/](docs/decisions/) (ADR-0001…0011).

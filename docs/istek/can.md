@@ -557,7 +557,7 @@ Karar: **Sıra: 1 → 2 → 3 (sunuma kadar), 4–7 sunumdan sonra.**
 4–7 sunumdan sonra (sinav.py temizliği, MWh sözlüğü denetimi, sicak_nokta.py, app/ bulguları).
 **Yedek listeye cevaplar:** (a) **"%27 → %19" kalkar** — eski "yanlış kırmızı" ölçüsü; ADR-0017'den beri kırmızı yok, yerine "büyük olasılıkla dolu uyarısının 22'sinde 15'i gerçekten dolu". (b) **"%5 → %13" yerine sayı:** ADR-0019 ile yeşil 28 → 60 trafo (aday evli 347 trafonun %8'i → %17'si; 21–30'daki %5 → %13 eski şehirler), yanlış yeşil 0/60 — dashboard'la aynı. Listenin kalanı doğru; G'deki eski rakamları düzeltmen yeterli.
 PR #39 ve 41–50 öğlen bulgusu: karar masası Mac'te koşuyor, sonuç ayrı girdi.
-Durum: karar verildi
+Durum: (1) yapıldı (db4926b): akış yük haritası öne, 8 ekran / 10 slayt, yük rakamları B-Y2 / 41–50, '%27 → %19' ve '%4' kalktı (yerine 15/22), '%5 → %13' sunum dosyalarında yoktu; (2) yapıldı: kilit grafik 31–40 (0/60, 24/46 — dashboard'la aynı); (3) yapıldı (7424eb0): tarife bulundu, emisyon 2014 tezi, mahsuplaşma ve Kıb-Tek trafo maliyeti BULAMADIM (volkan.md); 4: UYARI 11:12 yapıldı; sinav.py temizliği, MWh denetimi, sicak_nokta.py, app/ bulguları sunumdan sonra
 
 ## KARAR 10:26 — PR #39 birleşti; sunumun yük rakamları değişti (B-Y2, 41–50)
 Karar: B-Y2'n karar masasının Mac koşusunda birebir tuttu, birleşti (5948496); varsayılan model artık senin yaz eğimin. Sunumda yük rakamları **dashboard'daki yeni kartlar** (626ea6b): yılın tepesi hiç bakılmamış 41–50'de %11,4 / %23,9, tahmin ortanca %11 yukarıda (güvenli yön; "yaz eğimi Kıbrıs evlerinden"); %80 dolu 12/12 yakalanır, her 10 uyarıdan 1'i gerçek; akşam 207 V 2/2, "yeterli" 211'de 0 yanlış. Önceki %5,8 ve 16/16 / 87 uyarı rakamları artık kullanılmaz. İspanya Mayıs %15,4 / %36,1 aynı. 41–50 öğlen bulgun (P90 %30,1 KALDI) Mac'te doğrulandı; dashboard öğlen kartı 31–40 rakamı olarak kalır.
@@ -565,10 +565,70 @@ Durum: bilgi
 
 ## KARAR 10:43 — sunumun yük rakamları yeni model (B-Y2); iki modelin farkı sunumda bir cümleyle
 Karar: Volkan'ın ölçütü sapmanın yönü: yeni model tepeyi deneme şehrinde ortanca %11 yukarıda tahmin ediyor (güvenli yön), eski model sıfır sapmalı ama gerçek Kıbrıs evlerinin sıcaklık duyarlılığını yarım alıyor. **Sunum rakamları dashboard'daki 41–50 / B-Y2 kartları.** Konuşma notuna cümle: "Tepe modelimiz Kıbrıs evlerinin gerçek sıcaklık duyarlılığını kullanır; deneme şehirlerinde bu yüzden yaklaşık %11 fazla tahmin eder, yani güvenli tarafta; gerçek bahar verisinde hata %15." Jüri cevabı: eski ↔ yeni tablosu (volkan.md KARAR 10:43); dashboard'da "model sürümü" seçimiyle canlı gösterilebilir. "%5,8" artık kullanılmaz.
-Durum: bilgi
+Durum: bilgi — konuşma notuna cümle ve jüri 14 (eski ↔ yeni) eklendi (db4926b)
 
 ## UYARI! 1 Kasım 11:12 — karar masasından (KARAR) — `sinav.py` için iki eksik (TEST'in #43 koşusundan)
 Ne: (1) **faz1 "en düşük ≥ 200 V ve 207 V altı ≤ %1" maddesi yalnız Nisan'a bakıyor** (`v_min_bugun_v`). Üretici 1.4'ten beri cevap anahtarında yılın tepesi var (`v_min_tepe_v`); #43'te raporlanan 199,0 V (sehir-055 T36, faz dengesizliği) yılın tepesinde ve faz1'de görünmüyor — karar masası onu "kıl payı KALDI" diye raporluyor, sınav GEÇTİ diyor. Maddeye yılın tepesi de eklensin (ya da ayrı "akşam / yıl tepesi gerilimi" maddesi; ADR-0016 m. 3 aynı ölçüt). (2) **faz2 "şehirler arası hata ÷ şehir içi" oranı kökteki şehir kümesine bağlı** (#43'te BUILD 1 0,75, TEST 0,79; ikisi de aynı `--aralik` ile): `sablon.py`'nin şehirler arası deneyi kökteki bütün şehirleri kullanıyor. Sınav ya kendi aralığındaki şehirlerle hesaplasın ya da raporda kullanılan şehir listesini yazsın. Bilgi: clean review'daki S-05 eki (`tepe.py:94` `KONUT_MWH`) ve commit sayısı notu KARAR 09:33'te yazılı; dört sorunun cevabı orada (araç izni evet, `app/` salt okur kapsamda, `src/sicak_nokta.py` senin, yorum biçimi plan §5b).
 Dosya: src/sinav.py (senin)
 Neden: TEST oturumu, PR #43 (Volkan: "eksik kalanları Can'a ilet"). Sunuma engel değil; sıra sende (sunum işlerinden sonra).
+Durum: yapıldı — (1) faz1 madde 4 Nisan + yılın tepesi (v_min_tepe_v): 31–40 201,1 V (karar masasıyla aynı), 41–50 KALDI 175,0 V (sehir-047 T23, yeni bulgu, volkan.md); (2) faz2 şehirler arası yalnız modeli kuran şehir de kümedeyse sayılır, çiftler bilgi satırında; günlük docs/log/2026-11-01-can-sinav-eksikler.md
+
+## UYARI! 1 Kasım 11:23 — TEST oturumundan (Volkan'ın isteğiyle) — açık PR #43 ve #44: birleştirme ve son test sende
+Ne: Volkan: "Can birleştirip test yapacak." TEST'in Mac koşuları (resmi rakam Mac):
+- #44 dashboard/sunum-hazirlik (b3594f2'de denendi; uç şimdi 039fbb8, aradaki fark denenmedi): ham veri yokken canlı tahmin düşmüyor (yük katmanı kapanıyor, eksik 3 dosyayı adıyla yazıyor, panel boyuyor); ham veriyle sehir-031 main ile birebir (tahmin, kac_ev 40/40, tepe 40/40); os.symlink / os.link bilerek hata verince sonuç aynı; AppTest Genel bakış + Canlı hata 0 (Harita sayfası main'de gizli: Civan'ın harita/ui birleşmesi geri alınmış); git status temiz; README üretim adımları temiz klasörde çalışıyor, üretilen 31–40 resmi 1.5 ile 30/30 aynı. Denenmedi: sanal ortam kurulumu (pip), Windows.
+- #43 yuk/uretici-1.6 (1d49c85'te denendi; uç şimdi 374710c): tuttu (51–60 tepe %7,9 / %17,0, faz2 / faz3 GEÇTİ); en düşük 199,0 V sehir-055 T36 (faz dengesizliği) kalıyor; hat sayısı 9/800 trafoda gizli mahalle yükünü taşıyor (bilgi). Birleşme sunumdan sonra.
+Yapılacak: iki PR'ın son ucunu main ile birleşik koş, birleştir.
+Dosya: dashboard/ (#44), src/sehir_uret.py (#43)
+Neden: Volkan, 1 Kasım; TEST notları ortak not klasöründe (test-pr43-200v.md).
+Durum: bekliyor
+
+## KARAR 1 Kasım 11:43 — karar masasından (KARAR) — test PR'ları artık sende; #45'i dene; üç sorunun cevabı
+Ne: Volkan: test PR'ları bundan sonra sana (TEST oturumu yeni PR almıyor). Tutan PR'ı birleştirebilirsin (merge commit, dal silinmez); sonucu `volkan.md`'ye KONTROL kalıbıyla yaz.
+- **#44 ve #43:** UYARI 11:23'teki gibi. #44'te Windows yolu hiç denenmedi: sunum bilgisayarı Windows'sa README "Sunum bilgisayarında" bölümünü Windows'ta baştan bir kez izle (eski model sürümü seçimi de). #43 sunumdan sonra.
+- **#45** (harita animasyonu, https://github.com/volkanGRGN/KKTC-hackathon/pull/45): **uç eba8ed2'yi dene** (11:55'te güncellendi): bütün ada haritası, yakınlaşma, trafoya tıklayınca kart, karttan "Ölçülmüş say"; Oynat (karanlık harita, ölçülen trafonun çevresinde daire, bitince normal haritaya geçiş), duraklat, baştan; internet kapalıyken harita açılıyor mu; kasabaların 12 ölçümlü sonucu `tepe.csv` ile aynı mı. İlk Oynat 10–15 sn hazırlanır. **Birleştirme:** Volkan'ın sözü verildi (11:45: testin tutarsa birleştir) — #44'ten sonra (`canli_sayfa.py`'de tek satır çakışır; çözümü harita animasyonu oturumu yapar).
+- **Soruların:** (1) uzman listesine iki soru ekle (mahsuplaşmada fazla üretimin bedeli; dağıtım trafosu büyütmenin maliyeti); dashboard'a tarife / emisyon girmez. (2) Pitch: "~170 bin TL" yazılabilir, adı "prototip emeği (2 gün × 3 kişi, EMO saat ücreti) [Hesap]"; "geliştirme maliyeti" denmez. (3) 175 V: sunuma etkisi yok; faz1'in KALDI'sı saklanmaz; Mac teyidi ve 1.6 ile kalkıp kalkmadığı sunumdan sonra BUILD 1'de.
+Dosya: PR #44, #45; docs/01-plan.md; pitch şablonu
+Neden: volkan.md KARAR 11:43 (iki girdi).
+Durum: bekliyor
+
+## KARAR 1 Kasım 12:06 — karar masasından (KARAR) — PR #46'yı dene (dashboard sade dil); sonra sunum belgelerinde ekran adları
+Ne: https://github.com/volkanGRGN/KKTC-hackathon/pull/46 (yalnız `dashboard/`, #45'in üstünde). Dene: `icerik.json`'da yalnız başlık / açıklama / sözlük değişmiş, değerler main ile birebir; sayfalardaki rakamlar aynı; AppTest hata 0; Genel bakış sekmeleri Özet / Ne kadar tutuyor / Proje ve ekip / Ekip için; canlı tahminde "Ayrıntı" köşesi (gerçekle kıyas açılışta kapalı — kabul edildi). Tutarsa birleştir; sıra #44 → #45 → #46 (#45 birleşince #46'nın tabanını main'e çevir). Birleşince `docs/sunum/`'daki ekran adlarını ve sekmeleri ekrana uydur ("Kıbrısçık'a genel bakış", "Kıbrısçık'ta canlı tahmin").
+Dosya: PR #46; docs/sunum/ (senin)
+Neden: volkan.md KARAR 12:06.
+Durum: bekliyor
+
+## KARAR 1 Kasım 13:20 — karar masasından (KARAR) — maliyet tablosu sınandı (#47); slayt 8'de bir cümle
+Ne: Sunum maliyet tablosu: PR #47, `docs/log/2026-11-01-volkan-maliyet-sunum.md` (her satır etiketli; kur TCMB 30.10.2026; karar masası hesapları yeniden yaptı, tutuyor). Senin rakamların alt uç olarak doğru. (1) Slayt 8'de "adadaki ~6.400 trafonun ~%2'si" → **"Kuzey'deki ~6.400–6.700 trafonun (vekil) ~%2–3'ü"**. **(13:24: Volkan'ın isteğiyle MALİYET oturumu PR #48'de yaptı, tek satır; sen ayrıca yapma; Volkan'ın sözüyle 13:24'de birleşti.)** (2) Manşet önerisi (slayt ve pitch maliyet kutusu): "Bir trafoyu ölçmek yaklaşık 19 bin TL; 120–170 trafoluk pilot 2,2–3,2 milyon TL, her trafoya kalıcı cihaz takmanın yaklaşık yüzde biri." Geri ödeme, fatura ve emisyon yalnız soru gelirse, etiketleriyle.
+Dosya: docs/sunum/slaytlar.md (senin); pitch şablonu (Civan)
+Neden: volkan.md KARAR 13:20.
+Durum: bekliyor
+
+## BİLGİ 2 Kasım 11:07 — karar masasından (KARAR) — depoya lisans eklendi; adın lisans sahipleri arasında
+Ne: Volkan'ın isteğiyle `LICENSE` = Business Source License 1.1: kodu okumak, denemek, değiştirmek, araştırma serbest; gerçek işletmede / ticari hizmette kullanım ekipten ticari lisansla; 2030-11-01'de Apache 2.0. Lisans sahibi Volkan Görgün, Can Şahin, Civan Orak. README ürün vitrinine çevrildi, geliştirici komutları `docs/calistirma.md`'de. Ana dala girmiş dallar silindi; senin `sinav/faz2` dalın ana dala girmediği için duruyor. İtirazın varsa Volkan'a.
+Dosya: LICENSE, README.md
+Neden: volkan.md KARAR 2 Kasım 11:07.
+Durum: bilgi
+
+## UYARI! 3 Kasım 23:35 — Volkan'ın oturumundan — yeni veri setleri ve Open-Meteo saat dilimi düzeltmesi (KAYNAK + veri sözlüğü senin)
+Ne: Üç yeni veri seti indirildi; KAYNAK.txt taslakları ve Open-Meteo düzeltmesi [günlüğün ekinde](../log/2026-11-03-volkan-ktemo-pv-karsilastirma.md). (1) `data/raw/ktemo-solarweb/KAYNAK.txt` (KTEMO çatı paneli, 5 dk, 2018–2026) ve `data/raw/pvgis-lefkosa/KAYNAK.txt` (AB JRC uydu ışınımı, 2018–2023) ekle; (2) `data/raw/open-meteo-lefkosa/KAYNAK.txt`'te "yerel saat, yaz saati dahil" yanlış: saat sütunu bütün dosyalarda sabit UTC+2 (2015–2025 sıcaklık dosyası dahil); iki yeni dosyayı (2018–2022, 2026 Ocak–Nisan) ekle; (3) `docs/data/data-dictionary.md`: Güneş satırındaki "Yerel saat (yaz saati dahil)"ı düzelt, KTEMO ve PVGIS satırlarını ekle. Ayrıca `src/eszamanlilik.py` aynı sıcaklık dosyasını okuyor: yaz eğimi fitinde ev ölçümleriyle sıcaklık yazın 1 saat kayık olabilir — bak, etkisini yaz (düzeltme kararı DEVIR'deki saat işiyle birlikte).
+Dosya: data/raw/*/KAYNAK.txt, docs/data/data-dictionary.md, src/eszamanlilik.py (senin)
+Neden: KTEMO gerçek üretimiyle karşılaştırma (günlük 3 Kasım); DEVIR iş tahtası.
+Durum: yapıldı (4 Kasım, Volkan'ın oturumu: KAYNAK.txt ve veri sözlüğü Volkan'ın sözüyle beklemeden yazıldı); `src/eszamanlilik.py` kontrolü sende bekliyor
+
+## UYARI! 8 Kasım 16:36 — karar masasından (KARAR) — PR #49 (üretici 1.7): sınav şehirleri 61–70'i üret ve koş
+Ne: Volkan'ın isteği. PR #49 hava verisinin saatini düzeltiyor (Open-Meteo sabit UTC+2 → yerel, yazın 1 saat) ve panel kaybını sıcaklığa bağlıyor (KTEMO ile ayarlı). **Önce karar masasının ayar 1–10 sonucunu bekle** (volkan.md'de "KONTROL … 1.7 ayar"); sorun yoksa:
+```
+git fetch origin && git checkout veri/saat-sicaklik-pv
+python src/sehir_uret.py 61 70 --cikti data/synthetic/u17
+python src/sablon.py data/synthetic/u17
+python src/kac_ev_olasilik.py data/synthetic/u17
+python src/tepe.py data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz1 data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz2 data/synthetic/u17 --aralik 61-70
+python src/sinav.py faz3 data/synthetic/u17 --aralik 61-70
+```
+Ham veri (`data/raw/`): EAC Excel, osm-kasaba, open-meteo-lefkosa (`lefkosa_saatlik_2023.csv`, `lefkosa_saatlik_2024_2025.csv`, `lefkosa_sicaklik_2015_2025.csv`), kibris-20-prosumer — 1.6'daki gibi; yeni dosya gerekmez. 61–70 hiç üretilmedi; **bir kez** koşulur, sonuca bakıp ayar yapılmaz.
+Rapor: `volkan.md`'ye KONTROL: tepe.py özeti (tepe hatası ortanca / P90, işaretli sapma, %80 bant, %80'den dolu yakalanan ve uyarı, akşam 207 V) ve faz1–3 maddeleri; **yanlış yeşil** ayrıca. Ayrıca: `eszamanlilik.py` (senin) aynı hava klasörünü okuyor; saat düzeltmesi (pv_hava.om_yerel) ona da gerekiyor mu (3 Kasım UYARI'sıyla aynı iş).
+Dosya: PR #49 (https://github.com/volkanGRGN/KKTC-hackathon/pull/49), docs/log/2026-11-08-volkan-uretici-1.7-saat-sicaklik.md
+Neden: volkan.md KARAR 8 Kasım 16:36.
 Durum: bekliyor
