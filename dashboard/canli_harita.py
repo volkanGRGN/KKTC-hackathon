@@ -269,7 +269,7 @@ canvas {display:block; width:100%; height:100%; touch-action:none;}
 .kart .olc.kaldir {background:transparent; color:#cfe0f5;}
 .dugmeler, .yakinlik {position:absolute; display:none; gap:6px; z-index:2;}
 .dugmeler {top:10px; right:10px;}
-.yakinlik {right:10px; bottom:28px; flex-direction:column; align-items:flex-end;}
+.yakinlik {right:10px; bottom:10px; flex-direction:column; align-items:flex-end;}
 .yakinlik .sira {display:flex; gap:6px;}
 .dugmeler button, .yakinlik button {font:600 12.5px var(--st-font, sans-serif); padding:6px 12px; border-radius:999px;
     cursor:pointer; border:1px solid rgba(128,128,128,.45); background:rgba(255,255,255,.92); color:#1f2933;}

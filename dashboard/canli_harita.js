@@ -20,7 +20,8 @@ const KASABA_ARA = 0.85;
 const S_ANIM_EN_COK = 320; // px/km: animasyonda en yakın görünüm (bir mahalle)
 const S_EN_COK = 2500; // px/km: elle yakınlaşmanın sınırı
 const UST_PAY = 64; // px: üstteki etiket ve başlık kutusu, harita altında kalmasın
-const ALT_PAY = 58; // px: alttaki lejant ve düğmeler, harita altında kalmasın
+const ALT_PAY = 76; // px: alttaki lejant, kaynak satırı ve düğmeler, harita altında kalmasın
+const DUGME_PAY = 150; // px: sağ alttaki yakınlaşma düğmeleri; lejant buraya taşmaz
 const AD_ESIK = 45; // px/km: bundan uzakta kasaba adları görünür
 const FONT = '"Source Sans Pro", "Source Sans 3", system-ui, -apple-system, sans-serif';
 
@@ -223,17 +224,29 @@ function yazilarCiz(S, baslik) {
   let y = 10;
   y += kutuYazi(S, V.etiket, 10, y, 12.5, false) + 6;
   if (baslik) kutuYazi(S, baslik, 10, y, 17, true);
-  // lejant: biçim satırı, renk satırı
-  const satirlar = [[["ölçülen (dolu)", null, true], ["tahmin (halka)", null, false]],
-    (V.lejant || []).map(([ad, h]) => [ad, h, null])];
+  // lejant: biçim satırı, renk satırı; dar haritada sağ alttaki düğmelere taşmasın diye satırlar yeniden dizilir
+  const bicim = [["ölçülen (dolu)", null, true], ["tahmin (halka)", null, false]];
+  const renkler = (V.lejant || []).map(([ad, h]) => [ad, h, null]);
   ctx.font = `500 12px ${FONT}`;
-  const genislik = satirlar.map((s) => s.reduce((t, [ad]) => t + 22 + ctx.measureText(ad).width + 10, 0));
+  const oge = ([ad]) => 22 + ctx.measureText(ad).width + 10;
+  const enGenis = Math.max(160, W - 20 - DUGME_PAY);
+  let satirlar = [bicim, renkler];
+  if (satirlar.some((s) => s.reduce((t, o) => t + oge(o), 0) > enGenis)) {
+    satirlar = [[]];
+    let dolu = 0;
+    [...bicim, ...renkler].forEach((o) => {
+      if (dolu + oge(o) > enGenis && satirlar[satirlar.length - 1].length) { satirlar.push([]); dolu = 0; }
+      satirlar[satirlar.length - 1].push(o); dolu += oge(o);
+    });
+  }
+  const genislik = satirlar.map((s) => s.reduce((t, o) => t + oge(o), 0));
   const kw = Math.max(...genislik) + 10, kh = satirlar.length * 20 + 10;
+  const ky = H - kh - (V.zemin.atif ? 24 : 10); // altında kaynak satırı
   ctx.fillStyle = T.kutu;
-  ctx.beginPath(); ctx.roundRect(10, H - kh - 10, kw, kh, 7); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(10, ky, kw, kh, 7); ctx.fill();
   satirlar.forEach((satir, i) => {
     let x = 20;
-    const yy = H - kh - 10 + 15 + i * 20;
+    const yy = ky + 15 + i * 20;
     satir.forEach(([ad, renk, olculu]) => {
       const c = renk || T.soluk;
       ctx.beginPath(); ctx.arc(x + 6, yy, 5.5, 0, PI2);
@@ -247,9 +260,9 @@ function yazilarCiz(S, baslik) {
       x += 22 + ctx.measureText(ad).width + 10;
     });
   });
-  if (V.zemin.atif) {
-    ctx.font = `400 10.5px ${FONT}`; ctx.fillStyle = T.soluk; ctx.textAlign = "right";
-    ctx.fillText(`Ada: Natural Earth · Girne: ${V.zemin.atif}`, W - 10, H - 10);
+  if (V.zemin.atif) { // kaynak satırı lejantın altında, solda: sağ alt köşe düğmelerin
+    ctx.font = `400 10.5px ${FONT}`; ctx.fillStyle = T.soluk; ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    ctx.fillText(`Ada: Natural Earth · Girne: ${V.zemin.atif}`, 12, H - 8);
   }
   ctx.restore();
 }
