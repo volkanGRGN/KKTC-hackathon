@@ -48,4 +48,44 @@ Okuma: tepe saati, sıcaklık doğru saate oturunca belirgin iyileşti (+9 puan)
 - PR: #43'ün üstünde; #43 birleşince yalnız 1.7 farkı görünür. Birleşme Volkan'ın sözüyle.
 - Bundan önce "1.7" diye anılan BUILD 1 listesi (gerçek faz dağılımı, kapalı döngü düşüm, sızma kontrolü, Nisan → yaz) artık **1.8**.
 
+## Sınav 61–70 — bir kez (Can, 8 Kasım) [Hesap; farazi, gösterim]
+Kim / nasıl: Can, Windows, dal `veri/saat-sicaklik-pv` 772fa64; komutlar `docs/istek/can.md` "UYARI! 8 Kasım 16:36" aynen. 61–70 ilk kez üretildi, ayar sonucuna bakılmadan bir kez koşuldu; üretim 10 şehir 37–52 sn. Rakamlar Can'ın KONTROL girdisinden (`docs/istek/volkan.md`, 2d84516). Çıktılar Can'ın makinesinde, depoda yok; Mac teyidi yapılmadı. Bu koşuda B-Y2 yaz eğimi PR'ın bugünkü hâliyle 0,065.
+
+**Panel (faz3)**
+- **Yanlış yeşil 0/64 GEÇTİ** (en kötü şehir 0/6). Dolu trafoya "yer var": %40 kuralı 40/57, model 0/57.
+- Bayrak isabeti %68,8 (16 bayrak; eşik 0,56) GEÇTİ. Sarı %63,2 UYARI.
+- **Kaç ev hatası KALDI:** ortanca karamsar 10, iyimser 4, orta 4 ev (eşik ≤ 2, en az bir sayı; n 225).
+- Olasılık kovaları karamsar: 0,5–0,7 kovasında söylenen %57,7 ↔ gerçek %36,2.
+
+**Öğlen yükü (faz2)**
+- Arketip %76,8 (eşik %75; en kötü sehir-061 %46,4), şehirler arası 1,13, düşük güven %10,7 (en kötü sehir-061 %35,7) GEÇTİ.
+- **Öğlen yük hatası KALDI:** ortanca %12,2, **P90 %30,1** (eşik %30); en kötü sehir-063 %17,3 / %41,4. İspanya satırları komutta yoktu, ölçülmedi.
+
+**Faz1** 5/5 GEÇTİ: en düşük gerilim 201,7 V (sehir-061 T34, yılın tepesi), 207 V altı 2/400 (%0,5); üretim süresi en uzun 51,7 sn.
+
+**Yük haritası** (`tepe.py` özeti, ölçülmeyen 280 trafo)
+- Tepe hatası ortanca **%8,2**, P90 **%19,9**; %80 bant %98,2, %95 bant %100 (geniş, güvenli yön).
+- Tepe saati ±60 dk %53,2; iki adaydan biri %59,3; dönem %70,4.
+- Doluluk hatası ortanca 3,0 / P90 8,3 yüzde puan; bant içinde %98,9. **≥ %80 dolu 14/14 yakalandı** (104 uyarı); ≥ %100 dolu 2/2 (51 uyarı), orta tahmin 1/2.
+- **Akşam 207 V:** gerçekte altında 2/280, yakalanan 1/2. "Yeterli" denen 214 trafodan 1'i gerçekte 207 V altında: **sehir-061 T34** (köy, 100 kVA, 3 hat, en uzun 826 m, ABC95): gerçek 201,7 V; tahmin orta 231,7, P10 212,2; 207 V altı olasılığı %7,5. Öbürü (sehir-065 T25, şehir konutu, gerçek 202,8 V) P10 155,3 ile yakalandı.
+
+**Bağlam** (farklı şehir ve üretici sürümleri; yalnız yön için)
+- Akşam gerilimi "yeterli"de yanlış: 41–50 (1.5) 211'de 0, 51–60 (1.6) 230'da 0, ayar 1–10 (1.7) 223'te 0 → 61–70'teki T34 yük tarafının ilk yanlış "yeterli"si.
+- T34'ün tipi 51–60'taki sehir-055 T36 ile aynı (köy, 100 kVA, ~850 m ABC95): orada üreticinin hat kuralı düşümü ~16 V az görüyordu, dünyanın en düşük gerilimi 199,0 V ([1.6 günlüğü](2026-11-01-volkan-uretici-1.6.md), Ek 11:01). T34'ün sebebi (yük mü, hat mı, dünya mı) incelenmedi [Yorum].
+- Öğlen P90: 21–30 %27,0, 31–40 %28,1, 41–50 %30,1 (KALDI, eşik oynatılmadı, KARAR 1 Kasım 10:26), 51–60 (1.6) GEÇTİ, 61–70 %30,1. Eşiğin çevresinde gidip geliyor. 1.6 ↔ 1.7 öğlen farkı ayar 1–10'da ölçülmedi; bu KALDI'nın 1.7'den gelip gelmediği bilinmiyor.
+- Kaç ev: ayar 1–10'da 1.6 → 1.7 orta 2 → 3 ev, gerçek P90 üstü %8,2 → %13,9; 61–70'teki KALDI aynı yönde. `kac_ev_olasilik.py` öğlen güneşi `kac_ev.GUNES_KW_KWP` = 1,0 kW/kWp × `PV_DERATE`: saat ve sıcaklık yok; dünya artık `pv_hava.panel_carpani` ve yerel saatli ışınımla üretiyor [Yorum: kod okundu, etkisi ayrı ölçülmedi]. Yön karamsar (model gerçekten az ev söylüyor), yanlış yeşil yok.
+
+**Eşzamanlılık** (Can'ın günlüğü, [2026-11-01-can-eszamanlilik.md](2026-11-01-can-eszamanlilik.md) Ek 8 Kasım, 7270e25): `eszamanlilik.py` Open-Meteo saatini düzeltince Temmuz yaz eğimi 0,065 → 0,058 (P10–P90 0,051–0,068), tasarım tepesi +%2. Bu sınav 0,065 ile.
+
+### Okuma [Yorum]
+- En kritik ölçü (panelde yanlış yeşil) 0; yük haritasının tepe hatası ve dolu yakalama önceki sınav şehirleriyle aynı düzeyde ya da iyi.
+- İki KALDI'dan kaç ev yönü bilinen ve güvenli (karamsar); öğlen P90 eşiğin 0,1 puan üstünde, 41–50'de de aynıydı. İkisi de bu sınavda yanlış yeşil üretmedi.
+- T34 güvensiz yönde tek kaçırma (1/214, %0,5); tipi uzun köy hattı.
+
+### Karar / sıradaki
+- Bloklama ve birleştirme Volkan'da; birleşme yalnız açık "birleştir" sözüyle. 61–70 artık görülmüş: bundan sonraki yöntem değişikliğinin sınavı 71–80'de bir kez.
+- #49 birleşince: `tepe.py` B-Y2 sabiti 0,065 → 0,058 (BUILD 1); `eszamanlilik.py` saat okuması `pv_hava.om_yerel` ile (Can).
+- Ayrı iş (BUILD 2): `kac_ev_olasilik.py` öğlen güneşini dünyanın saat ve sıcaklık hesabıyla hizalamak; ayar 1–10, sınav 71–80. Sırası (#49'dan önce mi sonra mı) Volkan'a soruldu.
+- Ayrı iş: T34 tipi (uzun köy hattı) akşam gerilimi kaçırmasının sebebi.
+
 <!-- Append-only: eskiyi değiştirme, yeni tarihli dosya ekle. -->
