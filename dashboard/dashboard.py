@@ -787,11 +787,11 @@ def genel_sayfa():
 def main():
     st.set_page_config(page_title="Trafo Görünürlük Haritası · Dashboard", page_icon="⚡", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
-    sayfalar = [st.Page(genel_sayfa, title="Genel bakış", icon=":material/dashboard:", default=True)]
+    # Açılışta canlı tahmin haritası (Volkan, 8 Kasım: "Harita"); genel bakış ikinci sırada
+    sayfalar = [st.Page(canli_sayfa.sayfa, title="Canlı tahmin", icon=":material/bolt:", url_path="canli", default=True),
+                st.Page(genel_sayfa, title="Genel bakış", icon=":material/dashboard:", url_path="genel")]
     if harita_sayfa.KULLANILABILIR:  # Civan'ın harita/ui düzeni varsa (yoksa sayfa gizli)
         sayfalar.append(st.Page(harita_sayfa.sayfa, title="Harita", icon=":material/map:", url_path="harita"))
-    sayfalar.append(st.Page(canli_sayfa.sayfa, title="Canlı tahmin", icon=":material/bolt:",
-                            url_path="canli"))
     st.navigation(sayfalar, position="top").run()  # kenar menü yok, sayfalar üstte (Volkan, 8 Kasım)
 
 
