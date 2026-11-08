@@ -736,12 +736,13 @@ def genel_sayfa():
     icerik = json_oku(ICERIK_DOSYASI) or {}
     kimlik_bandi(icerik.get("kimlik", {}))
 
-    secili_set, klasorler = veri_seti_sec()
+    bant, sec_veri, sec_sehir = st.columns([3, 1.1, 1.1], vertical_alignment="center")  # kenar menü yok
+    secili_set, klasorler = veri_seti_sec(sec_veri)
     tek = None
     if klasorler:
-        secenek = st.sidebar.selectbox(
-            "Şehir", ["hepsi"] + klasorler, key="genel_sehir",
-            format_func=lambda p: f"Bütün şehirler ({len(klasorler)})" if p == "hepsi" else p.name,
+        secenek = sec_sehir.selectbox(
+            "Şehir", ["hepsi"] + klasorler, key="genel_sehir", label_visibility="collapsed",
+            format_func=lambda p: f"Bütün şehirler ({len(klasorler)})" if p == "hepsi" else f"Şehir: {p.name}",
         )
         tek = None if secenek == "hepsi" else secenek
 
@@ -749,7 +750,8 @@ def genel_sayfa():
     if klasorler:
         t_hepsi = birlesik_tablo(tuple(klasorler))
         t = t_hepsi if tek is None else t_hepsi[t_hepsi["sehir"] == sehir_no(tek)]
-        veri_bandi([tek] if tek else klasorler, t)
+        with bant:
+            veri_bandi([tek] if tek else klasorler, t)
 
     # Sunumda görünenler önde, teknik tablolar "Ekip için"de (Volkan, 1 Kasım: pitch'te herkes anlasın)
     ozet, tutuyor, proje, ekip = st.tabs(["Özet", "Ne kadar tutuyor", "Proje ve ekip", "Ekip için"])
@@ -790,7 +792,7 @@ def main():
         sayfalar.append(st.Page(harita_sayfa.sayfa, title="Harita", icon=":material/map:", url_path="harita"))
     sayfalar.append(st.Page(canli_sayfa.sayfa, title="Canlı tahmin", icon=":material/bolt:",
                             url_path="canli"))
-    st.navigation(sayfalar).run()
+    st.navigation(sayfalar, position="top").run()  # kenar menü yok, sayfalar üstte (Volkan, 8 Kasım)
 
 
 if __name__ == "__main__":

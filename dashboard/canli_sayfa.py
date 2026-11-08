@@ -22,7 +22,7 @@ from canli_harita import DOLULUK_SINIF, doluluk_sinifi
 from ortak import *  # noqa: F401,F403 — sabitler, renkler, biçim ve veri okuma (ortak.py)
 
 ONERI_SAYISI = 12  # ürünün tasarımı: 40 trafodan 12'si ölçülür (sablon.py OLCULU_ANA)
-HARITA_YUKSEKLIK = 660
+HARITA_YUKSEKLIK = 760  # en çok; asıl yükseklik ekrana göre (canli_harita.js yukseklikBul)
 RENK_KISA = {"yesil": "ilk 2 başvuru güvenle sığar", "sari": "emin değiliz, önce ölç", "kirmizi": "büyük ihtimalle dolu"}
 KATMAN_ADI = {"yuk": "Trafo ne kadar dolu (yaz akşamı)", "panel": "Güneşe ne kadar yer var (bahar öğleni)"}
 
@@ -349,7 +349,11 @@ def tahmin_tablosu(sonuc, gercek):
 # ---------- sayfa ----------
 
 def sayfa():
-    _, klasorler = veri_seti_sec()
+    # Üstte tek satır başlık ve seçimler, altında düğmeler; harita açılışta ekranın geri kalanını doldurur
+    # (Volkan, 8 Kasım: "açtığım anda önüme harita çıkması lazım", kenar menü yok)
+    bas, sec_veri, sec_sehir = st.columns([2.4, 1, 1], vertical_alignment="center")
+    bas.markdown("### Kıbrıscık'ta canlı tahmin")
+    _, klasorler = veri_seti_sec(sec_veri)
     if not klasorler:
         st.info("Şehir verisi yok. Deneme şehri üretmek için:")
         st.code("python3 src/sehir_uret.py 1 10", language="bash")
@@ -358,7 +362,8 @@ def sayfa():
     if not gerekli:
         st.info("Canlı tahmin için şehir klasöründe yuk_5dk.csv gerekir (ölçülecek trafoların yükü).")
         return
-    klasor = st.sidebar.selectbox("Şehir", gerekli, key="canli_sehir", format_func=lambda p: p.name)
+    klasor = sec_sehir.selectbox("Şehir", gerekli, key="canli_sehir", label_visibility="collapsed",
+                                 format_func=lambda p: f"Şehir: {p.name}")
 
     h = hazir(klasor)
     a = anahtarlar(klasor)
@@ -368,10 +373,7 @@ def sayfa():
     oneri = canli.oneri(h, ONERI_SAYISI)
     sinav_var = (klasor / "cevap_anahtari.csv").exists() and sehir_no(klasor) < 800
 
-    st.markdown("## Kıbrıscık ülkesinde canlı tahmin")
-    st.caption("Girne'de birkaç trafoyu ölçüyoruz; model gerisini tahmin ediyor.")
-
-    ust = st.columns(4)
+    ust = st.columns([1.1, 1.1, 1, 0.8, 0.8])
     ust[0].button(f"{ONERI_SAYISI} trafoyu ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, True),
                   width="stretch", help="Ürünün seçtiği 12 trafo: birbirine benzeyenler değil, farklı türden trafolar.")
     ust[1].button("Bir trafo daha ölç", on_click=_oneri_ekle, args=(a, h["nolar"], oneri, False), width="stretch")
@@ -384,7 +386,7 @@ def sayfa():
                       help=f"Haritayı kapatır; Girne'de bir mahalleden başlayıp önerilen {ONERI_SAYISI} trafoyu ölçer, "
                            "sonra adaya açılır (yarım dakika).")
     ust[3].button("Sıfırla", on_click=_sifirla, args=(a,), width="stretch", help="Bütün ölçümleri siler.")
-    with st.expander("Ayrıntı"):
+    with ust[4].popover("Ayrıntı", icon=":material/tune:", width="stretch"):
         katman = st.radio("Haritada hangi soru", ["yuk", "panel"], horizontal=True, key="canli_katman",
                           format_func=lambda k: KATMAN_ADI[k])
         sinav = st.toggle("Gerçekle karşılaştır (deneme şehrinin gerçek cevabı; model görmez)", value=False,

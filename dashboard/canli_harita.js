@@ -21,6 +21,7 @@ const S_ANIM_EN_COK = 320; // px/km: animasyonda en yakın görünüm (bir mahal
 const S_EN_COK = 2500; // px/km: elle yakınlaşmanın sınırı
 const UST_PAY = 64; // px: üstteki etiket ve başlık kutusu, harita altında kalmasın
 const ALT_PAY = 76; // px: alttaki lejant, kaynak satırı ve düğmeler, harita altında kalmasın
+const UST_ALAN = 200; // px: sayfanın üstü (menü, başlık, düğmeler); harita açılışta ekranın geri kalanını doldurur
 const DUGME_PAY = 150; // px: sağ alttaki yakınlaşma düğmeleri; lejant buraya taşmaz
 const AD_ESIK = 45; // px/km: bundan uzakta kasaba adları görünür
 const FONT = '"Source Sans Pro", "Source Sans 3", system-ui, -apple-system, sans-serif';
@@ -569,9 +570,10 @@ function dongu(S) {
   requestAnimationFrame(adim);
 }
 
-function yukseklikBul(S, W) { // yükseklik genişliğe göre: dar ekranda haritanın altı üstü boş deniz olmasın
+function yukseklikBul(S, W) { // ekranın kalanı kadar (açılışta harita tümüyle görünsün); dar haritada boş deniz olmasın
   const enCok = S.veri ? S.veri.yukseklik : 600;
-  return Math.round(Math.max(380, Math.min(enCok, W * 0.5 + UST_PAY + ALT_PAY)));
+  const ekranda = window.innerHeight - UST_ALAN;
+  return Math.round(Math.max(360, Math.min(enCok, ekranda, W * 0.5 + UST_PAY + ALT_PAY)));
 }
 
 function boyutla(S) {
@@ -638,6 +640,7 @@ function kur(parent) {
     kart: null, uzerinde: null, surukle: null, calisiyor: false, kirli: true, tetik: () => {},
   };
   new ResizeObserver(() => boyutla(S)).observe(kok);
+  window.addEventListener("resize", () => { if (S.kok.isConnected) boyutla(S); }); // ekran yüksekliği değişince
   const konum = (ev) => {
     const b = tuval.getBoundingClientRect();
     return [ev.clientX - b.left, ev.clientY - b.top];

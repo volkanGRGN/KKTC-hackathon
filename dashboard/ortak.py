@@ -115,14 +115,9 @@ CSS = """
 <style>
 :root {--murekkep:#18222D; --soluk:#5B6573; --cizgi:#DDD8CD; --kart:#FFFFFF; --ana:#0E6F73; --ana-koyu:#0B3B40;
        --zemin:#F5F3EE; --ana-acik:#E3F0EF;}
-.block-container {padding:3.2rem 2.75rem 3rem; max-width:1240px;}
-[data-testid="stSidebar"][data-collapsed="false"] {width:14.5rem !important; min-width:14.5rem !important;}
-.block-container h2 {font-size:1.85rem;}
+.block-container {padding:4rem 2.75rem 3rem; max-width:1240px;}
+.block-container h3 {padding:0; margin:0;}
 [data-testid="stHeader"] {background:rgba(245,243,238,.85); backdrop-filter:blur(6px);}
-[data-testid="stSidebar"] [data-testid="stCaptionContainer"], [data-testid="stSidebar"] small {color:rgba(230,239,238,.66) !important;}
-[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {color:#FFFFFF; letter-spacing:-.01em;}
-[data-testid="stSidebarNav"] a[aria-current="page"] {background:rgba(159,211,207,.16) !important;}
-[data-testid="stSidebarNav"] a[aria-current="page"] span {color:#FFFFFF !important; font-weight:650;}
 [data-testid="stAppViewContainer"] .stMarkdown, [data-testid="stAppViewContainer"] p {font-variant-numeric:tabular-nums;}
 h2, h3 {letter-spacing:-.01em;}
 [data-testid="stCaptionContainer"] {color:var(--soluk);}
@@ -370,14 +365,15 @@ def etiket(no, ayar):
     return "gösterim — Kıbrıscık ülkesindeki şehirler"  # Volkan, 1 Kasım: "farazi şehir" değil
 
 
-def veri_seti_sec():
-    """Sol menü: veri seti (iki sayfada aynı seçim). -> (seçili klasör ya da None, şehir klasörleri)."""
-    st.sidebar.header("Veri")
+def veri_seti_sec(yer=None):
+    """Veri seti seçimi sayfanın üst satırında (iki sayfada aynı seçim; kenar menü yok, Volkan 8 Kasım).
+    yer: seçimin konacağı sütun. -> (seçili klasör ya da None, şehir klasörleri)."""
+    yer = yer or st
     setler = veri_setleri()
     if not setler:
         return None, []
-    secili = st.sidebar.selectbox("Veri seti", setler, format_func=kisa_yol, key="veri_seti",
-                                  help="data/synthetic ve altındaki şehir klasörü içeren klasörler.")
+    secili = yer.selectbox("Veri seti", setler, key="veri_seti", label_visibility="collapsed",
+                           format_func=lambda p: "Veri: " + kisa_yol(p).removeprefix("data/"))
     return secili, sehir_klasorleri(secili)
 
 

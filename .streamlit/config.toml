@@ -28,3 +28,6 @@ backgroundColor = "#0F2E33"
 secondaryBackgroundColor = "#173F45"
 textColor = "#E6EFEE"
 borderColor = "#24525A"
+
+[client]
+toolbarMode = "minimal"  # "Deploy" düğmesi görünmesin (sunum)
