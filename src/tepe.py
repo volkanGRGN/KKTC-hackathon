@@ -67,6 +67,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pv_hava  # noqa: E402
 import profiller  # noqa: E402  EAC sınıf eğrileri (Can'ın okuyucusu)
 
 KOK = Path(__file__).resolve().parent.parent
@@ -170,7 +171,9 @@ def eac_hazirla():
 
 
 def hava_oku():
-    """{tarih: (24 sıcaklık °C, 24 ışınım W/m²)}; yalnız 24 saati tam günler."""
+    """{tarih: (24 sıcaklık °C, 24 ışınım W/m²)}; yalnız 24 saati tam günler. Etiket sabit UTC+2 (yaz saatsiz): üretici
+    1.7'den beri yerel saate çevrilir (pv_hava.om_yerel); ışınım [L−1, L) ortalaması, sıcaklık L'de anlık. Önceden etiket
+    saati doğrudan yerel saat sayılıyordu: ışınım kışın 1 saat geç, sıcaklık yazın 1 saat erken."""
     gun = {}
     for yol in HAVA_DOSYALARI:
         if not yol.exists():
@@ -183,9 +186,11 @@ def hava_oku():
         for r in satir[bas + 1:]:
             if not r or not r[it] or not r[ig]:
                 continue
-            z = dt.datetime.fromisoformat(r[0])
-            t, g = gun.setdefault(z.date(), ([None] * 24, [None] * 24))
-            t[z.hour], g[z.hour] = float(r[it]), float(r[ig])
+            L = dt.datetime.fromisoformat(r[0])
+            zt, zg = pv_hava.om_yerel(L, ortalama=False), pv_hava.om_yerel(L, ortalama=True)
+            gun.setdefault(zt.date(), ([None] * 24, [None] * 24))[0][zt.hour] = float(r[it])
+            gun.setdefault(zg.date(), ([None] * 24, [None] * 24))[1][zg.hour] = float(r[ig])
+    gun = {d: (pv_hava.bosluk_doldur(t), pv_hava.bosluk_doldur(g)) for d, (t, g) in gun.items()}
     return {d: (t, g) for d, (t, g) in gun.items() if None not in t and None not in g}
 
 
@@ -242,6 +247,10 @@ def ay_kosullari(hava, yil, kip, tasarim=None):
         if kip == 'tasarim' and m != NISAN:
             dT = tasarim[m]
         ghi = np.array([statistics.fmean(hava[d][1][h] for d in gunler) for h in range(24)])
+        # 1.7: panel için sıcaklıklı ışınım (pv_hava.panel_carpani); tepe gününde hava ayın saatlik ortalaması ± ΔT
+        isaret = 0.0 if m == NISAN else (1.0 if m in YAZ else -1.0)
+        tsa = [statistics.fmean(hava[d][0][h] for d in gunler) + isaret * dT for h in range(24)]
+        ghi = ghi * np.array([pv_hava.panel_carpani(tsa[h], ghi[h]) for h in range(24)])
         out[m] = dict(dT=dT, ghi=np.repeat(ghi, ADIM // 24), gun=len(gunler))
     return out
 
