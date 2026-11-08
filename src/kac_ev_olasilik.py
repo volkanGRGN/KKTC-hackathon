@@ -26,6 +26,16 @@ Konum payı (ADR-0015 m. 4; yalnız analiz, `kac_ev.csv`'ye yazılmaz — karar 
   sığma olasılığı ≥ YESIL_P ve güven yüksekse o yer "büyük olasılıkla evet". Renksiz trafoda neredeyse hep 0 çıktı.
 Sayılar: kac_ev_karamsar = çekilişlerin P10'u, kac_ev_iyimser = P90'ı, kac_ev_orta = ortanca.
 
+Öğlen güneşi saat ve sıcaklıkla hizalı (8 Kasım; üretici 1.7'nin saat düzeltmesinden sonra): eskiden tam güneş
+(1 kW/kWp × PV_DERATE) öğlenin en düşük yüküyle aynı anda sayılıyordu. Yerel saatle Nisan güneşi 12:30'da tepe yapıyor,
+öğlen penceresinin (11:00–14:00) en düşük yükü çoğu trafoda pencerenin başında; ikisi aynı anda gelmiyor. Şimdi her
+gündüz adımında güneş = Nisan açık gün zarfı (`pv_hava.gunes_zarfi`, Open-Meteo Lefkoşa 2018–2022, yerel saat, sıcaklıklı;
+dünyanın hava yılları 2023–2025 kullanılmaz) ve yük = çekilen öğlen en düşük yük × trafonun arketip biçimi (`arketipler.csv`,
+`sablon.py`; öğlenin en düşüğüne bölünmüş, iş günü ve tatilin küçüğü). Her çözümde iki an değerlendirilir: toplam net
+vermenin en büyük olduğu adım ve güneşin tepesi (hat sonundaki panelli evin en kötü anı ikincisi olabilir); kötüsü sayılır.
+Çekilişler (rastgele akış) değişmez. `--eski-gunes` eski kural; `trafo_cek(..., bicim=None)` çağıran eski betikler
+(`olcum_sirasi`, `bilgi_degeri`, `pv_acilma`, `basvuru`, `konum_payi`) eski kuralda kalır.
+
 Faz 3'ün resmi hesabı (ADR-0011, karar masası 18:46).
 Okur: trafolar.csv, tahmin.csv. cevap_anahtari.csv'yi okumaz.
 Yazar: kac_ev.csv, sözleşme §6 (1.3): karamsar / iyimser / renk bu hesaptan; isil_pay_kw, gerilim_pay_kw_*,
@@ -47,8 +57,16 @@ _argv, sys.argv = sys.argv, sys.argv[:1]
 import trafo_bos_kapasite as tb  # noqa: E402
 sys.argv = _argv
 import kac_ev as ke  # noqa: E402
+import pv_hava  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
+OGLE = range(132, 168)                  # 11:00–14:00 (sözleşme), 5 dakikalık adım
+ADIM = 288
+# Nisan açık gün zarfı için hava: Open-Meteo Lefkoşa 2018–2022 (KTEMO ayar yılları; dünyanın 2023–2025'i değil) [Hesap: zarfın
+# tepesi 1,011 kW/kWp 12:30'da, 11:00'de 0,901; pv_hava.gunes_zarfi]
+GUNES_DOSYALARI = [KOK / 'data' / 'raw' / 'open-meteo-lefkosa' / 'lefkosa_saatlik_2018_2022.csv']
+ESKI_GUNES = False                      # True: eski kural (tam güneş + öğlen en düşük yük aynı anda); --eski-gunes
+_ZARF = {}
 CEKILIS = 40
 KIRMIZI_P = 0.5                         # bugün aşma olasılığı bunun üstündeyse kırmızı [Yorum]
 YESIL_P = 0.98                          # ilk iki başvurunun sığma olasılığı (canlı bütçe %2, ADR-0010)
@@ -163,12 +181,71 @@ def yuk_dagit(evler, toplam, rng):
     return {h['id']: toplam * x / s for h, x in zip(evler, w)}
 
 
-def durum(ag, evler, yuk, ek, m, warm=None, iters=6):
-    gunes = ke.GUNES_KW_KWP
-    net = {h['id']: ((yuk[h['id']] - (h['pv'] + ek.get(h['id'], 0.0)) * gunes) * 1000,
-                     yuk[h['id']] * Q_ORAN * 1000) for h in evler}
+def durum(ag, evler, yuk, ek, m, warm=None, iters=6, an=None):
+    """an = (adım, güneş kW/kWp, yük çarpanı); None: eski kural (tam güneş, öğlen en düşük yük)."""
+    gunes, c = (ke.GUNES_KW_KWP, 1.0) if an is None else (an[1] * tb.PV_DERATE, an[2])
+    net = {h['id']: ((yuk[h['id']] * c - (h['pv'] + ek.get(h['id'], 0.0)) * gunes) * 1000,
+                     yuk[h['id']] * c * Q_ORAN * 1000) for h in evler}
     V, s_tr = tb.solve(ag, net, m, warm, iters=iters)
     return V, max(tb.house_voltages(ag, V).values()), s_tr
+
+
+def gunes_zarfi():
+    """Nisan açık gün zarfı (288 adım, kW/kWp) ve gündüz adımları; dosya yoksa None (eski kural)."""
+    if 'z' not in _ZARF:
+        yollar = [y for y in GUNES_DOSYALARI if y.exists()]
+        z = pv_hava.gunes_zarfi(yollar) if yollar else None
+        if z is None:
+            print('UYARI: Open-Meteo 2018–2022 dosyası yok; öğlen güneşi eski kuralla (tam güneş, en düşük yük aynı anda)')
+        _ZARF['z'] = z
+        _ZARF['gunduz'] = [i for i in range(ADIM) if z and z[i] > 0.01]
+        _ZARF['tepe'] = max(range(ADIM), key=lambda i: z[i]) if z else None
+    return _ZARF['z']
+
+
+def yuk_bicimleri(klasor):
+    """arketipler.csv (sablon.py) -> {arketip: 288 çarpan}: arketip eğrisi ÷ öğlen (11:00–14:00) en düşüğü; iş günü ve
+    tatilin her adımda küçüğü (temkinli: düşük yük → çok verme). Dosya yoksa {}."""
+    yol = klasor / 'arketipler.csv'
+    if not yol.exists():
+        return {}
+    egri = {}
+    with open(yol, encoding='utf-8', newline='') as fh:
+        for r in csv.DictReader(fh):
+            egri.setdefault((r['arketip'], r['gun_turu']), [0.0] * ADIM)[int(r['adim'])] = float(r['oran'])
+    out = {}
+    for (a, _), e in egri.items():
+        alt = min(e[i] for i in OGLE)
+        if alt <= 0:
+            continue
+        b = [x / alt for x in e]
+        out[a] = b if a not in out else [min(x, y) for x, y in zip(out[a], b)]
+    return out
+
+
+def anlar(p_kw, l_kw, bicim):
+    """Değerlendirilecek anlar: toplam net vermenin (panel kWp × güneş × PV_DERATE − öğlen en düşük yük × biçim) en büyük
+    olduğu gündüz adımı ve güneşin tepesi. bicim None ya da zarf yoksa [None] (eski kural)."""
+    z = gunes_zarfi() if bicim is not None else None
+    if z is None:
+        return [None]
+    t1 = max(_ZARF['gunduz'], key=lambda i: p_kw * tb.PV_DERATE * z[i] - l_kw * bicim[i])
+    return [(i, z[i], bicim[i]) for i in dict.fromkeys((t1, _ZARF['tepe']))]
+
+
+def durumlar(ag, evler, yuk, ek, m, an_listesi, onceki=None):
+    """Her anda durum(); (anlara göre V, en yüksek ev gerilimi, en büyük trafo yükü). onceki: anlara göre ılık başlangıç
+    (kopyası verilir; solve() yerinde değiştirir). Tek an ve None ise eski durum() çağrısıyla birebir."""
+    Vs, vmax, s_tr = {}, 0.0, 0.0
+    for an in an_listesi:
+        k = None if an is None else an[0]
+        bas = onceki.get(k) if onceki else None
+        if bas is not None:
+            V, v, s = durum(ag, evler, yuk, ek, m, [[list(x) for x in hat] for hat in bas], iters=4, an=an)
+        else:
+            V, v, s = durum(ag, evler, yuk, ek, m, an=an)
+        Vs[k], vmax, s_tr = V, max(vmax, v), max(s_tr, s)
+    return Vs, vmax, s_tr
 
 
 def trafo_satiri(r):
@@ -200,10 +277,10 @@ def renk_ver(p_bugun, p_iki, guven, guven_sarti=None):
     return 'sari'
 
 
-def trafo_cek(tr, t, rng, v0=None, vrng=None, yuk=None):
+def trafo_cek(tr, t, rng, v0=None, vrng=None, yuk=None, bicim=None):
     """Bir trafo için CEKILIS kez: (bugün aşar mı, kaç ev, ilk iki sığar mı) listesi. Ölçüm denemeleri için
     (`olcum_sirasi.py`): v0 = callable(vrng) bara gerilimini, yuk = ölçülen öğlen yükünü verir; bilgi ayrı akıştan,
-    resmi çekilişlerin akışı değişmez."""
+    resmi çekilişlerin akışı değişmez. bicim: trafonun yük biçimi (`yuk_bicimleri`); None ise eski öğlen kuralı."""
     olculen = ke.sayi(t['ogle_min_kw_olculen'])
     mu, sd = yuk_bandi(t)
     sonuc = []
@@ -226,7 +303,8 @@ def trafo_cek(tr, t, rng, v0=None, vrng=None, yuk=None):
             toplam = yuk
         yk = yuk_dagit(evler, toplam, rng)
         m = 1 + rng.uniform(*OG)
-        V, vmax, s_tr = durum(ag, evler, yk, {}, m)
+        p0 = sum(h['pv'] for h in evler)
+        Vs, vmax, s_tr = durumlar(ag, evler, yk, {}, m, anlar(p0, toplam, bicim))
         bugun = vmax > ke.V_SINIR or s_tr > ag['kva']
         adaylar = [h['id'] for h in evler if h['sinif'] == 'abone_konut' and h['pv'] == 0]
         if not adaylar:                       # başvuru ticari aboneden de gelebilir: renk için sanal aday
@@ -236,14 +314,15 @@ def trafo_cek(tr, t, rng, v0=None, vrng=None, yuk=None):
         if not bugun:
             for j, hid in enumerate(adaylar):
                 ek[hid] = ke.YENI_PANEL_KW
-                V2, vmax2, s2 = durum(ag, evler, yk, ek, m, [[list(v) for v in hat] for hat in V], iters=4)
+                an_listesi = anlar(p0 + sum(ek.values()), toplam, bicim)
+                V2s, vmax2, s2 = durumlar(ag, evler, yk, ek, m, an_listesi, Vs)
                 if vmax2 > ke.V_SINIR or s2 > ag['kva']:
                     del ek[hid]
                     if j < 2:
                         ilk_iki = False
                 else:
                     kabul += 1
-                    V = V2
+                    Vs.update(V2s)
         sonuc.append((bugun, kabul, ilk_iki))
     return sonuc
 
@@ -307,12 +386,14 @@ def sehir_calistir(klasor):
     with open(klasor / 'tahmin.csv', encoding='utf-8', newline='') as fh:
         tahmin = {r['trafo_no']: r for r in csv.DictReader(fh)}
     tek = {x['trafo_no']: x for x in ke.sehir_hesapla(klasor)}     # pay sütunları ve %40 kuralı tek denklemden
+    bicimler = None if ESKI_GUNES or gunes_zarfi() is None else yuk_bicimleri(klasor)
     satirlar = []
     for r in trafolar:
         tr = trafo_satiri(r)
         t = tahmin[r['trafo_no']]
         rng = random.Random(f'olasilik-{r["sehir"]}-{r["trafo_no"]}')
-        p_bugun, p_iki, kac = cekilis_ozeti(tr, trafo_cek(tr, t, rng))
+        bicim = None if bicimler is None else bicimler.get(t['arketip'], [1.0] * ADIM)   # arketip yoksa düz yük
+        p_bugun, p_iki, kac = cekilis_ozeti(tr, trafo_cek(tr, t, rng, bicim=bicim))
         renk = renk_ver(p_bugun, p_iki, t['guven'])
         satirlar.append({**tek[r['trafo_no']], 'kac_ev_karamsar': nicel(kac, 0.1), 'kac_ev_iyimser': nicel(kac, 0.9),
                          'renk': renk, 'p_bugun_asar': round(p_bugun, 3), 'p_iki_ev_sigar': round(p_iki, 3),
@@ -335,7 +416,11 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('kok', nargs='?', default=str(KOK / 'data' / 'synthetic'))
     ap.add_argument('--sehir', type=int, help='yalnız bu tohum')
+    ap.add_argument('--eski-gunes', action='store_true',
+                    help='eski öğlen kuralı: tam güneş ve öğlen en düşük yük aynı anda (8 Kasım öncesi)')
     a = ap.parse_args()
+    global ESKI_GUNES
+    ESKI_GUNES = a.eski_gunes
     klasorler = sorted(k for k in Path(a.kok).glob('sehir-*')
                        if (k / 'trafolar.csv').exists() and (k / 'tahmin.csv').exists())
     if a.sehir is not None:

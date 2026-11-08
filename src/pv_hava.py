@@ -17,6 +17,7 @@ Ayar: python3 src/pv_hava.py <ktemo gunluk klasörü> <open-meteo klasörü>  �
 (eski sabit ↔ sıcaklıklı), ayar 2018–2022, sınav 2023–2026.
 """
 import datetime as dt
+import math
 import sys
 
 GAMMA = -0.004          # güç sıcaklık katsayısı, 1/°C [Yorum: kristal silikon veri sayfası aralığı −0,0035…−0,0045]
@@ -56,6 +57,45 @@ def bosluk_doldur(seri):
 def panel_carpani(sicaklik_c, isinim_wm2):
     """Eski sabit 0,82'ye göre sıcaklık çarpanı (Nisan açık öğlede ~1)."""
     return 1 + GAMMA * (sicaklik_c + K_ISINIM * isinim_wm2 - T_REF)
+
+
+def gunes_zarfi(yollar, ay=4, adim=288):
+    """Açık gün zarfı (kaç ev modelinin öğlen güneşi, 8 Kasım): verilen ayın bütün günlerinde, her 5 dakikalık yerel
+    adımda sıcaklıklı panel ışınımının en yükseği; kW/kWp (eğik ışınım ÷ 1000 × `panel_carpani`), PV_DERATE hariç.
+    5 dakikaya çeviriş üreticininkiyle aynı kural: saatlik ortalama ışınım saatin ortasına konur, arası doğrusal;
+    sıcaklık anlık değerlerden doğrusal. yollar: Open-Meteo saatlik CSV'leri (global_tilted_irradiance, temperature_2m)."""
+    import csv
+    g, t = {}, {}
+    for yol in yollar:
+        with open(yol, encoding='utf-8', newline='') as fh:
+            satir = list(csv.reader(fh))
+        b = next(i for i, r in enumerate(satir) if r and r[0] == 'time')
+        gi = next(i for i, x in enumerate(satir[b]) if x.startswith('global_tilted'))
+        si = next(i for i, x in enumerate(satir[b]) if x.startswith('temperature_2m'))
+        for r in satir[b + 1:]:
+            if not r:
+                continue
+            L = dt.datetime.fromisoformat(r[0])
+            if r[gi] != '':
+                an = om_yerel(L, ortalama=True)
+                g.setdefault(an.date(), [0.0] * 24)[an.hour] = float(r[gi]) / 1000
+            if r[si] != '':
+                an = om_yerel(L, ortalama=False)
+                t.setdefault(an.date(), [float('nan')] * 24)[an.hour] = float(r[si])
+    t = {d: bosluk_doldur(v) for d, v in t.items()}
+    zarf = [0.0] * adim
+    for d in sorted(x for x in g if x.month == ay and x in t):
+        h, T = g[d], t[d]
+        ert = t.get(d + dt.timedelta(days=1), [T[23]])[0]
+        for s in range(adim):
+            x = (s + 0.5) * 24 / adim - 0.5                       # ışınım: saatin ortası
+            i, w = math.floor(x), x - math.floor(x)
+            gs = max(0.0, h[min(max(i, 0), 23)] * (1 - w) + h[min(max(i + 1, 0), 23)] * w)
+            x = s * 24 / adim                                     # sıcaklık: saatin kendisi
+            i, w = int(x), x - int(x)
+            ts = T[i] * (1 - w) + (T[i + 1] if i < 23 else ert) * w
+            zarf[s] = max(zarf[s], gs * panel_carpani(ts, gs * 1000))
+    return zarf
 
 
 def _ayar(gun_klasoru, om_klasoru):
