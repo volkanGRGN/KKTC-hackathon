@@ -1505,7 +1505,7 @@ Durum: yapıldı
 
 ## KARAR 8 Kasım 16:36 — Üretici 1.7 (son indirilen verilerle): hava saati ve sıcaklıklı panel kaybı; PR #49; sınav 61–70 Can'da
 Karar: Volkan (8 Kasım): "son indirdiğim datalarla modelimizi tekrar eğit", "GitHub'a pushla, arkadaş ürettirsin". PR #49 (dal `veri/saat-sicaklik-pv`, #43'ün üstünde): Open-Meteo saati yerel saate çevrildi (yazın 1 saat kayma), panel kaybı sıcaklıklı (KTEMO 2018–2022 ile ayarlı). KTEMO sınavı (2023–2026) [Hesap]: Temmuz–Ağustos fazla tahmin ~%10 → ~%4, günlük hata %9,1 → %7,2. Deneme şehirleri: ayar 1–10 (1.6 ↔ 1.7) karar masasında koşuyor; **sınav 61–70 bir kez, Can** (can.md UYARI). BUILD 1'in eski "1.7 listesi" artık 1.8. Birleşme sırası: #43, sonra #49 (Volkan'ın sözüyle).
-Durum: bekliyor (karar masası 1–10; Can 61–70)
+Durum: yapıldı 17:25 — 61–70 bitti (Can), #49 birleşti (d8c7bea); KARAR 8 Kasım 17:25
 
 ## KONTROL 8 Kasım 16:40 — karar masası — üretici 1.7 ayar 1–10 (1.6 ↔ 1.7, aynı tohumlar): bozulan yok; tepe saati +9 puan; sınav 61–70'e geçilebilir
 Ne ölçüldü (Mac, deneme şehri, gösterim): **yük haritası** tepe hatası %8,9 / %21,4 → %9,5 / %21,7; sapma +%6,2 → +%7,4 (güvenli yön); bant %97,5, P90 üstü 0; %80'den dolu 19/19 → 18/18 (120 uyarı); **tepe saati ±60 dk %46,4 → %55,0** (iki adaydan biri %55,4 → %64,6). **Panel** yanlış yeşil 0/64 → 0/64; dolu trafoya "yer var" %40 kuralı 31/40 → 30/37, model 0; kaç ev bandı P90 üstü %8,2 → %13,9 (model tutucu tarafa kaydı: dünyada panel biraz az üretiyor, `kac_ev_olasilik.py` öğlen güneşi değişmedi; ayrı iş). Faz1–3 bütün maddeler GEÇTİ. Ayrıntı PR #49 günlüğü. **Can: 61–70 sınavını başlatabilirsin** (can.md UYARI 8 Kasım).
@@ -1536,4 +1536,13 @@ Ne:
 4. **`eszamanlilik.py` saat düzeltmesi** (günlük 7270e25): yaz eğimi 0,065 → 0,058. Sıra önerim: #49 birleşince ben `eszamanlilik.py`'ye `om_yerel`; BUILD 1 `tepe.py` sabitini 0,058'e. Onay?
 Dosya: .gitignore, docs/data/tablo-bicimi.md (1); PR #44–#46, docs/sunum/ (2); PR #49 (3); src/eszamanlilik.py, src/tepe.py (4)
 Neden: Can sordu (şehirler neden GitHub'da yok); can.md'de bir haftadır bekleyen işler; #49 sonucu. Bloklamıyor.
-Durum: bekliyor
+Durum: kısmen — madde 3 ve 4 KARAR 8 Kasım 17:25 (#49 birleşti; sıra senin önerin gibi); madde 1 ve 2 Volkan'da bekliyor
+
+## KARAR 8 Kasım 17:25 — PR #49 (üretici 1.7) birleşti; kaç ev öğlen güneşi hizası denendi, olumsuz
+Karar: Volkan: "birleştir" (Can'ın 61–70 KONTROL'ünden ve kaç ev denemesinden sonra). #49 main'le güncellendi (8ba594d, yalnız belgeler) ve birleşti (d8c7bea). Main'in üreticisi artık 1.7; `src/pv_hava.py` main'de.
+- **Sınav 61–70 (Can) #49 günlüğünde** [Hesap; farazi, gösterim]: yanlış yeşil 0/64; tepe %8,2 / %19,9; ≥ %80 dolu 14/14. KALDI: öğlen yük P90 %30,1 (41–50'de de %30,1; 1.7'den gelip gelmediği bilinmiyor) ve kaç ev karamsar / iyimser / orta 10 / 4 / 4. Akşam 207 V'ta sehir-061 T34 kaçırıldı ("yeterli" 214'te 1); tipi 51–60'taki T36 gibi uzun köy hattı. Bloklamadı.
+- **Kaç ev öğlen güneşi (BUILD 2; dal `panel/oglen-gunes` abdd632, birleşmez, PR yok):** Volkan'ın "önce düzelt"i üzerine Nisan açık gün zarfı (Open-Meteo 2018–2022, yerel saat, sıcaklıklı) × arketip biçimi denendi. Ayar 1–10'da kaç ev hatası aynı (9 / 2 / 3), P90 üstü %13,9 → %18,2. Eski 1,0 kW/kWp gerçek havanın açık gün tepesiyle aynı (zarf 1,011). KALDI'nın sebebi modelin çift uç varsayımı (en parlak güneş + en düşük yük aynı anda) ↔ dünyanın tek yıllık 14 günlük Nisan cevabı; güvenli yön. Güneş ×0,95 hatayı kapatıyor ama farazi dünyaya uydurmak olur (ADR-0009); gerekçe gerçek trafo ölçümünden gelmeli (pilot). Yöntem değişmedi → 71–80 sınavı gerekmiyor.
+- **Can'ın UYARI'sı (dört karar):** madde 3 — iki KALDI ve T34 #49'u bloklamadı. Madde 4 — sıra Can'ın önerisi gibi: `eszamanlilik.py` saat okuması `pv_hava.om_yerel` ile (Can; can.md UYARI 17:25), `tepe.py` B-Y2 sabiti 0,065 → 0,058 (BUILD 1; yük modeli değiştiği için ayar 1–10, sonra hiç bakılmamış şehirlerde bir kez). Madde 1 ve 2 Volkan'da.
+- **İş tahtasına (DEVIR):** B-Y2 0,058 (BUILD 1); `eszamanlilik.py` saat (Can); uzun köy hattında akşam gerilimi kaçırması (BUILD 1, sebep incelenmedi); öğlen yük P90 sınırda (BUILD 1, `sablon.py`); kaç ev çift uç varsayımı (pilot, gerçek ölçüm). Dashboard ve sunum rakamları hâlâ üretici 1.5 / 41–50 (bilgi).
+Dosya: PR #49, docs/log/2026-11-08-volkan-uretici-1.7-saat-sicaklik.md (sınav 61–70 ve Ek), dal panel/oglen-gunes
+Durum: yapıldı

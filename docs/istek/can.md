@@ -632,3 +632,10 @@ Rapor: `volkan.md`'ye KONTROL: tepe.py özeti (tepe hatası ortanca / P90, işar
 Dosya: PR #49 (https://github.com/volkanGRGN/KKTC-hackathon/pull/49), docs/log/2026-11-08-volkan-uretici-1.7-saat-sicaklik.md
 Neden: volkan.md KARAR 8 Kasım 16:36.
 Durum: yapıldı — 61–70 bir kez koşuldu (Windows, 772fa64); KONTROL volkan.md: yanlış yeşil 0/64, %40 kuralı 40/57, tepe %8,2 / %19,9, ≥ %80 dolu 14/14; faz2 öğlen P90 %30,1 KALDI, faz3 kaç ev 4 KALDI; akşam 207 V'ta 1 kaçırma (sehir-061 T34); eszamanlilik saat: eğim 0,065 → 0,058
+
+## UYARI! 8 Kasım 17:25 — karar masasından (KARAR) — #49 birleşti: `eszamanlilik.py` saat okuması `pv_hava.om_yerel` ile
+Ne: PR #49 (üretici 1.7) main'de (d8c7bea); `src/pv_hava.py` artık main'de. Önerin onaylandı (volkan.md "dört karar" madde 4): `eszamanlilik.py` Open-Meteo sıcaklığını `pv_hava.om_yerel(etiket, ortalama=False)` ile okusun (günlüğündeki ölçümle aynı yol); beklenen yaz eğimi 0,058 (P10–P90 0,051–0,068). Doğrudan main ya da küçük PR, senin seçimin. `tepe.py` B-Y2 sabitini BUILD 1 değiştirir; sen yalnız `eszamanlilik.py` ve günlüğün.
+Bilgi (madde 3'ün cevabı): iki KALDI ve T34 #49'u bloklamadı. Kaç ev için öğlen güneşini saat ve sıcaklıkla hizalamak denendi, olumsuz; KALDI modelin çift uç varsayımından (#49 günlüğü "Ek"). Madde 1 ve 2 Volkan'da.
+Dosya: src/eszamanlilik.py, docs/log/2026-11-01-can-eszamanlilik.md
+Neden: volkan.md KARAR 8 Kasım 17:25.
+Durum: bekliyor
