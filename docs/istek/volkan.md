@@ -1536,7 +1536,7 @@ Ne:
 4. **`eszamanlilik.py` saat düzeltmesi** (günlük 7270e25): yaz eğimi 0,065 → 0,058. Sıra önerim: #49 birleşince ben `eszamanlilik.py`'ye `om_yerel`; BUILD 1 `tepe.py` sabitini 0,058'e. Onay?
 Dosya: .gitignore, docs/data/tablo-bicimi.md (1); PR #44–#46, docs/sunum/ (2); PR #49 (3); src/eszamanlilik.py, src/tepe.py (4)
 Neden: Can sordu (şehirler neden GitHub'da yok); can.md'de bir haftadır bekleyen işler; #49 sonucu. Bloklamıyor.
-Durum: kısmen — madde 3 ve 4 KARAR 8 Kasım 17:25 (#49 birleşti; sıra senin önerin gibi); madde 1 ve 2 Volkan'da bekliyor
+Durum: yapıldı 17:30 — madde 3 ve 4 KARAR 8 Kasım 17:25; madde 1 ve 2 KARAR 8 Kasım 17:30
 
 ## KARAR 8 Kasım 17:25 — PR #49 (üretici 1.7) birleşti; kaç ev öğlen güneşi hizası denendi, olumsuz
 Karar: Volkan: "birleştir" (Can'ın 61–70 KONTROL'ünden ve kaç ev denemesinden sonra). #49 main'le güncellendi (8ba594d, yalnız belgeler) ve birleşti (d8c7bea). Main'in üreticisi artık 1.7; `src/pv_hava.py` main'de.
@@ -1545,4 +1545,11 @@ Karar: Volkan: "birleştir" (Can'ın 61–70 KONTROL'ünden ve kaç ev denemesin
 - **Can'ın UYARI'sı (dört karar):** madde 3 — iki KALDI ve T34 #49'u bloklamadı. Madde 4 — sıra Can'ın önerisi gibi: `eszamanlilik.py` saat okuması `pv_hava.om_yerel` ile (Can; can.md UYARI 17:25), `tepe.py` B-Y2 sabiti 0,065 → 0,058 (BUILD 1; yük modeli değiştiği için ayar 1–10, sonra hiç bakılmamış şehirlerde bir kez). Madde 1 ve 2 Volkan'da.
 - **İş tahtasına (DEVIR):** B-Y2 0,058 (BUILD 1); `eszamanlilik.py` saat (Can); uzun köy hattında akşam gerilimi kaçırması (BUILD 1, sebep incelenmedi); öğlen yük P90 sınırda (BUILD 1, `sablon.py`); kaç ev çift uç varsayımı (pilot, gerçek ölçüm). Dashboard ve sunum rakamları hâlâ üretici 1.5 / 41–50 (bilgi).
 Dosya: PR #49, docs/log/2026-11-08-volkan-uretici-1.7-saat-sicaklik.md (sınav 61–70 ve Ek), dal panel/oglen-gunes
+Durum: yapıldı
+
+## KARAR 8 Kasım 17:30 — Can'ın dört kararından 1 ve 2: üretilen şehirler depoya girmez; #44–#46 #50 üzerinden test edilir, sunum işleri kapanır
+Karar: Volkan karar masasının önerisini onayladı.
+1. **Üretilen şehirler:** kural kalır (seçenek a, Can'ın önerisi). `data/synthetic/` depoya girmez; resmi rakam Mac koşumu, tohum + commit günlükte. Sözleşme değişmez. Gerekçe [Yorum]: sınav kümesi başına ~200 MB; aynı tohum ve kodla yeniden üretiliyor.
+2. **1 Kasım'dan kalan işler:** #44, #45, #46 PR #50'nin (dashboard yeni görünüm) içinde; tek tek test edilmez. Can #50'yi bir kez test eder (Windows dahil); #50 birleşince #44–#46 kapanır. #50'nin birleşmesi Volkan'ın sözüyle (görünüm henüz onaylanmadı). Sunum için yazılan işler kapanır (sunum bitti; yeni sunum olursa açılır): slayt 8 maliyet manşeti, pitch "~170 bin TL" cümlesi, `docs/sunum/` ekran adları. Açık kalan: uzman listesine iki soru (mahsuplaşma bedeli, trafo büyütme maliyeti), Kıb-Tek görüşmesi için.
+Dosya: can.md UYARI 8 Kasım 17:30; PR #50
 Durum: yapıldı

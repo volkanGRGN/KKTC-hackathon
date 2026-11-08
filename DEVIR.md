@@ -23,9 +23,8 @@ Tek yer: açık PR'lar ve sürmekte olan işler, kimde, kimi bekliyor. Ayrıntı
 | **Akşam 207 V kaçırması, uzun köy hattı** (61–70 sehir-061 T34: gerçek 201,7 V, P10 212,2; 51–60'taki T36 aynı tip) | BUILD 1 | sebep incelenmedi | — |
 | Öğlen yük P90 sınırda (61–70 %30,1, 41–50 %30,1; eşik %30) | BUILD 1 (`sablon.py`) | biliniyor, eşik oynatılmaz | — |
 | **Kaç ev çift uç varsayımı** (en parlak güneş + en düşük yük aynı anda; 61–70 kaç ev KALDI, güvenli yön) | pilot | güneş hizası denendi, olumsuz (#49 günlüğü Ek; dal `panel/oglen-gunes`) | gerçek trafoda düşük yük ↔ güneş tepesi çakışması |
-| PR #44 dashboard sunum bilgisayarı (ham veri yoksa / Windows) | Can (test + birleştirme) | TEST'te b3594f2 tuttu; uç yalnız README; Windows denenmedi | Can |
-| PR #45 dashboard harita animasyonu (Girne'den adaya) | Can (test); harita animasyonu oturumu | açık (eba8ed2) | Can'ın testi, #44 (Volkan'ın sözü 11:45: tutarsa birleşir) |
-| PR #46 dashboard sade dil (#45'in üstünde) | Can (test); harita animasyonu oturumu | açık | Can'ın testi, #45 |
+| **PR #50 dashboard yeni görünüm** (#44, #45, #46 dahil) | Can (test, Windows dahil; can.md UYARI 8 Kasım 17:30); dashboard oturumu | açık | Can'ın testi, Volkan'ın görünüm onayı ve sözü |
+| PR #44, #45, #46 (sunum bilgisayarı, harita animasyonu, sade dil) | — | #50'nin içinde | #50 birleşince kapanır |
 | **Hava verisinin saati (3 Kasım):** Open-Meteo saat sütunu yaz saatsiz (sabit UTC+2); `sehir_uret.py` (`isinim_oku`, `sicaklik_oku`) yaz saatli sanıyor → Mart sonu – Ekim sonu güneş ve sıcaklık 1 saat erken; `tepe.py`, `eszamanlilik.py`, `sahte_kayit.py` aynı klasörü okuyor. KTEMO gerçek paneliyle saatlik hata %35 → düzeltilince %16 ([günlük](docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)) | BUILD 1 + BUILD 2 | bitti: üretici 1.7, PR #49 birleşti (8 Kasım); sınav 61–70 günlükte | `eszamanlilik.py` (Can) |
 | **Sıcaklıklı panel kaybı (3 Kasım):** sabit 0,82 açık öğlende Tem–Ağu %7–8 fazla, Şub–Mar %3–7 az, Nisan %0–2; PVGIS'in sıcaklıklı gücü aylara göre düz ([günlük](docs/log/2026-11-03-volkan-ktemo-pv-karsilastirma.md)) | BUILD 2 | bitti: PR #49 (`pv_hava.panel_carpani`, KTEMO ile ayarlı) | — |
 | **Hava kaynağı adayı (3 Kasım):** PVGIS (AB JRC, uydu) günlük hata %6 ↔ Open-Meteo %9, ama 2023'te bitiyor | BUILD 2 | aday | — |

@@ -580,7 +580,7 @@ Ne: Volkan: "Can birleştirip test yapacak." TEST'in Mac koşuları (resmi rakam
 Yapılacak: iki PR'ın son ucunu main ile birleşik koş, birleştir.
 Dosya: dashboard/ (#44), src/sehir_uret.py (#43)
 Neden: Volkan, 1 Kasım; TEST notları ortak not klasöründe (test-pr43-200v.md).
-Durum: bekliyor
+Durum: kapandı 8 Kasım 17:30 — #43 birleşti (8479408, Volkan'ın sözüyle); #44 PR #50'nin içinde, testi #50'de (UYARI 17:30)
 
 ## KARAR 1 Kasım 11:43 — karar masasından (KARAR) — test PR'ları artık sende; #45'i dene; üç sorunun cevabı
 Ne: Volkan: test PR'ları bundan sonra sana (TEST oturumu yeni PR almıyor). Tutan PR'ı birleştirebilirsin (merge commit, dal silinmez); sonucu `volkan.md`'ye KONTROL kalıbıyla yaz.
@@ -589,19 +589,19 @@ Ne: Volkan: test PR'ları bundan sonra sana (TEST oturumu yeni PR almıyor). Tut
 - **Soruların:** (1) uzman listesine iki soru ekle (mahsuplaşmada fazla üretimin bedeli; dağıtım trafosu büyütmenin maliyeti); dashboard'a tarife / emisyon girmez. (2) Pitch: "~170 bin TL" yazılabilir, adı "prototip emeği (2 gün × 3 kişi, EMO saat ücreti) [Hesap]"; "geliştirme maliyeti" denmez. (3) 175 V: sunuma etkisi yok; faz1'in KALDI'sı saklanmaz; Mac teyidi ve 1.6 ile kalkıp kalkmadığı sunumdan sonra BUILD 1'de.
 Dosya: PR #44, #45; docs/01-plan.md; pitch şablonu
 Neden: volkan.md KARAR 11:43 (iki girdi).
-Durum: bekliyor
+Durum: kapandı 8 Kasım 17:30 — #45 testi #50'de; pitch cümlesi kapandı (sunum bitti); uzman listesine iki soru hâlâ açık (UYARI 17:30)
 
 ## KARAR 1 Kasım 12:06 — karar masasından (KARAR) — PR #46'yı dene (dashboard sade dil); sonra sunum belgelerinde ekran adları
 Ne: https://github.com/volkanGRGN/KKTC-hackathon/pull/46 (yalnız `dashboard/`, #45'in üstünde). Dene: `icerik.json`'da yalnız başlık / açıklama / sözlük değişmiş, değerler main ile birebir; sayfalardaki rakamlar aynı; AppTest hata 0; Genel bakış sekmeleri Özet / Ne kadar tutuyor / Proje ve ekip / Ekip için; canlı tahminde "Ayrıntı" köşesi (gerçekle kıyas açılışta kapalı — kabul edildi). Tutarsa birleştir; sıra #44 → #45 → #46 (#45 birleşince #46'nın tabanını main'e çevir). Birleşince `docs/sunum/`'daki ekran adlarını ve sekmeleri ekrana uydur ("Kıbrısçık'a genel bakış", "Kıbrısçık'ta canlı tahmin").
 Dosya: PR #46; docs/sunum/ (senin)
 Neden: volkan.md KARAR 12:06.
-Durum: bekliyor
+Durum: kapandı 8 Kasım 17:30 — #46 testi #50'de; `docs/sunum/` ekran adları kapandı (sunum bitti)
 
 ## KARAR 1 Kasım 13:20 — karar masasından (KARAR) — maliyet tablosu sınandı (#47); slayt 8'de bir cümle
 Ne: Sunum maliyet tablosu: PR #47, `docs/log/2026-11-01-volkan-maliyet-sunum.md` (her satır etiketli; kur TCMB 30.10.2026; karar masası hesapları yeniden yaptı, tutuyor). Senin rakamların alt uç olarak doğru. (1) Slayt 8'de "adadaki ~6.400 trafonun ~%2'si" → **"Kuzey'deki ~6.400–6.700 trafonun (vekil) ~%2–3'ü"**. **(13:24: Volkan'ın isteğiyle MALİYET oturumu PR #48'de yaptı, tek satır; sen ayrıca yapma; Volkan'ın sözüyle 13:24'de birleşti.)** (2) Manşet önerisi (slayt ve pitch maliyet kutusu): "Bir trafoyu ölçmek yaklaşık 19 bin TL; 120–170 trafoluk pilot 2,2–3,2 milyon TL, her trafoya kalıcı cihaz takmanın yaklaşık yüzde biri." Geri ödeme, fatura ve emisyon yalnız soru gelirse, etiketleriyle.
 Dosya: docs/sunum/slaytlar.md (senin); pitch şablonu (Civan)
 Neden: volkan.md KARAR 13:20.
-Durum: bekliyor
+Durum: kapandı 8 Kasım 17:30 — sunum bitti; manşet cümlesi yeni sunum olursa
 
 ## BİLGİ 2 Kasım 11:07 — karar masasından (KARAR) — depoya lisans eklendi; adın lisans sahipleri arasında
 Ne: Volkan'ın isteğiyle `LICENSE` = Business Source License 1.1: kodu okumak, denemek, değiştirmek, araştırma serbest; gerçek işletmede / ticari hizmette kullanım ekipten ticari lisansla; 2030-11-01'de Apache 2.0. Lisans sahibi Volkan Görgün, Can Şahin, Civan Orak. README ürün vitrinine çevrildi, geliştirici komutları `docs/calistirma.md`'de. Ana dala girmiş dallar silindi; senin `sinav/faz2` dalın ana dala girmediği için duruyor. İtirazın varsa Volkan'a.
@@ -638,4 +638,13 @@ Ne: PR #49 (üretici 1.7) main'de (d8c7bea); `src/pv_hava.py` artık main'de. Ö
 Bilgi (madde 3'ün cevabı): iki KALDI ve T34 #49'u bloklamadı. Kaç ev için öğlen güneşini saat ve sıcaklıkla hizalamak denendi, olumsuz; KALDI modelin çift uç varsayımından (#49 günlüğü "Ek"). Madde 1 ve 2 Volkan'da.
 Dosya: src/eszamanlilik.py, docs/log/2026-11-01-can-eszamanlilik.md
 Neden: volkan.md KARAR 8 Kasım 17:25.
+Durum: bekliyor
+
+## UYARI! 8 Kasım 17:30 — karar masasından (KARAR) — dört kararın 1 ve 2'si: şehirler depoya girmez; #50'yi bir kez test et (Windows dahil)
+Ne: Volkan önerini ve karar masasınınkini onayladı (volkan.md KARAR 17:30).
+1. **Üretilen şehirler** depoya girmez (seçenek a); sözleşme değişmez. Resmi rakam Mac koşumu, tohum + commit günlükte.
+2. **PR #50** (https://github.com/volkanGRGN/KKTC-hackathon/pull/50, dashboard yeni görünüm) #44, #45 ve #46'yı içeriyor; üçünü ayrı test etme. #50'yi main ile birleşik bir kez dene: AppTest hata 0; Genel bakış, "Ne kadar tutuyor", canlı tahmin; Oynat animasyonu yeni temayla; ham veri yokken canlı tahmin düşmüyor (#44); **Windows'ta** README "Sunum bilgisayarında" yolu baştan bir kez (#44'te hiç denenmedi); dar ekran. Sonuç `volkan.md`'ye KONTROL. Birleştirme Volkan'ın sözüyle (görünümü henüz onaylamadı); #50 birleşince #44–#46'yı kapat, dallar kalır.
+3. **Kapanan** (sunum bitti; yeni sunum olursa açılır): slayt 8 maliyet manşeti, pitch "~170 bin TL prototip emeği" cümlesi, `docs/sunum/` ekran adları. **Hâlâ açık:** uzman listesine (`docs/01-plan.md`) iki soru — mahsuplaşmada fazla üretimin bedeli; dağıtım trafosu büyütmenin maliyeti (Kıb-Tek görüşmesi için).
+Dosya: PR #50; docs/01-plan.md
+Neden: volkan.md KARAR 8 Kasım 17:30.
 Durum: bekliyor
