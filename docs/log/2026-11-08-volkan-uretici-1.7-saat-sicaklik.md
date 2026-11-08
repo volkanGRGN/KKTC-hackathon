@@ -25,7 +25,23 @@ Ayar 2018–2022 (etkin güç ve T_ref), sınav 2023–2026 (12.114 gündüz saa
 Yazın fazla tahmin (Temmuz–Ağustos) ~%10 → ~%4; saatlik hata ortancası %17,1 → %17,0 (bulutlu saatler baskın). γ denemesi (−0,004 … −0,007) sınav yıllarına bakılarak yapıldı; seçilen değer önceden belirlenen veri sayfası değeri, aynı zamanda denenenler arasında yayılımı en küçük olan (−0,006 yazı tam düzeltir ama kışı bozar, yayılım 0,098). Ayar ↔ sınav ayrımı bu yüzden γ için kusursuz değil; T_ref ve etkin güç yalnız ayar yıllarından.
 
 ## Deneme şehirleri (gösterim)
-- Ayar 1–10, aynı tohumlar, 1.6 ↔ 1.7: karar masasında koşuyor (sonuç bu günlüğe eklenecek).
+- **Ayar 1–10, aynı tohumlar, 1.6 ↔ 1.7** (Mac, karar masası 8 Kasım 16:38; aynı `sinav.py` (main) iki kümede; tepe sapması / dolu yakalama karar masasının kVA hesabı):
+
+| | 1.6 | 1.7 |
+|---|---|---|
+| **Yük haritası:** tepe hatası ortanca / P90 (sinav faz2, net kW) | %8,9 / %21,4 | %9,5 / %21,7 |
+| İşaretli sapma ortanca (kVA, ölçülmeyen 280) | +%6,2 | +%7,4 (güvenli yön) |
+| %80 bant (faz2) ; gerçek P90 üstü | %97,5 ; 0 | %97,5 ; 0 |
+| %80'den dolu yakalanan ; uyarı (P90 ≥ %80) | 19/19 ; 120 | 18/18 ; 120 |
+| **Tepe saati ±60 dk isabet ; iki adaydan biri ; dönem** | %46,4 ; %55,4 ; %66,4 | **%55,0 ; %64,6 ; %76,4** |
+| Akşam 207 V altı yakalanan ; "yeterli"de yanlış | — | 1/1 ; 223'te 0 |
+| **Panel:** yanlış yeşil | 0/64 | 0/64 |
+| Dolu trafoya "yer var": %40 kuralı ↔ model | 31/40 ↔ 0 | 30/37 ↔ 0 |
+| Kaç ev hatası ortanca (orta) | 2 ev | 3 ev |
+| Kaç ev bandı: gerçek P10 altı ; P90 üstü | %2,2 ; %8,2 | %2,2 ; %13,9 |
+| Faz1: 259 V üstü trafo ; en düşük gerilim (yıl tepesi) | 39/400 ; 200,9 V | 36/400 ; 201,0 V |
+
+Okuma: tepe saati, sıcaklık doğru saate oturunca belirgin iyileşti (+9 puan). Tepe büyüklüğü hatası ve sapma gürültü düzeyinde arttı, yön güvenli. Panelde yanlış yeşil yine 0; ama yeni dünyada panel biraz az üretiyor ve güneş öğlen penceresinde bir saat geç, gerçek kaç ev artıyor (sıfır olan trafo 40 → 37), model tarafı (`kac_ev_olasilik.py` öğlen güneşi) değişmediği için bant tutucu tarafa kaydı (P90 üstü %8,2 → %13,9). Güvenli yön; düzeltmek ayrı iş (öğlen güneşini saat ve sıcaklıkla hizalamak). Ayar şehirlerine bakılarak yöntem değiştirilmedi → sınav 61–70'e geçilebilir.
 - Sınav 61–70: bir kez, 1.7 ile (Can; can.md).
 
 ## Karar / sıradaki adım
